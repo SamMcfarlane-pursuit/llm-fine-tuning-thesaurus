@@ -1,0 +1,21 @@
+{
+  "name": "LLM Fine-Tuning Thesaurus",
+  "description": "A visual thesaurus application powered by a fine-tuned Large Language Model (LLM) that provides comprehensive information about LLM fine-tuning concepts and techniques.",
+  "repository": "https://github.com/yourusername/llm-thesaurus",
+  "keywords": ["python", "flask", "llm", "thesaurus", "fine-tuning", "nlp"],
+  "env": {
+    "FLASK_ENV": {
+      "description": "Flask environment (development or production)",
+      "value": "production"
+    },
+    "SECRET_KEY": {
+      "description": "A secret key for the Flask application",
+      "generator": "secret"
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ]
+}

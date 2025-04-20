@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ concept.name }} - Visual Thesaurus LLM</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">Visual Thesaurus LLM</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/learn">Learn</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/#help-section">Help</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/learn">Learn</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ concept.name }}</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h1>{{ concept.name }}</h1>
+                    </div>
+                    <div class="card-body">
+                        <h3>Description</h3>
+                        <p class="lead">{{ concept.description }}</p>
+                        
+                        <h3 class="mt-4">Related Concepts</h3>
+                        <div class="row">
+                            {% for related in concept.related_concepts %}
+                            <div class="col-md-4 mb-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ related }}</h5>
+                                        <a href="/concept/{{ related }}" class="btn btn-primary btn-sm">Learn More</a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4 mb-5">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h3>Hands-on Example</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="example-content">
+                            {% if concept.name == "LLM Fine-Tuning" %}
+                            <h4>Basic LLM Fine-Tuning Example</h4>
+                            <pre><code>from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments, Trainer
+from datasets import Dataset
+
+# Load model and tokenizer
+model_name = "gpt2"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(model_name)
+
+# Prepare dataset
+data = [
+    "A synonym for happy is joyful.",
+    "A synonym for sad is unhappy.",
+    "A synonym for big is large."
+]
+dataset = Dataset.from_dict({"text": data})
+dataset = dataset.train_test_split(test_size=0.2)
+
+# Tokenize dataset
+def tokenize_function(examples):
+    return tokenizer(examples["text"], padding="max_length", truncation=True, max_length=128)
+
+tokenized_datasets = dataset.map(tokenize_function, batched=True)
+
+# Set up training arguments
+training_args = TrainingArguments(
+    output_dir="./results",
+    evaluation_strategy="epoch",
+    learning_rate=2e-5,
+    per_device_train_batch_size=8,
+    per_device_eval_batch_size=8,
+    num_train_epochs=3,
+    weight_decay=0.01,
+)
+
+# Create trainer
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=tokenized_datasets["train"],
+    eval_dataset=tokenized_datasets["test"],
+)
+
+# Fine-tune the model
+trainer.train()</code></pre>
+                            {% elif concept.name == "LoRA" %}
+                            <h4>LoRA Implementation Example</h4>
+                            <pre><code>from transformers import AutoModelForCausalLM, AutoTokenizer
+from peft import LoraConfig, get_peft_model, TaskType
+
+# Load model and tokenizer
+model_name = "gpt2"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(model_name)
+
+# Configure LoRA
+lora_config = LoraConfig(
+    task_type=TaskType.CAUSAL_LM,
+    r=8,                     # Rank of the update matrices
+    lora_alpha=32,           # Parameter for scaling
+    lora_dropout=0.1,        # Dropout probability for LoRA layers
+    bias="none",             # Don't add bias parameters
+    target_modules=["c_attn", "c_proj"]  # Attention modules to apply LoRA to
+)
+
+# Apply LoRA to the model
+peft_model = get_peft_model(model, lora_config)
+
+# Print trainable parameters
+trainable_params = sum(p.numel() for p in peft_model.parameters() if p.requires_grad)
+total_params = sum(p.numel() for p in peft_model.parameters())
+print(f"Trainable parameters: {trainable_params:,} ({trainable_params/total_params:.2%} of total)")</code></pre>
+                            {% elif concept.name == "Training Data" %}
+                            <h4>Thesaurus Training Data Preparation Example</h4>
+                            <pre><code>import nltk
+from nltk.corpus import wordnet as wn
+import json
+
+# Download WordNet
+nltk.download('wordnet')
+
+# Generate thesaurus data
+words = ["happy", "good", "fast", "big", "small"]
+thesaurus_data = []
+
+for word in words:
+    entry = {"word": word, "synonyms": [], "antonyms": []}
+    
+    # Get synsets for the word
+    synsets = wn.synsets(word)
+    
+    for synset in synsets:
+        # Get synonyms
+        for lemma in synset.lemmas():
+            if lemma.name() != word and '_' not in lemma.name():
+                entry["synonyms"].append(lemma.name())
+                
+            # Get antonyms
+            for antonym in lemma.antonyms():
+                if '_' not in antonym.name():
+                    entry["antonyms"].append(antonym.name())
+    
+    # Remove duplicates
+    entry["synonyms"] = list(set(entry["synonyms"]))
+    entry["antonyms"] = list(set(entry["antonyms"]))
+    
+    thesaurus_data.append(entry)
+
+# Convert to training examples
+training_examples = []
+for entry in thesaurus_data:
+    word = entry["word"]
+    if entry["synonyms"]:
+        synonyms_str = ", ".join(entry["synonyms"])
+        training_examples.append(f"Synonyms for '{word}': {synonyms_str}")
+
+print(f"Generated {len(training_examples)} training examples")</code></pre>
+                            {% else %}
+                            <p>No specific example available for this concept. Check the related concepts for more examples.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Visual Thesaurus LLM</h5>
+                    <p>A project demonstrating LLM fine-tuning for thesaurus applications</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p>&copy; 2023 Thesaurus AI LLM FT Project</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

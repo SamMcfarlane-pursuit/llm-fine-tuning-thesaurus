@@ -1,0 +1,89 @@
+
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <title>Thesaurus Visualization</title>
+            <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@9.1.2/dist/vis-network.min.js"></script>
+            <style type="text/css">
+                #mynetwork {
+                    width: 100%;
+                    height: 100%;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    border: none;
+                    background-color: #ffffff;
+                }
+                body, html {
+                    height: 100%;
+                    margin: 0;
+                    padding: 0;
+                    overflow: hidden;
+                }
+                .vis-tooltip {
+                    position: absolute;
+                    visibility: hidden;
+                    padding: 5px;
+                    white-space: nowrap;
+                    font-family: Arial, sans-serif;
+                    font-size: 14px;
+                    color: #000000;
+                    background-color: #f5f5f5;
+                    border-radius: 3px;
+                    border: 1px solid #808080;
+                    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+                    max-width: 300px;
+                    word-wrap: break-word;
+                    z-index: 900;
+                }
+            </style>
+        </head>
+        <body>
+            <div id="mynetwork"></div>
+            <script type="text/javascript">
+                // Initialize the network
+                var container = document.getElementById('mynetwork');
+                var data = {"nodes": [{"id": "dockworker", "label": "dockworker", "color": "red", "size": 25, "title": "<div style='max-width:300px;'><b>dockworker</b><br/>a laborer who loads and unloads vessels in a port</div>"}, {"id": "stevedore", "label": "stevedore", "color": "blue", "size": 15, "title": "<div style='max-width:300px;'><b>stevedore</b><br/>a laborer who loads and unloads vessels in a port</div>"}, {"id": "loader", "label": "loader", "color": "blue", "size": 15, "title": "<div style='max-width:300px;'><b>loader</b><br/>a laborer who loads and unloads vessels in a port</div>"}, {"id": "longshoreman", "label": "longshoreman", "color": "blue", "size": 15, "title": "<div style='max-width:300px;'><b>longshoreman</b><br/>a laborer who loads and unloads vessels in a port</div>"}, {"id": "docker", "label": "docker", "color": "blue", "size": 15, "title": "<div style='max-width:300px;'><b>docker</b><br/>a laborer who loads and unloads vessels in a port</div>"}, {"id": "dockhand", "label": "dockhand", "color": "blue", "size": 15, "title": "<div style='max-width:300px;'><b>dockhand</b><br/>a laborer who loads and unloads vessels in a port</div>"}, {"id": "dock-walloper", "label": "dock-walloper", "color": "blue", "size": 15, "title": "<div style='max-width:300px;'><b>dock-walloper</b><br/>a laborer who loads and unloads vessels in a port</div>"}, {"id": "lumper", "label": "lumper", "color": "blue", "size": 15, "title": "<div style='max-width:300px;'><b>lumper</b><br/>a laborer who loads and unloads vessels in a port</div>"}, {"id": "laborer", "label": "laborer", "color": "green", "size": 15, "title": "<div style='max-width:300px;'><b>laborer</b><br/>someone who works with their hands; someone engaged in manual labor</div>"}, {"id": "labourer", "label": "labourer", "color": "green", "size": 15, "title": "<div style='max-width:300px;'><b>labourer</b><br/>someone who works with their hands; someone engaged in manual labor</div>"}, {"id": "jack", "label": "jack", "color": "green", "size": 15, "title": "<div style='max-width:300px;'><b>jack</b><br/>a small worthless amount</div>"}], "edges": [{"from": "dockworker", "to": "stevedore", "color": "blue", "width": 2, "title": "synonym"}, {"from": "dockworker", "to": "loader", "color": "blue", "width": 2, "title": "synonym"}, {"from": "dockworker", "to": "longshoreman", "color": "blue", "width": 2, "title": "synonym"}, {"from": "dockworker", "to": "docker", "color": "blue", "width": 2, "title": "synonym"}, {"from": "dockworker", "to": "dockhand", "color": "blue", "width": 2, "title": "synonym"}, {"from": "dockworker", "to": "dock-walloper", "color": "blue", "width": 2, "title": "synonym"}, {"from": "dockworker", "to": "lumper", "color": "blue", "width": 2, "title": "synonym"}, {"from": "dockworker", "to": "laborer", "color": "green", "width": 2, "title": "hypernym"}, {"from": "dockworker", "to": "labourer", "color": "green", "width": 2, "title": "hypernym"}, {"from": "dockworker", "to": "jack", "color": "green", "width": 2, "title": "hypernym"}]};
+                var options = {"interaction": {"hover": true, "zoomView": true, "dragView": true, "navigationButtons": true, "keyboard": true, "tooltipDelay": 100}, "physics": {"stabilization": {"iterations": 100, "fit": true}}, "layout": {"improvedLayout": true}};
+                var network = new vis.Network(container, data, options);
+
+                // Make the network object globally accessible
+                window.network = network;
+
+                // Fit the network to the container on load
+                network.once("afterDrawing", function() {
+                    setTimeout(function() {
+                        network.fit({
+                            animation: {
+                                duration: 1000,
+                                easingFunction: 'easeInOutQuad'
+                            }
+                        });
+                    }, 200);
+                });
+
+                // Add click event to nodes
+                network.on("click", function(params) {
+                    if (params.nodes.length > 0) {
+                        var nodeId = params.nodes[0];
+                        if (nodeId !== '') {
+                            window.parent.location.href = '/visualize/' + encodeURIComponent(nodeId);
+                        }
+                    }
+                });
+
+                // Prevent errors when iframe is reloaded
+                window.addEventListener('unload', function() {
+                    if (network) {
+                        try {
+                            network.destroy();
+                        } catch (e) {
+                            console.log('Network already destroyed');
+                        }
+                    }
+                });
+            </script>
+        </body>
+        </html>
+        

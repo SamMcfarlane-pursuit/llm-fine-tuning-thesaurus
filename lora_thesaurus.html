@@ -1,0 +1,89 @@
+
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <title>Thesaurus Visualization</title>
+            <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@9.1.2/dist/vis-network.min.js"></script>
+            <style type="text/css">
+                #mynetwork {
+                    width: 100%;
+                    height: 100%;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    border: none;
+                    background-color: #ffffff;
+                }
+                body, html {
+                    height: 100%;
+                    margin: 0;
+                    padding: 0;
+                    overflow: hidden;
+                }
+                .vis-tooltip {
+                    position: absolute;
+                    visibility: hidden;
+                    padding: 5px;
+                    white-space: nowrap;
+                    font-family: Arial, sans-serif;
+                    font-size: 14px;
+                    color: #000000;
+                    background-color: #f5f5f5;
+                    border-radius: 3px;
+                    border: 1px solid #808080;
+                    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+                    max-width: 300px;
+                    word-wrap: break-word;
+                    z-index: 900;
+                }
+            </style>
+        </head>
+        <body>
+            <div id="mynetwork"></div>
+            <script type="text/javascript">
+                // Initialize the network
+                var container = document.getElementById('mynetwork');
+                var data = {"nodes": [{"id": "lora", "label": "lora", "color": "red", "size": 25, "title": "<div style='max-width:300px;'><b>lora</b><br/></div>"}, {"id": "low-rank adaptation", "label": "low-rank adaptation", "color": "blue", "size": 20, "title": "<div style='max-width:300px;'><b>low-rank adaptation</b><br/></div>"}, {"id": "rank decomposition", "label": "rank decomposition", "color": "blue", "size": 20, "title": "<div style='max-width:300px;'><b>rank decomposition</b><br/></div>"}, {"id": "peft", "label": "peft", "color": "green", "size": 20, "title": "<div style='max-width:300px;'><b>peft</b><br/></div>"}, {"id": "fine-tuning", "label": "fine-tuning", "color": "green", "size": 20, "title": "<div style='max-width:300px;'><b>fine-tuning</b><br/>improve or perfect by pruning or polishing</div>"}, {"id": "adapter layers", "label": "adapter layers", "color": "green", "size": 20, "title": "<div style='max-width:300px;'><b>adapter layers</b><br/></div>"}, {"id": "rank", "label": "rank", "color": "green", "size": 20, "title": "<div style='max-width:300px;'><b>rank</b><br/>a row or line of people (especially soldiers or police) standing abreast of one another</div>"}, {"id": "attention layers", "label": "attention layers", "color": "green", "size": 20, "title": "<div style='max-width:300px;'><b>attention layers</b><br/></div>"}], "edges": [{"from": "lora", "to": "low-rank adaptation", "color": "blue", "width": 2, "title": "synonym"}, {"from": "lora", "to": "rank decomposition", "color": "blue", "width": 2, "title": "synonym"}, {"from": "lora", "to": "peft", "color": "green", "width": 2, "title": "related"}, {"from": "lora", "to": "fine-tuning", "color": "green", "width": 2, "title": "related"}, {"from": "lora", "to": "adapter layers", "color": "green", "width": 2, "title": "related"}, {"from": "lora", "to": "rank", "color": "green", "width": 2, "title": "related"}, {"from": "lora", "to": "attention layers", "color": "green", "width": 2, "title": "related"}]};
+                var options = {"interaction": {"hover": true, "zoomView": true, "dragView": true, "navigationButtons": true, "keyboard": true, "tooltipDelay": 100}, "physics": {"stabilization": {"iterations": 100, "fit": true}}, "layout": {"improvedLayout": true}};
+                var network = new vis.Network(container, data, options);
+
+                // Make the network object globally accessible
+                window.network = network;
+
+                // Fit the network to the container on load
+                network.once("afterDrawing", function() {
+                    setTimeout(function() {
+                        network.fit({
+                            animation: {
+                                duration: 1000,
+                                easingFunction: 'easeInOutQuad'
+                            }
+                        });
+                    }, 200);
+                });
+
+                // Add click event to nodes
+                network.on("click", function(params) {
+                    if (params.nodes.length > 0) {
+                        var nodeId = params.nodes[0];
+                        if (nodeId !== '') {
+                            window.parent.location.href = '/visualize/' + encodeURIComponent(nodeId);
+                        }
+                    }
+                });
+
+                // Prevent errors when iframe is reloaded
+                window.addEventListener('unload', function() {
+                    if (network) {
+                        try {
+                            network.destroy();
+                        } catch (e) {
+                            console.log('Network already destroyed');
+                        }
+                    }
+                });
+            </script>
+        </body>
+        </html>
+        

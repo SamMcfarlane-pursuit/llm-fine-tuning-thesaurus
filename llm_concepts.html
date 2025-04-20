@@ -1,0 +1,87 @@
+
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <title>LLM Concepts Visualization</title>
+            <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@9.1.2/dist/vis-network.min.js"></script>
+            <style type="text/css">
+                #mynetwork {
+                    width: 100%;
+                    height: 100%;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    border: none;
+                    background-color: #ffffff;
+                }
+                body, html {
+                    height: 100%;
+                    margin: 0;
+                    padding: 0;
+                    overflow: hidden;
+                }
+                .vis-tooltip {
+                    position: absolute;
+                    visibility: hidden;
+                    padding: 5px;
+                    white-space: nowrap;
+                    font-family: Arial, sans-serif;
+                    font-size: 14px;
+                    color: #000000;
+                    background-color: #f5f5f5;
+                    border-radius: 3px;
+                    border: 1px solid #808080;
+                    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+                    max-width: 300px;
+                    word-wrap: break-word;
+                    z-index: 900;
+                }
+            </style>
+        </head>
+        <body>
+            <div id="mynetwork"></div>
+            <script type="text/javascript">
+                // Initialize the network
+                var container = document.getElementById('mynetwork');
+                var data = {"nodes": [{"id": "LLM Fine-Tuning", "label": "LLM Fine-Tuning", "color": "red", "size": 50, "title": "The process of adapting a pre-trained language model for specific tasks."}, {"id": "Pre-trained Models", "label": "Pre-trained Models", "color": "blue", "size": 40, "title": "Large language models that have been trained on vast amounts of text data."}, {"id": "Parameter-Efficient Fine-Tuning", "label": "Parameter-Efficient Fine-Tuning", "color": "green", "size": 40, "title": "Techniques to fine-tune LLMs with fewer trainable parameters."}, {"id": "LoRA", "label": "LoRA", "color": "purple", "size": 36, "title": "Low-Rank Adaptation - a PEFT method that adds low-rank matrices to model weights."}, {"id": "Training Data", "label": "Training Data", "color": "orange", "size": 40, "title": "The dataset used to fine-tune the model for a specific task."}, {"id": "Hyperparameters", "label": "Hyperparameters", "color": "cyan", "size": 36, "title": "Parameters that control the fine-tuning process."}, {"id": "Evaluation Metrics", "label": "Evaluation Metrics", "color": "magenta", "size": 36, "title": "Measures to assess the performance of fine-tuned models."}, {"id": "Inference", "label": "Inference", "color": "brown", "size": 36, "title": "Using the fine-tuned model to generate outputs for new inputs."}, {"id": "GPT", "label": "GPT", "color": "lightblue", "size": 30, "title": "Generative Pre-trained Transformer - a family of autoregressive language models."}, {"id": "BERT", "label": "BERT", "color": "lightblue", "size": 30, "title": "Bidirectional Encoder Representations from Transformers - a family of encoder-only models."}, {"id": "T5", "label": "T5", "color": "lightblue", "size": 30, "title": "Text-to-Text Transfer Transformer - a family of encoder-decoder models."}, {"id": "Prefix Tuning", "label": "Prefix Tuning", "color": "lightgreen", "size": 30, "title": "A PEFT method that prepends trainable prefix vectors to hidden states."}, {"id": "Adapter Layers", "label": "Adapter Layers", "color": "lightgreen", "size": 30, "title": "A PEFT method that adds small trainable modules between layers of the model."}, {"id": "Prompt Tuning", "label": "Prompt Tuning", "color": "lightgreen", "size": 30, "title": "A PEFT method that optimizes continuous prompt embeddings."}, {"id": "Data Preparation", "label": "Data Preparation", "color": "lightorange", "size": 30, "title": "The process of cleaning, formatting, and organizing data for fine-tuning."}, {"id": "Instruction Tuning", "label": "Instruction Tuning", "color": "lightorange", "size": 30, "title": "Fine-tuning models on instruction-response pairs to follow user instructions."}, {"id": "Learning Rate", "label": "Learning Rate", "color": "lightcyan", "size": 24, "title": "A hyperparameter that controls how much to adjust model weights during training."}, {"id": "Batch Size", "label": "Batch Size", "color": "lightcyan", "size": 24, "title": "A hyperparameter that controls how many samples to process before updating model weights."}, {"id": "Perplexity", "label": "Perplexity", "color": "lightmagenta", "size": 24, "title": "A metric that measures how well a model predicts a sample of text."}, {"id": "Text Generation", "label": "Text Generation", "color": "lightbrown", "size": 30, "title": "The process of generating new text using a language model."}, {"id": "Transformer", "label": "Transformer", "color": "yellow", "size": 36, "title": "A neural network architecture based on self-attention mechanisms."}], "edges": [{"from": "LLM Fine-Tuning", "to": "Pre-trained Models", "color": "#848484", "width": 2}, {"from": "LLM Fine-Tuning", "to": "Parameter-Efficient Fine-Tuning", "color": "#848484", "width": 2}, {"from": "LLM Fine-Tuning", "to": "Training Data", "color": "#848484", "width": 2}, {"from": "LLM Fine-Tuning", "to": "Hyperparameters", "color": "#848484", "width": 2}, {"from": "LLM Fine-Tuning", "to": "Evaluation Metrics", "color": "#848484", "width": 2}, {"from": "LLM Fine-Tuning", "to": "Inference", "color": "#848484", "width": 2}, {"from": "Pre-trained Models", "to": "GPT", "color": "#848484", "width": 2}, {"from": "Pre-trained Models", "to": "BERT", "color": "#848484", "width": 2}, {"from": "Pre-trained Models", "to": "T5", "color": "#848484", "width": 2}, {"from": "Parameter-Efficient Fine-Tuning", "to": "LoRA", "color": "#848484", "width": 2}, {"from": "Parameter-Efficient Fine-Tuning", "to": "Prefix Tuning", "color": "#848484", "width": 2}, {"from": "Parameter-Efficient Fine-Tuning", "to": "Adapter Layers", "color": "#848484", "width": 2}, {"from": "Parameter-Efficient Fine-Tuning", "to": "Prompt Tuning", "color": "#848484", "width": 2}, {"from": "Training Data", "to": "Data Preparation", "color": "#848484", "width": 2}, {"from": "Training Data", "to": "Instruction Tuning", "color": "#848484", "width": 2}, {"from": "Hyperparameters", "to": "Learning Rate", "color": "#848484", "width": 2}, {"from": "Hyperparameters", "to": "Batch Size", "color": "#848484", "width": 2}, {"from": "Evaluation Metrics", "to": "Perplexity", "color": "#848484", "width": 2}, {"from": "Inference", "to": "Text Generation", "color": "#848484", "width": 2}, {"from": "GPT", "to": "Transformer", "color": "#848484", "width": 2}, {"from": "BERT", "to": "Transformer", "color": "#848484", "width": 2}, {"from": "T5", "to": "Transformer", "color": "#848484", "width": 2}]};
+                var options = {"interaction": {"hover": true, "zoomView": true, "dragView": true, "navigationButtons": true, "keyboard": true}, "physics": {"stabilization": {"iterations": 100, "fit": true}}, "layout": {"improvedLayout": true, "hierarchical": {"enabled": false}}};
+                var network = new vis.Network(container, data, options);
+
+                // Make the network object globally accessible
+                window.network = network;
+
+                // Fit the network to the container on load
+                network.once("afterDrawing", function() {
+                    setTimeout(function() {
+                        network.fit({
+                            animation: {
+                                duration: 1000,
+                                easingFunction: 'easeInOutQuad'
+                            }
+                        });
+                    }, 200);
+                });
+
+                // Add click event to nodes
+                network.on("click", function(params) {
+                    if (params.nodes.length > 0) {
+                        var nodeId = params.nodes[0];
+                        window.parent.location.href = '/concept/' + encodeURIComponent(nodeId);
+                    }
+                });
+
+                // Prevent errors when iframe is reloaded
+                window.addEventListener('unload', function() {
+                    if (network) {
+                        try {
+                            network.destroy();
+                        } catch (e) {
+                            console.log('Network already destroyed');
+                        }
+                    }
+                });
+            </script>
+        </body>
+        </html>
+        

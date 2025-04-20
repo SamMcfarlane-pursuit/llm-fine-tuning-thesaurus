@@ -1,0 +1,89 @@
+
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <title>Thesaurus Visualization</title>
+            <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@9.1.2/dist/vis-network.min.js"></script>
+            <style type="text/css">
+                #mynetwork {
+                    width: 100%;
+                    height: 100%;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    border: none;
+                    background-color: #ffffff;
+                }
+                body, html {
+                    height: 100%;
+                    margin: 0;
+                    padding: 0;
+                    overflow: hidden;
+                }
+                .vis-tooltip {
+                    position: absolute;
+                    visibility: hidden;
+                    padding: 5px;
+                    white-space: nowrap;
+                    font-family: Arial, sans-serif;
+                    font-size: 14px;
+                    color: #000000;
+                    background-color: #f5f5f5;
+                    border-radius: 3px;
+                    border: 1px solid #808080;
+                    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+                    max-width: 300px;
+                    word-wrap: break-word;
+                    z-index: 900;
+                }
+            </style>
+        </head>
+        <body>
+            <div id="mynetwork"></div>
+            <script type="text/javascript">
+                // Initialize the network
+                var container = document.getElementById('mynetwork');
+                var data = {"nodes": [{"id": "specialized", "label": "specialized", "color": "red", "size": 25, "title": "<div style='max-width:300px;'><b>specialized</b><br/>become more focus on an area of activity or field of study</div>"}, {"id": "specialize", "label": "specialize", "color": "blue", "size": 15, "title": "<div style='max-width:300px;'><b>specialize</b><br/>become more focus on an area of activity or field of study</div>"}, {"id": "specialise", "label": "specialise", "color": "blue", "size": 15, "title": "<div style='max-width:300px;'><b>specialise</b><br/>devote oneself to a special area of work</div>"}, {"id": "narrow", "label": "narrow", "color": "blue", "size": 15, "title": "<div style='max-width:300px;'><b>narrow</b><br/>a narrow strait connecting two bodies of water</div>"}, {"id": "diversify", "label": "diversify", "color": "orange", "size": 15, "title": "<div style='max-width:300px;'><b>diversify</b><br/>make (more) diverse</div>"}, {"id": "change", "label": "change", "color": "green", "size": 15, "title": "<div style='max-width:300px;'><b>change</b><br/>an event that occurs when something passes from one state or phase to another</div>"}, {"id": "alter", "label": "alter", "color": "green", "size": 15, "title": "<div style='max-width:300px;'><b>alter</b><br/>cause to change; make different; cause a transformation</div>"}, {"id": "vary", "label": "vary", "color": "green", "size": 15, "title": "<div style='max-width:300px;'><b>vary</b><br/>become different in some particular way, without permanently losing one's or its former characteristics or essence</div>"}, {"id": "overspecialize", "label": "overspecialize", "color": "purple", "size": 15, "title": "<div style='max-width:300px;'><b>overspecialize</b><br/>become overly specialized</div>"}, {"id": "overspecialise", "label": "overspecialise", "color": "purple", "size": 15, "title": "<div style='max-width:300px;'><b>overspecialise</b><br/>become overly specialized</div>"}, {"id": "specify", "label": "specify", "color": "blue", "size": 15, "title": "<div style='max-width:300px;'><b>specify</b><br/>specify as a condition or requirement in a contract or agreement; make an express demand or provision in an agreement</div>"}, {"id": "particularize", "label": "particularize", "color": "blue", "size": 15, "title": "<div style='max-width:300px;'><b>particularize</b><br/>be specific about</div>"}, {"id": "particularise", "label": "particularise", "color": "blue", "size": 15, "title": "<div style='max-width:300px;'><b>particularise</b><br/>be specific about</div>"}, {"id": "generalize", "label": "generalize", "color": "orange", "size": 15, "title": "<div style='max-width:300px;'><b>generalize</b><br/>draw from specific cases for more general cases</div>"}, {"id": "elaborate", "label": "elaborate", "color": "green", "size": 15, "title": "<div style='max-width:300px;'><b>elaborate</b><br/>add details, as to an account or idea; clarify the meaning of and discourse in a learned way, usually in writing</div>"}, {"id": "lucubrate", "label": "lucubrate", "color": "green", "size": 15, "title": "<div style='max-width:300px;'><b>lucubrate</b><br/>add details, as to an account or idea; clarify the meaning of and discourse in a learned way, usually in writing</div>"}, {"id": "expatiate", "label": "expatiate", "color": "green", "size": 15, "title": "<div style='max-width:300px;'><b>expatiate</b><br/>add details, as to an account or idea; clarify the meaning of and discourse in a learned way, usually in writing</div>"}, {"id": "exposit", "label": "exposit", "color": "green", "size": 15, "title": "<div style='max-width:300px;'><b>exposit</b><br/>state</div>"}, {"id": "enlarge", "label": "enlarge", "color": "green", "size": 15, "title": "<div style='max-width:300px;'><b>enlarge</b><br/>make larger</div>"}, {"id": "expand", "label": "expand", "color": "green", "size": 15, "title": "<div style='max-width:300px;'><b>expand</b><br/>extend in one or more directions</div>"}, {"id": "expound", "label": "expound", "color": "green", "size": 15, "title": "<div style='max-width:300px;'><b>expound</b><br/>add details, as to an account or idea; clarify the meaning of and discourse in a learned way, usually in writing</div>"}, {"id": "dilate", "label": "dilate", "color": "green", "size": 15, "title": "<div style='max-width:300px;'><b>dilate</b><br/>become wider</div>"}, {"id": "modify", "label": "modify", "color": "green", "size": 15, "title": "<div style='max-width:300px;'><b>modify</b><br/>make less severe or harsh or extreme</div>"}, {"id": "work", "label": "work", "color": "green", "size": 15, "title": "<div style='max-width:300px;'><b>work</b><br/>activity directed toward making or doing something</div>"}, {"id": "speciate", "label": "speciate", "color": "blue", "size": 15, "title": "<div style='max-width:300px;'><b>speciate</b><br/>evolve so as to lead to a new species or develop in a way most suited to the environment</div>"}, {"id": "differentiate", "label": "differentiate", "color": "blue", "size": 15, "title": "<div style='max-width:300px;'><b>differentiate</b><br/>mark as different</div>"}, {"id": "evolve", "label": "evolve", "color": "green", "size": 15, "title": "<div style='max-width:300px;'><b>evolve</b><br/>work out</div>"}, {"id": "specialised", "label": "specialised", "color": "blue", "size": 15, "title": "<div style='max-width:300px;'><b>specialised</b><br/>devote oneself to a special area of work</div>"}, {"id": "unspecialized", "label": "unspecialized", "color": "orange", "size": 15, "title": "<div style='max-width:300px;'><b>unspecialized</b><br/>not specialized or modified for a particular purpose or function</div>"}], "edges": [{"from": "specialized", "to": "specialize", "color": "blue", "width": 2, "title": "synonym"}, {"from": "specialized", "to": "specialise", "color": "blue", "width": 2, "title": "synonym"}, {"from": "specialized", "to": "narrow", "color": "blue", "width": 2, "title": "synonym"}, {"from": "specialized", "to": "diversify", "color": "orange", "width": 2, "title": "antonym"}, {"from": "specialized", "to": "change", "color": "green", "width": 2, "title": "hypernym"}, {"from": "specialized", "to": "alter", "color": "green", "width": 2, "title": "hypernym"}, {"from": "specialized", "to": "vary", "color": "green", "width": 2, "title": "hypernym"}, {"from": "specialized", "to": "overspecialize", "color": "purple", "width": 2, "title": "hyponym"}, {"from": "specialized", "to": "overspecialise", "color": "purple", "width": 2, "title": "hyponym"}, {"from": "specialized", "to": "specify", "color": "blue", "width": 2, "title": "synonym"}, {"from": "specialized", "to": "particularize", "color": "blue", "width": 2, "title": "synonym"}, {"from": "specialized", "to": "particularise", "color": "blue", "width": 2, "title": "synonym"}, {"from": "specialized", "to": "generalize", "color": "orange", "width": 2, "title": "antonym"}, {"from": "specialized", "to": "elaborate", "color": "green", "width": 2, "title": "hypernym"}, {"from": "specialized", "to": "lucubrate", "color": "green", "width": 2, "title": "hypernym"}, {"from": "specialized", "to": "expatiate", "color": "green", "width": 2, "title": "hypernym"}, {"from": "specialized", "to": "exposit", "color": "green", "width": 2, "title": "hypernym"}, {"from": "specialized", "to": "enlarge", "color": "green", "width": 2, "title": "hypernym"}, {"from": "specialized", "to": "expand", "color": "green", "width": 2, "title": "hypernym"}, {"from": "specialized", "to": "expound", "color": "green", "width": 2, "title": "hypernym"}, {"from": "specialized", "to": "dilate", "color": "green", "width": 2, "title": "hypernym"}, {"from": "specialized", "to": "modify", "color": "green", "width": 2, "title": "hypernym"}, {"from": "specialized", "to": "work", "color": "green", "width": 2, "title": "hypernym"}, {"from": "specialized", "to": "speciate", "color": "blue", "width": 2, "title": "synonym"}, {"from": "specialized", "to": "differentiate", "color": "blue", "width": 2, "title": "synonym"}, {"from": "specialized", "to": "evolve", "color": "green", "width": 2, "title": "hypernym"}, {"from": "specialized", "to": "specialised", "color": "blue", "width": 2, "title": "synonym"}, {"from": "specialized", "to": "unspecialized", "color": "orange", "width": 2, "title": "antonym"}]};
+                var options = {"interaction": {"hover": true, "zoomView": true, "dragView": true, "navigationButtons": true, "keyboard": true, "tooltipDelay": 100}, "physics": {"stabilization": {"iterations": 100, "fit": true}}, "layout": {"improvedLayout": true}};
+                var network = new vis.Network(container, data, options);
+
+                // Make the network object globally accessible
+                window.network = network;
+
+                // Fit the network to the container on load
+                network.once("afterDrawing", function() {
+                    setTimeout(function() {
+                        network.fit({
+                            animation: {
+                                duration: 1000,
+                                easingFunction: 'easeInOutQuad'
+                            }
+                        });
+                    }, 200);
+                });
+
+                // Add click event to nodes
+                network.on("click", function(params) {
+                    if (params.nodes.length > 0) {
+                        var nodeId = params.nodes[0];
+                        if (nodeId !== '') {
+                            window.parent.location.href = '/visualize/' + encodeURIComponent(nodeId);
+                        }
+                    }
+                });
+
+                // Prevent errors when iframe is reloaded
+                window.addEventListener('unload', function() {
+                    if (network) {
+                        try {
+                            network.destroy();
+                        } catch (e) {
+                            console.log('Network already destroyed');
+                        }
+                    }
+                });
+            </script>
+        </body>
+        </html>
+        

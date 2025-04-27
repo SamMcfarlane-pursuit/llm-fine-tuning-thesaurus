@@ -6,67 +6,192 @@ This project demonstrates how to fine-tune a Large Language Model (LLM) to creat
 
 ## Features
 
+### Learning Resources
 * **Guided Fine-tuning:** Step-by-step instructions for loading a pre-trained LLM, applying LoRA, and running a basic fine-tuning process.
-* **Interactive Code:** Executable code cells for each stage of the fine-tuning process.
-* **Visual Thesaurus Interface:** Interactive visualization of word relationships, similar to commercial thesaurus tools.
+* **Interactive Code:** Executable code cells for each stage of the fine-tuning process, compatible with Google Colab.
+* **Comprehensive Tutorials:** In-depth explanations of LLM fine-tuning concepts, techniques, and best practices.
+* **Hands-on Workshops:** Practical exercises to implement various fine-tuning techniques like QLoRA, LoRA, and parameter-efficient methods.
+* **Real-time Quizzes:** Interactive quizzes to test your knowledge after each lesson with immediate feedback.
+
+### Thesaurus Features
+* **Visual Thesaurus Interface:** Interactive visualization of word relationships and LLM fine-tuning concepts.
+* **Advanced Search:** Full-text search capabilities for finding related terms and concepts.
+* **Concept Maps:** Visual representation of relationships between different LLM fine-tuning techniques.
+* **Term Definitions:** Comprehensive explanations of technical terms with examples and use cases.
+
+### Application Features
+* **User Authentication:** Secure login with email, Google, GitHub, or other OAuth providers.
+* **Progress Tracking:** Track your learning journey with detailed progress statistics.
+* **Subscription Tiers:** Free and premium content with different access levels.
+* **Real-time Analytics:** Track your learning patterns and engagement metrics.
+* **Responsive Design:** Works seamlessly on desktop, tablet, and mobile devices.
+* **Dark Mode:** Eye-friendly dark theme for comfortable reading.
+
+### Technical Features
 * **Basic Inference:** Demonstrates how to use the fine-tuned model to generate synonyms and related words.
-* **"Need Help" Point:** A specific section where users can input a question and receive a direct text response.
-* **Clear Instructions:** Concise guidance for each step of the process.
+* **Pipeline Integration:** Easy model inference using Hugging Face pipeline() functionality.
+* **Memory Efficiency:** Techniques for optimizing memory usage during fine-tuning.
+* **Gradient Checkpointing:** Implementation of gradient checkpointing for training larger models.
+* **Quantization:** Practical examples of model quantization for faster inference.
+* **"Need Help" Assistant:** AI-powered assistance for answering questions about LLM fine-tuning.
 
 ## Getting Started
 
 ### Local Development
 
-1. Install the required dependencies:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/llm-fine-tuning-thesaurus.git
+   cd llm-fine-tuning-thesaurus
    ```
+
+2. Create and activate a virtual environment:
+   ```bash
+   python -m venv thesaurus_env
+   source thesaurus_env/bin/activate  # On Windows: thesaurus_env\Scripts\activate
+   ```
+
+3. Install the required dependencies:
+   ```bash
    pip install -r requirements.txt
    ```
 
-2. Download NLTK data:
+4. Set up environment variables:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration
    ```
+
+5. Initialize the database:
+   ```bash
+   flask db init
+   flask db migrate -m "Initial migration"
+   flask db upgrade
+   ```
+
+6. Download NLTK data:
+   ```bash
    python -c "import nltk; nltk.download('wordnet'); nltk.download('omw-1.4')"
    ```
 
-3. Open the Jupyter notebook to learn about LLM fine-tuning:
-   ```
-   jupyter notebook thesaurus_llm_finetuning.ipynb
-   ```
-
-4. Follow the step-by-step instructions in the notebook to fine-tune the model.
-
-5. Launch the visual thesaurus web application:
-   ```
-   python app.py
+7. Launch the web application:
+   ```bash
+   flask run
    ```
 
-6. Open your browser and navigate to `http://localhost:5000` to use the visual thesaurus interface.
+8. Open your browser and navigate to `http://localhost:5000` to use the application.
+
+### Fine-Tuning with QLoRA
+
+1. Prepare the dataset for fine-tuning:
+   ```bash
+   python prepare_dataset.py
+   ```
+
+2. Run the QLoRA fine-tuning process:
+   ```bash
+   python finetune_qlora.py
+   ```
+
+   Alternatively, you can use the provided shell script:
+   ```bash
+   chmod +x run_finetuning.sh
+   ./run_finetuning.sh
+   ```
+
+3. Test the fine-tuned model:
+   ```bash
+   python test_model.py
+   ```
+
+4. Deploy the application with the fine-tuned model:
+   ```bash
+   chmod +x deploy.sh
+   ./deploy.sh
+   ```
+
+### Using Google Colab for Tutorials
+
+1. Access the Colab notebooks directly from the application's tutorial section.
+
+2. Alternatively, open the notebooks from the `notebooks/` directory in Google Colab:
+   - Go to [Google Colab](https://colab.research.google.com/)
+   - Click on "File" > "Open notebook"
+   - Select the "GitHub" tab
+   - Enter the repository URL: `https://github.com/yourusername/llm-fine-tuning-thesaurus`
+   - Choose the notebook you want to open
+
+3. Follow the step-by-step instructions in the notebook to learn about LLM fine-tuning.
 
 ### Deployment
 
 #### Using Docker
 
 1. Build the Docker image:
-   ```
+   ```bash
    docker build -t thesaurus-llm .
    ```
 
 2. Run the container:
-   ```
-   docker run -p 8000:8000 thesaurus-llm
+   ```bash
+   docker run -p 5000:5000 -e SECRET_KEY=your-secret-key thesaurus-llm
    ```
 
-3. Access the application at `http://localhost:8000`
+3. Access the application at `http://localhost:5000`
 
 #### Using Docker Compose
 
-1. Start the application:
+1. Create a `.env` file based on `.env.example` with your configuration:
+   ```bash
+   cp .env.example .env
+   # Edit .env with your configuration
    ```
+
+2. Start the application with all services (web, database, Redis, Nginx):
+   ```bash
    docker-compose up -d
    ```
 
-2. Access the application at `http://localhost:8000`
+3. Access the application at `http://localhost:80` (or `https://localhost:443` if SSL is configured)
 
-#### Deploying to Render (Free Domain)
+#### Deploying to Cloud Providers
+
+##### AWS Elastic Beanstalk
+
+1. Install the AWS CLI and EB CLI:
+   ```bash
+   pip install awscli awsebcli
+   ```
+
+2. Initialize the EB application:
+   ```bash
+   eb init -p docker
+   ```
+
+3. Create an environment and deploy:
+   ```bash
+   eb create thesaurus-llm-env
+   ```
+
+4. Access your application at the provided AWS URL
+
+##### Google Cloud Run
+
+1. Install the Google Cloud SDK
+
+2. Build and push the Docker image to Google Container Registry:
+   ```bash
+   gcloud builds submit --tag gcr.io/your-project-id/thesaurus-llm
+   ```
+
+3. Deploy to Cloud Run:
+   ```bash
+   gcloud run deploy thesaurus-llm --image gcr.io/your-project-id/thesaurus-llm --platform managed
+   ```
+
+4. Access your application at the provided Google Cloud Run URL
+
+##### Render (Free Domain)
 
 1. Fork this repository to your GitHub account
 
@@ -75,43 +200,62 @@ This project demonstrates how to fine-tune a Large Language Model (LLM) to creat
 3. Create a new Web Service and select your forked repository
 
 4. Use the following settings:
-   - Environment: Python
-   - Build Command: `./build.sh`
-   - Start Command: `gunicorn app:app`
+   - Environment: Docker
+   - Build Command: (leave empty)
+   - Start Command: (leave empty)
 
-5. Add the following environment variables:
-   - `PYTHON_VERSION`: 3.9.18
-   - `FLASK_ENV`: production
+5. Add the necessary environment variables from `.env.example`
 
 6. Click "Create Web Service"
 
 7. Access your application at the provided Render URL (e.g., your-app-name.onrender.com)
 
-#### Deploying to a Custom Domain
+#### Deploying to a Custom Domain with SSL
 
-1. Set up a server with Docker installed
+1. Set up a server with Docker and Docker Compose installed
 
-2. Clone the repository to your server
+2. Clone the repository to your server:
+   ```bash
+   git clone https://github.com/yourusername/llm-fine-tuning-thesaurus.git
+   cd llm-fine-tuning-thesaurus
+   ```
 
 3. Create a `.env` file based on `.env.example` with your configuration
 
-4. Start the application using Docker Compose:
+4. Create SSL certificates using Let's Encrypt:
+   ```bash
+   mkdir -p nginx/ssl
+   sudo certbot certonly --standalone -d yourdomain.com -d www.yourdomain.com
+   sudo cp /etc/letsencrypt/live/yourdomain.com/fullchain.pem nginx/ssl/
+   sudo cp /etc/letsencrypt/live/yourdomain.com/privkey.pem nginx/ssl/
+   sudo chmod 755 nginx/ssl
    ```
+
+5. Update the Nginx configuration in `nginx/conf.d/app.conf` with your domain name
+
+6. Start the application using Docker Compose:
+   ```bash
    docker-compose up -d
    ```
 
-5. Set up a reverse proxy (like Nginx) to forward requests from your domain to the application
-
-6. Configure SSL certificates for secure HTTPS connections
+7. Set up automatic SSL certificate renewal:
+   ```bash
+   sudo crontab -e
+   # Add the following line:
+   0 12 * * * certbot renew --quiet && cp /etc/letsencrypt/live/yourdomain.com/fullchain.pem /path/to/app/nginx/ssl/ && cp /etc/letsencrypt/live/yourdomain.com/privkey.pem /path/to/app/nginx/ssl/ && docker-compose restart nginx
+   ```
 
 ## Requirements
 
 - Python 3.8+
-- PyTorch 2.0+
-- Transformers library
-- PEFT library
+- PyTorch 2.1+
+- Transformers library 4.35+
+- PEFT library 0.5+
+- bitsandbytes 0.41+
+- trl 0.7+
 - 8GB+ RAM
-- GPU recommended for faster training
+- GPU with at least 8GB VRAM recommended for QLoRA fine-tuning
+- 16GB+ RAM for inference with quantized models
 
 ## Project Structure
 

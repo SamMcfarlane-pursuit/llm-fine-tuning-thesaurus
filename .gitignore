@@ -42,9 +42,33 @@ ENV/
 *.ckpt
 *.model
 thesaurus-model-lora/
+thesaurus_model/
+thesaurus_model_final/
 
 # Generated files
 static/visualizations/
+static/uploads/
+uploads/
+instance/
+*.sqlite
+*.db
+
+# Coverage reports
+.coverage
+htmlcov/
+coverage.xml
+coverage/
+
+# Docker volumes
+data/
+postgres_data/
+redis_data/
+
+# SSL certificates
+nginx/ssl/
+*.pem
+*.key
+*.crt
 
 # Logs
 *.log

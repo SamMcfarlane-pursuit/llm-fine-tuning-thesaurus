@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Free Access{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h3><i class="bi bi-unlock"></i> All Features Are Free!</h3>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-gift text-success" style="font-size: 5rem;"></i>
+                    </div>
+                    
+                    <h4 class="text-center mb-4">Good news! All features are now completely free!</h4>
+                    
+                    <p class="lead text-center">
+                        You have full access to all features of the LLM Fine-Tuning Thesaurus, including:
+                    </p>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6 offset-md-3">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i> Advanced Tutorials
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i> Progress Tracking
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i> Interactive Quizzes
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i> Code Exercises
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i> Premium Content
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg">
+                            <i class="bi bi-house-door"></i> Return to Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

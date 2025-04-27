@@ -1,0 +1,272 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} - Visual Thesaurus LLM{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Quizzes</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 style="font-size: 3rem; font-weight: 800; background: linear-gradient(135deg, #4287f5, #00ffdd); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; display: inline-block; margin-bottom: 10px;">{% if topic_filter %}Quizzes for {{ topic_filter }}{% elif module_filter %}Quizzes for {{ module_filter }} module{% else %}Available Quizzes{% endif %}</h1>
+                <div class="d-flex align-items-center">
+                    <a href="{{ url_for('quiz.quiz_dashboard') }}" class="btn me-3" style="background: linear-gradient(135deg, #00c853, #00d463); border: none; border-radius: 10px; padding: 10px 20px; font-weight: 600; letter-spacing: 0.5px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); color: white; transition: all 0.3s ease;">
+                        <i class="bi bi-speedometer2 me-2"></i> Learning Dashboard
+                    </a>
+                    <div class="quiz-filters">
+                        <div class="btn-group" role="group" aria-label="Quiz filters">
+                            <button type="button" class="btn btn-outline-primary quiz-filter-btn active" data-filter="all" style="border-width: 2px; font-weight: 600; letter-spacing: 0.5px; padding: 8px 18px;">All</button>
+                            <button type="button" class="btn btn-outline-primary quiz-filter-btn" data-filter="completed" style="border-width: 2px; font-weight: 600; letter-spacing: 0.5px; padding: 8px 18px;">Completed</button>
+                            <button type="button" class="btn btn-outline-primary quiz-filter-btn" data-filter="incomplete" style="border-width: 2px; font-weight: 600; letter-spacing: 0.5px; padding: 8px 18px;">Incomplete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <div class="card bg-dark border-0" style="border-radius: 15px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.3); border: 2px solid rgba(66, 135, 245, 0.2) !important; position: relative; margin-bottom: 20px;">
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: linear-gradient(to right, #4287f5, #00ffdd); z-index: 1;"></div>
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center">
+                                <div class="me-4">
+                                    <div style="width: 60px; height: 60px; border-radius: 12px; background: linear-gradient(135deg, rgba(66, 135, 245, 0.2), rgba(0, 255, 221, 0.2)); display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0,0,0,0.2);">
+                                        <i class="bi bi-lightbulb-fill fs-1" style="color: #4287f5; text-shadow: 0 0 10px rgba(66, 135, 245, 0.5);"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="mb-2" style="font-weight: 700; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">Test Your Knowledge</h4>
+                                    <p class="mb-0" style="font-size: 1.1rem; line-height: 1.6; color: #e0e0e0;">Complete quizzes to test your understanding of LLM fine-tuning concepts. Each quiz focuses on different aspects of the technology and provides detailed feedback to help you learn.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if not current_user.is_authenticated and ('guest_attempts' in session or 'guest_progress' in session) %}
+                    <div style="background: linear-gradient(135deg, rgba(255, 221, 32, 0.15), rgba(255, 153, 0, 0.15)); border-radius: 15px; padding: 20px; margin-top: 20px; border: 2px solid rgba(255, 221, 32, 0.3); box-shadow: 0 15px 35px rgba(0,0,0,0.3);">
+                        <div class="d-flex">
+                            <div class="me-4">
+                                <div style="width: 60px; height: 60px; border-radius: 12px; background: linear-gradient(135deg, rgba(255, 221, 32, 0.2), rgba(255, 153, 0, 0.2)); display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0,0,0,0.2);">
+                                    <i class="bi bi-exclamation-triangle-fill fs-1" style="color: #ffdd20; text-shadow: 0 0 10px rgba(255, 221, 32, 0.5);"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 style="font-weight: 700; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.3); margin-bottom: 10px;">Save Your Progress</h4>
+                                <p style="font-size: 1.1rem; line-height: 1.6; color: #e0e0e0; margin-bottom: 15px;">You're making progress as a guest! Create an account to save your progress permanently.</p>
+                                <a href="{{ url_for('auth.convert_guest') }}" class="btn" style="background: linear-gradient(135deg, #00c853, #00d463); border: none; border-radius: 10px; padding: 10px 20px; font-weight: 600; letter-spacing: 0.5px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2), 0 0 10px rgba(0, 212, 99, 0.3); transition: all 0.3s ease; color: white; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">
+                                    <i class="bi bi-save me-2"></i> Save My Progress
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100" style="border-radius: 15px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.3); border: 2px solid rgba(66, 135, 245, 0.2) !important; background-color: rgba(20, 20, 20, 0.7);">
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: linear-gradient(to right, #4287f5, #00ffdd); z-index: 1;"></div>
+                        <div class="card-header" style="background: linear-gradient(135deg, rgba(66, 135, 245, 0.2), rgba(0, 255, 221, 0.2)); border-bottom: 2px solid rgba(66, 135, 245, 0.2); padding: 20px;">
+                            <h5 class="mb-0" style="font-weight: 700; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.3);"><i class="bi bi-bar-chart-fill me-2" style="color: #4287f5;"></i> Your Progress</h5>
+                        </div>
+                        <div class="card-body" style="padding: 25px;">
+                            {% set total_quizzes = quizzes|length %}
+                            {% set completed_quizzes = 0 %}
+                            {% set attempted_quizzes = 0 %}
+                            {% set total_score = 0 %}
+
+                            {% for quiz in quizzes %}
+                                {% if quiz.id in user_attempts %}
+                                    {% if user_attempts[quiz.id].passed %}
+                                        {% set completed_quizzes = completed_quizzes + 1 %}
+                                    {% else %}
+                                        {% set attempted_quizzes = attempted_quizzes + 1 %}
+                                    {% endif %}
+                                    {% set total_score = total_score + user_attempts[quiz.id].best_score %}
+                                {% endif %}
+                            {% endfor %}
+
+                            {% set avg_score = (total_score / (completed_quizzes + attempted_quizzes))|round|int if (completed_quizzes + attempted_quizzes) > 0 else 0 %}
+                            {% set completion_percentage = (completed_quizzes / total_quizzes * 100)|round|int if total_quizzes > 0 else 0 %}
+
+                            <div class="progress mb-4" style="height: 12px; border-radius: 6px; background-color: rgba(30, 30, 30, 0.8); box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3); overflow: hidden;">
+                                <div class="progress-bar" role="progressbar" style="width: {{ completion_percentage }}%; background-image: linear-gradient(to right, #4287f5, #00ffdd); box-shadow: 0 0 10px rgba(66, 135, 245, 0.5);" aria-valuenow="{{ completion_percentage }}" aria-valuemin="0" aria-valuemax="100">{{ completion_percentage }}%</div>
+                            </div>
+
+                            <div class="row text-center g-3">
+                                <div class="col-4">
+                                    <div style="background: linear-gradient(135deg, rgba(30, 30, 30, 0.8), rgba(40, 40, 40, 0.8)); border-radius: 10px; padding: 15px; text-align: center; height: 100%; transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);">
+                                        <div style="font-size: 1.8rem; font-weight: 700; color: #00d463; text-shadow: 0 0 10px rgba(0, 212, 99, 0.3);">{{ completed_quizzes }}</div>
+                                        <div style="font-size: 0.85rem; color: #e0e0e0; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px;">Completed</div>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div style="background: linear-gradient(135deg, rgba(30, 30, 30, 0.8), rgba(40, 40, 40, 0.8)); border-radius: 10px; padding: 15px; text-align: center; height: 100%; transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);">
+                                        <div style="font-size: 1.8rem; font-weight: 700; color: #ffdd20; text-shadow: 0 0 10px rgba(255, 221, 32, 0.3);">{{ attempted_quizzes }}</div>
+                                        <div style="font-size: 0.85rem; color: #e0e0e0; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px;">In Progress</div>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div style="background: linear-gradient(135deg, rgba(30, 30, 30, 0.8), rgba(40, 40, 40, 0.8)); border-radius: 10px; padding: 15px; text-align: center; height: 100%; transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);">
+                                        <div style="font-size: 1.8rem; font-weight: 700; color: #4287f5; text-shadow: 0 0 10px rgba(66, 135, 245, 0.3);">{{ avg_score }}%</div>
+                                        <div style="font-size: 0.85rem; color: #e0e0e0; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px;">Avg. Score</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if quizzes %}
+                <div class="row">
+                    {% for quiz in quizzes %}
+                        <div class="col-md-4 mb-4">
+                            <div class="quiz-card {% if quiz.id in user_attempts and user_attempts[quiz.id].passed %}quiz-passed{% endif %}"
+                                 data-module="{{ quiz.module }}"
+                                 data-topic="{{ quiz.topic }}"
+                                 data-status="{% if quiz.id in user_attempts %}{% if user_attempts[quiz.id].passed %}completed{% else %}attempted{% endif %}{% else %}incomplete{% endif %}">
+                                <div class="card-header">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h5 class="card-title mb-0">{{ quiz.title }}</h5>
+                                        <div class="quiz-icon">
+                                            {% if 'lora' in quiz.module or 'lora' in quiz.topic %}
+                                                <i class="bi bi-diagram-3"></i>
+                                            {% elif 'qlora' in quiz.module or 'qlora' in quiz.topic %}
+                                                <i class="bi bi-cpu"></i>
+                                            {% elif 'memory' in quiz.module or 'memory' in quiz.topic %}
+                                                <i class="bi bi-memory"></i>
+                                            {% elif 'fine-tuning' in quiz.module or 'fine-tuning' in quiz.topic %}
+                                                <i class="bi bi-sliders"></i>
+                                            {% elif 'gpt' in quiz.module or 'gpt' in quiz.topic %}
+                                                <i class="bi bi-chat-square-text"></i>
+                                            {% else %}
+                                                <i class="bi bi-journal-check"></i>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="quiz-categories mt-2">
+                                        <span class="badge bg-primary">{{ quiz.module }}</span>
+                                        <span class="badge bg-secondary">{{ quiz.topic }}</span>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text">{{ quiz.description }}</p>
+
+                                    <div class="quiz-details mb-3">
+                                        <div class="row g-3">
+                                            <div class="col-6">
+                                                <div class="quiz-detail-item">
+                                                    <div class="detail-label">Questions</div>
+                                                    <div class="detail-value">{{ quiz.questions.count() }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="quiz-detail-item">
+                                                    <div class="detail-label">Passing Score</div>
+                                                    <div class="detail-value">{{ quiz.passing_score }}%</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="quiz-detail-item">
+                                                    <div class="detail-label">Difficulty</div>
+                                                    <div class="detail-value">
+                                                        {% if quiz.passing_score >= 80 %}
+                                                            <span style="color: #ff4d10; text-shadow: 0 0 10px rgba(255, 77, 16, 0.3);">Hard</span>
+                                                        {% elif quiz.passing_score >= 70 %}
+                                                            <span style="color: #ffdd20; text-shadow: 0 0 10px rgba(255, 221, 32, 0.3);">Medium</span>
+                                                        {% else %}
+                                                            <span style="color: #00d463; text-shadow: 0 0 10px rgba(0, 212, 99, 0.3);">Easy</span>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="quiz-detail-item">
+                                                    <div class="detail-label">Est. Time</div>
+                                                    <div class="detail-value">{{ quiz.questions.count() * 2 }} min</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {% if quiz.id in user_attempts %}
+                                        <div class="quiz-stats mb-3">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <span style="font-weight: 600; color: #ffffff; font-size: 1.1rem;">Best Score:</span>
+                                                <span style="padding: 8px 15px; font-size: 1rem; font-weight: 700; border-radius: 8px; box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2); {% if user_attempts[quiz.id].passed %}background: linear-gradient(135deg, rgba(0, 212, 99, 0.2), rgba(0, 200, 83, 0.2)); color: #00d463; border: 2px solid rgba(0, 212, 99, 0.3);{% else %}background: linear-gradient(135deg, rgba(255, 221, 32, 0.2), rgba(255, 193, 7, 0.2)); color: #ffdd20; border: 2px solid rgba(255, 221, 32, 0.3);{% endif %}">
+                                                    {{ user_attempts[quiz.id].best_score }}%
+                                                </span>
+                                            </div>
+                                            <div class="progress" style="height: 12px; border-radius: 6px; background-color: rgba(30, 30, 30, 0.8); box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3); overflow: hidden;">
+                                                <div class="progress-bar"
+                                                     role="progressbar"
+                                                     style="width: {{ user_attempts[quiz.id].best_score }}%; {% if user_attempts[quiz.id].passed %}background-image: linear-gradient(to right, #00c853, #00d463); box-shadow: 0 0 10px rgba(0, 212, 99, 0.5);{% else %}background-image: linear-gradient(to right, #ffc107, #ffdd20); box-shadow: 0 0 10px rgba(255, 221, 32, 0.5);{% endif %}"
+                                                     aria-valuenow="{{ user_attempts[quiz.id].best_score }}"
+                                                     aria-valuemin="0"
+                                                     aria-valuemax="100"></div>
+                                            </div>
+                                            <div class="mt-3" style="color: #e0e0e0; font-size: 0.9rem; display: flex; align-items: center;">
+                                                <i class="bi bi-clock-history me-2" style="color: #4287f5;"></i> {{ user_attempts[quiz.id].attempts }} attempt(s)
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <div class="quiz-stats mb-3">
+                                            <div style="background: linear-gradient(135deg, rgba(66, 135, 245, 0.1), rgba(0, 255, 221, 0.1)); border-radius: 12px; padding: 15px; border: 2px solid rgba(66, 135, 245, 0.2); display: flex; align-items: center;">
+                                                <i class="bi bi-info-circle me-3" style="color: #4287f5; font-size: 1.5rem; text-shadow: 0 0 10px rgba(66, 135, 245, 0.3);"></i>
+                                                <span style="color: #e0e0e0; font-size: 1rem;">You haven't attempted this quiz yet.</span>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="card-footer">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="quiz-status">
+                                            {% if quiz.id in user_attempts %}
+                                                {% if user_attempts[quiz.id].passed %}
+                                                    <span class="status-icon text-success"><i class="bi bi-check-circle-fill"></i></span>
+                                                    <span class="text-success">Passed</span>
+                                                {% else %}
+                                                    <span class="status-icon text-warning"><i class="bi bi-exclamation-circle-fill"></i></span>
+                                                    <span class="text-warning">Attempted</span>
+                                                {% endif %}
+                                            {% else %}
+                                                <span class="status-icon text-muted"><i class="bi bi-circle"></i></span>
+                                                <span class="text-muted">Not Started</span>
+                                            {% endif %}
+                                        </div>
+                                        <a href="{{ url_for('quiz.quiz_detail', quiz_id=quiz.id) }}" class="btn btn-primary">
+                                            {% if quiz.id in user_attempts and user_attempts[quiz.id].passed %}
+                                                <i class="bi bi-eye me-1"></i> Review
+                                            {% else %}
+                                                <i class="bi bi-play-fill me-1"></i> Take Quiz
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div style="background: linear-gradient(135deg, rgba(66, 135, 245, 0.15), rgba(0, 255, 221, 0.15)); border-radius: 15px; padding: 20px; margin-top: 20px; border: 2px solid rgba(66, 135, 245, 0.3); box-shadow: 0 15px 35px rgba(0,0,0,0.3); display: flex; align-items: center;">
+                    <div style="width: 50px; height: 50px; border-radius: 12px; background: linear-gradient(135deg, rgba(66, 135, 245, 0.2), rgba(0, 255, 221, 0.2)); display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0,0,0,0.2); margin-right: 20px;">
+                        <i class="bi bi-info-circle fs-2" style="color: #4287f5; text-shadow: 0 0 10px rgba(66, 135, 245, 0.5);"></i>
+                    </div>
+                    <span style="font-size: 1.2rem; color: #ffffff; font-weight: 500;">No quizzes are available at the moment.</span>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Styles moved to enhanced-quiz.css -->
+{% endblock %}

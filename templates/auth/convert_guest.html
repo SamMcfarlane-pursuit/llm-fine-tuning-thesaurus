@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% block title %}Convert Guest Account{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">Save Your Progress</h2>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> You've made progress as a guest! Create an account to save your progress permanently.
+                    </div>
+
+                    {% if quiz_attempts %}
+                    <div class="mb-4">
+                        <h4>Your Quiz Progress</h4>
+                        <ul class="list-group">
+                            {% for quiz_id, attempt in quiz_attempts.items() %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ attempt.quiz_title }}
+                                <span class="badge bg-primary rounded-pill">Score: {{ attempt.score }}%</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                    {% if progress_items %}
+                    <div class="mb-4">
+                        <h4>Your Learning Progress</h4>
+                        <ul class="list-group">
+                            {% for key, progress in progress_items.items() %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                {{ progress.module }} - {{ progress.topic }}
+                                {% if progress.completed %}
+                                <span class="badge bg-success rounded-pill">Completed</span>
+                                {% else %}
+                                <span class="badge bg-warning rounded-pill">In Progress</span>
+                                {% endif %}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card mb-3">
+                                <div class="card-header bg-success text-white">
+                                    <h5 class="mb-0">Create New Account</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form method="POST" action="{{ url_for('auth.convert_guest_to_user') }}">
+                                        {{ form.hidden_tag() }}
+
+                                        <div class="mb-3">
+                                            {{ form.username.label(class="form-label") }}
+                                            {{ form.username(class="form-control") }}
+                                            {% for error in form.username.errors %}
+                                            <div class="text-danger">{{ error }}</div>
+                                            {% endfor %}
+                                        </div>
+
+                                        <div class="mb-3">
+                                            {{ form.email.label(class="form-label") }}
+                                            {{ form.email(class="form-control") }}
+                                            {% for error in form.email.errors %}
+                                            <div class="text-danger">{{ error }}</div>
+                                            {% endfor %}
+                                        </div>
+
+                                        <div class="mb-3">
+                                            {{ form.password.label(class="form-label") }}
+                                            {{ form.password(class="form-control") }}
+                                            {% for error in form.password.errors %}
+                                            <div class="text-danger">{{ error }}</div>
+                                            {% endfor %}
+                                        </div>
+
+                                        <div class="mb-3">
+                                            {{ form.password2.label(class="form-label") }}
+                                            {{ form.password2(class="form-control") }}
+                                            {% for error in form.password2.errors %}
+                                            <div class="text-danger">{{ error }}</div>
+                                            {% endfor %}
+                                        </div>
+
+                                        <div class="d-grid">
+                                            {{ form.submit(class="btn btn-success") }}
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="mb-0">Sign In with Existing Account</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p>Already have an account? Sign in to transfer your guest progress.</p>
+
+                                    <div class="d-grid gap-2">
+                                        <a href="{{ url_for('auth.login') }}" class="btn btn-primary">
+                                            <i class="fas fa-sign-in-alt"></i> Sign In
+                                        </a>
+
+                                        {% if oauth_providers and false %}
+                                        <div class="text-center my-3">
+                                            <span class="divider-text">or sign in with</span>
+                                        </div>
+
+                                        {% for provider in oauth_providers %}
+                                        <a href="#" class="btn btn-outline-dark">
+                                            <i class="bi bi-{{ provider.icon }}"></i> {{ provider.display_name }}
+                                        </a>
+                                        {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{{ url_for('index') }}" class="btn btn-link">Continue as Guest</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

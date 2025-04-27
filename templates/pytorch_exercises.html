@@ -1,0 +1,401 @@
+{% extends "base.html" %}
+
+{% block title %}PyTorch Exercises | Thesaurus AI LLM FT{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/frameworks.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="framework-header pytorch-header">
+                <h1>PyTorch Exercises</h1>
+                <p>Hands-on exercises to master PyTorch through practical implementation of machine learning models and techniques.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Getting Started</h2>
+                <p>These exercises are designed to help you build practical skills with PyTorch. Each exercise includes:</p>
+                <ul>
+                    <li>Clear learning objectives</li>
+                    <li>Step-by-step instructions</li>
+                    <li>Code templates to get you started</li>
+                    <li>Challenges to extend your learning</li>
+                    <li>Solutions for reference</li>
+                </ul>
+                <p>To get the most out of these exercises, we recommend:</p>
+                <ul>
+                    <li>Completing the exercises in order, as they build on each other</li>
+                    <li>Trying to solve the exercises on your own before looking at the solutions</li>
+                    <li>Experimenting with the code to deepen your understanding</li>
+                    <li>Taking on the challenges to test your skills</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="mb-4" style="color: var(--pytorch-primary); font-weight: 700;">Beginner Exercises</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="exercise-card pytorch-exercise">
+                <div class="exercise-header">
+                    <h3 class="exercise-title">PyTorch Basics</h3>
+                    <span class="exercise-level level-beginner">Beginner</span>
+                </div>
+                <div class="exercise-body">
+                    <p class="exercise-description">Learn the fundamentals of PyTorch by working with tensors, autograd, and basic operations. This exercise will help you understand the building blocks of PyTorch.</p>
+                    <div class="exercise-tags">
+                        <span class="exercise-tag">Tensors</span>
+                        <span class="exercise-tag">Autograd</span>
+                        <span class="exercise-tag">Operations</span>
+                        <span class="exercise-tag">Gradients</span>
+                    </div>
+                </div>
+                <div class="exercise-footer">
+                    <div class="exercise-time">
+                        <i class="bi bi-clock"></i> 45 minutes
+                    </div>
+                    <a href="/frameworks/pytorch/exercises/basics" class="exercise-button">Start Exercise</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="exercise-card pytorch-exercise">
+                <div class="exercise-header">
+                    <h3 class="exercise-title">Linear Regression</h3>
+                    <span class="exercise-level level-beginner">Beginner</span>
+                </div>
+                <div class="exercise-body">
+                    <p class="exercise-description">Implement a linear regression model using PyTorch. You'll learn how to prepare data, build a model, train it, and evaluate its performance.</p>
+                    <div class="exercise-tags">
+                        <span class="exercise-tag">Linear Models</span>
+                        <span class="exercise-tag">Loss Functions</span>
+                        <span class="exercise-tag">Optimizers</span>
+                        <span class="exercise-tag">Model Training</span>
+                    </div>
+                </div>
+                <div class="exercise-footer">
+                    <div class="exercise-time">
+                        <i class="bi bi-clock"></i> 60 minutes
+                    </div>
+                    <a href="/frameworks/pytorch/exercises/linear-regression" class="exercise-button">Start Exercise</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="exercise-card pytorch-exercise">
+                <div class="exercise-header">
+                    <h3 class="exercise-title">Neural Network Basics</h3>
+                    <span class="exercise-level level-beginner">Beginner</span>
+                </div>
+                <div class="exercise-body">
+                    <p class="exercise-description">Build your first neural network with PyTorch. You'll implement a simple neural network for image classification using the MNIST dataset.</p>
+                    <div class="exercise-tags">
+                        <span class="exercise-tag">Neural Networks</span>
+                        <span class="exercise-tag">nn.Module</span>
+                        <span class="exercise-tag">Classification</span>
+                        <span class="exercise-tag">MNIST</span>
+                    </div>
+                </div>
+                <div class="exercise-footer">
+                    <div class="exercise-time">
+                        <i class="bi bi-clock"></i> 75 minutes
+                    </div>
+                    <a href="/frameworks/pytorch/exercises/neural-network-basics" class="exercise-button">Start Exercise</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="exercise-card pytorch-exercise">
+                <div class="exercise-header">
+                    <h3 class="exercise-title">Data Loading and Preprocessing</h3>
+                    <span class="exercise-level level-beginner">Beginner</span>
+                </div>
+                <div class="exercise-body">
+                    <p class="exercise-description">Learn how to efficiently load and preprocess data using PyTorch's data utilities. You'll work with various data formats and apply transformations.</p>
+                    <div class="exercise-tags">
+                        <span class="exercise-tag">Dataset</span>
+                        <span class="exercise-tag">DataLoader</span>
+                        <span class="exercise-tag">Transforms</span>
+                        <span class="exercise-tag">Batching</span>
+                    </div>
+                </div>
+                <div class="exercise-footer">
+                    <div class="exercise-time">
+                        <i class="bi bi-clock"></i> 60 minutes
+                    </div>
+                    <a href="/frameworks/pytorch/exercises/data-loading" class="exercise-button">Start Exercise</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4 mt-5">
+        <div class="col-12">
+            <h2 class="mb-4" style="color: var(--pytorch-primary); font-weight: 700;">Intermediate Exercises</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="exercise-card pytorch-exercise">
+                <div class="exercise-header">
+                    <h3 class="exercise-title">Convolutional Neural Networks</h3>
+                    <span class="exercise-level level-intermediate">Intermediate</span>
+                </div>
+                <div class="exercise-body">
+                    <p class="exercise-description">Implement convolutional neural networks (CNNs) for image classification. You'll build a CNN from scratch and understand how convolutional layers work.</p>
+                    <div class="exercise-tags">
+                        <span class="exercise-tag">CNNs</span>
+                        <span class="exercise-tag">Conv2d</span>
+                        <span class="exercise-tag">Pooling</span>
+                        <span class="exercise-tag">Image Classification</span>
+                    </div>
+                </div>
+                <div class="exercise-footer">
+                    <div class="exercise-time">
+                        <i class="bi bi-clock"></i> 90 minutes
+                    </div>
+                    <a href="/frameworks/pytorch/exercises/cnn" class="exercise-button">Start Exercise</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="exercise-card pytorch-exercise">
+                <div class="exercise-header">
+                    <h3 class="exercise-title">Recurrent Neural Networks</h3>
+                    <span class="exercise-level level-intermediate">Intermediate</span>
+                </div>
+                <div class="exercise-body">
+                    <p class="exercise-description">Build recurrent neural networks (RNNs) for sequence data. You'll implement RNNs for text classification and time series prediction.</p>
+                    <div class="exercise-tags">
+                        <span class="exercise-tag">RNNs</span>
+                        <span class="exercise-tag">LSTM</span>
+                        <span class="exercise-tag">GRU</span>
+                        <span class="exercise-tag">Sequence Data</span>
+                    </div>
+                </div>
+                <div class="exercise-footer">
+                    <div class="exercise-time">
+                        <i class="bi bi-clock"></i> 90 minutes
+                    </div>
+                    <a href="/frameworks/pytorch/exercises/rnn" class="exercise-button">Start Exercise</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="exercise-card pytorch-exercise">
+                <div class="exercise-header">
+                    <h3 class="exercise-title">Custom Datasets and DataLoaders</h3>
+                    <span class="exercise-level level-intermediate">Intermediate</span>
+                </div>
+                <div class="exercise-body">
+                    <p class="exercise-description">Learn how to create custom datasets and efficient data loading pipelines. You'll implement custom Dataset classes and use DataLoader for efficient batching.</p>
+                    <div class="exercise-tags">
+                        <span class="exercise-tag">Custom Dataset</span>
+                        <span class="exercise-tag">DataLoader</span>
+                        <span class="exercise-tag">Samplers</span>
+                        <span class="exercise-tag">Collate Functions</span>
+                    </div>
+                </div>
+                <div class="exercise-footer">
+                    <div class="exercise-time">
+                        <i class="bi bi-clock"></i> 75 minutes
+                    </div>
+                    <a href="/frameworks/pytorch/exercises/custom-datasets" class="exercise-button">Start Exercise</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="exercise-card pytorch-exercise">
+                <div class="exercise-header">
+                    <h3 class="exercise-title">Transfer Learning</h3>
+                    <span class="exercise-level level-intermediate">Intermediate</span>
+                </div>
+                <div class="exercise-body">
+                    <p class="exercise-description">Apply transfer learning to leverage pre-trained models for new tasks. You'll fine-tune a pre-trained model for image classification on a custom dataset.</p>
+                    <div class="exercise-tags">
+                        <span class="exercise-tag">Pre-trained Models</span>
+                        <span class="exercise-tag">Fine-tuning</span>
+                        <span class="exercise-tag">Feature Extraction</span>
+                        <span class="exercise-tag">torchvision</span>
+                    </div>
+                </div>
+                <div class="exercise-footer">
+                    <div class="exercise-time">
+                        <i class="bi bi-clock"></i> 90 minutes
+                    </div>
+                    <a href="/frameworks/pytorch/exercises/transfer-learning" class="exercise-button">Start Exercise</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-4 mt-5">
+        <div class="col-12">
+            <h2 class="mb-4" style="color: var(--pytorch-primary); font-weight: 700;">Advanced Exercises</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="exercise-card pytorch-exercise">
+                <div class="exercise-header">
+                    <h3 class="exercise-title">Generative Adversarial Networks</h3>
+                    <span class="exercise-level level-advanced">Advanced</span>
+                </div>
+                <div class="exercise-body">
+                    <p class="exercise-description">Implement a Generative Adversarial Network (GAN) to generate realistic images. You'll build both the generator and discriminator networks and train them together.</p>
+                    <div class="exercise-tags">
+                        <span class="exercise-tag">GANs</span>
+                        <span class="exercise-tag">Generator</span>
+                        <span class="exercise-tag">Discriminator</span>
+                        <span class="exercise-tag">Image Generation</span>
+                    </div>
+                </div>
+                <div class="exercise-footer">
+                    <div class="exercise-time">
+                        <i class="bi bi-clock"></i> 120 minutes
+                    </div>
+                    <a href="/frameworks/pytorch/exercises/gan" class="exercise-button">Start Exercise</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="exercise-card pytorch-exercise">
+                <div class="exercise-header">
+                    <h3 class="exercise-title">Attention Mechanisms</h3>
+                    <span class="exercise-level level-advanced">Advanced</span>
+                </div>
+                <div class="exercise-body">
+                    <p class="exercise-description">Implement attention mechanisms for sequence-to-sequence models. You'll build a neural machine translation system with attention.</p>
+                    <div class="exercise-tags">
+                        <span class="exercise-tag">Attention</span>
+                        <span class="exercise-tag">Seq2Seq</span>
+                        <span class="exercise-tag">NMT</span>
+                        <span class="exercise-tag">Transformers</span>
+                    </div>
+                </div>
+                <div class="exercise-footer">
+                    <div class="exercise-time">
+                        <i class="bi bi-clock"></i> 120 minutes
+                    </div>
+                    <a href="/frameworks/pytorch/exercises/attention" class="exercise-button">Start Exercise</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="exercise-card pytorch-exercise">
+                <div class="exercise-header">
+                    <h3 class="exercise-title">Model Deployment</h3>
+                    <span class="exercise-level level-advanced">Advanced</span>
+                </div>
+                <div class="exercise-body">
+                    <p class="exercise-description">Learn how to deploy PyTorch models to various platforms. You'll deploy models using TorchScript, ONNX, and PyTorch Mobile.</p>
+                    <div class="exercise-tags">
+                        <span class="exercise-tag">TorchScript</span>
+                        <span class="exercise-tag">ONNX</span>
+                        <span class="exercise-tag">PyTorch Mobile</span>
+                        <span class="exercise-tag">Model Optimization</span>
+                    </div>
+                </div>
+                <div class="exercise-footer">
+                    <div class="exercise-time">
+                        <i class="bi bi-clock"></i> 120 minutes
+                    </div>
+                    <a href="/frameworks/pytorch/exercises/deployment" class="exercise-button">Start Exercise</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="exercise-card pytorch-exercise">
+                <div class="exercise-header">
+                    <h3 class="exercise-title">Distributed Training</h3>
+                    <span class="exercise-level level-advanced">Advanced</span>
+                </div>
+                <div class="exercise-body">
+                    <p class="exercise-description">Scale your training across multiple GPUs and machines. You'll implement data parallelism and model parallelism using PyTorch's distributed training capabilities.</p>
+                    <div class="exercise-tags">
+                        <span class="exercise-tag">DistributedDataParallel</span>
+                        <span class="exercise-tag">Data Parallelism</span>
+                        <span class="exercise-tag">Model Parallelism</span>
+                        <span class="exercise-tag">Multi-GPU Training</span>
+                    </div>
+                </div>
+                <div class="exercise-footer">
+                    <div class="exercise-time">
+                        <i class="bi bi-clock"></i> 150 minutes
+                    </div>
+                    <a href="/frameworks/pytorch/exercises/distributed" class="exercise-button">Start Exercise</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Ready to Start?</h2>
+                <p>Choose an exercise from the list above to begin your PyTorch journey. We recommend starting with the beginner exercises if you're new to PyTorch, or jumping straight to the intermediate or advanced exercises if you already have some experience.</p>
+                
+                <div class="alert alert-info mt-4" role="alert" style="background-color: rgba(238, 76, 44, 0.1); border-left: 5px solid var(--pytorch-primary); color: #333; border-radius: 10px;">
+                    <div class="d-flex">
+                        <div class="me-3">
+                            <i class="bi bi-info-circle-fill" style="font-size: 1.5rem; color: var(--pytorch-primary);"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--pytorch-dark); font-weight: 600;">Need a refresher?</h4>
+                            <p class="mb-0">If you need to review the basics of PyTorch before diving into the exercises, check out our <a href="/frameworks/pytorch" style="color: var(--pytorch-primary); font-weight: 600;">PyTorch Guide</a>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add animation to cards on scroll
+        const cards = document.querySelectorAll('.exercise-card');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        cards.forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(card);
+        });
+    });
+</script>
+{% endblock %}

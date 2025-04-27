@@ -1,0 +1,466 @@
+{% extends "base.html" %}
+
+{% block title %}PyTorch Basics Exercise | Thesaurus AI LLM FT{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/frameworks.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/themes/prism-tomorrow.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="framework-header pytorch-header">
+                <h1>PyTorch Basics</h1>
+                <p>Learn the fundamentals of PyTorch by working with tensors, autograd, and basic operations.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Learning Objectives</h2>
+                <p>By the end of this exercise, you will be able to:</p>
+                <ul>
+                    <li>Create and manipulate tensors in PyTorch</li>
+                    <li>Understand automatic differentiation with autograd</li>
+                    <li>Perform basic mathematical operations on tensors</li>
+                    <li>Compute gradients for optimization</li>
+                    <li>Build a simple computational graph</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Prerequisites</h2>
+                <p>Before starting this exercise, you should have:</p>
+                <ul>
+                    <li>Basic knowledge of Python programming</li>
+                    <li>Familiarity with NumPy (helpful but not required)</li>
+                    <li>PyTorch installed on your machine</li>
+                </ul>
+                
+                <div class="alert alert-info mt-4" role="alert" style="background-color: rgba(238, 76, 44, 0.1); border-left: 5px solid var(--pytorch-primary); color: #333; border-radius: 10px;">
+                    <div class="d-flex">
+                        <div class="me-3">
+                            <i class="bi bi-info-circle-fill" style="font-size: 1.5rem; color: var(--pytorch-primary);"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--pytorch-dark); font-weight: 600;">Installation</h4>
+                            <p class="mb-0">If you haven't installed PyTorch yet, you can do so using pip:</p>
+                            <div class="framework-code pytorch-code mt-3">
+                                <div class="code-header">
+                                    <span>Terminal</span>
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code class="language-bash">pip install torch torchvision</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Exercise 1: Creating and Manipulating Tensors</h2>
+                <p>In this exercise, you'll learn how to create tensors of different shapes and types, and how to perform basic operations on them.</p>
+                
+                <h3>Step 1: Import PyTorch</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">import torch
+import numpy as np
+
+# Check PyTorch version
+print("PyTorch version:", torch.__version__)</code></pre>
+                </div>
+                
+                <h3>Step 2: Create Tensors</h3>
+                <p>Let's create tensors of different dimensions:</p>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Scalar (0D tensor)
+scalar = torch.tensor(7)
+print("Scalar:", scalar)
+print("Shape:", scalar.shape)
+print("Datatype:", scalar.dtype)
+
+# Vector (1D tensor)
+vector = torch.tensor([1, 2, 3, 4, 5])
+print("\nVector:", vector)
+print("Shape:", vector.shape)
+
+# Matrix (2D tensor)
+matrix = torch.tensor([[1, 2, 3], [4, 5, 6]])
+print("\nMatrix:", matrix)
+print("Shape:", matrix.shape)
+
+# 3D tensor
+tensor_3d = torch.tensor([[[1, 2], [3, 4]], [[5, 6], [7, 8]]])
+print("\n3D Tensor:", tensor_3d)
+print("Shape:", tensor_3d.shape)</code></pre>
+                </div>
+                
+                <h3>Step 3: Create Tensors from NumPy Arrays</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Create a NumPy array
+np_array = np.array([[1, 2, 3], [4, 5, 6]])
+
+# Convert to PyTorch tensor
+tensor_from_np = torch.from_numpy(np_array)
+print("Tensor from NumPy:", tensor_from_np)
+
+# Convert back to NumPy
+back_to_np = tensor_from_np.numpy()
+print("Back to NumPy:", back_to_np)</code></pre>
+                </div>
+                
+                <h3>Step 4: Tensor Operations</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Create two tensors
+a = torch.tensor([[1, 2], [3, 4]])
+b = torch.tensor([[5, 6], [7, 8]])
+
+# Addition
+c = a + b  # or torch.add(a, b)
+print("Addition:", c)
+
+# Subtraction
+d = a - b  # or torch.sub(a, b)
+print("Subtraction:", d)
+
+# Element-wise multiplication
+e = a * b  # or torch.mul(a, b)
+print("Element-wise multiplication:", e)
+
+# Matrix multiplication
+f = torch.matmul(a, b)
+print("Matrix multiplication:", f)
+
+# Division
+g = a / b  # or torch.div(a, b)
+print("Division:", g)</code></pre>
+                </div>
+                
+                <h3>Challenge 1</h3>
+                <p>Create a 3x3 identity matrix using PyTorch functions. Then, multiply it by a 3x3 matrix of your choice and verify that the result is the same as the original matrix.</p>
+                
+                <div class="alert alert-secondary mt-4" role="alert" style="background-color: rgba(0, 0, 0, 0.05); border-left: 5px solid #555; color: #333; border-radius: 10px;">
+                    <div class="d-flex">
+                        <div class="me-3">
+                            <i class="bi bi-lightbulb-fill" style="font-size: 1.5rem; color: #555;"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: #333; font-weight: 600;">Hint</h4>
+                            <p class="mb-0">Look up <code>torch.eye()</code> in the PyTorch documentation.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Exercise 2: Automatic Differentiation with Autograd</h2>
+                <p>In this exercise, you'll learn about PyTorch's autograd system for automatic differentiation.</p>
+                
+                <h3>Step 1: Tensors with Gradients</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Create tensors with requires_grad=True
+x = torch.tensor(3.0, requires_grad=True)
+y = torch.tensor(2.0, requires_grad=True)
+
+# Perform operations
+z = x**2 + y**3
+
+# Compute gradients
+z.backward()
+
+# Access gradients
+print(f"dz/dx: {x.grad}")  # Should be 2x = 6
+print(f"dz/dy: {y.grad}")  # Should be 3y^2 = 12</code></pre>
+                </div>
+                
+                <h3>Step 2: Gradient Accumulation and Zeroing</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Create a tensor with requires_grad=True
+x = torch.tensor(2.0, requires_grad=True)
+
+# First computation
+y1 = x**2
+y1.backward()
+print(f"First gradient: {x.grad}")  # Should be 2x = 4
+
+# Gradients accumulate by default
+y2 = x**3
+y2.backward()
+print(f"Accumulated gradient: {x.grad}")  # Should be 4 + 3x^2 = 4 + 12 = 16
+
+# Zero the gradients
+x.grad.zero_()
+print(f"After zeroing: {x.grad}")
+
+# New computation
+y3 = x**4
+y3.backward()
+print(f"New gradient: {x.grad}")  # Should be 4x^3 = 32</code></pre>
+                </div>
+                
+                <h3>Step 3: Gradient Descent Example</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Define a simple function to minimize: f(x) = x^2
+def f(x):
+    return x**2
+
+# Initialize the tensor
+x = torch.tensor(5.0, requires_grad=True)
+learning_rate = 0.1
+steps = 20
+
+print(f"Initial x: {x.item()}, f(x): {f(x).item()}")
+
+for i in range(steps):
+    # Forward pass: compute the function value
+    y = f(x)
+    
+    # Backward pass: compute the gradient
+    y.backward()
+    
+    # Update x using gradient descent
+    with torch.no_grad():  # Temporarily disable gradient tracking
+        x -= learning_rate * x.grad
+    
+    # Reset gradients for the next iteration
+    x.grad.zero_()
+    
+    print(f"Step {i+1}: x = {x.item():.4f}, f(x) = {f(x).item():.4f}")</code></pre>
+                </div>
+                
+                <h3>Challenge 2</h3>
+                <p>Implement gradient descent to find the minimum of the function f(x) = x^4 - 3x^3 + 2. Start with x = 2.0 and use a learning rate of 0.01. Run for 100 steps and observe how x converges to a minimum.</p>
+                
+                <div class="alert alert-secondary mt-4" role="alert" style="background-color: rgba(0, 0, 0, 0.05); border-left: 5px solid #555; color: #333; border-radius: 10px;">
+                    <div class="d-flex">
+                        <div class="me-3">
+                            <i class="bi bi-lightbulb-fill" style="font-size: 1.5rem; color: #555;"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: #333; font-weight: 600;">Hint</h4>
+                            <p class="mb-0">The derivative of f(x) = x^4 - 3x^3 + 2 is f'(x) = 4x^3 - 9x^2. You can verify your gradient computation by printing both the analytical derivative and the one computed by PyTorch.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Exercise 3: Building a Simple Model</h2>
+                <p>In this exercise, you'll build a simple linear regression model using PyTorch's low-level API.</p>
+                
+                <h3>Step 1: Generate Synthetic Data</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Generate synthetic data
+np.random.seed(42)
+x_data = np.random.rand(100, 1)
+y_data = 2 * x_data + 1 + 0.1 * np.random.randn(100, 1)  # y = 2x + 1 + noise
+
+# Convert to tensors
+x = torch.from_numpy(x_data).float()
+y = torch.from_numpy(y_data).float()</code></pre>
+                </div>
+                
+                <h3>Step 2: Define Model Parameters</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Initialize model parameters
+W = torch.randn(1, 1, requires_grad=True)
+b = torch.zeros(1, requires_grad=True)</code></pre>
+                </div>
+                
+                <h3>Step 3: Define Model and Loss Function</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Define the model
+def linear_model(x):
+    return torch.matmul(x, W) + b
+
+# Define the loss function (mean squared error)
+def loss_fn(y_pred, y_true):
+    return torch.mean((y_pred - y_true)**2)</code></pre>
+                </div>
+                
+                <h3>Step 4: Training Loop</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Define optimizer
+learning_rate = 0.1
+epochs = 100
+
+for epoch in range(epochs):
+    # Forward pass
+    y_pred = linear_model(x)
+    loss = loss_fn(y_pred, y)
+    
+    # Backward pass
+    loss.backward()
+    
+    # Update parameters
+    with torch.no_grad():
+        W -= learning_rate * W.grad
+        b -= learning_rate * b.grad
+    
+    # Reset gradients
+    W.grad.zero_()
+    b.grad.zero_()
+    
+    if epoch % 10 == 0:
+        print(f"Epoch {epoch}: Loss = {loss.item():.4f}, W = {W.item():.4f}, b = {b.item():.4f}")</code></pre>
+                </div>
+                
+                <h3>Step 5: Visualize Results</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">import matplotlib.pyplot as plt
+
+# Plot the data and the fitted line
+plt.scatter(x_data, y_data, label='Data')
+plt.plot(x_data, W.detach().numpy() * x_data + b.detach().numpy(), 'r', label='Fitted line')
+plt.legend()
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Linear Regression with PyTorch')
+plt.show()
+
+print(f"True parameters: W = 2, b = 1")
+print(f"Learned parameters: W = {W.item():.4f}, b = {b.item():.4f}")</code></pre>
+                </div>
+                
+                <h3>Challenge 3</h3>
+                <p>Extend the linear regression model to a polynomial regression model that fits the function y = 2x^2 + 3x + 1 + noise. Generate synthetic data for this function and train your model to recover the parameters.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Summary</h2>
+                <p>In this exercise, you've learned the basics of PyTorch:</p>
+                <ul>
+                    <li>Creating and manipulating tensors</li>
+                    <li>Using autograd for automatic differentiation</li>
+                    <li>Computing gradients for optimization</li>
+                    <li>Building and training a simple linear regression model</li>
+                </ul>
+                
+                <p>These fundamentals will serve as the building blocks for more complex models and techniques in the following exercises.</p>
+                
+                <div class="text-center mt-5">
+                    <a href="/frameworks/pytorch/exercises/linear-regression" class="btn btn-lg" style="background: linear-gradient(135deg, var(--pytorch-primary), var(--pytorch-secondary)); color: white; font-weight: 600; border-radius: 30px; padding: 12px 30px; box-shadow: 0 10px 20px rgba(238, 76, 44, 0.3);">
+                        <i class="bi bi-arrow-right-circle me-2"></i> Next Exercise: Linear Regression
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/components/prism-python.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/components/prism-bash.min.js"></script>
+<script>
+    function copyCode(button) {
+        const codeBlock = button.parentElement.nextElementSibling;
+        const code = codeBlock.textContent;
+        
+        navigator.clipboard.writeText(code).then(() => {
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            button.style.backgroundColor = 'rgba(46, 125, 50, 0.3)';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.backgroundColor = '';
+            }, 2000);
+        });
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add animation to sections on scroll
+        const sections = document.querySelectorAll('.framework-section');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        sections.forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(section);
+        });
+    });
+</script>
+{% endblock %}

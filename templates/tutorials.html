@@ -1,0 +1,589 @@
+{% extends 'base.html' %}
+
+{% block title %}Interactive Tutorials - Thesaurus LLM Fine-Tuning{% endblock %}
+
+{% block head %}
+<style>
+    .category-header {
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+        margin-top: 20px;
+    }
+
+    .tutorial-card .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .tutorial-card .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .badge {
+        font-size: 0.75rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4"><i class="bi bi-journal-code me-2"></i>Interactive LLM Fine-Tuning Tutorials</h1>
+            <p class="lead">
+                Explore our comprehensive collection of tutorials to master LLM fine-tuning techniques.
+                These interactive notebooks allow you to run code and experiments directly in your browser.
+            </p>
+
+            <div class="alert alert-info">
+                <div class="d-flex">
+                    <div class="me-3">
+                        <i class="bi bi-info-circle-fill fs-3"></i>
+                    </div>
+                    <div>
+                        <h5>How to Use These Tutorials</h5>
+                        <p class="mb-0">
+                            Click on any tutorial link below to open it in Google Colab. Make a copy to your Google Drive to save your work.
+                            You'll need a Google account to use Colab. For QLoRA tutorials, Colab Pro is recommended for access to better GPUs.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tutorial Categories Navigation -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-filter-circle me-2"></i>Browse by Category</h5>
+                    <div class="d-flex flex-wrap gap-2 mt-3">
+                        <button class="btn btn-outline-primary active" data-category="all">All Tutorials</button>
+                        <button class="btn btn-outline-primary" data-category="fundamentals">Fundamentals</button>
+                        <button class="btn btn-outline-primary" data-category="techniques">Techniques</button>
+                        <button class="btn btn-outline-primary" data-category="advanced">Advanced</button>
+                        <button class="btn btn-outline-primary" data-category="applications">Applications</button>
+                        <button class="btn btn-outline-primary" data-category="deployment">Deployment</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input type="text" class="form-control" id="tutorial-search" placeholder="Search tutorials...">
+                <button class="btn btn-primary" type="button">Search</button>
+            </div>
+        </div>
+        <div class="col-md-4 d-flex justify-content-end align-items-center">
+            <button class="btn btn-outline-success" type="button" data-bs-toggle="modal" data-bs-target="#learningPathsModal">
+                <i class="bi bi-signpost-split-fill me-2"></i>Learning Paths
+            </button>
+        </div>
+    </div>
+
+    <!-- Learning Paths Modal -->
+    <div class="modal fade" id="learningPathsModal" tabindex="-1" aria-labelledby="learningPathsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="learningPathsModalLabel"><i class="bi bi-signpost-split-fill me-2"></i>Learning Paths</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="lead">Follow these curated learning paths to master LLM fine-tuning step by step.</p>
+                    <div class="row" id="learning-paths-container">
+                        <!-- Learning paths will be inserted here by JavaScript -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Key Concepts Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="bi bi-lightbulb-fill me-2"></i>Key LLM Fine-Tuning Concepts</h5>
+                </div>
+                <div class="card-body">
+                    <p>Click on any concept to learn more about it:</p>
+                    <div class="d-flex flex-wrap gap-2">
+                        <span class="badge bg-primary p-2 llm-concept" data-concept="llm">Large Language Model (LLM)</span>
+                        <span class="badge bg-primary p-2 llm-concept" data-concept="fine-tuning">Fine-Tuning</span>
+                        <span class="badge bg-primary p-2 llm-concept" data-concept="lora">LoRA</span>
+                        <span class="badge bg-primary p-2 llm-concept" data-concept="qlora">QLoRA</span>
+                        <a href="{{ url_for('peft_guide') }}" class="badge bg-success p-2">Parameter-Efficient Fine-Tuning (PEFT) <i class="bi bi-book ms-1"></i></a>
+                        <span class="badge bg-primary p-2 llm-concept" data-concept="gradient-checkpointing">Gradient Checkpointing</span>
+                        <span class="badge bg-primary p-2 llm-concept" data-concept="mixed-precision">Mixed Precision Training</span>
+                        <span class="badge bg-primary p-2 llm-concept" data-concept="instruction-tuning">Instruction Tuning</span>
+                        <span class="badge bg-primary p-2 llm-concept" data-concept="tokenization">Tokenization</span>
+                        <span class="badge bg-primary p-2 llm-concept" data-concept="quantization">Quantization</span>
+                        <span class="badge bg-primary p-2 llm-concept" data-concept="inference">Inference</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tutorial Cards Container -->
+    <div class="row mt-4" id="tutorial-cards-container">
+        <!-- Fundamentals Category -->
+        <div class="col-12 mb-4 category-header" id="fundamentals-header">
+            <h3><i class="bi bi-book me-2"></i>Fundamentals</h3>
+            <p>Master the basics of LLM fine-tuning with these introductory tutorials</p>
+        </div>
+
+        <!-- Data Preparation Tutorial -->
+        <div class="col-md-6 col-lg-4 mb-4 tutorial-card" data-category="fundamentals">
+            <div class="card h-100 border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-database-gear me-2"></i>Data Preparation</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <h6 class="card-subtitle text-muted">Learn how to prepare data for LLM fine-tuning</h6>
+                        <span class="badge bg-primary">Beginner</span>
+                    </div>
+                    <p class="card-text">
+                        This tutorial covers data collection, cleaning, formatting, augmentation, and quality checks for LLM fine-tuning.
+                        You'll learn how to prepare datasets for different model sizes and fine-tuning approaches.
+                    </p>
+                    <div class="d-flex gap-1 mb-2">
+                        <span class="badge bg-secondary">Python</span>
+                        <span class="badge bg-secondary">NLTK</span>
+                        <span class="badge bg-secondary">Datasets</span>
+                    </div>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Data collection from WordNet</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Data cleaning and preprocessing</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Formatting for different fine-tuning approaches</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Data augmentation techniques</li>
+                    </ul>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex gap-2">
+                            <a href="https://colab.research.google.com/drive/1-RfhVkZ3YFMbG5X5BWgO6CkVQs4Hh-Wy?usp=sharing"
+                               class="btn btn-primary" target="_blank">
+                                <i class="bi bi-box-arrow-up-right me-2"></i>Open in Colab
+                            </a>
+                            <a href="{{ url_for('static', filename='notebooks/Data_Preparation_Tutorial.ipynb') }}"
+                               class="btn btn-outline-primary" download>
+                                <i class="bi bi-download me-2"></i>Download
+                            </a>
+                            <a href="{{ url_for('view_notebook', notebook_name='Data_Preparation_Tutorial') }}"
+                               class="btn btn-outline-primary">
+                                <i class="bi bi-eye me-2"></i>View
+                            </a>
+                        </div>
+                        <div class="progress-indicator" data-tutorial-id="Data_Preparation_Tutorial"
+                             data-status="{% for item in user_progress %}{% if item.content_id == 'Data_Preparation_Tutorial' %}{{ item.status }}{% endif %}{% endfor %}"
+                             title="{% for item in user_progress %}{% if item.content_id == 'Data_Preparation_Tutorial' %}{{ item.status|replace('_', ' ')|title }}{% endif %}{% endfor %}">
+                            {% set status = 'not_started' %}
+                            {% for item in user_progress %}
+                                {% if item.content_id == 'Data_Preparation_Tutorial' %}
+                                    {% set status = item.status %}
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if status == 'completed' %}
+                                <i class="bi bi-check-circle-fill text-success" style="font-size: 1.5rem;"></i>
+                            {% elif status == 'in_progress' %}
+                                <i class="bi bi-hourglass-split text-warning" style="font-size: 1.5rem;"></i>
+                            {% else %}
+                                <i class="bi bi-circle text-secondary" style="font-size: 1.5rem;"></i>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Techniques Category -->
+        <div class="col-12 mb-4 category-header" id="techniques-header">
+            <h3><i class="bi bi-diagram-3 me-2"></i>Fine-Tuning Techniques</h3>
+            <p>Learn different approaches to fine-tune language models efficiently</p>
+        </div>
+
+        <!-- Tuning Approaches Comparison -->
+        <div class="col-md-6 col-lg-4 mb-4 tutorial-card" data-category="techniques">
+            <div class="card h-100 border-success">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="bi bi-diagram-3 me-2"></i>Tuning Approaches Comparison</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <h6 class="card-subtitle text-muted">Compare different fine-tuning methods</h6>
+                        <span class="badge bg-primary">Beginner</span>
+                    </div>
+                    <p class="card-text">
+                        This tutorial compares full fine-tuning, LoRA, and QLoRA approaches, analyzing memory requirements,
+                        training time, and performance differences to help you choose the right approach for your needs.
+                    </p>
+                    <div class="d-flex gap-1 mb-2">
+                        <span class="badge bg-secondary">Python</span>
+                        <span class="badge bg-secondary">PyTorch</span>
+                        <span class="badge bg-secondary">PEFT</span>
+                    </div>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Memory requirements analysis</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Training time comparison</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Performance benchmarks</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Decision guide for choosing approaches</li>
+                    </ul>
+                    <div class="d-flex gap-2">
+                        <a href="https://colab.research.google.com/drive/1Ej_MlmHpKJxmvADlFMJgJ8aF9Kt6d-0I?usp=sharing"
+                           class="btn btn-success" target="_blank">
+                            <i class="bi bi-box-arrow-up-right me-2"></i>Open in Colab
+                        </a>
+                        <a href="{{ url_for('static', filename='notebooks/Tuning_Approaches_Comparison.ipynb') }}"
+                           class="btn btn-outline-success" download>
+                            <i class="bi bi-download me-2"></i>Download
+                        </a>
+                        <a href="{{ url_for('view_notebook', notebook_name='Tuning_Approaches_Comparison') }}"
+                           class="btn btn-outline-success">
+                            <i class="bi bi-eye me-2"></i>View
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LoRA Fine-Tuning Tutorial -->
+        <div class="col-md-6 col-lg-4 mb-4 tutorial-card" data-category="techniques">
+            <div class="card h-100 border-info">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="bi bi-cpu me-2"></i>LoRA Fine-Tuning</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <h6 class="card-subtitle text-muted">Learn parameter-efficient fine-tuning with LoRA</h6>
+                        <span class="badge bg-warning">Intermediate</span>
+                    </div>
+                    <p class="card-text">
+                        This tutorial provides a step-by-step guide to fine-tuning language models with LoRA (Low-Rank Adaptation),
+                        a parameter-efficient method that significantly reduces memory requirements.
+                    </p>
+                    <div class="d-flex gap-1 mb-2">
+                        <span class="badge bg-secondary">PyTorch</span>
+                        <span class="badge bg-secondary">PEFT</span>
+                        <span class="badge bg-secondary">Transformers</span>
+                    </div>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>LoRA configuration and setup</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Training with the PEFT library</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Evaluation and inference</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Merging adapters with base models</li>
+                    </ul>
+                    <div class="d-flex gap-2">
+                        <a href="https://colab.research.google.com/drive/1Ej9vBLxCG9aJ8Hn0Z9NMZ9iQBKD7qkDQ?usp=sharing"
+                           class="btn btn-info" target="_blank">
+                            <i class="bi bi-box-arrow-up-right me-2"></i>Open in Colab
+                        </a>
+                        <a href="{{ url_for('static', filename='notebooks/LoRA_Fine_Tuning_Tutorial.ipynb') }}"
+                           class="btn btn-outline-info" download>
+                            <i class="bi bi-download me-2"></i>Download
+                        </a>
+                        <a href="{{ url_for('view_notebook', notebook_name='LoRA_Fine_Tuning_Tutorial') }}"
+                           class="btn btn-outline-info">
+                            <i class="bi bi-eye me-2"></i>View
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Category -->
+        <div class="col-12 mb-4 category-header" id="advanced-header">
+            <h3><i class="bi bi-lightning-charge me-2"></i>Advanced Techniques</h3>
+            <p>Master cutting-edge methods for fine-tuning large language models</p>
+        </div>
+
+        <!-- PEFT Tutorial -->
+        <div class="col-md-6 col-lg-4 mb-4 tutorial-card" data-category="techniques">
+            <div class="card h-100 border-success">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="bi bi-cpu-fill me-2"></i>Parameter-Efficient Fine-Tuning</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <h6 class="card-subtitle text-muted">Comprehensive guide to PEFT methods</h6>
+                        <span class="badge bg-warning">Intermediate</span>
+                    </div>
+                    <p class="card-text">
+                        This comprehensive guide covers all major Parameter-Efficient Fine-Tuning methods including LoRA, QLoRA, Adapters, Prefix Tuning, and more.
+                        Learn how to fine-tune large models with minimal resources.
+                    </p>
+                    <div class="d-flex gap-1 mb-2">
+                        <span class="badge bg-secondary">PEFT</span>
+                        <span class="badge bg-secondary">LoRA</span>
+                        <span class="badge bg-secondary">Adapters</span>
+                    </div>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Detailed comparison of methods</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Implementation examples</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Best practices and tips</li>
+                    </ul>
+                    <div class="d-flex gap-2">
+                        <a href="{{ url_for('peft_guide') }}" class="btn btn-success">
+                            <i class="bi bi-book me-2"></i>View Guide
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- QLoRA Fine-Tuning Tutorial -->
+        <div class="col-md-6 col-lg-4 mb-4 tutorial-card" data-category="advanced">
+            <div class="card h-100 border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0"><i class="bi bi-gpu-card me-2"></i>QLoRA Fine-Tuning</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <h6 class="card-subtitle text-muted">Fine-tune large models on consumer hardware</h6>
+                        <span class="badge bg-danger">Advanced</span>
+                    </div>
+                    <p class="card-text">
+                        This tutorial demonstrates QLoRA (Quantized Low-Rank Adaptation), which combines 4-bit quantization with LoRA
+                        to enable fine-tuning of large language models on consumer hardware with limited VRAM.
+                    </p>
+                    <div class="d-flex gap-1 mb-2">
+                        <span class="badge bg-secondary">PyTorch</span>
+                        <span class="badge bg-secondary">PEFT</span>
+                        <span class="badge bg-secondary">BitsAndBytes</span>
+                    </div>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>4-bit quantization setup</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>QLoRA configuration</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Memory-efficient training</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Working with large models (7B+)</li>
+                    </ul>
+                    <div class="d-flex gap-2">
+                        <a href="https://colab.research.google.com/drive/1EjBWMQrjBbfxGk9GXRpRebRNwFicK-WR?usp=sharing"
+                           class="btn btn-danger" target="_blank">
+                            <i class="bi bi-box-arrow-up-right me-2"></i>Open in Colab
+                        </a>
+                        <a href="{{ url_for('static', filename='notebooks/QLoRA_Fine_Tuning_Tutorial.ipynb') }}"
+                           class="btn btn-outline-danger" download>
+                            <i class="bi bi-download me-2"></i>Download
+                        </a>
+                        <a href="{{ url_for('view_notebook', notebook_name='QLoRA_Fine_Tuning_Tutorial') }}"
+                           class="btn btn-outline-danger">
+                            <i class="bi bi-eye me-2"></i>View
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Applications Category -->
+        <div class="col-12 mb-4 category-header" id="applications-header">
+            <h3><i class="bi bi-gear me-2"></i>Applications & Deployment</h3>
+            <p>Learn how to use fine-tuned models in real-world applications</p>
+        </div>
+
+        <!-- Model Deployment Tutorial -->
+        <div class="col-md-6 col-lg-4 mb-4 tutorial-card" data-category="applications">
+            <div class="card h-100 border-warning">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0"><i class="bi bi-cloud-upload me-2"></i>Model Deployment</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <h6 class="card-subtitle text-muted">Deploy fine-tuned models to production</h6>
+                        <span class="badge bg-warning">Intermediate</span>
+                    </div>
+                    <p class="card-text">
+                        Learn how to deploy your fine-tuned models to production using Hugging Face Inference Endpoints,
+                        Flask, FastAPI, and other deployment options.
+                    </p>
+                    <div class="d-flex gap-1 mb-2">
+                        <span class="badge bg-secondary">Deployment</span>
+                        <span class="badge bg-secondary">Flask</span>
+                        <span class="badge bg-secondary">FastAPI</span>
+                    </div>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Hugging Face Inference Endpoints</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Building a Flask API</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Containerization with Docker</li>
+                    </ul>
+                    <div class="d-flex gap-2">
+                        <a href="https://colab.research.google.com/drive/1EjCXGQNMnMM_1RLyoKBfCLKzRtKS8Aw-?usp=sharing"
+                           class="btn btn-warning" target="_blank">
+                            <i class="bi bi-box-arrow-up-right me-2"></i>Open in Colab
+                        </a>
+                        <a href="{{ url_for('static', filename='notebooks/Model_Deployment_Tutorial.ipynb') }}"
+                           class="btn btn-outline-warning" download>
+                            <i class="bi bi-download me-2"></i>Download
+                        </a>
+                        <a href="{{ url_for('view_notebook', notebook_name='Model_Deployment_Tutorial') }}"
+                           class="btn btn-outline-warning">
+                            <i class="bi bi-eye me-2"></i>View
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pipeline Inference Tutorial -->
+        <div class="col-md-6 col-lg-4 mb-4 tutorial-card" data-category="applications">
+            <div class="card h-100 border-warning">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0"><i class="bi bi-lightning-charge me-2"></i>Pipeline Inference</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <h6 class="card-subtitle text-muted">Learn to use Hugging Face pipelines for inference</h6>
+                        <span class="badge bg-warning">Intermediate</span>
+                    </div>
+                    <p class="card-text">
+                        This tutorial shows how to use the Hugging Face pipeline API for quick and easy inference with language models,
+                        including creating custom pipelines for thesaurus applications.
+                    </p>
+                    <div class="d-flex gap-1 mb-2">
+                        <span class="badge bg-secondary">Transformers</span>
+                        <span class="badge bg-secondary">Flask</span>
+                        <span class="badge bg-secondary">API</span>
+                    </div>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Basic pipeline usage</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Working with fine-tuned models</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Custom thesaurus pipeline</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Integration with web applications</li>
+                    </ul>
+                    <div class="d-flex gap-2">
+                        <a href="https://colab.research.google.com/drive/1EjCXGQNMnMM_1RLyoKBfCLKzRtKS8Aw-?usp=sharing"
+                           class="btn btn-warning" target="_blank">
+                            <i class="bi bi-box-arrow-up-right me-2"></i>Open in Colab
+                        </a>
+                        <a href="{{ url_for('static', filename='notebooks/Pipeline_Inference_Tutorial.ipynb') }}"
+                           class="btn btn-outline-warning" download>
+                            <i class="bi bi-download me-2"></i>Download
+                        </a>
+                        <a href="{{ url_for('view_notebook', notebook_name='Pipeline_Inference_Tutorial') }}"
+                           class="btn btn-outline-warning">
+                            <i class="bi bi-eye me-2"></i>View
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gradient Checkpointing Tutorial -->
+        <div class="col-md-6 col-lg-4 mb-4 tutorial-card" data-category="advanced">
+            <div class="card h-100 border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0"><i class="bi bi-memory me-2"></i>Gradient Checkpointing</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <h6 class="card-subtitle text-muted">Optimize memory usage during training</h6>
+                        <span class="badge bg-danger">Advanced</span>
+                    </div>
+                    <p class="card-text">
+                        Learn how to use gradient checkpointing to reduce memory usage during training at the cost of some computation time.
+                        This technique is essential for fine-tuning large models on limited hardware.
+                    </p>
+                    <div class="d-flex gap-1 mb-2">
+                        <span class="badge bg-secondary">PyTorch</span>
+                        <span class="badge bg-secondary">Memory</span>
+                        <span class="badge bg-secondary">Optimization</span>
+                    </div>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Understanding memory bottlenecks</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Implementing gradient checkpointing</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Performance benchmarks</li>
+                    </ul>
+                    <div class="d-flex gap-2">
+                        <a href="https://colab.research.google.com/drive/1EjDWMQrjBbfxGk9GXRpRebRNwFicK-WR?usp=sharing"
+                           class="btn btn-danger" target="_blank">
+                            <i class="bi bi-box-arrow-up-right me-2"></i>Open in Colab
+                        </a>
+                        <a href="{{ url_for('static', filename='notebooks/Gradient_Checkpointing_Tutorial.ipynb') }}"
+                           class="btn btn-outline-danger" download>
+                            <i class="bi bi-download me-2"></i>Download
+                        </a>
+                        <a href="{{ url_for('view_notebook', notebook_name='Gradient_Checkpointing_Tutorial') }}"
+                           class="btn btn-outline-danger">
+                            <i class="bi bi-eye me-2"></i>View
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mixed Precision Training Tutorial -->
+        <div class="col-md-6 col-lg-4 mb-4 tutorial-card" data-category="advanced">
+            <div class="card h-100 border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0"><i class="bi bi-speedometer2 me-2"></i>Mixed Precision Training</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <h6 class="card-subtitle text-muted">Speed up training with FP16</h6>
+                        <span class="badge bg-danger">Advanced</span>
+                    </div>
+                    <p class="card-text">
+                        Learn how to use mixed precision training to speed up fine-tuning while reducing memory usage.
+                        This tutorial covers PyTorch's Automatic Mixed Precision (AMP) and its integration with Transformers.
+                    </p>
+                    <div class="d-flex gap-1 mb-2">
+                        <span class="badge bg-secondary">PyTorch</span>
+                        <span class="badge bg-secondary">AMP</span>
+                        <span class="badge bg-secondary">Performance</span>
+                    </div>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Understanding FP16 and FP32</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Setting up AMP training</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Handling gradient scaling</li>
+                    </ul>
+                    <div class="d-flex gap-2">
+                        <a href="https://colab.research.google.com/drive/1EjDWMQrjBbfxGk9GXRpRebRNwFicK-WR?usp=sharing"
+                           class="btn btn-danger" target="_blank">
+                            <i class="bi bi-box-arrow-up-right me-2"></i>Open in Colab
+                        </a>
+                        <a href="{{ url_for('static', filename='notebooks/Mixed_Precision_Training_Tutorial.ipynb') }}"
+                           class="btn btn-outline-danger" download>
+                            <i class="bi bi-download me-2"></i>Download
+                        </a>
+                        <a href="{{ url_for('view_notebook', notebook_name='Mixed_Precision_Training_Tutorial') }}"
+                           class="btn btn-outline-danger">
+                            <i class="bi bi-eye me-2"></i>View
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- External Resources Section -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <h2 class="mb-4"><i class="bi bi-globe me-2"></i>External Resources</h2>
+            <p class="lead">Explore these external resources to deepen your understanding of LLM fine-tuning.</p>
+            <div id="external-resources-container">
+                <!-- External resources will be inserted here by JavaScript -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/tutorials.js') }}"></script>
+<script src="{{ url_for('static', filename='js/learning-paths.js') }}"></script>
+<script src="{{ url_for('static', filename='js/llm-concepts-guide.js') }}"></script>
+<script src="{{ url_for('static', filename='js/colab-integration.js') }}"></script>
+<script src="{{ url_for('static', filename='js/external-resources.js') }}"></script>
+<script src="{{ url_for('static', filename='js/progress-tracking.js') }}"></script>
+{% endblock %}

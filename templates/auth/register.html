@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}Register - Visual Thesaurus LLM{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Register</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3>Create an Account</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('auth.register') }}">
+                        {{ form.hidden_tag() }}
+
+                        <div class="mb-3">
+                            {{ form.name.label(class="form-label") }}
+                            {{ form.name(class="form-control", placeholder="Enter your full name") }}
+                            {% for error in form.name.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.username.label(class="form-label") }}
+                            {{ form.username(class="form-control", placeholder="Choose a username") }}
+                            {% for error in form.username.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.email.label(class="form-label") }}
+                            {{ form.email(class="form-control", placeholder="Enter your email") }}
+                            {% for error in form.email.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                {{ form.password.label(class="form-label") }}
+                                {{ form.password(class="form-control", placeholder="Choose a password") }}
+                                {% for error in form.password.errors %}
+                                    <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.password2.label(class="form-label") }}
+                                {{ form.password2(class="form-control", placeholder="Confirm your password") }}
+                                {% for error in form.password2.errors %}
+                                    <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            {{ form.submit(class="btn btn-primary") }}
+                        </div>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <div class="text-center mb-3">
+                        <p class="text-muted">Or register with:</p>
+                        <div class="d-flex justify-content-center gap-2">
+                            {% for provider in oauth_providers %}
+                                <a href="{{ provider.url }}" class="btn btn-outline-secondary">
+                                    <i class="bi bi-{{ provider.icon }} me-2"></i>{{ provider.name }}
+                                </a>
+                            {% endfor %}
+                            <a href="{{ url_for('auth.supabase_login') }}" class="btn btn-outline-primary">
+                                <i class="bi bi-database-fill me-2"></i>Supabase
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer text-center">
+                    Already have an account? <a href="{{ url_for('auth.login') }}">Sign In</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

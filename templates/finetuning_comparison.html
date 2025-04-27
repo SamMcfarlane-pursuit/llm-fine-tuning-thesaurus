@@ -1,0 +1,710 @@
+{% extends 'base.html' %}
+
+{% block title %}LLM Fine-Tuning Methods Comparison{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/learn">Learn</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Fine-Tuning Methods Comparison</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1>Comprehensive Comparison of LLM Fine-Tuning Methods</h1>
+            <p class="lead">Understanding the trade-offs between different fine-tuning approaches</p>
+        </div>
+    </div>
+
+    <!-- Introduction Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3>Introduction to Fine-Tuning Methods</h3>
+                </div>
+                <div class="card-body">
+                    <p>Fine-tuning pre-trained language models has become a critical technique for adapting these models to specific tasks and domains. However, with the increasing size of language models, traditional fine-tuning approaches face significant challenges in terms of computational resources and memory requirements.</p>
+
+                    <p>This guide provides a comprehensive comparison of various fine-tuning methods, from traditional full fine-tuning to parameter-efficient techniques like LoRA, QLoRA, and others. We'll explore the trade-offs between these methods in terms of performance, efficiency, and use cases.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comparison Table Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h3>Fine-Tuning Methods at a Glance</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered comparison-table">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Method</th>
+                                    <th>Trainable Parameters</th>
+                                    <th>Memory Usage</th>
+                                    <th>Training Speed</th>
+                                    <th>Performance</th>
+                                    <th>Use Cases</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Full Fine-Tuning</strong></td>
+                                    <td>100%</td>
+                                    <td>Very High</td>
+                                    <td>Slow</td>
+                                    <td>Excellent</td>
+                                    <td>When computational resources are abundant and maximum performance is required</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>LoRA</strong></td>
+                                    <td>~0.1-1%</td>
+                                    <td>Low</td>
+                                    <td>Fast</td>
+                                    <td>Very Good</td>
+                                    <td>Efficient fine-tuning of large models with limited resources</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>QLoRA</strong></td>
+                                    <td>~0.1-1%</td>
+                                    <td>Very Low</td>
+                                    <td>Medium</td>
+                                    <td>Very Good</td>
+                                    <td>Fine-tuning extremely large models on consumer hardware</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Prefix Tuning</strong></td>
+                                    <td>~0.1-1%</td>
+                                    <td>Low</td>
+                                    <td>Medium</td>
+                                    <td>Good</td>
+                                    <td>NLG tasks where controlling generation is important</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Prompt Tuning</strong></td>
+                                    <td>&lt;0.1%</td>
+                                    <td>Very Low</td>
+                                    <td>Very Fast</td>
+                                    <td>Moderate</td>
+                                    <td>Simple adaptation with minimal resources</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Adapter Layers</strong></td>
+                                    <td>~1-3%</td>
+                                    <td>Low</td>
+                                    <td>Medium</td>
+                                    <td>Good</td>
+                                    <td>Multi-task learning and domain adaptation</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Full Fine-Tuning Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3>Full Fine-Tuning</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h4>Overview</h4>
+                            <p>Full fine-tuning is the traditional approach to adapting pre-trained language models to specific tasks. It involves updating all parameters of the pre-trained model during the fine-tuning process.</p>
+
+                            <h4 class="mt-4">How It Works</h4>
+                            <p>In full fine-tuning, the entire pre-trained model is loaded, and all parameters are updated during training on the target task. The process typically involves:</p>
+                            <ol>
+                                <li>Loading the pre-trained model weights</li>
+                                <li>Adding a task-specific head if needed (e.g., classification layer)</li>
+                                <li>Training the entire model on the target dataset with a small learning rate</li>
+                                <li>Saving the entire fine-tuned model</li>
+                            </ol>
+
+                            <div class="bg-light p-3 rounded code-block mt-4">
+                                <pre><code>import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer, Trainer, TrainingArguments
+
+# Load pre-trained model and tokenizer
+model_name = "gpt2"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(model_name)
+
+# Configure training arguments
+training_args = TrainingArguments(
+    output_dir="./results",
+    num_train_epochs=3,
+    per_device_train_batch_size=4,
+    learning_rate=5e-5,  # Small learning rate for fine-tuning
+    weight_decay=0.01,
+    save_strategy="epoch"
+)
+
+# Create trainer and train
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=train_dataset,
+    eval_dataset=eval_dataset,
+    tokenizer=tokenizer
+)
+
+trainer.train()
+
+# Save the fine-tuned model
+model.save_pretrained("./fine-tuned-model")
+tokenizer.save_pretrained("./fine-tuned-model")</code></pre>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h5>Pros and Cons</h5>
+                                    <div class="pros-cons">
+                                        <div class="pros">
+                                            <h6><i class="bi bi-check-circle-fill text-success me-2"></i>Pros</h6>
+                                            <ul>
+                                                <li>Maximum performance potential</li>
+                                                <li>No architectural constraints</li>
+                                                <li>Well-established methodology</li>
+                                                <li>Comprehensive adaptation to target task</li>
+                                            </ul>
+                                        </div>
+                                        <div class="cons mt-3">
+                                            <h6><i class="bi bi-x-circle-fill text-danger me-2"></i>Cons</h6>
+                                            <ul>
+                                                <li>Extremely high memory requirements</li>
+                                                <li>Slow training process</li>
+                                                <li>Requires significant computational resources</li>
+                                                <li>Not feasible for very large models on consumer hardware</li>
+                                                <li>Storage-intensive (entire model must be saved)</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card bg-light mt-4">
+                                <div class="card-body">
+                                    <h5>Resource Requirements</h5>
+                                    <table class="table table-sm">
+                                        <tbody>
+                                            <tr>
+                                                <td>1B parameters</td>
+                                                <td>~4GB VRAM</td>
+                                            </tr>
+                                            <tr>
+                                                <td>7B parameters</td>
+                                                <td>~28GB VRAM</td>
+                                            </tr>
+                                            <tr>
+                                                <td>13B parameters</td>
+                                                <td>~52GB VRAM</td>
+                                            </tr>
+                                            <tr>
+                                                <td>70B parameters</td>
+                                                <td>~280GB VRAM</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <p class="small text-muted">*Estimates for FP16 training</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LoRA Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h3>Low-Rank Adaptation (LoRA)</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h4>Overview</h4>
+                            <p>Low-Rank Adaptation (LoRA) is a parameter-efficient fine-tuning technique that significantly reduces the number of trainable parameters by adding low-rank decomposition matrices to the weights of a pre-trained model while keeping the original weights frozen.</p>
+
+                            <h4 class="mt-4">How It Works</h4>
+                            <p>LoRA is based on the hypothesis that the changes to the weights during adaptation have a low "intrinsic rank". Instead of fine-tuning all parameters, LoRA:</p>
+                            <ol>
+                                <li>Freezes the pre-trained model weights</li>
+                                <li>Injects trainable rank decomposition matrices into selected layers (typically attention layers)</li>
+                                <li>Updates only these low-rank matrices during training</li>
+                                <li>Combines the outputs of the original weights and the low-rank updates during forward pass</li>
+                            </ol>
+
+                            <div class="math-formula bg-light p-3 rounded mt-3">
+                                <p>For a pre-trained weight matrix W₀ ∈ ℝᵐˣⁿ, LoRA parameterizes its update with:</p>
+                                <p>W = W₀ + ΔW = W₀ + BA</p>
+                                <p>where B ∈ ℝᵐˣʳ, A ∈ ℝʳˣⁿ, and r ≪ min(m,n)</p>
+                            </div>
+
+                            <div class="bg-light p-3 rounded code-block mt-4">
+                                <pre><code>from transformers import AutoModelForCausalLM, AutoTokenizer
+from peft import LoraConfig, get_peft_model
+
+# Load pre-trained model
+model_name = "gpt2"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(model_name)
+
+# Define LoRA configuration
+lora_config = LoraConfig(
+    r=8,                       # Rank dimension
+    lora_alpha=32,             # Alpha parameter for scaling
+    target_modules=["c_attn"],  # Attention modules to apply LoRA to
+    lora_dropout=0.05,         # Dropout probability
+    bias="none"                # Don't add bias parameters
+)
+
+# Apply LoRA to the model
+model = get_peft_model(model, lora_config)
+
+# Train only the LoRA parameters
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=train_dataset,
+    eval_dataset=eval_dataset,
+    tokenizer=tokenizer
+)
+
+trainer.train()
+
+# Save only the LoRA adapter
+model.save_pretrained("./lora-adapter")</code></pre>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="lora-visualization bg-dark p-3 rounded">
+                                <img src="https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/peft/lora-diagram.png" alt="LoRA Architecture Diagram" class="img-fluid rounded">
+                                <p class="text-center mt-2 text-light"><small>LoRA architecture showing low-rank decomposition matrices A and B</small></p>
+                            </div>
+
+                            <div class="card bg-light mt-4">
+                                <div class="card-body">
+                                    <h5>Pros and Cons</h5>
+                                    <div class="pros-cons">
+                                        <div class="pros">
+                                            <h6><i class="bi bi-check-circle-fill text-success me-2"></i>Pros</h6>
+                                            <ul>
+                                                <li>Dramatically reduced memory usage</li>
+                                                <li>Faster training than full fine-tuning</li>
+                                                <li>Performance comparable to full fine-tuning</li>
+                                                <li>Small adapter size (easy to store and share)</li>
+                                                <li>Multiple adapters can be combined</li>
+                                            </ul>
+                                        </div>
+                                        <div class="cons mt-3">
+                                            <h6><i class="bi bi-x-circle-fill text-danger me-2"></i>Cons</h6>
+                                            <ul>
+                                                <li>Slightly more complex implementation</li>
+                                                <li>Performance depends on rank and target modules</li>
+                                                <li>May require task-specific hyperparameter tuning</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card bg-light mt-4">
+                                <div class="card-body">
+                                    <h5>Key Parameters</h5>
+                                    <table class="table table-sm">
+                                        <tbody>
+                                            <tr>
+                                                <td><strong>r (rank)</strong></td>
+                                                <td>Controls the expressiveness of the adapter (typically 4-32)</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>alpha</strong></td>
+                                                <td>Scaling factor, typically set to 2×r</td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>target_modules</strong></td>
+                                                <td>Which layers to apply LoRA to (e.g., attention layers)</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QLoRA Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h3>Quantized Low-Rank Adaptation (QLoRA)</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h4>Overview</h4>
+                            <p>QLoRA combines 4-bit quantization with Low-Rank Adaptation to enable fine-tuning of large language models on consumer hardware. It dramatically reduces memory usage while maintaining performance comparable to full fine-tuning.</p>
+
+                            <h4 class="mt-4">How It Works</h4>
+                            <p>QLoRA builds on LoRA by adding several memory optimization techniques:</p>
+                            <ol>
+                                <li><strong>4-bit NormalFloat (NF4) Quantization:</strong> Quantizes the pre-trained model weights to 4 bits using a data type optimized for normally distributed weights</li>
+                                <li><strong>Double Quantization:</strong> Quantizes the quantization constants themselves to further reduce memory usage</li>
+                                <li><strong>Paged Optimizers:</strong> Efficiently manages memory spikes during training by moving optimizer states between GPU and CPU memory</li>
+                                <li><strong>LoRA Adapters:</strong> Applies low-rank adaptation to the quantized model</li>
+                            </ol>
+
+                            <div class="bg-light p-3 rounded code-block mt-4">
+                                <pre><code>import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+from peft import prepare_model_for_kbit_training, LoraConfig, get_peft_model
+
+# Configure 4-bit quantization
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,                # Load model in 4-bit precision
+    bnb_4bit_quant_type="nf4",        # Use NormalFloat 4-bit quantization
+    bnb_4bit_compute_dtype=torch.float16,  # Compute in fp16
+    bnb_4bit_use_double_quant=True    # Use double quantization
+)
+
+# Load model with quantization config
+model_name = "meta-llama/Llama-2-13b-hf"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(
+    model_name,
+    quantization_config=bnb_config,
+    device_map="auto"  # Automatically distribute model across available GPUs
+)
+
+# Prepare the model for k-bit training
+model = prepare_model_for_kbit_training(model)
+
+# Configure LoRA
+lora_config = LoraConfig(
+    r=16,                  # Rank dimension
+    lora_alpha=32,         # Alpha parameter for scaling
+    target_modules=[       # Modules to apply LoRA to
+        "q_proj", "k_proj", "v_proj", "o_proj",
+        "gate_proj", "up_proj", "down_proj"
+    ],
+    lora_dropout=0.05,     # Dropout probability for LoRA layers
+    bias="none",           # Don't add bias parameters
+    task_type="CAUSAL_LM"  # Task type (causal language modeling)
+)
+
+# Apply LoRA to the model
+model = get_peft_model(model, lora_config)
+
+# Train and save as with regular LoRA</code></pre>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h5>Memory Savings</h5>
+                                    <p>QLoRA dramatically reduces memory requirements compared to full fine-tuning and standard LoRA:</p>
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Method</th>
+                                                <th>13B Model Memory</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Full Fine-tuning (FP16)</td>
+                                                <td>~26 GB</td>
+                                            </tr>
+                                            <tr>
+                                                <td>LoRA (FP16)</td>
+                                                <td>~13-15 GB</td>
+                                            </tr>
+                                            <tr class="table-success">
+                                                <td>QLoRA (4-bit)</td>
+                                                <td>~5-6 GB</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="card bg-light mt-4">
+                                <div class="card-body">
+                                    <h5>Pros and Cons</h5>
+                                    <div class="pros-cons">
+                                        <div class="pros">
+                                            <h6><i class="bi bi-check-circle-fill text-success me-2"></i>Pros</h6>
+                                            <ul>
+                                                <li>Extreme memory efficiency</li>
+                                                <li>Enables fine-tuning of very large models (13B+) on consumer GPUs</li>
+                                                <li>Performance comparable to full fine-tuning</li>
+                                                <li>Small adapter size</li>
+                                            </ul>
+                                        </div>
+                                        <div class="cons mt-3">
+                                            <h6><i class="bi bi-x-circle-fill text-danger me-2"></i>Cons</h6>
+                                            <ul>
+                                                <li>More complex implementation</li>
+                                                <li>Slightly slower training than standard LoRA</li>
+                                                <li>Requires specific libraries (bitsandbytes)</li>
+                                                <li>May have compatibility issues with some hardware</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="alert alert-info mt-4">
+                                <h6><i class="bi bi-info-circle me-2"></i>When to Use QLoRA</h6>
+                                <p class="mb-0">QLoRA is the method of choice when you need to fine-tune very large models (13B+ parameters) on consumer hardware with limited VRAM.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Other PEFT Methods Section -->
+    <div class="row mt-4 mb-5">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h3>Other Parameter-Efficient Fine-Tuning Methods</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="peft-method">
+                                <h4>Prefix Tuning</h4>
+                                <p>Prefix Tuning prepends trainable continuous vectors ("prefixes") to the hidden states at each layer of the transformer, while keeping the pre-trained model parameters frozen.</p>
+
+                                <div class="bg-light p-3 rounded mt-3">
+                                    <h5>Key Characteristics</h5>
+                                    <ul>
+                                        <li><strong>Trainable Parameters:</strong> ~0.1-1% of the full model</li>
+                                        <li><strong>Memory Usage:</strong> Low</li>
+                                        <li><strong>Best For:</strong> Natural language generation tasks</li>
+                                        <li><strong>Implementation:</strong> Adds virtual tokens at each transformer layer</li>
+                                    </ul>
+                                </div>
+
+                                <div class="bg-light p-3 rounded code-block mt-3">
+                                    <pre><code>from peft import PrefixTuningConfig, get_peft_model
+
+prefix_config = PrefixTuningConfig(
+    task_type="CAUSAL_LM",
+    num_virtual_tokens=20,  # Number of virtual tokens
+    prefix_projection=True,  # Use projection matrix
+    encoder_hidden_size=512  # Size of projection
+)
+
+model = get_peft_model(model, prefix_config)</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="peft-method mt-5">
+                                <h4>Prompt Tuning</h4>
+                                <p>Prompt Tuning is a simplified version of Prefix Tuning that only prepends trainable vectors to the input embeddings, rather than at every layer.</p>
+
+                                <div class="bg-light p-3 rounded mt-3">
+                                    <h5>Key Characteristics</h5>
+                                    <ul>
+                                        <li><strong>Trainable Parameters:</strong> &lt;0.1% of the full model</li>
+                                        <li><strong>Memory Usage:</strong> Very Low</li>
+                                        <li><strong>Best For:</strong> Simple task adaptation with minimal resources</li>
+                                        <li><strong>Implementation:</strong> Adds virtual tokens only at the embedding layer</li>
+                                    </ul>
+                                </div>
+
+                                <div class="bg-light p-3 rounded code-block mt-3">
+                                    <pre><code>from peft import PromptTuningConfig, get_peft_model
+
+prompt_config = PromptTuningConfig(
+    task_type="CAUSAL_LM",
+    num_virtual_tokens=10,  # Number of virtual tokens
+    tokenizer=tokenizer,
+    prompt_tuning_init="TEXT",  # Initialize from text
+    prompt_tuning_init_text="Summarize the following:"  # Text to initialize from
+)
+
+model = get_peft_model(model, prompt_config)</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="peft-method">
+                                <h4>Adapter Layers</h4>
+                                <p>Adapter Layers insert small trainable modules within the layers of a pre-trained model, typically after the attention and feed-forward layers.</p>
+
+                                <div class="bg-light p-3 rounded mt-3">
+                                    <h5>Key Characteristics</h5>
+                                    <ul>
+                                        <li><strong>Trainable Parameters:</strong> ~1-3% of the full model</li>
+                                        <li><strong>Memory Usage:</strong> Low to Medium</li>
+                                        <li><strong>Best For:</strong> Multi-task learning and domain adaptation</li>
+                                        <li><strong>Implementation:</strong> Adds bottleneck layers with down and up projections</li>
+                                    </ul>
+                                </div>
+
+                                <div class="bg-light p-3 rounded code-block mt-3">
+                                    <pre><code>from peft import AdapterConfig, get_peft_model
+
+adapter_config = AdapterConfig(
+    r=16,  # Bottleneck dimension
+    lora_alpha=8,
+    target_modules=["q_proj", "v_proj"],
+    lora_dropout=0.05,
+    bias="none",
+    task_type="CAUSAL_LM"
+)
+
+model = get_peft_model(model, adapter_config)</code></pre>
+                                </div>
+                            </div>
+
+                            <div class="peft-method mt-5">
+                                <h4>P-Tuning v2</h4>
+                                <p>P-Tuning v2 is an improved version of Prompt Tuning that adds trainable continuous prompts to all layers of the transformer, similar to Prefix Tuning but with a different implementation.</p>
+
+                                <div class="bg-light p-3 rounded mt-3">
+                                    <h5>Key Characteristics</h5>
+                                    <ul>
+                                        <li><strong>Trainable Parameters:</strong> ~0.1-1% of the full model</li>
+                                        <li><strong>Memory Usage:</strong> Low</li>
+                                        <li><strong>Best For:</strong> Natural language understanding tasks</li>
+                                        <li><strong>Implementation:</strong> Deep prompt tuning across all layers</li>
+                                    </ul>
+                                </div>
+
+                                <div class="bg-light p-3 rounded code-block mt-3">
+                                    <pre><code>from peft import PromptEncoderConfig, get_peft_model
+
+ptuning_config = PromptEncoderConfig(
+    task_type="CAUSAL_LM",
+    num_virtual_tokens=20,  # Number of virtual tokens
+    encoder_hidden_size=128,  # Hidden size of the encoder
+    encoder_num_layers=2  # Number of layers in the encoder
+)
+
+model = get_peft_model(model, ptuning_config)</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h4>Choosing the Right Method</h4>
+                                    <p>The choice of fine-tuning method depends on several factors:</p>
+
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead class="table-dark">
+                                                <tr>
+                                                    <th>If You Need...</th>
+                                                    <th>Consider Using...</th>
+                                                    <th>Why?</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Maximum performance regardless of resources</td>
+                                                    <td>Full Fine-tuning</td>
+                                                    <td>Updates all parameters for comprehensive adaptation</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Balance of performance and efficiency</td>
+                                                    <td>LoRA</td>
+                                                    <td>Good performance with significantly reduced memory usage</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Fine-tuning very large models on limited hardware</td>
+                                                    <td>QLoRA</td>
+                                                    <td>Extreme memory efficiency while maintaining performance</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Task-specific generation control</td>
+                                                    <td>Prefix Tuning</td>
+                                                    <td>Effective for controlling generation style and content</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Minimal resource usage</td>
+                                                    <td>Prompt Tuning</td>
+                                                    <td>Extremely parameter-efficient, though may have lower performance</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Multi-task learning</td>
+                                                    <td>Adapter Layers</td>
+                                                    <td>Good for switching between multiple tasks with task-specific adapters</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .comparison-table th, .comparison-table td {
+        vertical-align: middle;
+    }
+
+    .math-formula {
+        font-family: 'Cambria Math', serif;
+        font-size: 1.1rem;
+        padding: 10px;
+        background-color: rgba(0, 0, 0, 0.03);
+        border-radius: 5px;
+    }
+
+    .pros-cons ul {
+        padding-left: 1.5rem;
+    }
+
+    .peft-method {
+        margin-bottom: 2rem;
+    }
+
+    .peft-method h4 {
+        color: var(--primary-color);
+        border-bottom: 2px solid var(--primary-color);
+        padding-bottom: 0.5rem;
+        margin-bottom: 1rem;
+    }
+</style>
+{% endblock %}

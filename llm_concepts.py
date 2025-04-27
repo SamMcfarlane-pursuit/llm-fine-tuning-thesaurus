@@ -57,10 +57,50 @@ class LLMConceptsVisualizer:
             "LoRA": {
                 "description": "Low-Rank Adaptation - a PEFT method that adds low-rank matrices to model weights.",
                 "related_concepts": [
-                    "Parameter-Efficient Fine-Tuning", "Rank Decomposition", "Attention Layers"
+                    "Parameter-Efficient Fine-Tuning", "QLoRA", "Rank Decomposition", "Attention Layers"
                 ],
                 "color": "purple",
                 "size": 18
+            },
+            "QLoRA": {
+                "description": "Quantized Low-Rank Adaptation - combines 4-bit quantization with LoRA for memory-efficient fine-tuning.",
+                "related_concepts": [
+                    "LoRA", "Parameter-Efficient Fine-Tuning", "Quantization", "Memory Efficiency"
+                ],
+                "color": "darkviolet",
+                "size": 18
+            },
+            "Quantization": {
+                "description": "Technique to reduce model precision (e.g., from 32-bit to 4-bit) to decrease memory usage.",
+                "related_concepts": [
+                    "QLoRA", "Memory Efficiency", "Model Compression"
+                ],
+                "color": "slateblue",
+                "size": 15
+            },
+            "Memory Efficiency": {
+                "description": "Techniques to reduce the memory footprint of LLMs during training and inference.",
+                "related_concepts": [
+                    "QLoRA", "Quantization", "Gradient Checkpointing", "Model Compression"
+                ],
+                "color": "mediumslateblue",
+                "size": 15
+            },
+            "Model Compression": {
+                "description": "Techniques to reduce model size while preserving performance, including pruning, distillation, and quantization.",
+                "related_concepts": [
+                    "Memory Efficiency", "Quantization", "Knowledge Distillation", "Pruning"
+                ],
+                "color": "royalblue",
+                "size": 15
+            },
+            "Gradient Checkpointing": {
+                "description": "Memory optimization technique that trades computation for memory by recomputing activations during backpropagation.",
+                "related_concepts": [
+                    "Memory Efficiency", "Backpropagation", "Training Optimization"
+                ],
+                "color": "cornflowerblue",
+                "size": 12
             },
             "Training Data": {
                 "description": "The dataset used to fine-tune the model for a specific task.",

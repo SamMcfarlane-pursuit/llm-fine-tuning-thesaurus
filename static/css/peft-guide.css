@@ -1,0 +1,266 @@
+/* PEFT Guide Styles */
+
+/* Main content styles */
+#peft-content {
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+#peft-content h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: #0d6efd;
+}
+
+#peft-content h2 {
+    font-size: 1.8rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e9ecef;
+    color: #0d6efd;
+}
+
+#peft-content h3 {
+    font-size: 1.5rem;
+    margin-top: 1.5rem;
+    color: #198754;
+}
+
+#peft-content h4 {
+    font-size: 1.25rem;
+    margin-top: 1.2rem;
+    color: #6c757d;
+}
+
+/* Code blocks */
+#peft-content pre {
+    background-color: #f8f9fa;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+    border-left: 4px solid #0d6efd;
+}
+
+#peft-content code {
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 0.9rem;
+}
+
+/* Tables */
+#peft-content table {
+    width: 100%;
+    margin: 1.5rem 0;
+    border-collapse: collapse;
+}
+
+#peft-content th {
+    background-color: #f1f8ff;
+    font-weight: 600;
+}
+
+#peft-content th, #peft-content td {
+    padding: 0.75rem;
+    border: 1px solid #dee2e6;
+}
+
+#peft-content tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+/* Lists */
+#peft-content ul, #peft-content ol {
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+#peft-content li {
+    margin-bottom: 0.5rem;
+}
+
+/* Blockquotes */
+#peft-content blockquote {
+    border-left: 4px solid #6c757d;
+    padding-left: 1rem;
+    margin-left: 0;
+    color: #6c757d;
+    font-style: italic;
+}
+
+/* Links */
+#peft-content a {
+    color: #0d6efd;
+    text-decoration: none;
+    border-bottom: 1px dotted #0d6efd;
+}
+
+#peft-content a:hover {
+    color: #0a58ca;
+    border-bottom: 1px solid #0a58ca;
+}
+
+/* Images */
+#peft-content img {
+    max-width: 100%;
+    height: auto;
+    margin: 1.5rem 0;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Method cards */
+.method-card {
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.method-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.method-card-header {
+    padding: 1rem;
+    border-bottom: 1px solid #dee2e6;
+    background-color: #f8f9fa;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+}
+
+.method-card-body {
+    padding: 1rem;
+}
+
+/* Table of contents */
+.toc {
+    background-color: #f8f9fa;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    position: sticky;
+    top: 2rem;
+}
+
+.toc ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.toc li {
+    margin-bottom: 0.5rem;
+}
+
+.toc a {
+    color: #0d6efd;
+    text-decoration: none;
+}
+
+.toc a:hover {
+    text-decoration: underline;
+}
+
+.toc-h2 {
+    padding-left: 0;
+}
+
+.toc-h3 {
+    padding-left: 1rem;
+}
+
+.toc-h4 {
+    padding-left: 2rem;
+}
+
+/* Copy button for code blocks */
+.copy-button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.copy-button:hover {
+    background-color: #e9ecef;
+}
+
+/* Method comparison table */
+.method-comparison-table th:first-child {
+    width: 20%;
+}
+
+.method-comparison-table th {
+    text-align: center;
+}
+
+.method-comparison-table td {
+    text-align: center;
+}
+
+.method-comparison-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+}
+
+/* Highlight boxes */
+.highlight-box {
+    padding: 1rem;
+    margin: 1.5rem 0;
+    border-radius: 0.5rem;
+    border-left: 4px solid;
+}
+
+.highlight-box-info {
+    background-color: #cfe2ff;
+    border-color: #0d6efd;
+}
+
+.highlight-box-success {
+    background-color: #d1e7dd;
+    border-color: #198754;
+}
+
+.highlight-box-warning {
+    background-color: #fff3cd;
+    border-color: #ffc107;
+}
+
+.highlight-box-danger {
+    background-color: #f8d7da;
+    border-color: #dc3545;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #peft-content {
+        font-size: 1rem;
+    }
+    
+    #peft-content h1 {
+        font-size: 2rem;
+    }
+    
+    #peft-content h2 {
+        font-size: 1.5rem;
+    }
+    
+    #peft-content h3 {
+        font-size: 1.25rem;
+    }
+    
+    #peft-content h4 {
+        font-size: 1.1rem;
+    }
+    
+    .toc {
+        position: static;
+    }
+}

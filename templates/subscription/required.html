@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block title %}Subscription Required - Thesaurus LLM Fine-Tuning{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="bi bi-lock-fill me-2"></i>Premium Feature</h4>
+                </div>
+                <div class="card-body text-center py-5">
+                    <div class="mb-4">
+                        <i class="bi bi-stars text-warning" style="font-size: 4rem;"></i>
+                    </div>
+                    
+                    <h2 class="mb-3">Upgrade to Access This Feature</h2>
+                    <p class="lead mb-4">
+                        The <strong>{{ feature_name|replace('_', ' ')|title }}</strong> feature is available with the 
+                        <span class="badge bg-primary">{{ tier.name }}</span> plan or higher.
+                    </p>
+                    
+                    <div class="mb-4">
+                        <h5>This feature includes:</h5>
+                        <ul class="list-unstyled">
+                            {% if feature_name == 'advanced_tutorials' %}
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Advanced LLM fine-tuning techniques</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>In-depth QLoRA implementation</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Memory optimization strategies</li>
+                            {% elif feature_name == 'progress_tracking' %}
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Track your learning progress</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Resume where you left off</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Detailed progress statistics</li>
+                            {% elif feature_name == 'bookmarks' %}
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Save your favorite tutorials</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Create custom collections</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Quick access to important content</li>
+                            {% elif feature_name == 'premium_content' %}
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Exclusive premium tutorials</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Advanced implementation guides</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Expert-level techniques</li>
+                            {% elif feature_name == 'code_exercises' %}
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Hands-on coding exercises</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Practical implementation tasks</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Automated feedback on your code</li>
+                            {% elif feature_name == 'quizzes' %}
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Test your knowledge with quizzes</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Track your quiz performance</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Reinforce your learning</li>
+                            {% elif feature_name == 'team_management' %}
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Manage team access</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Track team progress</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Collaborative learning features</li>
+                            {% elif feature_name == 'custom_models' %}
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Create custom fine-tuned models</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Advanced model customization</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Model performance analytics</li>
+                            {% elif feature_name == 'api_access' %}
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>API access to fine-tuned models</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Integration with your applications</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Higher rate limits and priority access</li>
+                            {% else %}
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Premium features and content</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Enhanced learning experience</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Priority support</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('subscription.plans') }}" class="btn btn-primary btn-lg">
+                            <i class="bi bi-arrow-up-circle me-2"></i>Upgrade Now
+                        </a>
+                        <a href="{{ url_for('index') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-house me-2"></i>Back to Home
+                        </a>
+                    </div>
+                </div>
+                <div class="card-footer bg-light">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">Questions about our plans?</small>
+                        <a href="{{ url_for('contact') }}" class="btn btn-sm btn-outline-primary">Contact Us</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

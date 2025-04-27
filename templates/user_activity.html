@@ -1,0 +1,607 @@
+{% extends "base.html" %}
+
+{% block title %}Your Activity - Visual Thesaurus LLM{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="display-5 mb-0">Your Activity</h1>
+            <p class="text-muted">Track your learning journey and progress</p>
+        </div>
+        <div class="col-md-4 text-md-end">
+            <div class="btn-group">
+                <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-calendar3"></i> Time Period
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item time-period-option active" href="#" data-period="week">Last 7 days</a></li>
+                    <li><a class="dropdown-item time-period-option" href="#" data-period="month">Last 30 days</a></li>
+                    <li><a class="dropdown-item time-period-option" href="#" data-period="year">Last 365 days</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item time-period-option" href="#" data-period="all">All time</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity Summary -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card h-100 border-primary">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-primary">Learning Time</h5>
+                    <div class="display-4 mb-2">{{ user_activity.learning_time_hours }}</div>
+                    <p class="text-muted mb-0">hours spent learning</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card h-100 border-success">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-success">Tutorials</h5>
+                    <div class="display-4 mb-2">{{ user_activity.tutorials_completed }}</div>
+                    <p class="text-muted mb-0">tutorials completed</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card h-100 border-warning">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-warning">Quizzes</h5>
+                    <div class="display-4 mb-2">{{ user_activity.quizzes_completed }}</div>
+                    <p class="text-muted mb-0">quizzes completed</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card h-100 border-info">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-info">Exercises</h5>
+                    <div class="display-4 mb-2">{{ user_activity.exercises_completed }}</div>
+                    <p class="text-muted mb-0">exercises completed</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity Timeline -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Activity Timeline</h5>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="showAllActivities" checked>
+                        <label class="form-check-label" for="showAllActivities">Show all activities</label>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="activity-timeline">
+                        {% for activity in user_activity.timeline %}
+                        <div class="activity-item" data-activity-type="{{ activity.type }}">
+                            <div class="activity-icon 
+                                {% if activity.type == 'tutorial' %}bg-primary
+                                {% elif activity.type == 'quiz' %}bg-warning
+                                {% elif activity.type == 'exercise' %}bg-info
+                                {% elif activity.type == 'search' %}bg-secondary
+                                {% else %}bg-light{% endif %}">
+                                {% if activity.type == 'tutorial' %}
+                                    <i class="bi bi-book"></i>
+                                {% elif activity.type == 'quiz' %}
+                                    <i class="bi bi-question-circle"></i>
+                                {% elif activity.type == 'exercise' %}
+                                    <i class="bi bi-code-slash"></i>
+                                {% elif activity.type == 'search' %}
+                                    <i class="bi bi-search"></i>
+                                {% else %}
+                                    <i class="bi bi-activity"></i>
+                                {% endif %}
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-time">{{ activity.timestamp }}</div>
+                                <div class="activity-title">{{ activity.title }}</div>
+                                <div class="activity-description">{{ activity.description }}</div>
+                                {% if activity.link %}
+                                <div class="activity-link">
+                                    <a href="{{ activity.link }}" class="btn btn-sm btn-outline-primary">View</a>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Learning Patterns -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Learning Patterns</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="learningPatternsChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Activity Distribution</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="activityDistributionChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Content -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Recently Viewed Content</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Type</th>
+                                    <th>Last Viewed</th>
+                                    <th>Progress</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for content in user_activity.recent_content %}
+                                <tr>
+                                    <td>{{ content.title }}</td>
+                                    <td>
+                                        {% if content.type == 'tutorial' %}
+                                            <span class="badge bg-primary">Tutorial</span>
+                                        {% elif content.type == 'quiz' %}
+                                            <span class="badge bg-warning">Quiz</span>
+                                        {% elif content.type == 'exercise' %}
+                                            <span class="badge bg-info">Exercise</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{{ content.type|capitalize }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ content.last_viewed }}</td>
+                                    <td>
+                                        <div class="progress" style="height: 6px;">
+                                            <div class="progress-bar 
+                                                {% if content.type == 'tutorial' %}bg-primary
+                                                {% elif content.type == 'quiz' %}bg-warning
+                                                {% elif content.type == 'exercise' %}bg-info
+                                                {% else %}bg-secondary{% endif %}" 
+                                                role="progressbar" 
+                                                style="width: {{ content.progress }}%;" 
+                                                aria-valuenow="{{ content.progress }}" 
+                                                aria-valuemin="0" 
+                                                aria-valuemax="100">
+                                            </div>
+                                        </div>
+                                        <small class="text-muted">{{ content.progress }}%</small>
+                                    </td>
+                                    <td>
+                                        <a href="{{ content.link }}" class="btn btn-sm btn-outline-primary">Continue</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search History -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Recent Searches</h5>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        {% for search in user_activity.recent_searches %}
+                        <a href="/llm-thesaurus?q={{ search.term|urlencode }}" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">{{ search.term }}</h6>
+                                <small class="text-muted">{{ search.timestamp }}</small>
+                            </div>
+                            <p class="mb-1">{{ search.results_count }} results</p>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Popular Terms</h5>
+                </div>
+                <div class="card-body">
+                    <div class="popular-terms">
+                        {% for term in user_activity.popular_terms %}
+                        <a href="/llm-thesaurus?q={{ term.term|urlencode }}" class="popular-term" style="font-size: {{ term.size }}px;">
+                            {{ term.term }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievements -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Your Achievements</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% for achievement in user_activity.achievements %}
+                        <div class="col-md-3 col-sm-6 mb-4">
+                            <div class="achievement-card text-center {% if not achievement.unlocked %}achievement-locked{% endif %}">
+                                <div class="achievement-icon">
+                                    {% if achievement.unlocked %}
+                                    <i class="bi {{ achievement.icon }}"></i>
+                                    {% else %}
+                                    <i class="bi bi-lock"></i>
+                                    {% endif %}
+                                </div>
+                                <h5 class="achievement-title">{{ achievement.title }}</h5>
+                                <p class="achievement-description">{{ achievement.description }}</p>
+                                {% if achievement.unlocked %}
+                                <div class="achievement-date">Unlocked on {{ achievement.date }}</div>
+                                {% else %}
+                                <div class="achievement-progress">
+                                    <div class="progress" style="height: 6px;">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ achievement.progress }}%;" aria-valuenow="{{ achievement.progress }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                    <small class="text-muted">{{ achievement.progress }}% complete</small>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<style>
+    /* Activity Timeline */
+    .activity-timeline {
+        position: relative;
+        padding-left: 40px;
+    }
+    
+    .activity-timeline::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 19px;
+        width: 2px;
+        background-color: #e9ecef;
+    }
+    
+    .activity-item {
+        position: relative;
+        margin-bottom: 20px;
+    }
+    
+    .activity-icon {
+        position: absolute;
+        left: -40px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        z-index: 1;
+    }
+    
+    .activity-content {
+        background-color: #f8f9fa;
+        border-radius: 0.5rem;
+        padding: 15px;
+    }
+    
+    .activity-time {
+        font-size: 0.8rem;
+        color: #6c757d;
+        margin-bottom: 5px;
+    }
+    
+    .activity-title {
+        font-weight: 600;
+        margin-bottom: 5px;
+    }
+    
+    .activity-description {
+        margin-bottom: 10px;
+    }
+    
+    /* Popular Terms */
+    .popular-terms {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .popular-term {
+        display: inline-block;
+        padding: 5px 10px;
+        background-color: #f8f9fa;
+        border-radius: 20px;
+        text-decoration: none;
+        color: #212529;
+        transition: all 0.2s ease;
+    }
+    
+    .popular-term:hover {
+        background-color: #0d6efd;
+        color: white;
+    }
+    
+    /* Achievements */
+    .achievement-card {
+        background-color: #f8f9fa;
+        border-radius: 0.5rem;
+        padding: 20px;
+        height: 100%;
+        transition: all 0.3s ease;
+    }
+    
+    .achievement-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .achievement-locked {
+        opacity: 0.7;
+        filter: grayscale(1);
+    }
+    
+    .achievement-icon {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        color: #0d6efd;
+    }
+    
+    .achievement-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+    
+    .achievement-description {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin-bottom: 15px;
+    }
+    
+    .achievement-date {
+        font-size: 0.8rem;
+        color: #198754;
+    }
+</style>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Learning Patterns Chart
+        const learningPatternsCtx = document.getElementById('learningPatternsChart').getContext('2d');
+        const learningPatternsChart = new Chart(learningPatternsCtx, {
+            type: 'line',
+            data: {
+                labels: {{ user_activity.learning_patterns.labels|tojson }},
+                datasets: [{
+                    label: 'Learning Time (minutes)',
+                    data: {{ user_activity.learning_patterns.data|tojson }},
+                    borderColor: 'rgba(13, 110, 253, 1)',
+                    backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Minutes'
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Activity Distribution Chart
+        const activityDistributionCtx = document.getElementById('activityDistributionChart').getContext('2d');
+        const activityDistributionChart = new Chart(activityDistributionCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Tutorials', 'Quizzes', 'Exercises', 'Searches'],
+                datasets: [{
+                    data: [
+                        {{ user_activity.activity_distribution.tutorials }},
+                        {{ user_activity.activity_distribution.quizzes }},
+                        {{ user_activity.activity_distribution.exercises }},
+                        {{ user_activity.activity_distribution.searches }}
+                    ],
+                    backgroundColor: [
+                        'rgba(13, 110, 253, 0.8)',
+                        'rgba(255, 193, 7, 0.8)',
+                        'rgba(13, 202, 240, 0.8)',
+                        'rgba(108, 117, 125, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(13, 110, 253, 1)',
+                        'rgba(255, 193, 7, 1)',
+                        'rgba(13, 202, 240, 1)',
+                        'rgba(108, 117, 125, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'right'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = Math.round((context.parsed / total) * 100);
+                                return `${context.label}: ${context.parsed} (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        // Activity Timeline Filtering
+        const showAllActivitiesCheckbox = document.getElementById('showAllActivities');
+        const activityItems = document.querySelectorAll('.activity-item');
+        
+        showAllActivitiesCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                // Show all activities
+                activityItems.forEach(item => {
+                    item.style.display = 'block';
+                });
+            } else {
+                // Show only important activities
+                activityItems.forEach(item => {
+                    const activityType = item.dataset.activityType;
+                    if (activityType === 'tutorial' || activityType === 'quiz' || activityType === 'exercise') {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            }
+        });
+        
+        // Time Period Filtering
+        const timePeriodOptions = document.querySelectorAll('.time-period-option');
+        
+        timePeriodOptions.forEach(option => {
+            option.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all options
+                timePeriodOptions.forEach(opt => opt.classList.remove('active'));
+                
+                // Add active class to clicked option
+                this.classList.add('active');
+                
+                // Get selected period
+                const period = this.dataset.period;
+                
+                // Update data based on period
+                updateDataForPeriod(period);
+            });
+        });
+        
+        function updateDataForPeriod(period) {
+            // In a real implementation, this would fetch data from the server
+            // For demo purposes, we'll just show a loading indicator
+            
+            // Show loading state
+            document.querySelectorAll('.display-4').forEach(el => {
+                el.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></div>';
+            });
+            
+            // Simulate API call
+            setTimeout(() => {
+                // Update summary cards with random data
+                document.querySelectorAll('.display-4').forEach(el => {
+                    const randomValue = Math.floor(Math.random() * 100);
+                    el.textContent = randomValue;
+                });
+                
+                // Update charts with random data
+                updateChartsForPeriod(period);
+            }, 500);
+        }
+        
+        function updateChartsForPeriod(period) {
+            // Generate random data based on period
+            let labels, data;
+            
+            if (period === 'week') {
+                labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            } else if (period === 'month') {
+                labels = Array.from({length: 30}, (_, i) => `Day ${i+1}`);
+            } else if (period === 'year') {
+                labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            } else {
+                // All time - use months for the past year
+                labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            }
+            
+            // Generate random data
+            data = labels.map(() => Math.floor(Math.random() * 120));
+            
+            // Update learning patterns chart
+            learningPatternsChart.data.labels = labels;
+            learningPatternsChart.data.datasets[0].data = data;
+            learningPatternsChart.update();
+            
+            // Update activity distribution chart with random data
+            const tutorials = Math.floor(Math.random() * 50) + 10;
+            const quizzes = Math.floor(Math.random() * 30) + 5;
+            const exercises = Math.floor(Math.random() * 20) + 3;
+            const searches = Math.floor(Math.random() * 100) + 20;
+            
+            activityDistributionChart.data.datasets[0].data = [tutorials, quizzes, exercises, searches];
+            activityDistributionChart.update();
+        }
+    });
+</script>
+{% endblock %}

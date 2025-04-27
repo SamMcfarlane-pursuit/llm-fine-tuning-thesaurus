@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Sign In - Visual Thesaurus LLM{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Sign In</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card" style="border-radius: 15px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.3); border: 2px solid rgba(66, 135, 245, 0.2) !important; background-color: rgba(20, 20, 20, 0.7); position: relative;">
+                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: linear-gradient(to right, #4287f5, #00ffdd); z-index: 1;"></div>
+                <div class="card-header" style="background: linear-gradient(135deg, rgba(66, 135, 245, 0.2), rgba(0, 255, 221, 0.2)); border-bottom: 2px solid rgba(66, 135, 245, 0.2); padding: 20px;">
+                    <h3 style="font-weight: 700; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.3); margin-bottom: 0;">Sign In</h3>
+                </div>
+                <div class="card-body" style="padding: 30px;">
+                    <form method="POST" action="{{ url_for('auth.login') }}">
+                        {{ form.hidden_tag() }}
+
+                        <div class="mb-4">
+                            {{ form.email.label(class="form-label", style="color: #ffffff; font-weight: 600; font-size: 1.1rem; margin-bottom: 8px;") }}
+                            {{ form.email(class="form-control", placeholder="Enter your email", style="background-color: rgba(30, 30, 30, 0.7); border: 2px solid rgba(66, 135, 245, 0.3); color: #ffffff; padding: 12px; border-radius: 10px; font-size: 1.05rem;") }}
+                            {% for error in form.email.errors %}
+                                <div style="color: #ff4d10; font-weight: 500; margin-top: 8px;">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-4">
+                            {{ form.password.label(class="form-label", style="color: #ffffff; font-weight: 600; font-size: 1.1rem; margin-bottom: 8px;") }}
+                            {{ form.password(class="form-control", placeholder="Enter your password", style="background-color: rgba(30, 30, 30, 0.7); border: 2px solid rgba(66, 135, 245, 0.3); color: #ffffff; padding: 12px; border-radius: 10px; font-size: 1.05rem;") }}
+                            {% for error in form.password.errors %}
+                                <div style="color: #ff4d10; font-weight: 500; margin-top: 8px;">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-4 form-check">
+                            {{ form.remember_me(class="form-check-input", style="width: 20px; height: 20px; margin-top: 0.15rem;") }}
+                            {{ form.remember_me.label(class="form-check-label", style="color: #e0e0e0; font-weight: 500; margin-left: 8px; font-size: 1rem;") }}
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            {{ form.submit(class="btn btn-primary", style="background: linear-gradient(135deg, #4287f5, #3a75d8); border: none; border-radius: 10px; padding: 12px 24px; font-weight: 700; font-size: 1.05rem; letter-spacing: 0.5px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2), 0 0 10px rgba(66, 135, 245, 0.3); transition: all 0.3s ease; color: white; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);") }}
+                        </div>
+                    </form>
+
+                    <hr class="my-4" style="border-color: rgba(66, 135, 245, 0.2); opacity: 0.5;">
+
+                    <div class="text-center mb-3">
+                        <p style="color: #b8e0ff; font-weight: 500; font-size: 1.05rem;">Or sign in with:</p>
+                        <div class="d-flex justify-content-center gap-3">
+                            {% for provider in oauth_providers %}
+                                <a href="{{ provider.url }}" class="btn" style="background-color: rgba(30, 30, 30, 0.7); border: 2px solid rgba(255, 255, 255, 0.2); color: #ffffff; padding: 10px 20px; border-radius: 10px; font-weight: 600; transition: all 0.3s ease;">
+                                    <i class="bi bi-{{ provider.icon }} me-2" style="color: #4287f5;"></i>{{ provider.name }}
+                                </a>
+                            {% endfor %}
+                            <a href="{{ url_for('auth.supabase_login') }}" class="btn" style="background-color: rgba(30, 30, 30, 0.7); border: 2px solid rgba(66, 135, 245, 0.3); color: #ffffff; padding: 10px 20px; border-radius: 10px; font-weight: 600; transition: all 0.3s ease;">
+                                <i class="bi bi-database-fill me-2" style="color: #4287f5;"></i>Supabase
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer" style="background-color: rgba(25, 25, 25, 0.7); border-top: 2px solid rgba(66, 135, 245, 0.2); padding: 20px;">
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('auth.supabase_password_reset') }}" style="color: #4287f5; font-weight: 600; text-decoration: none; transition: all 0.3s ease;">Forgot Password?</a>
+                        <a href="{{ url_for('auth.register') }}" style="color: #4287f5; font-weight: 600; text-decoration: none; transition: all 0.3s ease;">Need an account? Register</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

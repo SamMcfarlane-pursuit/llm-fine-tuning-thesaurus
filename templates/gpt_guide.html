@@ -1,0 +1,630 @@
+{% extends 'base.html' %}
+
+{% block title %}Understanding GPT Models{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/learn">Learn</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Understanding GPT Models</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1>Comprehensive Guide to GPT Models</h1>
+            <p class="lead">Understanding Generative Pre-trained Transformers in full context</p>
+        </div>
+    </div>
+
+    <!-- Introduction Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3>Introduction to GPT Models</h3>
+                </div>
+                <div class="card-body">
+                    <p>GPT (Generative Pre-trained Transformer) models represent a revolutionary advancement in natural language processing. These models use transformer architecture to understand and generate human-like text based on the input they receive.</p>
+
+                    <p>This comprehensive guide explores the architecture, training methodology, capabilities, and limitations of GPT models, providing a deep understanding of how these powerful language models work.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Architecture Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h3>GPT Architecture: The Transformer Model</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <h4>The Transformer Architecture</h4>
+                            <p>GPT models are based on the transformer architecture introduced in the paper "Attention Is All You Need" (Vaswani et al., 2017). Unlike previous sequence models that used recurrent or convolutional neural networks, transformers rely entirely on attention mechanisms to draw global dependencies between input and output.</p>
+
+                            <p>The original transformer architecture consists of an encoder and a decoder, but GPT models use only the decoder part of the transformer, making them "decoder-only" transformers.</p>
+
+                            <h4 class="mt-4">Key Components of GPT Architecture</h4>
+                            <ul class="feature-list">
+                                <li><i class="bi bi-diagram-3 text-primary me-2"></i> <strong>Self-Attention Mechanism:</strong> Allows the model to weigh the importance of different words in the input when generating each word in the output</li>
+                                <li><i class="bi bi-layers text-primary me-2"></i> <strong>Multi-Head Attention:</strong> Runs multiple attention operations in parallel, allowing the model to focus on different aspects of the input</li>
+                                <li><i class="bi bi-arrow-repeat text-primary me-2"></i> <strong>Feed-Forward Networks:</strong> Process the attention outputs through fully connected neural networks</li>
+                                <li><i class="bi bi-plus-slash-minus text-primary me-2"></i> <strong>Residual Connections:</strong> Help with gradient flow during training by adding the input of a sub-layer to its output</li>
+                                <li><i class="bi bi-rulers text-primary me-2"></i> <strong>Layer Normalization:</strong> Normalizes the outputs of each sub-layer to stabilize training</li>
+                                <li><i class="bi bi-mask text-primary me-2"></i> <strong>Masked Self-Attention:</strong> Ensures that predictions for a given position can only depend on known outputs at positions before it</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="architecture-diagram bg-dark p-3 rounded">
+                                <div class="image-container">
+                                    <img src="https://miro.medium.com/v2/resize:fit:1400/1*aTzuYbD4pvY1ck5-GQN4Jw.png" alt="GPT Architecture Diagram" class="img-fluid rounded diagram-image" data-bs-toggle="tooltip" data-bs-placement="top" title="Click to enlarge">
+                                    <div class="image-caption">GPT's decoder-only transformer architecture</div>
+                                </div>
+                                <p class="text-center mt-2 text-light"><small>The transformer architecture is the foundation of all GPT models</small></p>
+                            </div>
+
+                            <div class="card bg-light mt-4">
+                                <div class="card-body">
+                                    <h5>GPT Model Sizes</h5>
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Model</th>
+                                                <th>Parameters</th>
+                                                <th>Layers</th>
+                                                <th>Width</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>GPT-1</td>
+                                                <td>117M</td>
+                                                <td>12</td>
+                                                <td>768</td>
+                                            </tr>
+                                            <tr>
+                                                <td>GPT-2</td>
+                                                <td>1.5B</td>
+                                                <td>48</td>
+                                                <td>1600</td>
+                                            </tr>
+                                            <tr>
+                                                <td>GPT-3</td>
+                                                <td>175B</td>
+                                                <td>96</td>
+                                                <td>12288</td>
+                                            </tr>
+                                            <tr>
+                                                <td>GPT-4</td>
+                                                <td>~1.8T*</td>
+                                                <td>Unknown</td>
+                                                <td>Unknown</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <p class="small text-muted">*Estimated, exact parameters not disclosed</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <h4>Self-Attention Mechanism: The Heart of Transformers</h4>
+                            <p>The self-attention mechanism is what allows GPT models to understand context and relationships between words in a sequence. Here's how it works:</p>
+
+                            <div class="bg-light p-3 rounded">
+                                <h5>Self-Attention Computation</h5>
+                                <ol>
+                                    <li>For each word in the input, three vectors are created: Query (Q), Key (K), and Value (V)</li>
+                                    <li>The attention score between words is calculated by taking the dot product of the Query vector of one word with the Key vectors of all words</li>
+                                    <li>These scores are normalized using softmax to get attention weights</li>
+                                    <li>The final representation for each word is computed as a weighted sum of all Value vectors, where the weights are the attention weights</li>
+                                </ol>
+
+                                <div class="math-formula">
+                                    <p>Attention(Q, K, V) = softmax(QK<sup>T</sup> / √d<sub>k</sub>)V</p>
+                                </div>
+
+                                <div class="code-block with-line-numbers mt-3">
+                                    <pre><code># Python implementation of self-attention mechanism
+import torch
+import torch.nn.functional as F
+
+def self_attention(query, key, value):
+    # query, key, value shapes: [batch_size, seq_len, d_model]
+
+    # Calculate attention scores
+    d_k = query.size(-1)
+    scores = torch.matmul(query, key.transpose(-2, -1)) / (d_k ** 0.5)
+
+    # Apply softmax to get attention weights
+    attention_weights = F.softmax(scores, dim=-1)
+
+    # Apply attention weights to values
+    output = torch.matmul(attention_weights, value)
+
+    return output, attention_weights</code></pre>
+                                </div>
+                            </div>
+
+                            <h4 class="mt-4">Multi-Head Attention</h4>
+                            <p>Instead of performing a single attention function, GPT models use multi-head attention, which allows the model to jointly attend to information from different representation subspaces at different positions.</p>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="bg-light p-3 rounded">
+                                        <h5>Multi-Head Attention Computation</h5>
+                                        <ol>
+                                            <li>Create multiple sets of Q, K, V matrices ("heads")</li>
+                                            <li>Perform self-attention for each head independently</li>
+                                            <li>Concatenate the results from all heads</li>
+                                            <li>Project the concatenated result to get the final output</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="bg-light p-3 rounded">
+                                        <h5>Positional Encoding</h5>
+                                        <p>Since transformers don't have recurrence or convolution, they have no inherent understanding of word order. Positional encodings are added to the input embeddings to provide information about the position of words in the sequence.</p>
+                                        <p>GPT models use sinusoidal positional encodings, where each dimension of the positional encoding corresponds to a sinusoid with a different frequency.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Training Methodology Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h3>GPT Training Methodology</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Pre-training and Fine-tuning Paradigm</h4>
+                            <p>GPT models follow a two-stage training approach:</p>
+
+                            <div class="training-stage bg-light p-3 rounded mb-3">
+                                <h5><i class="bi bi-1-circle-fill text-primary me-2"></i>Pre-training</h5>
+                                <p>During pre-training, the model learns general language understanding from a vast corpus of text data using unsupervised learning. The objective is to predict the next word in a sequence given all previous words.</p>
+                                <ul>
+                                    <li><strong>Training Data:</strong> Hundreds of gigabytes to terabytes of text from the internet, books, and other sources</li>
+                                    <li><strong>Objective:</strong> Minimize the negative log-likelihood of the next token</li>
+                                    <li><strong>Duration:</strong> Weeks to months on specialized hardware (TPUs/GPUs)</li>
+                                </ul>
+                            </div>
+
+                            <div class="training-stage bg-light p-3 rounded">
+                                <h5><i class="bi bi-2-circle-fill text-primary me-2"></i>Fine-tuning</h5>
+                                <p>After pre-training, the model is fine-tuned on specific tasks or with human feedback to improve performance and alignment with human values.</p>
+                                <ul>
+                                    <li><strong>Training Data:</strong> Task-specific datasets or human-labeled examples</li>
+                                    <li><strong>Techniques:</strong> Supervised fine-tuning (SFT), Reinforcement Learning from Human Feedback (RLHF)</li>
+                                    <li><strong>Objective:</strong> Optimize for task performance or human preferences</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Pre-training Objective: Next Token Prediction</h4>
+                            <p>GPT models are trained using a language modeling objective, where the goal is to predict the next token in a sequence given the previous tokens.</p>
+
+                            <div class="bg-light p-3 rounded mb-3">
+                                <h5>Mathematical Formulation</h5>
+                                <p>Given a sequence of tokens X = (x₁, x₂, ..., xₙ), the model is trained to maximize:</p>
+                                <div class="math-formula">
+                                    <p>L(X) = Σ log P(xₜ | x₁, x₂, ..., xₜ₋₁)</p>
+                                </div>
+                                <p>Where P(xₜ | x₁, x₂, ..., xₜ₋₁) is the probability of token xₜ given all previous tokens.</p>
+                            </div>
+
+                            <div class="example-box">
+                                <h5>Example of Next Token Prediction</h5>
+                                <p>Input: "The quick brown fox jumps over the lazy"</p>
+                                <p>The model predicts the next token, which might be "dog" with high probability.</p>
+                                <div class="token-prediction">
+                                    <div class="token">The</div>
+                                    <div class="token">quick</div>
+                                    <div class="token">brown</div>
+                                    <div class="token">fox</div>
+                                    <div class="token">jumps</div>
+                                    <div class="token">over</div>
+                                    <div class="token">the</div>
+                                    <div class="token">lazy</div>
+                                    <div class="token prediction">dog (94%)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <h4>Advanced Training Techniques</h4>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="card h-100">
+                                        <div class="card-header bg-primary text-white">
+                                            <h5>Reinforcement Learning from Human Feedback (RLHF)</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <p>RLHF is a technique used to align language models with human preferences and values.</p>
+                                            <ol>
+                                                <li><strong>Collect Human Feedback:</strong> Human evaluators rank different model responses</li>
+                                                <li><strong>Train a Reward Model:</strong> Learn to predict human preferences</li>
+                                                <li><strong>Optimize the Policy:</strong> Fine-tune the model using reinforcement learning to maximize the reward</li>
+                                            </ol>
+                                            <p>This technique is crucial for making models like ChatGPT more helpful, harmless, and honest.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card h-100">
+                                        <div class="card-header bg-info text-white">
+                                            <h5>Constitutional AI</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <p>Constitutional AI is an approach to align AI systems with human values by defining a set of principles (a "constitution") that the model should follow.</p>
+                                            <ol>
+                                                <li><strong>Define Principles:</strong> Create a set of rules or guidelines</li>
+                                                <li><strong>Self-Critique:</strong> Have the model critique its own outputs based on these principles</li>
+                                                <li><strong>Self-Improvement:</strong> Generate improved responses that better align with the principles</li>
+                                                <li><strong>Fine-tune:</strong> Train on the improved responses</li>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card h-100">
+                                        <div class="card-header bg-warning text-dark">
+                                            <h5>Scaling Laws</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <p>Research has discovered predictable scaling laws that govern how model performance improves with:</p>
+                                            <ul>
+                                                <li><strong>Model Size:</strong> Performance improves as a power law with the number of parameters</li>
+                                                <li><strong>Dataset Size:</strong> Performance improves logarithmically with the amount of training data</li>
+                                                <li><strong>Compute:</strong> Performance scales with the amount of compute used for training</li>
+                                            </ul>
+                                            <p>These laws guide decisions about how to allocate resources when training larger models.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Capabilities and Applications Section -->
+    <div class="row mt-4 mb-5">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3>GPT Capabilities and Applications</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4>Emergent Abilities</h4>
+                            <p>One of the most fascinating aspects of GPT models is their emergent abilities—capabilities that appear only when the model reaches a certain scale and weren't explicitly programmed or trained for.</p>
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>Emergent Ability</th>
+                                            <th>Description</th>
+                                            <th>Emergence Threshold</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>In-context Learning</td>
+                                            <td>Ability to learn from examples provided in the prompt without parameter updates</td>
+                                            <td>~10B parameters</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Instruction Following</td>
+                                            <td>Ability to follow natural language instructions without specific training</td>
+                                            <td>~100B parameters</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Chain-of-Thought Reasoning</td>
+                                            <td>Ability to break down complex problems into steps and reason through them</td>
+                                            <td>~100B parameters</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Code Generation</td>
+                                            <td>Ability to write functional code in various programming languages</td>
+                                            <td>~10B parameters</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Multilingual Capabilities</td>
+                                            <td>Ability to understand and generate text in multiple languages</td>
+                                            <td>~10B parameters</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h4>Key Capabilities</h4>
+                            <div class="accordion" id="capabilitiesAccordion">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingOne">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            <i class="bi bi-chat-text me-2"></i> Natural Language Understanding and Generation
+                                        </button>
+                                    </h2>
+                                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#capabilitiesAccordion">
+                                        <div class="accordion-body">
+                                            <p>GPT models excel at understanding and generating human-like text across a wide range of topics and styles.</p>
+                                            <ul>
+                                                <li><strong>Text Completion:</strong> Continuing text from a given prompt</li>
+                                                <li><strong>Summarization:</strong> Condensing long documents into shorter summaries</li>
+                                                <li><strong>Paraphrasing:</strong> Rewriting text while preserving meaning</li>
+                                                <li><strong>Translation:</strong> Converting text between languages</li>
+                                                <li><strong>Question Answering:</strong> Providing information in response to queries</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingTwo">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                            <i class="bi bi-code-square me-2"></i> Code Understanding and Generation
+                                        </button>
+                                    </h2>
+                                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#capabilitiesAccordion">
+                                        <div class="accordion-body">
+                                            <p>GPT models can understand and generate code in various programming languages.</p>
+                                            <ul>
+                                                <li><strong>Code Completion:</strong> Suggesting code based on context</li>
+                                                <li><strong>Bug Fixing:</strong> Identifying and correcting errors in code</li>
+                                                <li><strong>Code Translation:</strong> Converting code between programming languages</li>
+                                                <li><strong>Documentation Generation:</strong> Creating documentation for code</li>
+                                                <li><strong>Test Generation:</strong> Creating test cases for code</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingThree">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                            <i class="bi bi-lightbulb me-2"></i> Reasoning and Problem Solving
+                                        </button>
+                                    </h2>
+                                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#capabilitiesAccordion">
+                                        <div class="accordion-body">
+                                            <p>GPT models can perform various reasoning tasks, especially when prompted with chain-of-thought techniques.</p>
+                                            <ul>
+                                                <li><strong>Logical Reasoning:</strong> Following logical steps to reach conclusions</li>
+                                                <li><strong>Mathematical Problem Solving:</strong> Solving math problems step by step</li>
+                                                <li><strong>Analogical Reasoning:</strong> Understanding relationships between concepts</li>
+                                                <li><strong>Causal Reasoning:</strong> Understanding cause and effect relationships</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Applications of GPT Models</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="application-card">
+                                        <div class="app-icon bg-primary text-white">
+                                            <i class="bi bi-robot"></i>
+                                        </div>
+                                        <h5>Conversational AI</h5>
+                                        <ul>
+                                            <li>Virtual assistants</li>
+                                            <li>Customer service chatbots</li>
+                                            <li>Therapy and mental health support</li>
+                                            <li>Educational tutoring</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="application-card">
+                                        <div class="app-icon bg-success text-white">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </div>
+                                        <h5>Content Creation</h5>
+                                        <ul>
+                                            <li>Blog and article writing</li>
+                                            <li>Marketing copy generation</li>
+                                            <li>Email drafting</li>
+                                            <li>Creative writing assistance</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mt-3">
+                                    <div class="application-card">
+                                        <div class="app-icon bg-info text-white">
+                                            <i class="bi bi-code"></i>
+                                        </div>
+                                        <h5>Software Development</h5>
+                                        <ul>
+                                            <li>Code generation and completion</li>
+                                            <li>Debugging assistance</li>
+                                            <li>Documentation generation</li>
+                                            <li>Code review and optimization</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mt-3">
+                                    <div class="application-card">
+                                        <div class="app-icon bg-warning text-dark">
+                                            <i class="bi bi-translate"></i>
+                                        </div>
+                                        <h5>Language Translation</h5>
+                                        <ul>
+                                            <li>Real-time translation</li>
+                                            <li>Document translation</li>
+                                            <li>Localization assistance</li>
+                                            <li>Language learning tools</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <h4>Limitations and Challenges</h4>
+                            <div class="alert alert-warning">
+                                <h5><i class="bi bi-exclamation-triangle me-2"></i>Understanding GPT's Limitations</h5>
+                                <p>Despite their impressive capabilities, GPT models have several important limitations:</p>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="limitation-card">
+                                        <h5><i class="bi bi-x-circle text-danger me-2"></i>Hallucinations</h5>
+                                        <p>GPT models can generate plausible-sounding but factually incorrect information. They don't have a built-in mechanism to verify the truthfulness of their outputs.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="limitation-card">
+                                        <h5><i class="bi bi-x-circle text-danger me-2"></i>Knowledge Cutoff</h5>
+                                        <p>GPT models have a knowledge cutoff date and don't have access to real-time information or events that occurred after their training data cutoff.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="limitation-card">
+                                        <h5><i class="bi bi-x-circle text-danger me-2"></i>Reasoning Limitations</h5>
+                                        <p>While GPT models can perform some reasoning tasks, they struggle with complex logical reasoning, mathematical proofs, and tasks requiring deep domain expertise.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mt-3">
+                                    <div class="limitation-card">
+                                        <h5><i class="bi bi-x-circle text-danger me-2"></i>Bias and Fairness</h5>
+                                        <p>GPT models can reflect and potentially amplify biases present in their training data, leading to unfair or discriminatory outputs.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mt-3">
+                                    <div class="limitation-card">
+                                        <h5><i class="bi bi-x-circle text-danger me-2"></i>Context Window Limitations</h5>
+                                        <p>GPT models have a fixed context window (e.g., 4K, 8K, or 32K tokens), limiting their ability to process very long documents or maintain context over extended conversations.</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mt-3">
+                                    <div class="limitation-card">
+                                        <h5><i class="bi bi-x-circle text-danger me-2"></i>Lack of Grounding</h5>
+                                        <p>GPT models don't have direct access to the real world, external tools, or the ability to run code unless specifically integrated with such capabilities.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .feature-list li {
+        margin-bottom: 10px;
+    }
+
+    .math-formula {
+        font-family: 'Cambria Math', serif;
+        font-size: 1.1rem;
+        padding: 10px;
+        background-color: rgba(0, 0, 0, 0.03);
+        border-radius: 5px;
+    }
+
+    .token-prediction {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-top: 10px;
+    }
+
+    .token {
+        padding: 5px 10px;
+        background-color: var(--light-bg);
+        border-radius: 4px;
+        font-family: monospace;
+    }
+
+    .token.prediction {
+        background-color: var(--primary-color);
+        color: white;
+    }
+
+    .training-stage {
+        border-left: 4px solid var(--primary-color);
+    }
+
+    .example-box {
+        background-color: rgba(0, 102, 255, 0.05);
+        border-left: 4px solid var(--primary-color);
+        padding: 15px;
+        border-radius: 5px;
+    }
+
+    .application-card {
+        background-color: var(--light-bg);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        height: 100%;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0, 198, 255, 0.2);
+    }
+
+    .application-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--card-shadow);
+    }
+
+    .app-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+    }
+
+    .limitation-card {
+        background-color: var(--light-bg);
+        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        height: 100%;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 61, 0, 0.2);
+    }
+
+    .limitation-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--card-shadow);
+    }
+</style>
+{% endblock %}

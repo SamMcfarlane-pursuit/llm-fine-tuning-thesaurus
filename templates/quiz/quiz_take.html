@@ -1,0 +1,580 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} - Visual Thesaurus LLM{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('quiz.quiz_list') }}">Quizzes</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('quiz.quiz_detail', quiz_id=quiz.id) }}">{{ quiz.title }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Taking Quiz</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h2 class="mb-0">{{ quiz.title }}</h2>
+                    <div class="quiz-timer" id="quiz-timer">
+                        <i class="bi bi-clock me-1"></i> <span id="timer-display">00:00</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form id="quiz-form" method="POST" action="{{ url_for('quiz.quiz_take', quiz_id=quiz.id, attempt_id=attempt.id) }}">
+                        {{ form.csrf_token }}
+
+                        <div class="quiz-progress mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span>Progress</span>
+                                <span id="question-counter">Question 1 of {{ questions|length }}</span>
+                            </div>
+                            <div class="progress" style="height: 10px;">
+                                <div class="progress-bar bg-info" id="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+
+                        <div class="quiz-questions">
+                            {% for question in questions %}
+                                <div class="quiz-question" id="question-{{ loop.index }}" {% if loop.index > 1 %}style="display: none;"{% endif %}>
+                                    <div class="question-header mb-3">
+                                        <h4>Question {{ loop.index }}</h4>
+                                        <div class="question-points">
+                                            <span class="badge bg-info">{{ question.points }} point{% if question.points > 1 %}s{% endif %}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="question-text mb-4">
+                                        <p>{{ question.question_text }}</p>
+                                        <div class="hint-container mt-2">
+                                            <button type="button" class="btn btn-sm btn-outline-info hint-button" data-question-id="{{ question.id }}">
+                                                <i class="bi bi-lightbulb me-1"></i> Show Hint
+                                            </button>
+                                            <div class="hint-content alert alert-info mt-2 d-none" id="hint_{{ question.id }}">
+                                                <i class="bi bi-lightbulb-fill me-2"></i>
+                                                <span class="hint-text">
+                                                    {% if question.explanation %}
+                                                        {{ question.explanation|truncate(100, true) }}
+                                                    {% else %}
+                                                        Think about the key concepts related to this topic and how they apply to the question.
+                                                    {% endif %}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="question-options mb-4">
+                                        {% if question.question_type == 'multiple_choice' %}
+                                            <div class="list-group">
+                                                {% for option in question.options %}
+                                                    <label class="list-group-item list-group-item-action option-item">
+                                                        <div class="d-flex align-items-center">
+                                                            <input type="radio" name="question_{{ question.id }}" value="{{ option.id }}" class="form-check-input me-3" data-question-id="{{ question.id }}">
+                                                            <span>{{ option.option_text }}</span>
+                                                        </div>
+                                                    </label>
+                                                {% endfor %}
+                                            </div>
+                                            <div class="feedback-area mt-3 d-none" id="feedback_{{ question.id }}">
+                                                <!-- Feedback will be shown here after answering -->
+                                            </div>
+                                        {% elif question.question_type == 'true_false' %}
+                                            <div class="list-group">
+                                                <label class="list-group-item list-group-item-action option-item">
+                                                    <div class="d-flex align-items-center">
+                                                        <input type="radio" name="question_{{ question.id }}" value="true" class="form-check-input me-3" data-question-id="{{ question.id }}">
+                                                        <span>True</span>
+                                                    </div>
+                                                </label>
+                                                <label class="list-group-item list-group-item-action option-item">
+                                                    <div class="d-flex align-items-center">
+                                                        <input type="radio" name="question_{{ question.id }}" value="false" class="form-check-input me-3" data-question-id="{{ question.id }}">
+                                                        <span>False</span>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                            <div class="feedback-area mt-3 d-none" id="feedback_{{ question.id }}">
+                                                <!-- Feedback will be shown here after answering -->
+                                            </div>
+                                        {% elif question.question_type == 'text' %}
+                                            <div class="form-group">
+                                                <textarea name="question_{{ question.id }}" class="form-control" rows="4" placeholder="Enter your answer here..."></textarea>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="question-navigation d-flex justify-content-between">
+                                        {% if loop.index > 1 %}
+                                            <button type="button" class="btn btn-outline-primary prev-question" data-question="{{ loop.index }}">
+                                                <i class="bi bi-arrow-left me-2"></i> Previous
+                                            </button>
+                                        {% else %}
+                                            <div></div>
+                                        {% endif %}
+
+                                        {% if loop.index < questions|length %}
+                                            <button type="button" class="btn btn-primary next-question" data-question="{{ loop.index }}">
+                                                Next <i class="bi bi-arrow-right ms-2"></i>
+                                            </button>
+                                        {% else %}
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="bi bi-check-circle me-2"></i> Submit Quiz
+                                            </button>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="quiz-navigation">
+                            <div class="btn-group" role="group" aria-label="Question navigation">
+                                {% for question in questions %}
+                                    <button type="button" class="btn btn-outline-secondary question-nav-btn" data-question="{{ loop.index }}" title="Go to question {{ loop.index }}">{{ loop.index }}</button>
+                                {% endfor %}
+                            </div>
+                            <button type="button" class="btn btn-link ms-2" data-bs-toggle="modal" data-bs-target="#quizHelpModal">
+                                <i class="bi bi-question-circle"></i> Help
+                            </button>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#quitQuizModal">
+                                <i class="bi bi-x-circle me-2"></i> Quit Quiz
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quiz Help Modal -->
+<div class="modal fade" id="quizHelpModal" tabindex="-1" aria-labelledby="quizHelpModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title" id="quizHelpModalLabel"><i class="bi bi-question-circle me-2"></i> Quiz Help</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5><i class="bi bi-list-ol me-2"></i> Navigation</h5>
+                        <ul class="list-group mb-4">
+                            <li class="list-group-item d-flex align-items-center">
+                                <span class="badge bg-primary me-3">1</span>
+                                Use the <strong>Next</strong> and <strong>Previous</strong> buttons to move between questions
+                            </li>
+                            <li class="list-group-item d-flex align-items-center">
+                                <span class="badge bg-primary me-3">2</span>
+                                Click the numbered buttons at the bottom to jump to a specific question
+                            </li>
+                            <li class="list-group-item d-flex align-items-center">
+                                <span class="badge bg-primary me-3">3</span>
+                                Green numbered buttons indicate questions you've already answered
+                            </li>
+                        </ul>
+
+                        <h5><i class="bi bi-clock-history me-2"></i> Timer</h5>
+                        <ul class="list-group mb-4">
+                            <li class="list-group-item">
+                                The timer at the top shows how long you've been working on the quiz
+                            </li>
+                            <li class="list-group-item">
+                                There is no time limit, so take your time to answer carefully
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="col-md-6">
+                        <h5><i class="bi bi-check2-square me-2"></i> Answering Questions</h5>
+                        <ul class="list-group mb-4">
+                            <li class="list-group-item d-flex align-items-center">
+                                <span class="badge bg-success me-3"><i class="bi bi-check-lg"></i></span>
+                                For multiple choice questions, select one option by clicking on it
+                            </li>
+                            <li class="list-group-item d-flex align-items-center">
+                                <span class="badge bg-success me-3"><i class="bi bi-check-lg"></i></span>
+                                For true/false questions, select either True or False
+                            </li>
+                            <li class="list-group-item d-flex align-items-center">
+                                <span class="badge bg-success me-3"><i class="bi bi-check-lg"></i></span>
+                                For text questions, type your answer in the text box
+                            </li>
+                            <li class="list-group-item d-flex align-items-center">
+                                <span class="badge bg-success me-3"><i class="bi bi-check-lg"></i></span>
+                                You can change your answers at any time before submitting
+                            </li>
+                        </ul>
+
+                        <h5><i class="bi bi-info-circle me-2"></i> Submission</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                Click the <strong>Submit Quiz</strong> button on the last question to finish
+                            </li>
+                            <li class="list-group-item">
+                                You'll be warned if you have unanswered questions before submitting
+                            </li>
+                            <li class="list-group-item">
+                                After submission, you'll see your results and detailed feedback
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Got it!</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quit Quiz Modal -->
+<div class="modal fade" id="quitQuizModal" tabindex="-1" aria-labelledby="quitQuizModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="quitQuizModalLabel">Quit Quiz?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to quit this quiz? Your progress will not be saved.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a href="{{ url_for('quiz.quiz_detail', quiz_id=quiz.id) }}" class="btn btn-danger">Quit Quiz</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .quiz-timer {
+        background-color: rgba(255, 255, 255, 0.2);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: bold;
+    }
+
+    .question-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .question-text {
+        font-size: 1.1rem;
+    }
+
+    .question-options .list-group-item {
+        transition: all 0.2s ease;
+    }
+
+    .question-options .list-group-item:hover {
+        background-color: rgba(var(--primary-rgb), 0.1);
+    }
+
+    .question-nav-btn {
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 5px;
+    }
+
+    .question-nav-btn.active {
+        background-color: var(--primary-color);
+        color: white;
+        border-color: var(--primary-color);
+    }
+
+    .question-nav-btn.answered {
+        background-color: var(--success-color);
+        color: white;
+        border-color: var(--success-color);
+    }
+
+    .hint-container {
+        margin-top: 10px;
+    }
+
+    .hint-content {
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+    }
+
+    .hint-button {
+        transition: all 0.2s ease;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Timer functionality
+        let startTime = new Date().getTime();
+        let timerInterval = setInterval(updateTimer, 1000);
+
+        function updateTimer() {
+            let currentTime = new Date().getTime();
+            let elapsedTime = Math.floor((currentTime - startTime) / 1000);
+            let minutes = Math.floor(elapsedTime / 60);
+            let seconds = elapsedTime % 60;
+
+            document.getElementById('timer-display').textContent =
+                (minutes < 10 ? '0' + minutes : minutes) + ':' +
+                (seconds < 10 ? '0' + seconds : seconds);
+        }
+
+        // Question navigation
+        const totalQuestions = {{ questions|length }};
+        let currentQuestion = 1;
+        let answeredQuestions = new Set();
+        let questionFeedback = {};
+
+        // Update progress bar
+        function updateProgress() {
+            const progressPercentage = ((currentQuestion - 1) / totalQuestions) * 100;
+            document.getElementById('progress-bar').style.width = progressPercentage + '%';
+            document.getElementById('progress-bar').setAttribute('aria-valuenow', progressPercentage);
+            document.getElementById('question-counter').textContent = `Question ${currentQuestion} of ${totalQuestions}`;
+
+            // Update navigation buttons
+            document.querySelectorAll('.question-nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (parseInt(btn.dataset.question) === currentQuestion) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+
+        // Show a specific question
+        function showQuestion(questionNumber) {
+            document.querySelectorAll('.quiz-question').forEach(question => {
+                question.style.display = 'none';
+            });
+
+            document.getElementById(`question-${questionNumber}`).style.display = 'block';
+            currentQuestion = questionNumber;
+            updateProgress();
+        }
+
+        // Next question button
+        document.querySelectorAll('.next-question').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const questionNumber = parseInt(this.dataset.question);
+                showQuestion(questionNumber + 1);
+
+                // Mark the question as answered if an option is selected
+                const currentQuestionElement = document.getElementById(`question-${questionNumber}`);
+                const questionId = currentQuestionElement.querySelector('.question-options input, .question-options textarea').name.split('_')[1];
+
+                if (isQuestionAnswered(questionId)) {
+                    document.querySelector(`.question-nav-btn[data-question="${questionNumber}"]`).classList.add('answered');
+                    answeredQuestions.add(parseInt(questionId));
+                }
+            });
+        });
+
+        // Previous question button
+        document.querySelectorAll('.prev-question').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const questionNumber = parseInt(this.dataset.question);
+                showQuestion(questionNumber - 1);
+            });
+        });
+
+        // Question navigation buttons
+        document.querySelectorAll('.question-nav-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const questionNumber = parseInt(this.dataset.question);
+                showQuestion(questionNumber);
+            });
+        });
+
+        // Check if a question is answered
+        function isQuestionAnswered(questionId) {
+            const inputs = document.querySelectorAll(`input[name="question_${questionId}"]`);
+            const textarea = document.querySelector(`textarea[name="question_${questionId}"]`);
+
+            if (inputs.length > 0) {
+                for (let input of inputs) {
+                    if (input.checked) {
+                        return true;
+                    }
+                }
+            } else if (textarea && textarea.value.trim() !== '') {
+                return true;
+            }
+
+            return false;
+        }
+
+        // Provide immediate feedback when an option is selected
+        document.querySelectorAll('.question-options input[type="radio"]').forEach(input => {
+            input.addEventListener('change', function() {
+                const questionId = this.name.split('_')[1];
+                // Find the question element in a more compatible way
+                let questionElement = null;
+                document.querySelectorAll('.quiz-question').forEach(el => {
+                    if (el.querySelector(`input[name="question_${questionId}"]`)) {
+                        questionElement = el;
+                    }
+                });
+                const questionNumber = questionElement ? questionElement.id.split('-')[1] : null;
+                const feedbackArea = document.getElementById(`feedback_${questionId}`);
+
+                // Mark question as answered
+                document.querySelector(`.question-nav-btn[data-question="${questionNumber}"]`).classList.add('answered');
+                answeredQuestions.add(parseInt(questionId));
+
+                // Show feedback
+                if (feedbackArea) {
+                    // Get the question text
+                    const questionText = document.querySelector(`#question-${questionNumber} .question-text p`).textContent;
+
+                    // Generate feedback
+                    let feedbackHtml = '';
+
+                    // For this demo, we'll just provide generic feedback
+                    // In a real application, you would check against correct answers
+                    feedbackHtml = `
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle-fill me-2"></i>
+                            <strong>Answer Recorded!</strong> You can change your answer before submitting the quiz.
+                        </div>
+                    `;
+
+                    // Store feedback for this question
+                    questionFeedback[questionId] = feedbackHtml;
+
+                    // Display feedback
+                    feedbackArea.innerHTML = feedbackHtml;
+                    feedbackArea.classList.remove('d-none');
+                }
+            });
+        });
+
+        document.querySelectorAll('.question-options textarea').forEach(textarea => {
+            textarea.addEventListener('input', function() {
+                if (this.value.trim() !== '') {
+                    const questionId = this.name.split('_')[1];
+                    // Find the question element in a more compatible way
+                    let questionElement = null;
+                    document.querySelectorAll('.quiz-question').forEach(el => {
+                        if (el.querySelector(`textarea[name="question_${questionId}"]`)) {
+                            questionElement = el;
+                        }
+                    });
+                    const questionNumber = questionElement ? questionElement.id.split('-')[1] : null;
+                    document.querySelector(`.question-nav-btn[data-question="${questionNumber}"]`).classList.add('answered');
+                    answeredQuestions.add(parseInt(questionId));
+                }
+            });
+        });
+
+        // Add visual feedback when hovering over options
+        document.querySelectorAll('.option-item').forEach(item => {
+            item.addEventListener('mouseover', function() {
+                this.classList.add('option-hover');
+            });
+
+            item.addEventListener('mouseout', function() {
+                this.classList.remove('option-hover');
+            });
+        });
+
+        // Add click animation to options
+        document.querySelectorAll('.option-item').forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.add('option-selected');
+
+                // Remove the selected class from other options in the same group
+                const questionId = this.querySelector('input').name;
+                document.querySelectorAll(`input[name="${questionId}"]`).forEach(input => {
+                    if (input !== this.querySelector('input')) {
+                        input.closest('.option-item').classList.remove('option-selected');
+                    }
+                });
+            });
+        });
+
+        // Handle hint buttons
+        document.querySelectorAll('.hint-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const questionId = this.dataset.questionId;
+                const hintContent = document.getElementById(`hint_${questionId}`);
+
+                if (hintContent.classList.contains('d-none')) {
+                    hintContent.classList.remove('d-none');
+                    this.innerHTML = '<i class="bi bi-lightbulb-fill me-1"></i> Hide Hint';
+                    this.classList.remove('btn-outline-info');
+                    this.classList.add('btn-info');
+
+                    // Track hint usage for analytics
+                    if (typeof trackEvent === 'function') {
+                        trackEvent('quiz_hint_used', {
+                            quiz_id: {{ quiz.id }},
+                            question_id: questionId
+                        });
+                    }
+                } else {
+                    hintContent.classList.add('d-none');
+                    this.innerHTML = '<i class="bi bi-lightbulb me-1"></i> Show Hint';
+                    this.classList.remove('btn-info');
+                    this.classList.add('btn-outline-info');
+                }
+            });
+        });
+
+        // Initialize
+        showQuestion(1);
+        document.querySelector('.question-nav-btn[data-question="1"]').classList.add('active');
+
+        // Add form submission handler to show a summary before submitting
+        document.getElementById('quiz-form').addEventListener('submit', function(e) {
+            const unansweredCount = totalQuestions - answeredQuestions.size;
+
+            if (unansweredCount > 0) {
+                if (!confirm(`You have ${unansweredCount} unanswered question(s). Are you sure you want to submit the quiz?`)) {
+                    e.preventDefault();
+                    return false;
+                }
+            }
+
+            return true;
+        });
+    });
+</script>
+
+<style>
+    /* Add styles for option hover and selection effects */
+    .option-hover {
+        background-color: rgba(var(--primary-rgb), 0.1);
+        transform: translateX(5px);
+        transition: all 0.2s ease;
+    }
+
+    .option-selected {
+        background-color: rgba(var(--primary-rgb), 0.2);
+        border-left: 4px solid var(--primary-color);
+        font-weight: bold;
+    }
+
+    .feedback-area {
+        transition: all 0.3s ease;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,447 @@
+{% extends "base.html" %}
+
+{% block title %}TensorFlow Basics Exercise | Thesaurus AI LLM FT{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/frameworks.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/themes/prism-tomorrow.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="framework-header tensorflow-header">
+                <h1>TensorFlow Basics</h1>
+                <p>Learn the fundamentals of TensorFlow by working with tensors, variables, and basic operations.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section tensorflow-section">
+                <h2>Learning Objectives</h2>
+                <p>By the end of this exercise, you will be able to:</p>
+                <ul>
+                    <li>Create and manipulate tensors in TensorFlow</li>
+                    <li>Understand the difference between tensors and variables</li>
+                    <li>Perform basic mathematical operations on tensors</li>
+                    <li>Use automatic differentiation to compute gradients</li>
+                    <li>Build a simple computational graph</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section tensorflow-section">
+                <h2>Prerequisites</h2>
+                <p>Before starting this exercise, you should have:</p>
+                <ul>
+                    <li>Basic knowledge of Python programming</li>
+                    <li>Familiarity with NumPy (helpful but not required)</li>
+                    <li>TensorFlow 2.x installed on your machine</li>
+                </ul>
+                
+                <div class="alert alert-info mt-4" role="alert" style="background-color: rgba(255, 111, 0, 0.1); border-left: 5px solid var(--tensorflow-primary); color: #333; border-radius: 10px;">
+                    <div class="d-flex">
+                        <div class="me-3">
+                            <i class="bi bi-info-circle-fill" style="font-size: 1.5rem; color: var(--tensorflow-primary);"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: var(--tensorflow-dark); font-weight: 600;">Installation</h4>
+                            <p class="mb-0">If you haven't installed TensorFlow yet, you can do so using pip:</p>
+                            <div class="framework-code tensorflow-code mt-3">
+                                <div class="code-header">
+                                    <span>Terminal</span>
+                                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                                </div>
+                                <pre><code class="language-bash">pip install tensorflow</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section tensorflow-section">
+                <h2>Exercise 1: Creating and Manipulating Tensors</h2>
+                <p>In this exercise, you'll learn how to create tensors of different shapes and types, and how to perform basic operations on them.</p>
+                
+                <h3>Step 1: Import TensorFlow</h3>
+                <div class="framework-code tensorflow-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">import tensorflow as tf
+import numpy as np
+
+# Check TensorFlow version
+print("TensorFlow version:", tf.__version__)</code></pre>
+                </div>
+                
+                <h3>Step 2: Create Tensors</h3>
+                <p>Let's create tensors of different dimensions:</p>
+                <div class="framework-code tensorflow-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Scalar (0D tensor)
+scalar = tf.constant(7)
+print("Scalar:", scalar)
+print("Shape:", scalar.shape)
+print("Datatype:", scalar.dtype)
+
+# Vector (1D tensor)
+vector = tf.constant([1, 2, 3, 4, 5])
+print("\nVector:", vector)
+print("Shape:", vector.shape)
+
+# Matrix (2D tensor)
+matrix = tf.constant([[1, 2, 3], [4, 5, 6]])
+print("\nMatrix:", matrix)
+print("Shape:", matrix.shape)
+
+# 3D tensor
+tensor_3d = tf.constant([[[1, 2], [3, 4]], [[5, 6], [7, 8]]])
+print("\n3D Tensor:", tensor_3d)
+print("Shape:", tensor_3d.shape)</code></pre>
+                </div>
+                
+                <h3>Step 3: Create Tensors from NumPy Arrays</h3>
+                <div class="framework-code tensorflow-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Create a NumPy array
+np_array = np.array([[1, 2, 3], [4, 5, 6]])
+
+# Convert to TensorFlow tensor
+tensor_from_np = tf.constant(np_array)
+print("Tensor from NumPy:", tensor_from_np)
+
+# Convert back to NumPy
+back_to_np = tensor_from_np.numpy()
+print("Back to NumPy:", back_to_np)</code></pre>
+                </div>
+                
+                <h3>Step 4: Tensor Operations</h3>
+                <div class="framework-code tensorflow-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Create two tensors
+a = tf.constant([[1, 2], [3, 4]])
+b = tf.constant([[5, 6], [7, 8]])
+
+# Addition
+c = a + b  # or tf.add(a, b)
+print("Addition:", c)
+
+# Subtraction
+d = a - b  # or tf.subtract(a, b)
+print("Subtraction:", d)
+
+# Element-wise multiplication
+e = a * b  # or tf.multiply(a, b)
+print("Element-wise multiplication:", e)
+
+# Matrix multiplication
+f = tf.matmul(a, b)
+print("Matrix multiplication:", f)
+
+# Division
+g = a / b  # or tf.divide(a, b)
+print("Division:", g)</code></pre>
+                </div>
+                
+                <h3>Challenge 1</h3>
+                <p>Create a 3x3 identity matrix using TensorFlow functions. Then, multiply it by a 3x3 matrix of your choice and verify that the result is the same as the original matrix.</p>
+                
+                <div class="alert alert-secondary mt-4" role="alert" style="background-color: rgba(0, 0, 0, 0.05); border-left: 5px solid #555; color: #333; border-radius: 10px;">
+                    <div class="d-flex">
+                        <div class="me-3">
+                            <i class="bi bi-lightbulb-fill" style="font-size: 1.5rem; color: #555;"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: #333; font-weight: 600;">Hint</h4>
+                            <p class="mb-0">Look up <code>tf.eye()</code> or <code>tf.linalg.eye()</code> in the TensorFlow documentation.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section tensorflow-section">
+                <h2>Exercise 2: Variables and Gradients</h2>
+                <p>In this exercise, you'll learn about TensorFlow variables and how to compute gradients using automatic differentiation.</p>
+                
+                <h3>Step 1: Create Variables</h3>
+                <div class="framework-code tensorflow-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Create a variable
+w = tf.Variable([[1.0, 2.0], [3.0, 4.0]])
+print("Variable:", w)
+
+# Update the variable
+w.assign(w + 1)
+print("Updated variable:", w)
+
+# Create a variable with a specific dtype
+v = tf.Variable(tf.random.normal([2, 3], mean=0, stddev=1), dtype=tf.float32)
+print("Random variable:", v)</code></pre>
+                </div>
+                
+                <h3>Step 2: Automatic Differentiation with GradientTape</h3>
+                <div class="framework-code tensorflow-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Define a function
+def f(x):
+    return tf.square(x) + 2*x - 5
+
+# Compute the gradient at x=3
+x = tf.Variable(3.0)
+with tf.GradientTape() as tape:
+    y = f(x)
+    
+# dy/dx at x=3
+dy_dx = tape.gradient(y, x)
+print(f"f(x) = x² + 2x - 5")
+print(f"f'(x) at x=3 is {dy_dx.numpy()}")  # Should be 2x + 2 = 8 at x=3</code></pre>
+                </div>
+                
+                <h3>Step 3: Gradient Descent Example</h3>
+                <div class="framework-code tensorflow-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Define a simple function to minimize: f(x) = x^2
+def f(x):
+    return tf.square(x)
+
+# Initialize the variable
+x = tf.Variable(5.0)
+learning_rate = 0.1
+steps = 20
+
+print(f"Initial x: {x.numpy()}, f(x): {f(x).numpy()}")
+
+for i in range(steps):
+    with tf.GradientTape() as tape:
+        y = f(x)
+    
+    # Compute the gradient
+    dy_dx = tape.gradient(y, x)
+    
+    # Update x using gradient descent
+    x.assign_sub(learning_rate * dy_dx)
+    
+    print(f"Step {i+1}: x = {x.numpy():.4f}, f(x) = {f(x).numpy():.4f}")</code></pre>
+                </div>
+                
+                <h3>Challenge 2</h3>
+                <p>Implement gradient descent to find the minimum of the function f(x) = x^4 - 3x^3 + 2. Start with x = 2.0 and use a learning rate of 0.01. Run for 100 steps and observe how x converges to a minimum.</p>
+                
+                <div class="alert alert-secondary mt-4" role="alert" style="background-color: rgba(0, 0, 0, 0.05); border-left: 5px solid #555; color: #333; border-radius: 10px;">
+                    <div class="d-flex">
+                        <div class="me-3">
+                            <i class="bi bi-lightbulb-fill" style="font-size: 1.5rem; color: #555;"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: #333; font-weight: 600;">Hint</h4>
+                            <p class="mb-0">The derivative of f(x) = x^4 - 3x^3 + 2 is f'(x) = 4x^3 - 9x^2. You can verify your gradient computation by printing both the analytical derivative and the one computed by TensorFlow.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section tensorflow-section">
+                <h2>Exercise 3: Building a Simple Model</h2>
+                <p>In this exercise, you'll build a simple linear regression model using TensorFlow's low-level API.</p>
+                
+                <h3>Step 1: Generate Synthetic Data</h3>
+                <div class="framework-code tensorflow-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Generate synthetic data
+np.random.seed(42)
+x_data = np.random.rand(100, 1)
+y_data = 2 * x_data + 1 + 0.1 * np.random.randn(100, 1)  # y = 2x + 1 + noise
+
+# Convert to tensors
+x = tf.constant(x_data, dtype=tf.float32)
+y = tf.constant(y_data, dtype=tf.float32)</code></pre>
+                </div>
+                
+                <h3>Step 2: Define Model Parameters</h3>
+                <div class="framework-code tensorflow-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Initialize model parameters
+W = tf.Variable(tf.random.normal([1, 1], mean=0, stddev=0.1))
+b = tf.Variable(tf.zeros([1]))</code></pre>
+                </div>
+                
+                <h3>Step 3: Define Model and Loss Function</h3>
+                <div class="framework-code tensorflow-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Define the model
+def linear_model(x):
+    return tf.matmul(x, W) + b
+
+# Define the loss function (mean squared error)
+def loss_fn(y_pred, y_true):
+    return tf.reduce_mean(tf.square(y_pred - y_true))</code></pre>
+                </div>
+                
+                <h3>Step 4: Training Loop</h3>
+                <div class="framework-code tensorflow-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Define optimizer
+optimizer = tf.optimizers.SGD(learning_rate=0.1)
+
+# Training loop
+epochs = 100
+for epoch in range(epochs):
+    with tf.GradientTape() as tape:
+        y_pred = linear_model(x)
+        loss = loss_fn(y_pred, y)
+    
+    # Compute gradients
+    gradients = tape.gradient(loss, [W, b])
+    
+    # Update parameters
+    optimizer.apply_gradients(zip(gradients, [W, b]))
+    
+    if epoch % 10 == 0:
+        print(f"Epoch {epoch}: Loss = {loss.numpy():.4f}, W = {W.numpy()[0][0]:.4f}, b = {b.numpy()[0]:.4f}")</code></pre>
+                </div>
+                
+                <h3>Step 5: Visualize Results</h3>
+                <div class="framework-code tensorflow-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">import matplotlib.pyplot as plt
+
+# Plot the data and the fitted line
+plt.scatter(x_data, y_data, label='Data')
+plt.plot(x_data, W.numpy() * x_data + b.numpy(), 'r', label='Fitted line')
+plt.legend()
+plt.xlabel('x')
+plt.ylabel('y')
+plt.title('Linear Regression with TensorFlow')
+plt.show()
+
+print(f"True parameters: W = 2, b = 1")
+print(f"Learned parameters: W = {W.numpy()[0][0]:.4f}, b = {b.numpy()[0]:.4f}")</code></pre>
+                </div>
+                
+                <h3>Challenge 3</h3>
+                <p>Extend the linear regression model to a polynomial regression model that fits the function y = 2x^2 + 3x + 1 + noise. Generate synthetic data for this function and train your model to recover the parameters.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="framework-section tensorflow-section">
+                <h2>Summary</h2>
+                <p>In this exercise, you've learned the basics of TensorFlow:</p>
+                <ul>
+                    <li>Creating and manipulating tensors</li>
+                    <li>Working with variables</li>
+                    <li>Computing gradients using automatic differentiation</li>
+                    <li>Building and training a simple linear regression model</li>
+                </ul>
+                
+                <p>These fundamentals will serve as the building blocks for more complex models and techniques in the following exercises.</p>
+                
+                <div class="text-center mt-5">
+                    <a href="/frameworks/tensorflow/exercises/linear-regression" class="btn btn-lg" style="background: linear-gradient(135deg, var(--tensorflow-primary), var(--tensorflow-secondary)); color: white; font-weight: 600; border-radius: 30px; padding: 12px 30px; box-shadow: 0 10px 20px rgba(255, 111, 0, 0.3);">
+                        <i class="bi bi-arrow-right-circle me-2"></i> Next Exercise: Linear Regression
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/components/prism-python.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/components/prism-bash.min.js"></script>
+<script>
+    function copyCode(button) {
+        const codeBlock = button.parentElement.nextElementSibling;
+        const code = codeBlock.textContent;
+        
+        navigator.clipboard.writeText(code).then(() => {
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            button.style.backgroundColor = 'rgba(46, 125, 50, 0.3)';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.backgroundColor = '';
+            }, 2000);
+        });
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add animation to sections on scroll
+        const sections = document.querySelectorAll('.framework-section');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        sections.forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(section);
+        });
+    });
+</script>
+{% endblock %}

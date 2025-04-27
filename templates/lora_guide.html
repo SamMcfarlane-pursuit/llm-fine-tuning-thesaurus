@@ -1,0 +1,567 @@
+{% extends 'base.html' %}
+
+{% block title %}LoRA Implementation Guide{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/learn">Learn</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">LoRA Implementation Guide</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1>Comprehensive LoRA Implementation Guide</h1>
+            <p class="lead">Master Low-Rank Adaptation for efficient fine-tuning of large language models</p>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3>What is LoRA?</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <p><strong>Low-Rank Adaptation (LoRA)</strong> is a parameter-efficient fine-tuning technique that significantly reduces the number of trainable parameters by adding low-rank decomposition matrices to the weights of a pre-trained model while keeping the original weights frozen.</p>
+                            
+                            <h4 class="mt-4">Key Benefits of LoRA</h4>
+                            <ul class="feature-list">
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i> <strong>Memory Efficiency:</strong> Reduces GPU memory requirements by up to 70% compared to full fine-tuning</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i> <strong>Training Speed:</strong> Faster training due to fewer trainable parameters</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i> <strong>Performance:</strong> Achieves comparable or better results than full fine-tuning</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i> <strong>Adaptability:</strong> Can be applied to any layer in a transformer model</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i> <strong>Modularity:</strong> Multiple LoRA adapters can be combined or switched without retraining</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h5>LoRA at a Glance</h5>
+                                    <table class="table table-sm">
+                                        <tbody>
+                                            <tr>
+                                                <td>Paper</td>
+                                                <td><a href="https://arxiv.org/abs/2106.09685" target="_blank">LoRA: Low-Rank Adaptation of Large Language Models</a></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Authors</td>
+                                                <td>Hu et al. (Microsoft Research)</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Published</td>
+                                                <td>June 2021</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Key Parameters</td>
+                                                <td>Rank (r), Alpha (α)</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Memory Reduction</td>
+                                                <td>Up to 10,000x fewer trainable parameters</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h3>The Mathematics Behind LoRA</h3>
+                </div>
+                <div class="card-body">
+                    <h4>Low-Rank Decomposition</h4>
+                    <p>LoRA is based on the hypothesis that the changes to the weights during adaptation have a low "intrinsic rank". Instead of fine-tuning all parameters of a pre-trained model, LoRA freezes the pre-trained model weights and injects trainable rank decomposition matrices into each layer of the Transformer architecture.</p>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h5>Mathematical Formulation</h5>
+                            <p>For a pre-trained weight matrix W₀ ∈ ℝᵐˣⁿ, LoRA parameterizes its update with a low-rank decomposition:</p>
+                            
+                            <div class="math-formula bg-light p-3 rounded">
+                                <p>W = W₀ + ΔW = W₀ + BA</p>
+                                <p>where B ∈ ℝᵐˣʳ, A ∈ ℝʳˣⁿ, and r ≪ min(m,n)</p>
+                            </div>
+                            
+                            <p class="mt-3">During forward pass, for an input x, the computation becomes:</p>
+                            
+                            <div class="math-formula bg-light p-3 rounded">
+                                <p>h = W₀x + ΔWx = W₀x + BAx</p>
+                            </div>
+                            
+                            <p class="mt-3">The scaling hyperparameter α is introduced to control the magnitude of the update:</p>
+                            
+                            <div class="math-formula bg-light p-3 rounded">
+                                <p>h = W₀x + (α/r)BAx</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Visualization of LoRA</h5>
+                            <div class="lora-visualization bg-dark p-3 rounded">
+                                <img src="https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/peft/lora-diagram.png" alt="LoRA Architecture" class="img-fluid">
+                            </div>
+                            <p class="text-center mt-2"><small>LoRA architecture showing low-rank decomposition matrices A and B</small></p>
+                            
+                            <div class="alert alert-info mt-3">
+                                <h6><i class="bi bi-info-circle me-2"></i>Key Insight</h6>
+                                <p class="mb-0">By setting r ≪ min(m,n), the number of trainable parameters is significantly reduced from m×n to r×(m+n), which can be orders of magnitude smaller.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h3>Step-by-Step Implementation Guide</h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <h5><i class="bi bi-exclamation-triangle me-2"></i>Prerequisites</h5>
+                        <p>Before starting, make sure you have the following libraries installed:</p>
+                        <div class="bg-light p-3 rounded code-block">
+                            <pre><code>pip install transformers peft datasets accelerate</code></pre>
+                        </div>
+                    </div>
+                    
+                    <h4 class="mt-4">Step 1: Import Required Libraries</h4>
+                    <div class="bg-light p-3 rounded code-block">
+                        <pre><code>import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments
+from peft import LoraConfig, get_peft_model, TaskType, PeftModel
+from datasets import load_dataset
+from tqdm import tqdm</code></pre>
+                    </div>
+                    
+                    <h4 class="mt-4">Step 2: Load Pre-trained Model and Tokenizer</h4>
+                    <div class="bg-light p-3 rounded code-block">
+                        <pre><code># Load base model and tokenizer
+model_name = "gpt2"  # You can use any model from Hugging Face
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(
+    model_name,
+    torch_dtype=torch.float16,  # Use half-precision for memory efficiency
+    device_map="auto"  # Automatically distribute model across available GPUs
+)
+
+# Add padding token if not present
+if tokenizer.pad_token is None:
+    tokenizer.pad_token = tokenizer.eos_token
+    model.config.pad_token_id = model.config.eos_token_id</code></pre>
+                    </div>
+                    
+                    <h4 class="mt-4">Step 3: Configure LoRA</h4>
+                    <div class="bg-light p-3 rounded code-block">
+                        <pre><code># Define LoRA configuration
+lora_config = LoraConfig(
+    r=8,                       # Rank dimension
+    lora_alpha=32,             # Alpha parameter for scaling
+    target_modules=["c_attn", "c_proj"],  # Attention modules to apply LoRA to
+    lora_dropout=0.05,         # Dropout probability for LoRA layers
+    bias="none",               # Don't add bias parameters
+    task_type=TaskType.CAUSAL_LM  # Task type (causal language modeling)
+)
+
+# Apply LoRA to the model
+model = get_peft_model(model, lora_config)
+
+# Print trainable parameters
+def print_trainable_parameters(model):
+    trainable_params = 0
+    all_params = 0
+    for _, param in model.named_parameters():
+        all_params += param.numel()
+        if param.requires_grad:
+            trainable_params += param.numel()
+    print(f"Trainable params: {trainable_params:,} ({100 * trainable_params / all_params:.2f}% of total)")
+
+print_trainable_parameters(model)</code></pre>
+                    </div>
+                    
+                    <div class="alert alert-info mt-3">
+                        <h6><i class="bi bi-lightbulb me-2"></i>Understanding Target Modules</h6>
+                        <p>The <code>target_modules</code> parameter specifies which layers to apply LoRA to. Common choices include:</p>
+                        <ul>
+                            <li><strong>GPT-2:</strong> <code>["c_attn", "c_proj"]</code> (query-key-value projection and output projection)</li>
+                            <li><strong>LLaMA:</strong> <code>["q_proj", "k_proj", "v_proj", "o_proj"]</code> (separate Q, K, V projections and output)</li>
+                            <li><strong>T5:</strong> <code>["q", "k", "v", "o"]</code> (similar to LLaMA)</li>
+                        </ul>
+                        <p class="mb-0">Applying LoRA to more modules increases trainable parameters but may improve performance.</p>
+                    </div>
+                    
+                    <h4 class="mt-4">Step 4: Prepare Dataset</h4>
+                    <div class="bg-light p-3 rounded code-block">
+                        <pre><code># Load and prepare dataset (example using a text dataset)
+dataset = load_dataset("imdb")  # Example: IMDB movie reviews
+
+# Tokenization function
+def tokenize_function(examples):
+    return tokenizer(
+        examples["text"],
+        padding="max_length",
+        truncation=True,
+        max_length=512
+    )
+
+# Tokenize dataset
+tokenized_dataset = dataset.map(
+    tokenize_function,
+    batched=True,
+    remove_columns=["text"]
+)
+
+# Format dataset for causal language modeling
+tokenized_dataset = tokenized_dataset.map(
+    lambda examples: {"labels": examples["input_ids"]},
+    batched=True
+)</code></pre>
+                    </div>
+                    
+                    <h4 class="mt-4">Step 5: Configure Training</h4>
+                    <div class="bg-light p-3 rounded code-block">
+                        <pre><code># Define training arguments
+training_args = TrainingArguments(
+    output_dir="./lora-finetuned-model",
+    num_train_epochs=3,
+    per_device_train_batch_size=4,
+    gradient_accumulation_steps=4,
+    learning_rate=2e-4,
+    weight_decay=0.01,
+    warmup_ratio=0.03,
+    lr_scheduler_type="cosine",
+    save_strategy="epoch",
+    fp16=True,  # Use mixed precision training
+    logging_steps=100,
+    report_to="none"
+)
+
+# Create Trainer
+from transformers import Trainer
+
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=tokenized_dataset["train"],
+    eval_dataset=tokenized_dataset["test"],
+    tokenizer=tokenizer
+)</code></pre>
+                    </div>
+                    
+                    <h4 class="mt-4">Step 6: Train the Model</h4>
+                    <div class="bg-light p-3 rounded code-block">
+                        <pre><code># Start training
+trainer.train()
+
+# Save the LoRA adapter only (much smaller than full model)
+model.save_pretrained("./lora-adapter-only")</code></pre>
+                    </div>
+                    
+                    <h4 class="mt-4">Step 7: Inference with LoRA</h4>
+                    <div class="bg-light p-3 rounded code-block">
+                        <pre><code># Load base model
+base_model = AutoModelForCausalLM.from_pretrained(
+    model_name,
+    torch_dtype=torch.float16,
+    device_map="auto"
+)
+
+# Load LoRA adapter
+lora_model = PeftModel.from_pretrained(
+    base_model,
+    "./lora-adapter-only"
+)
+
+# Generate text
+input_text = "This movie was really"
+input_ids = tokenizer(input_text, return_tensors="pt").input_ids.to("cuda")
+
+with torch.no_grad():
+    outputs = lora_model.generate(
+        input_ids=input_ids,
+        max_length=100,
+        temperature=0.7,
+        top_p=0.9,
+        do_sample=True
+    )
+
+generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
+print(generated_text)</code></pre>
+                    </div>
+                    
+                    <h4 class="mt-4">Step 8 (Optional): Merge LoRA Weights with Base Model</h4>
+                    <div class="bg-light p-3 rounded code-block">
+                        <pre><code># Merge LoRA weights with base model for faster inference
+merged_model = lora_model.merge_and_unload()
+
+# Save the merged model
+merged_model.save_pretrained("./merged-model")
+tokenizer.save_pretrained("./merged-model")
+
+# Load and use the merged model
+from transformers import AutoModelForCausalLM
+
+merged_model = AutoModelForCausalLM.from_pretrained("./merged-model")
+# Use merged_model for inference as you would with any model</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h3>Advanced LoRA Techniques</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Optimizing LoRA Parameters</h4>
+                            <p>The performance of LoRA depends on several key parameters:</p>
+                            
+                            <h5 class="mt-3">Rank (r)</h5>
+                            <p>The rank parameter controls the expressiveness of the LoRA adapter:</p>
+                            <ul>
+                                <li><strong>Lower rank (1-4):</strong> Fewer parameters, less expressive, more memory efficient</li>
+                                <li><strong>Higher rank (16-64):</strong> More parameters, more expressive, closer to full fine-tuning</li>
+                            </ul>
+                            
+                            <h5 class="mt-3">Alpha (α)</h5>
+                            <p>The alpha parameter scales the LoRA contribution:</p>
+                            <ul>
+                                <li>Typically set to 2×r for stable training</li>
+                                <li>Higher alpha values increase the impact of the LoRA adapter</li>
+                            </ul>
+                            
+                            <h5 class="mt-3">Target Modules</h5>
+                            <p>Choosing which layers to apply LoRA to affects performance:</p>
+                            <ul>
+                                <li><strong>Attention layers only:</strong> Most common, good balance of efficiency and performance</li>
+                                <li><strong>All linear layers:</strong> Better performance but more parameters</li>
+                                <li><strong>Query and value only:</strong> More efficient, still good performance</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Advanced Techniques</h4>
+                            
+                            <h5 class="mt-3">1. Adaptive LoRA Rank</h5>
+                            <p>Dynamically adjust rank based on layer importance:</p>
+                            <div class="bg-light p-3 rounded code-block">
+                                <pre><code># Example: Different ranks for different layers
+lora_config = LoraConfig(
+    target_modules=["q_proj", "k_proj", "v_proj", "o_proj"],
+    modules_to_save=["embed_tokens", "lm_head"],
+    rank_pattern={
+        "q_proj": 16,  # Higher rank for query projection
+        "k_proj": 8,   # Medium rank for key projection
+        "v_proj": 16,  # Higher rank for value projection
+        "o_proj": 8    # Medium rank for output projection
+    }
+)</code></pre>
+                            </div>
+                            
+                            <h5 class="mt-3">2. LoRA for Multiple Tasks</h5>
+                            <p>Train and switch between multiple LoRA adapters:</p>
+                            <div class="bg-light p-3 rounded code-block">
+                                <pre><code># Load different adapters for different tasks
+from peft import PeftModel
+
+base_model = AutoModelForCausalLM.from_pretrained("llama-7b")
+
+# Load task-specific adapters
+summarization_model = PeftModel.from_pretrained(
+    base_model, "./lora-summarization"
+)
+translation_model = PeftModel.from_pretrained(
+    base_model, "./lora-translation"
+)</code></pre>
+                            </div>
+                            
+                            <h5 class="mt-3">3. LoRA with Quantization</h5>
+                            <p>Combine LoRA with quantization for maximum efficiency:</p>
+                            <div class="bg-light p-3 rounded code-block">
+                                <pre><code># Load quantized model and apply LoRA
+from transformers import BitsAndBytesConfig
+
+quantization_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_compute_dtype=torch.float16
+)
+
+model = AutoModelForCausalLM.from_pretrained(
+    "llama-13b",
+    quantization_config=quantization_config
+)
+
+# Apply LoRA to quantized model
+model = get_peft_model(model, lora_config)</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4 mb-5">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3>Performance Comparison and Best Practices</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Performance Comparison</h4>
+                            <table class="table table-bordered">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Method</th>
+                                        <th>Trainable Parameters</th>
+                                        <th>Memory Usage</th>
+                                        <th>Training Speed</th>
+                                        <th>Performance</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Full Fine-tuning</td>
+                                        <td>100%</td>
+                                        <td>High</td>
+                                        <td>Slow</td>
+                                        <td>Baseline</td>
+                                    </tr>
+                                    <tr>
+                                        <td>LoRA (r=8)</td>
+                                        <td>~0.1-1%</td>
+                                        <td>Low</td>
+                                        <td>Fast</td>
+                                        <td>Comparable</td>
+                                    </tr>
+                                    <tr>
+                                        <td>LoRA (r=16)</td>
+                                        <td>~0.2-2%</td>
+                                        <td>Low</td>
+                                        <td>Fast</td>
+                                        <td>Often Better</td>
+                                    </tr>
+                                    <tr>
+                                        <td>LoRA (r=32)</td>
+                                        <td>~0.4-4%</td>
+                                        <td>Medium</td>
+                                        <td>Medium</td>
+                                        <td>Usually Better</td>
+                                    </tr>
+                                    <tr>
+                                        <td>QLoRA (4-bit + LoRA)</td>
+                                        <td>~0.1-1%</td>
+                                        <td>Very Low</td>
+                                        <td>Medium</td>
+                                        <td>Comparable</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Best Practices</h4>
+                            <div class="best-practices">
+                                <div class="practice-item">
+                                    <h5><i class="bi bi-check-circle-fill text-success me-2"></i>Start with a Good Base Model</h5>
+                                    <p>Choose a high-quality base model that's already somewhat aligned with your target task.</p>
+                                </div>
+                                
+                                <div class="practice-item">
+                                    <h5><i class="bi bi-check-circle-fill text-success me-2"></i>Experiment with Rank Values</h5>
+                                    <p>Start with r=8 or r=16 and adjust based on performance and memory constraints.</p>
+                                </div>
+                                
+                                <div class="practice-item">
+                                    <h5><i class="bi bi-check-circle-fill text-success me-2"></i>Target the Right Modules</h5>
+                                    <p>Focus on attention layers first, then experiment with other modules if needed.</p>
+                                </div>
+                                
+                                <div class="practice-item">
+                                    <h5><i class="bi bi-check-circle-fill text-success me-2"></i>Use Higher Learning Rates</h5>
+                                    <p>LoRA typically works well with higher learning rates (1e-4 to 5e-4) than full fine-tuning.</p>
+                                </div>
+                                
+                                <div class="practice-item">
+                                    <h5><i class="bi bi-check-circle-fill text-success me-2"></i>Combine with Other Techniques</h5>
+                                    <p>LoRA works well with quantization, gradient checkpointing, and other memory optimization techniques.</p>
+                                </div>
+                                
+                                <div class="practice-item">
+                                    <h5><i class="bi bi-check-circle-fill text-success me-2"></i>Save Adapters Separately</h5>
+                                    <p>Store LoRA adapters separately from the base model for flexibility and efficient storage.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-success mt-4">
+                        <h5><i class="bi bi-lightbulb me-2"></i>When to Use LoRA</h5>
+                        <p>LoRA is particularly effective in these scenarios:</p>
+                        <ul>
+                            <li><strong>Limited GPU memory:</strong> When you can't fit the full model in memory for fine-tuning</li>
+                            <li><strong>Multiple tasks:</strong> When you need to fine-tune for several different tasks</li>
+                            <li><strong>Rapid prototyping:</strong> When you need to experiment with different fine-tuning approaches quickly</li>
+                            <li><strong>Large models:</strong> When working with models larger than 7B parameters</li>
+                            <li><strong>Deployment constraints:</strong> When you need to switch between different fine-tuned versions efficiently</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .math-formula {
+        font-family: 'Cambria Math', serif;
+        font-size: 1.1rem;
+    }
+    
+    .feature-list li {
+        margin-bottom: 10px;
+    }
+    
+    .practice-item {
+        margin-bottom: 20px;
+    }
+    
+    .practice-item h5 {
+        color: var(--primary-color);
+    }
+    
+    .lora-visualization {
+        text-align: center;
+    }
+    
+    .lora-visualization img {
+        max-width: 100%;
+        border-radius: var(--border-radius);
+    }
+</style>
+{% endblock %}

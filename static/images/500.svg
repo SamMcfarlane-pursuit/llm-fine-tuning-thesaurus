@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800px" height="400px" viewBox="0 0 800 400" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>500 Error</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#DC3545" stop-opacity="0.2" offset="0%"></stop>
+            <stop stop-color="#DC3545" stop-opacity="0.1" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="500-Error" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Background" fill="url(#linearGradient-1)" x="0" y="0" width="800" height="400" rx="20"></rect>
+        <text id="500" font-family="Arial-BoldMT, Arial" font-size="180" font-weight="bold" fill="#DC3545">
+            <tspan x="200" y="240">500</tspan>
+        </text>
+        <g id="Server" transform="translate(500.000000, 150.000000)">
+            <rect id="Server-Body" stroke="#DC3545" stroke-width="12" x="0" y="0" width="120" height="160" rx="10"></rect>
+            <line x1="0" y1="40" x2="120" y2="40" id="Line-1" stroke="#DC3545" stroke-width="6"></line>
+            <line x1="0" y1="80" x2="120" y2="80" id="Line-2" stroke="#DC3545" stroke-width="6"></line>
+            <line x1="0" y1="120" x2="120" y2="120" id="Line-3" stroke="#DC3545" stroke-width="6"></line>
+            <circle id="Light-1" fill="#DC3545" cx="20" cy="20" r="8"></circle>
+            <circle id="Light-2" fill="#DC3545" cx="50" cy="20" r="8"></circle>
+            <path d="M80,12 L100,28 L80,28 L80,12 Z" id="Warning" fill="#DC3545"></path>
+        </g>
+        <text id="Server-Error" font-family="Arial-BoldMT, Arial" font-size="24" font-weight="bold" fill="#333333">
+            <tspan x="320" y="300">Server Error</tspan>
+        </text>
+    </g>
+</svg>

@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+
+{% block title %}Parameter-Efficient Fine-Tuning Guide - Thesaurus LLM Fine-Tuning{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/peft-guide.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4"><i class="bi bi-cpu me-2"></i>Parameter-Efficient Fine-Tuning Guide</h1>
+            <p class="lead">
+                A comprehensive guide to Parameter-Efficient Fine-Tuning (PEFT) methods for Large Language Models.
+            </p>
+
+            <div class="alert alert-info">
+                <div class="d-flex">
+                    <div class="me-3">
+                        <i class="bi bi-info-circle-fill fs-3"></i>
+                    </div>
+                    <div>
+                        <h5>What is Parameter-Efficient Fine-Tuning?</h5>
+                        <p class="mb-0">
+                            Parameter-Efficient Fine-Tuning (PEFT) refers to a family of techniques designed to adapt pre-trained language models
+                            to specific tasks while updating only a small subset of the model's parameters. These methods dramatically reduce
+                            computational and memory requirements compared to full fine-tuning, while maintaining comparable performance.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content will be loaded here -->
+    <div class="row mt-4">
+        <div class="col-md-3 d-none d-md-block">
+            <div class="toc" id="toc">
+                <h5><i class="bi bi-list-ul me-2"></i>Table of Contents</h5>
+                <div id="toc-content">Loading...</div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-body">
+                    <div id="peft-content">Loading content...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="{{ url_for('static', filename='js/peft-comparison.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Load the markdown content
+        fetch('{{ url_for("static", filename="notebooks/Parameter_Efficient_Fine_Tuning_Guide.md") }}')
+            .then(response => response.text())
+            .then(markdown => {
+                // Convert markdown to HTML
+                document.getElementById('peft-content').innerHTML = marked.parse(markdown);
+
+                // Add classes to elements for styling
+                const content = document.getElementById('peft-content');
+
+                // Generate table of contents
+                const toc = document.getElementById('toc-content');
+                const tocList = document.createElement('ul');
+                tocList.className = 'list-unstyled';
+
+                // Add IDs to headings and build TOC
+                content.querySelectorAll('h2, h3, h4').forEach((heading, index) => {
+                    // Create ID for the heading
+                    const id = heading.textContent.toLowerCase().replace(/[^\w]+/g, '-');
+                    heading.id = id;
+
+                    // Create TOC item
+                    const tocItem = document.createElement('li');
+                    tocItem.className = `toc-${heading.tagName.toLowerCase()}`;
+
+                    const tocLink = document.createElement('a');
+                    tocLink.href = `#${id}`;
+                    tocLink.textContent = heading.textContent;
+
+                    tocItem.appendChild(tocLink);
+                    tocList.appendChild(tocItem);
+
+                    // Style headings
+                    heading.classList.add('mt-4', 'mb-3');
+
+                    // Add icons to headings
+                    if (heading.tagName === 'H2') {
+                        heading.innerHTML = '<i class="bi bi-bookmark-star me-2"></i>' + heading.innerHTML;
+                    } else if (heading.tagName === 'H3') {
+                        heading.innerHTML = '<i class="bi bi-arrow-right-circle me-2"></i>' + heading.innerHTML;
+                    } else if (heading.tagName === 'H4') {
+                        heading.innerHTML = '<i class="bi bi-dot me-2"></i>' + heading.innerHTML;
+                    }
+                });
+
+                // Add TOC to page
+                toc.innerHTML = '';
+                toc.appendChild(tocList);
+
+                // Make TOC sticky on scroll
+                window.addEventListener('scroll', function() {
+                    const tocElement = document.getElementById('toc');
+                    const headerHeight = 100; // Adjust based on your header height
+
+                    if (window.scrollY > headerHeight) {
+                        tocElement.style.top = '20px';
+                    } else {
+                        tocElement.style.top = `${headerHeight - window.scrollY + 20}px`;
+                    }
+                });
+
+                // Style code blocks
+                content.querySelectorAll('pre').forEach(pre => {
+                    pre.classList.add('bg-light', 'p-3', 'rounded');
+                });
+
+                // Style tables
+                content.querySelectorAll('table').forEach(table => {
+                    table.classList.add('table', 'table-striped', 'table-bordered', 'mt-3', 'mb-4');
+                });
+
+                // Add copy button to code blocks
+                content.querySelectorAll('pre code').forEach(codeBlock => {
+                    const container = document.createElement('div');
+                    container.className = 'position-relative';
+
+                    const copyButton = document.createElement('button');
+                    copyButton.className = 'copy-button';
+                    copyButton.innerHTML = '<i class="bi bi-clipboard me-1"></i>Copy';
+                    copyButton.addEventListener('click', function() {
+                        navigator.clipboard.writeText(codeBlock.textContent);
+                        copyButton.innerHTML = '<i class="bi bi-clipboard-check me-1"></i>Copied!';
+                        setTimeout(() => {
+                            copyButton.innerHTML = '<i class="bi bi-clipboard me-1"></i>Copy';
+                        }, 2000);
+                    });
+
+                    const parent = codeBlock.parentNode;
+                    parent.parentNode.insertBefore(container, parent);
+                    container.appendChild(parent);
+                    container.appendChild(copyButton);
+                });
+
+                // Style method comparison sections
+                content.querySelectorAll('h2').forEach(heading => {
+                    if (heading.textContent.includes('Comparative Analysis')) {
+                        const nextTable = heading.nextElementSibling;
+                        if (nextTable && nextTable.tagName === 'TABLE') {
+                            nextTable.classList.add('method-comparison-table');
+                        }
+                    }
+                });
+
+                // Add highlight boxes
+                content.querySelectorAll('blockquote').forEach(blockquote => {
+                    blockquote.classList.add('highlight-box');
+
+                    // Determine type based on first word
+                    const firstParagraph = blockquote.querySelector('p');
+                    if (firstParagraph) {
+                        const text = firstParagraph.textContent;
+                        if (text.startsWith('Note:') || text.startsWith('Info:')) {
+                            blockquote.classList.add('highlight-box-info');
+                        } else if (text.startsWith('Tip:') || text.startsWith('Best practice:')) {
+                            blockquote.classList.add('highlight-box-success');
+                        } else if (text.startsWith('Warning:') || text.startsWith('Caution:')) {
+                            blockquote.classList.add('highlight-box-warning');
+                        } else if (text.startsWith('Error:') || text.startsWith('Danger:')) {
+                            blockquote.classList.add('highlight-box-danger');
+                        } else {
+                            blockquote.classList.add('highlight-box-info');
+                        }
+                    }
+                });
+
+                // Add smooth scrolling for TOC links
+                document.querySelectorAll('#toc a').forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+
+                        const targetId = this.getAttribute('href').substring(1);
+                        const targetElement = document.getElementById(targetId);
+
+                        if (targetElement) {
+                            window.scrollTo({
+                                top: targetElement.offsetTop - 80, // Adjust for header
+                                behavior: 'smooth'
+                            });
+                        }
+                    });
+                });
+            })
+            .catch(error => {
+                console.error('Error loading markdown:', error);
+                document.getElementById('peft-content').innerHTML = 'Error loading content. Please try again later.';
+                document.getElementById('toc-content').innerHTML = 'Error loading table of contents.';
+            });
+    });
+</script>
+{% endblock %}

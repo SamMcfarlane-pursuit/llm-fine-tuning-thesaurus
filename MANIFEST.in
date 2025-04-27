@@ -1,0 +1,31 @@
+include LICENSE
+include README.md
+include requirements.txt
+include .env.example
+include setup.py
+
+recursive-include static *
+recursive-include templates *
+recursive-include notebooks *
+recursive-include migrations *
+
+recursive-exclude __pycache__ *
+recursive-exclude *.py[cod] *
+recursive-exclude venv *
+recursive-exclude .git *
+recursive-exclude .github *
+recursive-exclude .vscode *
+recursive-exclude .idea *
+recursive-exclude tests *
+recursive-exclude instance *
+recursive-exclude data *
+recursive-exclude uploads *
+recursive-exclude nginx *
+
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude *.pyd
+global-exclude .DS_Store
+global-exclude .env
+global-exclude *.sqlite
+global-exclude *.db

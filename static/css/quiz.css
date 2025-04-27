@@ -1,0 +1,527 @@
+/**
+ * Quiz Styles
+ * Styles for the quiz functionality in the Visual Thesaurus LLM application.
+ */
+
+/* Quiz List Styles */
+.quiz-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+}
+
+.quiz-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.quiz-card .card-header {
+    border-bottom: none;
+}
+
+.quiz-card .quiz-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.quiz-card .quiz-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.quiz-card .quiz-stats .stat-item {
+    text-align: center;
+}
+
+.quiz-card .quiz-stats .stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.quiz-card .quiz-stats .stat-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.quiz-card .quiz-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.quiz-card .quiz-status {
+    display: flex;
+    align-items: center;
+}
+
+.quiz-card .quiz-status .status-icon {
+    margin-right: 0.5rem;
+}
+
+/* Quiz Detail Styles */
+.progress-circle {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: conic-gradient(var(--success-color) var(--progress-percentage), var(--light-bg) 0);
+    margin: 0 auto;
+}
+
+.progress-circle-inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 120px;
+    background-color: var(--medium-bg);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.progress-percentage {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--text-primary);
+}
+
+.progress-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* Quiz Take Styles */
+.quiz-timer {
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+.question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.question-text {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 1.2rem;
+}
+
+.question-options .list-group-item {
+    transition: all 0.2s ease;
+    padding: 1rem 1.25rem;
+    font-size: 1.05rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 0.5rem;
+    border-radius: 8px;
+}
+
+.question-options .list-group-item:hover {
+    background-color: rgba(var(--primary-rgb), 0.15);
+    border-color: rgba(var(--primary-rgb), 0.3);
+}
+
+.question-nav-btn {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 5px;
+}
+
+.question-nav-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.question-nav-btn.answered {
+    background-color: var(--success-color);
+    color: white;
+    border-color: var(--success-color);
+}
+
+/* Option hover and selection effects */
+.option-hover {
+    background-color: rgba(var(--primary-rgb), 0.1);
+    transform: translateX(5px);
+    transition: all 0.2s ease;
+}
+
+.option-selected {
+    background-color: rgba(var(--primary-rgb), 0.2);
+    border-left: 4px solid var(--primary-color);
+    font-weight: bold;
+}
+
+.feedback-area {
+    transition: all 0.3s ease;
+}
+
+/* Feedback Messages */
+.feedback-message {
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    animation: fadeIn 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.correct-feedback {
+    background-color: rgba(40, 167, 69, 0.2);
+    color: var(--success-color);
+    border: 1px solid var(--success-color);
+}
+
+.incorrect-feedback {
+    background-color: rgba(220, 53, 69, 0.2);
+    color: var(--danger-color);
+    border: 1px solid var(--danger-color);
+}
+
+.feedback-message.fade-out {
+    animation: fadeOut 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-10px); }
+}
+
+/* Quiz Result Styles */
+.result-badge {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    border-radius: 30px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.result-badge i {
+    margin-right: 0.5rem;
+}
+
+.result-passed {
+    background-color: rgba(40, 167, 69, 0.2);
+    color: var(--success-color);
+    border: 2px solid var(--success-color);
+}
+
+.result-failed {
+    background-color: rgba(220, 53, 69, 0.2);
+    color: var(--danger-color);
+    border: 2px solid var(--danger-color);
+}
+
+.progress-circle.large {
+    width: 200px;
+    height: 200px;
+}
+
+.accordion-button.correct-answer {
+    border-left: 5px solid var(--success-color);
+}
+
+.accordion-button.incorrect-answer {
+    border-left: 5px solid var(--danger-color);
+}
+
+/* Quiz Assignment Styles */
+.assignment-card {
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.assignment-header {
+    background-color: var(--light-bg);
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.assignment-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-right: 1rem;
+}
+
+.assignment-body {
+    padding: 1.5rem;
+}
+
+.steps-container {
+    margin-bottom: 1.5rem;
+}
+
+.steps-header {
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.step {
+    display: flex;
+    align-items: flex-start;
+}
+
+.step-number {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+.step-content {
+    flex-grow: 1;
+}
+
+.code-container {
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.code-header {
+    background-color: var(--light-bg);
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.code-content {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.code-content pre {
+    margin: 0;
+    padding: 1rem;
+}
+
+.expected-output h6 {
+    margin-bottom: 1rem;
+}
+
+.memory-bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.memory-bar {
+    width: 40px;
+    border-radius: 4px 4px 0 0;
+    margin-bottom: 0.5rem;
+}
+
+.memory-bar-full {
+    background-color: var(--danger-color);
+}
+
+.memory-bar-lora {
+    background-color: var(--warning-color);
+}
+
+.memory-bar-qlora {
+    background-color: var(--success-color);
+}
+
+.memory-label {
+    font-size: 0.8rem;
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+/* Pop Quiz Styles */
+.pop-quiz-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 400px;
+    max-width: 90vw;
+    z-index: 1050;
+    display: none;
+}
+
+.pop-quiz-card {
+    border: none;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.pop-quiz-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pop-quiz-title {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.pop-quiz-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.pop-quiz-body {
+    padding: 1.5rem;
+}
+
+.pop-quiz-question {
+    margin-bottom: 1.5rem;
+}
+
+.pop-quiz-options .form-check {
+    margin-bottom: 0.75rem;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.pop-quiz-options .form-check:hover {
+    background-color: rgba(var(--primary-rgb), 0.05);
+}
+
+.pop-quiz-options .form-check-input {
+    margin-top: 0.25rem;
+}
+
+.pop-quiz-footer {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.pop-quiz-result {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+    display: none;
+}
+
+.pop-quiz-result.correct {
+    background-color: rgba(40, 167, 69, 0.1);
+    border: 1px solid var(--success-color);
+}
+
+.pop-quiz-result.incorrect {
+    background-color: rgba(220, 53, 69, 0.1);
+    border: 1px solid var(--danger-color);
+}
+
+.pop-quiz-explanation {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* Quiz Animation */
+.quiz-icon {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .quiz-card .quiz-stats {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .quiz-card .quiz-stats .stat-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .quiz-card .quiz-stats .stat-value {
+        font-size: 1.2rem;
+    }
+
+    .progress-circle {
+        width: 120px;
+        height: 120px;
+    }
+
+    .progress-circle-inner {
+        width: 90px;
+        height: 90px;
+    }
+
+    .progress-percentage {
+        font-size: 1.5rem;
+    }
+
+    .question-nav-btn {
+        width: 35px;
+        height: 35px;
+        margin-right: 3px;
+    }
+
+    .pop-quiz-container {
+        width: 90vw;
+        bottom: 10px;
+        right: 10px;
+    }
+}

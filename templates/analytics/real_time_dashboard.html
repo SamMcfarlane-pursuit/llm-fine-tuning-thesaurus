@@ -1,0 +1,655 @@
+{% extends "base.html" %}
+
+{% block title %}Real-Time Analytics Dashboard{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/analytics.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.css">
+<style>
+    .real-time-indicator {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        background-color: #198754;
+        border-radius: 50%;
+        margin-right: 0.5rem;
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(25, 135, 84, 0.7);
+        }
+        70% {
+            box-shadow: 0 0 0 10px rgba(25, 135, 84, 0);
+        }
+        100% {
+            box-shadow: 0 0 0 0 rgba(25, 135, 84, 0);
+        }
+    }
+    
+    .dashboard-header {
+        display: flex;
+        align-items: center;
+    }
+    
+    .real-time-indicator-container {
+        display: flex;
+        align-items: center;
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+    
+    .real-time-text {
+        margin-right: 0.5rem;
+        font-weight: 500;
+    }
+    
+    .real-time-updated {
+        font-size: 0.8rem;
+    }
+    
+    .data-refresh {
+        animation: fadeInOut 0.5s;
+    }
+    
+    @keyframes fadeInOut {
+        0% { opacity: 0.3; }
+        50% { opacity: 1; }
+        100% { opacity: 1; }
+    }
+    
+    .stat-card {
+        transition: all 0.3s ease;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .funnel-step {
+        transition: width 0.5s ease;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="dashboard-header">
+                <h1 class="display-5 mb-0">Real-Time Analytics Dashboard</h1>
+                <!-- Real-time indicator will be added by JavaScript -->
+            </div>
+            <p class="text-muted">Live metrics and insights for your LLM fine-tuning platform</p>
+        </div>
+    </div>
+
+    <!-- Real-time Stats -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card h-100 border-primary stat-card">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-primary">Active Users</h5>
+                    <div class="display-4 mb-2" id="active-users">{{ real_time_stats.active_users }}</div>
+                    <p class="text-muted mb-0">Currently online</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card h-100 border-success stat-card">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-success">Completion Rate</h5>
+                    <div class="display-4 mb-2" id="completion-rate">{{ real_time_stats.completion_rate }}%</div>
+                    <p class="text-muted mb-0">Tutorials completed</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card h-100 border-warning stat-card">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-warning">Page Views</h5>
+                    <div class="display-4 mb-2" id="page-views-today">{{ real_time_stats.page_views_today }}</div>
+                    <p class="text-muted mb-0">Today</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card h-100 border-info stat-card">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-info">Conversion Rate</h5>
+                    <div class="display-4 mb-2" id="conversion-rate">{{ real_time_stats.conversion_rate }}%</div>
+                    <p class="text-muted mb-0">Free to paid</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Activity Chart -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">User Activity</h5>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-outline-secondary active" data-period="week">Week</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" data-period="month">Month</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="userActivityChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">User Distribution</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="userDistributionChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Performance -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Content Performance</h5>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-download me-1"></i> Export
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item export-data-btn" href="#" data-type="content_metrics">Export as CSV</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="window.print()">Print Report</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <ul class="nav nav-tabs" id="contentTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="tutorials-tab" data-bs-toggle="tab" data-bs-target="#tutorials" type="button" role="tab" aria-controls="tutorials" aria-selected="true">Tutorials</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="quizzes-tab" data-bs-toggle="tab" data-bs-target="#quizzes" type="button" role="tab" aria-controls="quizzes" aria-selected="false">Quizzes</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="exercises-tab" data-bs-toggle="tab" data-bs-target="#exercises" type="button" role="tab" aria-controls="exercises" aria-selected="false">Exercises</button>
+                        </li>
+                    </ul>
+                    <div class="tab-content pt-4" id="contentTabsContent">
+                        <div class="tab-pane fade show active" id="tutorials" role="tabpanel" aria-labelledby="tutorials-tab">
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="tutorials-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Tutorial</th>
+                                            <th>Views</th>
+                                            <th>Completions</th>
+                                            <th>Completion Rate</th>
+                                            <th>Avg. Time Spent</th>
+                                            <th>Rating</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for tutorial in content_metrics.tutorials %}
+                                        <tr>
+                                            <td>{{ tutorial.title }}</td>
+                                            <td>{{ tutorial.views }}</td>
+                                            <td>{{ tutorial.completions }}</td>
+                                            <td>
+                                                <div class="progress" style="height: 6px;">
+                                                    <div class="progress-bar bg-success" role="progressbar" style="width: {{ tutorial.completion_rate }}%;" aria-valuenow="{{ tutorial.completion_rate }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                                <small class="text-muted">{{ tutorial.completion_rate|round(1) }}%</small>
+                                            </td>
+                                            <td>{{ tutorial.avg_time_spent }} min</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="me-2">{{ tutorial.rating|round(1) }}</div>
+                                                    <div class="text-warning">
+                                                        {% for i in range(5) %}
+                                                            {% if i < tutorial.rating|int %}
+                                                                <i class="bi bi-star-fill"></i>
+                                                            {% elif i < tutorial.rating|round(0, 'ceil')|int %}
+                                                                <i class="bi bi-star-half"></i>
+                                                            {% else %}
+                                                                <i class="bi bi-star"></i>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="quizzes" role="tabpanel" aria-labelledby="quizzes-tab">
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="quizzes-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Quiz</th>
+                                            <th>Attempts</th>
+                                            <th>Completions</th>
+                                            <th>Pass Rate</th>
+                                            <th>Avg. Score</th>
+                                            <th>Difficulty</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for quiz in content_metrics.quizzes %}
+                                        <tr>
+                                            <td>{{ quiz.title }}</td>
+                                            <td>{{ quiz.attempts }}</td>
+                                            <td>{{ quiz.completions }}</td>
+                                            <td>
+                                                <div class="progress" style="height: 6px;">
+                                                    <div class="progress-bar bg-success" role="progressbar" style="width: {{ quiz.pass_rate }}%;" aria-valuenow="{{ quiz.pass_rate }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                                <small class="text-muted">{{ quiz.pass_rate|round(1) }}%</small>
+                                            </td>
+                                            <td>{{ quiz.avg_score|round(1) }}%</td>
+                                            <td>
+                                                {% if quiz.difficulty < 30 %}
+                                                    <span class="badge bg-success">Easy</span>
+                                                {% elif quiz.difficulty < 70 %}
+                                                    <span class="badge bg-warning">Medium</span>
+                                                {% else %}
+                                                    <span class="badge bg-danger">Hard</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="exercises" role="tabpanel" aria-labelledby="exercises-tab">
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="exercises-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Exercise</th>
+                                            <th>Attempts</th>
+                                            <th>Completions</th>
+                                            <th>Completion Rate</th>
+                                            <th>Avg. Time Spent</th>
+                                            <th>Difficulty</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for exercise in content_metrics.exercises %}
+                                        <tr>
+                                            <td>{{ exercise.title }}</td>
+                                            <td>{{ exercise.attempts }}</td>
+                                            <td>{{ exercise.completions }}</td>
+                                            <td>
+                                                <div class="progress" style="height: 6px;">
+                                                    <div class="progress-bar bg-success" role="progressbar" style="width: {{ exercise.completion_rate }}%;" aria-valuenow="{{ exercise.completion_rate }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                                <small class="text-muted">{{ exercise.completion_rate|round(1) }}%</small>
+                                            </td>
+                                            <td>{{ exercise.avg_time_spent }} min</td>
+                                            <td>
+                                                {% if exercise.difficulty < 30 %}
+                                                    <span class="badge bg-success">Easy</span>
+                                                {% elif exercise.difficulty < 70 %}
+                                                    <span class="badge bg-warning">Medium</span>
+                                                {% else %}
+                                                    <span class="badge bg-danger">Hard</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Journey -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">User Journey</h5>
+                </div>
+                <div class="card-body">
+                    <div class="user-journey-funnel">
+                        <div class="funnel-step" id="signup-to-tutorial" style="width: {{ user_journey.signup_to_tutorial }}%;">
+                            <div class="funnel-label">Signup</div>
+                            <div class="funnel-value">{{ user_journey.signup_to_tutorial|round(1) }}%</div>
+                        </div>
+                        <div class="funnel-step" id="tutorial-to-quiz" style="width: {{ user_journey.tutorial_to_quiz }}%;">
+                            <div class="funnel-label">Start Tutorial</div>
+                            <div class="funnel-value">{{ user_journey.tutorial_to_quiz|round(1) }}%</div>
+                        </div>
+                        <div class="funnel-step" id="quiz-to-subscription" style="width: {{ user_journey.quiz_to_subscription }}%;">
+                            <div class="funnel-label">Take Quiz</div>
+                            <div class="funnel-value">{{ user_journey.quiz_to_subscription|round(1) }}%</div>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <div class="d-flex justify-content-between mb-2">
+                            <div>Average Tutorials per User</div>
+                            <div id="avg-tutorials-per-user">{{ user_journey.average_tutorials_per_user|round(1) }}</div>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <div>Average Quizzes per User</div>
+                            <div id="avg-quizzes-per-user">{{ user_journey.average_quizzes_per_user|round(1) }}</div>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <div>Average Time to Subscription</div>
+                            <div id="avg-time-to-subscription">{{ user_journey.average_time_to_subscription }} days</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Retention</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="retentionChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Activity Feed -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Live Activity Feed</h5>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="autoRefreshFeed" checked>
+                        <label class="form-check-label" for="autoRefreshFeed">Auto-refresh</label>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="activity-feed" id="live-activity-feed">
+                        {% for activity in live_activity %}
+                        <div class="activity-item">
+                            <div class="activity-icon 
+                                {% if activity.type == 'page_view' %}bg-primary
+                                {% elif activity.type == 'tutorial' %}bg-success
+                                {% elif activity.type == 'quiz' %}bg-warning
+                                {% elif activity.type == 'exercise' %}bg-info
+                                {% elif activity.type == 'search' %}bg-secondary
+                                {% else %}bg-light{% endif %}">
+                                {% if activity.type == 'page_view' %}
+                                    <i class="bi bi-eye"></i>
+                                {% elif activity.type == 'tutorial' %}
+                                    <i class="bi bi-book"></i>
+                                {% elif activity.type == 'quiz' %}
+                                    <i class="bi bi-question-circle"></i>
+                                {% elif activity.type == 'exercise' %}
+                                    <i class="bi bi-code-slash"></i>
+                                {% elif activity.type == 'search' %}
+                                    <i class="bi bi-search"></i>
+                                {% else %}
+                                    <i class="bi bi-activity"></i>
+                                {% endif %}
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-time">{{ activity.timestamp }}</div>
+                                <div class="activity-title">{{ activity.title }}</div>
+                                <div class="activity-description">{{ activity.description }}</div>
+                                {% if activity.user %}
+                                <div class="activity-user">
+                                    <span class="badge bg-light text-dark">{{ activity.user }}</span>
+                                    {% if activity.subscription_tier != 'free' %}
+                                    <span class="badge bg-success">{{ activity.subscription_tier }}</span>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+<script src="{{ url_for('static', filename='js/real-time-analytics.js') }}"></script>
+<script>
+    // User Activity Chart
+    const userActivityCtx = document.getElementById('userActivityChart').getContext('2d');
+    const userActivityChart = new Chart(userActivityCtx, {
+        type: 'line',
+        data: {
+            labels: {{ user_activity.labels|tojson }},
+            datasets: [
+                {
+                    label: 'Active Users',
+                    data: {{ user_activity.active_users|tojson }},
+                    borderColor: 'rgba(13, 110, 253, 1)',
+                    backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                },
+                {
+                    label: 'Page Views',
+                    data: {{ user_activity.page_views|tojson }},
+                    borderColor: 'rgba(255, 193, 7, 1)',
+                    backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // User Distribution Chart
+    const userDistributionCtx = document.getElementById('userDistributionChart').getContext('2d');
+    const userDistributionChart = new Chart(userDistributionCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Free', 'Basic', 'Premium', 'Enterprise'],
+            datasets: [{
+                data: [
+                    {{ subscription_metrics.free }},
+                    {{ subscription_metrics.basic }},
+                    {{ subscription_metrics.premium }},
+                    {{ subscription_metrics.enterprise }}
+                ],
+                backgroundColor: [
+                    'rgba(108, 117, 125, 0.8)',
+                    'rgba(13, 110, 253, 0.8)',
+                    'rgba(25, 135, 84, 0.8)',
+                    'rgba(102, 16, 242, 0.8)'
+                ],
+                borderColor: [
+                    'rgba(108, 117, 125, 1)',
+                    'rgba(13, 110, 253, 1)',
+                    'rgba(25, 135, 84, 1)',
+                    'rgba(102, 16, 242, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right'
+                }
+            }
+        }
+    });
+
+    // Retention Chart
+    const retentionCtx = document.getElementById('retentionChart').getContext('2d');
+    const retentionChart = new Chart(retentionCtx, {
+        type: 'line',
+        data: {
+            labels: {{ retention_data.labels|tojson }},
+            datasets: [{
+                label: 'Retention Rate',
+                data: {{ retention_data.rates|tojson }},
+                borderColor: 'rgba(25, 135, 84, 1)',
+                backgroundColor: 'rgba(25, 135, 84, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return context.parsed.y + '%';
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: {
+                        callback: function(value) {
+                            return value + '%';
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Live Activity Feed
+    const activityFeed = document.getElementById('live-activity-feed');
+    const autoRefreshCheckbox = document.getElementById('autoRefreshFeed');
+    
+    function updateActivityFeed() {
+        if (autoRefreshCheckbox.checked) {
+            fetch('/api/analytics/activity-feed')
+                .then(response => response.json())
+                .then(data => {
+                    // Clear existing activities
+                    activityFeed.innerHTML = '';
+                    
+                    // Add new activities
+                    data.activities.forEach(activity => {
+                        const activityItem = document.createElement('div');
+                        activityItem.className = 'activity-item';
+                        
+                        // Determine icon class
+                        let iconClass = 'bg-light';
+                        let iconHtml = '<i class="bi bi-activity"></i>';
+                        
+                        if (activity.type === 'page_view') {
+                            iconClass = 'bg-primary';
+                            iconHtml = '<i class="bi bi-eye"></i>';
+                        } else if (activity.type === 'tutorial') {
+                            iconClass = 'bg-success';
+                            iconHtml = '<i class="bi bi-book"></i>';
+                        } else if (activity.type === 'quiz') {
+                            iconClass = 'bg-warning';
+                            iconHtml = '<i class="bi bi-question-circle"></i>';
+                        } else if (activity.type === 'exercise') {
+                            iconClass = 'bg-info';
+                            iconHtml = '<i class="bi bi-code-slash"></i>';
+                        } else if (activity.type === 'search') {
+                            iconClass = 'bg-secondary';
+                            iconHtml = '<i class="bi bi-search"></i>';
+                        }
+                        
+                        // Create user badge
+                        let userHtml = '';
+                        if (activity.user) {
+                            userHtml = `
+                                <div class="activity-user">
+                                    <span class="badge bg-light text-dark">${activity.user}</span>
+                                    ${activity.subscription_tier !== 'free' ? 
+                                        `<span class="badge bg-success">${activity.subscription_tier}</span>` : ''}
+                                </div>
+                            `;
+                        }
+                        
+                        // Set HTML
+                        activityItem.innerHTML = `
+                            <div class="activity-icon ${iconClass}">
+                                ${iconHtml}
+                            </div>
+                            <div class="activity-content">
+                                <div class="activity-time">${activity.timestamp}</div>
+                                <div class="activity-title">${activity.title}</div>
+                                <div class="activity-description">${activity.description}</div>
+                                ${userHtml}
+                            </div>
+                        `;
+                        
+                        // Add to feed
+                        activityFeed.prepend(activityItem);
+                        
+                        // Add animation
+                        activityItem.classList.add('data-refresh');
+                        setTimeout(() => {
+                            activityItem.classList.remove('data-refresh');
+                        }, 500);
+                    });
+                })
+                .catch(error => console.error('Error updating activity feed:', error));
+        }
+    }
+    
+    // Update activity feed every 5 seconds
+    setInterval(updateActivityFeed, 5000);
+    
+    // Register charts for real-time updates
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof registerChart === 'function') {
+            registerChart('userActivity', userActivityChart);
+            registerChart('userDistribution', userDistributionChart);
+            registerChart('retention', retentionChart);
+        }
+    });
+</script>
+{% endblock %}

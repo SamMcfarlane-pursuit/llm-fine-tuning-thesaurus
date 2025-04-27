@@ -1,0 +1,652 @@
+{% extends 'base.html' %}
+
+{% block title %}Memory Efficiency in LLM Fine-Tuning{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1>Memory Efficiency in LLM Fine-Tuning</h1>
+            <p class="lead">Essential techniques for fine-tuning large language models with limited resources</p>
+        </div>
+    </div>
+
+    {% if not current_user.is_authenticated %}
+    <div class="row mt-3 mb-4">
+        <div class="col-md-8 offset-md-2">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h4><i class="bi bi-person-badge me-2"></i> Sign In to Track Your Progress</h4>
+                            <p>Create an account or sign in to save your progress, take quizzes after each lesson, and access personalized learning paths.</p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <a href="{{ url_for('auth.login') }}" class="btn btn-light me-2"><i class="bi bi-box-arrow-in-right"></i> Sign In</a>
+                            <a href="{{ url_for('auth.register') }}" class="btn btn-success"><i class="bi bi-person-plus"></i> Register</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3>Workshop Overview</h3>
+                </div>
+                <div class="card-body">
+                    <p class="lead">This workshop focuses on the most critical memory efficiency techniques for LLM fine-tuning, distilled into essential concepts for maximum learning and retention.</p>
+
+                    <div class="alert alert-info">
+                        <h4><i class="bi bi-lightbulb"></i> Why Memory Efficiency Matters</h4>
+                        <p>As language models grow larger (reaching hundreds of billions of parameters), memory becomes the primary bottleneck in fine-tuning. Mastering memory efficiency techniques allows you to:</p>
+                        <ul>
+                            <li><strong>Fine-tune larger models</strong> on consumer hardware</li>
+                            <li><strong>Reduce cloud computing costs</strong> by using smaller instances</li>
+                            <li><strong>Increase batch sizes</strong> for more stable training</li>
+                            <li><strong>Enable more complex model architectures</strong> within memory constraints</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h3>Key Memory Efficiency Techniques</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 technique-card">
+                                <div class="card-header bg-primary text-white">
+                                    <h4><i class="bi bi-layers-half"></i> Quantization</h4>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>What it is:</strong> Reducing the precision of model weights from 32-bit (FP32) or 16-bit (FP16) to lower precision formats like 8-bit (INT8) or 4-bit (INT4/NF4).</p>
+
+                                    <h5>Memory Savings:</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead class="table-dark">
+                                                <tr>
+                                                    <th>Precision</th>
+                                                    <th>Memory Reduction</th>
+                                                    <th>Impact on 7B Model</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>FP16 (from FP32)</td>
+                                                    <td>50%</td>
+                                                    <td>~14GB → ~7GB</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>INT8 (from FP16)</td>
+                                                    <td>50%</td>
+                                                    <td>~7GB → ~3.5GB</td>
+                                                </tr>
+                                                <tr class="table-success">
+                                                    <td>INT4/NF4 (from FP16)</td>
+                                                    <td>75%</td>
+                                                    <td>~7GB → ~1.75GB</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <h5>Implementation (4-bit NF4):</h5>
+                                    <div class="bg-light p-3 rounded code-block">
+                                        <pre><code>from transformers import AutoModelForCausalLM, BitsAndBytesConfig
+
+# Configure 4-bit quantization
+quantization_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_compute_dtype=torch.float16,
+    bnb_4bit_quant_type="nf4",  # NormalFloat 4-bit
+    bnb_4bit_use_double_quant=True  # Double quantization
+)
+
+# Load model with quantization
+model = AutoModelForCausalLM.from_pretrained(
+    "meta-llama/Llama-2-7b",
+    quantization_config=quantization_config,
+    device_map="auto"
+)</code></pre>
+                                    </div>
+
+                                    <div class="alert alert-warning mt-3">
+                                        <strong>Key Insight:</strong> NF4 (NormalFloat 4-bit) is specifically designed for the normal distribution of weights in LLMs, providing better empirical results than uniform 4-bit quantization.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 technique-card">
+                                <div class="card-header bg-info text-white">
+                                    <h4><i class="bi bi-arrow-repeat"></i> Gradient Checkpointing</h4>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>What it is:</strong> A technique that trades computation for memory by recomputing activations during the backward pass instead of storing them in memory during the forward pass.</p>
+
+                                    <h5>How It Works:</h5>
+                                    <ol>
+                                        <li><strong>Standard Approach:</strong> Store all activations from the forward pass to compute gradients during backpropagation</li>
+                                        <li><strong>Checkpointing Approach:</strong> Store activations only at certain layers ("checkpoints") and recompute the others when needed</li>
+                                    </ol>
+
+                                    <div class="memory-comparison-card mb-3">
+                                        <div class="row">
+                                            <div class="col-6 text-center">
+                                                <h6>Without Checkpointing</h6>
+                                                <div class="memory-usage-indicator high"></div>
+                                                <p class="small">High Memory Usage</p>
+                                                <p class="small">Faster Training</p>
+                                            </div>
+                                            <div class="col-6 text-center">
+                                                <h6>With Checkpointing</h6>
+                                                <div class="memory-usage-indicator low"></div>
+                                                <p class="small">Low Memory Usage (~60% reduction)</p>
+                                                <p class="small">Slower Training (~30% slower)</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <h5>Implementation:</h5>
+                                    <div class="bg-light p-3 rounded code-block">
+                                        <pre><code># Method 1: Enable directly on the model
+model.gradient_checkpointing_enable()
+
+# Method 2: Enable in training arguments
+from transformers import TrainingArguments
+
+training_args = TrainingArguments(
+    output_dir="./results",
+    gradient_checkpointing=True,  # Enable checkpointing
+    # Other arguments...
+)</code></pre>
+                                    </div>
+
+                                    <div class="alert alert-info mt-3">
+                                        <strong>Key Insight:</strong> Gradient checkpointing is essential when fine-tuning models larger than 7B parameters on consumer GPUs, even when using other memory optimization techniques.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 technique-card">
+                                <div class="card-header bg-warning text-dark">
+                                    <h4><i class="bi bi-cpu"></i> Parameter-Efficient Fine-Tuning (PEFT)</h4>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>What it is:</strong> Methods that update only a small subset of parameters while keeping most of the model frozen, dramatically reducing memory requirements.</p>
+
+                                    <h5>Popular PEFT Methods:</h5>
+                                    <ul>
+                                        <li><strong>LoRA (Low-Rank Adaptation):</strong> Adds trainable low-rank matrices to existing weights</li>
+                                        <li><strong>QLoRA:</strong> Combines LoRA with 4-bit quantization for extreme memory efficiency</li>
+                                        <li><strong>Prefix Tuning:</strong> Prepends trainable vectors to hidden states</li>
+                                        <li><strong>Adapter Layers:</strong> Inserts small trainable modules between layers</li>
+                                    </ul>
+
+                                    <h5>Memory Comparison:</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead class="table-dark">
+                                                <tr>
+                                                    <th>Method</th>
+                                                    <th>Trainable Parameters</th>
+                                                    <th>Memory Reduction</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Full Fine-tuning</td>
+                                                    <td>100%</td>
+                                                    <td>Baseline</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>LoRA</td>
+                                                    <td>~0.1-1%</td>
+                                                    <td>~95%</td>
+                                                </tr>
+                                                <tr class="table-success">
+                                                    <td>QLoRA</td>
+                                                    <td>~0.1-1%</td>
+                                                    <td>~98%</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <h5>LoRA Implementation:</h5>
+                                    <div class="bg-light p-3 rounded code-block">
+                                        <pre><code>from peft import LoraConfig, get_peft_model
+
+# Configure LoRA
+lora_config = LoraConfig(
+    r=16,                  # Rank dimension
+    lora_alpha=32,         # Alpha parameter for scaling
+    target_modules=["q_proj", "v_proj"],  # Attention modules to apply LoRA to
+    lora_dropout=0.05,     # Dropout probability
+    bias="none"            # Don't train bias parameters
+)
+
+# Apply LoRA to the model
+model = get_peft_model(model, lora_config)</code></pre>
+                                    </div>
+
+                                    <div class="alert alert-warning mt-3">
+                                        <strong>Key Insight:</strong> LoRA's effectiveness comes from the observation that weight changes during adaptation have a low "intrinsic rank" - they can be approximated by low-rank matrices.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 technique-card">
+                                <div class="card-header bg-danger text-white">
+                                    <h4><i class="bi bi-hdd"></i> Memory-Efficient Optimizers</h4>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>What it is:</strong> Optimizers designed to reduce memory usage during training, particularly for the optimizer states which can consume as much memory as the model itself.</p>
+
+                                    <h5>Memory-Efficient Optimizer Types:</h5>
+                                    <ul>
+                                        <li><strong>8-bit Optimizers:</strong> Store optimizer states in 8-bit precision (e.g., 8-bit Adam)</li>
+                                        <li><strong>Paged Optimizers:</strong> Offload optimizer states to CPU when not in use</li>
+                                        <li><strong>Memory-Efficient Attention:</strong> Flash Attention and other optimized attention implementations</li>
+                                    </ul>
+
+                                    <h5>Memory Savings:</h5>
+                                    <p>Optimizer states for Adam typically require 8 bytes per parameter (two states at FP32). For a 7B parameter model:</p>
+                                    <ul>
+                                        <li><strong>Standard Adam:</strong> ~56GB for optimizer states alone</li>
+                                        <li><strong>8-bit Adam:</strong> ~7GB for optimizer states (87.5% reduction)</li>
+                                    </ul>
+
+                                    <h5>Implementation:</h5>
+                                    <div class="bg-light p-3 rounded code-block">
+                                        <pre><code># 8-bit Adam optimizer
+from transformers import TrainingArguments
+
+training_args = TrainingArguments(
+    output_dir="./results",
+    optim="adamw_8bit",  # Use 8-bit Adam
+    # Other arguments...
+)
+
+# Paged optimizer (offloads to CPU)
+training_args = TrainingArguments(
+    output_dir="./results",
+    optim="paged_adamw_8bit",  # Use paged 8-bit Adam
+    # Other arguments...
+)</code></pre>
+                                    </div>
+
+                                    <div class="alert alert-info mt-3">
+                                        <strong>Key Insight:</strong> Optimizer states often consume more memory than the model itself. Using 8-bit optimizers can reduce this overhead by up to 75%.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h3>Putting It All Together: QLoRA</h3>
+                </div>
+                <div class="card-body">
+                    <p class="lead">QLoRA combines multiple memory efficiency techniques to enable fine-tuning of large models on consumer hardware:</p>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>QLoRA Components:</h4>
+                            <ul class="list-group mb-4">
+                                <li class="list-group-item list-group-item-primary">
+                                    <strong>4-bit NF4 Quantization:</strong> Reduces base model memory by 8x
+                                </li>
+                                <li class="list-group-item list-group-item-success">
+                                    <strong>Double Quantization:</strong> Further reduces memory by quantizing quantization constants
+                                </li>
+                                <li class="list-group-item list-group-item-info">
+                                    <strong>LoRA:</strong> Updates only a small subset of parameters
+                                </li>
+                                <li class="list-group-item list-group-item-warning">
+                                    <strong>Paged Optimizers:</strong> Offloads optimizer states to CPU
+                                </li>
+                                <li class="list-group-item list-group-item-danger">
+                                    <strong>Gradient Checkpointing:</strong> Reduces activation memory
+                                </li>
+                            </ul>
+
+                            <h4>Real-World Impact:</h4>
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>Model Size</th>
+                                            <th>Full Fine-tuning</th>
+                                            <th>QLoRA</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>7B</td>
+                                            <td>~28GB VRAM</td>
+                                            <td>~5GB VRAM</td>
+                                        </tr>
+                                        <tr>
+                                            <td>13B</td>
+                                            <td>~52GB VRAM</td>
+                                            <td>~8GB VRAM</td>
+                                        </tr>
+                                        <tr>
+                                            <td>33B</td>
+                                            <td>~130GB VRAM</td>
+                                            <td>~16GB VRAM</td>
+                                        </tr>
+                                        <tr>
+                                            <td>65B</td>
+                                            <td>~260GB VRAM</td>
+                                            <td>~24GB VRAM</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h4>Complete QLoRA Implementation:</h4>
+                            <div class="bg-light p-3 rounded code-block">
+                                <pre><code>import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, TrainingArguments
+from peft import prepare_model_for_kbit_training, LoraConfig, get_peft_model
+from datasets import load_dataset
+from trl import SFTTrainer
+
+# 1. Define quantization configuration
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,                # Load model in 4-bit precision
+    bnb_4bit_quant_type="nf4",        # Use NormalFloat 4-bit quantization
+    bnb_4bit_compute_dtype=torch.float16,  # Compute in fp16
+    bnb_4bit_use_double_quant=True    # Use double quantization
+)
+
+# 2. Load the model with quantization config
+model_id = "meta-llama/Llama-2-7b-hf"  # Replace with your model
+tokenizer = AutoTokenizer.from_pretrained(model_id)
+model = AutoModelForCausalLM.from_pretrained(
+    model_id,
+    quantization_config=bnb_config,
+    device_map="auto"  # Automatically distribute model across available GPUs
+)
+
+# 3. Prepare the model for k-bit training
+model = prepare_model_for_kbit_training(model)
+
+# 4. Configure LoRA
+lora_config = LoraConfig(
+    r=16,                  # Rank dimension
+    lora_alpha=32,         # Alpha parameter for scaling
+    target_modules=[       # Modules to apply LoRA to
+        "q_proj", "k_proj", "v_proj", "o_proj"
+    ],
+    lora_dropout=0.05,     # Dropout probability for LoRA layers
+    bias="none",           # Don't add bias parameters
+    task_type="CAUSAL_LM"  # Task type (causal language modeling)
+)
+
+# 5. Apply LoRA to the model
+model = get_peft_model(model, lora_config)
+
+# 6. Configure training arguments
+training_args = TrainingArguments(
+    output_dir="./results",
+    num_train_epochs=3,
+    per_device_train_batch_size=4,
+    gradient_accumulation_steps=4,
+    learning_rate=2e-4,
+    weight_decay=0.01,
+    warmup_ratio=0.03,
+    lr_scheduler_type="cosine",
+    fp16=True,
+    gradient_checkpointing=True,  # Enable gradient checkpointing
+    optim="paged_adamw_8bit",     # Use paged 8-bit Adam
+    report_to="none"
+)
+
+# 7. Create trainer and train
+trainer = SFTTrainer(
+    model=model,
+    args=training_args,
+    train_dataset=dataset["train"],
+    tokenizer=tokenizer,
+    packing=True,  # Pack sequences for efficiency
+)
+
+trainer.train()</code></pre>
+                            </div>
+
+                            <div class="alert alert-success mt-3">
+                                <h5><i class="bi bi-lightbulb"></i> Key Takeaway</h5>
+                                <p>By combining these memory efficiency techniques, QLoRA enables fine-tuning of models with up to 65B parameters on a single consumer GPU with 24GB VRAM (like an NVIDIA RTX 3090/4090).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3>Memory Efficiency Cheat Sheet</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Technique</th>
+                                    <th>Memory Reduction</th>
+                                    <th>Performance Impact</th>
+                                    <th>When to Use</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>4-bit Quantization</strong></td>
+                                    <td>75% (from FP16)</td>
+                                    <td>Minimal with NF4</td>
+                                    <td>Always for large models (>7B)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>LoRA</strong></td>
+                                    <td>~95%</td>
+                                    <td>Minimal with proper rank</td>
+                                    <td>Most fine-tuning scenarios</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Gradient Checkpointing</strong></td>
+                                    <td>~60% of activation memory</td>
+                                    <td>~30% slower training</td>
+                                    <td>Models >1B parameters</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>8-bit Optimizers</strong></td>
+                                    <td>75% of optimizer states</td>
+                                    <td>Negligible</td>
+                                    <td>All fine-tuning scenarios</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Flash Attention</strong></td>
+                                    <td>Variable (sequence-dependent)</td>
+                                    <td>Faster training</td>
+                                    <td>Long sequences (>1024 tokens)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="alert alert-info mt-4">
+                        <h5><i class="bi bi-info-circle"></i> Recommended Configurations</h5>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card mb-3">
+                                    <div class="card-header bg-success text-white">
+                                        <h5>Consumer GPU (8GB VRAM)</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul>
+                                            <li>QLoRA with 4-bit quantization</li>
+                                            <li>Models up to 7B parameters</li>
+                                            <li>Small batch size (1-2)</li>
+                                            <li>Gradient accumulation (8-16 steps)</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card mb-3">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5>High-end GPU (24GB VRAM)</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul>
+                                            <li>QLoRA with 4-bit quantization</li>
+                                            <li>Models up to 65B parameters</li>
+                                            <li>Batch size 4-8</li>
+                                            <li>Gradient accumulation (4-8 steps)</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card mb-3">
+                                    <div class="card-header bg-dark text-white">
+                                        <h5>Multi-GPU Server</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul>
+                                            <li>LoRA with 16-bit precision</li>
+                                            <li>Models of any size</li>
+                                            <li>Larger batch sizes</li>
+                                            <li>DeepSpeed ZeRO-3 for distributed training</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4 mb-5">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h3><i class="bi bi-check-circle-fill me-2"></i> Test Your Knowledge</h3>
+                </div>
+                <div class="card-body">
+                    <p class="lead">Ready to test your understanding of memory efficiency techniques in LLM fine-tuning?</p>
+
+                    <div class="alert alert-info">
+                        <p><i class="bi bi-info-circle-fill me-2"></i> This quiz covers the key concepts from this workshop, including:</p>
+                        <ul>
+                            <li>Quantization techniques and their benefits</li>
+                            <li>Gradient checkpointing</li>
+                            <li>Parameter-efficient fine-tuning methods</li>
+                            <li>Memory-efficient optimizers</li>
+                            <li>QLoRA implementation details</li>
+                        </ul>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        {% if current_user.is_authenticated %}
+                            <a href="{{ url_for('quiz.module_topic_quiz', module_id='memory-efficiency', topic_id='basics') }}" class="btn btn-success btn-lg">
+                                <i class="bi bi-pencil-square me-2"></i> Take the Quiz
+                            </a>
+                        {% else %}
+                            <div class="alert alert-warning">
+                                <p><i class="bi bi-exclamation-triangle-fill me-2"></i> You need to be logged in to take the quiz.</p>
+                                <a href="{{ url_for('auth.login') }}" class="btn btn-primary me-2">
+                                    <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
+                                </a>
+                                <a href="{{ url_for('auth.register') }}" class="btn btn-outline-primary">
+                                    <i class="bi bi-person-plus me-1"></i> Register
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .technique-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .technique-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .memory-usage-indicator {
+        height: 20px;
+        border-radius: 10px;
+        margin: 10px auto;
+        width: 80%;
+    }
+
+    .memory-usage-indicator.high {
+        background: linear-gradient(90deg, #dc3545 70%, #f8f9fa 70%);
+    }
+
+    .memory-usage-indicator.low {
+        background: linear-gradient(90deg, #28a745 30%, #f8f9fa 30%);
+    }
+
+    .memory-comparison-card {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 15px;
+        border: 1px solid #dee2e6;
+    }
+
+    .code-block {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .text-gradient {
+        background: linear-gradient(90deg, #007bff, #6610f2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-fill-color: transparent;
+    }
+</style>
+{% endblock %}

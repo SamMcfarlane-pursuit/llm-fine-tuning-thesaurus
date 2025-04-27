@@ -1,0 +1,495 @@
+{% extends 'base.html' %}
+
+{% block title %}QLoRA Deep Dive Workshop{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/workshops">Workshops</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">QLoRA Deep Dive</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1>QLoRA Deep Dive Workshop</h1>
+            <p class="lead">Master Quantized Low-Rank Adaptation for efficient fine-tuning of large language models</p>
+            <div class="workshop-meta mt-3">
+                <span class="badge bg-primary me-2"><i class="bi bi-clock me-1"></i> 6 Hours</span>
+                <span class="badge bg-success me-2"><i class="bi bi-bar-chart-fill me-1"></i> Intermediate/Advanced</span>
+                <span class="badge bg-info me-2"><i class="bi bi-gpu-card me-1"></i> GPU Required</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3>Workshop Overview</h3>
+                </div>
+                <div class="card-body">
+                    <p>This comprehensive workshop takes you deep into Quantized Low-Rank Adaptation (QLoRA), a cutting-edge technique that enables fine-tuning of large language models on consumer hardware. You'll learn both the theoretical foundations and practical implementation details, with hands-on exercises to reinforce your understanding.</p>
+
+                    <h4 class="mt-4">What You'll Learn</h4>
+                    <ul class="feature-list">
+                        <li><i class="bi bi-check-circle-fill text-success me-2"></i> The mathematical foundations of quantization and low-rank adaptation</li>
+                        <li><i class="bi bi-check-circle-fill text-success me-2"></i> How to implement 4-bit NF4 quantization for LLMs</li>
+                        <li><i class="bi bi-check-circle-fill text-success me-2"></i> Advanced memory optimization techniques including double quantization</li>
+                        <li><i class="bi bi-check-circle-fill text-success me-2"></i> How to fine-tune models with 13B+ parameters on consumer GPUs</li>
+                        <li><i class="bi bi-check-circle-fill text-success me-2"></i> Performance optimization and evaluation strategies</li>
+                    </ul>
+
+                    <h4 class="mt-4">Prerequisites</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Knowledge</h5>
+                            <ul>
+                                <li>Understanding of transformer architecture</li>
+                                <li>Basic PyTorch experience</li>
+                                <li>Familiarity with Hugging Face libraries</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Hardware</h5>
+                            <ul>
+                                <li>GPU with 8GB+ VRAM (16GB+ recommended)</li>
+                                <li>Alternative: Google Colab Pro</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-header bg-success text-white">
+                    <h3>Workshop Modules</h3>
+                </div>
+                <div class="card-body p-0">
+                    <div class="accordion" id="workshopModules">
+                        <!-- Module 1 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    <span class="module-number">1</span> Foundations of Quantization and LoRA
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#workshopModules">
+                                <div class="accordion-body">
+                                    <h4>Module Overview</h4>
+                                    <p>This module covers the theoretical foundations of quantization and Low-Rank Adaptation, providing the necessary background for understanding QLoRA.</p>
+
+                                    <h5 class="mt-3">Topics Covered</h5>
+                                    <ul>
+                                        <li>Numerical precision in deep learning (FP32, FP16, INT8, INT4)</li>
+                                        <li>Quantization techniques and their trade-offs</li>
+                                        <li>Low-rank matrix factorization theory</li>
+                                        <li>LoRA architecture and implementation</li>
+                                    </ul>
+
+                                    <h5 class="mt-3">Hands-on Exercise</h5>
+                                    <div class="exercise-box">
+                                        <h6><i class="bi bi-laptop me-2"></i>Exercise 1.1: Implementing Basic Quantization</h6>
+                                        <p>In this exercise, you'll implement basic quantization techniques on a small transformer model to understand the effects on model size and accuracy.</p>
+                                        <a href="#" class="btn btn-sm btn-outline-primary mt-2">Open Exercise Notebook</a>
+                                    </div>
+
+                                    <div class="exercise-box mt-3">
+                                        <h6><i class="bi bi-laptop me-2"></i>Exercise 1.2: Basic LoRA Implementation</h6>
+                                        <p>Implement a simple LoRA adapter for a pre-trained model and observe how different rank values affect performance and parameter count.</p>
+                                        <a href="#" class="btn btn-sm btn-outline-primary mt-2">Open Exercise Notebook</a>
+                                    </div>
+
+                                    <div class="time-estimate mt-3">
+                                        <i class="bi bi-clock me-1"></i> Estimated time: 1.5 hours
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Module 2 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    <span class="module-number">2</span> Advanced Quantization Techniques
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#workshopModules">
+                                <div class="accordion-body">
+                                    <h4>Module Overview</h4>
+                                    <p>This module explores advanced quantization techniques specifically designed for large language models, including NF4 quantization and double quantization.</p>
+
+                                    <h5 class="mt-3">Topics Covered</h5>
+                                    <ul>
+                                        <li>NormalFloat (NF4) quantization for normally distributed weights</li>
+                                        <li>Double quantization techniques</li>
+                                        <li>Quantization-aware training</li>
+                                        <li>BitsAndBytes library for efficient quantization</li>
+                                    </ul>
+
+                                    <h5 class="mt-3">Hands-on Exercise</h5>
+                                    <div class="exercise-box">
+                                        <h6><i class="bi bi-laptop me-2"></i>Exercise 2.1: Implementing NF4 Quantization</h6>
+                                        <p>In this exercise, you'll implement NF4 quantization on a pre-trained model and compare its performance with standard INT4 quantization.</p>
+                                        <a href="#" class="btn btn-sm btn-outline-primary mt-2">Open Exercise Notebook</a>
+                                    </div>
+
+                                    <div class="exercise-box mt-3">
+                                        <h6><i class="bi bi-laptop me-2"></i>Exercise 2.2: Double Quantization Implementation</h6>
+                                        <p>Implement double quantization to further reduce memory usage and analyze the impact on model performance.</p>
+                                        <a href="#" class="btn btn-sm btn-outline-primary mt-2">Open Exercise Notebook</a>
+                                    </div>
+
+                                    <div class="time-estimate mt-3">
+                                        <i class="bi bi-clock me-1"></i> Estimated time: 1 hour
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Module 3 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingThree">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    <span class="module-number">3</span> QLoRA Implementation
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#workshopModules">
+                                <div class="accordion-body">
+                                    <h4>Module Overview</h4>
+                                    <p>This module focuses on the complete implementation of QLoRA, combining quantization with Low-Rank Adaptation for efficient fine-tuning.</p>
+
+                                    <h5 class="mt-3">Topics Covered</h5>
+                                    <ul>
+                                        <li>QLoRA architecture and implementation details</li>
+                                        <li>Preparing models for k-bit training</li>
+                                        <li>Configuring LoRA for quantized models</li>
+                                        <li>Memory optimization strategies</li>
+                                    </ul>
+
+                                    <h5 class="mt-3">Hands-on Exercise</h5>
+                                    <div class="exercise-box">
+                                        <h6><i class="bi bi-laptop me-2"></i>Exercise 3.1: Complete QLoRA Implementation</h6>
+                                        <p>Implement a complete QLoRA setup for fine-tuning a large language model (7B parameters) on a specific task.</p>
+                                        <a href="#" class="btn btn-sm btn-outline-primary mt-2">Open Exercise Notebook</a>
+                                    </div>
+
+                                    <div class="code-preview mt-3">
+                                        <h6>Implementation Preview</h6>
+                                        <div class="bg-light p-3 rounded code-block">
+                                            <pre><code>import torch
+from transformers import AutoModelForCausalLM, BitsAndBytesConfig
+from peft import prepare_model_for_kbit_training, LoraConfig, get_peft_model
+
+# Configure 4-bit quantization
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_compute_dtype=torch.float16,
+    bnb_4bit_use_double_quant=True
+)
+
+# Load model with quantization
+model = AutoModelForCausalLM.from_pretrained(
+    "meta-llama/Llama-2-7b-hf",
+    quantization_config=bnb_config,
+    device_map="auto"
+)
+
+# Prepare model for k-bit training
+model = prepare_model_for_kbit_training(model)
+
+# Configure LoRA
+lora_config = LoraConfig(
+    r=16,
+    lora_alpha=32,
+    target_modules=[
+        "q_proj", "k_proj", "v_proj", "o_proj",
+        "gate_proj", "up_proj", "down_proj"
+    ],
+    lora_dropout=0.05,
+    bias="none",
+    task_type="CAUSAL_LM"
+)
+
+# Apply LoRA to the model
+model = get_peft_model(model, lora_config)</code></pre>
+                                        </div>
+                                    </div>
+
+                                    <div class="time-estimate mt-3">
+                                        <i class="bi bi-clock me-1"></i> Estimated time: 1.5 hours
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Module 4 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingFour">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                    <span class="module-number">4</span> Advanced Memory Optimization
+                                </button>
+                            </h2>
+                            <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#workshopModules">
+                                <div class="accordion-body">
+                                    <h4>Module Overview</h4>
+                                    <p>This module covers advanced memory optimization techniques that enable fine-tuning of extremely large models on consumer hardware.</p>
+
+                                    <h5 class="mt-3">Topics Covered</h5>
+                                    <ul>
+                                        <li>Gradient checkpointing for memory efficiency</li>
+                                        <li>Paged optimizers for managing memory spikes</li>
+                                        <li>Flash Attention implementation</li>
+                                        <li>Mixed-precision training strategies</li>
+                                    </ul>
+
+                                    <h5 class="mt-3">Hands-on Exercise</h5>
+                                    <div class="exercise-box">
+                                        <h6><i class="bi bi-laptop me-2"></i>Exercise 4.1: Implementing Gradient Checkpointing</h6>
+                                        <p>Implement gradient checkpointing to reduce memory usage during training and analyze the trade-off between memory and computation time.</p>
+                                        <a href="#" class="btn btn-sm btn-outline-primary mt-2">Open Exercise Notebook</a>
+                                    </div>
+
+                                    <div class="exercise-box mt-3">
+                                        <h6><i class="bi bi-laptop me-2"></i>Exercise 4.2: Paged Optimizers and Flash Attention</h6>
+                                        <p>Implement paged optimizers and Flash Attention to further optimize memory usage during training.</p>
+                                        <a href="#" class="btn btn-sm btn-outline-primary mt-2">Open Exercise Notebook</a>
+                                    </div>
+
+                                    <div class="time-estimate mt-3">
+                                        <i class="bi bi-clock me-1"></i> Estimated time: 1 hour
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Module 5 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingFive">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                    <span class="module-number">5</span> Fine-tuning Large Models (13B+)
+                                </button>
+                            </h2>
+                            <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#workshopModules">
+                                <div class="accordion-body">
+                                    <h4>Module Overview</h4>
+                                    <p>This module focuses on applying QLoRA to fine-tune very large models (13B+ parameters) on specific tasks using consumer hardware.</p>
+
+                                    <h5 class="mt-3">Topics Covered</h5>
+                                    <ul>
+                                        <li>Scaling QLoRA to 13B+ parameter models</li>
+                                        <li>Dataset preparation for efficient fine-tuning</li>
+                                        <li>Hyperparameter optimization for large models</li>
+                                        <li>Multi-GPU training strategies</li>
+                                    </ul>
+
+                                    <h5 class="mt-3">Hands-on Exercise</h5>
+                                    <div class="exercise-box">
+                                        <h6><i class="bi bi-laptop me-2"></i>Exercise 5.1: Fine-tuning a 13B Parameter Model</h6>
+                                        <p>Fine-tune a 13B parameter model on a specific task using QLoRA and all the optimization techniques learned in previous modules.</p>
+                                        <a href="#" class="btn btn-sm btn-outline-primary mt-2">Open Exercise Notebook</a>
+                                    </div>
+
+                                    <div class="alert alert-info mt-3">
+                                        <h6><i class="bi bi-info-circle me-2"></i>Hardware Requirements</h6>
+                                        <p class="mb-0">This exercise requires a GPU with at least 16GB VRAM or can be run on Google Colab Pro with a high-RAM runtime.</p>
+                                    </div>
+
+                                    <div class="time-estimate mt-3">
+                                        <i class="bi bi-clock me-1"></i> Estimated time: 1 hour
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card sticky-top" style="top: 20px; z-index: 1;">
+                <div class="card-header bg-dark text-white">
+                    <h3>Workshop Resources</h3>
+                </div>
+                <div class="card-body">
+                    <div class="resource-item">
+                        <i class="bi bi-journal-code text-primary me-2"></i>
+                        <a href="#" class="resource-link">Complete Workshop Notebook</a>
+                    </div>
+                    <div class="resource-item">
+                        <i class="bi bi-file-earmark-pdf text-danger me-2"></i>
+                        <a href="#" class="resource-link">QLoRA Paper (PDF)</a>
+                    </div>
+                    <div class="resource-item">
+                        <i class="bi bi-github text-dark me-2"></i>
+                        <a href="#" class="resource-link">GitHub Repository</a>
+                    </div>
+                    <div class="resource-item">
+                        <i class="bi bi-cloud-fill text-info me-2"></i>
+                        <a href="#" class="resource-link">Google Colab Setup</a>
+                    </div>
+
+                    <hr>
+
+                    <h4>Required Libraries</h4>
+                    <div class="bg-light p-3 rounded code-block">
+                        <pre><code>pip install transformers==4.31.0
+pip install peft==0.4.0
+pip install bitsandbytes==0.40.2
+pip install accelerate==0.21.0
+pip install datasets
+pip install trl</code></pre>
+                    </div>
+
+                    <hr>
+
+                    <h4>Workshop Progress</h4>
+                    <div class="progress mb-3" style="height: 25px;">
+                        <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                    </div>
+                    <div class="text-center">
+                        <button id="start-workshop-btn" class="btn btn-primary">Start Workshop</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4 mb-5">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h3><i class="bi bi-check-circle-fill me-2"></i> Test Your QLoRA Knowledge</h3>
+                </div>
+                <div class="card-body">
+                    <p class="lead">Ready to test your understanding of Quantized Low-Rank Adaptation (QLoRA) techniques?</p>
+
+                    <div class="alert alert-info">
+                        <p><i class="bi bi-info-circle-fill me-2"></i> This quiz covers the key concepts from this workshop, including:</p>
+                        <ul>
+                            <li>NF4 quantization and its benefits for LLMs</li>
+                            <li>Double quantization techniques</li>
+                            <li>LoRA configuration and implementation</li>
+                            <li>Memory optimization strategies</li>
+                            <li>Scaling QLoRA to larger models</li>
+                        </ul>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        {% if current_user.is_authenticated %}
+                            <a href="{{ url_for('quiz.module_topic_quiz', module_id='qlora', topic_id='advanced') }}" class="btn btn-warning btn-lg text-dark">
+                                <i class="bi bi-pencil-square me-2"></i> Take the Quiz
+                            </a>
+                        {% else %}
+                            <div class="alert alert-warning">
+                                <p><i class="bi bi-exclamation-triangle-fill me-2"></i> You need to be logged in to take the quiz.</p>
+                                <a href="{{ url_for('auth.login') }}" class="btn btn-primary me-2">
+                                    <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
+                                </a>
+                                <a href="{{ url_for('auth.register') }}" class="btn btn-outline-primary">
+                                    <i class="bi bi-person-plus me-1"></i> Register
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .module-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: var(--primary-color);
+        color: white;
+        margin-right: 15px;
+        font-weight: bold;
+    }
+
+    .accordion-button:not(.collapsed) .module-number {
+        background-color: white;
+        color: var(--primary-color);
+    }
+
+    .exercise-box {
+        background-color: rgba(0, 102, 255, 0.05);
+        border-left: 4px solid var(--primary-color);
+        padding: 15px;
+        border-radius: 5px;
+    }
+
+    .time-estimate {
+        font-style: italic;
+        color: var(--text-secondary);
+    }
+
+    .resource-item {
+        margin-bottom: 15px;
+        font-size: 1.1rem;
+    }
+
+    .resource-link {
+        color: var(--primary-color);
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .resource-link:hover {
+        color: var(--secondary-color);
+        text-decoration: underline;
+    }
+
+    .workshop-meta .badge {
+        font-size: 0.9rem;
+        padding: 8px 15px;
+    }
+
+    .feature-list li {
+        margin-bottom: 10px;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Workshop progress tracking
+        const startButton = document.getElementById('start-workshop-btn');
+        const progressBar = document.querySelector('.progress-bar');
+
+        if (startButton && progressBar) {
+            startButton.addEventListener('click', function() {
+                // Simulate workshop progress
+                let progress = 0;
+                startButton.disabled = true;
+                startButton.textContent = 'In Progress...';
+
+                const interval = setInterval(function() {
+                    progress += 1;
+                    progressBar.style.width = progress + '%';
+                    progressBar.setAttribute('aria-valuenow', progress);
+                    progressBar.textContent = progress + '%';
+
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        startButton.textContent = 'Completed!';
+                        startButton.classList.remove('btn-primary');
+                        startButton.classList.add('btn-success');
+                    }
+                }, 100);
+            });
+        }
+    });
+</script>
+{% endblock %}

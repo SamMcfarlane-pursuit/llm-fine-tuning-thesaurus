@@ -1,0 +1,569 @@
+/**
+ * Frameworks CSS
+ * Styling for TensorFlow and PyTorch content
+ */
+
+/* Framework-specific colors */
+:root {
+    --tensorflow-primary: #FF6F00;
+    --tensorflow-secondary: #F57C00;
+    --tensorflow-accent: #FFB74D;
+    --tensorflow-dark: #E65100;
+    --tensorflow-light: #FFF3E0;
+    
+    --pytorch-primary: #EE4C2C;
+    --pytorch-secondary: #F05941;
+    --pytorch-accent: #F78166;
+    --pytorch-dark: #C71F1F;
+    --pytorch-light: #FDEDEC;
+    
+    --framework-text-dark: #212121;
+    --framework-text-light: #FFFFFF;
+    --framework-code-bg: #1E1E1E;
+    --framework-code-text: #D4D4D4;
+}
+
+/* Framework Header Styling */
+.framework-header {
+    text-align: center;
+    margin: 2rem 0 4rem;
+    padding: 3rem;
+    position: relative;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+}
+
+.tensorflow-header {
+    background: linear-gradient(135deg, rgba(255, 111, 0, 0.9), rgba(245, 124, 0, 0.9));
+    border: 3px solid rgba(255, 111, 0, 0.5);
+}
+
+.pytorch-header {
+    background: linear-gradient(135deg, rgba(238, 76, 44, 0.9), rgba(199, 31, 31, 0.9));
+    border: 3px solid rgba(238, 76, 44, 0.5);
+}
+
+.framework-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    z-index: 1;
+}
+
+.tensorflow-header::before {
+    background: linear-gradient(to right, var(--tensorflow-dark), var(--tensorflow-accent));
+}
+
+.pytorch-header::before {
+    background: linear-gradient(to right, var(--pytorch-dark), var(--pytorch-accent));
+}
+
+.framework-header h1 {
+    font-size: 4rem;
+    font-weight: 800;
+    margin-bottom: 1.8rem;
+    color: white;
+    display: inline-block;
+    letter-spacing: 2px;
+    position: relative;
+    text-shadow: 0 0 30px rgba(0, 0, 0, 0.3), 0 0 60px rgba(0, 0, 0, 0.2);
+    padding-bottom: 15px;
+}
+
+.framework-header h1::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    height: 4px;
+    border-radius: 2px;
+}
+
+.tensorflow-header h1::after {
+    background: linear-gradient(to right, var(--tensorflow-dark), var(--tensorflow-accent));
+    box-shadow: 0 0 20px rgba(255, 111, 0, 0.8);
+}
+
+.pytorch-header h1::after {
+    background: linear-gradient(to right, var(--pytorch-dark), var(--pytorch-accent));
+    box-shadow: 0 0 20px rgba(238, 76, 44, 0.8);
+}
+
+.framework-header p {
+    font-size: 1.4rem;
+    color: white;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.8;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    font-weight: 400;
+}
+
+/* Framework Content Styling */
+.framework-section {
+    margin: 3rem 0;
+    padding: 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    background-color: #FFFFFF;
+    position: relative;
+    overflow: hidden;
+}
+
+.tensorflow-section {
+    border-left: 5px solid var(--tensorflow-primary);
+}
+
+.pytorch-section {
+    border-left: 5px solid var(--pytorch-primary);
+}
+
+.framework-section h2 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.tensorflow-section h2 {
+    color: var(--tensorflow-dark);
+}
+
+.pytorch-section h2 {
+    color: var(--pytorch-dark);
+}
+
+.framework-section h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100px;
+    height: 3px;
+    border-radius: 3px;
+}
+
+.tensorflow-section h2::after {
+    background: linear-gradient(to right, var(--tensorflow-primary), var(--tensorflow-accent));
+}
+
+.pytorch-section h2::after {
+    background: linear-gradient(to right, var(--pytorch-primary), var(--pytorch-accent));
+}
+
+.framework-section h3 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 2rem 0 1rem;
+}
+
+.tensorflow-section h3 {
+    color: var(--tensorflow-primary);
+}
+
+.pytorch-section h3 {
+    color: var(--pytorch-primary);
+}
+
+.framework-section p {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    color: var(--framework-text-dark);
+}
+
+/* Code Block Styling */
+.framework-code {
+    background-color: var(--framework-code-bg);
+    color: var(--framework-code-text);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    overflow-x: auto;
+    position: relative;
+}
+
+.tensorflow-code {
+    border-left: 5px solid var(--tensorflow-primary);
+}
+
+.pytorch-code {
+    border-left: 5px solid var(--pytorch-primary);
+}
+
+.code-header {
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 0.5rem 1rem;
+    border-radius: 5px 5px 0 0;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin: -1.5rem -1.5rem 1rem -1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tensorflow-code .code-header {
+    color: var(--tensorflow-accent);
+    border-bottom: 1px solid var(--tensorflow-primary);
+}
+
+.pytorch-code .code-header {
+    color: var(--pytorch-accent);
+    border-bottom: 1px solid var(--pytorch-primary);
+}
+
+.copy-button {
+    background: none;
+    border: none;
+    color: #FFFFFF;
+    cursor: pointer;
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+.tensorflow-code .copy-button {
+    background-color: rgba(255, 111, 0, 0.2);
+}
+
+.pytorch-code .copy-button {
+    background-color: rgba(238, 76, 44, 0.2);
+}
+
+.tensorflow-code .copy-button:hover {
+    background-color: rgba(255, 111, 0, 0.4);
+}
+
+.pytorch-code .copy-button:hover {
+    background-color: rgba(238, 76, 44, 0.4);
+}
+
+/* Exercise Card Styling */
+.exercise-card {
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    margin-bottom: 2rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.tensorflow-exercise {
+    border-top: 5px solid var(--tensorflow-primary);
+}
+
+.pytorch-exercise {
+    border-top: 5px solid var(--pytorch-primary);
+}
+
+.exercise-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+.exercise-header {
+    padding: 1.5rem;
+    position: relative;
+}
+
+.tensorflow-exercise .exercise-header {
+    background: linear-gradient(135deg, rgba(255, 111, 0, 0.1), rgba(255, 183, 77, 0.1));
+}
+
+.pytorch-exercise .exercise-header {
+    background: linear-gradient(135deg, rgba(238, 76, 44, 0.1), rgba(247, 129, 102, 0.1));
+}
+
+.exercise-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.tensorflow-exercise .exercise-title {
+    color: var(--tensorflow-dark);
+}
+
+.pytorch-exercise .exercise-title {
+    color: var(--pytorch-dark);
+}
+
+.exercise-level {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.level-beginner {
+    background-color: #E8F5E9;
+    color: #2E7D32;
+}
+
+.level-intermediate {
+    background-color: #FFF8E1;
+    color: #F57F17;
+}
+
+.level-advanced {
+    background-color: #FFEBEE;
+    color: #C62828;
+}
+
+.exercise-body {
+    padding: 1.5rem;
+}
+
+.exercise-description {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    color: var(--framework-text-dark);
+}
+
+.exercise-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.exercise-tag {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    background-color: #F5F5F5;
+    color: #616161;
+}
+
+.exercise-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #EEEEEE;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.exercise-time {
+    font-size: 0.9rem;
+    color: #757575;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.exercise-button {
+    padding: 0.5rem 1.25rem;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    border: none;
+    color: white;
+}
+
+.tensorflow-exercise .exercise-button {
+    background: linear-gradient(135deg, var(--tensorflow-primary), var(--tensorflow-secondary));
+    box-shadow: 0 4px 10px rgba(255, 111, 0, 0.3);
+}
+
+.pytorch-exercise .exercise-button {
+    background: linear-gradient(135deg, var(--pytorch-primary), var(--pytorch-secondary));
+    box-shadow: 0 4px 10px rgba(238, 76, 44, 0.3);
+}
+
+.tensorflow-exercise .exercise-button:hover {
+    background: linear-gradient(135deg, var(--tensorflow-dark), var(--tensorflow-primary));
+    box-shadow: 0 6px 15px rgba(255, 111, 0, 0.4);
+}
+
+.pytorch-exercise .exercise-button:hover {
+    background: linear-gradient(135deg, var(--pytorch-dark), var(--pytorch-primary));
+    box-shadow: 0 6px 15px rgba(238, 76, 44, 0.4);
+}
+
+/* Comparison Table Styling */
+.comparison-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 2rem 0;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.comparison-table thead th {
+    background-color: #212121;
+    color: white;
+    padding: 1.25rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.comparison-table thead th:first-child {
+    border-top-left-radius: 10px;
+}
+
+.comparison-table thead th:last-child {
+    border-top-right-radius: 10px;
+}
+
+.comparison-table thead th.tensorflow-col {
+    background-color: var(--tensorflow-primary);
+}
+
+.comparison-table thead th.pytorch-col {
+    background-color: var(--pytorch-primary);
+}
+
+.comparison-table tbody tr:nth-child(odd) {
+    background-color: #F5F5F5;
+}
+
+.comparison-table tbody tr:nth-child(even) {
+    background-color: #FFFFFF;
+}
+
+.comparison-table tbody td {
+    padding: 1rem 1.25rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-bottom: 1px solid #EEEEEE;
+}
+
+.comparison-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.comparison-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+
+.comparison-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+}
+
+.feature-name {
+    font-weight: 600;
+    color: #424242;
+}
+
+.feature-advantage {
+    color: #2E7D32;
+    font-weight: 600;
+}
+
+.feature-disadvantage {
+    color: #C62828;
+    font-weight: 600;
+}
+
+.feature-neutral {
+    color: #F57F17;
+    font-weight: 600;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+    .framework-header h1 {
+        font-size: 3rem;
+    }
+    
+    .framework-section {
+        padding: 2rem;
+    }
+    
+    .framework-section h2 {
+        font-size: 1.8rem;
+    }
+    
+    .framework-section h3 {
+        font-size: 1.5rem;
+    }
+    
+    .comparison-table thead th {
+        padding: 1rem;
+        font-size: 1rem;
+    }
+    
+    .comparison-table tbody td {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .framework-header {
+        padding: 2rem;
+        margin: 1.5rem 0 3rem;
+    }
+    
+    .framework-header h1 {
+        font-size: 2.5rem;
+    }
+    
+    .framework-header p {
+        font-size: 1.1rem;
+    }
+    
+    .framework-section {
+        padding: 1.5rem;
+        margin: 2rem 0;
+    }
+    
+    .exercise-card {
+        margin-bottom: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .framework-header h1 {
+        font-size: 2rem;
+    }
+    
+    .framework-header p {
+        font-size: 1rem;
+    }
+    
+    .framework-section h2 {
+        font-size: 1.5rem;
+    }
+    
+    .framework-section h3 {
+        font-size: 1.3rem;
+    }
+    
+    .framework-section p {
+        font-size: 1rem;
+    }
+    
+    .framework-code {
+        font-size: 0.85rem;
+    }
+    
+    .exercise-title {
+        font-size: 1.3rem;
+    }
+    
+    .comparison-table {
+        display: block;
+        overflow-x: auto;
+    }
+}

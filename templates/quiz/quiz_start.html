@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }} - Visual Thesaurus LLM{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('quiz.quiz_list') }}">Quizzes</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('quiz.quiz_detail', quiz_id=quiz.id) }}">{{ quiz.title }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Start Quiz</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">{{ quiz.title }}</h2>
+                </div>
+                <div class="card-body">
+                    <div class="quiz-intro text-center mb-4">
+                        <div class="quiz-icon mb-3">
+                            <i class="bi bi-journal-check" style="font-size: 5rem; color: var(--primary-color);"></i>
+                        </div>
+                        <h3>Ready to Begin?</h3>
+                        <p class="lead">This quiz will test your knowledge of {{ quiz.module }} in the {{ quiz.topic }} topic.</p>
+                    </div>
+
+                    <div class="quiz-details mb-4">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="bi bi-list-check me-2"></i> Questions</h5>
+                                        <p class="card-text display-6 text-center">{{ quiz.questions.count() }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><i class="bi bi-trophy me-2"></i> Passing Score</h5>
+                                        <p class="card-text display-6 text-center">{{ quiz.passing_score }}%</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="quiz-instructions mb-4">
+                        <div class="card">
+                            <div class="card-header bg-info text-white">
+                                <h4 class="mb-0"><i class="bi bi-info-circle me-2"></i> Instructions</h4>
+                            </div>
+                            <div class="card-body">
+                                <ul class="mb-0">
+                                    <li>Read each question carefully before answering.</li>
+                                    <li>You can navigate between questions using the navigation buttons.</li>
+                                    <li>You can review your answers before submitting the quiz.</li>
+                                    <li>Once you submit the quiz, you cannot change your answers.</li>
+                                    <li>You need to score at least {{ quiz.passing_score }}% to pass the quiz.</li>
+                                    <li>Your progress will be saved when you pass the quiz.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('quiz.quiz_take', quiz_id=quiz.id, attempt_id=0) }}" class="btn btn-primary btn-lg">
+                            <i class="bi bi-play-circle me-2"></i> Start Quiz Now
+                        </a>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="{{ url_for('quiz.quiz_detail', quiz_id=quiz.id) }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-2"></i> Back
+                        </a>
+                        <a href="/learn/{{ quiz.module }}/{{ quiz.topic }}" class="btn btn-outline-info">
+                            <i class="bi bi-book me-2"></i> Review Lesson
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .quiz-icon {
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.1);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+</style>
+{% endblock %}

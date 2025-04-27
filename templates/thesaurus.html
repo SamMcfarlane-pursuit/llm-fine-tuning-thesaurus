@@ -1,0 +1,820 @@
+{% extends "base.html" %}
+
+{% block title %}Visual Thesaurus Search{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-thesaurus.css') }}">
+
+<style>
+    /* All styles moved to enhanced-thesaurus.css */
+    /* Keeping this style tag for potential future overrides */
+    .search-container {
+        margin-bottom: 30px;
+        background-color: rgba(255, 255, 255, 0.05);
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .search-input {
+        background-color: rgba(30, 30, 30, 0.9);
+        color: #ffffff;
+        border: 2px solid rgba(66, 135, 245, 0.4);
+        border-radius: 12px;
+        padding: 15px 25px;
+        font-size: 1.2rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), inset 0 2px 5px rgba(0, 0, 0, 0.2);
+        letter-spacing: 0.5px;
+    }
+
+    .search-input:focus {
+        border-color: #4287f5;
+        box-shadow: 0 8px 25px rgba(66, 135, 245, 0.4), 0 0 15px rgba(66, 135, 245, 0.3), inset 0 2px 5px rgba(0, 0, 0, 0.2);
+        outline: none;
+        background-color: rgba(40, 40, 40, 0.95);
+    }
+
+    .search-input::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+        font-weight: 400;
+    }
+
+    .search-button {
+        background: #4287f5;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 12px 25px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(66, 135, 245, 0.4);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .search-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(66, 135, 245, 0.6);
+        background: #5a9aff;
+    }
+
+    .search-button:active {
+        transform: translateY(1px);
+    }
+
+    .results-container {
+        margin-top: 30px;
+        background-color: rgba(25, 25, 25, 0.9);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+        border: 2px solid rgba(66, 135, 245, 0.3);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .results-container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(to right, #4287f5, #00ffdd);
+        z-index: 1;
+    }
+
+    .word-info {
+        margin-bottom: 30px;
+    }
+
+    .word-title {
+        font-size: 4rem;
+        font-weight: 800;
+        margin-bottom: 35px;
+        color: #4287f5;
+        text-align: center;
+        padding: 25px 0;
+        border-bottom: 4px solid #4287f5;
+        text-shadow: 0 0 30px rgba(66, 135, 245, 0.8), 0 0 60px rgba(66, 135, 245, 0.4);
+        letter-spacing: 3px;
+        position: relative;
+        background: linear-gradient(135deg, #4287f5, #00ffdd, #ffdd00, #4287f5);
+        background-size: 300% 100%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: gradient 8s ease infinite;
+        display: inline-block;
+        width: 100%;
+        transition: opacity 0.5s ease, transform 0.5s ease;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .word-title::before {
+        content: "";
+        position: absolute;
+        top: -10px;
+        left: -20px;
+        right: -20px;
+        height: calc(100% + 20px);
+        background: linear-gradient(135deg, rgba(30, 30, 30, 0.95), rgba(40, 40, 40, 0.95));
+        z-index: -1;
+        border-radius: 20px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+        transform: scale(1.05);
+        border: 2px solid rgba(66, 135, 245, 0.3);
+    }
+
+    .word-title::after {
+        content: "";
+        position: absolute;
+        bottom: -4px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 150px;
+        height: 4px;
+        background: linear-gradient(to right, #4287f5, #00ffdd);
+        box-shadow: 0 0 25px rgba(66, 135, 245, 0.9);
+        border-radius: 2px;
+    }
+
+    .word-section {
+        margin-bottom: 30px;
+        padding: 30px;
+        border-radius: 18px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        background-color: rgba(25, 25, 25, 0.95); /* Darker solid background */
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .word-section:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .word-section:nth-child(2):hover {
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(255, 204, 0, 0.2);
+    }
+
+    .word-section:nth-child(3):hover {
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 255, 204, 0.2);
+    }
+
+    .word-section:nth-child(2) {
+        background: #332b00; /* Darker gold-tinted background with better contrast */
+        border: 2px solid rgba(255, 221, 0, 0.6);
+        box-shadow: 0 15px 35px rgba(255, 221, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    }
+
+    .word-section:nth-child(3) {
+        background: #003329; /* Darker teal-tinted background with better contrast */
+        border: 2px solid rgba(0, 255, 221, 0.6);
+        box-shadow: 0 15px 35px rgba(0, 255, 221, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+    }
+
+    .word-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+    }
+
+    .word-section:nth-child(2)::before {
+        background: #ffdd00;
+        box-shadow: 0 0 20px rgba(255, 221, 0, 0.7);
+    }
+
+    .word-section:nth-child(3)::before {
+        background: #00ffdd;
+        box-shadow: 0 0 20px rgba(0, 255, 221, 0.7);
+    }
+
+    .word-section h4 {
+        margin-bottom: 20px;
+        font-size: 1.6rem;
+        font-weight: 600;
+        letter-spacing: 0.8px;
+        position: relative;
+        display: inline-block;
+        padding-bottom: 10px;
+    }
+
+    .word-section h4::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        border-radius: 3px;
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .word-section:nth-child(2) h4 {
+        color: #ffdd00; /* Bright gold/yellow for synonyms */
+        text-shadow: 0 0 20px rgba(255, 221, 0, 0.8);
+        font-weight: 800;
+        font-size: 1.8rem;
+        letter-spacing: 1px;
+    }
+
+    .word-section:nth-child(2) h4::after {
+        background: #ffdd00;
+        height: 4px;
+        border-radius: 2px;
+        box-shadow: 0 0 10px rgba(255, 221, 0, 0.6);
+    }
+
+    .word-section:nth-child(3) h4 {
+        color: #00ffdd; /* Bright teal for related terms */
+        text-shadow: 0 0 20px rgba(0, 255, 221, 0.8);
+        font-weight: 800;
+        font-size: 1.8rem;
+        letter-spacing: 1px;
+    }
+
+    .word-section:nth-child(3) h4::after {
+        background: #00ffdd;
+        height: 4px;
+        border-radius: 2px;
+        box-shadow: 0 0 10px rgba(0, 255, 221, 0.6);
+    }
+
+    .word-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 18px;
+        margin-top: 10px;
+    }
+
+    @media (max-width: 768px) {
+        .word-list {
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
+        }
+    }
+
+    .word-item {
+        background: #2a2a2a; /* Darker background for better contrast */
+        color: #ffffff;
+        padding: 16px 24px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 1.2rem;
+        font-weight: 700; /* Increased font weight for better visibility */
+        transition: all 0.3s ease;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+        letter-spacing: 0.5px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8); /* Stronger text shadow */
+    }
+
+    /* Add subtle highlight */
+    .word-item::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(to right, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .word-item span {
+        position: relative;
+        z-index: 2;
+    }
+
+    .word-item::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 6px;
+        background: #555555;
+    }
+
+    .word-section:nth-child(2) .word-item {
+        background: #3a3000; /* Dark gold background for synonyms */
+        border-color: rgba(255, 221, 0, 0.5);
+        color: #ffdd00; /* Yellow text for better visibility */
+    }
+
+    .word-section:nth-child(2) .word-item::before {
+        background: #ffdd00; /* Bright gold/yellow accent for synonyms */
+        box-shadow: 0 0 20px rgba(255, 221, 0, 0.7);
+        width: 8px;
+    }
+
+    .word-section:nth-child(3) .word-item {
+        background: #003a30; /* Dark teal background for related terms */
+        border-color: rgba(0, 255, 221, 0.5);
+        color: #00ffdd; /* Teal text for better visibility */
+    }
+
+    .word-section:nth-child(3) .word-item::before {
+        background: #00ffdd; /* Bright teal accent for related terms */
+        box-shadow: 0 0 20px rgba(0, 255, 221, 0.7);
+        width: 8px;
+    }
+
+    .word-section:nth-child(2) .word-item span::before {
+        content: "•";
+        color: #ffdd00;
+        margin-right: 12px;
+        font-size: 1.8em;
+        text-shadow: 0 0 15px rgba(255, 221, 0, 1);
+        display: inline-block;
+    }
+
+    .word-section:nth-child(3) .word-item span::before {
+        content: "•";
+        color: #00ffdd;
+        margin-right: 12px;
+        font-size: 1.8em;
+        text-shadow: 0 0 15px rgba(0, 255, 221, 1);
+        display: inline-block;
+    }
+
+    .word-item:hover {
+        background: #444444; /* Lighter background on hover for better contrast */
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+        border-color: rgba(255, 255, 255, 0.7);
+        color: #ffffff;
+    }
+
+    .word-section:nth-child(2) .word-item:hover {
+        background: #4d4000; /* Darker gold background for better contrast */
+        box-shadow: 0 15px 30px rgba(255, 221, 0, 0.4), 0 0 20px rgba(255, 221, 0, 0.2);
+        border-color: #ffdd00;
+        color: #ffdd00; /* Bright text color for contrast */
+        transform: translateY(-5px) scale(1.05);
+    }
+
+    .word-section:nth-child(3) .word-item:hover {
+        background: #004d40; /* Darker teal background for better contrast */
+        box-shadow: 0 15px 30px rgba(0, 255, 221, 0.4), 0 0 20px rgba(0, 255, 221, 0.2);
+        border-color: #00ffdd;
+        color: #00ffdd; /* Bright text color for contrast */
+        transform: translateY(-5px) scale(1.05);
+    }
+
+    .word-section:nth-child(2) .word-item:hover::before {
+        box-shadow: 0 0 20px 5px rgba(255, 204, 0, 0.4);
+    }
+
+    .word-section:nth-child(3) .word-item:hover::before {
+        box-shadow: 0 0 20px 5px rgba(0, 255, 204, 0.4);
+    }
+
+    .word-item:active {
+        transform: translateY(1px) scale(0.98);
+    }
+
+    .loading {
+        text-align: center;
+        margin: 30px 0;
+        display: none;
+    }
+
+    .spinner {
+        border: 4px solid rgba(255, 255, 255, 0.1);
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border-left-color: var(--primary-color);
+        animation: spin 1s linear infinite;
+        display: inline-block;
+        box-shadow: 0 0 15px rgba(0, 119, 255, 0.3);
+    }
+
+    .loading p {
+        margin-top: 15px;
+        font-size: 1.1rem;
+        color: var(--text-secondary);
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @keyframes gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    /* Responsive adjustments */
+    .search-history {
+        margin: 25px 0;
+        padding: 20px;
+        background-color: rgba(40, 40, 40, 0.9);
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        border: 2px solid rgba(66, 135, 245, 0.3);
+    }
+
+    .search-history h4 {
+        color: #ffffff;
+        margin-bottom: 15px;
+        font-size: 1.4rem;
+        font-weight: 700;
+        text-shadow: 0 0 10px rgba(66, 135, 245, 0.5);
+        border-bottom: 2px solid rgba(66, 135, 245, 0.5);
+        padding-bottom: 8px;
+        display: inline-block;
+    }
+
+    .recent-searches-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .recent-search-item {
+        background-color: #333333;
+        border-radius: 20px;
+        padding: 8px 18px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        color: #ffffff;
+        font-size: 1rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        border: 1px solid rgba(66, 135, 245, 0.4);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .recent-search-item:hover {
+        background-color: #4287f5;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 15px rgba(66, 135, 245, 0.5);
+        color: white;
+        border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    #visualization-container {
+        background-color: #121212;
+        border-radius: 20px;
+        overflow: hidden;
+        margin-top: 40px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+        height: 650px;
+        border: 3px solid rgba(66, 135, 245, 0.4);
+        position: relative;
+    }
+
+    #visualization-container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(to right, #4287f5, #00ffdd);
+        z-index: 1;
+    }
+
+    #visualization-iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        background-color: #121212;
+        background-image: radial-gradient(circle at 50% 50%, rgba(40, 40, 40, 0.3) 0%, rgba(20, 20, 20, 0.1) 100%);
+        display: block;
+    }
+
+    @media (max-width: 768px) {
+        .word-title {
+            font-size: 2.5rem;
+        }
+
+        .word-section {
+            padding: 15px;
+        }
+
+        .word-item {
+            font-size: 1rem;
+            padding: 8px 15px;
+        }
+
+        #visualization-container {
+            height: 400px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="thesaurus-header">
+        <h1>Visual Thesaurus Search</h1>
+        <p class="lead">
+            Search for a word or phrase to visualize its relationships with other words.
+            You can also enter a question or sentence, and we'll extract the key terms.
+        </p>
+    </div>
+
+    <div class="search-container">
+        <div class="input-group">
+            <input type="text" id="search-input" class="form-control search-input"
+                   placeholder="Enter a word, phrase, or question (e.g., 'fine-tuning', 'What is LoRA?')"
+                   aria-label="Search term" list="search-suggestions">
+            <datalist id="search-suggestions"></datalist>
+            <div class="input-group-append">
+                <button class="btn search-button" id="search-button">
+                    <i class="bi bi-search me-2"></i> Search
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="search-history">
+        <h4><i class="bi bi-clock-history me-2"></i>Recent Searches</h4>
+        <div id="recent-searches" class="recent-searches-list"></div>
+    </div>
+
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>Generating visualization...</p>
+    </div>
+
+    <div class="results-container" id="results-container" style="display: none;">
+        <div class="word-info" id="word-info">
+            <div class="word-title" id="word-title">Word</div>
+
+            <div class="word-section">
+                <h4><i class="bi bi-diagram-2 me-2"></i>Synonyms</h4>
+                <div class="word-list" id="synonyms-list"></div>
+            </div>
+
+            <div class="word-section">
+                <h4><i class="bi bi-link-45deg me-2"></i>Related Terms</h4>
+                <div class="word-list" id="related-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="visualization-container">
+        <iframe id="visualization-iframe" src="about:blank"></iframe>
+        <div class="visualization-legend">
+            <div class="legend-title">Legend</div>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <div class="legend-color main-term"></div>
+                    <div class="legend-label">Main Term</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color synonym"></div>
+                    <div class="legend-label">Synonyms</div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color related"></div>
+                    <div class="legend-label">Related Terms</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('search-input');
+        const searchButton = document.getElementById('search-button');
+        const loadingElement = document.getElementById('loading');
+        const resultsContainer = document.getElementById('results-container');
+        const wordTitle = document.getElementById('word-title');
+        const synonymsList = document.getElementById('synonyms-list');
+        const relatedList = document.getElementById('related-list');
+        const visualizationIframe = document.getElementById('visualization-iframe');
+        const recentSearchesContainer = document.getElementById('recent-searches');
+        const searchSuggestions = document.getElementById('search-suggestions');
+
+        // Load recent searches from localStorage
+        let recentSearches = JSON.parse(localStorage.getItem('recentSearches')) || [];
+
+        // Function to update recent searches display
+        function updateRecentSearches() {
+            recentSearchesContainer.innerHTML = '';
+
+            if (recentSearches.length === 0) {
+                recentSearchesContainer.innerHTML = '<em>No recent searches</em>';
+                return;
+            }
+
+            // Display the most recent 10 searches
+            recentSearches.slice(0, 10).forEach(search => {
+                const searchItem = document.createElement('div');
+                searchItem.className = 'recent-search-item';
+                searchItem.innerHTML = `<i class="bi bi-search me-2"></i>${search}`;
+                searchItem.addEventListener('click', () => {
+                    searchInput.value = search;
+                    searchWord(search);
+                });
+                recentSearchesContainer.appendChild(searchItem);
+            });
+        }
+
+        // Function to update search suggestions
+        function updateSearchSuggestions() {
+            searchSuggestions.innerHTML = '';
+
+            // Add recent searches to suggestions
+            recentSearches.forEach(search => {
+                const option = document.createElement('option');
+                option.value = search;
+                searchSuggestions.appendChild(option);
+            });
+
+            // Add common LLM terms to suggestions
+            const commonTerms = ['fine-tuning', 'lora', 'peft', 'llm', 'transformer', 'attention', 'embedding',
+                                'tokenizer', 'prompt', 'inference', 'hyperparameter', 'training'];
+            commonTerms.forEach(term => {
+                if (!recentSearches.includes(term)) {
+                    const option = document.createElement('option');
+                    option.value = term;
+                    searchSuggestions.appendChild(option);
+                }
+            });
+        }
+
+        // Initialize recent searches and suggestions
+        updateRecentSearches();
+        updateSearchSuggestions();
+
+        // Function to search for a word
+        function searchWord(word) {
+            if (!word) return;
+
+            // Save to recent searches
+            if (!recentSearches.includes(word)) {
+                recentSearches.unshift(word);
+                // Keep only the most recent 20 searches
+                if (recentSearches.length > 20) {
+                    recentSearches = recentSearches.slice(0, 20);
+                }
+                // Save to localStorage
+                localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
+                // Update UI
+                updateRecentSearches();
+                updateSearchSuggestions();
+            } else {
+                // Move the word to the top of recent searches
+                recentSearches = recentSearches.filter(item => item !== word);
+                recentSearches.unshift(word);
+                localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
+                updateRecentSearches();
+            }
+
+            // Show loading indicator
+            loadingElement.style.display = 'block';
+            resultsContainer.style.display = 'none';
+
+            // Call the API to get thesaurus data
+            fetch(`/api/thesaurus/${encodeURIComponent(word)}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Hide loading indicator
+                    loadingElement.style.display = 'none';
+
+                    // Update the visualization iframe with a timestamp to force reload
+                    visualizationIframe.src = data.visualization_path + '?t=' + new Date().getTime();
+                    visualizationIframe.style.backgroundColor = '#121212';
+                    visualizationIframe.style.backgroundImage = 'radial-gradient(circle at 50% 50%, rgba(40, 40, 40, 0.3) 0%, rgba(20, 20, 20, 0.1) 100%)';
+
+                    // Get synonyms for the word
+                    fetch(`/api/synonyms/${encodeURIComponent(data.word)}`)
+                        .then(response => response.json())
+                        .then(synonymsData => {
+                            // Update the word info section with animation
+                            wordTitle.style.opacity = '0';
+                            wordTitle.style.transform = 'translateY(-20px)';
+
+                            setTimeout(() => {
+                                wordTitle.textContent = data.word;
+                                wordTitle.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                                wordTitle.style.opacity = '1';
+                                wordTitle.style.transform = 'translateY(0)';
+                            }, 300);
+
+                            // Update synonyms list
+                            synonymsList.innerHTML = '';
+                            if (synonymsData.synonyms && synonymsData.synonyms.length > 0) {
+                                // Add the main term first with special styling
+                                const mainTermBadge = document.createElement('div');
+                                mainTermBadge.className = 'term-badge main-term-badge';
+                                mainTermBadge.textContent = data.word;
+                                synonymsList.appendChild(mainTermBadge);
+
+                                // Add synonyms
+                                synonymsData.synonyms.forEach(synonym => {
+                                    const synonymBadge = document.createElement('div');
+                                    synonymBadge.className = 'term-badge synonym-badge';
+                                    synonymBadge.textContent = synonym;
+                                    synonymBadge.addEventListener('click', () => searchWord(synonym));
+                                    synonymsList.appendChild(synonymBadge);
+                                });
+                            } else {
+                                synonymsList.innerHTML = '<div style="color: var(--thesaurus-text-secondary); font-style: italic; padding: 10px;">No synonyms found</div>';
+                            }
+
+                            // Get related terms
+                            fetch(`/api/related/${encodeURIComponent(data.word)}`)
+                                .then(response => response.json())
+                                .then(relatedData => {
+                                    // Update related terms list
+                                    relatedList.innerHTML = '';
+                                    if (relatedData.terms && relatedData.terms.length > 0) {
+                                        relatedData.terms.forEach(term => {
+                                            const relatedBadge = document.createElement('div');
+                                            relatedBadge.className = 'term-badge related-badge';
+                                            relatedBadge.textContent = term;
+                                            relatedBadge.addEventListener('click', () => searchWord(term));
+                                            relatedList.appendChild(relatedBadge);
+                                        });
+                                    } else {
+                                        relatedList.innerHTML = '<div style="color: var(--thesaurus-text-secondary); font-style: italic; padding: 10px;">No related terms found</div>';
+                                    }
+
+                                    // Show results container
+                                    resultsContainer.style.display = 'block';
+                                })
+                                .catch(error => {
+                                    console.error('Error fetching related terms:', error);
+                                    relatedList.innerHTML = '<div class="error-message"><i class="bi bi-exclamation-triangle-fill"></i>Error loading related terms. Please try again.</div>';
+                                    resultsContainer.style.display = 'block';
+                                });
+                        })
+                        .catch(error => {
+                            console.error('Error fetching synonyms:', error);
+                            synonymsList.innerHTML = '<div class="error-message"><i class="bi bi-exclamation-triangle-fill"></i>Error loading synonyms. Please try again.</div>';
+                            resultsContainer.style.display = 'block';
+                        });
+                })
+                .catch(error => {
+                    console.error('Error fetching thesaurus data:', error);
+                    loadingElement.style.display = 'none';
+
+                    // Create a more user-friendly error message
+                    const errorContainer = document.createElement('div');
+                    errorContainer.className = 'error-container';
+                    errorContainer.innerHTML = `
+                        <div class="error-icon"><i class="bi bi-exclamation-circle-fill"></i></div>
+                        <div class="error-title">Visualization Error</div>
+                        <div class="error-message-text">We couldn't generate a visualization for "${word}". Please try a different word or check your spelling.</div>
+                        <button class="btn search-button mt-3" onclick="document.getElementById('search-input').focus()">Try Another Word</button>
+                    `;
+
+                    // Clear and show the results container with the error
+                    resultsContainer.innerHTML = '';
+                    resultsContainer.appendChild(errorContainer);
+                    resultsContainer.style.display = 'block';
+                });
+        }
+
+        // Add event listener to search button
+        searchButton.addEventListener('click', function() {
+            const word = searchInput.value.trim();
+            searchWord(word);
+        });
+
+        // Add event listener to search input for Enter key
+        searchInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                const word = searchInput.value.trim();
+                searchWord(word);
+            }
+        });
+
+        // Search for a default word on page load
+        searchWord('fine-tuning');
+    });
+</script>
+{% endblock %}

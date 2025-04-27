@@ -1,0 +1,314 @@
+{% extends 'base.html' %}
+
+{% block title %}LLM Fine-Tuning Workshops{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1>LLM Fine-Tuning Workshops</h1>
+            <p class="lead">Comprehensive hands-on workshops for mastering LLM fine-tuning techniques</p>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3>Workshop Overview</h3>
+                </div>
+                <div class="card-body">
+                    <p>These workshops provide in-depth, hands-on experience with various LLM fine-tuning techniques. Each workshop includes:</p>
+
+                    <div class="row mt-3">
+                        <div class="col-md-3 text-center">
+                            <div class="feature-icon">
+                                <i class="bi bi-book text-primary" style="font-size: 2.5rem;"></i>
+                            </div>
+                            <h5 class="mt-2">Comprehensive Theory</h5>
+                            <p>Deep dive into the theoretical foundations</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <div class="feature-icon">
+                                <i class="bi bi-code-square text-primary" style="font-size: 2.5rem;"></i>
+                            </div>
+                            <h5 class="mt-2">Complete Code</h5>
+                            <p>Full implementation with detailed explanations</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <div class="feature-icon">
+                                <i class="bi bi-laptop text-primary" style="font-size: 2.5rem;"></i>
+                            </div>
+                            <h5 class="mt-2">Hands-on Exercises</h5>
+                            <p>Step-by-step practical exercises</p>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <div class="feature-icon">
+                                <i class="bi bi-graph-up text-primary" style="font-size: 2.5rem;"></i>
+                            </div>
+                            <h5 class="mt-2">Performance Analysis</h5>
+                            <p>Evaluate and optimize your fine-tuned models</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h3>Available Workshops</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 workshop-card">
+                                <div class="card-header bg-primary text-white">
+                                    <h4>Workshop 1: Full Fine-Tuning</h4>
+                                    <span class="badge bg-light text-dark">4 hours</span>
+                                </div>
+                                <div class="card-body">
+                                    <p>Master the fundamentals of full fine-tuning for language models, including dataset preparation, training configuration, and evaluation.</p>
+                                    <h5>What You'll Learn:</h5>
+                                    <ul>
+                                        <li>Preparing and formatting datasets for fine-tuning</li>
+                                        <li>Configuring training hyperparameters</li>
+                                        <li>Implementing full fine-tuning with Hugging Face</li>
+                                        <li>Evaluating model performance</li>
+                                    </ul>
+                                    <div class="text-center mt-3">
+                                        <a href="/workshop/full-fine-tuning" class="btn btn-primary">Start Workshop</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 workshop-card">
+                                <div class="card-header bg-info text-white">
+                                    <h4>Workshop 2: LoRA Fine-Tuning</h4>
+                                    <span class="badge bg-light text-dark">5 hours</span>
+                                </div>
+                                <div class="card-body">
+                                    <p>Learn how to implement Low-Rank Adaptation (LoRA) for efficient fine-tuning of large language models with limited computational resources.</p>
+                                    <h5>What You'll Learn:</h5>
+                                    <ul>
+                                        <li>Understanding LoRA architecture and mathematics</li>
+                                        <li>Implementing LoRA with the PEFT library</li>
+                                        <li>Optimizing rank and alpha parameters</li>
+                                        <li>Merging LoRA adapters with base models</li>
+                                    </ul>
+                                    <div class="text-center mt-3">
+                                        <a href="/workshop/lora-fine-tuning" class="btn btn-info">Start Workshop</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 workshop-card">
+                                <div class="card-header bg-warning text-dark">
+                                    <h4>Workshop 3: QLoRA Deep Dive</h4>
+                                    <span class="badge bg-light text-dark">6 hours</span>
+                                </div>
+                                <div class="card-body">
+                                    <p>Master Quantized Low-Rank Adaptation (QLoRA) for fine-tuning extremely large models on consumer hardware through advanced memory optimization techniques.</p>
+                                    <h5>What You'll Learn:</h5>
+                                    <ul>
+                                        <li>4-bit NF4 quantization implementation</li>
+                                        <li>Double quantization techniques</li>
+                                        <li>Paged optimizers and gradient checkpointing</li>
+                                        <li>Fine-tuning 13B+ parameter models on consumer GPUs</li>
+                                    </ul>
+                                    <div class="text-center mt-3">
+                                        <a href="/workshop/qlora-deep-dive" class="btn btn-warning text-dark">Start Workshop</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 workshop-card">
+                                <div class="card-header bg-success text-white">
+                                    <h4>Workshop: Memory Efficiency in LLM Fine-Tuning</h4>
+                                    <span class="badge bg-light text-dark">3 hours</span>
+                                </div>
+                                <div class="card-body">
+                                    <p>Learn essential memory efficiency techniques for fine-tuning large language models with limited hardware resources, focusing on the most important concepts for learning and retention.</p>
+                                    <h5>What You'll Learn:</h5>
+                                    <ul>
+                                        <li>Quantization techniques (4-bit, 8-bit, NF4)</li>
+                                        <li>Gradient checkpointing for activation memory reduction</li>
+                                        <li>Parameter-efficient fine-tuning methods (LoRA, QLoRA)</li>
+                                        <li>Memory-efficient optimizers and attention mechanisms</li>
+                                    </ul>
+                                    <div class="text-center mt-3">
+                                        <a href="/workshop/memory-efficiency" class="btn btn-success">Start Workshop</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 workshop-card">
+                                <div class="card-header bg-danger text-white">
+                                    <h4>Workshop 4: Advanced PEFT Techniques</h4>
+                                    <span class="badge bg-light text-dark">8 hours</span>
+                                </div>
+                                <div class="card-body">
+                                    <p>Explore advanced Parameter-Efficient Fine-Tuning (PEFT) methods beyond LoRA, including Prefix Tuning, P-Tuning, Adapter Layers, and more.</p>
+                                    <h5>What You'll Learn:</h5>
+                                    <ul>
+                                        <li>Implementing Prefix Tuning for sequence generation</li>
+                                        <li>P-Tuning v2 for natural language understanding</li>
+                                        <li>Adapter Layers for multi-task learning</li>
+                                        <li>Comparing PEFT methods and choosing the right approach</li>
+                                    </ul>
+                                    <div class="text-center mt-3">
+                                        <a href="/workshop/advanced-peft" class="btn btn-danger">Start Workshop</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 workshop-card">
+                                <div class="card-header bg-secondary text-white">
+                                    <h4>Workshop 5: Instruction Fine-Tuning</h4>
+                                    <span class="badge bg-light text-dark">5 hours</span>
+                                </div>
+                                <div class="card-body">
+                                    <p>Learn how to fine-tune models to follow specific instructions and generate high-quality responses for conversational AI applications.</p>
+                                    <h5>What You'll Learn:</h5>
+                                    <ul>
+                                        <li>Preparing instruction-response datasets</li>
+                                        <li>Implementing RLHF (Reinforcement Learning from Human Feedback)</li>
+                                        <li>Fine-tuning with instruction templates</li>
+                                        <li>Evaluating instruction-following capabilities</li>
+                                    </ul>
+                                    <div class="text-center mt-3">
+                                        <a href="/workshop/instruction-fine-tuning" class="btn btn-secondary">Start Workshop</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-4">
+                            <div class="card h-100 workshop-card">
+                                <div class="card-header bg-dark text-white">
+                                    <h4>Workshop 6: Deployment & Optimization</h4>
+                                    <span class="badge bg-light text-dark">7 hours</span>
+                                </div>
+                                <div class="card-body">
+                                    <p>Master the techniques for deploying fine-tuned models in production environments, including quantization, distillation, and optimization for inference.</p>
+                                    <h5>What You'll Learn:</h5>
+                                    <ul>
+                                        <li>ONNX conversion and optimization</li>
+                                        <li>Knowledge distillation for smaller models</li>
+                                        <li>Quantization for inference</li>
+                                        <li>Deploying with Docker, FastAPI, and cloud services</li>
+                                    </ul>
+                                    <div class="text-center mt-3">
+                                        <a href="/workshop/deployment-optimization" class="btn btn-dark">Start Workshop</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4 mb-5">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3>Workshop Prerequisites</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Knowledge Prerequisites</h4>
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    Basic understanding of deep learning concepts
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    Familiarity with Python programming
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    Experience with PyTorch or TensorFlow
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    Understanding of transformer architecture basics
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Technical Requirements</h4>
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <i class="bi bi-gpu-card text-primary me-2"></i>
+                                    GPU with at least 8GB VRAM (16GB+ recommended)
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="bi bi-cpu text-primary me-2"></i>
+                                    Multi-core CPU with 16GB+ RAM
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="bi bi-hdd-fill text-primary me-2"></i>
+                                    50GB+ free disk space
+                                </li>
+                                <li class="list-group-item">
+                                    <i class="bi bi-cloud-fill text-primary me-2"></i>
+                                    Alternative: Google Colab Pro or similar cloud GPU service
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info mt-4">
+                        <h5><i class="bi bi-info-circle-fill me-2"></i>Can't meet the hardware requirements?</h5>
+                        <p>All workshops include Google Colab notebooks that can be run on free or paid Colab instances. The QLoRA workshop specifically focuses on techniques to fine-tune large models with limited resources.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .workshop-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .workshop-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .feature-icon {
+        height: 80px;
+        width: 80px;
+        border-radius: 50%;
+        background-color: rgba(0, 102, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        transition: all 0.3s ease;
+    }
+
+    .feature-icon:hover {
+        background-color: rgba(0, 102, 255, 0.2);
+        transform: scale(1.1);
+    }
+</style>
+{% endblock %}

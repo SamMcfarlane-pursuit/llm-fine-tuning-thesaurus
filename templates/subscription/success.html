@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Subscription Activated - Thesaurus LLM Fine-Tuning{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0"><i class="bi bi-check-circle-fill me-2"></i>Subscription Activated</h4>
+                </div>
+                <div class="card-body text-center py-5">
+                    <div class="mb-4">
+                        <i class="bi bi-emoji-smile text-success" style="font-size: 4rem;"></i>
+                    </div>
+                    
+                    <h2 class="mb-3">Thank You for Subscribing!</h2>
+                    <p class="lead mb-4">
+                        Your subscription has been successfully activated. You now have access to all the features included in your plan.
+                    </p>
+                    
+                    <div class="alert alert-info mb-4">
+                        <i class="bi bi-info-circle-fill me-2"></i>
+                        A confirmation email has been sent to your registered email address with the details of your subscription.
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('tutorials') }}" class="btn btn-primary btn-lg">
+                            <i class="bi bi-book me-2"></i>Explore Tutorials
+                        </a>
+                        <a href="{{ url_for('subscription.manage') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-gear me-2"></i>Manage Subscription
+                        </a>
+                    </div>
+                </div>
+                <div class="card-footer bg-light">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">Need help with your subscription?</small>
+                        <a href="{{ url_for('contact') }}" class="btn btn-sm btn-outline-primary">Contact Support</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+{% block title %}Machine Learning Frameworks | Thesaurus AI LLM FT{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/frameworks.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="framework-header" style="background: linear-gradient(135deg, rgba(66, 135, 245, 0.9), rgba(0, 119, 255, 0.9)); border: 3px solid rgba(66, 135, 245, 0.5);">
+                <h1>Machine Learning Frameworks</h1>
+                <p>Explore the most popular frameworks for deep learning and neural networks. Learn about TensorFlow and PyTorch through comprehensive guides and hands-on exercises.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section" style="border-left: 5px solid #4287f5;">
+                <h2 style="color: #0062cc;">Why Learn ML Frameworks?</h2>
+                <p>Machine learning frameworks provide essential tools, libraries, and interfaces that simplify the process of building, training, and deploying machine learning models. They abstract away many of the complex mathematical operations and allow developers to focus on designing and optimizing their models.</p>
+                <p>By learning these frameworks, you'll be able to:</p>
+                <ul>
+                    <li>Build and train neural networks more efficiently</li>
+                    <li>Implement state-of-the-art machine learning algorithms</li>
+                    <li>Deploy models to production environments</li>
+                    <li>Collaborate with the broader ML community</li>
+                    <li>Stay current with the latest advancements in AI</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="exercise-card tensorflow-exercise h-100">
+                <div class="exercise-header">
+                    <h3 class="exercise-title">TensorFlow</h3>
+                    <span class="exercise-level level-intermediate">Google's ML Framework</span>
+                </div>
+                <div class="exercise-body">
+                    <p class="exercise-description">TensorFlow is an end-to-end open-source platform for machine learning developed by Google. It has a comprehensive, flexible ecosystem of tools, libraries, and community resources that lets researchers push the state-of-the-art in ML and developers easily build and deploy ML-powered applications.</p>
+                    <div class="exercise-tags">
+                        <span class="exercise-tag">Deep Learning</span>
+                        <span class="exercise-tag">Neural Networks</span>
+                        <span class="exercise-tag">Production-Ready</span>
+                        <span class="exercise-tag">TensorFlow.js</span>
+                        <span class="exercise-tag">TensorFlow Lite</span>
+                    </div>
+                </div>
+                <div class="exercise-footer">
+                    <div class="exercise-time">
+                        <i class="bi bi-book"></i> Comprehensive Guide
+                    </div>
+                    <a href="/frameworks/tensorflow" class="exercise-button">Explore TensorFlow</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="exercise-card pytorch-exercise h-100">
+                <div class="exercise-header">
+                    <h3 class="exercise-title">PyTorch</h3>
+                    <span class="exercise-level level-intermediate">Facebook's ML Framework</span>
+                </div>
+                <div class="exercise-body">
+                    <p class="exercise-description">PyTorch is an open-source machine learning library developed by Facebook's AI Research lab. It provides a seamless path from research prototyping to production deployment with a focus on deep learning. PyTorch is known for its dynamic computational graph and intuitive Python interface.</p>
+                    <div class="exercise-tags">
+                        <span class="exercise-tag">Deep Learning</span>
+                        <span class="exercise-tag">Dynamic Graphs</span>
+                        <span class="exercise-tag">Research-Friendly</span>
+                        <span class="exercise-tag">TorchScript</span>
+                        <span class="exercise-tag">PyTorch Mobile</span>
+                    </div>
+                </div>
+                <div class="exercise-footer">
+                    <div class="exercise-time">
+                        <i class="bi bi-book"></i> Comprehensive Guide
+                    </div>
+                    <a href="/frameworks/pytorch" class="exercise-button">Explore PyTorch</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="exercise-card" style="border-top: 5px solid #4287f5;">
+                <div class="exercise-header" style="background: linear-gradient(135deg, rgba(66, 135, 245, 0.1), rgba(0, 119, 255, 0.1));">
+                    <h3 class="exercise-title" style="color: #0062cc;">Framework Comparison</h3>
+                    <span class="exercise-level level-intermediate">TensorFlow vs PyTorch</span>
+                </div>
+                <div class="exercise-body">
+                    <p class="exercise-description">Wondering which framework is right for your project? Our detailed comparison breaks down the strengths, weaknesses, and use cases for both TensorFlow and PyTorch. Learn about their architectural differences, ecosystem support, deployment options, and community adoption.</p>
+                    <div class="exercise-tags">
+                        <span class="exercise-tag">Side-by-Side Comparison</span>
+                        <span class="exercise-tag">Performance Benchmarks</span>
+                        <span class="exercise-tag">Use Case Analysis</span>
+                        <span class="exercise-tag">Learning Curve</span>
+                        <span class="exercise-tag">Industry Adoption</span>
+                    </div>
+                </div>
+                <div class="exercise-footer">
+                    <div class="exercise-time">
+                        <i class="bi bi-bar-chart-steps"></i> Detailed Analysis
+                    </div>
+                    <a href="/frameworks/comparison" class="exercise-button" style="background: linear-gradient(135deg, #4287f5, #0062cc); box-shadow: 0 4px 10px rgba(66, 135, 245, 0.3);">View Comparison</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="framework-section" style="border-left: 5px solid #4287f5;">
+                <h2 style="color: #0062cc;">Hands-On Exercises</h2>
+                <p>The best way to learn is by doing. Our hands-on exercises will guide you through implementing real machine learning solutions using both TensorFlow and PyTorch. From basic neural networks to advanced deep learning architectures, these exercises will help you build practical skills that you can apply to your own projects.</p>
+                
+                <div class="row mt-4">
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100" style="border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); border: none; overflow: hidden;">
+                            <div class="card-body p-4">
+                                <h3 style="color: var(--tensorflow-primary); font-weight: 700; font-size: 1.5rem; margin-bottom: 1rem;">TensorFlow Exercises</h3>
+                                <p>Dive into TensorFlow with our structured exercises covering everything from basic tensors to advanced neural networks and deployment.</p>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--tensorflow-primary);"></i> Basic Neural Networks</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--tensorflow-primary);"></i> Convolutional Neural Networks</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--tensorflow-primary);"></i> Recurrent Neural Networks</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--tensorflow-primary);"></i> Transfer Learning</li>
+                                    <li><i class="bi bi-check-circle-fill me-2" style="color: var(--tensorflow-primary);"></i> Model Deployment</li>
+                                </ul>
+                            </div>
+                            <div class="card-footer bg-white p-3 border-top-0">
+                                <a href="/frameworks/tensorflow/exercises" class="btn w-100" style="background: var(--tensorflow-primary); color: white; font-weight: 600; border-radius: 30px;">Start TensorFlow Exercises</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100" style="border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); border: none; overflow: hidden;">
+                            <div class="card-body p-4">
+                                <h3 style="color: var(--pytorch-primary); font-weight: 700; font-size: 1.5rem; margin-bottom: 1rem;">PyTorch Exercises</h3>
+                                <p>Master PyTorch through our hands-on exercises that cover the fundamentals, advanced techniques, and real-world applications.</p>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--pytorch-primary);"></i> Tensors and Autograd</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--pytorch-primary);"></i> Neural Network Basics</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--pytorch-primary);"></i> Computer Vision Models</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--pytorch-primary);"></i> Natural Language Processing</li>
+                                    <li><i class="bi bi-check-circle-fill me-2" style="color: var(--pytorch-primary);"></i> Production Deployment</li>
+                                </ul>
+                            </div>
+                            <div class="card-footer bg-white p-3 border-top-0">
+                                <a href="/frameworks/pytorch/exercises" class="btn w-100" style="background: var(--pytorch-primary); color: white; font-weight: 600; border-radius: 30px;">Start PyTorch Exercises</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add animation to cards on scroll
+        const cards = document.querySelectorAll('.exercise-card, .card');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        cards.forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(card);
+        });
+    });
+</script>
+{% endblock %}

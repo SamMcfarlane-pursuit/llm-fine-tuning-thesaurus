@@ -1,0 +1,444 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile - Visual Thesaurus LLM{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Profile</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h3>Your Profile</h3>
+                </div>
+                <div class="card-body text-center">
+                    {% if current_user.avatar_url %}
+                        <img src="{{ current_user.avatar_url }}" alt="{{ current_user.name }}" class="rounded-circle img-thumbnail mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+                    {% else %}
+                        <div class="profile-avatar mb-3">
+                            <i class="bi bi-person-circle" style="font-size: 5rem; color: var(--primary-color);"></i>
+                        </div>
+                    {% endif %}
+                    <h4>{{ current_user.name }}</h4>
+                    <p class="text-muted">@{{ current_user.username }}</p>
+                    <p><i class="bi bi-envelope me-2"></i>{{ current_user.email }}</p>
+                    <p><i class="bi bi-calendar me-2"></i>Member since {{ current_user.created_at.strftime('%B %d, %Y') }}</p>
+
+                    <div class="d-flex justify-content-center">
+                        {% if current_user.oauth_provider == 'google' %}
+                            <span class="badge bg-danger me-2"><i class="bi bi-google me-1"></i>Google</span>
+                        {% elif current_user.oauth_provider == 'github' %}
+                            <span class="badge bg-dark me-2"><i class="bi bi-github me-1"></i>GitHub</span>
+                        {% elif current_user.oauth_provider == 'facebook' %}
+                            <span class="badge bg-primary me-2"><i class="bi bi-facebook me-1"></i>Facebook</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h3>Learning Progress</h3>
+                </div>
+                <div class="card-body">
+                    {% if progress %}
+                        {% set completed_total = 0 %}
+                        {% set total_items = 0 %}
+                        {% for item in progress %}
+                            {% set total_items = total_items + 1 %}
+                            {% if item.status == 'completed' %}
+                                {% set completed_total = completed_total + 1 %}
+                            {% endif %}
+                        {% endfor %}
+
+                        <div class="progress mb-3" style="height: 20px;">
+                            <div class="progress-bar bg-success" role="progressbar"
+                                 style="width: {{ (completed_total / total_items * 100) if total_items > 0 else 0 }}%;"
+                                 aria-valuenow="{{ (completed_total / total_items * 100) if total_items > 0 else 0 }}"
+                                 aria-valuemin="0" aria-valuemax="100">
+                                {{ ((completed_total / total_items * 100) if total_items > 0 else 0)|int }}%
+                            </div>
+                        </div>
+                        <p>You've completed {{ completed_total }} out of {{ total_items }} items.</p>
+                        <div class="d-grid gap-2">
+                            <a href="{{ url_for('tutorials') }}" class="btn btn-primary">
+                                <i class="bi bi-book me-2"></i>Continue Learning
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="progress mb-3">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                        </div>
+                        <p>You haven't started any tutorials or exercises yet.</p>
+                        <div class="d-grid gap-2">
+                            <a href="{{ url_for('tutorials') }}" class="btn btn-primary">
+                                <i class="bi bi-book me-2"></i>Start Learning
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Connected Accounts -->
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h3><i class="bi bi-link-45deg me-2"></i>Connected Accounts</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <!-- Google -->
+                        {% set google_connected = false %}
+                        {% for account in social_accounts if account.provider == 'google' %}
+                            {% set google_connected = true %}
+                        {% endfor %}
+
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="bi bi-google me-2 text-danger"></i>Google
+                            </div>
+                            {% if google_connected %}
+                                <span class="badge bg-success rounded-pill">Connected</span>
+                            {% else %}
+                                <a href="{{ url_for('auth.google') }}" class="btn btn-sm btn-outline-primary">Connect</a>
+                            {% endif %}
+                        </li>
+
+                        <!-- GitHub -->
+                        {% set github_connected = false %}
+                        {% for account in social_accounts if account.provider == 'github' %}
+                            {% set github_connected = true %}
+                        {% endfor %}
+
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="bi bi-github me-2"></i>GitHub
+                            </div>
+                            {% if github_connected %}
+                                <span class="badge bg-success rounded-pill">Connected</span>
+                            {% else %}
+                                <a href="{{ url_for('auth.github') }}" class="btn btn-sm btn-outline-primary">Connect</a>
+                            {% endif %}
+                        </li>
+
+                        <!-- Facebook -->
+                        {% set facebook_connected = false %}
+                        {% for account in social_accounts if account.provider == 'facebook' %}
+                            {% set facebook_connected = true %}
+                        {% endfor %}
+
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="bi bi-facebook me-2 text-primary"></i>Facebook
+                            </div>
+                            {% if facebook_connected %}
+                                <span class="badge bg-success rounded-pill">Connected</span>
+                            {% else %}
+                                <a href="{{ url_for('auth.facebook') }}" class="btn btn-sm btn-outline-primary">Connect</a>
+                            {% endif %}
+                        </li>
+
+                        <!-- Supabase -->
+                        {% set supabase_connected = false %}
+                        {% for account in social_accounts if account.provider == 'supabase' %}
+                            {% set supabase_connected = true %}
+                        {% endfor %}
+
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="bi bi-database-fill me-2 text-primary"></i>Supabase
+                            </div>
+                            {% if supabase_connected %}
+                                <span class="badge bg-success rounded-pill">Connected</span>
+                            {% else %}
+                                <a href="{{ url_for('auth.supabase_login') }}" class="btn btn-sm btn-outline-primary">Connect</a>
+                            {% endif %}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3>Edit Profile</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('auth.profile') }}">
+                        {{ form.hidden_tag() }}
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                {{ form.first_name.label(class="form-label") }}
+                                {{ form.first_name(class="form-control") }}
+                                {% for error in form.first_name.errors %}
+                                    <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.last_name.label(class="form-label") }}
+                                {{ form.last_name(class="form-control") }}
+                                {% for error in form.last_name.errors %}
+                                    <div class="text-danger">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.username.label(class="form-label") }}
+                            {{ form.username(class="form-control") }}
+                            {% for error in form.username.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.email.label(class="form-label") }}
+                            {{ form.email(class="form-control") }}
+                            {% for error in form.email.errors %}
+                                <div class="text-danger">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            {{ form.submit(class="btn btn-primary") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-header bg-info text-white">
+                    <h3><i class="bi bi-bar-chart-line me-2"></i>Learning Progress Details</h3>
+                </div>
+                <div class="card-body">
+                    {% if progress %}
+                        <ul class="nav nav-tabs" id="progressTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="tutorials-tab" data-bs-toggle="tab" data-bs-target="#tutorials" type="button" role="tab" aria-controls="tutorials" aria-selected="true">
+                                    <i class="bi bi-book me-2"></i>Tutorials
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="exercises-tab" data-bs-toggle="tab" data-bs-target="#exercises" type="button" role="tab" aria-controls="exercises" aria-selected="false">
+                                    <i class="bi bi-code-slash me-2"></i>Exercises
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="quizzes-tab" data-bs-toggle="tab" data-bs-target="#quizzes" type="button" role="tab" aria-controls="quizzes" aria-selected="false">
+                                    <i class="bi bi-question-circle me-2"></i>Quizzes
+                                </button>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content mt-3" id="progressTabsContent">
+                            <!-- Tutorials Tab -->
+                            <div class="tab-pane fade show active" id="tutorials" role="tabpanel" aria-labelledby="tutorials-tab">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Tutorial</th>
+                                                <th>Status</th>
+                                                <th>Last Updated</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% set has_tutorials = false %}
+                                            {% for item in progress %}
+                                                {% if item.content_type == 'tutorial' %}
+                                                    {% set has_tutorials = true %}
+                                                    <tr>
+                                                        <td>{{ item.content_id.replace('_', ' ') }}</td>
+                                                        <td>
+                                                            {% if item.status == 'completed' %}
+                                                                <span class="badge bg-success">Completed</span>
+                                                            {% elif item.status == 'in_progress' %}
+                                                                <span class="badge bg-warning">In Progress</span>
+                                                            {% else %}
+                                                                <span class="badge bg-secondary">Not Started</span>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>{{ item.updated_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                                                        <td>
+                                                            <a href="{{ url_for('view_notebook', notebook_name=item.content_id) }}" class="btn btn-sm btn-outline-primary">
+                                                                <i class="bi bi-eye me-1"></i>View
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                {% endif %}
+                                            {% endfor %}
+
+                                            {% if not has_tutorials %}
+                                                <tr>
+                                                    <td colspan="4" class="text-center py-3">
+                                                        <p class="text-muted mb-0">You haven't started any tutorials yet.</p>
+                                                    </td>
+                                                </tr>
+                                            {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Exercises Tab -->
+                            <div class="tab-pane fade" id="exercises" role="tabpanel" aria-labelledby="exercises-tab">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Exercise</th>
+                                                <th>Status</th>
+                                                <th>Last Updated</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% set has_exercises = false %}
+                                            {% for item in progress %}
+                                                {% if item.content_type == 'exercise' %}
+                                                    {% set has_exercises = true %}
+                                                    <tr>
+                                                        <td>{{ item.content_id.replace('_', ' ') }}</td>
+                                                        <td>
+                                                            {% if item.status == 'completed' %}
+                                                                <span class="badge bg-success">Completed</span>
+                                                            {% elif item.status == 'in_progress' %}
+                                                                <span class="badge bg-warning">In Progress</span>
+                                                            {% else %}
+                                                                <span class="badge bg-secondary">Not Started</span>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>{{ item.updated_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                                                        <td>
+                                                            <a href="{{ url_for('exercise', exercise_id=item.content_id) }}" class="btn btn-sm btn-outline-primary">
+                                                                <i class="bi bi-eye me-1"></i>View
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                {% endif %}
+                                            {% endfor %}
+
+                                            {% if not has_exercises %}
+                                                <tr>
+                                                    <td colspan="4" class="text-center py-3">
+                                                        <p class="text-muted mb-0">You haven't started any exercises yet.</p>
+                                                    </td>
+                                                </tr>
+                                            {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- Quizzes Tab -->
+                            <div class="tab-pane fade" id="quizzes" role="tabpanel" aria-labelledby="quizzes-tab">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Quiz</th>
+                                                <th>Status</th>
+                                                <th>Score</th>
+                                                <th>Last Updated</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% set has_quizzes = false %}
+                                            {% for item in progress %}
+                                                {% if item.content_type == 'quiz' %}
+                                                    {% set has_quizzes = true %}
+                                                    <tr>
+                                                        <td>{{ item.content_id.replace('_', ' ') }}</td>
+                                                        <td>
+                                                            {% if item.status == 'completed' %}
+                                                                <span class="badge bg-success">Completed</span>
+                                                            {% elif item.status == 'in_progress' %}
+                                                                <span class="badge bg-warning">In Progress</span>
+                                                            {% else %}
+                                                                <span class="badge bg-secondary">Not Started</span>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>
+                                                            {% if item.progress_data and item.progress_data.score is defined %}
+                                                                {{ item.progress_data.score }}/{{ item.progress_data.max_score }}
+                                                                ({{ (item.progress_data.score / item.progress_data.max_score * 100)|int }}%)
+                                                            {% else %}
+                                                                -
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>{{ item.updated_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                                                        <td>
+                                                            <a href="{{ url_for('quiz', quiz_id=item.content_id) }}" class="btn btn-sm btn-outline-primary">
+                                                                <i class="bi bi-eye me-1"></i>View
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                {% endif %}
+                                            {% endfor %}
+
+                                            {% if not has_quizzes %}
+                                                <tr>
+                                                    <td colspan="5" class="text-center py-3">
+                                                        <p class="text-muted mb-0">You haven't taken any quizzes yet.</p>
+                                                    </td>
+                                                </tr>
+                                            {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4">
+                            <i class="bi bi-journal-text text-muted" style="font-size: 3rem;"></i>
+                            <p class="mt-3">You haven't started any tutorials, exercises, or quizzes yet.</p>
+                            <a href="{{ url_for('tutorials') }}" class="btn btn-primary mt-2">
+                                <i class="bi bi-book me-2"></i>Browse Tutorials
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-header bg-warning text-dark">
+                    <h3><i class="bi bi-bookmark-star me-2"></i>Your Bookmarks</h3>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <a href="/guide/understanding-gpt" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">Understanding GPT Models</h5>
+                                <small>3 days ago</small>
+                            </div>
+                            <p class="mb-1">Comprehensive guide to GPT architecture and capabilities</p>
+                            <small class="text-muted">Guide</small>
+                        </a>
+                        <a href="/advanced-qlora" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">Advanced QLoRA Fine-Tuning</h5>
+                                <small>1 week ago</small>
+                            </div>
+                            <p class="mb-1">Quantized Low-Rank Adaptation for efficient fine-tuning</p>
+                            <small class="text-muted">Technique</small>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

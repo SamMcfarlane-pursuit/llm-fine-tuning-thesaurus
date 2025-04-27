@@ -1,0 +1,388 @@
+{% extends "base.html" %}
+
+{% block title %}TensorFlow Guide | Thesaurus AI LLM FT{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/frameworks.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/themes/prism-tomorrow.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="framework-header tensorflow-header">
+                <h1>TensorFlow</h1>
+                <p>A comprehensive guide to Google's open-source machine learning framework for building and training neural networks.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section tensorflow-section">
+                <h2>What is TensorFlow?</h2>
+                <p>TensorFlow is an end-to-end open-source platform for machine learning developed by Google. It has a comprehensive, flexible ecosystem of tools, libraries, and community resources that lets researchers push the state-of-the-art in ML and developers easily build and deploy ML-powered applications.</p>
+                
+                <p>TensorFlow provides:</p>
+                <ul>
+                    <li>Easy model building with intuitive high-level APIs like Keras</li>
+                    <li>Robust ML production capabilities anywhere</li>
+                    <li>Powerful experimentation for research</li>
+                    <li>Simplified API for beginners and experts</li>
+                </ul>
+                
+                <h3>Key Features</h3>
+                <div class="row mt-4">
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100" style="border-radius: 10px; border: none; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+                            <div class="card-body">
+                                <h4 style="color: var(--tensorflow-primary); font-weight: 600;">Eager Execution</h4>
+                                <p>An imperative programming environment that evaluates operations immediately, making debugging and iteration easier.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100" style="border-radius: 10px; border: none; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+                            <div class="card-body">
+                                <h4 style="color: var(--tensorflow-primary); font-weight: 600;">Keras Integration</h4>
+                                <p>TensorFlow includes Keras as its high-level API, making it easy to build and train deep learning models.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100" style="border-radius: 10px; border: none; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+                            <div class="card-body">
+                                <h4 style="color: var(--tensorflow-primary); font-weight: 600;">Deployment Options</h4>
+                                <p>Deploy models on browsers (TensorFlow.js), mobile devices (TensorFlow Lite), or servers (TensorFlow Serving).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section tensorflow-section">
+                <h2>Getting Started with TensorFlow</h2>
+                <p>Let's start with a simple example to understand the basics of TensorFlow. We'll create a basic neural network to classify handwritten digits from the MNIST dataset.</p>
+                
+                <h3>Installation</h3>
+                <p>First, you need to install TensorFlow. The easiest way is to use pip:</p>
+                
+                <div class="framework-code tensorflow-code">
+                    <div class="code-header">
+                        <span>Terminal</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-bash">pip install tensorflow</code></pre>
+                </div>
+                
+                <h3>Basic Neural Network Example</h3>
+                <p>Here's a simple neural network for classifying MNIST digits:</p>
+                
+                <div class="framework-code tensorflow-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">import tensorflow as tf
+from tensorflow.keras import layers, models
+from tensorflow.keras.datasets import mnist
+
+# Load and preprocess the MNIST dataset
+(train_images, train_labels), (test_images, test_labels) = mnist.load_data()
+train_images = train_images.reshape((60000, 28, 28, 1)).astype('float32') / 255
+test_images = test_images.reshape((10000, 28, 28, 1)).astype('float32') / 255
+
+# Create the model
+model = models.Sequential([
+    layers.Conv2D(32, (3, 3), activation='relu', input_shape=(28, 28, 1)),
+    layers.MaxPooling2D((2, 2)),
+    layers.Conv2D(64, (3, 3), activation='relu'),
+    layers.MaxPooling2D((2, 2)),
+    layers.Conv2D(64, (3, 3), activation='relu'),
+    layers.Flatten(),
+    layers.Dense(64, activation='relu'),
+    layers.Dense(10, activation='softmax')
+])
+
+# Compile the model
+model.compile(optimizer='adam',
+              loss='sparse_categorical_crossentropy',
+              metrics=['accuracy'])
+
+# Train the model
+model.fit(train_images, train_labels, epochs=5, batch_size=64,
+          validation_data=(test_images, test_labels))
+
+# Evaluate the model
+test_loss, test_acc = model.evaluate(test_images, test_labels)
+print(f'Test accuracy: {test_acc}')</code></pre>
+                </div>
+                
+                <h3>Understanding the Code</h3>
+                <p>Let's break down what's happening in this example:</p>
+                <ol>
+                    <li>We import TensorFlow and necessary modules from Keras (TensorFlow's high-level API).</li>
+                    <li>We load the MNIST dataset, which contains 28x28 pixel grayscale images of handwritten digits.</li>
+                    <li>We preprocess the data by reshaping it and scaling the pixel values to be between 0 and 1.</li>
+                    <li>We create a sequential model with convolutional layers, pooling layers, and dense layers.</li>
+                    <li>We compile the model with an optimizer, loss function, and metrics.</li>
+                    <li>We train the model on the training data and validate it on the test data.</li>
+                    <li>Finally, we evaluate the model's performance on the test data.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section tensorflow-section">
+                <h2>Core Concepts in TensorFlow</h2>
+                
+                <h3>Tensors</h3>
+                <p>Tensors are the fundamental data structure in TensorFlow. They are multi-dimensional arrays that can represent various types of data. Here's how to create and manipulate tensors:</p>
+                
+                <div class="framework-code tensorflow-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">import tensorflow as tf
+
+# Create tensors
+scalar = tf.constant(7)
+vector = tf.constant([1, 2, 3, 4])
+matrix = tf.constant([[1, 2], [3, 4]])
+tensor_3d = tf.constant([[[1, 2], [3, 4]], [[5, 6], [7, 8]]])
+
+# Tensor operations
+a = tf.constant([[1, 2], [3, 4]])
+b = tf.constant([[5, 6], [7, 8]])
+
+# Addition
+c = a + b  # or tf.add(a, b)
+
+# Matrix multiplication
+d = tf.matmul(a, b)
+
+# Element-wise multiplication
+e = a * b  # or tf.multiply(a, b)
+
+print("Scalar:", scalar)
+print("Vector:", vector)
+print("Matrix:", matrix)
+print("3D Tensor:", tensor_3d)
+print("Addition:", c)
+print("Matrix multiplication:", d)
+print("Element-wise multiplication:", e)</code></pre>
+                </div>
+                
+                <h3>Variables</h3>
+                <p>Variables are special tensors that can be modified. They're used to store model parameters that need to be updated during training:</p>
+                
+                <div class="framework-code tensorflow-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">import tensorflow as tf
+
+# Create a variable
+w = tf.Variable([[1.0, 2.0], [3.0, 4.0]])
+print("Original variable:", w)
+
+# Update the variable
+w.assign(w + 1)
+print("Updated variable:", w)
+
+# Using variables in a simple model
+class SimpleModel(tf.Module):
+    def __init__(self):
+        self.w = tf.Variable([[1.0, 2.0], [3.0, 4.0]])
+        self.b = tf.Variable([1.0, 1.0])
+        
+    def __call__(self, x):
+        return tf.matmul(x, self.w) + self.b
+
+model = SimpleModel()
+x = tf.constant([[1.0, 2.0]])
+y = model(x)
+print("Model output:", y)</code></pre>
+                </div>
+                
+                <h3>Automatic Differentiation</h3>
+                <p>TensorFlow's automatic differentiation system (GradientTape) allows you to compute gradients for optimization:</p>
+                
+                <div class="framework-code tensorflow-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">import tensorflow as tf
+
+# Define a function
+def f(x):
+    return tf.square(x) + 2*x - 5
+
+# Compute the gradient at x=3
+x = tf.Variable(3.0)
+with tf.GradientTape() as tape:
+    y = f(x)
+    
+# dy/dx at x=3
+dy_dx = tape.gradient(y, x)
+print(f"f(x) = x² + 2x - 5")
+print(f"f'(x) at x=3 is {dy_dx.numpy()}")  # Should be 2x + 2 = 8 at x=3
+
+# Gradient descent example
+x = tf.Variable(0.0)  # Starting point
+learning_rate = 0.1
+steps = 100
+
+for i in range(steps):
+    with tf.GradientTape() as tape:
+        y = f(x)
+    
+    # Compute the gradient
+    dy_dx = tape.gradient(y, x)
+    
+    # Update x using gradient descent
+    x.assign_sub(learning_rate * dy_dx)
+    
+    if i % 10 == 0:
+        print(f"Step {i}: x = {x.numpy():.4f}, f(x) = {f(x).numpy():.4f}")</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section tensorflow-section">
+                <h2>Advanced TensorFlow Topics</h2>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100" style="border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); border: none; overflow: hidden;">
+                            <div class="card-body p-4">
+                                <h3 style="color: var(--tensorflow-primary); font-weight: 700; font-size: 1.5rem; margin-bottom: 1rem;">Custom Training Loops</h3>
+                                <p>Learn how to implement custom training loops for more control over the training process.</p>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--tensorflow-primary);"></i> Manual gradient computation</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--tensorflow-primary);"></i> Custom optimization strategies</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--tensorflow-primary);"></i> Fine-grained control over training</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100" style="border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); border: none; overflow: hidden;">
+                            <div class="card-body p-4">
+                                <h3 style="color: var(--tensorflow-primary); font-weight: 700; font-size: 1.5rem; margin-bottom: 1rem;">TensorFlow Datasets</h3>
+                                <p>Efficiently load and preprocess data with TensorFlow's data pipeline.</p>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--tensorflow-primary);"></i> tf.data API for efficient data loading</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--tensorflow-primary);"></i> Data augmentation techniques</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--tensorflow-primary);"></i> Performance optimization</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100" style="border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); border: none; overflow: hidden;">
+                            <div class="card-body p-4">
+                                <h3 style="color: var(--tensorflow-primary); font-weight: 700; font-size: 1.5rem; margin-bottom: 1rem;">Model Deployment</h3>
+                                <p>Learn how to deploy TensorFlow models to various platforms.</p>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--tensorflow-primary);"></i> TensorFlow Serving for production</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--tensorflow-primary);"></i> TensorFlow Lite for mobile devices</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--tensorflow-primary);"></i> TensorFlow.js for web browsers</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100" style="border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); border: none; overflow: hidden;">
+                            <div class="card-body p-4">
+                                <h3 style="color: var(--tensorflow-primary); font-weight: 700; font-size: 1.5rem; margin-bottom: 1rem;">TensorFlow Extended (TFX)</h3>
+                                <p>Build end-to-end ML pipelines for production environments.</p>
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--tensorflow-primary);"></i> Data validation and preprocessing</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--tensorflow-primary);"></i> Model training and evaluation</li>
+                                    <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--tensorflow-primary);"></i> Model serving and monitoring</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="framework-section tensorflow-section">
+                <h2>Ready to Practice?</h2>
+                <p>Now that you've learned the basics of TensorFlow, it's time to put your knowledge into practice with our hands-on exercises. These exercises will guide you through implementing various machine learning models and techniques using TensorFlow.</p>
+                
+                <div class="text-center mt-4">
+                    <a href="/frameworks/tensorflow/exercises" class="btn btn-lg" style="background: linear-gradient(135deg, var(--tensorflow-primary), var(--tensorflow-secondary)); color: white; font-weight: 600; border-radius: 30px; padding: 12px 30px; box-shadow: 0 10px 20px rgba(255, 111, 0, 0.3);">
+                        <i class="bi bi-code-square me-2"></i> Start TensorFlow Exercises
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/components/prism-python.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/components/prism-bash.min.js"></script>
+<script>
+    function copyCode(button) {
+        const codeBlock = button.parentElement.nextElementSibling;
+        const code = codeBlock.textContent;
+        
+        navigator.clipboard.writeText(code).then(() => {
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            button.style.backgroundColor = 'rgba(46, 125, 50, 0.3)';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.backgroundColor = '';
+            }, 2000);
+        });
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add animation to sections on scroll
+        const sections = document.querySelectorAll('.framework-section');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        sections.forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(section);
+        });
+    });
+</script>
+{% endblock %}

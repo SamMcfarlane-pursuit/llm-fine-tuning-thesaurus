@@ -1,37 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Learn LLM Fine-Tuning - Visual Thesaurus LLM</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vis-network@9.1.2/dist/vis-network.min.js"></script>
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="/">Visual Thesaurus LLM</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/learn">Learn</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/#help-section">Help</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+{% extends 'base.html' %}
+
+{% block title %}Learn LLM Fine-Tuning - Visual Thesaurus LLM{% endblock %}
+
+{% block head %}
+<!-- Additional head content specific to this page -->
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vis-network@9.1.2/dist/vis-network.min.js"></script>
+{% endblock %}
+
+{% block content %}
 
     <div class="container mt-4">
         <div class="row">
@@ -40,6 +17,45 @@
                 <p class="lead">Explore LLM fine-tuning concepts in a visual thesaurus format</p>
             </div>
         </div>
+
+        {% if not current_user.is_authenticated %}
+        <div class="row mt-3 mb-4">
+            <div class="col-md-8 offset-md-2">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h4><i class="bi bi-person-badge me-2"></i> Sign In to Track Your Progress</h4>
+                                <p>Create an account or sign in to save your progress, take quizzes after each lesson, and access personalized learning paths.</p>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <a href="{{ url_for('auth.login') }}" class="btn btn-light me-2"><i class="bi bi-box-arrow-in-right"></i> Sign In</a>
+                                <a href="{{ url_for('auth.register') }}" class="btn btn-success"><i class="bi bi-person-plus"></i> Register</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="row mt-3 mb-4">
+            <div class="col-md-8 offset-md-2">
+                <div class="card bg-success text-white">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h4><i class="bi bi-person-check me-2"></i> Welcome Back, {{ current_user.username }}!</h4>
+                                <p>Continue your learning journey. You've completed {{ completed_topics|default(0) }} of {{ total_topics|default(0) }} topics.</p>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <a href="{{ url_for('user_progress') }}" class="btn btn-light"><i class="bi bi-graph-up me-2"></i> View Progress</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
 
         <div class="row mt-4">
             <div class="col-md-12">
@@ -74,6 +90,48 @@
             </div>
         </div>
 
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3><i class="bi bi-mortarboard-fill me-2"></i> Test Your Knowledge</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="lead">Ready to test your understanding of LLM fine-tuning fundamentals?</p>
+
+                        <div class="alert alert-info">
+                            <p><i class="bi bi-info-circle-fill me-2"></i> Our comprehensive quiz covers key concepts including:</p>
+                            <ul>
+                                <li>Fine-tuning fundamentals and benefits</li>
+                                <li>Parameter-efficient fine-tuning methods (PEFT)</li>
+                                <li>LoRA implementation details</li>
+                                <li>Instruction fine-tuning</li>
+                                <li>Advanced techniques like RLHF</li>
+                            </ul>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            {% if current_user.is_authenticated %}
+                                <a href="{{ url_for('quiz.module_topic_quiz', module_id='fine-tuning', topic_id='fundamentals') }}" class="btn btn-primary btn-lg">
+                                    <i class="bi bi-pencil-square me-2"></i> Take the Quiz
+                                </a>
+                            {% else %}
+                                <div class="alert alert-warning">
+                                    <p><i class="bi bi-exclamation-triangle-fill me-2"></i> You need to be logged in to take the quiz.</p>
+                                    <a href="{{ url_for('auth.login') }}" class="btn btn-primary me-2">
+                                        <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
+                                    </a>
+                                    <a href="{{ url_for('auth.register') }}" class="btn btn-outline-primary">
+                                        <i class="bi bi-person-plus me-1"></i> Register
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row mt-4 mb-5">
             <div class="col-md-12">
                 <div class="card">
@@ -89,7 +147,7 @@
                                     <h5 class="mb-1">Exercise 1: Understanding Pre-trained Models</h5>
                                     <small>15 minutes</small>
                                 </div>
-                                <p class="mb-1">Learn about different pre-trained models and their architectures.</p>
+                                <p class="mb-1">Learn about different pre-trained models and their architectures. <a href="/guide/understanding-gpt" class="badge bg-primary">GPT Deep Dive</a></p>
                             </a>
                             <a href="/learn#exercise2" class="list-group-item list-group-item-action">
                                 <div class="d-flex w-100 justify-content-between">
@@ -103,7 +161,7 @@
                                     <h5 class="mb-1">Exercise 3: Fine-Tuning with LoRA</h5>
                                     <small>30 minutes</small>
                                 </div>
-                                <p class="mb-1">Apply LoRA for parameter-efficient fine-tuning.</p>
+                                <p class="mb-1">Apply LoRA for parameter-efficient fine-tuning. <a href="/guide/lora-implementation" class="badge bg-primary">Comprehensive Guide</a></p>
                             </a>
                             <a href="/learn#exercise4" class="list-group-item list-group-item-action">
                                 <div class="d-flex w-100 justify-content-between">
@@ -118,6 +176,34 @@
                                     <small>25 minutes</small>
                                 </div>
                                 <p class="mb-1">Use your fine-tuned model to build a thesaurus application.</p>
+                            </a>
+                            <a href="/learn#exercise6" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">Exercise 6: Deploying Your Fine-Tuned Model</h5>
+                                    <small>20 minutes</small>
+                                </div>
+                                <p class="mb-1">Learn different options for deploying your fine-tuned model.</p>
+                            </a>
+                            <a href="/learn#exercise7" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">Exercise 7: Advanced Fine-Tuning with QLoRA</h5>
+                                    <small>25 minutes</small>
+                                </div>
+                                <p class="mb-1">Learn how to fine-tune larger models with limited resources using QLoRA. <a href="/workshop/qlora-deep-dive" class="badge bg-warning text-dark">Deep Dive Workshop</a></p>
+                            </a>
+                            <a href="/learn#exercise8" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">Exercise 8: Other Advanced Fine-Tuning Techniques</h5>
+                                    <small>30 minutes</small>
+                                </div>
+                                <p class="mb-1">Explore other parameter-efficient fine-tuning methods like Prefix Tuning, Prompt Tuning, and more. <a href="/guide/instruction-tuning" class="badge bg-success">Instruction Tuning Guide</a> <a href="/guide/finetuning-comparison" class="badge bg-info">Methods Comparison</a></p>
+                            </a>
+                            <a href="/learn#exercise9" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">Exercise 9: Using pipeline() for Quick Inference</h5>
+                                    <small>15 minutes</small>
+                                </div>
+                                <p class="mb-1">Learn how to use the powerful pipeline() function for fast and easy inference with pre-trained and fine-tuned models. <a href="/guide/pipeline-inference" class="badge bg-primary">Pipeline Guide</a></p>
                             </a>
                         </div>
                     </div>
@@ -299,7 +385,770 @@ peft_model = get_peft_model(model, lora_config)
 # Print trainable parameters
 trainable_params = sum(p.numel() for p in peft_model.parameters() if p.requires_grad)
 total_params = sum(p.numel() for p in peft_model.parameters())
-print(f"Trainable parameters: {trainable_params:,} ({trainable_params/total_params:.2%} of total)")</code></pre>
+print(f"Trainable parameters: {trainable_params:,} ({trainable_params/total_params:.2%} of total)")
+
+# Define training arguments
+training_args = TrainingArguments(
+    output_dir="./results",
+    num_train_epochs=3,
+    per_device_train_batch_size=4,
+    gradient_accumulation_steps=2,
+    warmup_steps=100,
+    weight_decay=0.01,
+    logging_dir="./logs",
+    logging_steps=10,
+    save_strategy="epoch",
+    learning_rate=1e-4,
+    fp16=True,  # Use mixed precision training
+    report_to="none"
+)
+
+# Tokenize the dataset
+def tokenize_function(examples):
+    return tokenizer(examples["text"], padding="max_length", truncation=True, max_length=128)
+
+tokenized_dataset = dataset.map(tokenize_function, batched=True)
+
+# Create Trainer and train the model
+trainer = Trainer(
+    model=peft_model,
+    args=training_args,
+    train_dataset=tokenized_dataset["train"],
+    eval_dataset=tokenized_dataset["test"],
+)
+
+# Train the model
+trainer.train()
+
+# Save the LoRA adapter only (much smaller than full model)
+peft_model.save_pretrained("./thesaurus-model-lora")
+tokenizer.save_pretrained("./thesaurus-model-lora")
+
+print("Fine-tuning complete! The model has been saved to ./thesaurus-model-lora")</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="exercise4" class="row mt-4 mb-5">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3>Exercise 4: Evaluating Your Fine-Tuned Model</h3>
+                    </div>
+                    <div class="card-body">
+                        <h4>Why Evaluate Your Model?</h4>
+                        <p>Evaluation helps you understand how well your fine-tuned model performs on the specific task it was trained for. For a thesaurus model, we want to evaluate how well it can generate synonyms and related words.</p>
+
+                        <h4>Key Evaluation Metrics:</h4>
+                        <ul>
+                            <li><strong>Accuracy</strong>: How many of the generated synonyms are correct</li>
+                            <li><strong>Recall</strong>: How many of the known synonyms the model can generate</li>
+                            <li><strong>Relevance</strong>: How semantically related the generated words are to the input</li>
+                            <li><strong>Diversity</strong>: The variety of synonyms generated</li>
+                        </ul>
+
+                        <h4>Hands-on Task:</h4>
+                        <div class="bg-light p-3 rounded">
+                            <p>In this exercise, we'll evaluate our fine-tuned thesaurus model:</p>
+                            <pre><code>import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from peft import PeftModel
+import nltk
+from nltk.corpus import wordnet as wn
+
+# Download WordNet if not already downloaded
+nltk.download('wordnet')
+nltk.download('omw-1.4')
+
+# Load the base model
+base_model = AutoModelForCausalLM.from_pretrained("gpt2")
+
+# Load the fine-tuned model with LoRA adapter
+model = PeftModel.from_pretrained(base_model, "./thesaurus-model-lora")
+tokenizer = AutoTokenizer.from_pretrained("./thesaurus-model-lora")
+
+# Set up evaluation
+test_words = ["intelligent", "beautiful", "interesting", "difficult", "important"]
+results = []
+
+# Function to get WordNet synonyms for comparison
+def get_wordnet_synonyms(word):
+    synonyms = set()
+    for synset in wn.synsets(word):
+        for lemma in synset.lemmas():
+            if lemma.name() != word and "_" not in lemma.name():
+                synonyms.add(lemma.name())
+    return list(synonyms)
+
+# Function to generate synonyms using our model
+def generate_synonyms(word, max_length=50):
+    prompt = f"### Instruction: List synonyms for the word '{word}'.\n\n### Response:"
+    inputs = tokenizer(prompt, return_tensors="pt")
+
+    with torch.no_grad():
+        outputs = model.generate(
+            inputs.input_ids,
+            max_length=max_length,
+            num_return_sequences=1,
+            temperature=0.7,
+            top_p=0.9,
+            do_sample=True
+        )
+
+    generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    # Extract just the synonyms part
+    if "Synonyms for" in generated_text and ":" in generated_text:
+        synonyms_text = generated_text.split(":", 1)[1].strip()
+        # Split by commas and clean up
+        generated_synonyms = [s.strip().lower() for s in synonyms_text.split(",")]
+        return generated_synonyms
+    return []
+
+# Evaluate each test word
+for word in test_words:
+    # Get ground truth synonyms from WordNet
+    wordnet_synonyms = get_wordnet_synonyms(word)
+
+    # Generate synonyms with our model
+    generated_synonyms = generate_synonyms(word)
+
+    # Calculate metrics
+    correct_synonyms = [s for s in generated_synonyms if s in wordnet_synonyms]
+    accuracy = len(correct_synonyms) / len(generated_synonyms) if generated_synonyms else 0
+    recall = len(correct_synonyms) / len(wordnet_synonyms) if wordnet_synonyms else 0
+
+    # Store results
+    results.append({
+        "word": word,
+        "wordnet_synonyms": wordnet_synonyms,
+        "generated_synonyms": generated_synonyms,
+        "accuracy": accuracy,
+        "recall": recall
+    })
+
+# Print evaluation results
+print("\nEvaluation Results:")
+print("-" * 50)
+for result in results:
+    print(f"Word: {result['word']}")
+    print(f"WordNet Synonyms: {', '.join(result['wordnet_synonyms'][:5])}{'...' if len(result['wordnet_synonyms']) > 5 else ''}")
+    print(f"Generated Synonyms: {', '.join(result['generated_synonyms'])}")
+    print(f"Accuracy: {result['accuracy']:.2f}")
+    print(f"Recall: {result['recall']:.2f}")
+    print("-" * 50)
+
+# Calculate overall metrics
+avg_accuracy = sum(r['accuracy'] for r in results) / len(results)
+avg_recall = sum(r['recall'] for r in results) / len(results)
+print(f"\nOverall Accuracy: {avg_accuracy:.2f}")
+print(f"Overall Recall: {avg_recall:.2f}")</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="exercise5" class="row mt-4 mb-5">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3>Exercise 5: Building a Thesaurus Application</h3>
+                    </div>
+                    <div class="card-body">
+                        <h4>From Model to Application</h4>
+                        <p>Now that we have a fine-tuned model, let's build a simple thesaurus application that allows users to look up synonyms for words.</p>
+
+                        <h4>Key Components:</h4>
+                        <ul>
+                            <li>Model loading and inference</li>
+                            <li>User interface for input and output</li>
+                            <li>Response formatting and presentation</li>
+                            <li>Error handling and edge cases</li>
+                        </ul>
+
+                        <h4>Hands-on Task:</h4>
+                        <div class="bg-light p-3 rounded">
+                            <p>In this exercise, we'll create a simple thesaurus application using our fine-tuned model:</p>
+                            <pre><code>import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from peft import PeftModel
+import gradio as gr
+
+# Load the model
+def load_model():
+    # Load the base model
+    base_model = AutoModelForCausalLM.from_pretrained("gpt2")
+
+    # Load the fine-tuned model with LoRA adapter
+    model = PeftModel.from_pretrained(base_model, "./thesaurus-model-lora")
+    tokenizer = AutoTokenizer.from_pretrained("./thesaurus-model-lora")
+
+    return model, tokenizer
+
+# Generate synonyms for a given word
+def generate_synonyms(word, model, tokenizer, max_length=50):
+    prompt = f"### Instruction: List synonyms for the word '{word}'.\n\n### Response:"
+    inputs = tokenizer(prompt, return_tensors="pt")
+
+    with torch.no_grad():
+        outputs = model.generate(
+            inputs.input_ids,
+            max_length=max_length,
+            num_return_sequences=1,
+            temperature=0.7,
+            top_p=0.9,
+            do_sample=True
+        )
+
+    generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    return generated_text
+
+# Format the response for better presentation
+def format_response(response):
+    if "Synonyms for" in response and ":" in response:
+        # Extract the word and synonyms
+        word_part = response.split("Synonyms for")[1].split(":")[0].strip()
+        synonyms_part = response.split(":")[1].strip()
+
+        # Format the synonyms as a list
+        synonyms = [s.strip() for s in synonyms_part.split(",")]
+        formatted_synonyms = "<ul>" + "".join([f"<li>{s}</li>" for s in synonyms]) + "</ul>"
+
+        return f"<h3>Synonyms for {word_part}:</h3>{formatted_synonyms}"
+    else:
+        return response
+
+# Create the Gradio interface
+def create_interface():
+    model, tokenizer = load_model()
+
+    def process_input(word):
+        if not word.strip():
+            return "Please enter a word."
+
+        try:
+            response = generate_synonyms(word.strip().lower(), model, tokenizer)
+            return format_response(response)
+        except Exception as e:
+            return f"Error: {str(e)}"
+
+    interface = gr.Interface(
+        fn=process_input,
+        inputs=gr.Textbox(placeholder="Enter a word...", label="Word"),
+        outputs=gr.HTML(label="Synonyms"),
+        title="LLM-Powered Thesaurus",
+        description="Enter a word to find its synonyms using our fine-tuned language model.",
+        examples=["happy", "intelligent", "beautiful", "fast", "important"]
+    )
+
+    return interface
+
+# Launch the application
+if __name__ == "__main__":
+    interface = create_interface()
+    interface.launch()
+    print("Thesaurus application is running!")</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="exercise6" class="row mt-4 mb-5">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3>Exercise 6: Deploying Your Fine-Tuned Model</h3>
+                    </div>
+                    <div class="card-body">
+                        <h4>Deployment Options</h4>
+                        <p>Once you've fine-tuned and evaluated your model, you'll want to deploy it for others to use. There are several deployment options depending on your needs.</p>
+
+                        <div class="row mt-4">
+                            <div class="col-md-4">
+                                <div class="card h-100">
+                                    <div class="card-header bg-success text-white">
+                                        <h5>Docker Containers</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>Package your model and dependencies in a container for consistent deployment across environments.</p>
+                                        <p><strong>Benefits:</strong> Isolation, reproducibility, easy scaling</p>
+                                        <div class="bg-light p-3 rounded code-block">
+                                            <pre><code># Dockerfile for deploying a fine-tuned model
+FROM python:3.9-slim
+
+WORKDIR /app
+
+# Install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy model files and code
+COPY ./thesaurus-model-lora /app/thesaurus-model-lora
+COPY app.py .
+
+# Expose port
+EXPOSE 5000
+
+# Run the application
+CMD ["python", "app.py"]</code></pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card h-100">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5>Cloud Services</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>Deploy to managed services like AWS SageMaker, Azure ML, or Google Vertex AI.</p>
+                                        <p><strong>Benefits:</strong> Managed infrastructure, auto-scaling, monitoring</p>
+                                        <div class="bg-light p-3 rounded code-block">
+                                            <pre><code># Example for AWS SageMaker deployment
+import sagemaker
+from sagemaker.huggingface import HuggingFaceModel
+
+# Set up the Hugging Face model
+huggingface_model = HuggingFaceModel(
+    model_data="s3://my-bucket/model.tar.gz",
+    role=role,
+    transformers_version="4.26.0",
+    pytorch_version="1.13.1",
+    py_version="py39",
+)
+
+# Deploy the model
+predictor = huggingface_model.deploy(
+    initial_instance_count=1,
+    instance_type="ml.g4dn.xlarge"
+)</code></pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card h-100">
+                                    <div class="card-header bg-warning text-dark">
+                                        <h5>Edge Deployment</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>Optimize and deploy smaller models to edge devices using quantization and pruning.</p>
+                                        <p><strong>Benefits:</strong> Low latency, offline operation, privacy</p>
+                                        <div class="bg-light p-3 rounded code-block">
+                                            <pre><code># Quantize the model for edge deployment
+from transformers import AutoModelForCausalLM
+import torch
+
+# Load the model
+model = AutoModelForCausalLM.from_pretrained(
+    "./thesaurus-model-lora"
+)
+
+# Quantize to 8-bit precision
+quantized_model = torch.quantization.quantize_dynamic(
+    model, {torch.nn.Linear}, dtype=torch.qint8
+)
+
+# Save the quantized model
+torch.save(quantized_model.state_dict(),
+          "quantized_model.pth")</code></pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="exercise7" class="row mt-4 mb-5">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3>Exercise 7: Advanced Fine-Tuning with QLoRA</h3>
+                    </div>
+                    <div class="card-body">
+                        <h4>What is QLoRA?</h4>
+                        <p>QLoRA (Quantized Low-Rank Adaptation) is an advanced fine-tuning technique that combines quantization with LoRA to enable fine-tuning of large language models with even less memory.</p>
+
+                        <h4>Key Benefits of QLoRA:</h4>
+                        <ul>
+                            <li><strong>Memory Efficiency:</strong> Fine-tune large models (up to 65B parameters) on a single consumer GPU</li>
+                            <li><strong>Preserved Performance:</strong> Maintains model quality comparable to full fine-tuning</li>
+                            <li><strong>Reduced Precision:</strong> Uses 4-bit quantization for the base model weights</li>
+                            <li><strong>Backpropagation Compatible:</strong> Allows gradient flow through quantized weights</li>
+                        </ul>
+
+                        <h4>How QLoRA Works:</h4>
+                        <ol>
+                            <li>Quantize the pre-trained model weights to 4-bit precision</li>
+                            <li>Keep a small set of trainable LoRA parameters in higher precision (16-bit)</li>
+                            <li>Use a technique called Double Quantization to further reduce memory usage</li>
+                            <li>Implement Paged Optimizers to handle memory spikes during training</li>
+                        </ol>
+
+                        <h4>Hands-on Task:</h4>
+                        <div class="bg-light p-3 rounded">
+                            <p>In this exercise, we'll fine-tune a larger model using QLoRA:</p>
+                            <pre><code>import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments, Trainer
+from datasets import Dataset
+from peft import prepare_model_for_kbit_training, LoraConfig, get_peft_model
+from bitsandbytes.nn import Linear4bit
+
+# Prepare training data (same as before)
+def format_examples(thesaurus_data):
+    examples = []
+    for entry in thesaurus_data:
+        word = entry["word"]
+        if entry["synonyms"]:
+            synonyms_str = ", ".join(entry["synonyms"])
+            examples.append(f"### Instruction: List synonyms for the word '{word}'.\n\n### Response: Synonyms for '{word}': {synonyms_str}")
+    return examples
+
+# Create a dataset
+texts = format_examples(thesaurus_data)
+dataset = Dataset.from_dict({"text": texts})
+dataset = dataset.train_test_split(test_size=0.1)
+
+# Load a larger model in 4-bit precision
+model_name = "facebook/opt-1.3b"  # Using a larger model than before
+
+# Load in 4-bit precision with specific quantization settings
+model = AutoModelForCausalLM.from_pretrained(
+    model_name,
+    load_in_4bit=True,
+    device_map="auto",
+    quantization_config={
+        "bnb_4bit_compute_dtype": torch.float16,
+        "bnb_4bit_use_double_quant": True,
+        "bnb_4bit_quant_type": "nf4"  # NormalFloat 4-bit
+    }
+)
+
+# Load tokenizer
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+tokenizer.pad_token = tokenizer.eos_token
+
+# Prepare model for k-bit training
+model = prepare_model_for_kbit_training(model)
+
+# Configure LoRA
+lora_config = LoraConfig(
+    r=16,                     # Higher rank for more capacity
+    lora_alpha=32,
+    target_modules=["q_proj", "v_proj", "k_proj", "o_proj", "gate_proj", "up_proj", "down_proj"],
+    lora_dropout=0.05,
+    bias="none",
+    task_type="CAUSAL_LM"
+)
+
+# Apply LoRA to the model
+model = get_peft_model(model, lora_config)
+
+# Print trainable parameters
+trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+total_params = sum(p.numel() for p in model.parameters())
+print(f"Trainable parameters: {trainable_params:,} ({trainable_params/total_params:.2%} of total)")
+
+# Define training arguments with gradient checkpointing and mixed precision
+training_args = TrainingArguments(
+    output_dir="./results-qlora",
+    num_train_epochs=3,
+    per_device_train_batch_size=2,  # Smaller batch size for larger model
+    gradient_accumulation_steps=4,  # Increase gradient accumulation
+    warmup_steps=100,
+    weight_decay=0.01,
+    logging_dir="./logs-qlora",
+    logging_steps=10,
+    save_strategy="epoch",
+    learning_rate=2e-4,
+    fp16=True,  # Use mixed precision training
+    gradient_checkpointing=True,  # Enable gradient checkpointing
+    report_to="none"
+)
+
+# Tokenize the dataset
+def tokenize_function(examples):
+    return tokenizer(examples["text"], padding="max_length", truncation=True, max_length=128)
+
+tokenized_dataset = dataset.map(tokenize_function, batched=True)
+
+# Create Trainer and train the model
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=tokenized_dataset["train"],
+    eval_dataset=tokenized_dataset["test"],
+)
+
+# Train the model
+trainer.train()
+
+# Save the LoRA adapter only
+model.save_pretrained("./thesaurus-qlora-adapter")
+tokenizer.save_pretrained("./thesaurus-qlora-adapter")
+
+print("QLoRA fine-tuning complete! The model has been saved to ./thesaurus-qlora-adapter")</code></pre>
+                        </div>
+
+                        <h4 class="mt-4">Memory Usage Comparison:</h4>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Fine-Tuning Method</th>
+                                        <th>Model Size</th>
+                                        <th>Memory Usage</th>
+                                        <th>GPU Required</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Full Fine-Tuning</td>
+                                        <td>1.3B parameters</td>
+                                        <td>~10-12 GB</td>
+                                        <td>High-end (A100, V100)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>LoRA</td>
+                                        <td>1.3B parameters</td>
+                                        <td>~6-8 GB</td>
+                                        <td>Mid-range (RTX 3090)</td>
+                                    </tr>
+                                    <tr class="table-success">
+                                        <td>QLoRA</td>
+                                        <td>1.3B parameters</td>
+                                        <td>~4-5 GB</td>
+                                        <td>Consumer (RTX 3060)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="exercise8" class="row mt-4 mb-5">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3>Exercise 8: Other Advanced Fine-Tuning Techniques</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card mb-4">
+                                    <div class="card-header bg-info text-white">
+                                        <h4>Prefix Tuning</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>Prefix Tuning prepends trainable continuous vectors ("virtual tokens") to the input sequence, keeping the pre-trained model frozen.</p>
+
+                                        <h5>Key Features:</h5>
+                                        <ul>
+                                            <li>Only trains a small set of continuous prefix vectors</li>
+                                            <li>Extremely parameter-efficient (< 1% of parameters)</li>
+                                            <li>Particularly effective for NLG tasks</li>
+                                        </ul>
+
+                                        <div class="bg-light p-3 rounded">
+                                            <pre><code>from peft import PrefixTuningConfig, get_peft_model
+
+# Configure Prefix Tuning
+prefix_config = PrefixTuningConfig(
+    task_type="CAUSAL_LM",
+    num_virtual_tokens=20,  # Number of virtual tokens
+    prefix_projection=True,  # Use projection layer
+    encoder_hidden_size=512  # Size of prefix encoder
+)
+
+# Apply Prefix Tuning to the model
+prefix_model = get_peft_model(model, prefix_config)
+
+# Print trainable parameters
+trainable_params = sum(p.numel() for p in prefix_model.parameters()
+                      if p.requires_grad)
+print(f"Trainable parameters: {trainable_params:,}")</code></pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="card mb-4">
+                                    <div class="card-header bg-info text-white">
+                                        <h4>Prompt Tuning</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>Prompt Tuning trains continuous embeddings that are prepended to the input embeddings, while keeping the model frozen.</p>
+
+                                        <h5>Key Features:</h5>
+                                        <ul>
+                                            <li>Simpler than Prefix Tuning (no projection layers)</li>
+                                            <li>Extremely parameter-efficient</li>
+                                            <li>Scales well with model size</li>
+                                        </ul>
+
+                                        <div class="bg-light p-3 rounded">
+                                            <pre><code>from peft import PromptTuningConfig, get_peft_model, TaskType
+
+# Configure Prompt Tuning
+prompt_config = PromptTuningConfig(
+    task_type=TaskType.CAUSAL_LM,
+    num_virtual_tokens=10,  # Number of virtual tokens
+    tokenizer_name_or_path=model_name,
+    prompt_tuning_init="RANDOM"  # Initialize randomly
+)
+
+# Apply Prompt Tuning to the model
+prompt_model = get_peft_model(model, prompt_config)
+
+# Print trainable parameters
+trainable_params = sum(p.numel() for p in prompt_model.parameters()
+                      if p.requires_grad)
+print(f"Trainable parameters: {trainable_params:,}")</code></pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card mb-4">
+                                    <div class="card-header bg-info text-white">
+                                        <h4>Adapter Layers</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>Adapter Layers insert small trainable modules between layers of the frozen pre-trained model.</p>
+
+                                        <h5>Key Features:</h5>
+                                        <ul>
+                                            <li>Bottleneck architecture reduces parameter count</li>
+                                            <li>Can be placed at various positions in the network</li>
+                                            <li>Modular and composable for multi-task learning</li>
+                                        </ul>
+
+                                        <div class="bg-light p-3 rounded">
+                                            <pre><code>from peft import AdapterConfig, get_peft_model
+
+# Configure Adapter
+adapter_config = AdapterConfig(
+    r=16,  # Bottleneck dimension
+    lora_alpha=32,
+    lora_dropout=0.05,
+    task_type="CAUSAL_LM",
+    bias="none"
+)
+
+# Apply Adapter to the model
+adapter_model = get_peft_model(model, adapter_config)
+
+# Print trainable parameters
+trainable_params = sum(p.numel() for p in adapter_model.parameters()
+                      if p.requires_grad)
+print(f"Trainable parameters: {trainable_params:,}")</code></pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="card mb-4">
+                                    <div class="card-header bg-info text-white">
+                                        <h4>P-Tuning v2</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>P-Tuning v2 is an improved version of prompt tuning that adds deep prompt embeddings at each layer of the model.</p>
+
+                                        <h5>Key Features:</h5>
+                                        <ul>
+                                            <li>Adds prompts to multiple layers, not just the input</li>
+                                            <li>More expressive than standard prompt tuning</li>
+                                            <li>Particularly effective for NLU tasks</li>
+                                        </ul>
+
+                                        <div class="bg-light p-3 rounded">
+                                            <pre><code>from peft import PromptEncoderConfig, get_peft_model, TaskType
+
+# Configure P-Tuning v2
+ptuning_config = PromptEncoderConfig(
+    task_type=TaskType.CAUSAL_LM,
+    num_virtual_tokens=20,  # Number of virtual tokens
+    encoder_hidden_size=128,  # Hidden size of prompt encoder
+    encoder_num_layers=2,  # Number of layers in prompt encoder
+    encoder_dropout=0.1  # Dropout in prompt encoder
+)
+
+# Apply P-Tuning v2 to the model
+ptuning_model = get_peft_model(model, ptuning_config)
+
+# Print trainable parameters
+trainable_params = sum(p.numel() for p in ptuning_model.parameters()
+                      if p.requires_grad)
+print(f"Trainable parameters: {trainable_params:,}")</code></pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h4 class="mt-4">Comparison of Parameter-Efficient Fine-Tuning Methods:</h4>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Method</th>
+                                        <th>Trainable Parameters</th>
+                                        <th>Memory Usage</th>
+                                        <th>Best For</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>LoRA</td>
+                                        <td>0.1-1%</td>
+                                        <td>Medium</td>
+                                        <td>General purpose, good balance of efficiency and performance</td>
+                                    </tr>
+                                    <tr>
+                                        <td>QLoRA</td>
+                                        <td>0.1-1%</td>
+                                        <td>Low</td>
+                                        <td>Very large models, limited GPU memory</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Prefix Tuning</td>
+                                        <td>< 1%</td>
+                                        <td>Low</td>
+                                        <td>Generation tasks, sequence-to-sequence models</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Prompt Tuning</td>
+                                        <td>< 0.1%</td>
+                                        <td>Very Low</td>
+                                        <td>Simple tasks, very large models</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Adapter Layers</td>
+                                        <td>1-5%</td>
+                                        <td>Medium</td>
+                                        <td>Multi-task learning, complex tasks</td>
+                                    </tr>
+                                    <tr>
+                                        <td>P-Tuning v2</td>
+                                        <td>< 1%</td>
+                                        <td>Low</td>
+                                        <td>Understanding tasks, complex reasoning</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -307,148 +1156,135 @@ print(f"Trainable parameters: {trainable_params:,} ({trainable_params/total_para
         </div>
     </div>
 
-    <footer class="bg-dark text-white py-4">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5>Visual Thesaurus LLM</h5>
-                    <p>A project demonstrating LLM fine-tuning for thesaurus applications</p>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <p>&copy; 2023 Thesaurus AI LLM FT Project</p>
-                </div>
-            </div>
-        </div>
-    </footer>
+{% endblock %}
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            let network = null;
-            let iframe = null;
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let network = null;
+        let iframe = null;
 
-            // Fetch LLM concepts visualization
-            fetch('/api/llm-concepts-visualization')
-                .then(response => response.json())
-                .then(data => {
-                    iframe = document.createElement('iframe');
-                    iframe.src = data.visualization_path;
-                    iframe.style.width = '100%';
-                    iframe.style.height = '100%';
-                    iframe.style.border = 'none';
-                    iframe.id = 'concepts-iframe';
+        // Fetch LLM concepts visualization
+        fetch('/api/llm-concepts-visualization')
+            .then(response => response.json())
+            .then(data => {
+                iframe = document.createElement('iframe');
+                iframe.src = data.visualization_path;
+                iframe.style.width = '100%';
+                iframe.style.height = '100%';
+                iframe.style.border = 'none';
+                iframe.id = 'concepts-iframe';
 
-                    const container = document.getElementById('concepts-visualization');
-                    container.innerHTML = '';
-                    container.appendChild(iframe);
+                const container = document.getElementById('concepts-visualization');
+                container.innerHTML = '';
+                container.appendChild(iframe);
 
-                    // Setup zoom buttons with event delegation (works even if iframe reloads)
-                    document.getElementById('zoom-in-btn').addEventListener('click', function() {
-                        zoomIn();
-                    });
-
-                    document.getElementById('zoom-out-btn').addEventListener('click', function() {
-                        zoomOut();
-                    });
-
-                    document.getElementById('reset-zoom-btn').addEventListener('click', function() {
-                        resetZoom();
-                    });
-
-                    // Functions to control zoom
-                    function zoomIn() {
-                        try {
-                            if (iframe.contentWindow && iframe.contentWindow.network) {
-                                const network = iframe.contentWindow.network;
-                                const scale = network.getScale() * 1.2;
-                                const position = network.getViewPosition();
-                                network.moveTo({
-                                    position: position,
-                                    scale: scale
-                                });
-                            }
-                        } catch (e) {
-                            console.error('Error zooming in:', e);
-                        }
-                    }
-
-                    function zoomOut() {
-                        try {
-                            if (iframe.contentWindow && iframe.contentWindow.network) {
-                                const network = iframe.contentWindow.network;
-                                const scale = network.getScale() / 1.2;
-                                const position = network.getViewPosition();
-                                network.moveTo({
-                                    position: position,
-                                    scale: scale
-                                });
-                            }
-                        } catch (e) {
-                            console.error('Error zooming out:', e);
-                        }
-                    }
-
-                    function resetZoom() {
-                        try {
-                            if (iframe.contentWindow && iframe.contentWindow.network) {
-                                const network = iframe.contentWindow.network;
-                                network.fit({
-                                    animation: {
-                                        duration: 1000,
-                                        easingFunction: 'easeInOutQuad'
-                                    }
-                                });
-                            }
-                        } catch (e) {
-                            console.error('Error resetting zoom:', e);
-                        }
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching LLM concepts visualization:', error);
-                    document.getElementById('concepts-visualization').innerHTML =
-                        '<div class="alert alert-danger">Error loading visualization</div>';
+                // Setup zoom buttons with event delegation (works even if iframe reloads)
+                document.getElementById('zoom-in-btn').addEventListener('click', function() {
+                    zoomIn();
                 });
 
-            // Fetch LLM concepts list
-            fetch('/api/llm-concepts')
-                .then(response => response.json())
-                .then(data => {
-                    const conceptsList = document.getElementById('concepts-list');
-                    conceptsList.innerHTML = '';
-
-                    data.concepts.forEach(concept => {
-                        const col = document.createElement('div');
-                        col.className = 'col-md-4 mb-3';
-
-                        const card = document.createElement('div');
-                        card.className = 'card h-100';
-
-                        const cardBody = document.createElement('div');
-                        cardBody.className = 'card-body';
-
-                        const title = document.createElement('h5');
-                        title.className = 'card-title';
-                        title.textContent = concept;
-
-                        const link = document.createElement('a');
-                        link.href = `/concept/${concept}`;
-                        link.className = 'btn btn-primary btn-sm mt-2';
-                        link.textContent = 'Learn More';
-
-                        cardBody.appendChild(title);
-                        cardBody.appendChild(link);
-                        card.appendChild(cardBody);
-                        col.appendChild(card);
-                        conceptsList.appendChild(col);
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching LLM concepts:', error);
-                    document.getElementById('concepts-list').innerHTML =
-                        '<div class="alert alert-danger">Error loading concepts</div>';
+                document.getElementById('zoom-out-btn').addEventListener('click', function() {
+                    zoomOut();
                 });
-        });
-    </script>
-</body>
-</html>
+
+                document.getElementById('reset-zoom-btn').addEventListener('click', function() {
+                    resetZoom();
+                });
+
+                // Functions to control zoom
+                function zoomIn() {
+                    try {
+                        if (iframe.contentWindow && iframe.contentWindow.network) {
+                            const network = iframe.contentWindow.network;
+                            const scale = network.getScale() * 1.2;
+                            const position = network.getViewPosition();
+                            network.moveTo({
+                                position: position,
+                                scale: scale
+                            });
+                        }
+                    } catch (e) {
+                        console.error('Error zooming in:', e);
+                    }
+                }
+
+                function zoomOut() {
+                    try {
+                        if (iframe.contentWindow && iframe.contentWindow.network) {
+                            const network = iframe.contentWindow.network;
+                            const scale = network.getScale() / 1.2;
+                            const position = network.getViewPosition();
+                            network.moveTo({
+                                position: position,
+                                scale: scale
+                            });
+                        }
+                    } catch (e) {
+                        console.error('Error zooming out:', e);
+                    }
+                }
+
+                function resetZoom() {
+                    try {
+                        if (iframe.contentWindow && iframe.contentWindow.network) {
+                            const network = iframe.contentWindow.network;
+                            network.fit({
+                                animation: {
+                                    duration: 1000,
+                                    easingFunction: 'easeInOutQuad'
+                                }
+                            });
+                        }
+                    } catch (e) {
+                        console.error('Error resetting zoom:', e);
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching LLM concepts visualization:', error);
+                document.getElementById('concepts-visualization').innerHTML =
+                    '<div class="alert alert-danger">Error loading visualization</div>';
+            });
+
+        // Fetch LLM concepts list
+        fetch('/api/llm-concepts')
+            .then(response => response.json())
+            .then(data => {
+                const conceptsList = document.getElementById('concepts-list');
+                conceptsList.innerHTML = '';
+
+                data.concepts.forEach(concept => {
+                    const col = document.createElement('div');
+                    col.className = 'col-md-4 mb-3';
+
+                    const card = document.createElement('div');
+                    card.className = 'card h-100';
+
+                    const cardBody = document.createElement('div');
+                    cardBody.className = 'card-body';
+
+                    const title = document.createElement('h5');
+                    title.className = 'card-title';
+                    title.textContent = concept;
+
+                    const link = document.createElement('a');
+                    link.href = `/concept/${concept}`;
+                    link.className = 'btn btn-primary btn-sm mt-2';
+                    link.textContent = 'Learn More';
+
+                    cardBody.appendChild(title);
+                    cardBody.appendChild(link);
+                    card.appendChild(cardBody);
+                    col.appendChild(card);
+                    conceptsList.appendChild(col);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching LLM concepts:', error);
+                document.getElementById('concepts-list').innerHTML =
+                    '<div class="alert alert-danger">Error loading concepts</div>';
+            });
+    });
+</script>
+{% endblock %}

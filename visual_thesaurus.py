@@ -254,96 +254,255 @@ class VisualThesaurus:
         }
         net.set_options(json.dumps(options))
 
-        # Generate the HTML with the network object exposed globally
-        html_template = """
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="utf-8">
-            <title>Thesaurus Visualization</title>
-            <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@9.1.2/dist/vis-network.min.js"></script>
-            <style type="text/css">
-                #mynetwork {
-                    width: 100%;
-                    height: 100%;
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    border: none;
-                    background-color: #ffffff;
-                }
-                body, html {
-                    height: 100%;
-                    margin: 0;
-                    padding: 0;
-                    overflow: hidden;
-                }
-                .vis-tooltip {
-                    position: absolute;
-                    visibility: hidden;
-                    padding: 5px;
-                    white-space: nowrap;
-                    font-family: Arial, sans-serif;
-                    font-size: 14px;
-                    color: #000000;
-                    background-color: #f5f5f5;
-                    border-radius: 3px;
-                    border: 1px solid #808080;
-                    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
-                    max-width: 300px;
-                    word-wrap: break-word;
-                    z-index: 900;
-                }
-            </style>
-        </head>
-        <body>
-            <div id="mynetwork"></div>
-            <script type="text/javascript">
-                // Initialize the network
-                var container = document.getElementById('mynetwork');
-                var data = {NETWORK_DATA};
-                var options = {NETWORK_OPTIONS};
-                var network = new vis.Network(container, data, options);
+        # Read the template file
+        template_path = 'static/visualizations/template.html'
+        try:
+            with open(template_path, 'r', encoding='utf-8') as f:
+                html_template = f.read()
+        except FileNotFoundError:
+            # Fallback to embedded template if file not found
+            html_template = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thesaurus Visualization</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@9.1.2/dist/vis-network.min.js"></script>
+    <style type="text/css">
+        #mynetwork {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            border: none;
+            background-color: #1e1e1e; /* Dark background */
+        }
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .vis-tooltip {
+            position: absolute;
+            visibility: hidden;
+            padding: 10px 15px;
+            white-space: nowrap;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+            color: #ffffff;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            max-width: 300px;
+            word-wrap: break-word;
+            z-index: 900;
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
+        }
 
-                // Make the network object globally accessible
-                window.network = network;
+        /* Custom node styling */
+        .vis-network .vis-node {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 600;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+        }
 
-                // Fit the network to the container on load
-                network.once("afterDrawing", function() {
-                    setTimeout(function() {
-                        network.fit({
-                            animation: {
-                                duration: 1000,
-                                easingFunction: 'easeInOutQuad'
-                            }
-                        });
-                    }, 200);
-                });
+        /* Controls styling */
+        .vis-navigation {
+            background-color: rgba(30, 30, 30, 0.7) !important;
+            border-radius: 8px !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3) !important;
+            -webkit-backdrop-filter: blur(5px) !important;
+            backdrop-filter: blur(5px) !important;
+        }
 
-                // Add click event to nodes
-                network.on("click", function(params) {
-                    if (params.nodes.length > 0) {
-                        var nodeId = params.nodes[0];
-                        if (nodeId !== '{CENTRAL_WORD}') {
-                            window.parent.location.href = '/visualize/' + encodeURIComponent(nodeId);
-                        }
+        .vis-button {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            border-radius: 4px !important;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .vis-button:hover {
+            background-color: rgba(255, 255, 255, 0.2) !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .vis-button:active {
+            transform: translateY(1px) !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+        }
+    </style>
+</head>
+<body>
+    <div id="mynetwork"></div>
+    <script type="text/javascript">
+        // Initialize the network
+        var container = document.getElementById('mynetwork');
+
+        // Define custom node colors for dark theme
+        const nodeColors = {
+            main: "#ff4d4d",      // Bright red for main node
+            synonym: "#ffcc00",   // Bright gold/yellow for synonyms
+            related: "#00ffcc"    // Bright teal for related terms
+        };
+
+        // Define custom edge colors
+        const edgeColors = {
+            synonym: "#ffcc00",   // Bright gold/yellow for synonym connections
+            related: "#00ffcc"    // Bright teal for related connections
+        };
+
+        // Process the data to use our custom colors
+        var rawData = REPLACE_WITH_DATA;
+
+        // Update node colors for better visibility on dark background
+        rawData.nodes.forEach(node => {
+            if (node.color === "red") {
+                node.color = nodeColors.main;
+            } else if (node.color === "blue") {
+                node.color = nodeColors.synonym;
+            } else if (node.color === "green") {
+                node.color = nodeColors.related;
+            }
+
+            // Add shadow to nodes
+            node.shadow = {
+                enabled: true,
+                color: node.color,
+                size: 10,
+                x: 0,
+                y: 0
+            };
+
+            // Update tooltip styling
+            if (node.title) {
+                node.title = node.title.replace('<div style=\\'max-width:300px;\\'>', '<div style=\\'max-width:300px; color:#ffffff; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;\\'>');
+            }
+        });
+
+        // Update edge colors
+        rawData.edges.forEach(edge => {
+            if (edge.color === "blue") {
+                edge.color = edgeColors.synonym;
+            } else if (edge.color === "green") {
+                edge.color = edgeColors.related;
+            }
+
+            // Add smooth curves to edges
+            edge.smooth = {
+                type: 'dynamic',
+                roundness: 0.5
+            };
+        });
+
+        var data = rawData;
+
+        var options = {
+            nodes: {
+                font: {
+                    color: '#ffffff',
+                    size: 16,
+                    face: 'Segoe UI',
+                    strokeWidth: 3,
+                    strokeColor: '#1e1e1e'
+                },
+                borderWidth: 2,
+                borderWidthSelected: 4,
+                shadow: true
+            },
+            edges: {
+                width: 3,
+                selectionWidth: 6,
+                smooth: true,
+                shadow: true,
+                color: {
+                    inherit: false,
+                    opacity: 0.8
+                },
+                font: {
+                    color: '#ffffff',
+                    size: 14,
+                    face: 'Segoe UI',
+                    strokeWidth: 3,
+                    strokeColor: '#1e1e1e',
+                    background: 'rgba(30, 30, 30, 0.7)'
+                }
+            },
+            interaction: {
+                hover: true,
+                zoomView: true,
+                dragView: true,
+                navigationButtons: true,
+                keyboard: true,
+                tooltipDelay: 100
+            },
+            physics: {
+                stabilization: {
+                    iterations: 100,
+                    fit: true
+                },
+                barnesHut: {
+                    gravitationalConstant: -5000,
+                    centralGravity: 0.3,
+                    springLength: 150,
+                    springConstant: 0.04,
+                    damping: 0.09
+                }
+            },
+            layout: {
+                improvedLayout: true,
+                randomSeed: 42
+            }
+        };
+
+        var network = new vis.Network(container, data, options);
+
+        // Make the network object globally accessible
+        window.network = network;
+
+        // Fit the network to the container on load
+        network.once("afterDrawing", function() {
+            setTimeout(function() {
+                network.fit({
+                    animation: {
+                        duration: 1000,
+                        easingFunction: 'easeInOutQuad'
                     }
                 });
+            }, 200);
+        });
 
-                // Prevent errors when iframe is reloaded
-                window.addEventListener('unload', function() {
-                    if (network) {
-                        try {
-                            network.destroy();
-                        } catch (e) {
-                            console.log('Network already destroyed');
-                        }
-                    }
-                });
-            </script>
-        </body>
-        </html>
-        """
+        // Add click event to nodes
+        network.on("click", function(params) {
+            if (params.nodes.length > 0) {
+                var nodeId = params.nodes[0];
+                if (nodeId !== '') {
+                    window.parent.location.href = '/visualize/' + encodeURIComponent(nodeId);
+                }
+            }
+        });
+
+        // Prevent errors when iframe is reloaded
+        window.addEventListener('unload', function() {
+            if (network) {
+                try {
+                    network.destroy();
+                } catch (e) {
+                    console.log('Network already destroyed');
+                }
+            }
+        });
+    </script>
+</body>
+</html>"""
 
         # Replace placeholders with actual data
         nodes_data = []
@@ -377,12 +536,9 @@ class VisualThesaurus:
             "nodes": nodes_data,
             "edges": edges_data
         })
-        network_options = json.dumps(options)
-        central_word = word if word else ""
 
-        html_content = html_template.replace("{NETWORK_DATA}", network_data)\
-                                    .replace("{NETWORK_OPTIONS}", network_options)\
-                                    .replace("{CENTRAL_WORD}", central_word)
+        # Replace the placeholder in the template with the actual data
+        html_content = html_template.replace("REPLACE_WITH_DATA", network_data)
 
         # Save the HTML file
         if save_path:

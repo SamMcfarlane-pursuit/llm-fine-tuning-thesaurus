@@ -83,20 +83,33 @@ function init() {
     }
 }
 
-// Search for a word
+// Search for a word or sentence
 function searchWord() {
-    let word = wordInput.value.trim().toLowerCase();
+    let input = wordInput.value.trim().toLowerCase();
 
-    if (!word) {
-        alert('Please enter a word to search');
+    if (!input) {
+        alert('Please enter a word or sentence to search');
         return;
     }
 
-    // If the input contains spaces, extract just the first word
-    if (word.includes(' ')) {
-        const firstWord = word.split(' ')[0];
-        console.log(`Input contains multiple words. Using first word: '${firstWord}'`);
-        word = firstWord;
+    // Keep the original input for the API call
+    let word = input;
+
+    // Check if it's a question or sentence
+    const isQuestion = input.includes('?') ||
+                      input.startsWith('how') ||
+                      input.startsWith('what') ||
+                      input.startsWith('why') ||
+                      input.startsWith('when') ||
+                      input.startsWith('where') ||
+                      input.startsWith('which') ||
+                      input.startsWith('who') ||
+                      input.startsWith('can') ||
+                      input.startsWith('does');
+
+    // If it's a question, we'll handle it differently in the backend
+    if (isQuestion) {
+        console.log(`Input appears to be a question: '${input}'`);
     }
 
     // Update current word
@@ -337,11 +350,15 @@ function askQuestion() {
     askBtn.disabled = true;
     askBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Asking...';
 
+    // Get CSRF token from meta tag
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
     // Send question to API
     fetch('/api/ask', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken
         },
         body: JSON.stringify({ question })
     })

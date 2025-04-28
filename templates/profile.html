@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+
+{% block title %}User Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3>Profile</h3>
+                </div>
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <img src="{{ user.avatar_url or url_for('static', filename='img/default-avatar.png') }}" alt="Profile Picture" class="rounded-circle img-fluid" style="width: 150px; height: 150px; object-fit: cover;">
+                    </div>
+                    <h4>{{ user.username }}</h4>
+                    <p class="text-muted">{{ user.email }}</p>
+                    <p>Member since: {{ user.created_at.strftime('%B %d, %Y') }}</p>
+                    
+                    <div class="d-grid gap-2 mt-3">
+                        <a href="{{ url_for('edit_profile') }}" class="btn btn-outline-primary">
+                            <i class="bi bi-pencil-square me-2"></i>Edit Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-header bg-info text-white">
+                    <h4>Connected Accounts</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="bi bi-github me-2"></i>GitHub
+                            </div>
+                            {% if user.github_connected %}
+                                <span class="badge bg-success rounded-pill">Connected</span>
+                            {% else %}
+                                <a href="{{ url_for('oauth_login', provider='github') }}" class="btn btn-sm btn-outline-dark">Connect</a>
+                            {% endif %}
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="bi bi-hdd-network me-2"></i>Hugging Face
+                            </div>
+                            {% if user.huggingface_connected %}
+                                <span class="badge bg-success rounded-pill">Connected</span>
+                            {% else %}
+                                <a href="{{ url_for('oauth_login', provider='huggingface') }}" class="btn btn-sm btn-outline-primary">Connect</a>
+                            {% endif %}
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="bi bi-google me-2"></i>Google
+                            </div>
+                            {% if user.google_connected %}
+                                <span class="badge bg-success rounded-pill">Connected</span>
+                            {% else %}
+                                <a href="{{ url_for('oauth_login', provider='google') }}" class="btn btn-sm btn-outline-danger">Connect</a>
+                            {% endif %}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3>Learning Progress</h3>
+                </div>
+                <div class="card-body">
+                    <h4>Course Completion</h4>
+                    <div class="progress mb-4" style="height: 25px;">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ user.course_progress }}%;" aria-valuenow="{{ user.course_progress }}" aria-valuemin="0" aria-valuemax="100">{{ user.course_progress }}%</div>
+                    </div>
+                    
+                    <h4>Completed Exercises</h4>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Exercise</th>
+                                    <th>Completed On</th>
+                                    <th>Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for exercise in completed_exercises %}
+                                <tr>
+                                    <td>{{ exercise.title }}</td>
+                                    <td>{{ exercise.completed_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                                    <td>
+                                        {% if exercise.score >= 80 %}
+                                            <span class="badge bg-success">{{ exercise.score }}%</span>
+                                        {% elif exercise.score >= 60 %}
+                                            <span class="badge bg-warning text-dark">{{ exercise.score }}%</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">{{ exercise.score }}%</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="3" class="text-center">No completed exercises yet.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <h4 class="mt-4">Your Models</h4>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Model Name</th>
+                                    <th>Created On</th>
+                                    <th>Type</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for model in user_models %}
+                                <tr>
+                                    <td>{{ model.name }}</td>
+                                    <td>{{ model.created_at.strftime('%Y-%m-%d') }}</td>
+                                    <td>{{ model.type }}</td>
+                                    <td>
+                                        <a href="{{ url_for('view_model', model_id=model.id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                                        <a href="{{ url_for('download_model', model_id=model.id) }}" class="btn btn-sm btn-outline-success">Download</a>
+                                    </td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="4" class="text-center">No models created yet.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="d-grid gap-2 mt-4">
+                        <a href="{{ url_for('create_model') }}" class="btn btn-primary">
+                            <i class="bi bi-plus-circle me-2"></i>Create New Model
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-header bg-info text-white">
+                    <h3>Quiz Results</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Quiz</th>
+                                    <th>Date</th>
+                                    <th>Score</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for quiz in quiz_results %}
+                                <tr>
+                                    <td>{{ quiz.title }}</td>
+                                    <td>{{ quiz.completed_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                                    <td>
+                                        {% if quiz.score >= 80 %}
+                                            <span class="badge bg-success">{{ quiz.score }}%</span>
+                                        {% elif quiz.score >= 60 %}
+                                            <span class="badge bg-warning text-dark">{{ quiz.score }}%</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">{{ quiz.score }}%</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{{ url_for('view_quiz_result', result_id=quiz.id) }}" class="btn btn-sm btn-outline-primary">View Results</a>
+                                    </td>
+                                </tr>
+                                {% else %}
+                                <tr>
+                                    <td colspan="4" class="text-center">No quiz results yet.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

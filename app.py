@@ -5,7 +5,7 @@ This provides a web interface for interacting with the thesaurus.
 import os
 import ssl
 import nltk
-from flask import Flask, render_template, request, jsonify, send_from_directory, redirect, url_for
+from flask import Flask, render_template, request, jsonify, send_from_directory, redirect, url_for, flash
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from peft import PeftModel
@@ -262,6 +262,12 @@ def workshop_qlora():
 def workshop_memory_efficiency():
     """Render the memory efficiency in LLM fine-tuning workshop page."""
     return render_template('workshop_memory_efficiency.html', module_id='memory', topic_id='efficiency')
+
+@app.route('/workshop/lora-basics')
+@login_required
+def workshop_lora_basics():
+    """Render the LoRA basics workshop page."""
+    return render_template('workshop_lora_basics.html', module_id='lora', topic_id='basics')
 
 @app.route('/guide/lora-implementation')
 def lora_guide():
@@ -556,6 +562,45 @@ def privacy():
 def oauth_login(provider):
     """Redirect to OAuth login for the specified provider."""
     return redirect(url_for(f'auth.{provider}'))
+
+@app.route('/edit-profile')
+@login_required
+def edit_profile():
+    """Redirect to auth edit profile page."""
+    return redirect(url_for('auth.profile'))
+
+@app.route('/view-model/<int:model_id>')
+@login_required
+def view_model(model_id):
+    """View a specific model."""
+    # This is a placeholder route - implement actual model viewing logic
+    return render_template('model_viewer.html', model_id=model_id)
+
+@app.route('/download-model/<int:model_id>')
+@login_required
+def download_model(model_id):
+    """Download a specific model."""
+    # This is a placeholder route - implement actual model download logic
+    from flask import send_file
+    import os
+
+    # For now, just return a message
+    flash(f"Model download functionality will be implemented soon.", "info")
+    return redirect(url_for('profile'))
+
+@app.route('/create-model')
+@login_required
+def create_model():
+    """Create a new model."""
+    # This is a placeholder route - implement actual model creation logic
+    return render_template('create_model.html')
+
+@app.route('/view-quiz-result/<int:result_id>')
+@login_required
+def view_quiz_result(result_id):
+    """View a specific quiz result."""
+    # This is a placeholder route - implement actual quiz result viewing logic
+    return render_template('quiz/quiz_result.html', result_id=result_id)
 
 @app.route('/frameworks/tensorflow/exercises')
 def tensorflow_exercises():

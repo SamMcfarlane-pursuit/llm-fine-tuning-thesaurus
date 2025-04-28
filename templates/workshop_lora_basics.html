@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}LoRA Basics Workshop{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h1 class="mb-0">LoRA Basics Workshop</h1>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <p>This is a placeholder page for the LoRA Basics Workshop. The full workshop content will be implemented soon.</p>
+                    </div>
+                    
+                    <h2>Workshop Overview</h2>
+                    <p>This workshop will cover the basics of Low-Rank Adaptation (LoRA) for fine-tuning large language models. LoRA is a parameter-efficient fine-tuning technique that significantly reduces memory requirements while maintaining performance.</p>
+                    
+                    <h3>What You'll Learn</h3>
+                    <ul>
+                        <li>Understanding the core concepts of LoRA</li>
+                        <li>Setting up your environment for LoRA fine-tuning</li>
+                        <li>Preparing your dataset for fine-tuning</li>
+                        <li>Implementing LoRA with Hugging Face Transformers</li>
+                        <li>Evaluating your fine-tuned model</li>
+                    </ul>
+                    
+                    <h3>Prerequisites</h3>
+                    <ul>
+                        <li>Basic understanding of neural networks and transformers</li>
+                        <li>Familiarity with Python and PyTorch</li>
+                        <li>Access to a GPU (recommended but not required)</li>
+                    </ul>
+                    
+                    <div class="mt-4">
+                        <a href="{{ url_for('workshops') }}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-2"></i>Back to Workshops
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,691 @@
+{% extends 'base.html' %}
+
+{% block title %}Docker Guide for LLM Fine-Tuning{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">Docker Guide for LLM Fine-Tuning</h1>
+            <p class="lead">Learn how to use Docker to containerize and deploy your fine-tuned language models</p>
+        </div>
+    </div>
+
+    <!-- Introduction Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2>Introduction to Docker for ML</h2>
+                </div>
+                <div class="card-body">
+                    <p>Docker is a powerful tool for creating, deploying, and running applications in containers. For machine learning and specifically LLM fine-tuning, Docker provides several key benefits:</p>
+                    
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="bi bi-box-seam me-2"></i>Environment Consistency</h5>
+                                    <p class="card-text">Docker ensures that your fine-tuning environment is consistent across development, testing, and production. This eliminates "it works on my machine" problems and makes your work reproducible.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="bi bi-gpu-card me-2"></i>GPU Support</h5>
+                                    <p class="card-text">Docker can leverage GPU acceleration for training and inference, making it ideal for resource-intensive LLM fine-tuning tasks.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="bi bi-share me-2"></i>Portability</h5>
+                                    <p class="card-text">Package your fine-tuned models with all dependencies and share them with others or deploy them to any environment that supports Docker.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="bi bi-diagram-3 me-2"></i>Scalability</h5>
+                                    <p class="card-text">Easily scale your fine-tuning or inference workloads using container orchestration tools like Kubernetes.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Docker Basics Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2>Docker Basics for ML Engineers</h2>
+                </div>
+                <div class="card-body">
+                    <h4>Key Docker Concepts</h4>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Concept</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Container</strong></td>
+                                    <td>A lightweight, standalone, executable package that includes everything needed to run an application.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Image</strong></td>
+                                    <td>A read-only template with instructions for creating a Docker container.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Dockerfile</strong></td>
+                                    <td>A text file with instructions to build a Docker image.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Volume</strong></td>
+                                    <td>Persistent data storage that exists outside the container lifecycle.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Docker Compose</strong></td>
+                                    <td>A tool for defining and running multi-container Docker applications.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4 class="mt-4">Essential Docker Commands</h4>
+                    <div class="bg-light p-3 rounded">
+                        <pre><code># Build an image from a Dockerfile
+docker build -t my-llm-image .
+
+# Run a container from an image
+docker run -p 8000:8000 my-llm-image
+
+# Run with GPU support
+docker run --gpus all -p 8000:8000 my-llm-image
+
+# List running containers
+docker ps
+
+# Stop a container
+docker stop container_id
+
+# View container logs
+docker logs container_id
+
+# Execute a command in a running container
+docker exec -it container_id bash</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Docker for LLM Fine-Tuning Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2>Docker for LLM Fine-Tuning</h2>
+                </div>
+                <div class="card-body">
+                    <h4>Creating a Dockerfile for Fine-Tuning</h4>
+                    <p>Here's a sample Dockerfile for LLM fine-tuning with PyTorch and Hugging Face Transformers:</p>
+                    
+                    <div class="bg-light p-3 rounded">
+                        <pre><code># Use NVIDIA's PyTorch container as base image
+FROM nvcr.io/nvidia/pytorch:23.04-py3
+
+# Set working directory
+WORKDIR /app
+
+# Install additional dependencies
+RUN pip install --no-cache-dir \
+    transformers \
+    datasets \
+    accelerate \
+    bitsandbytes \
+    peft \
+    trl \
+    wandb \
+    tensorboard
+
+# Copy fine-tuning code and configuration
+COPY finetune_qlora.py .
+COPY prepare_dataset.py .
+COPY requirements.txt .
+COPY run_finetuning.sh .
+
+# Make the script executable
+RUN chmod +x run_finetuning.sh
+
+# Set the entrypoint
+ENTRYPOINT ["/app/run_finetuning.sh"]</code></pre>
+                    </div>
+
+                    <div class="alert alert-info mt-3">
+                        <h5><i class="bi bi-info-circle me-2"></i>Best Practices</h5>
+                        <ul>
+                            <li>Use official base images from NVIDIA for GPU support</li>
+                            <li>Pin specific versions of dependencies for reproducibility</li>
+                            <li>Use multi-stage builds to reduce image size</li>
+                            <li>Store large datasets and model checkpoints in volumes</li>
+                        </ul>
+                    </div>
+
+                    <h4 class="mt-4">Using Docker Compose for Fine-Tuning</h4>
+                    <p>Docker Compose allows you to define and run multi-container applications. Here's an example for LLM fine-tuning:</p>
+                    
+                    <div class="bg-light p-3 rounded">
+                        <pre><code>version: '3.8'
+
+services:
+  fine-tuning:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+    environment:
+      - WANDB_API_KEY=${WANDB_API_KEY}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+  
+  tensorboard:
+    image: tensorflow/tensorflow:latest
+    command: tensorboard --logdir=/logs --bind_all
+    volumes:
+      - ./models:/logs
+    ports:
+      - "6006:6006"</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Practical Examples Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2>Practical Examples</h2>
+                </div>
+                <div class="card-body">
+                    <h4>Example 1: Fine-Tuning with QLoRA in Docker</h4>
+                    <p>This example demonstrates how to set up a Docker container for fine-tuning a language model using QLoRA:</p>
+                    
+                    <div class="accordion" id="exampleAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Step 1: Create the Dockerfile
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#exampleAccordion">
+                                <div class="accordion-body">
+                                    <div class="bg-light p-3 rounded">
+                                        <pre><code># Dockerfile.qlora
+FROM nvcr.io/nvidia/pytorch:23.04-py3
+
+WORKDIR /app
+
+# Install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy code
+COPY finetune_qlora.py .
+COPY prepare_dataset.py .
+COPY utils.py .
+
+# Create directories for data and models
+RUN mkdir -p /app/data /app/models
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+
+# Default command
+CMD ["python", "finetune_qlora.py"]</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    Step 2: Create requirements.txt
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#exampleAccordion">
+                                <div class="accordion-body">
+                                    <div class="bg-light p-3 rounded">
+                                        <pre><code>torch>=2.0.0
+transformers>=4.30.0
+datasets>=2.12.0
+accelerate>=0.20.0
+bitsandbytes>=0.39.0
+peft>=0.4.0
+trl>=0.4.7
+wandb>=0.15.0
+tensorboard>=2.12.0
+scipy>=1.10.0
+scikit-learn>=1.2.0</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingThree">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    Step 3: Create docker-compose.yml
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#exampleAccordion">
+                                <div class="accordion-body">
+                                    <div class="bg-light p-3 rounded">
+                                        <pre><code>version: '3.8'
+
+services:
+  qlora-finetuning:
+    build:
+      context: .
+      dockerfile: Dockerfile.qlora
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+    environment:
+      - MODEL_NAME=TinyLlama/TinyLlama-1.1B-Chat-v1.0
+      - NUM_EPOCHS=3
+      - LEARNING_RATE=2e-4
+      - BATCH_SIZE=4
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+  
+  tensorboard:
+    image: tensorflow/tensorflow:latest
+    command: tensorboard --logdir=/logs --bind_all
+    volumes:
+      - ./models:/logs
+    ports:
+      - "6006:6006"
+    depends_on:
+      - qlora-finetuning</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingFour">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                    Step 4: Run the containers
+                                </button>
+                            </h2>
+                            <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#exampleAccordion">
+                                <div class="accordion-body">
+                                    <div class="bg-light p-3 rounded">
+                                        <pre><code># Build and start the containers
+docker-compose up -d
+
+# Monitor the fine-tuning logs
+docker-compose logs -f qlora-finetuning
+
+# Access TensorBoard at http://localhost:6006
+
+# Stop the containers when done
+docker-compose down</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4 class="mt-4">Example 2: Deploying a Fine-Tuned Model with Docker</h4>
+                    <p>This example shows how to deploy a fine-tuned model as a REST API using FastAPI and Docker:</p>
+                    
+                    <div class="accordion" id="deploymentAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingDeploy1">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDeploy1" aria-expanded="true" aria-controls="collapseDeploy1">
+                                    Step 1: Create the API code (app.py)
+                                </button>
+                            </h2>
+                            <div id="collapseDeploy1" class="accordion-collapse collapse show" aria-labelledby="headingDeploy1" data-bs-parent="#deploymentAccordion">
+                                <div class="accordion-body">
+                                    <div class="bg-light p-3 rounded">
+                                        <pre><code>from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from peft import PeftModel
+import os
+
+app = FastAPI(title="Fine-tuned LLM API")
+
+# Model paths
+BASE_MODEL_PATH = os.environ.get("BASE_MODEL_PATH", "distilgpt2")
+ADAPTER_PATH = os.environ.get("ADAPTER_PATH", "./models/thesaurus-model-lora")
+
+# Load model and tokenizer
+@app.on_event("startup")
+async def startup_event():
+    global model, tokenizer
+    
+    print(f"Loading base model: {BASE_MODEL_PATH}")
+    base_model = AutoModelForCausalLM.from_pretrained(
+        BASE_MODEL_PATH,
+        device_map="auto",
+        torch_dtype=torch.float16
+    )
+    
+    print(f"Loading adapter: {ADAPTER_PATH}")
+    model = PeftModel.from_pretrained(base_model, ADAPTER_PATH)
+    tokenizer = AutoTokenizer.from_pretrained(ADAPTER_PATH)
+    
+    print("Model loaded successfully!")
+
+class GenerationRequest(BaseModel):
+    prompt: str
+    max_length: int = 100
+    temperature: float = 0.7
+    top_p: float = 0.9
+    num_return_sequences: int = 1
+
+class GenerationResponse(BaseModel):
+    generated_text: str
+
+@app.post("/generate", response_model=GenerationResponse)
+async def generate_text(request: GenerationRequest):
+    try:
+        inputs = tokenizer(request.prompt, return_tensors="pt").to(model.device)
+        
+        with torch.no_grad():
+            outputs = model.generate(
+                inputs.input_ids,
+                max_length=request.max_length,
+                temperature=request.temperature,
+                top_p=request.top_p,
+                num_return_sequences=request.num_return_sequences,
+                pad_token_id=tokenizer.eos_token_id
+            )
+        
+        generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
+        return {"generated_text": generated_text}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingDeploy2">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDeploy2" aria-expanded="false" aria-controls="collapseDeploy2">
+                                    Step 2: Create the Dockerfile for deployment
+                                </button>
+                            </h2>
+                            <div id="collapseDeploy2" class="accordion-collapse collapse" aria-labelledby="headingDeploy2" data-bs-parent="#deploymentAccordion">
+                                <div class="accordion-body">
+                                    <div class="bg-light p-3 rounded">
+                                        <pre><code># Dockerfile.deploy
+FROM nvcr.io/nvidia/pytorch:23.04-py3
+
+WORKDIR /app
+
+# Install dependencies
+RUN pip install --no-cache-dir fastapi uvicorn peft transformers
+
+# Copy application code
+COPY app.py .
+
+# Create directory for models
+RUN mkdir -p /app/models
+
+# Expose port
+EXPOSE 8000
+
+# Start the API server
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingDeploy3">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDeploy3" aria-expanded="false" aria-controls="collapseDeploy3">
+                                    Step 3: Create docker-compose.yml for deployment
+                                </button>
+                            </h2>
+                            <div id="collapseDeploy3" class="accordion-collapse collapse" aria-labelledby="headingDeploy3" data-bs-parent="#deploymentAccordion">
+                                <div class="accordion-body">
+                                    <div class="bg-light p-3 rounded">
+                                        <pre><code>version: '3.8'
+
+services:
+  llm-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.deploy
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./models:/app/models
+    environment:
+      - BASE_MODEL_PATH=distilgpt2
+      - ADAPTER_PATH=/app/models/thesaurus-model-lora
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingDeploy4">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDeploy4" aria-expanded="false" aria-controls="collapseDeploy4">
+                                    Step 4: Run and test the API
+                                </button>
+                            </h2>
+                            <div id="collapseDeploy4" class="accordion-collapse collapse" aria-labelledby="headingDeploy4" data-bs-parent="#deploymentAccordion">
+                                <div class="accordion-body">
+                                    <div class="bg-light p-3 rounded">
+                                        <pre><code># Start the API container
+docker-compose up -d
+
+# Test the API with curl
+curl -X POST http://localhost:8000/generate \
+  -H "Content-Type: application/json" \
+  -d '{"prompt": "A synonym for happy is", "max_length": 50}'
+
+# Access the Swagger UI at http://localhost:8000/docs
+
+# Stop the container when done
+docker-compose down</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Advanced Topics Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2>Advanced Topics</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Optimizing Docker Images for ML</h4>
+                            <ul class="list-group mb-4">
+                                <li class="list-group-item">
+                                    <strong>Multi-stage builds</strong>: Use multiple stages to keep final images small.
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Layer caching</strong>: Order Dockerfile commands to maximize cache usage.
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Minimal dependencies</strong>: Only install what you need.
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Non-root users</strong>: Run containers as non-root for security.
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Distributed Training with Docker</h4>
+                            <ul class="list-group mb-4">
+                                <li class="list-group-item">
+                                    <strong>Docker Swarm</strong>: Simple container orchestration for distributed training.
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Kubernetes</strong>: Advanced orchestration for large-scale training.
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Horovod</strong>: Distributed deep learning training framework.
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>DeepSpeed</strong>: Optimized distributed training for large models.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h4>Integration with Hugging Face Hub</h4>
+                    <p>You can easily integrate your Docker-based fine-tuning with the Hugging Face Hub:</p>
+                    
+                    <div class="bg-light p-3 rounded">
+                        <pre><code># Inside your Docker container
+from huggingface_hub import login, push_to_hub
+
+# Login to Hugging Face
+login(token="your_huggingface_token")
+
+# After fine-tuning, push your model to the Hub
+model.push_to_hub("your-username/your-model-name")
+tokenizer.push_to_hub("your-username/your-model-name")</code></pre>
+                    </div>
+
+                    <div class="alert alert-success mt-3">
+                        <h5><i class="bi bi-lightbulb me-2"></i>Pro Tip</h5>
+                        <p>You can use Docker secrets or environment variables to securely store your Hugging Face token:</p>
+                        <pre><code>docker run -e HUGGINGFACE_TOKEN=${HUGGINGFACE_TOKEN} my-llm-image</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hands-on Exercise Section -->
+    <div class="row mt-4 mb-5">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h2>Hands-on Exercise: Dockerize Your Fine-Tuning Pipeline</h2>
+                </div>
+                <div class="card-body">
+                    <p>In this exercise, you'll create a complete Docker setup for fine-tuning a language model with QLoRA and deploying it as an API.</p>
+                    
+                    <div class="alert alert-info">
+                        <h5><i class="bi bi-info-circle me-2"></i>Learning Objectives</h5>
+                        <ul>
+                            <li>Create a Docker environment for LLM fine-tuning</li>
+                            <li>Use Docker Compose to manage multiple containers</li>
+                            <li>Deploy a fine-tuned model as a REST API</li>
+                            <li>Implement best practices for ML Docker containers</li>
+                        </ul>
+                    </div>
+                    
+                    <h4 class="mt-4">Exercise Steps</h4>
+                    <ol class="list-group list-group-numbered mb-4">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Set up the project structure</div>
+                                Create directories for code, data, and models
+                            </div>
+                            <span class="badge bg-primary rounded-pill">5 min</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Create the Dockerfile for fine-tuning</div>
+                                Write a Dockerfile that includes all necessary dependencies
+                            </div>
+                            <span class="badge bg-primary rounded-pill">10 min</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Create the docker-compose.yml file</div>
+                                Define services for fine-tuning and monitoring
+                            </div>
+                            <span class="badge bg-primary rounded-pill">10 min</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Run the fine-tuning process</div>
+                                Build and run the containers to fine-tune the model
+                            </div>
+                            <span class="badge bg-primary rounded-pill">15 min</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Create the deployment Dockerfile</div>
+                                Write a Dockerfile for deploying the fine-tuned model
+                            </div>
+                            <span class="badge bg-primary rounded-pill">10 min</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Deploy and test the model</div>
+                                Deploy the model as an API and test it with sample requests
+                            </div>
+                            <span class="badge bg-primary rounded-pill">10 min</span>
+                        </li>
+                    </ol>
+                    
+                    <div class="text-center">
+                        <a href="/exercises/docker-fine-tuning" class="btn btn-primary btn-lg">
+                            <i class="bi bi-play-fill me-2"></i> Start Exercise
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,655 @@
+{% extends 'base.html' %}
+
+{% block title %}Hugging Face Integration Guide{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">Hugging Face Integration Guide</h1>
+            <p class="lead">Learn how to leverage the Hugging Face ecosystem for LLM fine-tuning and deployment</p>
+        </div>
+    </div>
+
+    <!-- Introduction Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2>Introduction to Hugging Face</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <p>Hugging Face is the leading platform for machine learning collaboration, offering tools, libraries, and infrastructure for building, training, and deploying models. For LLM fine-tuning, Hugging Face provides several key components:</p>
+                            
+                            <ul class="list-group mt-3">
+                                <li class="list-group-item">
+                                    <strong>🤗 Transformers</strong>: A library providing thousands of pre-trained models for NLP, computer vision, and more.
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>🤗 Datasets</strong>: A library for easily accessing and sharing datasets.
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>🤗 PEFT</strong>: Parameter-Efficient Fine-Tuning methods including LoRA and QLoRA.
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>🤗 Accelerate</strong>: Tools for distributed training across multiple GPUs or TPUs.
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>🤗 Hub</strong>: A platform for sharing models, datasets, and spaces (interactive demos).
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">Hugging Face Hub</h5>
+                                    <p class="card-text">Create a free account to access all features of the Hugging Face ecosystem.</p>
+                                    <a href="https://huggingface.co/join" target="_blank" class="btn btn-primary">
+                                        <i class="bi bi-person-plus me-2"></i>Sign Up
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="card mt-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">Key Statistics</h5>
+                                    <ul class="list-unstyled">
+                                        <li>🔥 150,000+ models</li>
+                                        <li>📊 25,000+ datasets</li>
+                                        <li>🧑‍💻 20,000+ organizations</li>
+                                        <li>🌐 Millions of monthly users</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hugging Face Libraries Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2>Essential Hugging Face Libraries</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-header bg-info text-white">
+                                    <h4>🤗 Transformers</h4>
+                                </div>
+                                <div class="card-body">
+                                    <p>The Transformers library provides APIs and tools to easily download and train state-of-the-art pre-trained models.</p>
+                                    
+                                    <h5>Key Features:</h5>
+                                    <ul>
+                                        <li>Access to thousands of pre-trained models</li>
+                                        <li>Support for PyTorch, TensorFlow, and JAX</li>
+                                        <li>Easy model fine-tuning with the Trainer API</li>
+                                        <li>Built-in pipeline abstraction for inference</li>
+                                        <li>Model conversion and quantization utilities</li>
+                                    </ul>
+                                    
+                                    <div class="bg-light p-3 rounded mt-3">
+                                        <pre><code># Basic usage example
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+# Load model and tokenizer
+model = AutoModelForCausalLM.from_pretrained("distilgpt2")
+tokenizer = AutoTokenizer.from_pretrained("distilgpt2")
+
+# Generate text
+inputs = tokenizer("Hello, I'm a language model", return_tensors="pt")
+outputs = model.generate(**inputs, max_length=50)
+print(tokenizer.decode(outputs[0], skip_special_tokens=True))</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-header bg-info text-white">
+                                    <h4>🤗 PEFT</h4>
+                                </div>
+                                <div class="card-body">
+                                    <p>Parameter-Efficient Fine-Tuning (PEFT) methods enable fine-tuning large models with limited computational resources.</p>
+                                    
+                                    <h5>Supported Methods:</h5>
+                                    <ul>
+                                        <li><strong>LoRA</strong>: Low-Rank Adaptation of large language models</li>
+                                        <li><strong>QLoRA</strong>: Quantized Low-Rank Adaptation</li>
+                                        <li><strong>Prefix Tuning</strong>: Optimizing continuous prompts</li>
+                                        <li><strong>P-Tuning</strong>: Prompt tuning with trainable continuous vectors</li>
+                                        <li><strong>Prompt Tuning</strong>: Learning soft prompts for LLMs</li>
+                                    </ul>
+                                    
+                                    <div class="bg-light p-3 rounded mt-3">
+                                        <pre><code># LoRA example
+from transformers import AutoModelForCausalLM
+from peft import LoraConfig, get_peft_model
+
+# Load base model
+model = AutoModelForCausalLM.from_pretrained("distilgpt2")
+
+# Define LoRA configuration
+lora_config = LoraConfig(
+    r=16,
+    lora_alpha=32,
+    target_modules=["q_proj", "v_proj"],
+    lora_dropout=0.05,
+    bias="none",
+    task_type="CAUSAL_LM"
+)
+
+# Apply LoRA
+peft_model = get_peft_model(model, lora_config)</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-header bg-info text-white">
+                                    <h4>🤗 Datasets</h4>
+                                </div>
+                                <div class="card-body">
+                                    <p>The Datasets library provides a simple API for accessing and sharing datasets for machine learning.</p>
+                                    
+                                    <h5>Key Features:</h5>
+                                    <ul>
+                                        <li>Access to thousands of public datasets</li>
+                                        <li>Efficient data loading and processing</li>
+                                        <li>Built-in data preprocessing functions</li>
+                                        <li>Memory-efficient dataset handling</li>
+                                        <li>Easy dataset sharing on the Hub</li>
+                                    </ul>
+                                    
+                                    <div class="bg-light p-3 rounded mt-3">
+                                        <pre><code># Loading and processing a dataset
+from datasets import load_dataset
+
+# Load a dataset from the Hub
+dataset = load_dataset("imdb")
+
+# Apply preprocessing
+def tokenize_function(examples):
+    return tokenizer(examples["text"], padding="max_length", truncation=True)
+
+tokenized_dataset = dataset.map(tokenize_function, batched=True)</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-header bg-info text-white">
+                                    <h4>🤗 Accelerate</h4>
+                                </div>
+                                <div class="card-body">
+                                    <p>Accelerate simplifies the process of training models on multiple GPUs, TPUs, or mixed precision without changing your code.</p>
+                                    
+                                    <h5>Key Features:</h5>
+                                    <ul>
+                                        <li>Distributed training across multiple GPUs</li>
+                                        <li>Mixed precision training</li>
+                                        <li>Gradient accumulation</li>
+                                        <li>DeepSpeed and FSDP integration</li>
+                                        <li>Easy configuration via CLI or config files</li>
+                                    </ul>
+                                    
+                                    <div class="bg-light p-3 rounded mt-3">
+                                        <pre><code># Distributed training with Accelerate
+from accelerate import Accelerator
+
+# Initialize accelerator
+accelerator = Accelerator()
+
+# Prepare model, optimizer, and dataloaders
+model, optimizer, train_dataloader = accelerator.prepare(
+    model, optimizer, train_dataloader
+)
+
+# Training loop
+for epoch in range(num_epochs):
+    for batch in train_dataloader:
+        outputs = model(**batch)
+        loss = outputs.loss
+        accelerator.backward(loss)
+        optimizer.step()
+        optimizer.zero_grad()</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hugging Face Hub Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2>Hugging Face Hub Integration</h2>
+                </div>
+                <div class="card-body">
+                    <h4>Authentication and Setup</h4>
+                    <p>To interact with the Hugging Face Hub, you'll need to authenticate using an access token:</p>
+                    
+                    <div class="alert alert-info">
+                        <h5><i class="bi bi-info-circle me-2"></i>Getting Your Token</h5>
+                        <ol>
+                            <li>Create an account at <a href="https://huggingface.co/join" target="_blank">huggingface.co</a></li>
+                            <li>Go to your profile settings</li>
+                            <li>Navigate to the "Access Tokens" section</li>
+                            <li>Create a new token with appropriate permissions</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="bg-light p-3 rounded mt-3">
+                        <pre><code># Authenticate with the Hub
+from huggingface_hub import login
+
+# Method 1: Interactive login
+login()
+
+# Method 2: Login with token
+login(token="your_token_here")
+
+# Method 3: Store token in ~/.huggingface/token
+# Run this once on your machine
+login(token="your_token_here", add_to_git_credential=True)</code></pre>
+                    </div>
+
+                    <h4 class="mt-4">Sharing Models on the Hub</h4>
+                    <p>After fine-tuning a model, you can easily share it on the Hugging Face Hub:</p>
+                    
+                    <div class="bg-light p-3 rounded">
+                        <pre><code># Push a model to the Hub
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+# Load your fine-tuned model and tokenizer
+model = AutoModelForCausalLM.from_pretrained("./thesaurus_model_final")
+tokenizer = AutoTokenizer.from_pretrained("./thesaurus_model_final")
+
+# Push to the Hub
+model.push_to_hub("your-username/thesaurus-model")
+tokenizer.push_to_hub("your-username/thesaurus-model")
+
+# For PEFT models
+from peft import PeftModel, PeftConfig
+
+# Load the PEFT model
+config = PeftConfig.from_pretrained("./thesaurus_model_lora")
+model = AutoModelForCausalLM.from_pretrained(config.base_model_name_or_path)
+model = PeftModel.from_pretrained(model, "./thesaurus_model_lora")
+
+# Push to the Hub
+model.push_to_hub("your-username/thesaurus-model-lora")</code></pre>
+                    </div>
+
+                    <h4 class="mt-4">Creating Model Cards</h4>
+                    <p>A good model card helps others understand your model's capabilities, limitations, and intended use:</p>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-header bg-light">
+                                    <h5>Model Card Template</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="bg-light p-3 rounded">
+                                        <pre><code># Thesaurus Fine-Tuned Model
+
+## Model description
+
+This model is a fine-tuned version of `distilgpt2` on a thesaurus dataset. It can generate synonyms, antonyms, and related terms for given words.
+
+## Intended uses & limitations
+
+The model is intended for educational purposes and to assist with vocabulary expansion. It should not be used for critical applications without human review.
+
+## Training data
+
+The model was fine-tuned on a custom thesaurus dataset containing 200 examples of word relationships.
+
+## Training procedure
+
+### Training hyperparameters
+
+- Learning rate: 2e-4
+- Batch size: 4
+- Optimizer: AdamW
+- LR scheduler: Cosine
+- Epochs: 3
+
+### Framework versions
+
+- Transformers 4.30.0
+- PyTorch 2.0.1
+- Datasets 2.12.0
+- PEFT 0.4.0</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-header bg-light">
+                                    <h5>Programmatic Model Card Creation</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="bg-light p-3 rounded">
+                                        <pre><code>from huggingface_hub import ModelCard, ModelCardData
+
+# Create model card data
+card_data = ModelCardData(
+    language="en",
+    license="mit",
+    library_name="transformers",
+    tags=["thesaurus", "nlp", "language", "qlora"],
+    datasets=["custom_thesaurus_dataset"],
+    metrics=["accuracy", "perplexity"]
+)
+
+# Create model card
+card = ModelCard.from_template(
+    card_data,
+    model_id="your-username/thesaurus-model",
+    model_description="A fine-tuned language model for thesaurus applications",
+    intended_use="Educational purposes and vocabulary assistance",
+    limitations="Limited vocabulary coverage",
+    training_data="Custom thesaurus dataset with 200 examples",
+    training_procedure="Fine-tuned with QLoRA for 3 epochs",
+    evaluation_results="Achieved 85% accuracy on test set"
+)
+
+# Save and push model card
+card.save("README.md")
+card.push_to_hub("your-username/thesaurus-model")</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4 class="mt-4">Creating Hugging Face Spaces</h4>
+                    <p>Spaces allow you to create interactive demos for your models directly on the Hugging Face Hub:</p>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-header bg-light">
+                                    <h5>Gradio Demo</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="bg-light p-3 rounded">
+                                        <pre><code>import gradio as gr
+from transformers import pipeline
+
+# Load the model
+model_id = "your-username/thesaurus-model"
+pipe = pipeline("text-generation", model=model_id)
+
+# Define the generation function
+def generate_thesaurus(word, relation_type):
+    prompt = f"Find {relation_type} for the word '{word}':"
+    result = pipe(prompt, max_length=100, temperature=0.7)[0]["generated_text"]
+    return result.split(prompt)[1].strip()
+
+# Create the interface
+demo = gr.Interface(
+    fn=generate_thesaurus,
+    inputs=[
+        gr.Textbox(label="Word"),
+        gr.Radio(["synonyms", "antonyms", "related terms"], label="Relation Type")
+    ],
+    outputs=gr.Textbox(label="Results"),
+    title="Thesaurus AI",
+    description="Generate synonyms, antonyms, and related terms for any word."
+)
+
+# Launch the demo
+demo.launch()</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-header bg-light">
+                                    <h5>Streamlit Demo</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="bg-light p-3 rounded">
+                                        <pre><code>import streamlit as st
+from transformers import pipeline
+
+# Set page title
+st.set_page_config(page_title="Thesaurus AI")
+
+# Load the model
+@st.cache_resource
+def load_model():
+    return pipeline("text-generation", model="your-username/thesaurus-model")
+
+pipe = load_model()
+
+# Create the UI
+st.title("Thesaurus AI")
+st.write("Generate synonyms, antonyms, and related terms for any word.")
+
+word = st.text_input("Enter a word:")
+relation_type = st.selectbox(
+    "Select relation type:",
+    ["synonyms", "antonyms", "related terms"]
+)
+
+if st.button("Generate"):
+    if word:
+        with st.spinner("Generating..."):
+            prompt = f"Find {relation_type} for the word '{word}':"
+            result = pipe(prompt, max_length=100, temperature=0.7)[0]["generated_text"]
+            output = result.split(prompt)[1].strip()
+            st.success(f"**{relation_type.title()} for '{word}':**")
+            st.write(output)
+    else:
+        st.error("Please enter a word.")</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Advanced Hugging Face Features Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2>Advanced Hugging Face Features</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Model Versioning</h4>
+                            <p>Hugging Face Hub supports Git-based versioning for your models:</p>
+                            
+                            <div class="bg-light p-3 rounded">
+                                <pre><code># Push a specific version/tag
+model.push_to_hub("your-username/thesaurus-model", tags=["v1.0.0"])
+
+# Create a model repository with specific branch
+from huggingface_hub import create_repo, HfApi
+
+create_repo("your-username/thesaurus-model", private=True)
+api = HfApi()
+api.upload_folder(
+    folder_path="./thesaurus_model_final",
+    repo_id="your-username/thesaurus-model",
+    revision="dev"  # Push to a specific branch
+)</code></pre>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Model Inference API</h4>
+                            <p>Hugging Face provides a hosted Inference API for your models:</p>
+                            
+                            <div class="bg-light p-3 rounded">
+                                <pre><code># Using the Inference API
+import requests
+
+API_URL = "https://api-inference.huggingface.co/models/your-username/thesaurus-model"
+headers = {"Authorization": f"Bearer {API_TOKEN}"}
+
+def query(payload):
+    response = requests.post(API_URL, headers=headers, json=payload)
+    return response.json()
+
+output = query({
+    "inputs": "Find synonyms for the word 'happy':",
+    "parameters": {
+        "max_length": 100,
+        "temperature": 0.7
+    }
+})</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h4>Dataset Sharing</h4>
+                            <p>Share your custom datasets on the Hugging Face Hub:</p>
+                            
+                            <div class="bg-light p-3 rounded">
+                                <pre><code>from datasets import Dataset
+import pandas as pd
+
+# Create a dataset from your data
+df = pd.read_json("data/thesaurus_dataset.json")
+dataset = Dataset.from_pandas(df)
+
+# Push to the Hub
+dataset.push_to_hub(
+    "your-username/thesaurus-dataset",
+    private=True
+)</code></pre>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Collaborative Features</h4>
+                            <p>Hugging Face Hub supports collaboration through organizations and model/dataset cards:</p>
+                            
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <strong>Organizations</strong>: Create teams to collaborate on models and datasets
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Pull Requests</strong>: Suggest changes to models and datasets
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Discussions</strong>: Engage with the community about your models
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Model Registry</strong>: Track model versions and experiments
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hands-on Exercise Section -->
+    <div class="row mt-4 mb-5">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h2>Hands-on Exercise: Hugging Face Integration</h2>
+                </div>
+                <div class="card-body">
+                    <p>In this exercise, you'll fine-tune a model, push it to the Hugging Face Hub, and create an interactive demo.</p>
+                    
+                    <div class="alert alert-info">
+                        <h5><i class="bi bi-info-circle me-2"></i>Learning Objectives</h5>
+                        <ul>
+                            <li>Fine-tune a model using Hugging Face libraries</li>
+                            <li>Push the model to the Hugging Face Hub</li>
+                            <li>Create a comprehensive model card</li>
+                            <li>Build an interactive demo with Gradio</li>
+                        </ul>
+                    </div>
+                    
+                    <h4 class="mt-4">Exercise Steps</h4>
+                    <ol class="list-group list-group-numbered mb-4">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Set up Hugging Face authentication</div>
+                                Create an account and get an access token
+                            </div>
+                            <span class="badge bg-primary rounded-pill">5 min</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Fine-tune a model with QLoRA</div>
+                                Use the Transformers and PEFT libraries
+                            </div>
+                            <span class="badge bg-primary rounded-pill">15 min</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Push the model to the Hub</div>
+                                Upload your fine-tuned model to your Hugging Face account
+                            </div>
+                            <span class="badge bg-primary rounded-pill">5 min</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Create a model card</div>
+                                Document your model's capabilities and limitations
+                            </div>
+                            <span class="badge bg-primary rounded-pill">10 min</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Create a Gradio demo</div>
+                                Build an interactive interface for your model
+                            </div>
+                            <span class="badge bg-primary rounded-pill">10 min</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Push the demo to Hugging Face Spaces</div>
+                                Share your demo with the community
+                            </div>
+                            <span class="badge bg-primary rounded-pill">5 min</span>
+                        </li>
+                    </ol>
+                    
+                    <div class="text-center">
+                        <a href="/exercises/huggingface-integration" class="btn btn-primary btn-lg">
+                            <i class="bi bi-play-fill me-2"></i> Start Exercise
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

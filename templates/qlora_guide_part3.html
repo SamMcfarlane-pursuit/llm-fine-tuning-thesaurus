@@ -1,0 +1,505 @@
+{% extends 'base.html' %}
+
+{% block title %}QLoRA Fine-Tuning Guide - Part 3{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">QLoRA Fine-Tuning Guide</h1>
+            <p class="lead">Part 3: Advanced Topics and Case Studies</p>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/qlora-guide-part1">Part 1: Introduction</a></li>
+                    <li class="breadcrumb-item"><a href="/qlora-guide-part2">Part 2: Implementation</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Part 3: Advanced Topics</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Advanced Techniques Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2>Advanced QLoRA Techniques</h2>
+                </div>
+                <div class="card-body">
+                    <h4>Instruction Fine-Tuning with QLoRA</h4>
+                    <p>Instruction fine-tuning is a technique to make models better at following specific instructions. When combined with QLoRA, it enables efficient instruction tuning of large models.</p>
+                    
+                    <div class="bg-light p-3 rounded">
+                        <pre><code>from trl import SFTTrainer
+
+# Initialize SFTTrainer for instruction tuning
+trainer = SFTTrainer(
+    model=model,
+    train_dataset=train_dataset,
+    eval_dataset=eval_dataset,
+    args=training_args,
+    peft_config=lora_config,
+    formatting_func=format_instruction,  # Function to format instructions
+    max_seq_length=512,
+    tokenizer=tokenizer,
+)
+
+# Define instruction formatting function
+def format_instruction(example):
+    """Format examples as instructions."""
+    return f"""### Instruction:
+{example['instruction']}
+
+### Input:
+{example['input']}
+
+### Response:
+{example['output']}"""
+
+# Train the model
+trainer.train()</code></pre>
+                    </div>
+                    
+                    <h4 class="mt-4">Multi-Task Fine-Tuning</h4>
+                    <p>Fine-tune a model on multiple tasks simultaneously to improve its general capabilities:</p>
+                    
+                    <div class="bg-light p-3 rounded">
+                        <pre><code># Load multiple datasets
+summarization_dataset = load_dataset("cnn_dailymail", "3.0.0")
+qa_dataset = load_dataset("squad_v2")
+translation_dataset = load_dataset("wmt16", "de-en")
+
+# Process and combine datasets
+def process_summarization(example):
+    return {
+        "instruction": "Summarize the following article:",
+        "input": example["article"],
+        "output": example["highlights"]
+    }
+
+def process_qa(example):
+    return {
+        "instruction": "Answer the following question based on the context:",
+        "input": f"Context: {example['context']}\nQuestion: {example['question']}",
+        "output": example["answers"]["text"][0] if example["answers"]["text"] else "I don't know."
+    }
+
+def process_translation(example):
+    return {
+        "instruction": "Translate the following text from German to English:",
+        "input": example["translation"]["de"],
+        "output": example["translation"]["en"]
+    }
+
+# Process datasets
+summarization_processed = summarization_dataset["train"].map(process_summarization)
+qa_processed = qa_dataset["train"].map(process_qa)
+translation_processed = translation_dataset["train"].map(process_translation)
+
+# Combine datasets
+from datasets import concatenate_datasets
+combined_dataset = concatenate_datasets([
+    summarization_processed.select(range(5000)),
+    qa_processed.select(range(5000)),
+    translation_processed.select(range(5000))
+])</code></pre>
+                    </div>
+                    
+                    <h4 class="mt-4">Domain Adaptation</h4>
+                    <p>Adapt a general-purpose model to a specific domain (e.g., medical, legal, financial):</p>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header bg-light">
+                                    <h5>Two-Stage Fine-Tuning</h5>
+                                </div>
+                                <div class="card-body">
+                                    <ol>
+                                        <li><strong>Domain Adaptation</strong>: First fine-tune on a large corpus of domain-specific text using a lower learning rate</li>
+                                        <li><strong>Task-Specific Tuning</strong>: Then fine-tune on specific tasks within that domain using a higher learning rate</li>
+                                    </ol>
+                                    <div class="bg-light p-3 rounded">
+                                        <pre><code># Stage 1: Domain adaptation
+domain_config = LoraConfig(
+    r=16,
+    lora_alpha=32,
+    target_modules=["q_proj", "v_proj"],
+    lora_dropout=0.05,
+    bias="none",
+    task_type=TaskType.CAUSAL_LM
+)
+
+# Use a lower learning rate for domain adaptation
+domain_args = TrainingArguments(
+    output_dir="./domain_adaptation",
+    learning_rate=5e-5,
+    num_train_epochs=1,
+    # Other parameters...
+)</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header bg-light">
+                                    <h5>Selective Layer Fine-Tuning</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p>Apply LoRA to different layers based on their role:</p>
+                                    <ul>
+                                        <li><strong>Lower layers</strong>: Capture domain-specific features</li>
+                                        <li><strong>Middle layers</strong>: Encode domain knowledge</li>
+                                        <li><strong>Upper layers</strong>: Task-specific reasoning</li>
+                                    </ul>
+                                    <div class="bg-light p-3 rounded">
+                                        <pre><code># Example for a 24-layer model
+# Target early layers for domain knowledge
+early_layer_config = LoraConfig(
+    r=16,
+    target_modules=[
+        "model.layers.0.self_attn.q_proj",
+        "model.layers.1.self_attn.q_proj",
+        # More early layers...
+    ],
+    # Other parameters...
+)</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h4 class="mt-4">Combining QLoRA with Other PEFT Methods</h4>
+                    <p>QLoRA can be combined with other parameter-efficient fine-tuning methods for even better results:</p>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card mb-3">
+                                <div class="card-header bg-light">
+                                    <h5>QLoRA + Prefix Tuning</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p>Add trainable prefix tokens to the input while using QLoRA for weight updates:</p>
+                                    <div class="bg-light p-3 rounded">
+                                        <pre><code>from peft import PrefixTuningConfig
+
+# Define prefix tuning config
+prefix_config = PrefixTuningConfig(
+    task_type=TaskType.CAUSAL_LM,
+    num_virtual_tokens=20,
+    prefix_projection=True,
+    encoder_hidden_size=model.config.hidden_size
+)
+
+# Apply both methods
+# Note: This is conceptual, actual implementation
+# would require custom code</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card mb-3">
+                                <div class="card-header bg-light">
+                                    <h5>QLoRA + Adapter Modules</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p>Add adapter modules to certain layers while using QLoRA for others:</p>
+                                    <div class="bg-light p-3 rounded">
+                                        <pre><code>from peft import AdapterConfig
+
+# Define adapter config
+adapter_config = AdapterConfig(
+    r=16,
+    adapter_dropout=0.1,
+    adapter_init_scale=0.001
+)
+
+# Apply to different parts of the model
+# Note: This is conceptual, actual implementation
+# would require custom code</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Case Studies Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2>Case Studies</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-header bg-info text-white">
+                                    <h4>Case Study 1: Thesaurus Model Fine-Tuning</h4>
+                                </div>
+                                <div class="card-body">
+                                    <h5>Project Overview</h5>
+                                    <p>Fine-tuning a language model to generate synonyms, antonyms, and related terms for given words.</p>
+                                    
+                                    <h5>Model and Hardware</h5>
+                                    <ul>
+                                        <li><strong>Base Model</strong>: Llama-2-7B</li>
+                                        <li><strong>Hardware</strong>: Single NVIDIA RTX 3090 (24GB VRAM)</li>
+                                        <li><strong>Framework</strong>: Hugging Face Transformers + PEFT</li>
+                                    </ul>
+                                    
+                                    <h5>QLoRA Configuration</h5>
+                                    <ul>
+                                        <li><strong>Rank (r)</strong>: 16</li>
+                                        <li><strong>Alpha</strong>: 32</li>
+                                        <li><strong>Target Modules</strong>: Query, Key, Value, and Output projections</li>
+                                        <li><strong>Dropout</strong>: 0.05</li>
+                                    </ul>
+                                    
+                                    <h5>Training Details</h5>
+                                    <ul>
+                                        <li><strong>Dataset</strong>: Custom thesaurus dataset with 10,000 examples</li>
+                                        <li><strong>Batch Size</strong>: 4 (with gradient accumulation of 4)</li>
+                                        <li><strong>Learning Rate</strong>: 2e-4</li>
+                                        <li><strong>Epochs</strong>: 3</li>
+                                        <li><strong>Training Time</strong>: ~2 hours</li>
+                                    </ul>
+                                    
+                                    <h5>Results</h5>
+                                    <ul>
+                                        <li><strong>Memory Usage</strong>: Peak 18GB VRAM</li>
+                                        <li><strong>Performance</strong>: 92% accuracy on test set</li>
+                                        <li><strong>Model Size</strong>: 13MB (adapter only)</li>
+                                    </ul>
+                                    
+                                    <div class="alert alert-success mt-3">
+                                        <h6><i class="bi bi-lightbulb me-2"></i>Key Insight</h6>
+                                        <p class="mb-0">Using a higher rank (r=16) significantly improved the model's ability to generate diverse and accurate synonyms compared to a lower rank (r=8).</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card mb-4">
+                                <div class="card-header bg-info text-white">
+                                    <h4>Case Study 2: Medical Question Answering</h4>
+                                </div>
+                                <div class="card-body">
+                                    <h5>Project Overview</h5>
+                                    <p>Adapting a general-purpose LLM to answer medical questions accurately using QLoRA fine-tuning.</p>
+                                    
+                                    <h5>Model and Hardware</h5>
+                                    <ul>
+                                        <li><strong>Base Model</strong>: Mistral-7B</li>
+                                        <li><strong>Hardware</strong>: NVIDIA A100 (40GB VRAM)</li>
+                                        <li><strong>Framework</strong>: Hugging Face Transformers + PEFT + TRL</li>
+                                    </ul>
+                                    
+                                    <h5>QLoRA Configuration</h5>
+                                    <ul>
+                                        <li><strong>Rank (r)</strong>: 32</li>
+                                        <li><strong>Alpha</strong>: 64</li>
+                                        <li><strong>Target Modules</strong>: All attention and MLP layers</li>
+                                        <li><strong>Dropout</strong>: 0.1</li>
+                                    </ul>
+                                    
+                                    <h5>Training Details</h5>
+                                    <ul>
+                                        <li><strong>Dataset</strong>: Combined medical datasets (PubMedQA, MedQA, MedMCQA)</li>
+                                        <li><strong>Batch Size</strong>: 8</li>
+                                        <li><strong>Learning Rate</strong>: 1e-4</li>
+                                        <li><strong>Epochs</strong>: 2</li>
+                                        <li><strong>Training Time</strong>: ~6 hours</li>
+                                    </ul>
+                                    
+                                    <h5>Results</h5>
+                                    <ul>
+                                        <li><strong>Memory Usage</strong>: Peak 32GB VRAM</li>
+                                        <li><strong>Performance</strong>: 78% accuracy on medical benchmarks (vs. 45% for base model)</li>
+                                        <li><strong>Model Size</strong>: 42MB (adapter only)</li>
+                                    </ul>
+                                    
+                                    <div class="alert alert-success mt-3">
+                                        <h6><i class="bi bi-lightbulb me-2"></i>Key Insight</h6>
+                                        <p class="mb-0">Two-stage fine-tuning (first on medical literature, then on QA pairs) produced significantly better results than direct fine-tuning on QA pairs alone.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card mb-4">
+                                <div class="card-header bg-info text-white">
+                                    <h4>Case Study 3: Code Assistant Fine-Tuning</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <h5>Project Overview</h5>
+                                            <p>Fine-tuning a language model to assist with code completion and generation across multiple programming languages.</p>
+                                            
+                                            <h5>Model and Hardware</h5>
+                                            <ul>
+                                                <li><strong>Base Model</strong>: CodeLlama-13B</li>
+                                                <li><strong>Hardware</strong>: 2x NVIDIA RTX 4090 (distributed training)</li>
+                                                <li><strong>Framework</strong>: Hugging Face Transformers + PEFT + Accelerate</li>
+                                            </ul>
+                                            
+                                            <h5>QLoRA Configuration</h5>
+                                            <ul>
+                                                <li><strong>Rank (r)</strong>: 64</li>
+                                                <li><strong>Alpha</strong>: 128</li>
+                                                <li><strong>Target Modules</strong>: Query, Key, Value projections in all layers</li>
+                                                <li><strong>Dropout</strong>: 0.05</li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h5>Training Details</h5>
+                                            <ul>
+                                                <li><strong>Dataset</strong>: Mixed code dataset (Python, JavaScript, Java, C++)</li>
+                                                <li><strong>Batch Size</strong>: 2 per GPU (effective batch size of 4)</li>
+                                                <li><strong>Learning Rate</strong>: 1e-4 with cosine scheduler</li>
+                                                <li><strong>Epochs</strong>: 1</li>
+                                                <li><strong>Training Time</strong>: ~12 hours</li>
+                                            </ul>
+                                            
+                                            <h5>Results</h5>
+                                            <ul>
+                                                <li><strong>Memory Usage</strong>: Peak 22GB VRAM per GPU</li>
+                                                <li><strong>Performance</strong>: 15% improvement in code completion accuracy</li>
+                                                <li><strong>Model Size</strong>: 85MB (adapter only)</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="alert alert-success mt-3">
+                                        <h6><i class="bi bi-lightbulb me-2"></i>Key Insights</h6>
+                                        <ul class="mb-0">
+                                            <li>Using a higher rank (r=64) was crucial for capturing the complexity of multiple programming languages</li>
+                                            <li>Distributed training with Accelerate made it possible to fine-tune the 13B model efficiently</li>
+                                            <li>Language-specific adapters (one per programming language) performed better than a single adapter for all languages</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <h5 class="mt-3">Implementation Challenges</h5>
+                                    <div class="bg-light p-3 rounded">
+                                        <pre><code># Distributed training setup with Accelerate
+from accelerate import Accelerator
+
+# Initialize accelerator
+accelerator = Accelerator()
+
+# Prepare model, optimizer, and dataloaders
+model, optimizer, train_dataloader = accelerator.prepare(
+    model, optimizer, train_dataloader
+)
+
+# Training loop
+for epoch in range(num_epochs):
+    for batch in train_dataloader:
+        with accelerator.accumulate(model):
+            outputs = model(**batch)
+            loss = outputs.loss
+            accelerator.backward(loss)
+            optimizer.step()
+            optimizer.zero_grad()
+            
+# Save the model (only on main process)
+if accelerator.is_main_process:
+    model.save_pretrained("./code_assistant_model")</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hands-on Exercise Section -->
+    <div class="row mt-4 mb-5">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h2>Hands-on Exercise: QLoRA Fine-Tuning</h2>
+                </div>
+                <div class="card-body">
+                    <p>In this exercise, you'll fine-tune a language model using QLoRA for a specific task.</p>
+                    
+                    <div class="alert alert-info">
+                        <h5><i class="bi bi-info-circle me-2"></i>Learning Objectives</h5>
+                        <ul>
+                            <li>Set up a QLoRA fine-tuning environment</li>
+                            <li>Prepare a dataset for fine-tuning</li>
+                            <li>Configure and train a model with QLoRA</li>
+                            <li>Evaluate and use the fine-tuned model</li>
+                        </ul>
+                    </div>
+                    
+                    <h4 class="mt-4">Exercise Steps</h4>
+                    <ol class="list-group list-group-numbered mb-4">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Set up the environment</div>
+                                Install required libraries and prepare your development environment
+                            </div>
+                            <span class="badge bg-primary rounded-pill">10 min</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Prepare the dataset</div>
+                                Format and process a dataset for fine-tuning
+                            </div>
+                            <span class="badge bg-primary rounded-pill">15 min</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Configure QLoRA parameters</div>
+                                Set up the QLoRA configuration for your model
+                            </div>
+                            <span class="badge bg-primary rounded-pill">10 min</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Train the model</div>
+                                Run the fine-tuning process
+                            </div>
+                            <span class="badge bg-primary rounded-pill">30 min</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Evaluate the model</div>
+                                Test the fine-tuned model on evaluation data
+                            </div>
+                            <span class="badge bg-primary rounded-pill">15 min</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold">Deploy the model</div>
+                                Save and use the fine-tuned model
+                            </div>
+                            <span class="badge bg-primary rounded-pill">10 min</span>
+                        </li>
+                    </ol>
+                    
+                    <div class="text-center">
+                        <a href="/exercises/qlora-fine-tuning" class="btn btn-primary btn-lg">
+                            <i class="bi bi-play-fill me-2"></i> Start Exercise
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

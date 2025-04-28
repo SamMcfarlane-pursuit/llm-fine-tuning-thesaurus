@@ -1,0 +1,259 @@
+{% extends 'base.html' %}
+
+{% block title %}QLoRA Fine-Tuning Guide{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">QLoRA Fine-Tuning Guide</h1>
+            <p class="lead">A comprehensive guide to efficiently fine-tune large language models with Quantized Low-Rank Adaptation</p>
+        </div>
+    </div>
+
+    <!-- Guide Overview Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2>Guide Overview</h2>
+                </div>
+                <div class="card-body">
+                    <p>This comprehensive guide covers everything you need to know about QLoRA (Quantized Low-Rank Adaptation), a parameter-efficient fine-tuning method that enables fine-tuning of large language models on consumer hardware with limited GPU memory.</p>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <h3 class="card-title"><i class="bi bi-1-circle me-2"></i>Part 1</h3>
+                                    <h5 class="card-subtitle mb-3 text-muted">Introduction & Background</h5>
+                                    <p class="card-text">Learn about the fundamentals of QLoRA, how it works, and its advantages over other fine-tuning methods.</p>
+                                    <a href="/qlora-guide-part1" class="btn btn-primary mt-auto">Read Part 1</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <h3 class="card-title"><i class="bi bi-2-circle me-2"></i>Part 2</h3>
+                                    <h5 class="card-subtitle mb-3 text-muted">Implementation & Best Practices</h5>
+                                    <p class="card-text">Step-by-step implementation guide, code examples, and best practices for QLoRA fine-tuning.</p>
+                                    <a href="/qlora-guide-part2" class="btn btn-primary mt-auto">Read Part 2</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <h3 class="card-title"><i class="bi bi-3-circle me-2"></i>Part 3</h3>
+                                    <h5 class="card-subtitle mb-3 text-muted">Advanced Topics & Case Studies</h5>
+                                    <p class="card-text">Advanced techniques, real-world case studies, and hands-on exercises for QLoRA fine-tuning.</p>
+                                    <a href="/qlora-guide-part3" class="btn btn-primary mt-auto">Read Part 3</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Start Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h2>Quick Start Guide</h2>
+                </div>
+                <div class="card-body">
+                    <p>Want to get started quickly with QLoRA fine-tuning? Follow these essential steps:</p>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>1. Install Required Libraries</h4>
+                            <div class="bg-light p-3 rounded">
+                                <pre><code>pip install transformers>=4.30.0 peft>=0.4.0 bitsandbytes>=0.39.0 accelerate>=0.20.0 datasets trl</code></pre>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>2. Load Model in 4-bit</h4>
+                            <div class="bg-light p-3 rounded">
+                                <pre><code>from transformers import AutoModelForCausalLM, BitsAndBytesConfig
+import torch
+
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_compute_dtype=torch.float16,
+    bnb_4bit_use_double_quant=True
+)
+
+model = AutoModelForCausalLM.from_pretrained(
+    "meta-llama/Llama-2-7b-hf",
+    quantization_config=bnb_config,
+    device_map="auto"
+)</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <h4>3. Apply LoRA</h4>
+                            <div class="bg-light p-3 rounded">
+                                <pre><code>from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
+
+# Prepare model for k-bit training
+model = prepare_model_for_kbit_training(model)
+
+# Define LoRA config
+lora_config = LoraConfig(
+    r=16,
+    lora_alpha=32,
+    target_modules=["q_proj", "v_proj"],
+    lora_dropout=0.05,
+    bias="none",
+    task_type="CAUSAL_LM"
+)
+
+# Apply LoRA
+model = get_peft_model(model, lora_config)</code></pre>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>4. Train the Model</h4>
+                            <div class="bg-light p-3 rounded">
+                                <pre><code>from transformers import TrainingArguments, Trainer
+
+# Define training arguments
+training_args = TrainingArguments(
+    output_dir="./results",
+    num_train_epochs=3,
+    per_device_train_batch_size=4,
+    gradient_accumulation_steps=2,
+    learning_rate=2e-4,
+    fp16=True,
+    save_steps=50,
+    logging_steps=10
+)
+
+# Initialize trainer
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=tokenized_dataset,
+    data_collator=data_collator
+)
+
+# Train the model
+trainer.train()</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-info mt-4">
+                        <h5><i class="bi bi-info-circle me-2"></i>Want More Details?</h5>
+                        <p class="mb-0">This is just a quick overview. For a complete step-by-step guide, check out <a href="/qlora-guide-part2">Part 2: Implementation & Best Practices</a>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resources Section -->
+    <div class="row mt-4 mb-5">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h2>Additional Resources</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Documentation & Papers</h4>
+                            <ul class="list-group mb-4">
+                                <li class="list-group-item">
+                                    <a href="https://huggingface.co/docs/peft/index" target="_blank">
+                                        <i class="bi bi-book me-2"></i>PEFT Library Documentation
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="https://arxiv.org/abs/2305.14314" target="_blank">
+                                        <i class="bi bi-file-earmark-text me-2"></i>QLoRA: Efficient Finetuning of Quantized LLMs (Paper)
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="https://arxiv.org/abs/2106.09685" target="_blank">
+                                        <i class="bi bi-file-earmark-text me-2"></i>LoRA: Low-Rank Adaptation of Large Language Models (Paper)
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="https://huggingface.co/docs/transformers/index" target="_blank">
+                                        <i class="bi bi-book me-2"></i>Hugging Face Transformers Documentation
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Tutorials & Examples</h4>
+                            <ul class="list-group mb-4">
+                                <li class="list-group-item">
+                                    <a href="https://huggingface.co/blog/4bit-transformers-bitsandbytes" target="_blank">
+                                        <i class="bi bi-pencil-square me-2"></i>4-bit Quantization with bitsandbytes
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="https://github.com/huggingface/peft/tree/main/examples/qlora" target="_blank">
+                                        <i class="bi bi-github me-2"></i>QLoRA Examples on GitHub
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="https://colab.research.google.com/github/huggingface/peft/blob/main/examples/qlora/qlora_example.ipynb" target="_blank">
+                                        <i class="bi bi-google me-2"></i>QLoRA Colab Notebook
+                                    </a>
+                                </li>
+                                <li class="list-group-item">
+                                    <a href="https://huggingface.co/spaces/huggingface-projects/QLoRA-LLM" target="_blank">
+                                        <i class="bi bi-box me-2"></i>QLoRA Demo on Hugging Face Spaces
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <h4>Community & Support</h4>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="bi bi-chat-dots me-2"></i>Hugging Face Forums</h5>
+                                    <p class="card-text">Join discussions and get help from the community on the Hugging Face forums.</p>
+                                    <a href="https://discuss.huggingface.co/" target="_blank" class="btn btn-outline-primary">Visit Forums</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="bi bi-discord me-2"></i>Discord Community</h5>
+                                    <p class="card-text">Join the Hugging Face Discord server for real-time discussions and support.</p>
+                                    <a href="https://huggingface.co/join/discord" target="_blank" class="btn btn-outline-primary">Join Discord</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="bi bi-github me-2"></i>GitHub Issues</h5>
+                                    <p class="card-text">Report bugs or request features on the PEFT library GitHub repository.</p>
+                                    <a href="https://github.com/huggingface/peft/issues" target="_blank" class="btn btn-outline-primary">View Issues</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -496,6 +496,67 @@ def frameworks_comparison():
     """Render the frameworks comparison page."""
     return render_template('frameworks_comparison.html')
 
+@app.route('/docker-guide')
+def docker_guide():
+    """Render the Docker guide for LLM fine-tuning."""
+    return render_template('docker_guide.html')
+
+@app.route('/login')
+def login():
+    """Redirect to auth login page."""
+    return redirect(url_for('auth.login'))
+
+@app.route('/register')
+def register():
+    """Redirect to auth register page."""
+    return redirect(url_for('auth.register'))
+
+@app.route('/profile')
+@login_required
+def profile():
+    """Redirect to auth profile page."""
+    return redirect(url_for('auth.profile'))
+
+@app.route('/huggingface-guide')
+def huggingface_guide():
+    """Render the Hugging Face integration guide."""
+    return render_template('huggingface_guide.html')
+
+@app.route('/qlora-guide')
+def qlora_guide_main():
+    """Render the main QLoRA guide page."""
+    return render_template('qlora_guide.html')
+
+@app.route('/qlora-guide-part1')
+def qlora_guide_part1():
+    """Render part 1 of the QLoRA guide."""
+    return render_template('qlora_guide_part1.html')
+
+@app.route('/qlora-guide-part2')
+def qlora_guide_part2():
+    """Render part 2 of the QLoRA guide."""
+    return render_template('qlora_guide_part2.html')
+
+@app.route('/qlora-guide-part3')
+def qlora_guide_part3():
+    """Render part 3 of the QLoRA guide."""
+    return render_template('qlora_guide_part3.html')
+
+@app.route('/terms')
+def terms():
+    """Render the terms of service page."""
+    return render_template('terms.html')
+
+@app.route('/privacy')
+def privacy():
+    """Render the privacy policy page."""
+    return render_template('privacy.html')
+
+@app.route('/oauth_login/<provider>')
+def oauth_login(provider):
+    """Redirect to OAuth login for the specified provider."""
+    return redirect(url_for(f'auth.{provider}'))
+
 @app.route('/frameworks/tensorflow/exercises')
 def tensorflow_exercises():
     """Render the TensorFlow exercises overview page."""

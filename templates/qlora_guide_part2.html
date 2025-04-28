@@ -1,0 +1,523 @@
+{% extends 'base.html' %}
+
+{% block title %}QLoRA Fine-Tuning Guide - Part 2{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">QLoRA Fine-Tuning Guide</h1>
+            <p class="lead">Part 2: Implementation and Best Practices</p>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/qlora-guide-part1">Part 1: Introduction</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Part 2: Implementation</li>
+                    <li class="breadcrumb-item"><a href="/qlora-guide-part3">Part 3: Advanced Topics</a></li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Implementation Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2>Implementing QLoRA with Hugging Face</h2>
+                </div>
+                <div class="card-body">
+                    <h4>Required Libraries</h4>
+                    <p>To implement QLoRA, you'll need the following libraries:</p>
+                    
+                    <div class="bg-light p-3 rounded">
+                        <pre><code>pip install transformers>=4.30.0 peft>=0.4.0 bitsandbytes>=0.39.0 accelerate>=0.20.0 datasets trl</code></pre>
+                    </div>
+                    
+                    <div class="alert alert-info mt-3">
+                        <h5><i class="bi bi-info-circle me-2"></i>Library Versions</h5>
+                        <p class="mb-0">QLoRA requires specific versions of these libraries to work properly. Make sure you're using compatible versions.</p>
+                    </div>
+                    
+                    <h4 class="mt-4">Basic QLoRA Implementation</h4>
+                    <p>Here's a step-by-step implementation of QLoRA fine-tuning:</p>
+                    
+                    <div class="accordion" id="qloraImplementation">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    Step 1: Load the model in 4-bit quantization
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#qloraImplementation">
+                                <div class="accordion-body">
+                                    <div class="bg-light p-3 rounded">
+                                        <pre><code>import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+
+# Define quantization config
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_compute_dtype=torch.float16,
+    bnb_4bit_use_double_quant=True
+)
+
+# Load model in 4-bit precision
+model_id = "meta-llama/Llama-2-7b-hf"  # or any other model
+model = AutoModelForCausalLM.from_pretrained(
+    model_id,
+    quantization_config=bnb_config,
+    device_map="auto"
+)
+
+# Load tokenizer
+tokenizer = AutoTokenizer.from_pretrained(model_id)
+tokenizer.pad_token = tokenizer.eos_token</code></pre>
+                                    </div>
+                                    
+                                    <div class="alert alert-warning mt-3">
+                                        <h6><i class="bi bi-exclamation-triangle me-2"></i>Important Note</h6>
+                                        <p class="mb-0">For some models like Llama-2, you'll need to have accepted the model license on Hugging Face and have a valid access token.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    Step 2: Configure LoRA adapter
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#qloraImplementation">
+                                <div class="accordion-body">
+                                    <div class="bg-light p-3 rounded">
+                                        <pre><code>from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training, TaskType
+
+# Prepare model for k-bit training
+model = prepare_model_for_kbit_training(model)
+
+# Define LoRA configuration
+lora_config = LoraConfig(
+    r=16,                       # Rank
+    lora_alpha=32,              # Alpha parameter for LoRA scaling
+    target_modules=[
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj",
+        "gate_proj",
+        "up_proj",
+        "down_proj"
+    ],
+    lora_dropout=0.05,          # Dropout probability for LoRA layers
+    bias="none",                # Add bias to LoRA layers
+    task_type=TaskType.CAUSAL_LM # Task type
+)
+
+# Apply LoRA to the model
+model = get_peft_model(model, lora_config)
+
+# Print trainable parameters
+def print_trainable_parameters(model):
+    trainable_params = 0
+    all_params = 0
+    for _, param in model.named_parameters():
+        all_params += param.numel()
+        if param.requires_grad:
+            trainable_params += param.numel()
+    print(f"Trainable params: {trainable_params} ({100 * trainable_params / all_params:.2f}% of all params)")
+
+print_trainable_parameters(model)</code></pre>
+                                    </div>
+                                    
+                                    <div class="alert alert-info mt-3">
+                                        <h6><i class="bi bi-info-circle me-2"></i>Target Modules</h6>
+                                        <p class="mb-0">The <code>target_modules</code> parameter specifies which layers to apply LoRA to. These module names vary by model architecture, so you may need to adjust them based on your specific model.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingThree">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    Step 3: Prepare training data
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#qloraImplementation">
+                                <div class="accordion-body">
+                                    <div class="bg-light p-3 rounded">
+                                        <pre><code>from datasets import load_dataset
+
+# Load dataset (example using a dataset from Hugging Face)
+dataset = load_dataset("databricks/databricks-dolly-15k")
+
+# Function to format prompts
+def format_prompt(sample):
+    """Format the prompt based on the template."""
+    instruction = sample["instruction"]
+    context = sample["context"] if sample["context"] else ""
+    response = sample["response"]
+    
+    if context:
+        formatted_prompt = f"""### Instruction:
+{instruction}
+
+### Context:
+{context}
+
+### Response:
+{response}"""
+    else:
+        formatted_prompt = f"""### Instruction:
+{instruction}
+
+### Response:
+{response}"""
+    
+    return formatted_prompt
+
+# Process the dataset
+def process_dataset(dataset):
+    """Process the dataset for training."""
+    processed_data = []
+    
+    for sample in dataset:
+        formatted_text = format_prompt(sample)
+        processed_data.append({"text": formatted_text})
+    
+    return processed_data
+
+# Process the dataset
+train_data = process_dataset(dataset["train"])
+eval_data = process_dataset(dataset["test"]) if "test" in dataset else None
+
+# Convert to Dataset object
+from datasets import Dataset
+train_dataset = Dataset.from_list(train_data)
+eval_dataset = Dataset.from_list(eval_data) if eval_data else None</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingFour">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                    Step 4: Configure training arguments
+                                </button>
+                            </h2>
+                            <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#qloraImplementation">
+                                <div class="accordion-body">
+                                    <div class="bg-light p-3 rounded">
+                                        <pre><code>from transformers import TrainingArguments
+
+# Define training arguments
+training_args = TrainingArguments(
+    output_dir="./results",
+    num_train_epochs=3,
+    per_device_train_batch_size=4,
+    gradient_accumulation_steps=2,
+    gradient_checkpointing=True,
+    optim="paged_adamw_32bit",
+    learning_rate=2e-4,
+    weight_decay=0.001,
+    fp16=True,
+    logging_steps=10,
+    evaluation_strategy="steps" if eval_dataset else "no",
+    eval_steps=50 if eval_dataset else None,
+    save_strategy="steps",
+    save_steps=50,
+    save_total_limit=3,
+    load_best_model_at_end=True if eval_dataset else False,
+    report_to="tensorboard",
+    remove_unused_columns=False,
+)</code></pre>
+                                    </div>
+                                    
+                                    <div class="alert alert-info mt-3">
+                                        <h6><i class="bi bi-info-circle me-2"></i>Key Parameters</h6>
+                                        <ul class="mb-0">
+                                            <li><code>gradient_checkpointing</code>: Saves memory by recomputing gradients during backpropagation</li>
+                                            <li><code>optim="paged_adamw_32bit"</code>: Uses memory-efficient optimizer</li>
+                                            <li><code>gradient_accumulation_steps</code>: Accumulates gradients over multiple batches to simulate larger batch sizes</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingFive">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                    Step 5: Define data collator
+                                </button>
+                            </h2>
+                            <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#qloraImplementation">
+                                <div class="accordion-body">
+                                    <div class="bg-light p-3 rounded">
+                                        <pre><code>from transformers import DataCollatorForLanguageModeling
+
+# Define data collator
+data_collator = DataCollatorForLanguageModeling(
+    tokenizer=tokenizer,
+    mlm=False  # Not using masked language modeling
+)
+
+# Tokenization function
+def tokenize_function(examples):
+    return tokenizer(
+        examples["text"],
+        truncation=True,
+        max_length=512,
+        padding="max_length",
+    )
+
+# Tokenize datasets
+tokenized_train_dataset = train_dataset.map(
+    tokenize_function,
+    batched=True,
+    remove_columns=["text"] if "text" in train_dataset.column_names else None
+)
+
+tokenized_eval_dataset = None
+if eval_dataset:
+    tokenized_eval_dataset = eval_dataset.map(
+        tokenize_function,
+        batched=True,
+        remove_columns=["text"] if "text" in eval_dataset.column_names else None
+    )</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingSix">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                                    Step 6: Train the model
+                                </button>
+                            </h2>
+                            <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#qloraImplementation">
+                                <div class="accordion-body">
+                                    <div class="bg-light p-3 rounded">
+                                        <pre><code>from transformers import Trainer
+
+# Initialize trainer
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=tokenized_train_dataset,
+    eval_dataset=tokenized_eval_dataset,
+    data_collator=data_collator,
+)
+
+# Train the model
+trainer.train()
+
+# Save the trained model
+model.save_pretrained("./qlora_model")
+tokenizer.save_pretrained("./qlora_model")</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingSeven">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                                    Step 7: Merge adapter with base model (optional)
+                                </button>
+                            </h2>
+                            <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#qloraImplementation">
+                                <div class="accordion-body">
+                                    <div class="bg-light p-3 rounded">
+                                        <pre><code>from peft import AutoPeftModelForCausalLM
+
+# Load the trained model
+adapter_model = AutoPeftModelForCausalLM.from_pretrained("./qlora_model")
+
+# Merge adapter weights with base model
+merged_model = adapter_model.merge_and_unload()
+
+# Save the merged model
+merged_model.save_pretrained("./merged_model")
+tokenizer.save_pretrained("./merged_model")</code></pre>
+                                    </div>
+                                    
+                                    <div class="alert alert-warning mt-3">
+                                        <h6><i class="bi bi-exclamation-triangle me-2"></i>Memory Requirements</h6>
+                                        <p class="mb-0">Merging the adapter with the base model requires significantly more memory than training with QLoRA. Make sure you have enough GPU or CPU memory for this step.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Best Practices Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2>Best Practices for QLoRA Fine-Tuning</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Hyperparameter Selection</h4>
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Parameter</th>
+                                            <th>Recommended Value</th>
+                                            <th>Notes</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>LoRA rank (r)</td>
+                                            <td>8-64</td>
+                                            <td>Higher values = more capacity but more memory</td>
+                                        </tr>
+                                        <tr>
+                                            <td>LoRA alpha</td>
+                                            <td>16-64</td>
+                                            <td>Usually 2x the rank value</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Learning rate</td>
+                                            <td>1e-4 to 3e-4</td>
+                                            <td>Smaller models may use higher rates</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Batch size</td>
+                                            <td>1-8</td>
+                                            <td>Use gradient accumulation for larger effective batches</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Training epochs</td>
+                                            <td>2-5</td>
+                                            <td>Depends on dataset size</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Memory Optimization Tips</h4>
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <strong>Use gradient checkpointing</strong>: Reduces memory usage by recomputing gradients during backpropagation.
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Enable flash attention</strong>: If available for your model, it significantly reduces memory usage.
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Optimize sequence length</strong>: Only use as much context as needed for your task.
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Use paged optimizers</strong>: They manage memory more efficiently for optimizer states.
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Limit target modules</strong>: Apply LoRA to fewer layers if memory is still an issue.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <h4>Common Issues and Solutions</h4>
+                            <div class="accordion" id="troubleshootingAccordion">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingIssue1">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseIssue1" aria-expanded="false" aria-controls="collapseIssue1">
+                                            Out of Memory Errors
+                                        </button>
+                                    </h2>
+                                    <div id="collapseIssue1" class="accordion-collapse collapse" aria-labelledby="headingIssue1" data-bs-parent="#troubleshootingAccordion">
+                                        <div class="accordion-body">
+                                            <p><strong>Problem:</strong> CUDA out of memory errors during training.</p>
+                                            <p><strong>Solutions:</strong></p>
+                                            <ul>
+                                                <li>Reduce batch size</li>
+                                                <li>Enable gradient checkpointing</li>
+                                                <li>Reduce sequence length</li>
+                                                <li>Apply LoRA to fewer layers</li>
+                                                <li>Use a smaller base model</li>
+                                                <li>Increase gradient accumulation steps</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingIssue2">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseIssue2" aria-expanded="false" aria-controls="collapseIssue2">
+                                            Poor Performance
+                                        </button>
+                                    </h2>
+                                    <div id="collapseIssue2" class="accordion-collapse collapse" aria-labelledby="headingIssue2" data-bs-parent="#troubleshootingAccordion">
+                                        <div class="accordion-body">
+                                            <p><strong>Problem:</strong> Model doesn't learn effectively or produces poor results.</p>
+                                            <p><strong>Solutions:</strong></p>
+                                            <ul>
+                                                <li>Increase LoRA rank (r)</li>
+                                                <li>Apply LoRA to more layers</li>
+                                                <li>Check data quality and formatting</li>
+                                                <li>Adjust learning rate</li>
+                                                <li>Train for more epochs</li>
+                                                <li>Use a different base model</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingIssue3">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseIssue3" aria-expanded="false" aria-controls="collapseIssue3">
+                                            Slow Training
+                                        </button>
+                                    </h2>
+                                    <div id="collapseIssue3" class="accordion-collapse collapse" aria-labelledby="headingIssue3" data-bs-parent="#troubleshootingAccordion">
+                                        <div class="accordion-body">
+                                            <p><strong>Problem:</strong> Training is taking too long.</p>
+                                            <p><strong>Solutions:</strong></p>
+                                            <ul>
+                                                <li>Use a smaller base model</li>
+                                                <li>Reduce the dataset size</li>
+                                                <li>Decrease sequence length</li>
+                                                <li>Apply LoRA to fewer layers</li>
+                                                <li>Use mixed precision training (fp16)</li>
+                                                <li>Use a more powerful GPU</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingIssue4">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseIssue4" aria-expanded="false" aria-controls="collapseIssue4">
+                                            Library Compatibility Issues
+                                        </button>
+                                    </h2>
+                                    <div id="collapseIssue4" class="accordion-collapse collapse" aria-labelledby="headingIssue4" data-bs-parent="#troubleshootingAccordion">
+                                        <div class="accordion-body">
+                                            <p><strong>Problem:</strong> Errors related to library versions or compatibility.</p>
+                                            <p><strong>Solutions:</strong></p>
+                                            <ul>
+                                                <li>Ensure compatible versions of all libraries</li>
+                                                <li>Use a virtual environment</li>
+                                                <li>Check for CUDA compatibility</li>
+                                                <li>Update to the latest versions of libraries</li>
+                                                <li>Check GitHub issues for known problems</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

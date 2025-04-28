@@ -1,0 +1,217 @@
+{% extends 'base.html' %}
+
+{% block title %}QLoRA Fine-Tuning Guide - Part 1{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">QLoRA Fine-Tuning Guide</h1>
+            <p class="lead">Learn how to efficiently fine-tune large language models with Quantized Low-Rank Adaptation</p>
+        </div>
+    </div>
+
+    <!-- Introduction Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2>Introduction to QLoRA</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <p>QLoRA (Quantized Low-Rank Adaptation) is a parameter-efficient fine-tuning method that enables fine-tuning of large language models on consumer hardware with limited GPU memory.</p>
+                            
+                            <h4 class="mt-3">Key Benefits of QLoRA:</h4>
+                            <ul>
+                                <li><strong>Memory Efficiency</strong>: Fine-tune models with billions of parameters on consumer GPUs</li>
+                                <li><strong>Performance Preservation</strong>: Maintains model quality comparable to full fine-tuning</li>
+                                <li><strong>Training Speed</strong>: Faster training compared to full parameter fine-tuning</li>
+                                <li><strong>Adaptability</strong>: Works with a wide range of model architectures</li>
+                            </ul>
+                            
+                            <p class="mt-3">QLoRA builds on LoRA (Low-Rank Adaptation) by adding 4-bit quantization and other optimizations to further reduce memory requirements while maintaining performance.</p>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h5 class="card-title">QLoRA vs. Other Methods</h5>
+                                    <div class="table-responsive">
+                                        <table class="table table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>Method</th>
+                                                    <th>Memory</th>
+                                                    <th>Quality</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Full Fine-tuning</td>
+                                                    <td>Very High</td>
+                                                    <td>Excellent</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>LoRA</td>
+                                                    <td>Medium</td>
+                                                    <td>Very Good</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>QLoRA</td>
+                                                    <td>Low</td>
+                                                    <td>Very Good</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Prompt Tuning</td>
+                                                    <td>Very Low</td>
+                                                    <td>Good</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="alert alert-info mt-3">
+                                <h5><i class="bi bi-lightbulb me-2"></i>When to Use QLoRA</h5>
+                                <p class="mb-0">QLoRA is ideal when you need to fine-tune large models (7B+ parameters) on limited hardware while maintaining high performance.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <h4>How QLoRA Works</h4>
+                            <p>QLoRA combines several techniques to reduce memory usage during fine-tuning:</p>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h5 class="card-title"><i class="bi bi-123 me-2"></i>4-bit Quantization</h5>
+                                            <p class="card-text">QLoRA uses 4-bit NormalFloat (NF4) quantization to store the pre-trained weights, reducing memory requirements by up to 4x compared to FP16.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h5 class="card-title"><i class="bi bi-arrow-down-up me-2"></i>Low-Rank Adaptation</h5>
+                                            <p class="card-text">Adds trainable low-rank matrices to specific layers of the model while keeping the original weights frozen, significantly reducing the number of trainable parameters.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h5 class="card-title"><i class="bi bi-cpu me-2"></i>Double Quantization</h5>
+                                            <p class="card-text">Further reduces memory usage by quantizing the quantization constants themselves, saving additional memory with minimal impact on model quality.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h5 class="card-title"><i class="bi bi-lightning-charge me-2"></i>Paged Optimizers</h5>
+                                            <p class="card-text">Uses efficient memory management techniques to handle optimizer states, reducing memory spikes during training.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Technical Background Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2>Technical Background</h2>
+                </div>
+                <div class="card-body">
+                    <h4>LoRA: The Foundation of QLoRA</h4>
+                    <p>LoRA (Low-Rank Adaptation) is a technique that freezes the pre-trained model weights and injects trainable rank decomposition matrices into each layer of the Transformer architecture, greatly reducing the number of trainable parameters.</p>
+                    
+                    <div class="bg-light p-3 rounded">
+                        <p>For a pre-trained weight matrix \(W_0 \in \mathbb{R}^{d \times k}\), LoRA defines its update as a low-rank decomposition:</p>
+                        <p class="text-center">\(W = W_0 + \Delta W = W_0 + BA\)</p>
+                        <p>Where \(B \in \mathbb{R}^{d \times r}\), \(A \in \mathbb{R}^{r \times k}\), and the rank \(r \ll \min(d, k)\).</p>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h4>4-bit NormalFloat (NF4) Quantization</h4>
+                            <p>NF4 is a 4-bit quantization data type specifically designed for weight distributions in neural networks:</p>
+                            <ul>
+                                <li>Optimized for normally distributed weights</li>
+                                <li>Better preserves outliers compared to standard quantization</li>
+                                <li>Uses non-uniform quantization intervals</li>
+                                <li>Reduces memory usage by 4x compared to FP16</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Double Quantization</h4>
+                            <p>Double quantization further reduces memory by quantizing the quantization constants:</p>
+                            <ul>
+                                <li>First quantization: Convert model weights to 4-bit</li>
+                                <li>Second quantization: Quantize the scaling factors</li>
+                                <li>Saves an additional 0.37 bits per parameter</li>
+                                <li>Minimal impact on model quality</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <h4 class="mt-4">Memory Requirements Comparison</h4>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Model Size</th>
+                                    <th>Full FP16 Fine-tuning</th>
+                                    <th>LoRA (FP16)</th>
+                                    <th>QLoRA (4-bit)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>7B parameters</td>
+                                    <td>~28 GB</td>
+                                    <td>~14 GB</td>
+                                    <td>~5 GB</td>
+                                </tr>
+                                <tr>
+                                    <td>13B parameters</td>
+                                    <td>~52 GB</td>
+                                    <td>~26 GB</td>
+                                    <td>~9 GB</td>
+                                </tr>
+                                <tr>
+                                    <td>33B parameters</td>
+                                    <td>~130 GB</td>
+                                    <td>~65 GB</td>
+                                    <td>~20 GB</td>
+                                </tr>
+                                <tr>
+                                    <td>65B parameters</td>
+                                    <td>~260 GB</td>
+                                    <td>~130 GB</td>
+                                    <td>~40 GB</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="text-muted mt-2">* Actual memory requirements may vary based on implementation details, batch size, and sequence length.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

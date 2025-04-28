@@ -46,6 +46,47 @@ body::before {
     z-index: -1;
 }
 
+/* Top Auth Bar */
+.top-auth-bar {
+    background-color: rgba(10, 10, 10, 0.95);
+    padding: 8px 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    z-index: 1001;
+    position: relative;
+}
+
+.top-auth-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+}
+
+.top-auth-link:hover {
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+.register-link {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.register-link:hover {
+    color: var(--secondary-color);
+}
+
+.user-info {
+    display: inline-flex;
+    align-items: center;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
 /* Header and Navbar styling */
 .main-header {
     position: relative;
@@ -58,6 +99,18 @@ body::before {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
+}
+
+/* Compact Navigation */
+.compact-nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+}
+
+.compact-nav .nav-link {
+    padding: 0.75rem 0.7rem;
+    font-size: 0.95rem;
 }
 
 .header-accent {

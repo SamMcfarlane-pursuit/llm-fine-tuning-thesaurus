@@ -12,16 +12,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const antonymsList = document.getElementById('antonyms-list');
     const relatedList = document.getElementById('related-list');
     const relationButtons = document.querySelectorAll('[data-relation]');
-    
+
     // Network visualization
     let network = null;
     let currentRelation = 'hypernyms';
-    
+
     // Add event listeners
     if (searchBtn) {
         searchBtn.addEventListener('click', searchWord);
     }
-    
+
     if (wordInput) {
         wordInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
+
     // Add click event to badge examples
     document.querySelectorAll('.badge').forEach(badge => {
         badge.addEventListener('click', function() {
@@ -39,20 +39,20 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-    
+
     // Add event listeners to relation buttons
     relationButtons.forEach(button => {
         button.addEventListener('click', function() {
             currentRelation = this.dataset.relation;
             relationButtons.forEach(btn => btn.classList.remove('active'));
             this.classList.add('active');
-            
+
             if (wordInput && wordInput.value.trim()) {
                 fetchRelatedTerms(wordInput.value.trim(), currentRelation);
             }
         });
     });
-    
+
     // Add zoom controls
     if (document.getElementById('zoom-in-btn')) {
         document.getElementById('zoom-in-btn').addEventListener('click', function() {
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
+
     if (document.getElementById('zoom-out-btn')) {
         document.getElementById('zoom-out-btn').addEventListener('click', function() {
             if (network) {
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
+
     if (document.getElementById('reset-zoom-btn')) {
         document.getElementById('reset-zoom-btn').addEventListener('click', function() {
             if (network) {
@@ -79,16 +79,16 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
+
     // Search for a word
     function searchWord() {
         const word = wordInput.value.trim();
         if (!word) return;
-        
+
         // Show loading state
         networkContainer.innerHTML = '<div class="text-center p-5"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-3">Generating visualization...</p></div>';
         visualizationPlaceholder.style.display = 'none';
-        
+
         // Fetch thesaurus data
         fetch(`/api/thesaurus/${word}`)
             .then(response => response.json())
@@ -97,11 +97,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     networkContainer.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
                     return;
                 }
-                
+
                 // Create visualization
                 createVisualization(data);
                 zoomControls.style.display = 'block';
-                
+
                 // Fetch synonyms, antonyms, and related terms
                 fetchSynonyms(word);
                 fetchAntonyms(word);
@@ -112,23 +112,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 networkContainer.innerHTML = '<div class="alert alert-danger">Error generating visualization. Please try again.</div>';
             });
     }
-    
+
     // Create network visualization
     function createVisualization(data) {
         // Create a network
         const container = networkContainer;
-        
-        // Create an iframe to display the visualization
-        container.innerHTML = `<iframe src="${data.visualization_path}" style="width: 100%; height: 500px; border: none;"></iframe>`;
+
+        // Create an iframe to display the visualization with dark background
+        container.innerHTML = `<iframe src="${data.visualization_path}" style="width: 100%; height: 600px; border: none; background-color: #121212; display: block;"></iframe>`;
     }
-    
+
     // Fetch synonyms
     function fetchSynonyms(word) {
         fetch(`/api/synonyms/${word}`)
             .then(response => response.json())
             .then(data => {
                 synonymsList.innerHTML = '';
-                
+
                 if (data.synonyms && data.synonyms.length > 0) {
                     data.synonyms.forEach(synonym => {
                         const badge = document.createElement('span');
@@ -150,14 +150,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 synonymsList.innerHTML = '<div class="alert alert-danger">Error fetching synonyms.</div>';
             });
     }
-    
+
     // Fetch antonyms
     function fetchAntonyms(word) {
         fetch(`/api/antonyms/${word}`)
             .then(response => response.json())
             .then(data => {
                 antonymsList.innerHTML = '';
-                
+
                 if (data.antonyms && data.antonyms.length > 0) {
                     data.antonyms.forEach(antonym => {
                         const badge = document.createElement('span');
@@ -179,14 +179,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 antonymsList.innerHTML = '<div class="alert alert-danger">Error fetching antonyms.</div>';
             });
     }
-    
+
     // Fetch related terms
     function fetchRelatedTerms(word, relationType) {
         fetch(`/api/related/${word}?type=${relationType}`)
             .then(response => response.json())
             .then(data => {
                 relatedList.innerHTML = '';
-                
+
                 if (data.terms && data.terms.length > 0) {
                     data.terms.forEach(term => {
                         const badge = document.createElement('span');
@@ -208,13 +208,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 relatedList.innerHTML = '<div class="alert alert-danger">Error fetching related terms.</div>';
             });
     }
-    
+
     // Help section functionality
     const askBtn = document.getElementById('ask-btn');
     const questionInput = document.getElementById('question-input');
     const answerContainer = document.getElementById('answer-container');
     const answerText = document.getElementById('answer-text');
-    
+
     if (askBtn && questionInput) {
         askBtn.addEventListener('click', askQuestion);
         questionInput.addEventListener('keypress', function(e) {
@@ -223,11 +223,11 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
-    
+
     function askQuestion() {
         const question = questionInput.value.trim();
         if (!question) return;
-        
+
         // Show loading state
         if (answerContainer) {
             answerContainer.style.display = 'block';
@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 answerText.innerHTML = '<div class="spinner-border spinner-border-sm text-primary" role="status"><span class="visually-hidden">Loading...</span></div> Thinking...';
             }
         }
-        
+
         // Send question to API
         fetch('/api/ask', {
             method: 'POST',
@@ -252,7 +252,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                     return;
                 }
-                
+
                 if (answerText) {
                     answerText.innerHTML = data.answer;
                 }

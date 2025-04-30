@@ -1,9 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="200px" height="200px" viewBox="0 0 200 200" version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <title>Default User Avatar</title>
-    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <circle fill="#E0E0E0" cx="100" cy="100" r="100"></circle>
-        <circle fill="#BBBBBB" cx="100" cy="85" r="40"></circle>
-        <path d="M100,135 C66.8,135 40,155 40,180 C40,190 60,200 100,200 C140,200 160,190 160,180 C160,155 133.2,135 100,135 Z" fill="#BBBBBB"></path>
-    </g>
+<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4287f5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3b5998;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="140%">
+      <feDropShadow dx="2" dy="3" stdDeviation="2" flood-color="#000" flood-opacity="0.3" />
+    </filter>
+  </defs>
+
+  <!-- Background Circle -->
+  <circle cx="100" cy="100" r="98" fill="url(#bg-gradient)" stroke="#fff" stroke-width="2" filter="url(#shadow)" />
+
+  <!-- User Icon -->
+  <circle cx="100" cy="80" r="30" fill="#fff" />
+  <path d="M100 120 C65 120 40 150 40 190 L160 190 C160 150 135 120 100 120 Z" fill="#fff" />
+
+  <!-- Subtle Pattern -->
+  <circle cx="70" cy="80" r="5" fill="#3b5998" opacity="0.5" />
+  <circle cx="130" cy="80" r="5" fill="#3b5998" opacity="0.5" />
+
+  <!-- Border -->
+  <circle cx="100" cy="100" r="98" fill="none" stroke="#fff" stroke-width="4" stroke-opacity="0.3" />
 </svg>

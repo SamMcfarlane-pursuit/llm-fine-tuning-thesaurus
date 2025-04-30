@@ -85,11 +85,60 @@ middleware.init_app(app)
 # Error handlers
 @app.errorhandler(404)
 def page_not_found(e):
+    """Handle 404 errors by showing a custom page."""
     return render_template('errors/404.html'), 404
 
 @app.errorhandler(500)
 def internal_server_error(e):
+    """Handle 500 errors by showing a custom page and logging the error."""
+    # Log the error for debugging
+    app.logger.error(f"500 error occurred: {str(e)}")
+    app.logger.exception("Exception details:")
     return render_template('errors/500.html'), 500
+
+@app.errorhandler(502)
+def bad_gateway_error(e):
+    """Handle 502 Bad Gateway errors by showing a custom page and logging the error."""
+    # Log the error for debugging
+    app.logger.error(f"502 Bad Gateway error occurred: {str(e)}")
+    app.logger.exception("Exception details:")
+    return render_template('errors/500.html', error_code=502, error_message="Bad Gateway"), 502
+
+
+
+@app.errorhandler(Exception)
+def handle_exception(e):
+    """Handle all unhandled exceptions."""
+    app.logger.error(f"Unhandled exception: {str(e)}")
+    app.logger.exception("Exception details:")
+    return render_template('errors/500.html'), 500
+
+# Add a catch-all route for UUID-like paths
+@app.route('/<path:uuid_path>')
+def catch_all_handler(uuid_path):
+    """
+    Catch-all route for paths that might cause 502 errors.
+    This will handle paths that look like UUIDs and redirect to the home page.
+    """
+    # Check if the path looks like a UUID (8-4-4-4-12 format)
+    import re
+    uuid_pattern = re.compile(r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$', re.IGNORECASE)
+
+    if uuid_pattern.match(uuid_path):
+        app.logger.warning(f"Caught UUID-like path: {uuid_path}")
+        flash("The page you were looking for doesn't exist. You've been redirected to the home page.", "warning")
+        return redirect(url_for('index'))
+
+    # If it's not a UUID, check if it's a specific UUID we're looking for
+    if uuid_path == '6d8e68e0-9e3d-4c53-9944-7437fa991895' or uuid_path == '3dae26b2-9368-420e-8174-f220103049b0':
+        app.logger.warning(f"Caught specific UUID path: {uuid_path}")
+        flash("The page you were looking for doesn't exist. You've been redirected to the home page.", "warning")
+        return redirect(url_for('index'))
+
+    # If it's not a UUID, return a 404
+    return render_template('errors/404.html'), 404
+
+
 
 # Configure paths
 app.config['STATIC_FOLDER'] = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
@@ -221,8 +270,8 @@ def learn():
 
 @app.route('/llm-thesaurus')
 def llm_thesaurus():
-    """Render the LLM fine-tuning thesaurus page."""
-    return render_template('llm_thesaurus.html')
+    """Render the LLM fine-tuning thesaurus page (legacy route)."""
+    return redirect(url_for('thesaurus'))
 
 @app.route('/thesaurus')
 def thesaurus():
@@ -293,6 +342,11 @@ def finetuning_comparison():
 def pipeline_inference():
     """Render the pipeline inference guide page."""
     return render_template('exercise_pipeline.html', module_id='inference', topic_id='pipeline')
+
+@app.route('/guide/data-preparation')
+def data_preparation():
+    """Render the data preparation guide page."""
+    return render_template('exercise_data_preparation.html', module_id='data-preparation', topic_id='advanced')
 
 @app.route('/tutorials')
 def tutorials():
@@ -375,7 +429,7 @@ def user_activity():
                 'type': 'search',
                 'title': 'Searched for: QLoRA parameters',
                 'description': 'Found 12 results.',
-                'link': '/llm-thesaurus?q=QLoRA+parameters',
+                'link': '/thesaurus?q=QLoRA+parameters',
                 'timestamp': (datetime.now() - timedelta(days=3)).strftime('%b %d, %Y at %I:%M %p')
             }
         ],
@@ -622,6 +676,11 @@ def pytorch_exercise(exercise_name):
     """Render a specific PyTorch exercise page."""
     return render_template(f'pytorch_exercises/{exercise_name}.html')
 
+@app.route('/exercises')
+def exercises():
+    """Render the main exercises overview page."""
+    return render_template('exercises.html')
+
 @app.route('/notebooks/<path:filename>')
 def serve_notebook(filename):
     """Serve notebook files directly."""
@@ -696,37 +755,62 @@ def get_thesaurus_data(word):
         # Keep track of the original input
         original_word = word
 
-        # Check if it's a question or sentence
-        is_question = '?' in word or any(word.lower().startswith(q) for q in ['how', 'what', 'why', 'when', 'where', 'which', 'who', 'can', 'does'])
+        # Define common stop words and question words
+        stop_words = ['a', 'an', 'the', 'to', 'for', 'in', 'on', 'with', 'about', 'of', 'and', 'or', 'but', 'as', 'if', 'then', 'else', 'when', 'up', 'down', 'out', 'by', 'from', 'at', 'so', 'like']
+        question_words = ['how', 'what', 'why', 'when', 'where', 'which', 'who', 'can', 'does', 'is', 'are', 'do', 'did', 'will', 'would', 'should', 'could']
 
-        # If it's a question, try to extract key terms
-        if is_question:
-            print(f"Input appears to be a question: '{word}'")
-            # Extract key terms from the question
-            # Remove common question words and stop words
-            question_words = ['how', 'what', 'why', 'when', 'where', 'which', 'who', 'can', 'does', 'is', 'are', 'do', 'did', 'will', 'would', 'should', 'could', 'a', 'an', 'the', 'to', 'for', 'in', 'on', 'with', 'about']
+        # Check if input contains multiple words
+        if ' ' in word:
+            print(f"Processing multi-word input: '{word}'")
 
-            # Split the sentence and filter out question words and stop words
-            words = word.lower().replace('?', '').split()
-            key_terms = [w for w in words if w not in question_words and len(w) > 2]
+            # Check if it's a question
+            is_question = '?' in word or any(word.lower().startswith(q) for q in question_words)
 
-            if key_terms:
-                # Use the most significant term (usually a noun or technical term)
-                # For simplicity, we'll use the longest word as it's often a technical term
-                key_term = max(key_terms, key=len)
-                print(f"Extracted key term from question: '{key_term}'")
+            # Process the input to extract key terms
+            words = word.lower().replace('?', '').replace(',', ' ').replace('.', ' ').replace('!', ' ').split()
+
+            # Filter out stop words and short words
+            key_terms = [w for w in words if w not in stop_words and w not in question_words and len(w) > 2]
+
+            # Domain-specific terms to prioritize
+            domain_terms = ['fine-tuning', 'lora', 'qlora', 'peft', 'llm', 'transformer', 'attention', 'embedding',
+                           'tokenizer', 'prompt', 'inference', 'hyperparameter', 'training', 'model', 'neural',
+                           'network', 'deep', 'learning', 'parameter', 'gradient', 'optimization', 'quantization']
+
+            # First try to find domain-specific terms in the input
+            domain_matches = [term for term in domain_terms if term in word.lower()]
+
+            if domain_matches:
+                # Use the longest matching domain term
+                key_term = max(domain_matches, key=len)
+                print(f"Found domain-specific term in input: '{key_term}'")
                 word = key_term
-            else:
-                # If no key terms found, use the first non-question word
-                for w in words:
-                    if w not in question_words and len(w) > 2:
-                        word = w
-                        print(f"Using first non-question word: '{word}'")
+            elif key_terms:
+                # Try to find compound terms (e.g., "fine tuning" should match "fine-tuning")
+                for i in range(len(key_terms) - 1):
+                    compound = key_terms[i] + '-' + key_terms[i + 1]
+                    if compound in domain_terms or compound.replace('-', '') in domain_terms:
+                        print(f"Found compound term: '{compound}'")
+                        word = compound
                         break
-        # Handle multi-word inputs that aren't questions by using just the first word
-        elif ' ' in word:
-            word = word.split(' ')[0]
-            print(f"Input contains multiple words. Using first word: '{word}'")
+                else:
+                    # If no compound terms found, use the longest key term
+                    key_term = max(key_terms, key=len)
+                    print(f"Using longest key term from input: '{key_term}'")
+                    word = key_term
+            else:
+                # If no key terms found, use the first non-stop word
+                for w in words:
+                    if w not in stop_words and w not in question_words and len(w) > 2:
+                        word = w
+                        print(f"Using first non-stop word: '{word}'")
+                        break
+                else:
+                    # If all else fails, just use the first word
+                    word = words[0]
+                    print(f"No suitable key terms found, using first word: '{word}'")
+
+            print(f"Final extracted term from input: '{word}'")
 
         # Try to use domain-specific relationships first
         domain_graph = llm_thesaurus_instance.build_domain_graph(word)
@@ -829,31 +913,48 @@ def get_synonyms(word):
         if thesaurus_llm is None:
             from nltk.corpus import wordnet as wn
 
-            # Check if it's a question or sentence
-            is_question = '?' in word or any(word.lower().startswith(q) for q in ['how', 'what', 'why', 'when', 'where', 'which', 'who', 'can', 'does'])
+            # Use the same sentence processing logic as in get_thesaurus_data
+            if ' ' in word:
+                # Define common stop words and question words
+                stop_words = ['a', 'an', 'the', 'to', 'for', 'in', 'on', 'with', 'about', 'of', 'and', 'or', 'but', 'as', 'if', 'then', 'else', 'when', 'up', 'down', 'out', 'by', 'from', 'at', 'so', 'like']
+                question_words = ['how', 'what', 'why', 'when', 'where', 'which', 'who', 'can', 'does', 'is', 'are', 'do', 'did', 'will', 'would', 'should', 'could']
 
-            # If it's a question, try to extract key terms
-            if is_question:
-                # Extract key terms from the question
-                question_words = ['how', 'what', 'why', 'when', 'where', 'which', 'who', 'can', 'does', 'is', 'are', 'do', 'did', 'will', 'would', 'should', 'could', 'a', 'an', 'the', 'to', 'for', 'in', 'on', 'with', 'about']
+                # Process the input to extract key terms
+                words = word.lower().replace('?', '').replace(',', ' ').replace('.', ' ').replace('!', ' ').split()
 
-                # Split the sentence and filter out question words and stop words
-                words = word.lower().replace('?', '').split()
-                key_terms = [w for w in words if w not in question_words and len(w) > 2]
+                # Filter out stop words and short words
+                key_terms = [w for w in words if w not in stop_words and w not in question_words and len(w) > 2]
 
-                if key_terms:
-                    # Use the most significant term (usually a noun or technical term)
-                    key_term = max(key_terms, key=len)
-                    word = key_term
+                # Domain-specific terms to prioritize
+                domain_terms = ['fine-tuning', 'lora', 'qlora', 'peft', 'llm', 'transformer', 'attention', 'embedding',
+                               'tokenizer', 'prompt', 'inference', 'hyperparameter', 'training', 'model', 'neural',
+                               'network', 'deep', 'learning', 'parameter', 'gradient', 'optimization', 'quantization']
+
+                # First try to find domain-specific terms in the input
+                domain_matches = [term for term in domain_terms if term in word.lower()]
+
+                if domain_matches:
+                    # Use the longest matching domain term
+                    word = max(domain_matches, key=len)
+                elif key_terms:
+                    # Try to find compound terms (e.g., "fine tuning" should match "fine-tuning")
+                    for i in range(len(key_terms) - 1):
+                        compound = key_terms[i] + '-' + key_terms[i + 1]
+                        if compound in domain_terms or compound.replace('-', '') in domain_terms:
+                            word = compound
+                            break
+                    else:
+                        # If no compound terms found, use the longest key term
+                        word = max(key_terms, key=len)
                 else:
-                    # If no key terms found, use the first non-question word
+                    # If no key terms found, use the first non-stop word
                     for w in words:
-                        if w not in question_words and len(w) > 2:
+                        if w not in stop_words and w not in question_words and len(w) > 2:
                             word = w
                             break
-            # Handle multi-word inputs that aren't questions by using just the first word
-            elif ' ' in word:
-                word = word.split(' ')[0]
+                    else:
+                        # If all else fails, just use the first word
+                        word = words[0]
 
             # Handle case where no synsets are found
             if not wn.synsets(word):
@@ -885,9 +986,48 @@ def get_antonyms(word):
         if thesaurus_llm is None:
             from nltk.corpus import wordnet as wn
 
-            # Handle multi-word inputs by using just the first word
+            # Use the same sentence processing logic as in get_thesaurus_data
             if ' ' in word:
-                word = word.split(' ')[0]
+                # Define common stop words and question words
+                stop_words = ['a', 'an', 'the', 'to', 'for', 'in', 'on', 'with', 'about', 'of', 'and', 'or', 'but', 'as', 'if', 'then', 'else', 'when', 'up', 'down', 'out', 'by', 'from', 'at', 'so', 'like']
+                question_words = ['how', 'what', 'why', 'when', 'where', 'which', 'who', 'can', 'does', 'is', 'are', 'do', 'did', 'will', 'would', 'should', 'could']
+
+                # Process the input to extract key terms
+                words = word.lower().replace('?', '').replace(',', ' ').replace('.', ' ').replace('!', ' ').split()
+
+                # Filter out stop words and short words
+                key_terms = [w for w in words if w not in stop_words and w not in question_words and len(w) > 2]
+
+                # Domain-specific terms to prioritize
+                domain_terms = ['fine-tuning', 'lora', 'qlora', 'peft', 'llm', 'transformer', 'attention', 'embedding',
+                               'tokenizer', 'prompt', 'inference', 'hyperparameter', 'training', 'model', 'neural',
+                               'network', 'deep', 'learning', 'parameter', 'gradient', 'optimization', 'quantization']
+
+                # First try to find domain-specific terms in the input
+                domain_matches = [term for term in domain_terms if term in word.lower()]
+
+                if domain_matches:
+                    # Use the longest matching domain term
+                    word = max(domain_matches, key=len)
+                elif key_terms:
+                    # Try to find compound terms (e.g., "fine tuning" should match "fine-tuning")
+                    for i in range(len(key_terms) - 1):
+                        compound = key_terms[i] + '-' + key_terms[i + 1]
+                        if compound in domain_terms or compound.replace('-', '') in domain_terms:
+                            word = compound
+                            break
+                    else:
+                        # If no compound terms found, use the longest key term
+                        word = max(key_terms, key=len)
+                else:
+                    # If no key terms found, use the first non-stop word
+                    for w in words:
+                        if w not in stop_words and w not in question_words and len(w) > 2:
+                            word = w
+                            break
+                    else:
+                        # If all else fails, just use the first word
+                        word = words[0]
 
             # Handle case where no synsets are found
             if not wn.synsets(word):
@@ -922,9 +1062,48 @@ def get_related_terms(word):
         if thesaurus_llm is None:
             from nltk.corpus import wordnet as wn
 
-            # Handle multi-word inputs by using just the first word
+            # Use the same sentence processing logic as in get_thesaurus_data
             if ' ' in word:
-                word = word.split(' ')[0]
+                # Define common stop words and question words
+                stop_words = ['a', 'an', 'the', 'to', 'for', 'in', 'on', 'with', 'about', 'of', 'and', 'or', 'but', 'as', 'if', 'then', 'else', 'when', 'up', 'down', 'out', 'by', 'from', 'at', 'so', 'like']
+                question_words = ['how', 'what', 'why', 'when', 'where', 'which', 'who', 'can', 'does', 'is', 'are', 'do', 'did', 'will', 'would', 'should', 'could']
+
+                # Process the input to extract key terms
+                words = word.lower().replace('?', '').replace(',', ' ').replace('.', ' ').replace('!', ' ').split()
+
+                # Filter out stop words and short words
+                key_terms = [w for w in words if w not in stop_words and w not in question_words and len(w) > 2]
+
+                # Domain-specific terms to prioritize
+                domain_terms = ['fine-tuning', 'lora', 'qlora', 'peft', 'llm', 'transformer', 'attention', 'embedding',
+                               'tokenizer', 'prompt', 'inference', 'hyperparameter', 'training', 'model', 'neural',
+                               'network', 'deep', 'learning', 'parameter', 'gradient', 'optimization', 'quantization']
+
+                # First try to find domain-specific terms in the input
+                domain_matches = [term for term in domain_terms if term in word.lower()]
+
+                if domain_matches:
+                    # Use the longest matching domain term
+                    word = max(domain_matches, key=len)
+                elif key_terms:
+                    # Try to find compound terms (e.g., "fine tuning" should match "fine-tuning")
+                    for i in range(len(key_terms) - 1):
+                        compound = key_terms[i] + '-' + key_terms[i + 1]
+                        if compound in domain_terms or compound.replace('-', '') in domain_terms:
+                            word = compound
+                            break
+                    else:
+                        # If no compound terms found, use the longest key term
+                        word = max(key_terms, key=len)
+                else:
+                    # If no key terms found, use the first non-stop word
+                    for w in words:
+                        if w not in stop_words and w not in question_words and len(w) > 2:
+                            word = w
+                            break
+                    else:
+                        # If all else fails, just use the first word
+                        word = words[0]
 
             # Handle case where no synsets are found
             if not wn.synsets(word):
@@ -1231,36 +1410,67 @@ def get_real_time_analytics():
 @app.route('/api/llm-term/<term>')
 def get_llm_term(term):
     """API endpoint to get detailed information about an LLM fine-tuning term."""
-    # Check if it's a question or sentence
-    is_question = '?' in term or any(term.lower().startswith(q) for q in ['how', 'what', 'why', 'when', 'where', 'which', 'who', 'can', 'does'])
+    # Use the same sentence processing logic as in get_thesaurus_data
+    if ' ' in term:
+        print(f"Processing multi-word input: '{term}'")
 
-    # If it's a question, try to extract key terms
-    if is_question:
-        print(f"Input appears to be a question: '{term}'")
-        # Extract key terms from the question
-        question_words = ['how', 'what', 'why', 'when', 'where', 'which', 'who', 'can', 'does', 'is', 'are', 'do', 'did', 'will', 'would', 'should', 'could', 'a', 'an', 'the', 'to', 'for', 'in', 'on', 'with', 'about']
+        # Define common stop words and question words
+        stop_words = ['a', 'an', 'the', 'to', 'for', 'in', 'on', 'with', 'about', 'of', 'and', 'or', 'but', 'as', 'if', 'then', 'else', 'when', 'up', 'down', 'out', 'by', 'from', 'at', 'so', 'like']
+        question_words = ['how', 'what', 'why', 'when', 'where', 'which', 'who', 'can', 'does', 'is', 'are', 'do', 'did', 'will', 'would', 'should', 'could']
 
-        # Split the sentence and filter out question words and stop words
-        words = term.lower().replace('?', '').split()
-        key_terms = [w for w in words if w not in question_words and len(w) > 2]
+        # Check if it's a question
+        is_question = '?' in term or any(term.lower().startswith(q) for q in question_words)
+        if is_question:
+            print(f"Input appears to be a question: '{term}'")
 
-        if key_terms:
-            # Use the most significant term (usually a noun or technical term)
-            key_term = max(key_terms, key=len)
-            print(f"Extracted key term from question: '{key_term}'")
-            term = key_term
-        else:
-            # If no key terms found, use the first non-question word
-            for w in words:
-                if w not in question_words and len(w) > 2:
-                    term = w
-                    print(f"Using first non-question word: '{term}'")
+        # Process the input to extract key terms
+        words = term.lower().replace('?', '').replace(',', ' ').replace('.', ' ').replace('!', ' ').split()
+
+        # Filter out stop words and short words
+        key_terms = [w for w in words if w not in stop_words and w not in question_words and len(w) > 2]
+
+        # Domain-specific terms to prioritize
+        domain_terms = ['fine-tuning', 'lora', 'qlora', 'peft', 'llm', 'transformer', 'attention', 'embedding',
+                       'tokenizer', 'prompt', 'inference', 'hyperparameter', 'training', 'model', 'neural',
+                       'network', 'deep', 'learning', 'parameter', 'gradient', 'optimization', 'quantization']
+
+        # First try to find domain-specific terms in the input
+        domain_matches = [t for t in domain_terms if t in term.lower()]
+
+        if domain_matches:
+            # Use the longest matching domain term
+            original_term = term
+            term = max(domain_matches, key=len)
+            print(f"Found domain-specific term in input: '{term}' from '{original_term}'")
+        elif key_terms:
+            # Try to find compound terms (e.g., "fine tuning" should match "fine-tuning")
+            for i in range(len(key_terms) - 1):
+                compound = key_terms[i] + '-' + key_terms[i + 1]
+                if compound in domain_terms or compound.replace('-', '') in domain_terms:
+                    original_term = term
+                    term = compound
+                    print(f"Found compound term: '{term}' from '{original_term}'")
                     break
-    # Handle multi-word inputs that aren't questions by using just the first word
-    elif ' ' in term:
-        original_term = term
-        term = term.split(' ')[0]
-        print(f"Input contains multiple words. Using first word: '{term}' from '{original_term}'")
+            else:
+                # If no compound terms found, use the longest key term
+                original_term = term
+                term = max(key_terms, key=len)
+                print(f"Using longest key term: '{term}' from '{original_term}'")
+        else:
+            # If no key terms found, use the first non-stop word
+            for w in words:
+                if w not in stop_words and w not in question_words and len(w) > 2:
+                    original_term = term
+                    term = w
+                    print(f"Using first non-stop word: '{term}' from '{original_term}'")
+                    break
+            else:
+                # If all else fails, just use the first word
+                original_term = term
+                term = words[0]
+                print(f"No suitable key terms found, using first word: '{term}' from '{original_term}'")
+
+        print(f"Final extracted term from input: '{term}'")
 
     # Get the term information from the LLM thesaurus
     domain_terms = llm_thesaurus_instance.domain_terms
@@ -1886,6 +2096,66 @@ def get_llm_term(term):
 def serve_visualization(filename):
     """Serve visualization files."""
     return send_from_directory(app.config['VISUALIZATIONS_FOLDER'], filename)
+
+@app.route('/api/visualize/<word>')
+@csrf.exempt
+def get_visualization_data(word):
+    """API endpoint to get visualization data for a specific word."""
+    try:
+        # Create visualization directory if it doesn't exist
+        os.makedirs('static/visualizations', exist_ok=True)
+
+        # Try to use domain-specific relationships first
+        domain_graph = llm_thesaurus_instance.build_domain_graph(word)
+
+        if domain_graph:
+            # Use the domain-specific graph
+            visual_thesaurus.graph = domain_graph
+            print(f"Using domain-specific graph for '{word}'")
+        else:
+            # Fall back to WordNet
+            visual_thesaurus.build_graph_for_word(word)
+
+            # Try to enhance with domain-specific relationships
+            enhanced = llm_thesaurus_instance.enhance_thesaurus_graph(visual_thesaurus, word)
+            if enhanced:
+                print(f"Enhanced graph for '{word}' with domain-specific relationships")
+
+        # Always regenerate the visualization to ensure it uses the latest template
+        vis_path = f'static/visualizations/{word}_thesaurus.html'
+        visual_thesaurus.visualize_interactive(save_path=vis_path)
+
+        # Get node and edge data for the frontend
+        nodes = []
+        for node in visual_thesaurus.graph.nodes():
+            nodes.append({
+                'id': node,
+                'label': visual_thesaurus.graph.nodes[node].get('label', node),
+                'color': visual_thesaurus.graph.nodes[node].get('color', 'blue'),
+                'size': visual_thesaurus.graph.nodes[node].get('size', 15)
+            })
+
+        edges = []
+        for edge in visual_thesaurus.graph.edges():
+            edges.append({
+                'from': edge[0],
+                'to': edge[1],
+                'color': visual_thesaurus.graph.edges[edge].get('color', 'gray'),
+                'label': visual_thesaurus.graph.edges[edge].get('label', '')
+            })
+
+        return jsonify({
+            'word': word,
+            'nodes': nodes,
+            'edges': edges,
+            'visualization_path': f'/static/visualizations/{word}_thesaurus.html'
+        })
+    except Exception as e:
+        print(f"Error generating visualization for '{word}': {e}")
+        return jsonify({
+            'error': f"Could not generate visualization for '{word}'",
+            'message': str(e)
+        }), 500
 
 
 @app.route('/progress')

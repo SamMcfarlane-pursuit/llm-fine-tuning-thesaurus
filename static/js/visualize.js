@@ -41,6 +41,7 @@ function init() {
     const zoomInBtn = document.getElementById('zoom-in-btn');
     const zoomOutBtn = document.getElementById('zoom-out-btn');
     const resetZoomBtn = document.getElementById('reset-zoom-btn');
+    const fullscreenBtn = document.getElementById('fullscreen-btn');
 
     if (zoomInBtn) {
         zoomInBtn.addEventListener('click', () => {
@@ -57,6 +58,12 @@ function init() {
     if (resetZoomBtn) {
         resetZoomBtn.addEventListener('click', () => {
             resetZoom();
+        });
+    }
+
+    if (fullscreenBtn) {
+        fullscreenBtn.addEventListener('click', () => {
+            toggleFullscreen();
         });
     }
 
@@ -127,24 +134,142 @@ function resetZoom() {
     }
 }
 
-// Search for a word
-function searchWord() {
-    let word = wordInput.value.trim().toLowerCase();
+// Toggle fullscreen for better visibility
+function toggleFullscreen() {
+    try {
+        const container = document.getElementById('network-container');
+        const iframe = container.querySelector('iframe');
 
-    if (!word) {
-        alert('Please enter a word to search');
+        // First try to make the iframe fullscreen directly
+        if (iframe) {
+            if (!document.fullscreenElement) {
+                console.log("Attempting to make iframe fullscreen");
+                // Try to make the iframe fullscreen
+                if (iframe.requestFullscreen) {
+                    iframe.requestFullscreen().catch(err => {
+                        console.warn("Iframe fullscreen failed, trying container", err);
+                        // If iframe fullscreen fails, try the container
+                        if (container.requestFullscreen) {
+                            container.requestFullscreen();
+                        } else if (container.webkitRequestFullscreen) {
+                            container.webkitRequestFullscreen();
+                        } else if (container.msRequestFullscreen) {
+                            container.msRequestFullscreen();
+                        } else if (container.mozRequestFullScreen) {
+                            container.mozRequestFullScreen();
+                        }
+                    });
+                } else if (iframe.webkitRequestFullscreen) {
+                    iframe.webkitRequestFullscreen().catch(err => {
+                        console.warn("Iframe webkit fullscreen failed, trying container", err);
+                        if (container.webkitRequestFullscreen) {
+                            container.webkitRequestFullscreen();
+                        }
+                    });
+                } else if (iframe.msRequestFullscreen) {
+                    iframe.msRequestFullscreen().catch(err => {
+                        console.warn("Iframe MS fullscreen failed, trying container", err);
+                        if (container.msRequestFullscreen) {
+                            container.msRequestFullscreen();
+                        }
+                    });
+                } else if (iframe.mozRequestFullScreen) {
+                    iframe.mozRequestFullScreen().catch(err => {
+                        console.warn("Iframe Moz fullscreen failed, trying container", err);
+                        if (container.mozRequestFullScreen) {
+                            container.mozRequestFullScreen();
+                        }
+                    });
+                } else {
+                    // If iframe methods aren't available, try the container
+                    console.log("Iframe fullscreen methods not available, trying container");
+                    if (container.requestFullscreen) {
+                        container.requestFullscreen();
+                    } else if (container.webkitRequestFullscreen) {
+                        container.webkitRequestFullscreen();
+                    } else if (container.msRequestFullscreen) {
+                        container.msRequestFullscreen();
+                    } else if (container.mozRequestFullScreen) {
+                        container.mozRequestFullScreen();
+                    }
+                }
+            } else {
+                // Exit fullscreen
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                }
+            }
+
+            // Update button icon
+            const fullscreenBtn = document.getElementById('fullscreen-btn');
+            if (fullscreenBtn) {
+                if (!document.fullscreenElement) {
+                    fullscreenBtn.innerHTML = '<i class="bi bi-fullscreen-exit"></i>';
+                    fullscreenBtn.setAttribute('title', 'Exit Fullscreen');
+                } else {
+                    fullscreenBtn.innerHTML = '<i class="bi bi-fullscreen"></i>';
+                    fullscreenBtn.setAttribute('title', 'Fullscreen');
+                }
+            }
+        } else {
+            console.error("No iframe found in network container");
+            alert("Fullscreen mode is not available. Please try again later.");
+        }
+    } catch (e) {
+        console.error('Error toggling fullscreen:', e);
+        alert("Fullscreen mode failed. This may be due to browser restrictions.");
+    }
+
+    // Add event listener for fullscreen change
+    document.addEventListener('fullscreenchange', updateFullscreenButton);
+    document.addEventListener('webkitfullscreenchange', updateFullscreenButton);
+    document.addEventListener('mozfullscreenchange', updateFullscreenButton);
+    document.addEventListener('MSFullscreenChange', updateFullscreenButton);
+}
+
+// Update fullscreen button based on fullscreen state
+function updateFullscreenButton() {
+    const fullscreenBtn = document.getElementById('fullscreen-btn');
+    if (fullscreenBtn) {
+        if (document.fullscreenElement ||
+            document.webkitFullscreenElement ||
+            document.mozFullScreenElement ||
+            document.msFullscreenElement) {
+            fullscreenBtn.innerHTML = '<i class="bi bi-fullscreen-exit"></i>';
+            fullscreenBtn.setAttribute('title', 'Exit Fullscreen');
+        } else {
+            fullscreenBtn.innerHTML = '<i class="bi bi-fullscreen"></i>';
+            fullscreenBtn.setAttribute('title', 'Fullscreen');
+        }
+    }
+}
+
+// Search for a word or sentence
+function searchWord() {
+    let query = wordInput.value.trim();
+
+    if (!query) {
+        alert('Please enter a word or sentence to search');
         return;
     }
 
-    // If the input contains spaces, extract just the first word
-    if (word.includes(' ')) {
-        const firstWord = word.split(' ')[0];
-        console.log(`Input contains multiple words. Using first word: '${firstWord}'`);
-        word = firstWord;
+    // We'll let the backend handle the extraction of key terms from sentences
+    // This allows for more sophisticated processing on the server side
+
+    // Show a message if the input is a sentence
+    if (query.includes(' ')) {
+        console.log(`Processing sentence: '${query}'`);
     }
 
     // Navigate to the word's visualization page
-    window.location.href = `/visualize/${word}`;
+    // The backend will extract the most relevant term from the query
+    window.location.href = `/visualize/${encodeURIComponent(query)}`;
 }
 
 // Fetch thesaurus data for visualization
@@ -169,93 +294,58 @@ function fetchThesaurusData(word) {
 
 // Create the network visualization
 function createVisualization(data) {
-    // Create nodes and edges for vis.js
-    const nodes = new vis.DataSet(
-        data.nodes.map(node => ({
-            id: node.id,
-            label: node.label,
-            color: node.color,
-            value: node.size,
-            font: { size: node.id === currentWord ? 18 : 14 }
-        }))
-    );
+    // Create an iframe to display the visualization with enhanced styling
+    const iframe = document.createElement('iframe');
+    iframe.style.width = '100%';
+    iframe.style.height = '600px';
+    iframe.style.border = 'none';
+    iframe.style.backgroundColor = '#121212';
+    iframe.style.backgroundImage = 'radial-gradient(circle at 50% 50%, rgba(40, 40, 40, 0.3) 0%, rgba(20, 20, 20, 0.1) 100%)';
+    iframe.style.boxShadow = '0 0 20px rgba(0, 0, 0, 0.5)';
+    iframe.style.borderRadius = '10px';
+    iframe.setAttribute('allowfullscreen', 'true'); // Allow fullscreen for better visibility
+    iframe.setAttribute('loading', 'eager'); // Prioritize loading
 
-    const edges = new vis.DataSet(
-        data.edges.map(edge => ({
-            from: edge.from,
-            to: edge.to,
-            color: edge.color,
-            label: edge.label,
-            font: { size: 12, align: 'middle' }
-        }))
-    );
+    // Set the source to the visualization path from the API response
+    if (data.visualization_path) {
+        // Add a timestamp to force reload and prevent caching
+        iframe.src = data.visualization_path + '?t=' + new Date().getTime();
 
-    // Create a network
-    const data_vis = { nodes, edges };
-    const options = {
-        nodes: {
-            shape: 'dot',
-            scaling: {
-                min: 10,
-                max: 30,
-                label: {
-                    min: 14,
-                    max: 18,
-                    drawThreshold: 8,
-                    maxVisible: 20
-                }
-            },
-            font: {
-                size: 14,
-                face: 'Segoe UI'
-            }
-        },
-        edges: {
-            width: 2,
-            smooth: {
-                type: 'continuous'
-            },
-            arrows: {
-                to: { enabled: false },
-                from: { enabled: false }
-            }
-        },
-        physics: {
-            stabilization: false,
-            barnesHut: {
-                gravitationalConstant: -80000,
-                centralGravity: 0.3,
-                springLength: 95,
-                springConstant: 0.04,
-                damping: 0.09,
-                avoidOverlap: 0.1
-            }
-        },
-        interaction: {
-            tooltipDelay: 200,
-            hideEdgesOnDrag: true,
-            hover: true
-        }
-    };
+        // Clear the container and add the iframe
+        networkContainer.innerHTML = '';
+        networkContainer.appendChild(iframe);
 
-    // Destroy previous network if it exists
-    if (network) {
-        network.destroy();
+        // Add zoom controls back with enhanced styling
+        const zoomControls = document.createElement('div');
+        zoomControls.className = 'zoom-controls';
+        zoomControls.innerHTML = `
+            <button id="zoom-in-btn" class="zoom-btn" data-bs-toggle="tooltip" title="Zoom In"><i class="bi bi-plus-lg"></i></button>
+            <button id="zoom-out-btn" class="zoom-btn" data-bs-toggle="tooltip" title="Zoom Out"><i class="bi bi-dash-lg"></i></button>
+            <button id="reset-zoom-btn" class="zoom-btn" data-bs-toggle="tooltip" title="Reset View"><i class="bi bi-arrows-fullscreen"></i></button>
+            <button id="fullscreen-btn" class="zoom-btn" data-bs-toggle="tooltip" title="Fullscreen"><i class="bi bi-fullscreen"></i></button>
+        `;
+        networkContainer.appendChild(zoomControls);
+
+        // Reattach event listeners to zoom controls
+        document.getElementById('zoom-in-btn').addEventListener('click', zoomIn);
+        document.getElementById('zoom-out-btn').addEventListener('click', zoomOut);
+        document.getElementById('reset-zoom-btn').addEventListener('click', resetZoom);
+        document.getElementById('fullscreen-btn').addEventListener('click', toggleFullscreen);
+
+        // Initialize tooltips
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    } else {
+        // Show error if no visualization path is provided
+        networkContainer.innerHTML = `
+            <div class="alert alert-danger">
+                <h4 class="alert-heading">Visualization Error</h4>
+                <p>Could not load visualization for "${currentWord}". Please try another word.</p>
+            </div>
+        `;
     }
-
-    // Create new network
-    network = new vis.Network(networkContainer, data_vis, options);
-
-    // Add event listener for node clicks
-    network.on('click', function(params) {
-        if (params.nodes.length > 0) {
-            const nodeId = params.nodes[0];
-            if (nodeId !== currentWord) {
-                // Navigate to the clicked word
-                window.location.href = `/visualize/${nodeId}`;
-            }
-        }
-    });
 
     // Hide loading
     hideLoading();

@@ -1,74 +1,139 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="800" height="500" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background -->
-  <rect width="800" height="500" fill="#f8f9fa" rx="10" ry="10" />
-  
-  <!-- Title -->
-  <text x="400" y="40" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#333">QLoRA: Quantized Low-Rank Adaptation</text>
-  
-  <!-- Original Model Box -->
-  <rect x="100" y="100" width="200" height="240" fill="#e9ecef" stroke="#495057" stroke-width="2" rx="10" ry="10" />
-  <text x="200" y="130" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#333">Pre-trained Model</text>
-  <text x="200" y="155" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#495057">(Frozen & Quantized)</text>
-  
-  <!-- Quantization Label -->
-  <rect x="120" y="170" width="160" height="30" fill="#ffd166" stroke="#ef476f" stroke-width="1" rx="5" ry="5" />
-  <text x="200" y="190" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#333">4-bit Quantization</text>
-  
-  <!-- Original Model Layers -->
-  <rect x="120" y="210" width="160" height="30" fill="#adb5bd" stroke="#495057" stroke-width="1" rx="5" ry="5" />
-  <text x="200" y="230" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#212529">Attention Layer</text>
-  
-  <rect x="120" y="250" width="160" height="30" fill="#adb5bd" stroke="#495057" stroke-width="1" rx="5" ry="5" />
-  <text x="200" y="270" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#212529">Feed-Forward Layer</text>
-  
-  <rect x="120" y="290" width="160" height="30" fill="#adb5bd" stroke="#495057" stroke-width="1" rx="5" ry="5" />
-  <text x="200" y="310" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#212529">Output Layer</text>
-  
-  <!-- LoRA Modules -->
-  <rect x="500" y="100" width="200" height="240" fill="#d0e8f2" stroke="#0077b6" stroke-width="2" rx="10" ry="10" />
-  <text x="600" y="130" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#0077b6">LoRA Adapters</text>
-  <text x="600" y="155" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#0077b6">(Full Precision)</text>
-  
-  <!-- Precision Label -->
-  <rect x="520" y="170" width="160" height="30" fill="#06d6a0" stroke="#118ab2" stroke-width="1" rx="5" ry="5" />
-  <text x="600" y="190" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#333">16/32-bit Precision</text>
-  
-  <!-- LoRA Layers -->
-  <rect x="520" y="210" width="160" height="30" fill="#90e0ef" stroke="#0077b6" stroke-width="1" rx="5" ry="5" />
-  <text x="600" y="230" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#023e8a">Low-Rank Matrix A</text>
-  
-  <rect x="520" y="250" width="160" height="30" fill="#90e0ef" stroke="#0077b6" stroke-width="1" rx="5" ry="5" />
-  <text x="600" y="270" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#023e8a">Low-Rank Matrix B</text>
-  
-  <rect x="520" y="290" width="160" height="30" fill="#90e0ef" stroke="#0077b6" stroke-width="1" rx="5" ry="5" />
-  <text x="600" y="310" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#023e8a">Scaling Factor (α)</text>
-  
-  <!-- Connection Arrows -->
-  <path d="M 300 225 L 500 225" stroke="#6c757d" stroke-width="2" fill="none" marker-end="url(#arrowhead)" />
-  <path d="M 300 265 L 500 265" stroke="#6c757d" stroke-width="2" fill="none" marker-end="url(#arrowhead)" />
-  
-  <!-- Arrowhead marker -->
+<svg width="800" height="500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" preserveAspectRatio="xMidYMid meet">
+  <!-- Enhanced Background with gradient -->
   <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f0f8ff;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Glow filter for highlighting -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <!-- Shadow filter for depth -->
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="140%">
+      <feDropShadow dx="4" dy="6" stdDeviation="4" flood-color="#000" flood-opacity="0.3" />
+    </filter>
+
+    <!-- Arrowhead marker with enhanced styling -->
     <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="#6c757d" />
+      <polygon points="0 0, 10 3.5, 0 7" fill="#4287f5" />
     </marker>
   </defs>
-  
-  <!-- Memory Comparison -->
-  <rect x="100" y="360" width="600" height="120" fill="#e6f2ff" stroke="#0077b6" stroke-width="1" rx="5" ry="5" />
-  <text x="400" y="385" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#333">Memory Efficiency Comparison</text>
-  
-  <!-- Memory Bars -->
-  <rect x="150" y="400" width="500" height="20" fill="#dee2e6" stroke="#adb5bd" stroke-width="1" rx="3" ry="3" />
-  <rect x="150" y="400" width="500" height="20" fill="#ef476f" stroke="#adb5bd" stroke-width="1" rx="3" ry="3" />
-  <text x="660" y="415" font-family="Arial, sans-serif" font-size="14" text-anchor="start" fill="#333">Full Fine-tuning</text>
-  
-  <rect x="150" y="430" width="500" height="20" fill="#dee2e6" stroke="#adb5bd" stroke-width="1" rx="3" ry="3" />
-  <rect x="150" y="430" width="125" height="20" fill="#118ab2" stroke="#adb5bd" stroke-width="1" rx="3" ry="3" />
-  <text x="660" y="445" font-family="Arial, sans-serif" font-size="14" text-anchor="start" fill="#333">LoRA</text>
-  
-  <rect x="150" y="460" width="500" height="20" fill="#dee2e6" stroke="#adb5bd" stroke-width="1" rx="3" ry="3" />
-  <rect x="150" y="460" width="30" height="20" fill="#06d6a0" stroke="#adb5bd" stroke-width="1" rx="3" ry="3" />
-  <text x="660" y="475" font-family="Arial, sans-serif" font-size="14" text-anchor="start" fill="#333">QLoRA</text>
+
+  <!-- Enhanced Background -->
+  <rect width="800" height="500" fill="url(#bg-gradient)" rx="15" ry="15" filter="url(#shadow)" />
+
+  <!-- Enhanced Title with shadow -->
+  <text x="400" y="45" font-family="Arial, sans-serif" font-size="28" font-weight="bold" text-anchor="middle" fill="#1a365d" filter="url(#shadow)">QLoRA: Quantized Low-Rank Adaptation</text>
+  <text x="400" y="75" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#4a5568">Efficient Fine-Tuning for Large Language Models</text>
+
+  <!-- Enhanced Original Model Box with gradient and shadow -->
+  <rect x="100" y="100" width="200" height="240" fill="#e9ecef" stroke="#4287f5" stroke-width="3" rx="15" ry="15" filter="url(#shadow)">
+    <animate attributeName="stroke-opacity" values="0.6;1;0.6" dur="3s" repeatCount="indefinite" />
+  </rect>
+  <text x="200" y="130" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#1a365d">Pre-trained Model</text>
+  <text x="200" y="155" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#4a5568">(Frozen & Quantized)</text>
+
+  <!-- Enhanced Quantization Label with gradient -->
+  <linearGradient id="quant-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" style="stop-color:#ffd166;stop-opacity:1" />
+    <stop offset="100%" style="stop-color:#ffb347;stop-opacity:1" />
+  </linearGradient>
+  <rect x="120" y="170" width="160" height="35" fill="url(#quant-gradient)" stroke="#ef476f" stroke-width="2" rx="8" ry="8" />
+  <text x="200" y="193" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#333">4-bit Quantization</text>
+
+  <!-- Enhanced Original Model Layers with gradients -->
+  <linearGradient id="layer-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" style="stop-color:#adb5bd;stop-opacity:1" />
+    <stop offset="100%" style="stop-color:#868e96;stop-opacity:1" />
+  </linearGradient>
+  <rect x="120" y="215" width="160" height="35" fill="url(#layer-gradient)" stroke="#495057" stroke-width="2" rx="8" ry="8" />
+  <text x="200" y="238" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#fff">Attention Layer</text>
+
+  <rect x="120" y="255" width="160" height="35" fill="url(#layer-gradient)" stroke="#495057" stroke-width="2" rx="8" ry="8" />
+  <text x="200" y="278" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#fff">Feed-Forward Layer</text>
+
+  <rect x="120" y="295" width="160" height="35" fill="url(#layer-gradient)" stroke="#495057" stroke-width="2" rx="8" ry="8" />
+  <text x="200" y="318" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#fff">Output Layer</text>
+
+  <!-- Enhanced LoRA Modules with gradient and animation -->
+  <linearGradient id="lora-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+    <stop offset="0%" style="stop-color:#d0e8f2;stop-opacity:1" />
+    <stop offset="100%" style="stop-color:#90cdf4;stop-opacity:1" />
+  </linearGradient>
+  <rect x="500" y="100" width="200" height="240" fill="url(#lora-gradient)" stroke="#4287f5" stroke-width="3" rx="15" ry="15" filter="url(#shadow)">
+    <animate attributeName="stroke-opacity" values="0.6;1;0.6" dur="3s" repeatCount="indefinite" />
+  </rect>
+  <text x="600" y="130" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#1a365d">LoRA Adapters</text>
+  <text x="600" y="155" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#2b6cb0">(Full Precision)</text>
+
+  <!-- Enhanced Precision Label with gradient -->
+  <linearGradient id="precision-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" style="stop-color:#06d6a0;stop-opacity:1" />
+    <stop offset="100%" style="stop-color:#00b894;stop-opacity:1" />
+  </linearGradient>
+  <rect x="520" y="170" width="160" height="35" fill="url(#precision-gradient)" stroke="#118ab2" stroke-width="2" rx="8" ry="8" />
+  <text x="600" y="193" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#333">16/32-bit Precision</text>
+
+  <!-- Enhanced LoRA Layers with gradients -->
+  <linearGradient id="lora-layer-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" style="stop-color:#90e0ef;stop-opacity:1" />
+    <stop offset="100%" style="stop-color:#4cc9f0;stop-opacity:1" />
+  </linearGradient>
+  <rect x="520" y="215" width="160" height="35" fill="url(#lora-layer-gradient)" stroke="#0077b6" stroke-width="2" rx="8" ry="8" />
+  <text x="600" y="238" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#023e8a">Low-Rank Matrix A</text>
+
+  <rect x="520" y="255" width="160" height="35" fill="url(#lora-layer-gradient)" stroke="#0077b6" stroke-width="2" rx="8" ry="8" />
+  <text x="600" y="278" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#023e8a">Low-Rank Matrix B</text>
+
+  <rect x="520" y="295" width="160" height="35" fill="url(#lora-layer-gradient)" stroke="#0077b6" stroke-width="2" rx="8" ry="8" />
+  <text x="600" y="318" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#023e8a">Scaling Factor (α)</text>
+
+  <!-- Enhanced Connection Arrows with animation -->
+  <path d="M 300 225 L 500 225" stroke="#4287f5" stroke-width="3" fill="none" marker-end="url(#arrowhead)">
+    <animate attributeName="stroke-opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite" />
+  </path>
+  <path d="M 300 265 L 500 265" stroke="#4287f5" stroke-width="3" fill="none" marker-end="url(#arrowhead)">
+    <animate attributeName="stroke-opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite" />
+  </path>
+
+  <!-- Enhanced Memory Comparison with gradient and shadow -->
+  <linearGradient id="memory-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop offset="0%" style="stop-color:#e6f2ff;stop-opacity:1" />
+    <stop offset="100%" style="stop-color:#c5e3ff;stop-opacity:1" />
+  </linearGradient>
+  <rect x="100" y="360" width="600" height="120" fill="url(#memory-gradient)" stroke="#4287f5" stroke-width="2" rx="10" ry="10" filter="url(#shadow)" />
+  <text x="400" y="385" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#1a365d">Memory Efficiency Comparison</text>
+
+  <!-- Enhanced Memory Bars with gradients and labels -->
+  <rect x="150" y="400" width="500" height="20" fill="#dee2e6" stroke="#adb5bd" stroke-width="1" rx="5" ry="5" />
+  <linearGradient id="full-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" style="stop-color:#ef476f;stop-opacity:1" />
+    <stop offset="100%" style="stop-color:#e63946;stop-opacity:1" />
+  </linearGradient>
+  <rect x="150" y="400" width="500" height="20" fill="url(#full-gradient)" stroke="#adb5bd" stroke-width="1" rx="5" ry="5" />
+  <text x="170" y="415" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="start" fill="#fff">100%</text>
+  <text x="660" y="415" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="start" fill="#333">Full Fine-tuning</text>
+
+  <rect x="150" y="430" width="500" height="20" fill="#dee2e6" stroke="#adb5bd" stroke-width="1" rx="5" ry="5" />
+  <linearGradient id="lora-bar-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" style="stop-color:#118ab2;stop-opacity:1" />
+    <stop offset="100%" style="stop-color:#0077b6;stop-opacity:1" />
+  </linearGradient>
+  <rect x="150" y="430" width="125" height="20" fill="url(#lora-bar-gradient)" stroke="#adb5bd" stroke-width="1" rx="5" ry="5" />
+  <text x="170" y="445" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="start" fill="#fff">25%</text>
+  <text x="660" y="445" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="start" fill="#333">LoRA</text>
+
+  <rect x="150" y="460" width="500" height="20" fill="#dee2e6" stroke="#adb5bd" stroke-width="1" rx="5" ry="5" />
+  <linearGradient id="qlora-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" style="stop-color:#06d6a0;stop-opacity:1" />
+    <stop offset="100%" style="stop-color:#00b894;stop-opacity:1" />
+  </linearGradient>
+  <rect x="150" y="460" width="30" height="20" fill="url(#qlora-gradient)" stroke="#adb5bd" stroke-width="1" rx="5" ry="5" />
+  <text x="170" y="475" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="start" fill="#fff">6%</text>
+  <text x="660" y="475" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="start" fill="#333">QLoRA</text>
 </svg>

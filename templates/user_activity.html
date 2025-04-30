@@ -80,7 +80,7 @@
                     <div class="activity-timeline">
                         {% for activity in user_activity.timeline %}
                         <div class="activity-item" data-activity-type="{{ activity.type }}">
-                            <div class="activity-icon 
+                            <div class="activity-icon
                                 {% if activity.type == 'tutorial' %}bg-primary
                                 {% elif activity.type == 'quiz' %}bg-warning
                                 {% elif activity.type == 'exercise' %}bg-info
@@ -177,15 +177,15 @@
                                     <td>{{ content.last_viewed }}</td>
                                     <td>
                                         <div class="progress" style="height: 6px;">
-                                            <div class="progress-bar 
+                                            <div class="progress-bar
                                                 {% if content.type == 'tutorial' %}bg-primary
                                                 {% elif content.type == 'quiz' %}bg-warning
                                                 {% elif content.type == 'exercise' %}bg-info
-                                                {% else %}bg-secondary{% endif %}" 
-                                                role="progressbar" 
-                                                style="width: {{ content.progress }}%;" 
-                                                aria-valuenow="{{ content.progress }}" 
-                                                aria-valuemin="0" 
+                                                {% else %}bg-secondary{% endif %}"
+                                                role="progressbar"
+                                                style="width: {{ content.progress }}%;"
+                                                aria-valuenow="{{ content.progress }}"
+                                                aria-valuemin="0"
                                                 aria-valuemax="100">
                                             </div>
                                         </div>
@@ -214,7 +214,7 @@
                 <div class="card-body">
                     <div class="list-group">
                         {% for search in user_activity.recent_searches %}
-                        <a href="/llm-thesaurus?q={{ search.term|urlencode }}" class="list-group-item list-group-item-action">
+                        <a href="/thesaurus?q={{ search.term|urlencode }}" class="list-group-item list-group-item-action">
                             <div class="d-flex w-100 justify-content-between">
                                 <h6 class="mb-1">{{ search.term }}</h6>
                                 <small class="text-muted">{{ search.timestamp }}</small>
@@ -234,7 +234,7 @@
                 <div class="card-body">
                     <div class="popular-terms">
                         {% for term in user_activity.popular_terms %}
-                        <a href="/llm-thesaurus?q={{ term.term|urlencode }}" class="popular-term" style="font-size: {{ term.size }}px;">
+                        <a href="/thesaurus?q={{ term.term|urlencode }}" class="popular-term" style="font-size: {{ term.size }}px;">
                             {{ term.term }}
                         </a>
                         {% endfor %}
@@ -294,7 +294,7 @@
         position: relative;
         padding-left: 40px;
     }
-    
+
     .activity-timeline::before {
         content: '';
         position: absolute;
@@ -304,12 +304,12 @@
         width: 2px;
         background-color: #e9ecef;
     }
-    
+
     .activity-item {
         position: relative;
         margin-bottom: 20px;
     }
-    
+
     .activity-icon {
         position: absolute;
         left: -40px;
@@ -322,28 +322,28 @@
         color: white;
         z-index: 1;
     }
-    
+
     .activity-content {
         background-color: #f8f9fa;
         border-radius: 0.5rem;
         padding: 15px;
     }
-    
+
     .activity-time {
         font-size: 0.8rem;
         color: #6c757d;
         margin-bottom: 5px;
     }
-    
+
     .activity-title {
         font-weight: 600;
         margin-bottom: 5px;
     }
-    
+
     .activity-description {
         margin-bottom: 10px;
     }
-    
+
     /* Popular Terms */
     .popular-terms {
         display: flex;
@@ -352,7 +352,7 @@
         align-items: center;
         gap: 10px;
     }
-    
+
     .popular-term {
         display: inline-block;
         padding: 5px 10px;
@@ -362,12 +362,12 @@
         color: #212529;
         transition: all 0.2s ease;
     }
-    
+
     .popular-term:hover {
         background-color: #0d6efd;
         color: white;
     }
-    
+
     /* Achievements */
     .achievement-card {
         background-color: #f8f9fa;
@@ -376,35 +376,35 @@
         height: 100%;
         transition: all 0.3s ease;
     }
-    
+
     .achievement-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     }
-    
+
     .achievement-locked {
         opacity: 0.7;
         filter: grayscale(1);
     }
-    
+
     .achievement-icon {
         font-size: 2.5rem;
         margin-bottom: 15px;
         color: #0d6efd;
     }
-    
+
     .achievement-title {
         font-size: 1.1rem;
         font-weight: 600;
         margin-bottom: 10px;
     }
-    
+
     .achievement-description {
         font-size: 0.9rem;
         color: #6c757d;
         margin-bottom: 15px;
     }
-    
+
     .achievement-date {
         font-size: 0.8rem;
         color: #198754;
@@ -455,7 +455,7 @@
                 }
             }
         });
-        
+
         // Activity Distribution Chart
         const activityDistributionCtx = document.getElementById('activityDistributionChart').getContext('2d');
         const activityDistributionChart = new Chart(activityDistributionCtx, {
@@ -503,11 +503,11 @@
                 }
             }
         });
-        
+
         // Activity Timeline Filtering
         const showAllActivitiesCheckbox = document.getElementById('showAllActivities');
         const activityItems = document.querySelectorAll('.activity-item');
-        
+
         showAllActivitiesCheckbox.addEventListener('change', function() {
             if (this.checked) {
                 // Show all activities
@@ -526,37 +526,37 @@
                 });
             }
         });
-        
+
         // Time Period Filtering
         const timePeriodOptions = document.querySelectorAll('.time-period-option');
-        
+
         timePeriodOptions.forEach(option => {
             option.addEventListener('click', function(e) {
                 e.preventDefault();
-                
+
                 // Remove active class from all options
                 timePeriodOptions.forEach(opt => opt.classList.remove('active'));
-                
+
                 // Add active class to clicked option
                 this.classList.add('active');
-                
+
                 // Get selected period
                 const period = this.dataset.period;
-                
+
                 // Update data based on period
                 updateDataForPeriod(period);
             });
         });
-        
+
         function updateDataForPeriod(period) {
             // In a real implementation, this would fetch data from the server
             // For demo purposes, we'll just show a loading indicator
-            
+
             // Show loading state
             document.querySelectorAll('.display-4').forEach(el => {
                 el.innerHTML = '<div class="spinner-border spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></div>';
             });
-            
+
             // Simulate API call
             setTimeout(() => {
                 // Update summary cards with random data
@@ -564,16 +564,16 @@
                     const randomValue = Math.floor(Math.random() * 100);
                     el.textContent = randomValue;
                 });
-                
+
                 // Update charts with random data
                 updateChartsForPeriod(period);
             }, 500);
         }
-        
+
         function updateChartsForPeriod(period) {
             // Generate random data based on period
             let labels, data;
-            
+
             if (period === 'week') {
                 labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
             } else if (period === 'month') {
@@ -584,21 +584,21 @@
                 // All time - use months for the past year
                 labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
             }
-            
+
             // Generate random data
             data = labels.map(() => Math.floor(Math.random() * 120));
-            
+
             // Update learning patterns chart
             learningPatternsChart.data.labels = labels;
             learningPatternsChart.data.datasets[0].data = data;
             learningPatternsChart.update();
-            
+
             // Update activity distribution chart with random data
             const tutorials = Math.floor(Math.random() * 50) + 10;
             const quizzes = Math.floor(Math.random() * 30) + 5;
             const exercises = Math.floor(Math.random() * 20) + 3;
             const searches = Math.floor(Math.random() * 100) + 20;
-            
+
             activityDistributionChart.data.datasets[0].data = [tutorials, quizzes, exercises, searches];
             activityDistributionChart.update();
         }

@@ -60,12 +60,13 @@
                     <div class="card-header">
                         <h3>Visualization</h3>
                     </div>
-                    <div class="card-body">
-                        <div id="network-container" style="height: 600px; position: relative;">
+                    <div class="card-body p-0"> <!-- Removed padding for full-width visualization -->
+                        <div id="network-container" style="height: 650px; position: relative; border-radius: 8px; overflow: hidden; box-shadow: 0 0 20px rgba(0, 0, 0, 0.3) inset;">
                             <div class="zoom-controls">
                                 <button id="zoom-in-btn" class="zoom-btn" data-bs-toggle="tooltip" title="Zoom In"><i class="bi bi-plus-lg"></i></button>
                                 <button id="zoom-out-btn" class="zoom-btn" data-bs-toggle="tooltip" title="Zoom Out"><i class="bi bi-dash-lg"></i></button>
                                 <button id="reset-zoom-btn" class="zoom-btn" data-bs-toggle="tooltip" title="Reset View"><i class="bi bi-arrows-fullscreen"></i></button>
+                                <button id="fullscreen-btn" class="zoom-btn" data-bs-toggle="tooltip" title="Fullscreen"><i class="bi bi-fullscreen"></i></button>
                             </div>
                         </div>
                     </div>

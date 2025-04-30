@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+
+{% block title %}LLM Fine-Tuning Exercises{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="page-header mb-4">
+                <h1 class="display-4">LLM Fine-Tuning Exercises</h1>
+                <p class="lead">Hands-on exercises to master LLM fine-tuning techniques</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle-fill me-2"></i>
+                These exercises provide practical experience with different fine-tuning approaches. Complete them to build your skills and understanding.
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Exercise Categories -->
+    <div class="row mb-5">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 exercise-card">
+                <div class="card-body">
+                    <h3 class="card-title"><i class="bi bi-lightning-charge-fill text-warning me-2"></i>QLoRA Exercises</h3>
+                    <p class="card-text">Practice Quantized Low-Rank Adaptation techniques for efficient fine-tuning.</p>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Memory-efficient fine-tuning</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>4-bit quantization</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Low-rank adaptation</li>
+                    </ul>
+                    <a href="/guide/qlora-implementation" class="btn btn-primary">Start Exercises</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 exercise-card">
+                <div class="card-body">
+                    <h3 class="card-title"><i class="bi bi-database-fill text-info me-2"></i>Data Preparation</h3>
+                    <p class="card-text">Learn how to prepare and process data for effective LLM fine-tuning.</p>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Dataset cleaning and formatting</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Train/test splitting</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Tokenization strategies</li>
+                    </ul>
+                    <a href="/guide/data-preparation" class="btn btn-primary">Start Exercises</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 exercise-card">
+                <div class="card-body">
+                    <h3 class="card-title"><i class="bi bi-cpu-fill text-danger me-2"></i>Pipeline Inference</h3>
+                    <p class="card-text">Master efficient inference techniques with fine-tuned models.</p>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Optimized inference pipelines</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Batch processing</li>
+                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i>Deployment strategies</li>
+                    </ul>
+                    <a href="/guide/pipeline-inference" class="btn btn-primary">Start Exercises</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Visual Diagrams Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="mb-4">Visual Learning Resources</h2>
+            <p class="lead mb-4">Interactive diagrams to help understand key concepts</p>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0">QLoRA Architecture</h3>
+                </div>
+                <div class="card-body text-center">
+                    <div class="image-container mb-3">
+                        <img src="{{ url_for('static', filename='images/exercises/qlora-diagram.svg') }}" alt="QLoRA Architecture Diagram" class="img-fluid exercise-diagram">
+                        <div class="zoom-indicator">
+                            <i class="bi bi-zoom-in"></i>
+                        </div>
+                    </div>
+                    <p class="card-text">Understand how QLoRA combines quantization with low-rank adaptation for efficient fine-tuning.</p>
+                    <a href="/visualize/qlora" class="btn btn-outline-primary">Explore Interactive Visualization</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-success text-white">
+                    <h3 class="card-title mb-0">Data Preparation Flow</h3>
+                </div>
+                <div class="card-body text-center">
+                    <div class="image-container mb-3">
+                        <img src="{{ url_for('static', filename='images/exercises/data-preparation-flow.svg') }}" alt="Data Preparation Flow Diagram" class="img-fluid exercise-diagram">
+                        <div class="zoom-indicator">
+                            <i class="bi bi-zoom-in"></i>
+                        </div>
+                    </div>
+                    <p class="card-text">Learn the essential steps in preparing data for effective LLM fine-tuning.</p>
+                    <a href="/visualize/data-preparation" class="btn btn-outline-success">Explore Interactive Visualization</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Framework-specific Exercises -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="mb-4">Framework-Specific Exercises</h2>
+            <p class="lead mb-4">Hands-on exercises for popular deep learning frameworks</p>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="card-title mb-0">PyTorch Exercises</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Practice fine-tuning LLMs using PyTorch and the Transformers library.</p>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-code-slash me-2"></i>Custom LoRA Implementation</span>
+                            <span class="badge bg-primary rounded-pill">Intermediate</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-code-slash me-2"></i>Gradient Checkpointing</span>
+                            <span class="badge bg-danger rounded-pill">Advanced</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-code-slash me-2"></i>Mixed Precision Training</span>
+                            <span class="badge bg-danger rounded-pill">Advanced</span>
+                        </li>
+                    </ul>
+                    <a href="/frameworks/pytorch/exercises" class="btn btn-outline-danger">View PyTorch Exercises</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header bg-info text-white">
+                    <h3 class="card-title mb-0">TensorFlow Exercises</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Practice fine-tuning LLMs using TensorFlow and Keras.</p>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-code-slash me-2"></i>Custom Adapter Layers</span>
+                            <span class="badge bg-primary rounded-pill">Intermediate</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-code-slash me-2"></i>Memory Optimization</span>
+                            <span class="badge bg-danger rounded-pill">Advanced</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-code-slash me-2"></i>Distributed Training</span>
+                            <span class="badge bg-danger rounded-pill">Advanced</span>
+                        </li>
+                    </ul>
+                    <a href="/frameworks/tensorflow/exercises" class="btn btn-outline-info">View TensorFlow Exercises</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Practical Challenges Section -->
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">Practical Challenges</h2>
+            <p class="lead mb-4">Apply your knowledge to real-world fine-tuning scenarios</p>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 challenge-card">
+                <div class="card-body">
+                    <h3 class="card-title"><i class="bi bi-trophy-fill text-warning me-2"></i>Beginner Challenge</h3>
+                    <p class="card-text">Fine-tune a small language model for text classification using LoRA.</p>
+                    <div class="d-grid gap-2">
+                        <a href="/guide/lora-implementation" class="btn btn-outline-primary">Start Challenge</a>
+                    </div>
+                </div>
+                <div class="card-footer text-muted">
+                    <small><i class="bi bi-clock me-1"></i> Estimated time: 1-2 hours</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 challenge-card">
+                <div class="card-body">
+                    <h3 class="card-title"><i class="bi bi-trophy-fill text-primary me-2"></i>Intermediate Challenge</h3>
+                    <p class="card-text">Fine-tune a medium-sized LLM for instruction following using QLoRA.</p>
+                    <div class="d-grid gap-2">
+                        <a href="/guide/instruction-tuning" class="btn btn-outline-primary">Start Challenge</a>
+                    </div>
+                </div>
+                <div class="card-footer text-muted">
+                    <small><i class="bi bi-clock me-1"></i> Estimated time: 2-4 hours</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 challenge-card">
+                <div class="card-body">
+                    <h3 class="card-title"><i class="bi bi-trophy-fill text-danger me-2"></i>Advanced Challenge</h3>
+                    <p class="card-text">Fine-tune a large language model with custom dataset and deploy it.</p>
+                    <div class="d-grid gap-2">
+                        <a href="/docker-guide" class="btn btn-outline-primary">Start Challenge</a>
+                    </div>
+                </div>
+                <div class="card-footer text-muted">
+                    <small><i class="bi bi-clock me-1"></i> Estimated time: 4-8 hours</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Initialize image handling -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize lazy loading for images
+        initLazyLoading();
+        
+        // Add zoom functionality to exercise diagrams
+        addImageZoom();
+    });
+</script>
+{% endblock %}

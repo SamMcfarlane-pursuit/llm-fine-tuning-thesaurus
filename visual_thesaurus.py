@@ -544,12 +544,12 @@ class VisualThesaurus:
         if save_path:
             with open(save_path, 'w', encoding='utf-8') as f:
                 f.write(html_content)
-            return HTML(f'<iframe src="{save_path}" height="{height}" width="{width}"></iframe>')
+            return HTML(f'<iframe src="{save_path}" height="{height}" width="{width}" style="border: none; background-color: #121212;"></iframe>')
         else:
             temp_path = "thesaurus_visualization.html"
             with open(temp_path, 'w', encoding='utf-8') as f:
                 f.write(html_content)
-            return HTML(f'<iframe src="{temp_path}" height="{height}" width="{width}"></iframe>')
+            return HTML(f'<iframe src="{temp_path}" height="{height}" width="{width}" style="border: none; background-color: #121212;"></iframe>')
 
     def visualize_plotly(self, word=None, height=600, width=900):
         """

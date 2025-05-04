@@ -1,0 +1,503 @@
+/**
+ * Enhanced Progress Bar CSS
+ * A modern, responsive progress tracking system with improved visuals
+ */
+
+/* Main progress container */
+.enhanced-progress-container {
+    background-color: rgba(25, 25, 30, 0.8);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    border: 1px solid rgba(66, 135, 245, 0.2);
+    margin-bottom: 30px;
+    position: relative;
+}
+
+/* Progress header with gradient */
+.progress-header {
+    background: linear-gradient(135deg, #2b5cbe, #1e3c7b);
+    padding: 20px 25px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Shimmer effect for header */
+.progress-header::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        rgba(255, 255, 255, 0) 0%, 
+        rgba(255, 255, 255, 0.1) 50%, 
+        rgba(255, 255, 255, 0) 100%);
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 200%; }
+}
+
+.progress-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+}
+
+.progress-title i {
+    margin-right: 10px;
+    color: #4db6ff;
+}
+
+.progress-subtitle {
+    font-size: 1rem;
+    opacity: 0.9;
+    max-width: 80%;
+}
+
+/* Progress body */
+.progress-body {
+    padding: 25px;
+    background-color: rgba(30, 30, 35, 0.7);
+}
+
+/* Circular progress indicator */
+.circular-progress {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+}
+
+.progress-ring {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: conic-gradient(var(--progress-color) var(--progress), #2a2a2a 0);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.progress-ring::before {
+    content: '';
+    position: absolute;
+    width: 70%;
+    height: 70%;
+    background-color: rgba(25, 25, 30, 0.9);
+    border-radius: 50%;
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.progress-percentage {
+    position: relative;
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+    z-index: 1;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.progress-label {
+    position: absolute;
+    bottom: -25px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+}
+
+/* Progress stats */
+.progress-stats {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 15px;
+    min-width: 100px;
+    flex: 1;
+    background-color: rgba(40, 40, 45, 0.6);
+    border-radius: 10px;
+    margin: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.stat-value.completed {
+    color: #4cd964;
+}
+
+.stat-value.in-progress {
+    color: #ffcc00;
+}
+
+.stat-value.total {
+    color: #4db6ff;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+}
+
+/* Linear progress bar */
+.linear-progress {
+    height: 10px;
+    background-color: rgba(40, 40, 45, 0.6);
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 15px 0;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.linear-progress-bar {
+    height: 100%;
+    border-radius: 5px;
+    transition: width 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.linear-progress-bar.completed {
+    background: linear-gradient(90deg, #32a852, #4cd964);
+}
+
+.linear-progress-bar.in-progress {
+    background: linear-gradient(90deg, #ffb700, #ffcc00);
+}
+
+.progress-legend {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 5px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    margin-right: 5px;
+}
+
+.legend-color.completed {
+    background: linear-gradient(90deg, #32a852, #4cd964);
+}
+
+.legend-color.in-progress {
+    background: linear-gradient(90deg, #ffb700, #ffcc00);
+}
+
+.legend-color.not-started {
+    background-color: #6c757d;
+}
+
+/* Workshop module cards */
+.workshop-module-card {
+    background-color: rgba(40, 40, 45, 0.6);
+    border-radius: 10px;
+    margin-bottom: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.workshop-module-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.module-card-header {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.module-card-header.completed {
+    background: linear-gradient(90deg, rgba(50, 168, 82, 0.2), rgba(76, 217, 100, 0.2));
+    border-left: 4px solid #4cd964;
+}
+
+.module-card-header.in-progress {
+    background: linear-gradient(90deg, rgba(255, 183, 0, 0.2), rgba(255, 204, 0, 0.2));
+    border-left: 4px solid #ffcc00;
+}
+
+.module-card-header.not-started {
+    background: rgba(108, 117, 125, 0.1);
+    border-left: 4px solid #6c757d;
+}
+
+.module-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: white;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.module-title i {
+    margin-right: 10px;
+}
+
+.module-status {
+    font-size: 0.8rem;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.module-status.completed {
+    background-color: rgba(76, 217, 100, 0.2);
+    color: #4cd964;
+    border: 1px solid rgba(76, 217, 100, 0.3);
+}
+
+.module-status.in-progress {
+    background-color: rgba(255, 204, 0, 0.2);
+    color: #ffcc00;
+    border: 1px solid rgba(255, 204, 0, 0.3);
+}
+
+.module-status.not-started {
+    background-color: rgba(108, 117, 125, 0.2);
+    color: #adb5bd;
+    border: 1px solid rgba(108, 117, 125, 0.3);
+}
+
+.module-card-body {
+    padding: 15px;
+}
+
+.module-progress {
+    height: 6px;
+    background-color: rgba(40, 40, 45, 0.6);
+    border-radius: 3px;
+    overflow: hidden;
+    margin: 10px 0;
+}
+
+.module-progress-bar {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.module-progress-bar.completed {
+    background: linear-gradient(90deg, #32a852, #4cd964);
+}
+
+.module-progress-bar.in-progress {
+    background: linear-gradient(90deg, #ffb700, #ffcc00);
+}
+
+.module-progress-bar.not-started {
+    background-color: #6c757d;
+}
+
+.module-progress-stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 15px;
+}
+
+.module-description {
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 15px;
+    font-size: 0.95rem;
+}
+
+.module-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.module-btn {
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+}
+
+.module-btn i {
+    margin-right: 5px;
+}
+
+.module-btn.primary {
+    background: linear-gradient(135deg, #4287f5, #3a75d8);
+    color: white;
+    box-shadow: 0 4px 10px rgba(66, 135, 245, 0.3);
+}
+
+.module-btn.primary:hover {
+    box-shadow: 0 6px 15px rgba(66, 135, 245, 0.4);
+    transform: translateY(-2px);
+}
+
+.module-btn.primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(66, 135, 245, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .progress-stats {
+        flex-wrap: wrap;
+    }
+    
+    .stat-item {
+        min-width: 80px;
+        margin: 5px;
+    }
+    
+    .stat-value {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .progress-title {
+        font-size: 1.5rem;
+    }
+    
+    .progress-subtitle {
+        font-size: 0.9rem;
+        max-width: 100%;
+    }
+    
+    .circular-progress {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .progress-percentage {
+        font-size: 1.5rem;
+    }
+    
+    .stat-item {
+        padding: 10px;
+        min-width: 70px;
+    }
+    
+    .module-title {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .progress-header {
+        padding: 15px;
+    }
+    
+    .progress-body {
+        padding: 15px;
+    }
+    
+    .circular-progress {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .progress-percentage {
+        font-size: 1.3rem;
+    }
+    
+    .stat-value {
+        font-size: 1.3rem;
+    }
+    
+    .stat-label {
+        font-size: 0.75rem;
+    }
+    
+    .module-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .module-status {
+        margin-top: 5px;
+    }
+    
+    .module-progress-stats {
+        flex-direction: column;
+    }
+    
+    .module-progress-stats span:last-child {
+        margin-top: 5px;
+    }
+}
+
+/* Animation for progress bars */
+@keyframes progressAnimation {
+    0% { width: 0; }
+    100% { width: var(--progress-width); }
+}
+
+.animate-progress {
+    animation: progressAnimation 1s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+    .enhanced-progress-container {
+        background-color: rgba(20, 20, 25, 0.9);
+    }
+    
+    .progress-body {
+        background-color: rgba(25, 25, 30, 0.8);
+    }
+    
+    .stat-item {
+        background-color: rgba(35, 35, 40, 0.7);
+    }
+    
+    .workshop-module-card {
+        background-color: rgba(35, 35, 40, 0.7);
+    }
+}

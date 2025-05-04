@@ -1,0 +1,74 @@
+{% include 'includes/improved-sidebar.html' with context %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get workshop sections from the page
+    const workshopSections = [];
+    const sectionElements = document.querySelectorAll('[data-section-id]');
+    
+    sectionElements.forEach((section, index) => {
+        const sectionId = section.getAttribute('data-section-id');
+        const sectionTitle = section.getAttribute('data-section-title') || section.querySelector('h2, h3, h4')?.textContent || `Section ${index + 1}`;
+        const sectionCategory = section.getAttribute('data-section-category') || '';
+        const isActive = section.classList.contains('active-section');
+        const isPassed = section.classList.contains('completed-section');
+        
+        workshopSections.push({
+            id: sectionId,
+            title: sectionTitle,
+            category: sectionCategory,
+            active: isActive,
+            passed: isPassed
+        });
+    });
+    
+    // If no sections found, try to create them from headings
+    if (workshopSections.length === 0) {
+        const headings = document.querySelectorAll('h2, h3');
+        let currentCategory = '';
+        
+        headings.forEach((heading, index) => {
+            // Check if this is a category heading (h2)
+            if (heading.tagName === 'H2') {
+                currentCategory = heading.textContent;
+                return;
+            }
+            
+            // Create section ID from heading text
+            const sectionId = heading.textContent
+                .toLowerCase()
+                .replace(/[^\w\s]/g, '')
+                .replace(/\s+/g, '-');
+            
+            // Add ID to the heading element for scrolling
+            heading.id = sectionId;
+            
+            // Add to sections array
+            workshopSections.push({
+                id: sectionId,
+                title: heading.textContent,
+                category: currentCategory,
+                active: index === 0, // First section is active by default
+                passed: false
+            });
+        });
+    }
+    
+    // Create sidebar with sections
+    if (workshopSections.length > 0) {
+        // Remove default sidebar if it exists
+        const defaultSidebar = document.querySelector('.improved-sidebar');
+        if (defaultSidebar) {
+            defaultSidebar.remove();
+        }
+        
+        // Create new sidebar
+        createSidebar({
+            containerId: 'main-content',
+            sections: workshopSections,
+            position: 'right',
+            expanded: false
+        });
+    }
+});
+</script>

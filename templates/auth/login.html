@@ -2,6 +2,12 @@
 
 {% block title %}Sign In - Visual Thesaurus LLM{% endblock %}
 
+{% block head %}
+{{ super() }}
+<!-- Add responsive authentication CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/responsive-auth.css') }}">
+{% endblock %}
+
 {% block content %}
 <div class="container mt-4">
     <div class="row">
@@ -17,140 +23,154 @@
 
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card" style="border-radius: 15px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.3); border: 2px solid rgba(66, 135, 245, 0.2) !important; background-color: rgba(20, 20, 20, 0.7); position: relative;">
-                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: linear-gradient(to right, #4287f5, #00ffdd); z-index: 1; overflow: hidden;">
-                    <div class="login-shimmer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent); animation: shimmer 2s infinite linear; transform: translateX(-100%);"></div>
-                </div>
-                <div class="card-header" style="background: linear-gradient(135deg, rgba(66, 135, 245, 0.2), rgba(0, 255, 221, 0.2)); border-bottom: 2px solid rgba(66, 135, 245, 0.2); padding: 20px;">
-                    <h3 style="font-weight: 700; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.3); margin-bottom: 0; display: flex; align-items: center;">
-                        <i class="bi bi-shield-lock me-2" style="color: #4287f5;"></i>
-                        <span>Sign In</span>
-                        <span class="ms-2 badge bg-success" style="font-size: 0.6rem; padding: 0.35em 0.65em; border-radius: 10px; background: linear-gradient(135deg, #4287f5, #00ffdd) !important;">Secure</span>
-                    </h3>
-                </div>
-
-                {% if show_password_error %}
-                <div class="password-error-banner" style="background-color: rgba(220, 53, 69, 0.9); color: white; padding: 15px; margin-bottom: 0; border-bottom: 2px solid rgba(66, 135, 245, 0.2); display: flex; align-items: center; justify-content: space-between;">
-                    <div style="display: flex; align-items: center;">
-                        <i class="bi bi-exclamation-triangle-fill me-3" style="font-size: 24px;"></i>
-                        <div>
-                            <h5 style="margin-bottom: 5px; font-weight: 600;">Authentication Failed</h5>
-                            <p style="margin-bottom: 0;">{{ error_message }}</p>
-                        </div>
+            <div class="auth-container">
+                <div class="auth-card">
+                    <!-- Top accent bar with shimmer effect -->
+                    <div class="auth-accent">
+                        <div class="auth-shimmer"></div>
                     </div>
-                    <button type="button" class="btn-close btn-close-white" aria-label="Close" onclick="this.parentElement.style.display='none'"></button>
-                </div>
-                {% endif %}
-                <div class="card-body" style="padding: 30px;">
-                    <form method="POST" action="{{ url_for('auth.login') }}">
-                        {{ form.hidden_tag() }}
 
-                        <div class="mb-4">
-                            {{ form.email.label(class="form-label", style="color: #ffffff; font-weight: 600; font-size: 1.1rem; margin-bottom: 8px; display: flex; align-items: center;") }}
-                            <i class="bi bi-envelope me-2" style="color: #4287f5;"></i>
-                            Email Address
-                            <div class="input-group">
-                                <span class="input-group-text" style="background-color: rgba(66, 135, 245, 0.2); border: 2px solid rgba(66, 135, 245, 0.3); border-right: none; color: #4287f5; border-radius: 10px 0 0 10px;">
-                                    <i class="bi bi-envelope-fill"></i>
-                                </span>
-                                {{ form.email(class="form-control", placeholder="Enter your email", style="background-color: rgba(30, 30, 30, 0.7); border: 2px solid rgba(66, 135, 245, 0.3); border-left: none; color: #ffffff; padding: 12px; border-radius: 0 10px 10px 0; font-size: 1.05rem;", value=attempted_email if attempted_email else "") }}
-                            </div>
-                            {% for error in form.email.errors %}
-                                <div style="color: #ff4d10; font-weight: 500; margin-top: 8px; display: flex; align-items: center;">
-                                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                                    {{ error }}
-                                </div>
-                            {% endfor %}
-                            <small class="text-muted" style="color: #b8e0ff !important; display: block; margin-top: 5px; font-size: 0.85rem;">We'll never share your email with anyone else.</small>
-                        </div>
+                    <!-- Card header -->
+                    <div class="auth-header">
+                        <h3 class="auth-title">
+                            <i class="bi bi-shield-lock"></i>
+                            Sign In
+                            <span class="auth-badge">Secure</span>
+                        </h3>
+                    </div>
 
-                        <div class="mb-4">
-                            {{ form.password.label(class="form-label", style="color: #ffffff; font-weight: 600; font-size: 1.1rem; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; width: 100%;") }}
+                    <!-- Error banner -->
+                    {% if show_password_error %}
+                    <div class="auth-error-banner">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-exclamation-triangle-fill me-3 fs-4"></i>
                             <div>
-                                <i class="bi bi-key me-2" style="color: #4287f5;"></i>
-                                Password
+                                <div class="auth-error-title">Authentication Failed</div>
+                                <div class="auth-error-message">{{ error_message }}</div>
                             </div>
-                            <a href="{{ url_for('auth.password_reset_request') }}" class="forgot-password-link" style="color: #4287f5; font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: all 0.2s ease;">
-                                Forgot Password?
-                            </a>
-                            <div class="input-group">
-                                <span class="input-group-text" style="background-color: rgba(66, 135, 245, 0.2); border: 2px solid rgba(66, 135, 245, 0.3); border-right: none; color: #4287f5; border-radius: 10px 0 0 10px;">
-                                    <i class="bi bi-key-fill"></i>
-                                </span>
-                                {{ form.password(class="form-control password-input", placeholder="Enter your password", style="background-color: rgba(30, 30, 30, 0.7); border: 2px solid rgba(66, 135, 245, 0.3); border-left: none; border-right: none; color: #ffffff; padding: 12px; border-radius: 0; font-size: 1.05rem;") }}
-                                <button type="button" class="input-group-text toggle-password" style="background-color: rgba(66, 135, 245, 0.2); border: 2px solid rgba(66, 135, 245, 0.3); border-left: none; color: #4287f5; border-radius: 0 10px 10px 0; cursor: pointer;">
-                                    <i class="bi bi-eye-fill"></i>
-                                </button>
-                            </div>
-                            {% for error in form.password.errors %}
-                                <div style="color: #ff4d10; font-weight: 500; margin-top: 8px; display: flex; align-items: center;">
-                                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        </div>
+                        <button type="button" class="btn-close btn-close-white" aria-label="Close" onclick="this.parentElement.style.display='none'"></button>
+                    </div>
+                    {% endif %}
+
+                    <!-- Card body -->
+                    <div class="auth-body">
+                        <form method="POST" action="{{ url_for('auth.login') }}" class="auth-form">
+                            {{ form.hidden_tag() }}
+
+                            <!-- Email field -->
+                            <div class="auth-form-group">
+                                <label class="auth-form-label">
+                                    <i class="bi bi-envelope"></i>
+                                    Email Address
+                                </label>
+                                <div class="auth-input-group">
+                                    <div class="auth-input-icon">
+                                        <i class="bi bi-envelope-fill"></i>
+                                    </div>
+                                    {{ form.email(class="auth-input", placeholder="Enter your email", value=attempted_email if attempted_email else "") }}
+                                </div>
+                                {% for error in form.email.errors %}
+                                <div class="auth-error-feedback">
+                                    <i class="bi bi-exclamation-triangle-fill"></i>
                                     {{ error }}
                                 </div>
-                            {% endfor %}
-                        </div>
-
-                        <!-- Account Recovery Options -->
-                        {% if show_reset_prompt %}
-                        <div class="mb-4 password-recovery-options" style="background-color: rgba(255, 193, 7, 0.1); border-radius: 10px; padding: 15px; border-left: 4px solid #ffc107;">
-                            <h5 style="color: #ffc107; font-weight: 600; font-size: 1rem; margin-bottom: 10px; display: flex; align-items: center;">
-                                <i class="bi bi-shield-exclamation me-2"></i> Having trouble signing in?
-                            </h5>
-                            <p style="color: #e0e0e0; font-size: 0.9rem; margin-bottom: 10px;">We can help you recover access to your account.</p>
-                            <div class="d-grid gap-2">
-                                <a href="{{ url_for('auth.supabase_password_reset') }}?email={{ user_email|urlencode }}" class="btn btn-warning" style="font-weight: 600; font-size: 0.9rem;">
-                                    <i class="bi bi-key-fill me-2"></i> Reset Your Password
-                                </a>
+                                {% endfor %}
+                                <small class="auth-form-text">We'll never share your email with anyone else.</small>
                             </div>
-                        </div>
-                        {% endif %}
 
-                        <!-- Register Prompt -->
-                        {% if show_register_prompt %}
-                        <div class="mb-4 register-prompt" style="background-color: rgba(25, 135, 84, 0.1); border-radius: 10px; padding: 15px; border-left: 4px solid #198754;">
-                            <h5 style="color: #198754; font-weight: 600; font-size: 1rem; margin-bottom: 10px; display: flex; align-items: center;">
-                                <i class="bi bi-person-plus me-2"></i> New to Visual Thesaurus LLM?
-                            </h5>
-                            <p style="color: #e0e0e0; font-size: 0.9rem; margin-bottom: 10px;">Create an account to track your progress and access all features.</p>
-                            <div class="d-grid gap-2">
-                                <a href="{{ url_for('auth.register') }}?email={{ attempted_email|urlencode }}" class="btn btn-success" style="font-weight: 600; font-size: 0.9rem;">
-                                    <i class="bi bi-person-plus-fill me-2"></i> Create an Account
-                                </a>
+                            <!-- Password field -->
+                            <div class="auth-form-group">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <label class="auth-form-label mb-0">
+                                        <i class="bi bi-key"></i>
+                                        Password
+                                    </label>
+                                    <a href="{{ url_for('auth.password_reset_request') }}" class="auth-footer-link">
+                                        Forgot Password?
+                                    </a>
+                                </div>
+                                <div class="auth-input-group password">
+                                    <div class="auth-input-icon">
+                                        <i class="bi bi-key-fill"></i>
+                                    </div>
+                                    {{ form.password(class="auth-input", placeholder="Enter your password", type="password") }}
+                                    <div class="auth-toggle-password">
+                                        <i class="bi bi-eye-fill"></i>
+                                    </div>
+                                </div>
+                                {% for error in form.password.errors %}
+                                <div class="auth-error-feedback">
+                                    <i class="bi bi-exclamation-triangle-fill"></i>
+                                    {{ error }}
+                                </div>
+                                {% endfor %}
                             </div>
-                        </div>
-                        {% endif %}
 
-                        <div class="mb-4 form-check">
-                            {{ form.remember_me(class="form-check-input", style="width: 20px; height: 20px; margin-top: 0.15rem;") }}
-                            {{ form.remember_me.label(class="form-check-label", style="color: #e0e0e0; font-weight: 500; margin-left: 8px; font-size: 1rem;") }}
-                        </div>
+                            <!-- Account Recovery Options -->
+                            {% if show_reset_prompt %}
+                            <div class="auth-recovery-options">
+                                <div class="auth-recovery-title">
+                                    <i class="bi bi-shield-exclamation"></i> Having trouble signing in?
+                                </div>
+                                <div class="auth-recovery-text">We can help you recover access to your account.</div>
+                                <div class="d-grid">
+                                    <a href="{{ url_for('auth.supabase_password_reset') }}?email={{ user_email|urlencode }}" class="btn btn-warning">
+                                        <i class="bi bi-key-fill me-2"></i> Reset Your Password
+                                    </a>
+                                </div>
+                            </div>
+                            {% endif %}
 
-                        <div class="d-grid gap-2">
-                            {{ form.submit(class="btn btn-primary sign-in-btn", style="background: linear-gradient(135deg, #4287f5, #3a75d8); border: none; border-radius: 10px; padding: 12px 24px; font-weight: 700; font-size: 1.05rem; letter-spacing: 0.5px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2), 0 0 10px rgba(66, 135, 245, 0.3); transition: all 0.3s ease; color: white; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); position: relative; overflow: hidden;") }}
-                            <div class="sign-in-btn-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent); transform: translateX(-100%); transition: transform 0.5s;"></div>
-                        </div>
-                    </form>
+                            <!-- Register Prompt -->
+                            {% if show_register_prompt %}
+                            <div class="auth-register-prompt">
+                                <div class="auth-register-title">
+                                    <i class="bi bi-person-plus"></i> New to Visual Thesaurus LLM?
+                                </div>
+                                <div class="auth-register-text">Create an account to track your progress and access all features.</div>
+                                <div class="d-grid">
+                                    <a href="{{ url_for('auth.register') }}?email={{ attempted_email|urlencode }}" class="btn btn-success">
+                                        <i class="bi bi-person-plus-fill me-2"></i> Create an Account
+                                    </a>
+                                </div>
+                            </div>
+                            {% endif %}
 
-                    <hr class="my-4" style="border-color: rgba(66, 135, 245, 0.2); opacity: 0.5;">
+                            <!-- Remember me checkbox -->
+                            <div class="auth-remember-me">
+                                {{ form.remember_me(class="auth-remember-checkbox") }}
+                                {{ form.remember_me.label(class="auth-remember-label") }}
+                            </div>
 
-                    <div class="text-center mb-3">
-                        <p style="color: #b8e0ff; font-weight: 500; font-size: 1.05rem;">Or sign in with:</p>
-                        <div class="d-flex justify-content-center gap-3">
+                            <!-- Submit button -->
+                            <button type="submit" class="auth-submit-btn">
+                                <i class="bi bi-box-arrow-in-right"></i>
+                                Sign In
+                                <div class="auth-btn-overlay"></div>
+                            </button>
+                        </form>
+
+                        <!-- Social login section -->
+                        <hr class="auth-divider">
+
+                        <div class="auth-social-title">Or sign in with:</div>
+                        <div class="auth-social-buttons">
                             {% for provider in oauth_providers %}
-                                <a href="{{ provider.url }}" class="btn" style="background-color: rgba(30, 30, 30, 0.7); border: 2px solid rgba(255, 255, 255, 0.2); color: #ffffff; padding: 10px 20px; border-radius: 10px; font-weight: 600; transition: all 0.3s ease;">
-                                    <i class="bi bi-{{ provider.icon }} me-2" style="color: #4287f5;"></i>{{ provider.name }}
-                                </a>
+                            <a href="{{ provider.url }}" class="auth-social-btn">
+                                <i class="bi bi-{{ provider.icon }}"></i>{{ provider.name }}
+                            </a>
                             {% endfor %}
-                            <a href="{{ url_for('auth.supabase_login') }}" class="btn" style="background-color: rgba(30, 30, 30, 0.7); border: 2px solid rgba(66, 135, 245, 0.3); color: #ffffff; padding: 10px 20px; border-radius: 10px; font-weight: 600; transition: all 0.3s ease;">
-                                <i class="bi bi-database-fill me-2" style="color: #4287f5;"></i>Supabase
+                            <a href="{{ url_for('auth.supabase_login') }}" class="auth-social-btn">
+                                <i class="bi bi-database-fill"></i>Supabase
                             </a>
                         </div>
                     </div>
-                </div>
-                <div class="card-footer" style="background-color: rgba(25, 25, 25, 0.7); border-top: 2px solid rgba(66, 135, 245, 0.2); padding: 20px;">
-                    <div class="d-flex justify-content-between">
-                        <a href="{{ url_for('auth.supabase_password_reset') }}" style="color: #4287f5; font-weight: 600; text-decoration: none; transition: all 0.3s ease;">Forgot Password?</a>
-                        <a href="{{ url_for('auth.register') }}" style="color: #4287f5; font-weight: 600; text-decoration: none; transition: all 0.3s ease;">Need an account? Register</a>
+
+                    <!-- Card footer -->
+                    <div class="auth-footer">
+                        <a href="{{ url_for('auth.supabase_password_reset') }}" class="auth-footer-link">Forgot Password?</a>
+                        <a href="{{ url_for('auth.register') }}" class="auth-footer-link">Need an account? Register</a>
                     </div>
                 </div>
             </div>
@@ -160,125 +180,7 @@
 {% endblock %}
 
 {% block scripts %}
-<style>
-@keyframes shimmer {
-    100% {
-        transform: translateX(100%);
-    }
-}
-
-.sign-in-btn:hover .sign-in-btn-overlay {
-    transform: translateX(100%);
-}
-
-.sign-in-btn:active {
-    transform: scale(0.98);
-}
-
-.form-control:focus, .form-check-input:focus {
-    box-shadow: 0 0 0 0.25rem rgba(66, 135, 245, 0.25);
-    border-color: rgba(66, 135, 245, 0.5);
-}
-
-.input-group:focus-within .input-group-text {
-    border-color: rgba(66, 135, 245, 0.5);
-    color: #4287f5;
-}
-
-.password-toggle-animation {
-    animation: pulse 0.3s ease;
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-}
-
-.social-btn-hover:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
-</style>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Password toggle functionality
-    const togglePassword = document.querySelector('.toggle-password');
-    const passwordInput = document.querySelector('.password-input');
-
-    if (togglePassword && passwordInput) {
-        togglePassword.addEventListener('click', function() {
-            // Toggle password visibility
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-
-            // Toggle icon
-            const icon = this.querySelector('i');
-            icon.classList.toggle('bi-eye-fill');
-            icon.classList.toggle('bi-eye-slash-fill');
-
-            // Add animation
-            this.classList.add('password-toggle-animation');
-            setTimeout(() => {
-                this.classList.remove('password-toggle-animation');
-            }, 300);
-        });
-    }
-
-    // Add hover effect to social buttons
-    const socialButtons = document.querySelectorAll('.d-flex.justify-content-center.gap-3 .btn');
-    socialButtons.forEach(button => {
-        button.classList.add('social-btn-hover');
-    });
-
-    // Add shimmer effect to sign in button on hover
-    const signInBtn = document.querySelector('.sign-in-btn');
-    if (signInBtn) {
-        signInBtn.addEventListener('mouseenter', function() {
-            const overlay = document.querySelector('.sign-in-btn-overlay');
-            if (overlay) {
-                overlay.style.transition = 'transform 0.8s';
-                overlay.style.transform = 'translateX(100%)';
-            }
-        });
-
-        signInBtn.addEventListener('mouseleave', function() {
-            const overlay = document.querySelector('.sign-in-btn-overlay');
-            if (overlay) {
-                overlay.style.transition = 'none';
-                overlay.style.transform = 'translateX(-100%)';
-                setTimeout(() => {
-                    overlay.style.transition = 'transform 0.8s';
-                }, 10);
-            }
-        });
-    }
-
-    // Add animation to form fields when focused
-    const formInputs = document.querySelectorAll('.form-control');
-    formInputs.forEach(input => {
-        input.addEventListener('focus', function() {
-            this.style.transition = 'all 0.3s ease';
-            this.style.transform = 'translateY(-2px)';
-            this.style.boxShadow = '0 5px 15px rgba(66, 135, 245, 0.2)';
-        });
-
-        input.addEventListener('blur', function() {
-            this.style.transform = 'translateY(0)';
-            this.style.boxShadow = 'none';
-        });
-    });
-
-    // Add shimmer animation to the top bar
-    const loginShimmer = document.querySelector('.login-shimmer');
-    if (loginShimmer) {
-        setInterval(() => {
-            loginShimmer.style.animation = 'none';
-            loginShimmer.offsetHeight; // Trigger reflow
-            loginShimmer.style.animation = 'shimmer 2s infinite linear';
-        }, 4000);
-    }
-});
-</script>
+{{ super() }}
+<!-- Add responsive authentication JavaScript -->
+<script src="{{ url_for('static', filename='js/responsive-auth.js') }}"></script>
 {% endblock %}

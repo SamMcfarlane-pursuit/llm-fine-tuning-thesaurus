@@ -1311,6 +1311,16 @@ def workshop_steps():
     """Render the workshop steps visualization page."""
     return render_template('workshop_steps.html')
 
+@app.route('/workshop/full-fine-tuning')
+def workshop_full_fine_tuning():
+    """Render the full fine-tuning workshop page."""
+    return render_template('workshop_full_fine_tuning.html')
+
+@app.route('/workshop/lora-fine-tuning')
+def workshop_lora_fine_tuning():
+    """Render the LoRA fine-tuning workshop page."""
+    return render_template('workshop_lora_fine_tuning.html')
+
 @app.route('/terms')
 def terms():
     """Render the terms of service page."""

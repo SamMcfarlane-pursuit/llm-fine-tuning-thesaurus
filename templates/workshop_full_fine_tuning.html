@@ -1,0 +1,406 @@
+{% extends 'base.html' %}
+
+{% block title %}Full Fine-Tuning Workshop{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/workshops">Workshops</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Full Fine-Tuning</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1>Full Fine-Tuning Workshop</h1>
+            <p class="lead">Master the fundamentals of full fine-tuning for large language models</p>
+            <div class="workshop-meta mt-3">
+                <span class="badge bg-primary me-2"><i class="bi bi-clock me-1"></i> 4 Hours</span>
+                <span class="badge bg-success me-2"><i class="bi bi-bar-chart-fill me-1"></i> Beginner/Intermediate</span>
+                <span class="badge bg-info me-2"><i class="bi bi-gpu-card me-1"></i> GPU Required</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3>Workshop Overview</h3>
+                </div>
+                <div class="card-body">
+                    <p>This comprehensive workshop covers the fundamentals of full fine-tuning for large language models. You'll learn how to prepare datasets, configure training parameters, and evaluate model performance, with hands-on exercises to reinforce your understanding.</p>
+
+                    <h4 class="mt-4">What You'll Learn</h4>
+                    <ul class="feature-list">
+                        <li><i class="bi bi-check-circle-fill text-success me-2"></i> How to prepare and format datasets for fine-tuning</li>
+                        <li><i class="bi bi-check-circle-fill text-success me-2"></i> Configuring training hyperparameters for optimal results</li>
+                        <li><i class="bi bi-check-circle-fill text-success me-2"></i> Implementing full fine-tuning with Hugging Face Transformers</li>
+                        <li><i class="bi bi-check-circle-fill text-success me-2"></i> Evaluating model performance and avoiding overfitting</li>
+                        <li><i class="bi bi-check-circle-fill text-success me-2"></i> Best practices for fine-tuning different model architectures</li>
+                    </ul>
+
+                    <h4 class="mt-4">Prerequisites</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Knowledge</h5>
+                            <ul>
+                                <li>Basic understanding of deep learning</li>
+                                <li>Familiarity with Python programming</li>
+                                <li>Basic knowledge of PyTorch</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Hardware</h5>
+                            <ul>
+                                <li>GPU with 8GB+ VRAM</li>
+                                <li>Alternative: Google Colab</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-header bg-success text-white">
+                    <h3>Workshop Modules</h3>
+                </div>
+                <div class="card-body p-0">
+                    <div class="accordion" id="workshopModules">
+                        <!-- Module 1 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    <span class="module-number">1</span> Dataset Preparation
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#workshopModules">
+                                <div class="accordion-body">
+                                    <h4>Module Overview</h4>
+                                    <p>This module covers the essential steps for preparing and formatting datasets for fine-tuning large language models.</p>
+
+                                    <h5 class="mt-3">Topics Covered</h5>
+                                    <ul>
+                                        <li>Data collection and cleaning strategies</li>
+                                        <li>Tokenization and preprocessing</li>
+                                        <li>Creating training, validation, and test splits</li>
+                                        <li>Handling different data formats (text, JSON, CSV)</li>
+                                    </ul>
+
+                                    <h5 class="mt-3">Hands-on Exercises</h5>
+                                    <div class="exercise-box">
+                                        <h6><i class="bi bi-laptop me-2"></i>Exercise 1.1: Preparing a Dataset for Fine-Tuning</h6>
+                                        <p>In this exercise, you'll prepare a dataset for fine-tuning a language model, including cleaning, tokenization, and creating data splits.</p>
+                                        <a href="#" class="btn btn-sm btn-outline-primary mt-2">
+                                            <i class="bi bi-journal-code me-1"></i> Open Exercise Notebook
+                                        </a>
+                                    </div>
+
+                                    <div class="time-estimate mt-3">
+                                        <i class="bi bi-clock me-1"></i> Estimated time: 1 hour
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Module 2 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    <span class="module-number">2</span> Training Configuration
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#workshopModules">
+                                <div class="accordion-body">
+                                    <h4>Module Overview</h4>
+                                    <p>This module focuses on configuring training parameters for optimal fine-tuning results.</p>
+
+                                    <h5 class="mt-3">Topics Covered</h5>
+                                    <ul>
+                                        <li>Learning rate selection and scheduling</li>
+                                        <li>Batch size optimization</li>
+                                        <li>Gradient accumulation and clipping</li>
+                                        <li>Optimizer selection and configuration</li>
+                                    </ul>
+
+                                    <h5 class="mt-3">Hands-on Exercise</h5>
+                                    <div class="exercise-box">
+                                        <h6><i class="bi bi-laptop me-2"></i>Exercise 2.1: Configuring Training Parameters</h6>
+                                        <p>Configure training parameters for fine-tuning a language model, including learning rate, batch size, and optimizer settings.</p>
+                                        <a href="#" class="btn btn-sm btn-outline-primary mt-2">Open Exercise Notebook</a>
+                                    </div>
+
+                                    <div class="time-estimate mt-3">
+                                        <i class="bi bi-clock me-1"></i> Estimated time: 1 hour
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Module 3 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingThree">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    <span class="module-number">3</span> Full Fine-Tuning Implementation
+                                </button>
+                            </h2>
+                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#workshopModules">
+                                <div class="accordion-body">
+                                    <h4>Module Overview</h4>
+                                    <p>This module covers the implementation of full fine-tuning using the Hugging Face Transformers library.</p>
+
+                                    <h5 class="mt-3">Topics Covered</h5>
+                                    <ul>
+                                        <li>Setting up the training pipeline</li>
+                                        <li>Implementing the Trainer class</li>
+                                        <li>Handling checkpoints and model saving</li>
+                                        <li>Monitoring training progress</li>
+                                    </ul>
+
+                                    <h5 class="mt-3">Hands-on Exercise</h5>
+                                    <div class="exercise-box">
+                                        <h6><i class="bi bi-laptop me-2"></i>Exercise 3.1: Implementing Full Fine-Tuning</h6>
+                                        <p>Implement full fine-tuning for a pre-trained language model using the Hugging Face Transformers library.</p>
+                                        <a href="#" class="btn btn-sm btn-outline-primary mt-2">Open Exercise Notebook</a>
+                                    </div>
+
+                                    <div class="code-preview mt-3">
+                                        <h6>Implementation Preview</h6>
+                                        <div class="bg-light p-3 rounded code-block">
+                                            <pre><code>from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import Trainer, TrainingArguments
+import torch
+
+# Load pre-trained model and tokenizer
+model_name = "gpt2"
+model = AutoModelForCausalLM.from_pretrained(model_name)
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+
+# Configure training arguments
+training_args = TrainingArguments(
+    output_dir="./results",
+    num_train_epochs=3,
+    per_device_train_batch_size=4,
+    per_device_eval_batch_size=4,
+    warmup_steps=500,
+    weight_decay=0.01,
+    logging_dir="./logs",
+    logging_steps=10,
+    evaluation_strategy="steps",
+    eval_steps=500,
+    save_steps=1000,
+    load_best_model_at_end=True,
+)
+
+# Initialize Trainer
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=train_dataset,
+    eval_dataset=eval_dataset,
+    data_collator=data_collator,
+)
+
+# Start training
+trainer.train()</code></pre>
+                                        </div>
+                                    </div>
+
+                                    <div class="time-estimate mt-3">
+                                        <i class="bi bi-clock me-1"></i> Estimated time: 1 hour
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Module 4 -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingFour">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                    <span class="module-number">4</span> Evaluation and Best Practices
+                                </button>
+                            </h2>
+                            <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#workshopModules">
+                                <div class="accordion-body">
+                                    <h4>Module Overview</h4>
+                                    <p>This module covers evaluation techniques and best practices for fine-tuning language models.</p>
+
+                                    <h5 class="mt-3">Topics Covered</h5>
+                                    <ul>
+                                        <li>Metrics for evaluating language models</li>
+                                        <li>Avoiding overfitting and catastrophic forgetting</li>
+                                        <li>Best practices for different model architectures</li>
+                                        <li>Troubleshooting common issues</li>
+                                    </ul>
+
+                                    <h5 class="mt-3">Hands-on Exercise</h5>
+                                    <div class="exercise-box">
+                                        <h6><i class="bi bi-laptop me-2"></i>Exercise 4.1: Evaluating Fine-Tuned Models</h6>
+                                        <p>Evaluate a fine-tuned language model using various metrics and implement strategies to avoid overfitting.</p>
+                                        <a href="#" class="btn btn-sm btn-outline-primary mt-2">Open Exercise Notebook</a>
+                                    </div>
+
+                                    <div class="time-estimate mt-3">
+                                        <i class="bi bi-clock me-1"></i> Estimated time: 1 hour
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card sticky-top" style="top: 20px; z-index: 1;">
+                <div class="card-header bg-dark text-white">
+                    <h3>Workshop Resources</h3>
+                </div>
+                <div class="card-body">
+                    <h5><i class="bi bi-journal-code me-2"></i>Notebooks</h5>
+                    <ul class="list-group mb-4">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Dataset Preparation
+                            <a href="#" class="btn btn-sm btn-outline-primary">Open</a>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Training Configuration
+                            <a href="#" class="btn btn-sm btn-outline-primary">Open</a>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Full Fine-Tuning Implementation
+                            <a href="#" class="btn btn-sm btn-outline-primary">Open</a>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Evaluation and Best Practices
+                            <a href="#" class="btn btn-sm btn-outline-primary">Open</a>
+                        </li>
+                    </ul>
+
+                    <h5><i class="bi bi-book me-2"></i>Additional Resources</h5>
+                    <ul class="list-group mb-4">
+                        <li class="list-group-item">
+                            <a href="https://huggingface.co/docs/transformers/training" target="_blank">
+                                Hugging Face Transformers Training Guide
+                                <i class="bi bi-box-arrow-up-right ms-2"></i>
+                            </a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="https://huggingface.co/docs/transformers/main_classes/trainer" target="_blank">
+                                Trainer API Documentation
+                                <i class="bi bi-box-arrow-up-right ms-2"></i>
+                            </a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="https://huggingface.co/docs/datasets/index" target="_blank">
+                                Hugging Face Datasets Library
+                                <i class="bi bi-box-arrow-up-right ms-2"></i>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <h5><i class="bi bi-people me-2"></i>Community Support</h5>
+                    <div class="d-grid gap-2">
+                        <a href="https://discuss.huggingface.co/" target="_blank" class="btn btn-outline-primary">
+                            <i class="bi bi-chat-dots me-2"></i>Hugging Face Forum
+                        </a>
+                        <a href="https://discord.gg/huggingface" target="_blank" class="btn btn-outline-primary">
+                            <i class="bi bi-discord me-2"></i>Discord Community
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4 mb-5">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3>Next Steps</h3>
+                </div>
+                <div class="card-body">
+                    <p>After completing this workshop, you may want to explore more advanced fine-tuning techniques:</p>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">LoRA Fine-Tuning</h5>
+                                    <p class="card-text">Learn how to use Low-Rank Adaptation for more efficient fine-tuning.</p>
+                                    <a href="/workshop/lora-fine-tuning" class="btn btn-primary">Go to Workshop</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">QLoRA Deep Dive</h5>
+                                    <p class="card-text">Explore Quantized Low-Rank Adaptation for fine-tuning large models on consumer hardware.</p>
+                                    <a href="/workshop/qlora-deep-dive" class="btn btn-primary">Go to Workshop</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Memory Efficiency</h5>
+                                    <p class="card-text">Learn advanced memory optimization techniques for fine-tuning large models.</p>
+                                    <a href="/workshop/memory-efficiency" class="btn btn-primary">Go to Workshop</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .module-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: #007bff;
+        color: white;
+        margin-right: 10px;
+        font-weight: bold;
+    }
+
+    .exercise-box {
+        background-color: #f8f9fa;
+        border-left: 4px solid #007bff;
+        padding: 15px;
+        border-radius: 4px;
+        position: relative;
+    }
+
+    .time-estimate {
+        color: #6c757d;
+        font-style: italic;
+    }
+
+    .feature-list li {
+        margin-bottom: 10px;
+    }
+
+    .code-block {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .workshop-meta .badge {
+        font-size: 0.9rem;
+        padding: 0.5rem 0.7rem;
+    }
+</style>
+{% endblock %}

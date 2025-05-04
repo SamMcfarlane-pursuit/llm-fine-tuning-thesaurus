@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#2a1a2c" rx="10" ry="10"/>
+  <rect x="20" y="20" width="360" height="260" fill="#3a2a3c" rx="8" ry="8" stroke="#c566f5" stroke-width="2"/>
+  
+  <!-- Code Window -->
+  <rect x="40" y="50" width="320" height="200" fill="#0d1117" rx="5" ry="5"/>
+  
+  <!-- Code Lines -->
+  <text x="60" y="80" font-family="monospace" font-size="12" fill="#e6edf3">from peft import LoraConfig, get_peft_model</text>
+  <text x="60" y="100" font-family="monospace" font-size="12" fill="#e6edf3"></text>
+  <text x="60" y="120" font-family="monospace" font-size="12" fill="#e6edf3"># Configure LoRA</text>
+  <text x="60" y="140" font-family="monospace" font-size="12" fill="#e6edf3">lora_config = LoraConfig(</text>
+  <text x="60" y="160" font-family="monospace" font-size="12" fill="#e6edf3">    r=16,                # Rank</text>
+  <text x="60" y="180" font-family="monospace" font-size="12" fill="#e6edf3">    lora_alpha=32,        # Alpha parameter</text>
+  <text x="60" y="200" font-family="monospace" font-size="12" fill="#e6edf3">    target_modules=["q_proj", "v_proj"],</text>
+  <text x="60" y="220" font-family="monospace" font-size="12" fill="#e6edf3">    lora_dropout=0.05     # Dropout probability</text>
+  <text x="60" y="240" font-family="monospace" font-size="12" fill="#e6edf3">)</text>
+  
+  <!-- Title -->
+  <text x="200" y="35" font-family="Arial, sans-serif" font-size="18" fill="white" text-anchor="middle" font-weight="bold">Apply LoRA</text>
+</svg>

@@ -1306,6 +1306,11 @@ def qlora_guide_part3():
     """Render part 3 of the QLoRA guide."""
     return render_template('qlora_guide_part3.html')
 
+@app.route('/workshop-steps')
+def workshop_steps():
+    """Render the workshop steps visualization page."""
+    return render_template('workshop_steps.html')
+
 @app.route('/terms')
 def terms():
     """Render the terms of service page."""

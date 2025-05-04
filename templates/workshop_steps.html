@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}LLM Fine-Tuning Workshop Steps{% endblock %}
+
+{% block head %}
+<!-- Additional head content specific to this page -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/workshop-steps-enhanced.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1>QLoRA Fine-Tuning Workshop</h1>
+            <p class="lead">Follow these steps to implement QLoRA fine-tuning for large language models</p>
+        </div>
+    </div>
+
+    <div class="workshop-steps-container">
+        <!-- Step 1: Install Required Libraries -->
+        <div class="workshop-step">
+            <div class="step-number">1</div>
+            <h3 class="step-title">Install Required Libraries</h3>
+            <div class="step-content">
+                <img src="{{ url_for('static', filename='images/workshop/install-libraries.svg') }}" alt="Installing required libraries" class="step-image">
+                <div class="step-description">
+                    Install all necessary libraries including transformers, peft, bitsandbytes, and accelerate for efficient fine-tuning.
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Load Model in 4-bit -->
+        <div class="workshop-step">
+            <div class="step-number">2</div>
+            <h3 class="step-title">Load Model in 4-bit</h3>
+            <div class="step-content">
+                <img src="{{ url_for('static', filename='images/workshop/load-model-4bit.svg') }}" alt="Loading model in 4-bit quantization" class="step-image">
+                <div class="step-description">
+                    Load the pre-trained model with 4-bit quantization to significantly reduce memory usage while maintaining model quality.
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Apply LoRA -->
+        <div class="workshop-step">
+            <div class="step-number">3</div>
+            <h3 class="step-title">Apply LoRA</h3>
+            <div class="step-content">
+                <img src="{{ url_for('static', filename='images/workshop/apply-lora.svg') }}" alt="Applying LoRA adapters" class="step-image">
+                <div class="step-description">
+                    Apply Low-Rank Adaptation to the model, adding trainable parameters while keeping most of the model frozen.
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4: Train the Model -->
+        <div class="workshop-step">
+            <div class="step-number">4</div>
+            <h3 class="step-title">Train the Model</h3>
+            <div class="step-content">
+                <img src="{{ url_for('static', filename='images/workshop/train-model.svg') }}" alt="Training the model" class="step-image">
+                <div class="step-description">
+                    Train the model on your dataset, updating only the LoRA parameters while keeping the base model frozen.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3>Workshop Details</h3>
+                </div>
+                <div class="card-body">
+                    <p>This workshop guides you through the process of implementing QLoRA (Quantized Low-Rank Adaptation) for fine-tuning large language models with limited computational resources. By combining 4-bit quantization with LoRA, you can fine-tune models with billions of parameters on consumer hardware.</p>
+
+                    <h4 class="mt-4">Prerequisites</h4>
+                    <ul>
+                        <li>Basic understanding of transformer models</li>
+                        <li>Familiarity with PyTorch</li>
+                        <li>GPU with at least 8GB VRAM</li>
+                    </ul>
+
+                    <h4 class="mt-4">What You'll Learn</h4>
+                    <ul>
+                        <li>How to implement 4-bit quantization for LLMs</li>
+                        <li>Configuring LoRA for efficient fine-tuning</li>
+                        <li>Memory optimization techniques</li>
+                        <li>Evaluating and using your fine-tuned model</li>
+                    </ul>
+
+                    <div class="text-center mt-4">
+                        <a href="/workshop/qlora-deep-dive" class="btn btn-primary">Start Full Workshop</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/workshop-steps-enhanced.js') }}"></script>
+{% endblock %}

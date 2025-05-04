@@ -6,15 +6,475 @@
 <!-- Additional head content specific to this page -->
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vis-network@9.1.2/dist/vis-network.min.js"></script>
+<style>
+    /* Enhanced code block styling */
+    pre {
+        margin: 0;
+        padding: 0;
+        background: transparent;
+        border: none;
+        overflow: visible;
+    }
+
+    code {
+        font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+        font-size: 14px;
+        line-height: 1.5;
+        tab-size: 4;
+        white-space: pre;
+        color: #f8f8f2 !important;
+        display: block;
+        overflow-x: auto;
+        padding: 0;
+        margin: 0;
+    }
+
+    .code-container {
+        background-color: #1a202c !important;
+        border: 1px solid #2d3748 !important;
+        border-radius: 8px !important;
+        margin-bottom: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .code-header {
+        background-color: #2d3748 !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+        padding: 10px 16px !important;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+        font-size: 13px !important;
+        color: #f7fafc !important;
+        font-weight: 600 !important;
+    }
+
+    .code-content {
+        padding: 16px !important;
+        overflow-x: auto;
+        background-color: #1a202c !important;
+    }
+
+    /* Syntax highlighting */
+    .hljs-keyword {
+        color: #ff79c6 !important;
+        font-weight: bold;
+    }
+
+    .hljs-built_in {
+        color: #8be9fd !important;
+        font-style: italic;
+    }
+
+    .hljs-type {
+        color: #8be9fd !important;
+    }
+
+    .hljs-literal {
+        color: #bd93f9 !important;
+    }
+
+    .hljs-number {
+        color: #bd93f9 !important;
+    }
+
+    .hljs-regexp {
+        color: #f1fa8c !important;
+    }
+
+    .hljs-string {
+        color: #f1fa8c !important;
+    }
+
+    .hljs-comment {
+        color: #6272a4 !important;
+        font-style: italic;
+    }
+
+    .hljs-doctag {
+        color: #6272a4 !important;
+    }
+
+    .hljs-meta {
+        color: #6272a4 !important;
+    }
+
+    .hljs-tag {
+        color: #50fa7b !important;
+    }
+
+    .hljs-name {
+        color: #50fa7b !important;
+    }
+
+    .hljs-attr {
+        color: #8be9fd !important;
+    }
+
+    .hljs-symbol {
+        color: #bd93f9 !important;
+    }
+
+    .hljs-title {
+        color: #50fa7b !important;
+        font-weight: bold;
+    }
+
+    .hljs-section {
+        color: #bd93f9 !important;
+        font-weight: bold;
+    }
+
+    .hljs-addition {
+        color: #50fa7b !important;
+        background-color: rgba(80, 250, 123, 0.1) !important;
+    }
+
+    .hljs-deletion {
+        color: #ff5555 !important;
+        background-color: rgba(255, 85, 85, 0.1) !important;
+    }
+
+    .hljs-selector-class {
+        color: #8be9fd !important;
+    }
+
+    .hljs-selector-id {
+        color: #8be9fd !important;
+    }
+
+    .hljs-emphasis {
+        font-style: italic;
+    }
+
+    .hljs-strong {
+        font-weight: bold;
+    }
+
+    .hljs-link {
+        text-decoration: underline;
+        color: #8be9fd !important;
+    }
+
+    /* Python-specific syntax highlighting */
+    .python-keyword {
+        color: #ff79c6 !important;
+        font-weight: bold;
+    }
+
+    .python-builtin {
+        color: #8be9fd !important;
+        font-style: italic;
+    }
+
+    .python-string {
+        color: #f1fa8c !important;
+    }
+
+    .python-number {
+        color: #bd93f9 !important;
+    }
+
+    .python-comment {
+        color: #6272a4 !important;
+        font-style: italic;
+    }
+
+    .python-function {
+        color: #50fa7b !important;
+    }
+
+    .python-class {
+        color: #8be9fd !important;
+        font-weight: bold;
+    }
+
+    .python-decorator {
+        color: #ff79c6 !important;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 992px) {
+        code {
+            font-size: 13px;
+        }
+
+        .code-content {
+            padding: 12px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        code {
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .code-content {
+            padding: 10px;
+        }
+
+        .code-header {
+            padding: 6px 12px;
+            font-size: 11px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        code {
+            font-size: 11px;
+        }
+
+        .code-content {
+            padding: 8px;
+        }
+    }
+
+    /* Fix for exercise 8 layout */
+    #exercise8 .card-body {
+        padding: 1.5rem;
+    }
+
+    #exercise8 .card .card-body {
+        padding: 1.25rem;
+        background-color: var(--dark-bg) !important;
+        color: var(--text-primary) !important;
+    }
+
+    #exercise8 .card-header {
+        padding: 1rem 1.25rem;
+    }
+
+    #exercise8 .card-header.bg-info {
+        background: linear-gradient(135deg, var(--info-color), var(--info-dark)) !important;
+        color: white !important;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    #exercise8 .card-header.bg-primary {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)) !important;
+        color: white !important;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    #exercise8 .bg-light {
+        background-color: transparent !important;
+        padding: 0 !important;
+        border-radius: 0 !important;
+    }
+
+    #exercise8 h5 {
+        color: var(--text-primary) !important;
+        font-weight: 600;
+    }
+
+    #exercise8 p, #exercise8 li {
+        color: var(--text-secondary) !important;
+    }
+
+    /* Enhance code blocks in exercise 8 */
+    #exercise8 .code-container {
+        border: 1px solid rgba(76, 201, 240, 0.3) !important;
+    }
+
+    /* Copy button styling */
+    .copy-btn {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background-color: rgba(255, 255, 255, 0.8);
+        border: 1px solid #e1e4e8;
+        border-radius: 4px;
+        padding: 4px 8px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        z-index: 10;
+    }
+
+    .code-header .copy-btn {
+        position: relative;
+        top: 0;
+        right: 0;
+        margin-left: auto;
+        background-color: transparent;
+        border: none;
+        padding: 0;
+    }
+
+    .copy-btn:hover {
+        background-color: #f1f1f1;
+    }
+
+    .copy-btn.copied {
+        background-color: #28a745;
+        color: white;
+        border-color: #28a745;
+    }
+
+    .copy-btn.error {
+        background-color: #dc3545;
+        color: white;
+        border-color: #dc3545;
+    }
+
+    /* Fix for code blocks in exercise sections */
+    .card-body pre {
+        max-width: 100%;
+        overflow-x: auto;
+    }
+
+    /* Fix for visualization container */
+    #concepts-visualization {
+        min-height: 500px;
+        width: 100%;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    /* Fix for zoom controls */
+    .zoom-controls {
+        margin-top: 10px;
+        display: flex;
+        gap: 8px;
+    }
+
+    /* Fix for exercise sections */
+    [id^="exercise"] {
+        scroll-margin-top: 70px;
+    }
+
+    /* Fix for LLM efficiency section */
+    #llm-efficiency {
+        scroll-margin-top: 70px;
+    }
+
+    /* Fix for deep learning section */
+    #deep-learning {
+        scroll-margin-top: 70px;
+    }
+
+    /* Enhanced Learn Page Styling */
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .learn-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .learn-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(90deg, #ffffff, #f0f0f0);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .learn-header p.lead {
+        font-size: 1.2rem;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+        background-color: var(--medium-bg);
+        overflow: hidden;
+    }
+
+    .card-header {
+        background-color: var(--light-bg);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 1rem 1.5rem;
+    }
+
+    .card-header h3 {
+        margin-bottom: 0;
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    .list-group-item {
+        background-color: var(--light-bg);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 0.5rem;
+        border-radius: 8px !important;
+        transition: all 0.3s ease;
+    }
+
+    .list-group-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        background-color: rgba(0, 119, 255, 0.1);
+    }
+
+    .list-group-item h5 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .list-group-item p {
+        font-size: 0.95rem;
+        color: var(--text-secondary);
+        margin-bottom: 0;
+    }
+
+    .badge {
+        padding: 0.4rem 0.6rem;
+        font-weight: 500;
+        border-radius: 4px;
+    }
+
+    #concepts-visualization {
+        height: 600px !important;
+        min-height: 600px !important;
+        border-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        background-color: var(--light-bg);
+        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .zoom-controls {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        z-index: 100;
+        background-color: rgba(0, 0, 0, 0.7);
+        padding: 0.5rem;
+        border-radius: 8px;
+        display: flex;
+        gap: 0.5rem;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
 
     <div class="container mt-4">
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <h1>Learn LLM Fine-Tuning</h1>
-                <p class="lead">Explore LLM fine-tuning concepts in a visual thesaurus format</p>
+        <div class="learn-header text-center">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Learn LLM Fine-Tuning</h1>
+                    <p class="lead">Explore LLM fine-tuning concepts in a visual thesaurus format</p>
+                </div>
             </div>
         </div>
 
@@ -66,11 +526,11 @@
                     <div class="card-body">
                         <p>This interactive visualization shows the relationships between different concepts in LLM fine-tuning.
                            Click on any concept to learn more about it.</p>
-                        <div id="concepts-visualization" style="height: 80vh; border: 1px solid #ddd; position: relative;"></div>
-                        <div class="mt-3">
-                            <button id="zoom-in-btn" class="btn btn-sm btn-outline-primary"><i class="bi bi-zoom-in"></i> Zoom In</button>
-                            <button id="zoom-out-btn" class="btn btn-sm btn-outline-primary"><i class="bi bi-zoom-out"></i> Zoom Out</button>
-                            <button id="reset-zoom-btn" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrows-fullscreen"></i> Reset View</button>
+                        <div id="concepts-visualization" style="position: relative;"></div>
+                        <div class="zoom-controls">
+                            <button id="zoom-in-btn" class="btn btn-sm btn-primary"><i class="bi bi-zoom-in"></i></button>
+                            <button id="zoom-out-btn" class="btn btn-sm btn-primary"><i class="bi bi-zoom-out"></i></button>
+                            <button id="reset-zoom-btn" class="btn btn-sm btn-secondary"><i class="bi bi-arrows-fullscreen"></i></button>
                         </div>
                     </div>
                 </div>
@@ -117,13 +577,15 @@
                                 </a>
                             {% else %}
                                 <div class="alert alert-warning">
-                                    <p><i class="bi bi-exclamation-triangle-fill me-2"></i> You need to be logged in to take the quiz.</p>
-                                    <a href="{{ url_for('auth.login') }}" class="btn btn-primary me-2">
-                                        <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
-                                    </a>
-                                    <a href="{{ url_for('auth.register') }}" class="btn btn-outline-primary">
-                                        <i class="bi bi-person-plus me-1"></i> Register
-                                    </a>
+                                    <p><i class="bi bi-exclamation-triangle-fill me-2"></i> You need to be logged in to use this feature.</p>
+                                    <div class="d-flex justify-content-center">
+                                        <a href="{{ url_for('auth.login') }}" class="btn btn-primary me-3">
+                                            <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
+                                        </a>
+                                        <a href="{{ url_for('auth.register') }}" class="btn btn-dark">
+                                            <i class="bi bi-person-plus me-1"></i> Register
+                                        </a>
+                                    </div>
                                 </div>
                             {% endif %}
                         </div>
@@ -205,9 +667,17 @@
                                 </div>
                                 <p class="mb-1">Learn how to use the powerful pipeline() function for fast and easy inference with pre-trained and fine-tuned models. <a href="/guide/pipeline-inference" class="badge bg-primary">Pipeline Guide</a></p>
                             </a>
+                            <a href="/learn#llm-efficiency" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1">Exercise 10: LLM Integration Efficiency Techniques</h5>
+                                    <small>30 minutes</small>
+                                </div>
+                                <p class="mb-1">Learn how to optimize LLM integration with techniques like response streaming, prompt optimization, and batch processing. <a href="#llm-efficiency" class="badge bg-success">Interactive Demo</a></p>
+                            </a>
+
                             <a href="/learn#deep-learning" class="list-group-item list-group-item-action">
                                 <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">Exercise 10: Deep Learning Fundamentals</h5>
+                                    <h5 class="mb-1">Exercise 11: Deep Learning Fundamentals</h5>
                                     <small>45 minutes</small>
                                 </div>
                                 <p class="mb-1">Explore the fundamentals of deep learning and learn about popular frameworks like TensorFlow and PyTorch. <a href="/frameworks/comparison" class="badge bg-success">Framework Comparison</a> <a href="/frameworks" class="badge bg-info">Hands-on Exercises</a></p>
@@ -239,23 +709,31 @@
                         <h4>Hands-on Task:</h4>
                         <div class="bg-light p-3 rounded">
                             <p>In this exercise, we'll explore the GPT-2 model that we'll use for our thesaurus application:</p>
-                            <pre><code>from transformers import AutoModelForCausalLM, AutoTokenizer
+                            <div class="code-container">
+                                <div class="code-header">
+                                    <span>GPT-2 Model Exploration</span>
+                                    <span>Python</span>
+                                </div>
+                                <div class="code-content">
+                                    <pre><code><span class="python-keyword">from</span> transformers <span class="python-keyword">import</span> AutoModelForCausalLM, AutoTokenizer
 
-# Load the model and tokenizer
-model_name = "gpt2"
+<span class="python-comment"># Load the model and tokenizer</span>
+model_name = <span class="python-string">"gpt2"</span>
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForCausalLM.from_pretrained(model_name)
 
-# Print model information
-print(f"Model: {model_name}")
-print(f"Parameter count: {sum(p.numel() for p in model.parameters()):,}")
-print(f"Vocabulary size: {len(tokenizer)}")
+<span class="python-comment"># Print model information</span>
+<span class="python-builtin">print</span>(<span class="python-string">f"Model: {model_name}"</span>)
+<span class="python-builtin">print</span>(<span class="python-string">f"Parameter count: {sum(p.numel() for p in model.parameters()):,}"</span>)
+<span class="python-builtin">print</span>(<span class="python-string">f"Vocabulary size: {len(tokenizer)}"</span>)
 
-# Try a simple generation
-prompt = "A synonym for happy is"
-inputs = tokenizer(prompt, return_tensors="pt")
-outputs = model.generate(inputs.input_ids, max_length=20, num_return_sequences=1)
-print(tokenizer.decode(outputs[0], skip_special_tokens=True))</code></pre>
+<span class="python-comment"># Try a simple generation</span>
+prompt = <span class="python-string">"A synonym for happy is"</span>
+inputs = tokenizer(prompt, return_tensors=<span class="python-string">"pt"</span>)
+outputs = model.generate(inputs.input_ids, max_length=<span class="python-number">20</span>, num_return_sequences=<span class="python-number">1</span>)
+<span class="python-builtin">print</span>(tokenizer.decode(outputs[<span class="python-number">0</span>], skip_special_tokens=<span class="python-builtin">True</span>))</code></pre>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -283,47 +761,55 @@ print(tokenizer.decode(outputs[0], skip_special_tokens=True))</code></pre>
                         <h4>Hands-on Task:</h4>
                         <div class="bg-light p-3 rounded">
                             <p>In this exercise, we'll prepare thesaurus data using WordNet:</p>
-                            <pre><code>import nltk
-from nltk.corpus import wordnet as wn
-import json
+                            <div class="code-container">
+                                <div class="code-header">
+                                    <span>WordNet Thesaurus Data Preparation</span>
+                                    <span>Python</span>
+                                </div>
+                                <div class="code-content">
+                                    <pre><code><span class="python-keyword">import</span> nltk
+<span class="python-keyword">from</span> nltk.corpus <span class="python-keyword">import</span> wordnet <span class="python-keyword">as</span> wn
+<span class="python-keyword">import</span> json
 
-# Download WordNet
-nltk.download('wordnet')
-nltk.download('omw-1.4')
+<span class="python-comment"># Download WordNet</span>
+nltk.download(<span class="python-string">'wordnet'</span>)
+nltk.download(<span class="python-string">'omw-1.4'</span>)
 
-# Generate thesaurus data for a few words
-words = ["happy", "good", "fast", "big", "small"]
+<span class="python-comment"># Generate thesaurus data for a few words</span>
+words = [<span class="python-string">"happy"</span>, <span class="python-string">"good"</span>, <span class="python-string">"fast"</span>, <span class="python-string">"big"</span>, <span class="python-string">"small"</span>]
 thesaurus_data = []
 
-for word in words:
-    entry = {"word": word, "synonyms": [], "antonyms": []}
+<span class="python-keyword">for</span> word <span class="python-keyword">in</span> words:
+    entry = {<span class="python-string">"word"</span>: word, <span class="python-string">"synonyms"</span>: [], <span class="python-string">"antonyms"</span>: []}
 
-    # Get synsets for the word
+    <span class="python-comment"># Get synsets for the word</span>
     synsets = wn.synsets(word)
 
-    for synset in synsets:
-        # Get synonyms
-        for lemma in synset.lemmas():
-            if lemma.name() != word and '_' not in lemma.name():
-                entry["synonyms"].append(lemma.name())
+    <span class="python-keyword">for</span> synset <span class="python-keyword">in</span> synsets:
+        <span class="python-comment"># Get synonyms</span>
+        <span class="python-keyword">for</span> lemma <span class="python-keyword">in</span> synset.lemmas():
+            <span class="python-keyword">if</span> lemma.name() != word <span class="python-keyword">and</span> <span class="python-string">'_'</span> <span class="python-keyword">not in</span> lemma.name():
+                entry[<span class="python-string">"synonyms"</span>].append(lemma.name())
 
-            # Get antonyms
-            for antonym in lemma.antonyms():
-                if '_' not in antonym.name():
-                    entry["antonyms"].append(antonym.name())
+            <span class="python-comment"># Get antonyms</span>
+            <span class="python-keyword">for</span> antonym <span class="python-keyword">in</span> lemma.antonyms():
+                <span class="python-keyword">if</span> <span class="python-string">'_'</span> <span class="python-keyword">not in</span> antonym.name():
+                    entry[<span class="python-string">"antonyms"</span>].append(antonym.name())
 
-    # Remove duplicates
-    entry["synonyms"] = list(set(entry["synonyms"]))
-    entry["antonyms"] = list(set(entry["antonyms"]))
+    <span class="python-comment"># Remove duplicates</span>
+    entry[<span class="python-string">"synonyms"</span>] = <span class="python-builtin">list</span>(<span class="python-builtin">set</span>(entry[<span class="python-string">"synonyms"</span>]))
+    entry[<span class="python-string">"antonyms"</span>] = <span class="python-builtin">list</span>(<span class="python-builtin">set</span>(entry[<span class="python-string">"antonyms"</span>]))
 
     thesaurus_data.append(entry)
 
-# Print the data
-for entry in thesaurus_data:
-    print(f"Word: {entry['word']}")
-    print(f"Synonyms: {', '.join(entry['synonyms'])}")
-    print(f"Antonyms: {', '.join(entry['antonyms'])}")
-    print()</code></pre>
+<span class="python-comment"># Print the data</span>
+<span class="python-keyword">for</span> entry <span class="python-keyword">in</span> thesaurus_data:
+    <span class="python-builtin">print</span>(<span class="python-string">f"Word: {entry['word']}"</span>)
+    <span class="python-builtin">print</span>(<span class="python-string">f"Synonyms: {', '.join(entry['synonyms'])}"</span>)
+    <span class="python-builtin">print</span>(<span class="python-string">f"Antonyms: {', '.join(entry['antonyms'])}"</span>)
+    <span class="python-builtin">print</span>()</code></pre>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -964,24 +1450,30 @@ print("QLoRA fine-tuning complete! The model has been saved to ./thesaurus-qlora
                                             <li>Particularly effective for NLG tasks</li>
                                         </ul>
 
-                                        <div class="bg-light p-3 rounded">
-                                            <pre><code>from peft import PrefixTuningConfig, get_peft_model
+                                        <div class="code-container">
+                                            <div class="code-header">
+                                                <span>Prefix Tuning Implementation</span>
+                                                <span>Python</span>
+                                            </div>
+                                            <div class="code-content">
+                                                <pre><code><span class="python-keyword">from</span> peft <span class="python-keyword">import</span> PrefixTuningConfig, get_peft_model
 
-# Configure Prefix Tuning
+<span class="python-comment"># Configure Prefix Tuning</span>
 prefix_config = PrefixTuningConfig(
-    task_type="CAUSAL_LM",
-    num_virtual_tokens=20,  # Number of virtual tokens
-    prefix_projection=True,  # Use projection layer
-    encoder_hidden_size=512  # Size of prefix encoder
+    task_type=<span class="python-string">"CAUSAL_LM"</span>,
+    num_virtual_tokens=<span class="python-number">20</span>,  <span class="python-comment"># Number of virtual tokens</span>
+    prefix_projection=<span class="python-builtin">True</span>,  <span class="python-comment"># Use projection layer</span>
+    encoder_hidden_size=<span class="python-number">512</span>  <span class="python-comment"># Size of prefix encoder</span>
 )
 
-# Apply Prefix Tuning to the model
+<span class="python-comment"># Apply Prefix Tuning to the model</span>
 prefix_model = get_peft_model(model, prefix_config)
 
-# Print trainable parameters
-trainable_params = sum(p.numel() for p in prefix_model.parameters()
-                      if p.requires_grad)
-print(f"Trainable parameters: {trainable_params:,}")</code></pre>
+<span class="python-comment"># Print trainable parameters</span>
+trainable_params = <span class="python-builtin">sum</span>(p.numel() <span class="python-keyword">for</span> p <span class="python-keyword">in</span> prefix_model.parameters()
+                  <span class="python-keyword">if</span> p.requires_grad)
+<span class="python-builtin">print</span>(<span class="python-string">f"Trainable parameters: {trainable_params:,}"</span>)</code></pre>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1002,24 +1494,30 @@ print(f"Trainable parameters: {trainable_params:,}")</code></pre>
                                             <li>Scales well with model size</li>
                                         </ul>
 
-                                        <div class="bg-light p-3 rounded">
-                                            <pre><code>from peft import PromptTuningConfig, get_peft_model, TaskType
+                                        <div class="code-container">
+                                            <div class="code-header">
+                                                <span>Prompt Tuning Implementation</span>
+                                                <span>Python</span>
+                                            </div>
+                                            <div class="code-content">
+                                                <pre><code><span class="python-keyword">from</span> peft <span class="python-keyword">import</span> PromptTuningConfig, get_peft_model, TaskType
 
-# Configure Prompt Tuning
+<span class="python-comment"># Configure Prompt Tuning</span>
 prompt_config = PromptTuningConfig(
     task_type=TaskType.CAUSAL_LM,
-    num_virtual_tokens=10,  # Number of virtual tokens
+    num_virtual_tokens=<span class="python-number">10</span>,  <span class="python-comment"># Number of virtual tokens</span>
     tokenizer_name_or_path=model_name,
-    prompt_tuning_init="RANDOM"  # Initialize randomly
+    prompt_tuning_init=<span class="python-string">"RANDOM"</span>  <span class="python-comment"># Initialize randomly</span>
 )
 
-# Apply Prompt Tuning to the model
+<span class="python-comment"># Apply Prompt Tuning to the model</span>
 prompt_model = get_peft_model(model, prompt_config)
 
-# Print trainable parameters
-trainable_params = sum(p.numel() for p in prompt_model.parameters()
-                      if p.requires_grad)
-print(f"Trainable parameters: {trainable_params:,}")</code></pre>
+<span class="python-comment"># Print trainable parameters</span>
+trainable_params = <span class="python-builtin">sum</span>(p.numel() <span class="python-keyword">for</span> p <span class="python-keyword">in</span> prompt_model.parameters()
+                  <span class="python-keyword">if</span> p.requires_grad)
+<span class="python-builtin">print</span>(<span class="python-string">f"Trainable parameters: {trainable_params:,}"</span>)</code></pre>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1042,25 +1540,31 @@ print(f"Trainable parameters: {trainable_params:,}")</code></pre>
                                             <li>Modular and composable for multi-task learning</li>
                                         </ul>
 
-                                        <div class="bg-light p-3 rounded">
-                                            <pre><code>from peft import AdapterConfig, get_peft_model
+                                        <div class="code-container">
+                                            <div class="code-header">
+                                                <span>Adapter Layers Implementation</span>
+                                                <span>Python</span>
+                                            </div>
+                                            <div class="code-content">
+                                                <pre><code><span class="python-keyword">from</span> peft <span class="python-keyword">import</span> AdapterConfig, get_peft_model
 
-# Configure Adapter
+<span class="python-comment"># Configure Adapter</span>
 adapter_config = AdapterConfig(
-    r=16,  # Bottleneck dimension
-    lora_alpha=32,
-    lora_dropout=0.05,
-    task_type="CAUSAL_LM",
-    bias="none"
+    r=<span class="python-number">16</span>,  <span class="python-comment"># Bottleneck dimension</span>
+    lora_alpha=<span class="python-number">32</span>,
+    lora_dropout=<span class="python-number">0.05</span>,
+    task_type=<span class="python-string">"CAUSAL_LM"</span>,
+    bias=<span class="python-string">"none"</span>
 )
 
-# Apply Adapter to the model
+<span class="python-comment"># Apply Adapter to the model</span>
 adapter_model = get_peft_model(model, adapter_config)
 
-# Print trainable parameters
-trainable_params = sum(p.numel() for p in adapter_model.parameters()
-                      if p.requires_grad)
-print(f"Trainable parameters: {trainable_params:,}")</code></pre>
+<span class="python-comment"># Print trainable parameters</span>
+trainable_params = <span class="python-builtin">sum</span>(p.numel() <span class="python-keyword">for</span> p <span class="python-keyword">in</span> adapter_model.parameters()
+                  <span class="python-keyword">if</span> p.requires_grad)
+<span class="python-builtin">print</span>(<span class="python-string">f"Trainable parameters: {trainable_params:,}"</span>)</code></pre>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1081,25 +1585,31 @@ print(f"Trainable parameters: {trainable_params:,}")</code></pre>
                                             <li>Particularly effective for NLU tasks</li>
                                         </ul>
 
-                                        <div class="bg-light p-3 rounded">
-                                            <pre><code>from peft import PromptEncoderConfig, get_peft_model, TaskType
+                                        <div class="code-container">
+                                            <div class="code-header">
+                                                <span>P-Tuning v2 Implementation</span>
+                                                <span>Python</span>
+                                            </div>
+                                            <div class="code-content">
+                                                <pre><code><span class="python-keyword">from</span> peft <span class="python-keyword">import</span> PromptEncoderConfig, get_peft_model, TaskType
 
-# Configure P-Tuning v2
+<span class="python-comment"># Configure P-Tuning v2</span>
 ptuning_config = PromptEncoderConfig(
     task_type=TaskType.CAUSAL_LM,
-    num_virtual_tokens=20,  # Number of virtual tokens
-    encoder_hidden_size=128,  # Hidden size of prompt encoder
-    encoder_num_layers=2,  # Number of layers in prompt encoder
-    encoder_dropout=0.1  # Dropout in prompt encoder
+    num_virtual_tokens=<span class="python-number">20</span>,  <span class="python-comment"># Number of virtual tokens</span>
+    encoder_hidden_size=<span class="python-number">128</span>,  <span class="python-comment"># Hidden size of prompt encoder</span>
+    encoder_num_layers=<span class="python-number">2</span>,  <span class="python-comment"># Number of layers in prompt encoder</span>
+    encoder_dropout=<span class="python-number">0.1</span>  <span class="python-comment"># Dropout in prompt encoder</span>
 )
 
-# Apply P-Tuning v2 to the model
+<span class="python-comment"># Apply P-Tuning v2 to the model</span>
 ptuning_model = get_peft_model(model, ptuning_config)
 
-# Print trainable parameters
-trainable_params = sum(p.numel() for p in ptuning_model.parameters()
-                      if p.requires_grad)
-print(f"Trainable parameters: {trainable_params:,}")</code></pre>
+<span class="python-comment"># Print trainable parameters</span>
+trainable_params = <span class="python-builtin">sum</span>(p.numel() <span class="python-keyword">for</span> p <span class="python-keyword">in</span> ptuning_model.parameters()
+                  <span class="python-keyword">if</span> p.requires_grad)
+<span class="python-builtin">print</span>(<span class="python-string">f"Trainable parameters: {trainable_params:,}"</span>)</code></pre>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1156,6 +1666,221 @@ print(f"Trainable parameters: {trainable_params:,}")</code></pre>
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LLM Integration Efficiency Techniques -->
+        <div id="llm-efficiency" class="row mt-4 mb-5">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h3><i class="bi bi-lightning-charge me-2"></i> LLM Integration Efficiency Techniques</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="lead">Integrating Large Language Models (LLMs) into applications requires careful consideration of efficiency to provide a responsive user experience. Here are key techniques to optimize LLM integration:</p>
+
+                        <div class="row mt-4">
+                            <div class="col-md-4 mb-4">
+                                <div class="card h-100 border-success">
+                                    <div class="card-header bg-success text-white">
+                                        <h4><i class="bi bi-broadcast-pin me-2"></i> Response Streaming</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>Stream partial responses as they're generated rather than waiting for complete generation, improving perceived performance by showing results immediately.</p>
+
+                                        <h5 class="mt-3">Implementation:</h5>
+                                        <ul>
+                                            <li><strong>Server-Side:</strong> Use Server-Sent Events (SSE) or WebSockets</li>
+                                            <li><strong>Backend:</strong> Implement token-by-token generation</li>
+                                            <li><strong>Frontend:</strong> Update UI progressively as tokens arrive</li>
+                                        </ul>
+
+                                        <h5 class="mt-3">Benefits:</h5>
+                                        <ul>
+                                            <li><i class="bi bi-speedometer2 me-2 text-success"></i>Significantly improved perceived latency</li>
+                                            <li><i class="bi bi-person-check me-2 text-success"></i>Better user experience for long responses</li>
+                                            <li><i class="bi bi-book-half me-2 text-success"></i>Allows users to start reading while generation continues</li>
+                                        </ul>
+
+                                        <div class="mt-4 text-center">
+                                            <a href="/api/ask?question=What%20is%20response%20streaming%3F&streaming=true" class="btn btn-success" target="_blank">
+                                                <i class="bi bi-play-fill me-1"></i> Try Streaming Demo
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 mb-4">
+                                <div class="card h-100 border-primary">
+                                    <div class="card-header bg-primary text-white">
+                                        <h4><i class="bi bi-chat-square-text me-2"></i> Prompt Optimization</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>Optimize prompts to reduce token usage and improve response quality, leading to faster and more cost-effective LLM interactions.</p>
+
+                                        <h5 class="mt-3">Techniques:</h5>
+                                        <ul>
+                                            <li><strong>Simplify:</strong> Remove unnecessary context and instructions</li>
+                                            <li><strong>Format:</strong> Use concise language and clear structure</li>
+                                            <li><strong>Templatize:</strong> Implement prompt templates with placeholders</li>
+                                            <li><strong>Compress:</strong> Use embeddings or summaries for context</li>
+                                        </ul>
+
+                                        <h5 class="mt-3">Benefits:</h5>
+                                        <ul>
+                                            <li><i class="bi bi-currency-dollar me-2 text-primary"></i>Reduced token consumption (lower costs)</li>
+                                            <li><i class="bi bi-lightning-charge me-2 text-primary"></i>Faster response generation</li>
+                                            <li><i class="bi bi-check-circle me-2 text-primary"></i>More consistent and relevant outputs</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 mb-4">
+                                <div class="card h-100 border-info">
+                                    <div class="card-header bg-info text-white">
+                                        <h4><i class="bi bi-collection me-2"></i> Batch Processing</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <p>Process multiple requests in batches to maximize throughput and efficiency when handling high volumes of LLM queries.</p>
+
+                                        <h5 class="mt-3">Implementation:</h5>
+                                        <ul>
+                                            <li><strong>Group:</strong> Combine similar requests into batches</li>
+                                            <li><strong>Prioritize:</strong> Implement request queuing and sorting</li>
+                                            <li><strong>Parallelize:</strong> Process batches asynchronously</li>
+                                            <li><strong>Optimize:</strong> Adjust batch size based on hardware</li>
+                                        </ul>
+
+                                        <h5 class="mt-3">Benefits:</h5>
+                                        <ul>
+                                            <li><i class="bi bi-graph-up me-2 text-info"></i>Higher throughput for multiple requests</li>
+                                            <li><i class="bi bi-gpu-card me-2 text-info"></i>Better GPU/TPU utilization</li>
+                                            <li><i class="bi bi-arrow-down-square me-2 text-info"></i>Reduced per-request overhead</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header bg-dark text-white">
+                                        <h4>Response Streaming Implementation Example</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <h5>Backend (Python/Flask)</h5>
+                                                <div class="code-container">
+                                                    <div class="code-header">
+                                                        <span>Streaming API Endpoint</span>
+                                                        <span>Python/Flask</span>
+                                                    </div>
+                                                    <div class="code-content">
+                                                        <pre><code><span class="python-decorator">@app.route</span>(<span class="python-string">'/api/ask/stream'</span>)
+<span class="python-keyword">def</span> <span class="python-function">stream_answer</span>():
+    <span class="python-string">"""API endpoint to stream an answer to a question."""</span>
+    question = request.args.get(<span class="python-string">'question'</span>, <span class="python-string">''</span>)
+
+    <span class="python-keyword">if</span> <span class="python-keyword">not</span> question:
+        <span class="python-keyword">return</span> jsonify({<span class="python-string">'error'</span>: <span class="python-string">'No question provided'</span>}), <span class="python-number">400</span>
+
+    <span class="python-keyword">def</span> <span class="python-function">generate</span>():
+        <span class="python-string">"""Generator function to stream the response."""</span>
+        <span class="python-keyword">try</span>:
+            <span class="python-comment"># Stream the response token by token</span>
+            <span class="python-keyword">for</span> partial_response <span class="python-keyword">in</span> llm.answer_question_streaming(question):
+                <span class="python-comment"># Format as Server-Sent Events (SSE)</span>
+                <span class="python-keyword">yield</span> <span class="python-string">f"data: {json.dumps({'text': partial_response})}\n\n"</span>
+
+        <span class="python-keyword">except</span> Exception <span class="python-keyword">as</span> e:
+            <span class="python-keyword">yield</span> <span class="python-string">f"data: {json.dumps({'error': str(e)})}\n\n"</span>
+
+        <span class="python-comment"># Signal the end of the stream</span>
+        <span class="python-keyword">yield</span> <span class="python-string">f"data: {json.dumps({'done': True})}\n\n"</span>
+
+    <span class="python-comment"># Return a streaming response</span>
+    <span class="python-keyword">return</span> Response(generate(), mimetype=<span class="python-string">'text/event-stream'</span>)</code></pre>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <h5>Frontend (JavaScript)</h5>
+                                                <div class="code-container">
+                                                    <div class="code-header">
+                                                        <span>Streaming Client Implementation</span>
+                                                        <span>JavaScript</span>
+                                                    </div>
+                                                    <div class="code-content">
+                                                        <pre><code><span class="hljs-keyword">function</span> <span class="hljs-title function_">handleStreamingResponse</span>(<span class="hljs-params">streamUrl</span>) {
+    <span class="hljs-comment">// Create an EventSource to receive the streaming response</span>
+    <span class="hljs-keyword">const</span> eventSource = <span class="hljs-keyword">new</span> <span class="hljs-title class_">EventSource</span>(streamUrl);
+
+    <span class="hljs-comment">// Clear the answer container</span>
+    answerElement.<span class="hljs-property">textContent</span> = <span class="hljs-string">''</span>;
+
+    <span class="hljs-comment">// Handle incoming data</span>
+    eventSource.<span class="hljs-property">onmessage</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">event</span>) {
+        <span class="hljs-keyword">const</span> data = <span class="hljs-title class_">JSON</span>.<span class="hljs-title function_">parse</span>(event.<span class="hljs-property">data</span>);
+
+        <span class="hljs-keyword">if</span> (data.<span class="hljs-property">error</span>) {
+            <span class="hljs-comment">// Handle error</span>
+            answerElement.<span class="hljs-property">textContent</span> = <span class="hljs-string">`Error: <span class="hljs-subst">${data.error}</span>`</span>;
+            eventSource.<span class="hljs-title function_">close</span>();
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (data.<span class="hljs-property">done</span>) {
+            <span class="hljs-comment">// Stream is complete</span>
+            eventSource.<span class="hljs-title function_">close</span>();
+        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (data.<span class="hljs-property">text</span>) {
+            <span class="hljs-comment">// Update the answer with the streamed text</span>
+            answerElement.<span class="hljs-property">textContent</span> = data.<span class="hljs-property">text</span>;
+        }
+    };
+
+    <span class="hljs-comment">// Handle errors</span>
+    eventSource.<span class="hljs-property">onerror</span> = <span class="hljs-keyword">function</span>(<span class="hljs-params">error</span>) {
+        <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">'Error with streaming response:'</span>, error);
+        eventSource.<span class="hljs-title function_">close</span>();
+    };
+}</code></pre>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-4">
+                                            <h5>Try It Yourself</h5>
+                                            <div class="row">
+                                                <div class="col-md-8">
+                                                    <div class="input-group mb-3">
+                                                        <input type="text" id="question-input" class="form-control" placeholder="Enter a question about LLM fine-tuning...">
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-success" type="button" id="ask-btn">Ask</button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-check mb-3">
+                                                        <input class="form-check-input" type="checkbox" id="use-streaming" checked>
+                                                        <label class="form-check-label" for="use-streaming">
+                                                            Use streaming response
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card mb-3" id="answer-container" style="display: none;">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">Answer</h5>
+                                                    <p class="card-text" id="answer-text"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1265,8 +1990,8 @@ print(f"Trainable parameters: {trainable_params:,}")</code></pre>
                         <div class="row mt-3">
                             <div class="col-md-6">
                                 <div class="card mb-4">
-                                    <div class="card-header" style="background-color: #FF6F00; color: white;">
-                                        <h4>TensorFlow</h4>
+                                    <div class="card-header tensorflow-header">
+                                        <h4><i class="bi bi-cpu me-2"></i>TensorFlow</h4>
                                     </div>
                                     <div class="card-body">
                                         <p>Developed by Google, TensorFlow is a comprehensive ecosystem for building and deploying machine learning models.</p>
@@ -1284,8 +2009,8 @@ print(f"Trainable parameters: {trainable_params:,}")</code></pre>
                             </div>
                             <div class="col-md-6">
                                 <div class="card mb-4">
-                                    <div class="card-header" style="background-color: #EE4C2C; color: white;">
-                                        <h4>PyTorch</h4>
+                                    <div class="card-header pytorch-header">
+                                        <h4><i class="bi bi-fire me-2"></i>PyTorch</h4>
                                     </div>
                                     <div class="card-body">
                                         <p>Developed by Facebook's AI Research lab, PyTorch is known for its flexibility and ease of use in research settings.</p>
@@ -1303,52 +2028,65 @@ print(f"Trainable parameters: {trainable_params:,}")</code></pre>
                             </div>
                         </div>
 
-                        <div class="bg-light p-4 rounded mt-4">
-                            <h4>Framework Comparison</h4>
+                        <div class="bg-light p-4 rounded mt-4 shadow-sm">
+                            <h4 class="mb-3">Framework Comparison</h4>
+                            <div class="d-flex justify-content-center mb-3">
+                                <div class="framework-legend d-flex align-items-center me-4">
+                                    <span class="legend-color tensorflow-legend me-2"></span>
+                                    <span class="legend-text">TensorFlow</span>
+                                </div>
+                                <div class="framework-legend d-flex align-items-center">
+                                    <span class="legend-color pytorch-legend me-2"></span>
+                                    <span class="legend-text">PyTorch</span>
+                                </div>
+                            </div>
                             <div class="table-responsive">
-                                <table class="table table-bordered">
-                                    <thead class="table-dark">
+                                <table class="table table-bordered comparison-table">
+                                    <caption class="visually-hidden">Comparison of TensorFlow and PyTorch features</caption>
+                                    <thead>
                                         <tr>
-                                            <th>Feature</th>
-                                            <th>TensorFlow</th>
-                                            <th>PyTorch</th>
+                                            <th scope="col" class="feature-col">Feature</th>
+                                            <th scope="col" class="tensorflow-col" style="background-color: var(--primary-color); color: white;">TensorFlow</th>
+                                            <th scope="col" class="pytorch-col" style="background-color: var(--info-color); color: white;">PyTorch</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>Primary Users</td>
-                                            <td>Industry, production deployment</td>
-                                            <td>Research, academic environments</td>
+                                            <th scope="row" class="feature-name">Primary Users</th>
+                                            <td class="tensorflow-data">Industry, production deployment</td>
+                                            <td class="pytorch-data">Research, academic environments</td>
                                         </tr>
                                         <tr>
-                                            <td>Learning Curve</td>
-                                            <td>Moderate (easier with Keras)</td>
-                                            <td>Low (Pythonic interface)</td>
+                                            <th scope="row" class="feature-name">Learning Curve</th>
+                                            <td class="tensorflow-data">Moderate (easier with Keras)</td>
+                                            <td class="pytorch-data">Low (Pythonic interface)</td>
                                         </tr>
                                         <tr>
-                                            <td>Debugging</td>
-                                            <td>Improved in TF 2.x</td>
-                                            <td>Straightforward (like regular Python)</td>
+                                            <th scope="row" class="feature-name">Debugging</th>
+                                            <td class="tensorflow-data">Improved in TF 2.x</td>
+                                            <td class="pytorch-data">Straightforward (like regular Python)</td>
                                         </tr>
                                         <tr>
-                                            <td>Deployment</td>
-                                            <td>Excellent ecosystem</td>
-                                            <td>Good, improving rapidly</td>
+                                            <th scope="row" class="feature-name">Deployment</th>
+                                            <td class="tensorflow-data">Excellent ecosystem</td>
+                                            <td class="pytorch-data">Good, improving rapidly</td>
                                         </tr>
                                         <tr>
-                                            <td>Mobile/Edge Support</td>
-                                            <td>TensorFlow Lite (mature)</td>
-                                            <td>PyTorch Mobile (newer)</td>
+                                            <th scope="row" class="feature-name">Mobile/Edge Support</th>
+                                            <td class="tensorflow-data">TensorFlow Lite (mature)</td>
+                                            <td class="pytorch-data">PyTorch Mobile (newer)</td>
                                         </tr>
                                         <tr>
-                                            <td>Community & Resources</td>
-                                            <td>Large, corporate-backed</td>
-                                            <td>Large, research-focused</td>
+                                            <th scope="row" class="feature-name">Community & Resources</th>
+                                            <td class="tensorflow-data">Large, corporate-backed</td>
+                                            <td class="pytorch-data">Large, research-focused</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-                            <p class="mt-3">For a more detailed comparison, visit our <a href="/frameworks/comparison">frameworks comparison page</a>.</p>
+                            <div class="text-center mt-3">
+                                <a href="/learn/exercise8" class="btn btn-outline-primary">View Detailed Framework Comparison <i class="bi bi-arrow-right ms-1"></i></a>
+                            </div>
                         </div>
 
                         <h4 class="mt-4">Hands-on Deep Learning</h4>
@@ -1426,6 +2164,119 @@ print(f"Trainable parameters: {trainable_params:,}")</code></pre>
     document.addEventListener('DOMContentLoaded', function() {
         let network = null;
         let iframe = null;
+
+        // Set up the question asking functionality
+        const questionInput = document.getElementById('question-input');
+        const askBtn = document.getElementById('ask-btn');
+        const answerContainer = document.getElementById('answer-container');
+        const answerText = document.getElementById('answer-text');
+
+        if (askBtn) {
+            askBtn.addEventListener('click', askQuestion);
+        }
+
+        if (questionInput) {
+            questionInput.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    askQuestion();
+                }
+            });
+        }
+
+        // Ask a question
+        function askQuestion() {
+            const question = questionInput.value.trim();
+            const useStreaming = document.getElementById('use-streaming')?.checked || false;
+
+            if (!question) {
+                alert('Please enter a question');
+                return;
+            }
+
+            // Show loading
+            askBtn.disabled = true;
+            askBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Asking...';
+
+            // Clear previous answer
+            answerText.textContent = '';
+            answerContainer.style.display = 'block';
+
+            // Get CSRF token from meta tag
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+            // Send question to API
+            fetch('/api/ask', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify({ question, streaming: useStreaming })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.streaming) {
+                        // Handle streaming response
+                        handleStreamingResponse(data.stream_url);
+                    } else {
+                        // Display answer
+                        answerText.textContent = data.answer;
+
+                        // Reset button
+                        askBtn.disabled = false;
+                        askBtn.textContent = 'Ask';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error asking question:', error);
+                    alert('Error asking question. Please try again.');
+
+                    // Reset button
+                    askBtn.disabled = false;
+                    askBtn.textContent = 'Ask';
+                });
+        }
+
+        // Handle streaming response
+        function handleStreamingResponse(streamUrl) {
+            // Create an EventSource to receive the streaming response
+            const eventSource = new EventSource(streamUrl);
+
+            // Handle incoming data
+            eventSource.onmessage = function(event) {
+                const data = JSON.parse(event.data);
+
+                if (data.error) {
+                    // Handle error
+                    answerText.textContent = `Error: ${data.error}`;
+                    eventSource.close();
+                    askBtn.disabled = false;
+                    askBtn.textContent = 'Ask';
+                } else if (data.done) {
+                    // Stream is complete
+                    eventSource.close();
+                    askBtn.disabled = false;
+                    askBtn.textContent = 'Ask';
+                } else if (data.text) {
+                    // Update the answer with the streamed text
+                    answerText.textContent = data.text;
+                }
+            };
+
+            // Handle errors
+            eventSource.onerror = function(error) {
+                console.error('Error with streaming response:', error);
+                answerText.textContent += '\n\nError: Connection lost. Please try again.';
+                eventSource.close();
+                askBtn.disabled = false;
+                askBtn.textContent = 'Ask';
+            };
+        }
 
         // Fetch LLM concepts visualization
         fetch('/api/llm-concepts-visualization')

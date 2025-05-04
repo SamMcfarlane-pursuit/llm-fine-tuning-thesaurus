@@ -588,13 +588,15 @@ trainer.train()</code></pre>
                             </a>
                         {% else %}
                             <div class="alert alert-warning">
-                                <p><i class="bi bi-exclamation-triangle-fill me-2"></i> You need to be logged in to take the quiz.</p>
-                                <a href="{{ url_for('auth.login') }}" class="btn btn-primary me-2">
-                                    <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
-                                </a>
-                                <a href="{{ url_for('auth.register') }}" class="btn btn-outline-primary">
-                                    <i class="bi bi-person-plus me-1"></i> Register
-                                </a>
+                                <p><i class="bi bi-exclamation-triangle-fill me-2"></i> You need to be logged in to use this feature.</p>
+                                <div class="d-flex justify-content-center">
+                                    <a href="{{ url_for('auth.login') }}" class="btn btn-primary me-3">
+                                        <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
+                                    </a>
+                                    <a href="{{ url_for('auth.register') }}" class="btn btn-dark">
+                                        <i class="bi bi-person-plus me-1"></i> Register
+                                    </a>
+                                </div>
                             </div>
                         {% endif %}
                     </div>

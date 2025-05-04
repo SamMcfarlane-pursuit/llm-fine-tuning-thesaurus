@@ -18,27 +18,57 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card" style="border-radius: 15px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.3); border: 2px solid rgba(66, 135, 245, 0.2) !important; background-color: rgba(20, 20, 20, 0.7); position: relative;">
-                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: linear-gradient(to right, #4287f5, #00ffdd); z-index: 1;"></div>
+                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: linear-gradient(to right, #4287f5, #00ffdd); z-index: 1; overflow: hidden;">
+                    <div class="login-shimmer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent); animation: shimmer 2s infinite linear; transform: translateX(-100%);"></div>
+                </div>
                 <div class="card-header" style="background: linear-gradient(135deg, rgba(66, 135, 245, 0.2), rgba(0, 255, 221, 0.2)); border-bottom: 2px solid rgba(66, 135, 245, 0.2); padding: 20px;">
-                    <h3 style="font-weight: 700; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.3); margin-bottom: 0;">Sign In</h3>
+                    <h3 style="font-weight: 700; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.3); margin-bottom: 0; display: flex; align-items: center;">
+                        <i class="bi bi-shield-lock me-2" style="color: #4287f5;"></i>
+                        <span>Sign In</span>
+                        <span class="ms-2 badge bg-success" style="font-size: 0.6rem; padding: 0.35em 0.65em; border-radius: 10px; background: linear-gradient(135deg, #4287f5, #00ffdd) !important;">Secure</span>
+                    </h3>
                 </div>
                 <div class="card-body" style="padding: 30px;">
                     <form method="POST" action="{{ url_for('auth.login') }}">
                         {{ form.hidden_tag() }}
 
                         <div class="mb-4">
-                            {{ form.email.label(class="form-label", style="color: #ffffff; font-weight: 600; font-size: 1.1rem; margin-bottom: 8px;") }}
-                            {{ form.email(class="form-control", placeholder="Enter your email", style="background-color: rgba(30, 30, 30, 0.7); border: 2px solid rgba(66, 135, 245, 0.3); color: #ffffff; padding: 12px; border-radius: 10px; font-size: 1.05rem;") }}
+                            {{ form.email.label(class="form-label", style="color: #ffffff; font-weight: 600; font-size: 1.1rem; margin-bottom: 8px; display: flex; align-items: center;") }}
+                            <i class="bi bi-envelope me-2" style="color: #4287f5;"></i>
+                            Email Address
+                            <div class="input-group">
+                                <span class="input-group-text" style="background-color: rgba(66, 135, 245, 0.2); border: 2px solid rgba(66, 135, 245, 0.3); border-right: none; color: #4287f5; border-radius: 10px 0 0 10px;">
+                                    <i class="bi bi-envelope-fill"></i>
+                                </span>
+                                {{ form.email(class="form-control", placeholder="Enter your email", style="background-color: rgba(30, 30, 30, 0.7); border: 2px solid rgba(66, 135, 245, 0.3); border-left: none; color: #ffffff; padding: 12px; border-radius: 0 10px 10px 0; font-size: 1.05rem;") }}
+                            </div>
                             {% for error in form.email.errors %}
-                                <div style="color: #ff4d10; font-weight: 500; margin-top: 8px;">{{ error }}</div>
+                                <div style="color: #ff4d10; font-weight: 500; margin-top: 8px; display: flex; align-items: center;">
+                                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                    {{ error }}
+                                </div>
                             {% endfor %}
+                            <small class="text-muted" style="color: #b8e0ff !important; display: block; margin-top: 5px; font-size: 0.85rem;">We'll never share your email with anyone else.</small>
                         </div>
 
                         <div class="mb-4">
-                            {{ form.password.label(class="form-label", style="color: #ffffff; font-weight: 600; font-size: 1.1rem; margin-bottom: 8px;") }}
-                            {{ form.password(class="form-control", placeholder="Enter your password", style="background-color: rgba(30, 30, 30, 0.7); border: 2px solid rgba(66, 135, 245, 0.3); color: #ffffff; padding: 12px; border-radius: 10px; font-size: 1.05rem;") }}
+                            {{ form.password.label(class="form-label", style="color: #ffffff; font-weight: 600; font-size: 1.1rem; margin-bottom: 8px; display: flex; align-items: center;") }}
+                            <i class="bi bi-key me-2" style="color: #4287f5;"></i>
+                            Password
+                            <div class="input-group">
+                                <span class="input-group-text" style="background-color: rgba(66, 135, 245, 0.2); border: 2px solid rgba(66, 135, 245, 0.3); border-right: none; color: #4287f5; border-radius: 10px 0 0 10px;">
+                                    <i class="bi bi-key-fill"></i>
+                                </span>
+                                {{ form.password(class="form-control password-input", placeholder="Enter your password", style="background-color: rgba(30, 30, 30, 0.7); border: 2px solid rgba(66, 135, 245, 0.3); border-left: none; border-right: none; color: #ffffff; padding: 12px; border-radius: 0; font-size: 1.05rem;") }}
+                                <button type="button" class="input-group-text toggle-password" style="background-color: rgba(66, 135, 245, 0.2); border: 2px solid rgba(66, 135, 245, 0.3); border-left: none; color: #4287f5; border-radius: 0 10px 10px 0; cursor: pointer;">
+                                    <i class="bi bi-eye-fill"></i>
+                                </button>
+                            </div>
                             {% for error in form.password.errors %}
-                                <div style="color: #ff4d10; font-weight: 500; margin-top: 8px;">{{ error }}</div>
+                                <div style="color: #ff4d10; font-weight: 500; margin-top: 8px; display: flex; align-items: center;">
+                                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                    {{ error }}
+                                </div>
                             {% endfor %}
                         </div>
 
@@ -48,28 +78,23 @@
                         </div>
 
                         <div class="d-grid gap-2">
-                            {{ form.submit(class="btn btn-primary", style="background: linear-gradient(135deg, #4287f5, #3a75d8); border: none; border-radius: 10px; padding: 12px 24px; font-weight: 700; font-size: 1.05rem; letter-spacing: 0.5px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2), 0 0 10px rgba(66, 135, 245, 0.3); transition: all 0.3s ease; color: white; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);") }}
+                            {{ form.submit(class="btn btn-primary sign-in-btn", style="background: linear-gradient(135deg, #4287f5, #3a75d8); border: none; border-radius: 10px; padding: 12px 24px; font-weight: 700; font-size: 1.05rem; letter-spacing: 0.5px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2), 0 0 10px rgba(66, 135, 245, 0.3); transition: all 0.3s ease; color: white; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); position: relative; overflow: hidden;") }}
+                            <div class="sign-in-btn-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent); transform: translateX(-100%); transition: transform 0.5s;"></div>
                         </div>
                     </form>
 
                     <hr class="my-4" style="border-color: rgba(66, 135, 245, 0.2); opacity: 0.5;">
 
-                    <div class="text-center mb-4">
-                        <p style="color: #ffffff; font-weight: 600; font-size: 1.1rem; margin-bottom: 15px;">Sign in with:</p>
+                    <div class="text-center mb-3">
+                        <p style="color: #b8e0ff; font-weight: 500; font-size: 1.05rem;">Or sign in with:</p>
                         <div class="d-flex justify-content-center gap-3">
-                            <a href="{{ url_for('auth.google') }}" class="btn btn-lg" style="background-color: #DB4437; border: none; color: #ffffff; padding: 12px 20px; border-radius: 10px; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(219, 68, 55, 0.3); width: 33%;">
-                                <i class="bi bi-google me-2"></i>Google
-                            </a>
-                            <a href="{{ url_for('auth.facebook') }}" class="btn btn-lg" style="background-color: #4267B2; border: none; color: #ffffff; padding: 12px 20px; border-radius: 10px; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(66, 103, 178, 0.3); width: 33%;">
-                                <i class="bi bi-facebook me-2"></i>Facebook
-                            </a>
-                            <a href="{{ url_for('auth.github') }}" class="btn btn-lg" style="background-color: #333333; border: none; color: #ffffff; padding: 12px 20px; border-radius: 10px; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(51, 51, 51, 0.3); width: 33%;">
-                                <i class="bi bi-github me-2"></i>GitHub
-                            </a>
-                        </div>
-                        <div class="mt-3">
-                            <a href="{{ url_for('auth.supabase_login') }}" class="btn btn-lg" style="background-color: #3ECF8E; border: none; color: #ffffff; padding: 12px 20px; border-radius: 10px; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(62, 207, 142, 0.3); width: 50%;">
-                                <i class="bi bi-database-fill me-2"></i>Supabase
+                            {% for provider in oauth_providers %}
+                                <a href="{{ provider.url }}" class="btn" style="background-color: rgba(30, 30, 30, 0.7); border: 2px solid rgba(255, 255, 255, 0.2); color: #ffffff; padding: 10px 20px; border-radius: 10px; font-weight: 600; transition: all 0.3s ease;">
+                                    <i class="bi bi-{{ provider.icon }} me-2" style="color: #4287f5;"></i>{{ provider.name }}
+                                </a>
+                            {% endfor %}
+                            <a href="{{ url_for('auth.supabase_login') }}" class="btn" style="background-color: rgba(30, 30, 30, 0.7); border: 2px solid rgba(66, 135, 245, 0.3); color: #ffffff; padding: 10px 20px; border-radius: 10px; font-weight: 600; transition: all 0.3s ease;">
+                                <i class="bi bi-database-fill me-2" style="color: #4287f5;"></i>Supabase
                             </a>
                         </div>
                     </div>
@@ -84,4 +109,128 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<style>
+@keyframes shimmer {
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.sign-in-btn:hover .sign-in-btn-overlay {
+    transform: translateX(100%);
+}
+
+.sign-in-btn:active {
+    transform: scale(0.98);
+}
+
+.form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.25rem rgba(66, 135, 245, 0.25);
+    border-color: rgba(66, 135, 245, 0.5);
+}
+
+.input-group:focus-within .input-group-text {
+    border-color: rgba(66, 135, 245, 0.5);
+    color: #4287f5;
+}
+
+.password-toggle-animation {
+    animation: pulse 0.3s ease;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.social-btn-hover:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Password toggle functionality
+    const togglePassword = document.querySelector('.toggle-password');
+    const passwordInput = document.querySelector('.password-input');
+
+    if (togglePassword && passwordInput) {
+        togglePassword.addEventListener('click', function() {
+            // Toggle password visibility
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+
+            // Toggle icon
+            const icon = this.querySelector('i');
+            icon.classList.toggle('bi-eye-fill');
+            icon.classList.toggle('bi-eye-slash-fill');
+
+            // Add animation
+            this.classList.add('password-toggle-animation');
+            setTimeout(() => {
+                this.classList.remove('password-toggle-animation');
+            }, 300);
+        });
+    }
+
+    // Add hover effect to social buttons
+    const socialButtons = document.querySelectorAll('.d-flex.justify-content-center.gap-3 .btn');
+    socialButtons.forEach(button => {
+        button.classList.add('social-btn-hover');
+    });
+
+    // Add shimmer effect to sign in button on hover
+    const signInBtn = document.querySelector('.sign-in-btn');
+    if (signInBtn) {
+        signInBtn.addEventListener('mouseenter', function() {
+            const overlay = document.querySelector('.sign-in-btn-overlay');
+            if (overlay) {
+                overlay.style.transition = 'transform 0.8s';
+                overlay.style.transform = 'translateX(100%)';
+            }
+        });
+
+        signInBtn.addEventListener('mouseleave', function() {
+            const overlay = document.querySelector('.sign-in-btn-overlay');
+            if (overlay) {
+                overlay.style.transition = 'none';
+                overlay.style.transform = 'translateX(-100%)';
+                setTimeout(() => {
+                    overlay.style.transition = 'transform 0.8s';
+                }, 10);
+            }
+        });
+    }
+
+    // Add animation to form fields when focused
+    const formInputs = document.querySelectorAll('.form-control');
+    formInputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            this.style.transition = 'all 0.3s ease';
+            this.style.transform = 'translateY(-2px)';
+            this.style.boxShadow = '0 5px 15px rgba(66, 135, 245, 0.2)';
+        });
+
+        input.addEventListener('blur', function() {
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = 'none';
+        });
+    });
+
+    // Add shimmer animation to the top bar
+    const loginShimmer = document.querySelector('.login-shimmer');
+    if (loginShimmer) {
+        setInterval(() => {
+            loginShimmer.style.animation = 'none';
+            loginShimmer.offsetHeight; // Trigger reflow
+            loginShimmer.style.animation = 'shimmer 2s infinite linear';
+        }, 4000);
+    }
+});
+</script>
 {% endblock %}

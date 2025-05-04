@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     {% if csrf_token %}
     <meta name="csrf-token" content="{{ csrf_token() }}">
     {% endif %}
@@ -18,6 +19,18 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/quiz.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-quiz.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-exercises.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/hands-on-exercises.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/help-button.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-navigation.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/improved-section-indicator.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ai-assistant.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/clean-sidebar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/image-styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home-features.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/progress-indicator.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/feature-buttons.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/integrated-learning.css') }}">
     <!-- Libraries -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vis-network@9.1.2/dist/vis-network.min.js"></script>
@@ -27,28 +40,53 @@
     {% block head %}{% endblock %}
 </head>
 <body data-topic-id="{{ topic_id|default('') }}" data-module-id="{{ module_id|default('') }}" data-user-logged-in="{{ current_user.is_authenticated|string|lower }}">
+    <!-- Skip to content link for accessibility -->
+    <a href="#main-content" class="skip-to-content">Skip to content</a>
+
     <!-- Top Auth Bar -->
     <div class="top-auth-bar">
         <div class="container">
-            <div class="d-flex justify-content-end align-items-center">
-                {% if current_user.is_authenticated %}
-                <div class="user-info me-3">
-                    <i class="bi bi-person-circle me-1"></i> Welcome, {{ current_user.username }}
+            <div class="d-flex justify-content-between align-items-center">
+                <!-- Quick Access Feature Buttons -->
+                <div class="quick-access-features">
+                    <a href="{{ url_for('thesaurus') }}" class="feature-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Interactive Concept Maps">
+                        <i class="bi bi-diagram-3"></i>
+                    </a>
+                    <a href="{{ url_for('exercises') }}" class="feature-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Hands-on Exercises">
+                        <i class="bi bi-code-square"></i>
+                    </a>
+                    <a href="{{ url_for('learn') }}" class="feature-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Learning Resources">
+                        <i class="bi bi-book"></i>
+                    </a>
+                    <a href="{{ url_for('quiz.quiz_list') }}" class="feature-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Knowledge Quizzes">
+                        <i class="bi bi-journal-check"></i>
+                        {% if current_user.is_authenticated %}
+                        <span class="badge-dot"></span>
+                        {% endif %}
+                    </a>
                 </div>
-                <a href="{{ url_for('auth.profile') }}" class="top-auth-link me-3">
-                    <i class="bi bi-person-badge me-1"></i> Profile
-                </a>
-                <a href="{{ url_for('auth.logout') }}" class="top-auth-link">
-                    <i class="bi bi-box-arrow-right me-1"></i> Sign Out
-                </a>
-                {% else %}
-                <a href="{{ url_for('auth.login') }}" class="top-auth-link me-3">
-                    <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
-                </a>
-                <a href="{{ url_for('auth.register') }}" class="top-auth-link register-link">
-                    <i class="bi bi-person-plus me-1"></i> Register
-                </a>
-                {% endif %}
+
+                <!-- Auth Links -->
+                <div class="auth-links">
+                    {% if current_user.is_authenticated %}
+                    <div class="user-info me-3">
+                        <i class="bi bi-person-circle me-1"></i> Welcome, {{ current_user.username }}
+                    </div>
+                    <a href="{{ url_for('auth.profile') }}" class="top-auth-link me-3">
+                        <i class="bi bi-person-badge me-1"></i> Profile
+                    </a>
+                    <a href="{{ url_for('auth.logout') }}" class="top-auth-link">
+                        <i class="bi bi-box-arrow-right me-1"></i> Sign Out
+                    </a>
+                    {% else %}
+                    <a href="{{ url_for('auth.login') }}" class="top-auth-link me-3">
+                        <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
+                    </a>
+                    <a href="{{ url_for('auth.register') }}" class="top-auth-link register-link">
+                        <i class="bi bi-person-plus me-1"></i> Register
+                    </a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
@@ -60,7 +98,7 @@
                     <span class="brand-icon"><i class="bi bi-diagram-3"></i></span>
                     <span class="brand-text">Visual Thesaurus LLM</span>
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
@@ -68,38 +106,65 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/"><i class="bi bi-house-door nav-icon"></i> Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/learn"><i class="bi bi-book nav-icon"></i> Learn</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="learnThesaurusDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-diagram-3 nav-icon"></i> Learn & Explore
+                            </a>
+                            <ul class="dropdown-menu mega-menu" aria-labelledby="learnThesaurusDropdown">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="dropdown-header">Integrated Learning</h6>
+                                        <li><a class="dropdown-item" href="/concepts-learning"><i class="bi bi-diagram-3 me-2"></i>Concepts & Learning</a></li>
+                                        <li><a class="dropdown-item" href="/learn"><i class="bi bi-book me-2"></i>Learning Modules</a></li>
+                                        <li><a class="dropdown-item" href="/thesaurus"><i class="bi bi-search me-2"></i>Visual Thesaurus</a></li>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="dropdown-header">Popular Concepts</h6>
+                                        <li><a class="dropdown-item" href="/concepts-learning?concept=fine-tuning"><i class="bi bi-hash me-2"></i>Fine-Tuning</a></li>
+                                        <li><a class="dropdown-item" href="/concepts-learning?concept=lora"><i class="bi bi-hash me-2"></i>LoRA</a></li>
+                                        <li><a class="dropdown-item" href="/concepts-learning?concept=qlora"><i class="bi bi-hash me-2"></i>QLoRA</a></li>
+                                        <li><a class="dropdown-item" href="/concepts-learning?concept=quantization"><i class="bi bi-hash me-2"></i>Quantization</a></li>
+                                    </div>
+                                </div>
+                            </ul>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="workshopsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-tools nav-icon"></i> Workshops
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="workshopsDropdown">
-                                <li><a class="dropdown-item" href="/workshops"><i class="bi bi-collection me-2"></i>All Workshops</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="/workshop/lora-basics"><i class="bi bi-1-circle me-2"></i>LoRA Basics</a></li>
-                                <li><a class="dropdown-item" href="/workshop/qlora-deep-dive"><i class="bi bi-2-circle me-2"></i>QLoRA Deep Dive</a></li>
-                                <li><a class="dropdown-item" href="/advanced-qlora"><i class="bi bi-3-circle me-2"></i>Advanced QLoRA</a></li>
+                            <ul class="dropdown-menu mega-menu" aria-labelledby="workshopsDropdown">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <li><a class="dropdown-item" href="/workshops"><i class="bi bi-collection me-2"></i>All Workshops</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="/workshop/lora-basics"><i class="bi bi-1-circle me-2"></i>LoRA Basics</a></li>
+                                        <li><a class="dropdown-item" href="/workshop/qlora-deep-dive"><i class="bi bi-2-circle me-2"></i>QLoRA Deep Dive</a></li>
+                                        <li><a class="dropdown-item" href="/advanced-qlora"><i class="bi bi-3-circle me-2"></i>Advanced QLoRA</a></li>
+                                    </div>
+                                </div>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="guidesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-book-half nav-icon"></i> Guides
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="guidesDropdown">
-                                <li><a class="dropdown-item" href="/qlora-guide"><i class="bi bi-cpu me-2"></i>QLoRA Fine-Tuning</a></li>
-                                <li><a class="dropdown-item" href="/docker-guide"><i class="bi bi-box-seam me-2"></i>Docker for LLM Fine-Tuning</a></li>
-                                <li><a class="dropdown-item" href="/huggingface-guide"><i class="bi bi-hdd-network me-2"></i>Hugging Face Integration</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="/guide/lora-implementation"><i class="bi bi-diagram-3 me-2"></i>LoRA Implementation</a></li>
-                                <li><a class="dropdown-item" href="/guide/instruction-tuning"><i class="bi bi-chat-square-text me-2"></i>Instruction Tuning</a></li>
-                                <li><a class="dropdown-item" href="/guide/understanding-gpt"><i class="bi bi-braces me-2"></i>Understanding GPT</a></li>
-                                <li><a class="dropdown-item" href="/guide/finetuning-comparison"><i class="bi bi-bar-chart-steps me-2"></i>Fine-Tuning Methods</a></li>
+                            <ul class="dropdown-menu mega-menu" aria-labelledby="guidesDropdown">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="dropdown-header">Core Guides</h6>
+                                        <li><a class="dropdown-item" href="/qlora-guide"><i class="bi bi-cpu me-2"></i>QLoRA Fine-Tuning</a></li>
+                                        <li><a class="dropdown-item" href="/docker-guide"><i class="bi bi-box-seam me-2"></i>Docker for LLM Fine-Tuning</a></li>
+                                        <li><a class="dropdown-item" href="/huggingface-guide"><i class="bi bi-hdd-network me-2"></i>Hugging Face Integration</a></li>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="dropdown-header">Advanced Topics</h6>
+                                        <li><a class="dropdown-item" href="/guide/lora-implementation"><i class="bi bi-diagram-3 me-2"></i>LoRA Implementation</a></li>
+                                        <li><a class="dropdown-item" href="/guide/instruction-tuning"><i class="bi bi-chat-square-text me-2"></i>Instruction Tuning</a></li>
+                                        <li><a class="dropdown-item" href="/guide/understanding-gpt"><i class="bi bi-braces me-2"></i>Understanding GPT</a></li>
+                                        <li><a class="dropdown-item" href="/guide/finetuning-comparison"><i class="bi bi-bar-chart-steps me-2"></i>Fine-Tuning Methods</a></li>
+                                    </div>
+                                </div>
                             </ul>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/thesaurus"><i class="bi bi-search nav-icon"></i> Thesaurus</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/tutorials"><i class="bi bi-journal-code nav-icon"></i> Tutorials</a>
@@ -108,16 +173,30 @@
                             <a class="nav-link dropdown-toggle" href="#" id="frameworksDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-cpu nav-icon"></i> Frameworks
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="frameworksDropdown">
-                                <li><a class="dropdown-item" href="/frameworks"><i class="bi bi-grid-3x3-gap me-2"></i>Overview</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="/frameworks/tensorflow"><i class="bi bi-diagram-3 me-2"></i>TensorFlow</a></li>
-                                <li><a class="dropdown-item" href="/frameworks/pytorch"><i class="bi bi-fire me-2"></i>PyTorch</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="/frameworks/comparison"><i class="bi bi-bar-chart-steps me-2"></i>Framework Comparison</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="/frameworks/tensorflow/exercises"><i class="bi bi-code-square me-2"></i>TensorFlow Exercises</a></li>
-                                <li><a class="dropdown-item" href="/frameworks/pytorch/exercises"><i class="bi bi-code-square me-2"></i>PyTorch Exercises</a></li>
+                            <ul class="dropdown-menu mega-menu" aria-labelledby="frameworksDropdown">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <h6 class="dropdown-header">Overview</h6>
+                                        <li><a class="dropdown-item" href="/frameworks"><i class="bi bi-grid-3x3-gap me-2"></i>All Frameworks</a></li>
+                                        <li><a class="dropdown-item" href="/frameworks/comparison"><i class="bi bi-bar-chart-steps me-2"></i>Framework Comparison</a></li>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h6 class="dropdown-header">TensorFlow</h6>
+                                        <li><a class="dropdown-item" href="/frameworks/tensorflow"><i class="bi bi-diagram-3 me-2"></i>TensorFlow Basics</a></li>
+                                        <li><a class="dropdown-item" href="/frameworks/tensorflow/exercises"><i class="bi bi-code-square me-2"></i>TensorFlow Exercises</a></li>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h6 class="dropdown-header">PyTorch</h6>
+                                        <li><a class="dropdown-item" href="/frameworks/pytorch"><i class="bi bi-fire me-2"></i>PyTorch Basics</a></li>
+                                        <li><a class="dropdown-item" href="/frameworks/pytorch/exercises"><i class="bi bi-code-square me-2"></i>PyTorch Exercises</a></li>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h6 class="dropdown-header">Resources</h6>
+                                        <li><a class="dropdown-item" href="/pipeline"><i class="bi bi-cpu-fill me-2"></i>Hugging Face Pipeline</a></li>
+                                        <li><a class="dropdown-item" href="/guide/pipeline-inference"><i class="bi bi-cpu-fill me-2"></i>Inference Pipeline</a></li>
+                                        <li><a class="dropdown-item" href="/guide/data-preparation"><i class="bi bi-database-fill me-2"></i>Data Preparation</a></li>
+                                    </div>
+                                </div>
                             </ul>
                         </li>
                         <li class="nav-item">
@@ -140,17 +219,27 @@
         <div class="header-accent"></div>
     </header>
 
-    {% block content %}{% endblock %}
+    <main id="main-content">
+        {% block content %}{% endblock %}
+    </main>
 
     <footer class="bg-dark text-white py-4">
         <div class="container">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <h5>Visual Thesaurus LLM</h5>
                     <p>A project demonstrating LLM fine-tuning for thesaurus applications</p>
                 </div>
-                <div class="col-md-6 text-md-end">
+                <div class="col-md-4 text-center">
+                    <h5>Resources</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{{ url_for('contact') }}" class="text-light">Contact Us</a></li>
+                        <li><a href="{{ url_for('tutorials') }}" class="text-light">Tutorials</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 text-md-end">
                     <p>&copy; 2023 Thesaurus AI LLM FT Project</p>
+                    <p class="small text-muted">Enhanced with user-centered design</p>
                 </div>
             </div>
         </div>
@@ -164,22 +253,96 @@
     <script src="{{ url_for('static', filename='js/code-blocks.js') }}"></script>
     <script src="{{ url_for('static', filename='js/analytics-tracking.js') }}"></script>
     <script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/ux-enhancements.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/enhanced-exercises.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/hands-on-exercises.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/help-button.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/enhanced-navigation.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/ai-assistant.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/clean-sidebar.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/image-handler-fixed.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/integrated-learning.js') }}"></script>
     {% if current_user.is_authenticated %}
     <script src="{{ url_for('static', filename='js/pop_quiz.js') }}"></script>
     {% endif %}
 
+    <!-- API Endpoints -->
+    <script>
+        // Define API endpoints for use throughout the application
+        const apiEndpoints = {
+            thesaurus: '/api/thesaurus',
+            synonyms: '/api/synonyms',
+            related: '/api/related',
+            llmConcepts: '/api/llm-concepts',
+            llmConceptsVisualization: '/api/llm-concepts-visualization',
+            analyticsTrack: '/api/analytics/track',
+            quizSubmit: '/api/quiz/submit',
+            quizResults: '/api/quiz/results',
+            userProgress: '/api/user/progress',
+            search: '/api/search',
+            relatedConcepts: '/api/related-concepts',
+            learningResources: '/api/learning-resources',
+            conceptDefinition: '/api/concept-definition'
+        };
+    </script>
+
     <!-- Initialize Bootstrap tooltips -->
     <script>
         $(function () {
+            // Initialize Bootstrap 4 tooltips (legacy)
             $('[data-toggle="tooltip"]').tooltip();
 
             // Initialize Bootstrap 5 tooltips
             const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl, {
+                delay: { show: 300, hide: 100 },
+                trigger: 'hover focus',
+                placement: 'auto'
+            }));
 
             // Initialize Bootstrap 5 popovers
             const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
-            const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));
+            const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl, {
+                trigger: 'focus',
+                html: true
+            }));
+
+            // Reinitialize tooltips when new elements are added dynamically
+            const reinitializeTooltips = function() {
+                // Destroy existing tooltips
+                tooltipList.forEach(tooltip => {
+                    if (tooltip && tooltip.dispose) {
+                        tooltip.dispose();
+                    }
+                });
+
+                // Reinitialize tooltips
+                const newTooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+                const newTooltipList = [...newTooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl, {
+                    delay: { show: 300, hide: 100 },
+                    trigger: 'hover focus',
+                    placement: 'auto'
+                }));
+            };
+
+            // Reinitialize tooltips after sidebar and progress indicator are added
+            setTimeout(reinitializeTooltips, 1000);
+
+            // Listen for DOM changes to reinitialize tooltips
+            const observer = new MutationObserver(function(mutations) {
+                const shouldReinitialize = mutations.some(mutation => {
+                    return mutation.addedNodes.length > 0 &&
+                           Array.from(mutation.addedNodes).some(node =>
+                               node.nodeType === 1 && node.querySelector && node.querySelector('[data-bs-toggle="tooltip"]')
+                           );
+                });
+
+                if (shouldReinitialize) {
+                    reinitializeTooltips();
+                }
+            });
+
+            observer.observe(document.body, { childList: true, subtree: true });
         });
     </script>
 

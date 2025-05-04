@@ -617,12 +617,47 @@
                 </div>
             </div>
         </div>
+
+        <!-- Keyboard navigation hint -->
+        <div class="keyboard-hint">
+            <i class="bi bi-keyboard me-2"></i> Keyboard: Arrow keys to pan, +/- to zoom, 0 to reset
+        </div>
     </div>
+
+    <style>
+        /* Keyboard navigation hint */
+        .keyboard-hint {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            z-index: 100;
+            border: 1px solid rgba(66, 135, 245, 0.4);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .keyboard-hint:hover {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .keyboard-hint {
+                display: none;
+            }
+        }
+    </style>
 </div>
 {% endblock %}
 
 {% block scripts %}
 {{ super() }}
+<script src="{{ url_for('static', filename='js/enhanced-visualization.js') }}"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const searchInput = document.getElementById('search-input');

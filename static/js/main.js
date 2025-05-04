@@ -340,6 +340,7 @@ function displayWordList(container, words, className) {
 // Ask a question
 function askQuestion() {
     const question = questionInput.value.trim();
+    const useStreaming = document.getElementById('use-streaming')?.checked || false;
 
     if (!question) {
         alert('Please enter a question');
@@ -349,6 +350,10 @@ function askQuestion() {
     // Show loading
     askBtn.disabled = true;
     askBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Asking...';
+
+    // Clear previous answer
+    answerText.textContent = '';
+    answerContainer.style.display = 'block';
 
     // Get CSRF token from meta tag
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
@@ -360,7 +365,7 @@ function askQuestion() {
             'Content-Type': 'application/json',
             'X-CSRFToken': csrfToken
         },
-        body: JSON.stringify({ question })
+        body: JSON.stringify({ question, streaming: useStreaming })
     })
         .then(response => {
             if (!response.ok) {
@@ -369,13 +374,17 @@ function askQuestion() {
             return response.json();
         })
         .then(data => {
-            // Display answer
-            answerText.textContent = data.answer;
-            answerContainer.style.display = 'block';
+            if (data.streaming) {
+                // Handle streaming response
+                handleStreamingResponse(data.stream_url);
+            } else {
+                // Display answer
+                answerText.textContent = data.answer;
 
-            // Reset button
-            askBtn.disabled = false;
-            askBtn.textContent = 'Ask';
+                // Reset button
+                askBtn.disabled = false;
+                askBtn.textContent = 'Ask';
+            }
         })
         .catch(error => {
             console.error('Error asking question:', error);
@@ -385,6 +394,42 @@ function askQuestion() {
             askBtn.disabled = false;
             askBtn.textContent = 'Ask';
         });
+}
+
+// Handle streaming response
+function handleStreamingResponse(streamUrl) {
+    // Create an EventSource to receive the streaming response
+    const eventSource = new EventSource(streamUrl);
+
+    // Handle incoming data
+    eventSource.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+
+        if (data.error) {
+            // Handle error
+            answerText.textContent = `Error: ${data.error}`;
+            eventSource.close();
+            askBtn.disabled = false;
+            askBtn.textContent = 'Ask';
+        } else if (data.done) {
+            // Stream is complete
+            eventSource.close();
+            askBtn.disabled = false;
+            askBtn.textContent = 'Ask';
+        } else if (data.text) {
+            // Update the answer with the streamed text
+            answerText.textContent = data.text;
+        }
+    };
+
+    // Handle errors
+    eventSource.onerror = function(error) {
+        console.error('Error with streaming response:', error);
+        answerText.textContent += '\n\nError: Connection lost. Please try again.';
+        eventSource.close();
+        askBtn.disabled = false;
+        askBtn.textContent = 'Ask';
+    };
 }
 
 // Show loading state

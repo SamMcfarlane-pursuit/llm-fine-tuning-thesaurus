@@ -5,7 +5,8 @@ This provides a web interface for interacting with the thesaurus.
 import os
 import ssl
 import nltk
-from flask import Flask, render_template, request, jsonify, send_from_directory, redirect, url_for, flash
+from flask import Flask, render_template, request, jsonify, send_from_directory, redirect, url_for, flash, Response
+import json
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from peft import PeftModel
@@ -267,6 +268,11 @@ def visualize(word):
 def learn():
     """Render the learning page with LLM fine-tuning concepts."""
     return render_template('learn.html')
+
+@app.route('/learn/exercise8')
+def learn_exercise8():
+    """Render the Exercise 8 page with framework comparison."""
+    return render_template('exercise8.html')
 
 @app.route('/llm-thesaurus')
 def llm_thesaurus():
@@ -1139,9 +1145,18 @@ def ask_question():
     """API endpoint to ask a question to the model."""
     data = request.json
     question = data.get('question', '')
+    streaming = data.get('streaming', False)  # Check if streaming is requested
 
     if not question:
         return jsonify({'error': 'No question provided'}), 400
+
+    # If streaming is requested, redirect to the streaming endpoint
+    if streaming and thesaurus_llm is not None:
+        return jsonify({
+            'question': question,
+            'streaming': True,
+            'stream_url': f'/api/ask/stream?question={question}'
+        })
 
     try:
         # If model is not loaded, provide a generic response
@@ -1171,6 +1186,36 @@ def ask_question():
     except Exception as e:
         print(f"Error answering question: {e}")
         return jsonify({'error': 'Error processing your question', 'message': str(e)}), 500
+
+@app.route('/api/ask/stream')
+def stream_answer():
+    """API endpoint to stream an answer to a question."""
+    question = request.args.get('question', '')
+
+    if not question:
+        return jsonify({'error': 'No question provided'}), 400
+
+    # If model is not loaded, redirect to non-streaming endpoint
+    if thesaurus_llm is None:
+        return redirect(url_for('ask_question'))
+
+    def generate():
+        """Generator function to stream the response."""
+        try:
+            # Stream the response token by token
+            for partial_response in thesaurus_llm.answer_question_streaming(question):
+                # Format as Server-Sent Events (SSE)
+                yield f"data: {json.dumps({'text': partial_response})}\n\n"
+
+        except Exception as e:
+            print(f"Error streaming answer: {e}")
+            yield f"data: {json.dumps({'error': str(e)})}\n\n"
+
+        # Signal the end of the stream
+        yield f"data: {json.dumps({'done': True})}\n\n"
+
+    # Return a streaming response
+    return Response(generate(), mimetype='text/event-stream')
 
 @app.route('/api/llm-concepts')
 def get_llm_concepts():

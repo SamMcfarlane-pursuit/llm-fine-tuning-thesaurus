@@ -222,34 +222,57 @@ class VisualThesaurus:
                 width=2
             )
 
-        # Set physics layout for better filling of the screen
+        # Set physics layout for better stability and control
         net.barnes_hut(
-            gravity=-80000,
-            central_gravity=0.3,
-            spring_length=250,
-            spring_strength=0.01,
-            damping=0.09,
-            overlap=0.1
+            gravity=-30000,  # Reduced gravity for more stability
+            central_gravity=0.5,  # Increased central gravity to keep nodes closer to center
+            spring_length=200,  # Slightly reduced spring length
+            spring_strength=0.05,  # Increased spring strength for more stability
+            damping=0.15,  # Increased damping for less oscillation
+            overlap=0.2  # Increased overlap avoidance
         )
 
-        # Add zoom options and other interactive features
+        # Add enhanced zoom options and other interactive features
         options = {
             "interaction": {
                 "hover": True,
                 "zoomView": True,
                 "dragView": True,
                 "navigationButtons": True,
-                "keyboard": True,
-                "tooltipDelay": 100
+                "keyboard": {
+                    "enabled": True,
+                    "speed": {
+                        "x": 10,
+                        "y": 10,
+                        "zoom": 0.1
+                    },
+                    "bindToWindow": False  # Only respond when iframe is focused
+                },
+                "tooltipDelay": 100,
+                "multiselect": True,  # Allow selecting multiple nodes
+                "selectable": True,
+                "selectConnectedEdges": True,
+                "hoverConnectedEdges": True,
+                "zoomSpeed": 0.8  # Slower zoom for more control
             },
             "physics": {
                 "stabilization": {
-                    "iterations": 100,
+                    "enabled": True,
+                    "iterations": 200,  # More iterations for better stability
+                    "updateInterval": 50,
+                    "onlyDynamicEdges": False,
                     "fit": True  # This helps fill the container
-                }
+                },
+                "adaptiveTimestep": True,  # Adaptive timestep for smoother physics
+                "maxVelocity": 30,  # Limit maximum velocity for stability
+                "minVelocity": 0.75,  # Higher minimum velocity threshold for stabilization
+                "solver": "barnesHut",
+                "timestep": 0.5,  # Smaller timestep for more stability
+                "wind": { "x": 0, "y": 0 }  # No wind force
             },
             "layout": {
-                "improvedLayout": True
+                "improvedLayout": True,
+                "randomSeed": 42  # Consistent layout between page loads
             }
         }
         net.set_options(json.dumps(options))
@@ -343,6 +366,59 @@ class VisualThesaurus:
 </head>
 <body>
     <div id="mynetwork"></div>
+
+    <!-- Custom zoom controls -->
+    <div id="custom-zoom-controls" style="position: absolute; top: 15px; right: 15px; background: rgba(0, 0, 0, 0.7); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 8px; z-index: 1000; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); border: 1px solid rgba(66, 135, 245, 0.4); transition: all 0.3s ease;">
+        <div style="display: flex; gap: 8px; align-items: center;">
+            <button id="zoom-in-btn" style="width: 36px; height: 36px; border-radius: 50%; background: rgba(40, 40, 40, 0.9); border: 1px solid rgba(66, 135, 245, 0.4); color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); transition: all 0.2s ease;" onclick="zoomIn()" title="Zoom In">+</button>
+            <div id="zoom-display" style="background: rgba(20, 20, 20, 0.9); border-radius: 5px; padding: 5px 10px; color: white; min-width: 60px; text-align: center; border: 1px solid rgba(66, 135, 245, 0.3); transition: all 0.2s ease;">100%</div>
+            <button id="zoom-out-btn" style="width: 36px; height: 36px; border-radius: 50%; background: rgba(40, 40, 40, 0.9); border: 1px solid rgba(66, 135, 245, 0.4); color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); transition: all 0.2s ease;" onclick="zoomOut()" title="Zoom Out">-</button>
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <button id="reset-zoom-btn" style="flex: 1; height: 32px; border-radius: 5px; background: rgba(40, 40, 40, 0.9); border: 1px solid rgba(66, 135, 245, 0.4); color: white; cursor: pointer; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); transition: all 0.2s ease;" onclick="resetZoom()" title="Reset View">Reset</button>
+            <button id="stabilize-btn" style="flex: 1; height: 32px; border-radius: 5px; background: rgba(40, 40, 40, 0.9); border: 1px solid rgba(66, 135, 245, 0.4); color: white; cursor: pointer; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); transition: all 0.2s ease;" onclick="stabilizeNetwork()" title="Stabilize Network">Stabilize</button>
+        </div>
+    </div>
+
+    <style>
+        /* Hover effects for custom zoom controls */
+        #custom-zoom-controls:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 10px rgba(66, 135, 245, 0.3);
+        }
+
+        #zoom-in-btn:hover, #zoom-out-btn:hover {
+            background: rgba(66, 135, 245, 0.8) !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        #reset-zoom-btn:hover, #stabilize-btn:hover {
+            background: rgba(66, 135, 245, 0.8) !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        #zoom-in-btn:active, #zoom-out-btn:active, #reset-zoom-btn:active, #stabilize-btn:active {
+            transform: translateY(1px) !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+        }
+    </style>
+
+    <!-- Keyboard navigation hint -->
+    <div id="keyboard-hint" style="position: absolute; bottom: 15px; left: 15px; background: rgba(0, 0, 0, 0.7); color: white; padding: 8px 15px; border-radius: 8px; font-size: 14px; z-index: 1000; border: 1px solid rgba(66, 135, 245, 0.4); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); opacity: 0.7; transition: all 0.3s ease; cursor: help;">
+        <span style="opacity: 0.9;">⌨️ Keyboard: Arrow keys to pan, +/- to zoom, 0 to reset, R to stabilize</span>
+    </div>
+
+    <style>
+        /* Hover effect for keyboard hint */
+        #keyboard-hint:hover {
+            opacity: 1;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 10px rgba(66, 135, 245, 0.3);
+            background: rgba(0, 0, 0, 0.85);
+        }
+    </style>
     <script type="text/javascript">
         // Initialize the network
         var container = document.getElementById('mynetwork');
@@ -416,12 +492,30 @@ class VisualThesaurus:
                 },
                 borderWidth: 2,
                 borderWidthSelected: 4,
-                shadow: true
+                shadow: true,
+                scaling: {
+                    min: 16,
+                    max: 32,
+                    label: {
+                        enabled: true,
+                        min: 14,
+                        max: 24
+                    }
+                },
+                shape: 'dot',
+                shapeProperties: {
+                    interpolation: true,
+                    borderRadius: 6
+                }
             },
             edges: {
                 width: 3,
                 selectionWidth: 6,
-                smooth: true,
+                smooth: {
+                    type: 'dynamic',
+                    forceDirection: 'none',
+                    roundness: 0.5
+                },
                 shadow: true,
                 color: {
                     inherit: false,
@@ -441,25 +535,54 @@ class VisualThesaurus:
                 zoomView: true,
                 dragView: true,
                 navigationButtons: true,
-                keyboard: true,
-                tooltipDelay: 100
+                keyboard: {
+                    enabled: true,
+                    speed: {
+                        x: 10,
+                        y: 10,
+                        zoom: 0.1
+                    },
+                    bindToWindow: false
+                },
+                tooltipDelay: 100,
+                multiselect: true,
+                selectable: true,
+                selectConnectedEdges: true,
+                hoverConnectedEdges: true,
+                zoomSpeed: 0.8
             },
             physics: {
+                enabled: true,
                 stabilization: {
-                    iterations: 100,
+                    enabled: true,
+                    iterations: 200,
+                    updateInterval: 50,
+                    onlyDynamicEdges: false,
                     fit: true
                 },
+                adaptiveTimestep: true,
                 barnesHut: {
-                    gravitationalConstant: -5000,
-                    centralGravity: 0.3,
-                    springLength: 150,
-                    springConstant: 0.04,
-                    damping: 0.09
-                }
+                    gravitationalConstant: -30000,
+                    centralGravity: 0.5,
+                    springLength: 200,
+                    springConstant: 0.05,
+                    damping: 0.15,
+                    avoidOverlap: 0.2
+                },
+                maxVelocity: 30,
+                minVelocity: 0.75,
+                solver: 'barnesHut',
+                timestep: 0.5,
+                wind: { x: 0, y: 0 }
             },
             layout: {
                 improvedLayout: true,
                 randomSeed: 42
+            },
+            configure: {
+                enabled: false,
+                filter: 'physics,layout',
+                showButton: true
             }
         };
 
@@ -468,17 +591,184 @@ class VisualThesaurus:
         // Make the network object globally accessible
         window.network = network;
 
-        // Fit the network to the container on load
+        // Track zoom level for better control
+        var currentZoom = 1.0;
+        var zoomStep = 0.1;
+        var minZoom = 0.2;
+        var maxZoom = 3.0;
+
+        // Add stabilization progress indicator
+        var stabilizationDiv = document.createElement('div');
+        stabilizationDiv.id = 'stabilization-indicator';
+        stabilizationDiv.style.position = 'absolute';
+        stabilizationDiv.style.top = '50%';
+        stabilizationDiv.style.left = '50%';
+        stabilizationDiv.style.transform = 'translate(-50%, -50%)';
+        stabilizationDiv.style.background = 'rgba(0, 0, 0, 0.8)';
+        stabilizationDiv.style.color = 'white';
+        stabilizationDiv.style.padding = '20px';
+        stabilizationDiv.style.borderRadius = '10px';
+        stabilizationDiv.style.textAlign = 'center';
+        stabilizationDiv.style.zIndex = '1000';
+        stabilizationDiv.style.display = 'none';
+        stabilizationDiv.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.5)';
+        stabilizationDiv.style.border = '2px solid rgba(66, 135, 245, 0.5)';
+        stabilizationDiv.innerHTML = '<div style="width: 40px; height: 40px; border: 4px solid rgba(66, 135, 245, 0.3); border-radius: 50%; border-top-color: #4287f5; margin: 0 auto 15px; animation: spin 1s linear infinite;"></div><div>Stabilizing network...</div>';
+        document.body.appendChild(stabilizationDiv);
+
+        // Add stabilization progress style
+        var style = document.createElement('style');
+        style.textContent = '@keyframes spin { to { transform: rotate(360deg); } }';
+        document.head.appendChild(style);
+
+        // Show stabilization indicator
+        network.on("stabilizationStart", function() {
+            stabilizationDiv.style.display = 'block';
+        });
+
+        // Hide stabilization indicator
+        network.on("stabilizationDone", function() {
+            stabilizationDiv.style.display = 'none';
+        });
+
+        // Track zoom level and update display
+        network.on("zoom", function(params) {
+            currentZoom = params.scale;
+            updateZoomDisplay();
+        });
+
+        // Function to update zoom display
+        function updateZoomDisplay() {
+            var zoomDisplay = document.getElementById('zoom-display');
+            if (zoomDisplay) {
+                var percentage = Math.round(currentZoom * 100);
+                zoomDisplay.textContent = percentage + '%';
+            }
+        }
+
+        // Fit the network to the container on load with better animation
         network.once("afterDrawing", function() {
             setTimeout(function() {
+                stabilizationDiv.style.display = 'block';
                 network.fit({
                     animation: {
                         duration: 1000,
                         easingFunction: 'easeInOutQuad'
                     }
                 });
+                setTimeout(function() {
+                    stabilizationDiv.style.display = 'none';
+                }, 1200);
             }, 200);
         });
+
+        // Add custom zoom functions
+        window.zoomIn = function() {
+            currentZoom = Math.min(currentZoom + zoomStep, maxZoom);
+            var position = network.getViewPosition();
+            network.moveTo({
+                position: position,
+                scale: currentZoom,
+                animation: {
+                    duration: 300,
+                    easingFunction: 'easeInOutQuad'
+                }
+            });
+            updateZoomDisplay();
+
+            // Add visual feedback to the button
+            var zoomInBtn = document.getElementById('zoom-in-btn');
+            if (zoomInBtn) {
+                zoomInBtn.style.transform = 'scale(1.1)';
+                zoomInBtn.style.background = 'rgba(66, 135, 245, 0.8)';
+                setTimeout(function() {
+                    zoomInBtn.style.transform = 'scale(1)';
+                    zoomInBtn.style.background = 'rgba(40, 40, 40, 0.9)';
+                }, 200);
+            }
+        };
+
+        window.zoomOut = function() {
+            currentZoom = Math.max(currentZoom - zoomStep, minZoom);
+            var position = network.getViewPosition();
+            network.moveTo({
+                position: position,
+                scale: currentZoom,
+                animation: {
+                    duration: 300,
+                    easingFunction: 'easeInOutQuad'
+                }
+            });
+            updateZoomDisplay();
+
+            // Add visual feedback to the button
+            var zoomOutBtn = document.getElementById('zoom-out-btn');
+            if (zoomOutBtn) {
+                zoomOutBtn.style.transform = 'scale(1.1)';
+                zoomOutBtn.style.background = 'rgba(66, 135, 245, 0.8)';
+                setTimeout(function() {
+                    zoomOutBtn.style.transform = 'scale(1)';
+                    zoomOutBtn.style.background = 'rgba(40, 40, 40, 0.9)';
+                }, 200);
+            }
+        };
+
+        window.resetZoom = function() {
+            network.fit({
+                animation: {
+                    duration: 1000,
+                    easingFunction: 'easeInOutQuad'
+                }
+            });
+
+            // Update zoom level after animation
+            setTimeout(function() {
+                currentZoom = network.getScale();
+                updateZoomDisplay();
+            }, 1100);
+
+            // Add visual feedback to the button
+            var resetBtn = document.getElementById('reset-zoom-btn');
+            if (resetBtn) {
+                resetBtn.style.transform = 'scale(1.05)';
+                resetBtn.style.background = 'rgba(66, 135, 245, 0.8)';
+                setTimeout(function() {
+                    resetBtn.style.transform = 'scale(1)';
+                    resetBtn.style.background = 'rgba(40, 40, 40, 0.9)';
+                }, 200);
+            }
+        };
+
+        window.stabilizeNetwork = function() {
+            stabilizationDiv.style.display = 'block';
+
+            // Add visual feedback to the button
+            var stabilizeBtn = document.getElementById('stabilize-btn');
+            if (stabilizeBtn) {
+                stabilizeBtn.style.transform = 'scale(1.05)';
+                stabilizeBtn.style.background = 'rgba(66, 135, 245, 0.8)';
+                stabilizeBtn.textContent = 'Stabilizing...';
+
+                // Disable the button during stabilization
+                stabilizeBtn.disabled = true;
+
+                // Re-enable and reset the button after stabilization
+                setTimeout(function() {
+                    stabilizeBtn.style.transform = 'scale(1)';
+                    stabilizeBtn.style.background = 'rgba(40, 40, 40, 0.9)';
+                    stabilizeBtn.textContent = 'Stabilize';
+                    stabilizeBtn.disabled = false;
+                }, 2000);
+            }
+
+            // Stabilize with more iterations for better results
+            network.stabilize(200);
+
+            // Hide the indicator after a delay
+            setTimeout(function() {
+                stabilizationDiv.style.display = 'none';
+            }, 2000);
+        };
 
         // Add click event to nodes
         network.on("click", function(params) {
@@ -486,6 +776,82 @@ class VisualThesaurus:
                 var nodeId = params.nodes[0];
                 if (nodeId !== '') {
                     window.parent.location.href = '/visualize/' + encodeURIComponent(nodeId);
+                }
+            }
+        });
+
+        // Add double-click event for zooming in
+        network.on("doubleClick", function(params) {
+            if (params.nodes.length > 0) {
+                // Zoom in on the node
+                network.focus(params.nodes[0], {
+                    scale: currentZoom * 1.5,
+                    animation: {
+                        duration: 800,
+                        easingFunction: 'easeInOutQuad'
+                    }
+                });
+            } else {
+                // Reset zoom if double-clicking on empty space
+                resetZoom();
+            }
+        });
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Only handle keyboard events if the iframe is focused
+            if (document.activeElement === document.body) {
+                switch (e.key) {
+                    case '+':
+                    case '=':
+                        zoomIn();
+                        e.preventDefault();
+                        break;
+                    case '-':
+                    case '_':
+                        zoomOut();
+                        e.preventDefault();
+                        break;
+                    case '0':
+                        resetZoom();
+                        e.preventDefault();
+                        break;
+                    case 'r':
+                        stabilizeNetwork();
+                        e.preventDefault();
+                        break;
+                    case 'ArrowUp':
+                        var position = network.getViewPosition();
+                        network.moveTo({
+                            position: {x: position.x, y: position.y - 50},
+                            animation: {duration: 300, easingFunction: 'easeInOutQuad'}
+                        });
+                        e.preventDefault();
+                        break;
+                    case 'ArrowDown':
+                        var position = network.getViewPosition();
+                        network.moveTo({
+                            position: {x: position.x, y: position.y + 50},
+                            animation: {duration: 300, easingFunction: 'easeInOutQuad'}
+                        });
+                        e.preventDefault();
+                        break;
+                    case 'ArrowLeft':
+                        var position = network.getViewPosition();
+                        network.moveTo({
+                            position: {x: position.x - 50, y: position.y},
+                            animation: {duration: 300, easingFunction: 'easeInOutQuad'}
+                        });
+                        e.preventDefault();
+                        break;
+                    case 'ArrowRight':
+                        var position = network.getViewPosition();
+                        network.moveTo({
+                            position: {x: position.x + 50, y: position.y},
+                            animation: {duration: 300, easingFunction: 'easeInOutQuad'}
+                        });
+                        e.preventDefault();
+                        break;
                 }
             }
         });

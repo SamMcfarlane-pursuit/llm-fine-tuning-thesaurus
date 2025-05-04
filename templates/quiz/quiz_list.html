@@ -35,47 +35,59 @@
 
             <div class="row mb-4">
                 <div class="col-md-8">
-                    <div class="card bg-dark border-0" style="border-radius: 15px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.3); border: 2px solid rgba(66, 135, 245, 0.2) !important; position: relative; margin-bottom: 20px;">
-                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: linear-gradient(to right, #4287f5, #00ffdd); z-index: 1;"></div>
+                    <div class="card border-0" style="border-radius: 15px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.5); border: 3px solid rgba(66, 135, 245, 0.6) !important; position: relative; margin-bottom: 20px; background: linear-gradient(135deg, rgba(66, 135, 245, 0.7), rgba(0, 192, 255, 0.7));">
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: linear-gradient(to right, #4287f5, #00ffdd); z-index: 1; box-shadow: 0 0 20px rgba(66, 135, 245, 0.8);"></div>
                         <div class="card-body p-4">
                             <div class="d-flex align-items-center">
                                 <div class="me-4">
-                                    <div style="width: 60px; height: 60px; border-radius: 12px; background: linear-gradient(135deg, rgba(66, 135, 245, 0.2), rgba(0, 255, 221, 0.2)); display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0,0,0,0.2);">
-                                        <i class="bi bi-lightbulb-fill fs-1" style="color: #4287f5; text-shadow: 0 0 10px rgba(66, 135, 245, 0.5);"></i>
+                                    <div style="width: 70px; height: 70px; border-radius: 15px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15)); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3), 0 0 15px rgba(66, 135, 245, 0.6); border: 2px solid rgba(255, 255, 255, 0.3);">
+                                        <i class="bi bi-lightbulb-fill fs-1" style="color: #ffffff; text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);"></i>
                                     </div>
                                 </div>
                                 <div>
-                                    <h4 class="mb-2" style="font-weight: 700; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.3);">Test Your Knowledge</h4>
-                                    <p class="mb-0" style="font-size: 1.1rem; line-height: 1.6; color: #e0e0e0;">Complete quizzes to test your understanding of LLM fine-tuning concepts. Each quiz focuses on different aspects of the technology and provides detailed feedback to help you learn.</p>
+                                    <h4 class="mb-2" style="font-weight: 800; color: #ffffff; text-shadow: 0 2px 8px rgba(0,0,0,0.5); letter-spacing: 0.5px; font-size: 1.8rem;">Ready to test your understanding of LLM fine-tuning fundamentals?</h4>
+                                    <p class="mb-0" style="font-size: 1.2rem; line-height: 1.7; color: #ffffff; text-shadow: 0 1px 4px rgba(0,0,0,0.4); font-weight: 600;">Our comprehensive quiz covers key concepts including:</p>
+                                    <ul style="color: #ffffff; font-size: 1.1rem; font-weight: 500; margin-top: 15px; text-shadow: 0 1px 4px rgba(0,0,0,0.4);">
+                                        <li>Fine-tuning fundamentals and benefits</li>
+                                        <li>Parameter-efficient fine-tuning methods (PEFT)</li>
+                                        <li>LoRA implementation details</li>
+                                        <li>Instruction fine-tuning</li>
+                                        <li>Advanced techniques like RLHF</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    {% if not current_user.is_authenticated and ('guest_attempts' in session or 'guest_progress' in session) %}
-                    <div style="background: linear-gradient(135deg, rgba(255, 221, 32, 0.15), rgba(255, 153, 0, 0.15)); border-radius: 15px; padding: 20px; margin-top: 20px; border: 2px solid rgba(255, 221, 32, 0.3); box-shadow: 0 15px 35px rgba(0,0,0,0.3);">
+                    {% if not current_user.is_authenticated %}
+                    <div style="background: linear-gradient(135deg, rgba(255, 153, 0, 0.7), rgba(255, 102, 0, 0.7)); border-radius: 15px; padding: 25px; margin-top: 20px; border: 3px solid rgba(255, 255, 255, 0.3); box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 0 20px rgba(255, 153, 0, 0.4);">
                         <div class="d-flex">
                             <div class="me-4">
-                                <div style="width: 60px; height: 60px; border-radius: 12px; background: linear-gradient(135deg, rgba(255, 221, 32, 0.2), rgba(255, 153, 0, 0.2)); display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0,0,0,0.2);">
-                                    <i class="bi bi-exclamation-triangle-fill fs-1" style="color: #ffdd20; text-shadow: 0 0 10px rgba(255, 221, 32, 0.5);"></i>
+                                <div style="width: 70px; height: 70px; border-radius: 15px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15)); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3), 0 0 15px rgba(255, 153, 0, 0.6); border: 2px solid rgba(255, 255, 255, 0.3);">
+                                    <i class="bi bi-person-badge fs-1" style="color: #ffffff; text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);"></i>
                                 </div>
                             </div>
                             <div>
-                                <h4 style="font-weight: 700; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.3); margin-bottom: 10px;">Save Your Progress</h4>
-                                <p style="font-size: 1.1rem; line-height: 1.6; color: #e0e0e0; margin-bottom: 15px;">You're making progress as a guest! Create an account to save your progress permanently.</p>
-                                <a href="{{ url_for('auth.convert_guest') }}" class="btn" style="background: linear-gradient(135deg, #00c853, #00d463); border: none; border-radius: 10px; padding: 10px 20px; font-weight: 600; letter-spacing: 0.5px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2), 0 0 10px rgba(0, 212, 99, 0.3); transition: all 0.3s ease; color: white; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);">
-                                    <i class="bi bi-save me-2"></i> Save My Progress
-                                </a>
+                                <h4 style="font-weight: 800; color: #ffffff; text-shadow: 0 2px 8px rgba(0,0,0,0.5); letter-spacing: 0.5px; font-size: 1.8rem; margin-bottom: 15px;">Track Your Learning Journey</h4>
+                                <p style="font-size: 1.2rem; line-height: 1.7; color: #ffffff; text-shadow: 0 1px 4px rgba(0,0,0,0.4); font-weight: 600; margin-bottom: 20px;">Sign in to save your quiz results, track your progress, and unlock personalized learning recommendations.</p>
+                                <div class="d-flex gap-3">
+                                    <a href="{{ url_for('auth.login') }}" class="btn" style="background: linear-gradient(135deg, #4287f5, #3a75d8); border: none; border-radius: 10px; padding: 12px 25px; font-weight: 700; letter-spacing: 0.5px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(66, 135, 245, 0.5); transition: all 0.3s ease; color: white; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); font-size: 1.1rem;">
+                                        <i class="bi bi-box-arrow-in-right me-2"></i> Sign In
+                                    </a>
+                                    <a href="{{ url_for('auth.register') }}" class="btn" style="background: linear-gradient(135deg, #00c853, #00d463); border: none; border-radius: 10px; padding: 12px 25px; font-weight: 700; letter-spacing: 0.5px; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(0, 212, 99, 0.5); transition: all 0.3s ease; color: white; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); font-size: 1.1rem;">
+                                        <i class="bi bi-person-plus me-2"></i> Register
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                     {% endif %}
                 </div>
                 <div class="col-md-4">
-                    <div class="card h-100" style="border-radius: 15px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.3); border: 2px solid rgba(66, 135, 245, 0.2) !important; background-color: rgba(20, 20, 20, 0.7);">
-                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: linear-gradient(to right, #4287f5, #00ffdd); z-index: 1;"></div>
-                        <div class="card-header" style="background: linear-gradient(135deg, rgba(66, 135, 245, 0.2), rgba(0, 255, 221, 0.2)); border-bottom: 2px solid rgba(66, 135, 245, 0.2); padding: 20px;">
-                            <h5 class="mb-0" style="font-weight: 700; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.3);"><i class="bi bi-bar-chart-fill me-2" style="color: #4287f5;"></i> Your Progress</h5>
+                    <div class="card h-100" style="border-radius: 15px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 0 20px rgba(66, 135, 245, 0.4); border: 3px solid rgba(66, 135, 245, 0.6) !important; background: linear-gradient(135deg, rgba(25, 25, 25, 0.95), rgba(40, 40, 40, 0.95));">
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 8px; background: linear-gradient(to right, #4287f5, #00ffdd); z-index: 1; box-shadow: 0 0 20px rgba(66, 135, 245, 0.8);"></div>
+                        <div class="card-header" style="background: linear-gradient(135deg, rgba(66, 135, 245, 0.5), rgba(0, 255, 221, 0.5)); border-bottom: 3px solid rgba(255, 255, 255, 0.3); padding: 20px;">
+                            <h5 class="mb-0" style="font-weight: 800; color: #ffffff; text-shadow: 0 2px 8px rgba(0,0,0,0.5); letter-spacing: 0.5px; font-size: 1.4rem;"><i class="bi bi-bar-chart-fill me-2" style="color: #ffffff; text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);"></i> Your Progress</h5>
                         </div>
                         <div class="card-body" style="padding: 25px;">
                             {% set total_quizzes = quizzes|length %}
@@ -97,27 +109,29 @@
                             {% set avg_score = (total_score / (completed_quizzes + attempted_quizzes))|round|int if (completed_quizzes + attempted_quizzes) > 0 else 0 %}
                             {% set completion_percentage = (completed_quizzes / total_quizzes * 100)|round|int if total_quizzes > 0 else 0 %}
 
-                            <div class="progress mb-4" style="height: 12px; border-radius: 6px; background-color: rgba(30, 30, 30, 0.8); box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3); overflow: hidden;">
-                                <div class="progress-bar" role="progressbar" style="width: {{ completion_percentage }}%; background-image: linear-gradient(to right, #4287f5, #00ffdd); box-shadow: 0 0 10px rgba(66, 135, 245, 0.5);" aria-valuenow="{{ completion_percentage }}" aria-valuemin="0" aria-valuemax="100">{{ completion_percentage }}%</div>
+                            <div class="progress mb-4" style="height: 16px; border-radius: 8px; background-color: rgba(20, 20, 20, 0.8); box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5); overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1);">
+                                <div class="progress-bar" role="progressbar" style="width: {{ completion_percentage }}%; background-image: linear-gradient(to right, #4287f5, #00ffdd); box-shadow: 0 0 15px rgba(66, 135, 245, 0.7);" aria-valuenow="{{ completion_percentage }}" aria-valuemin="0" aria-valuemax="100">
+                                    <span style="font-weight: 700; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);">{{ completion_percentage }}%</span>
+                                </div>
                             </div>
 
                             <div class="row text-center g-3">
                                 <div class="col-4">
-                                    <div style="background: linear-gradient(135deg, rgba(30, 30, 30, 0.8), rgba(40, 40, 40, 0.8)); border-radius: 10px; padding: 15px; text-align: center; height: 100%; transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);">
-                                        <div style="font-size: 1.8rem; font-weight: 700; color: #00d463; text-shadow: 0 0 10px rgba(0, 212, 99, 0.3);">{{ completed_quizzes }}</div>
-                                        <div style="font-size: 0.85rem; color: #e0e0e0; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px;">Completed</div>
+                                    <div style="background: linear-gradient(135deg, rgba(0, 212, 99, 0.2), rgba(0, 200, 83, 0.2)); border-radius: 12px; padding: 18px; text-align: center; height: 100%; transition: all 0.3s ease; border: 2px solid rgba(0, 212, 99, 0.5); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(0, 212, 99, 0.3);">
+                                        <div style="font-size: 2rem; font-weight: 800; color: #00d463; text-shadow: 0 0 15px rgba(0, 212, 99, 0.7);">{{ completed_quizzes }}</div>
+                                        <div style="font-size: 1rem; color: #ffffff; margin-top: 8px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);">Completed</div>
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    <div style="background: linear-gradient(135deg, rgba(30, 30, 30, 0.8), rgba(40, 40, 40, 0.8)); border-radius: 10px; padding: 15px; text-align: center; height: 100%; transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);">
-                                        <div style="font-size: 1.8rem; font-weight: 700; color: #ffdd20; text-shadow: 0 0 10px rgba(255, 221, 32, 0.3);">{{ attempted_quizzes }}</div>
-                                        <div style="font-size: 0.85rem; color: #e0e0e0; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px;">In Progress</div>
+                                    <div style="background: linear-gradient(135deg, rgba(255, 221, 32, 0.2), rgba(255, 193, 7, 0.2)); border-radius: 12px; padding: 18px; text-align: center; height: 100%; transition: all 0.3s ease; border: 2px solid rgba(255, 221, 32, 0.5); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 221, 32, 0.3);">
+                                        <div style="font-size: 2rem; font-weight: 800; color: #ffdd20; text-shadow: 0 0 15px rgba(255, 221, 32, 0.7);">{{ attempted_quizzes }}</div>
+                                        <div style="font-size: 1rem; color: #ffffff; margin-top: 8px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);">In Progress</div>
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    <div style="background: linear-gradient(135deg, rgba(30, 30, 30, 0.8), rgba(40, 40, 40, 0.8)); border-radius: 10px; padding: 15px; text-align: center; height: 100%; transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);">
-                                        <div style="font-size: 1.8rem; font-weight: 700; color: #4287f5; text-shadow: 0 0 10px rgba(66, 135, 245, 0.3);">{{ avg_score }}%</div>
-                                        <div style="font-size: 0.85rem; color: #e0e0e0; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px;">Avg. Score</div>
+                                    <div style="background: linear-gradient(135deg, rgba(66, 135, 245, 0.2), rgba(0, 192, 255, 0.2)); border-radius: 12px; padding: 18px; text-align: center; height: 100%; transition: all 0.3s ease; border: 2px solid rgba(66, 135, 245, 0.5); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(66, 135, 245, 0.3);">
+                                        <div style="font-size: 2rem; font-weight: 800; color: #4287f5; text-shadow: 0 0 15px rgba(66, 135, 245, 0.7);">{{ avg_score }}%</div>
+                                        <div style="font-size: 1rem; color: #ffffff; margin-top: 8px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);">Avg. Score</div>
                                     </div>
                                 </div>
                             </div>

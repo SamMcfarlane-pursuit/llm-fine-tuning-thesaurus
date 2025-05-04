@@ -1,0 +1,447 @@
+/**
+ * Enhanced Navigation Bar and Scroll Indicator
+ * Provides improved readability, visual appeal, and robust scrolling features
+ */
+
+/* Enhanced Navigation Bar */
+.navbar {
+    background: linear-gradient(90deg, rgba(10, 10, 10, 0.98), rgba(20, 20, 20, 0.98)) !important;
+    padding: 0.8rem 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+    border-bottom: 1px solid rgba(66, 135, 245, 0.2);
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+    position: relative;
+    padding: 0.8rem 1.2rem;
+    margin: 0 0.3rem;
+    border-radius: 10px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.02em;
+    font-size: 1.05rem;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.navbar-dark .navbar-nav .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0.4rem;
+    left: 1.2rem;
+    right: 1.2rem;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.3s ease;
+    border-radius: 2px;
+    opacity: 0.8;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover::after,
+.navbar-dark .navbar-nav .nav-link.active::after {
+    transform: scaleX(1);
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: var(--text-primary);
+    background-color: rgba(66, 135, 245, 0.1);
+    transform: translateY(-2px);
+}
+
+.nav-icon {
+    margin-right: 0.6rem;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+.navbar-dark .navbar-nav .nav-link:hover .nav-icon {
+    transform: translateY(-1px) scale(1.1);
+    color: var(--secondary-color);
+}
+
+.navbar-dark .navbar-nav .nav-link.active {
+    color: var(--text-primary);
+    background-color: rgba(66, 135, 245, 0.15);
+    box-shadow: inset 0 0 0 1px rgba(66, 135, 245, 0.3);
+}
+
+.navbar-dark .navbar-nav .nav-link.active .nav-icon {
+    color: var(--secondary-color);
+}
+
+/* Brand styling enhancement */
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 1.6rem;
+    padding: 0.5rem 0;
+    position: relative;
+    letter-spacing: 0.02em;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.brand-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border-radius: 12px;
+    margin-right: 0.8rem;
+    box-shadow: 0 0 15px rgba(66, 135, 245, 0.5);
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.brand-icon i {
+    font-size: 1.6rem;
+    color: white;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+.brand-text {
+    background: linear-gradient(90deg, #ffffff, #e0e0e0);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    position: relative;
+}
+
+.navbar-brand:hover .brand-icon {
+    transform: rotate(15deg) scale(1.1);
+    box-shadow: 0 0 20px rgba(66, 135, 245, 0.7);
+}
+
+/* Enhanced Dropdown Menu */
+.dropdown-menu {
+    background-color: rgba(15, 15, 15, 0.98);
+    border: 1px solid rgba(66, 135, 245, 0.3);
+    border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    padding: 1rem 0;
+    margin-top: 0.8rem;
+    -webkit-backdrop-filter: blur(15px);
+    backdrop-filter: blur(15px);
+}
+
+.dropdown-item {
+    color: var(--text-primary);
+    padding: 0.7rem 1.3rem;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    border-left: 3px solid transparent;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(66, 135, 245, 0.15);
+    color: var(--text-primary);
+    border-left: 3px solid var(--secondary-color);
+    transform: translateX(5px);
+}
+
+.dropdown-header {
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+    font-weight: 700;
+    padding: 0.7rem 1.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.dropdown-divider {
+    border-top: 1px solid rgba(66, 135, 245, 0.2);
+    margin: 0.7rem 0;
+}
+
+/* Scroll Indicator */
+.scroll-indicator-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 2000;
+    overflow: hidden;
+    pointer-events: none; /* Ensure it doesn't interfere with clicks */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.scroll-indicator-bar {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #4287f5, #00ffdd, #4361ee);
+    transition: width 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 0 20px rgba(66, 135, 245, 0.8);
+    border-radius: 0 4px 4px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.scroll-indicator-bar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg,
+        rgba(255, 255, 255, 0.1),
+        rgba(255, 255, 255, 0.4),
+        rgba(255, 255, 255, 0.1));
+    animation: shimmer 2s linear infinite;
+    transform: translateX(-100%);
+    will-change: transform;
+}
+
+.scroll-indicator-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 15px;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 0 4px 4px 0;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+    opacity: 0.9;
+}
+
+/* Scroll indicator pulse effect when reaching important sections */
+.scroll-indicator-pulse {
+    animation: pulse-glow 2s ease-in-out;
+}
+
+@keyframes pulse-glow {
+    0% { box-shadow: 0 0 5px rgba(66, 135, 245, 0.7); }
+    50% { box-shadow: 0 0 25px rgba(66, 135, 245, 1); }
+    100% { box-shadow: 0 0 5px rgba(66, 135, 245, 0.7); }
+}
+
+/* Add small dots to indicate sections */
+.scroll-indicator-container::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 15px;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+}
+
+.scroll-indicator-section-marker {
+    position: absolute;
+    top: 10px;
+    width: 6px;
+    height: 6px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    transform: translateX(-50%);
+    transition: all 0.3s ease;
+}
+
+.scroll-indicator-section-marker.active {
+    background-color: #4287f5;
+    box-shadow: 0 0 5px #4287f5;
+    transform: translateX(-50%) scale(1.5);
+}
+
+@keyframes shimmer {
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* Section Indicator */
+.section-indicator {
+    position: fixed;
+    top: 70px;
+    right: 30px;
+    background-color: rgba(15, 15, 15, 0.95);
+    border-radius: 12px;
+    padding: 12px 18px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(66, 135, 245, 0.4);
+    z-index: 1000;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform: translateX(200px);
+    opacity: 0;
+    max-width: 350px;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    font-family: 'Roboto', sans-serif;
+}
+
+.section-indicator.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.section-indicator-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--secondary-color);
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.section-indicator-title i {
+    margin-right: 8px;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+.section-indicator-content {
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    margin: 0;
+    font-weight: 500;
+    line-height: 1.4;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.section-indicator-progress {
+    margin-top: 10px;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.section-indicator-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    border-radius: 2px;
+    width: 0;
+    transition: width 0.3s ease;
+}
+
+/* Scroll Navigation Dots */
+.scroll-nav-dots {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.scroll-nav-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.scroll-nav-dot::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border-radius: 50%;
+    border: 1px solid rgba(66, 135, 245, 0.3);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.scroll-nav-dot:hover,
+.scroll-nav-dot.active {
+    background-color: var(--secondary-color);
+    transform: scale(1.2);
+    box-shadow: 0 0 10px rgba(66, 135, 245, 0.5);
+}
+
+.scroll-nav-dot:hover::before,
+.scroll-nav-dot.active::before {
+    opacity: 1;
+}
+
+.scroll-nav-dot:hover .scroll-nav-tooltip {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.scroll-nav-tooltip {
+    position: absolute;
+    right: 25px;
+    top: -5px;
+    background-color: rgba(15, 15, 15, 0.9);
+    color: var(--text-primary);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(10px);
+    transition: all 0.3s ease;
+    pointer-events: none;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(66, 135, 245, 0.2);
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .navbar-dark .navbar-nav .nav-link {
+        padding: 0.7rem 1rem;
+        margin: 0.2rem 0;
+    }
+
+    .section-indicator {
+        top: auto;
+        bottom: 20px;
+        right: 20px;
+        left: 20px;
+        max-width: none;
+    }
+
+    .scroll-nav-dots {
+        display: none;
+    }
+}
+
+/* High contrast mode */
+@media (forced-colors: active) {
+    .navbar-dark .navbar-nav .nav-link {
+        color: ButtonText;
+        border: 1px solid ButtonText;
+    }
+
+    .navbar-dark .navbar-nav .nav-link:hover,
+    .navbar-dark .navbar-nav .nav-link.active {
+        color: HighlightText;
+        background-color: Highlight;
+    }
+
+    .scroll-indicator-bar {
+        background: Highlight;
+    }
+
+    .section-indicator {
+        border: 1px solid ButtonText;
+    }
+}

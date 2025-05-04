@@ -93,17 +93,82 @@
                                         <li>LoRA architecture and implementation</li>
                                     </ul>
 
-                                    <h5 class="mt-3">Hands-on Exercise</h5>
+                                    <h5 class="mt-3">Hands-on Exercises</h5>
                                     <div class="exercise-box">
+                                        <div class="interactive-tip" data-bs-toggle="tooltip" title="Click for a helpful tip!">
+                                            <i class="bi bi-lightbulb"></i>
+                                        </div>
+
                                         <h6><i class="bi bi-laptop me-2"></i>Exercise 1.1: Implementing Basic Quantization</h6>
                                         <p>In this exercise, you'll implement basic quantization techniques on a small transformer model to understand the effects on model size and accuracy.</p>
-                                        <a href="#" class="btn btn-sm btn-outline-primary mt-2">Open Exercise Notebook</a>
+
+                                        <div class="fun-fact">
+                                            <h6>Fun Fact: Quantization Magic</h6>
+                                            <p>Did you know? Quantizing from FP32 to INT8 can reduce model size by 75% with often less than 1% accuracy loss! That's like compressing a 10GB file down to 2.5GB while keeping almost all the quality.</p>
+                                        </div>
+
+                                        <div class="exercise-objectives">
+                                            <h6><i class="bi bi-bullseye me-2"></i>Learning Objectives</h6>
+                                            <ul>
+                                                <li>Understand the basics of quantization and its impact on model size</li>
+                                                <li>Implement 8-bit and 4-bit quantization on a transformer model</li>
+                                                <li>Compare model performance before and after quantization</li>
+                                                <li>Learn to use BitsAndBytes library for efficient quantization</li>
+                                            </ul>
+                                        </div>
+
+                                        <div class="related-exercises">
+                                            <h6><i class="bi bi-link-45deg me-2"></i>Related Exercises</h6>
+                                            <div class="related-exercise-links">
+                                                <a href="#exercise2.1" class="related-exercise-link">Exercise 2.1</a>
+                                                <a href="#exercise3.1" class="related-exercise-link">Exercise 3.1</a>
+                                            </div>
+                                        </div>
+
+                                        <a href="#" class="btn btn-sm btn-outline-primary mt-2">
+                                            <i class="bi bi-journal-code me-1"></i> Open Exercise Notebook
+                                        </a>
+                                        <button class="btn btn-sm btn-outline-success mt-2 ms-2 complete-exercise-btn" data-exercise="1.1">
+                                            <i class="bi bi-check-circle me-1"></i> Mark as Complete
+                                        </button>
                                     </div>
 
                                     <div class="exercise-box mt-3">
+                                        <div class="interactive-tip" data-bs-toggle="tooltip" title="Click for a helpful tip!">
+                                            <i class="bi bi-lightbulb"></i>
+                                        </div>
+
                                         <h6><i class="bi bi-laptop me-2"></i>Exercise 1.2: Basic LoRA Implementation</h6>
                                         <p>Implement a simple LoRA adapter for a pre-trained model and observe how different rank values affect performance and parameter count.</p>
-                                        <a href="#" class="btn btn-sm btn-outline-primary mt-2">Open Exercise Notebook</a>
+
+                                        <div class="fun-fact">
+                                            <h6>Fun Fact: LoRA's Efficiency</h6>
+                                            <p>LoRA can reduce trainable parameters by up to 10,000x! For a 7B parameter model, you might only need to train 0.7M parameters. That's like having to move only one box instead of an entire house!</p>
+                                        </div>
+
+                                        <div class="exercise-objectives">
+                                            <h6><i class="bi bi-bullseye me-2"></i>Learning Objectives</h6>
+                                            <ul>
+                                                <li>Understand the core principles of Low-Rank Adaptation (LoRA)</li>
+                                                <li>Implement a LoRA adapter for a pre-trained model</li>
+                                                <li>Experiment with different rank values and observe their effects</li>
+                                                <li>Fine-tune a model using LoRA for a specific task</li>
+                                            </ul>
+                                        </div>
+
+                                        <div class="related-exercises">
+                                            <h6><i class="bi bi-link-45deg me-2"></i>Related Exercises</h6>
+                                            <div class="related-exercise-links">
+                                                <a href="#exercise3.1" class="related-exercise-link">Exercise 3.1</a>
+                                            </div>
+                                        </div>
+
+                                        <a href="#" class="btn btn-sm btn-outline-primary mt-2">
+                                            <i class="bi bi-journal-code me-1"></i> Open Exercise Notebook
+                                        </a>
+                                        <button class="btn btn-sm btn-outline-success mt-2 ms-2 complete-exercise-btn" data-exercise="1.2">
+                                            <i class="bi bi-check-circle me-1"></i> Mark as Complete
+                                        </button>
                                     </div>
 
                                     <div class="time-estimate mt-3">
@@ -133,16 +198,80 @@
                                         <li>BitsAndBytes library for efficient quantization</li>
                                     </ul>
 
-                                    <h5 class="mt-3">Hands-on Exercise</h5>
-                                    <div class="exercise-box">
+                                    <h5 class="mt-3">Hands-on Exercises</h5>
+                                    <div class="exercise-box" id="exercise2.1">
                                         <h6><i class="bi bi-laptop me-2"></i>Exercise 2.1: Implementing NF4 Quantization</h6>
                                         <p>In this exercise, you'll implement NF4 quantization on a pre-trained model and compare its performance with standard INT4 quantization.</p>
+
+                                        <div class="exercise-objectives">
+                                            <h6><i class="bi bi-bullseye me-2"></i>Learning Objectives</h6>
+                                            <ul>
+                                                <li>Understand NF4 quantization and its advantages over standard INT4</li>
+                                                <li>Implement NF4 quantization on a pre-trained model</li>
+                                                <li>Compare NF4 with standard INT4 quantization</li>
+                                                <li>Learn advanced quantization techniques for better performance</li>
+                                            </ul>
+                                        </div>
+
+                                        <div class="exercise-connection">
+                                            <h4>Learning Path</h4>
+                                            <div class="connection-map">
+                                                <div class="connection-node">
+                                                    1
+                                                    <div class="connection-label">Introduction</div>
+                                                </div>
+                                                <div class="connection-node">
+                                                    2
+                                                    <div class="connection-label">Basic Quantization</div>
+                                                </div>
+                                                <div class="connection-node current">
+                                                    3
+                                                    <div class="connection-label">Advanced Quantization</div>
+                                                </div>
+                                                <div class="connection-node">
+                                                    4
+                                                    <div class="connection-label">QLoRA</div>
+                                                </div>
+                                                <div class="connection-node">
+                                                    5
+                                                    <div class="connection-label">Advanced Techniques</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="related-exercises">
+                                            <h6><i class="bi bi-link-45deg me-2"></i>Related Exercises</h6>
+                                            <div class="related-exercise-links">
+                                                <a href="#exercise1.1" class="related-exercise-link">Exercise 1.1</a>
+                                                <a href="#exercise3.1" class="related-exercise-link">Exercise 3.1</a>
+                                            </div>
+                                        </div>
+
                                         <a href="#" class="btn btn-sm btn-outline-primary mt-2">Open Exercise Notebook</a>
                                     </div>
 
                                     <div class="exercise-box mt-3">
                                         <h6><i class="bi bi-laptop me-2"></i>Exercise 2.2: Double Quantization Implementation</h6>
                                         <p>Implement double quantization to further reduce memory usage and analyze the impact on model performance.</p>
+
+                                        <div class="exercise-objectives">
+                                            <h6><i class="bi bi-bullseye me-2"></i>Learning Objectives</h6>
+                                            <ul>
+                                                <li>Understand the concept of double quantization</li>
+                                                <li>Implement double quantization using BitsAndBytes</li>
+                                                <li>Measure memory savings from double quantization</li>
+                                                <li>Evaluate performance impact of double quantization</li>
+                                            </ul>
+                                        </div>
+
+                                        <div class="related-exercises">
+                                            <h6><i class="bi bi-link-45deg me-2"></i>Related Exercises</h6>
+                                            <div class="related-exercise-links">
+                                                <a href="#exercise2.1" class="related-exercise-link">Exercise 2.1</a>
+                                                <a href="#exercise3.1" class="related-exercise-link">Exercise 3.1</a>
+                                            </div>
+                                        </div>
+
                                         <a href="#" class="btn btn-sm btn-outline-primary mt-2">Open Exercise Notebook</a>
                                     </div>
 
@@ -174,11 +303,62 @@
                                     </ul>
 
                                     <h5 class="mt-3">Hands-on Exercise</h5>
-                                    <div class="exercise-box">
+                                    <div class="exercise-box" id="exercise3.1">
                                         <h6><i class="bi bi-laptop me-2"></i>Exercise 3.1: Complete QLoRA Implementation</h6>
                                         <p>Implement a complete QLoRA setup for fine-tuning a large language model (7B parameters) on a specific task.</p>
+
+                                        <div class="exercise-objectives">
+                                            <h6><i class="bi bi-bullseye me-2"></i>Learning Objectives</h6>
+                                            <ul>
+                                                <li>Understand the complete QLoRA architecture and workflow</li>
+                                                <li>Implement QLoRA for fine-tuning a large language model</li>
+                                                <li>Configure optimal parameters for QLoRA training</li>
+                                                <li>Evaluate the fine-tuned model and compare with baseline</li>
+                                            </ul>
+                                        </div>
+
+                                        <div class="exercise-connection">
+                                            <h4>Learning Path</h4>
+                                            <div class="connection-map">
+                                                <div class="connection-node">
+                                                    1
+                                                    <div class="connection-label">Introduction</div>
+                                                </div>
+                                                <div class="connection-node">
+                                                    2
+                                                    <div class="connection-label">Basic Quantization</div>
+                                                </div>
+                                                <div class="connection-node">
+                                                    3
+                                                    <div class="connection-label">Advanced Quantization</div>
+                                                </div>
+                                                <div class="connection-node current">
+                                                    4
+                                                    <div class="connection-label">QLoRA</div>
+                                                </div>
+                                                <div class="connection-node">
+                                                    5
+                                                    <div class="connection-label">Advanced Techniques</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="related-exercises">
+                                            <h6><i class="bi bi-link-45deg me-2"></i>Related Exercises</h6>
+                                            <div class="related-exercise-links">
+                                                <a href="#exercise1.1" class="related-exercise-link">Exercise 1.1</a>
+                                                <a href="#exercise1.2" class="related-exercise-link">Exercise 1.2</a>
+                                                <a href="#exercise2.1" class="related-exercise-link">Exercise 2.1</a>
+                                            </div>
+                                        </div>
+
                                         <a href="#" class="btn btn-sm btn-outline-primary mt-2">Open Exercise Notebook</a>
                                     </div>
+
+                                    <!-- Key Concepts Popup Trigger -->
+                                    <button id="show-key-concepts" class="btn btn-info btn-sm mt-3">
+                                        <i class="bi bi-lightbulb-fill me-1"></i> Show Key QLoRA Concepts
+                                    </button>
 
                                     <div class="code-preview mt-3">
                                         <h6>Implementation Preview</h6>
@@ -354,8 +534,37 @@ pip install trl</code></pre>
                     <div class="progress mb-3" style="height: 25px;">
                         <div class="progress-bar bg-success progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
                     </div>
+
+                    <div class="achievement-section mb-3">
+                        <h5><i class="bi bi-trophy-fill text-warning me-2"></i>Achievements</h5>
+                        <div class="achievement-badges">
+                            <div class="achievement-badge" data-bs-toggle="tooltip" title="Complete Module 1">
+                                <i class="bi bi-1-circle-fill"></i>
+                                <span class="badge-lock"><i class="bi bi-lock-fill"></i></span>
+                            </div>
+                            <div class="achievement-badge" data-bs-toggle="tooltip" title="Complete Module 2">
+                                <i class="bi bi-2-circle-fill"></i>
+                                <span class="badge-lock"><i class="bi bi-lock-fill"></i></span>
+                            </div>
+                            <div class="achievement-badge" data-bs-toggle="tooltip" title="Complete Module 3">
+                                <i class="bi bi-3-circle-fill"></i>
+                                <span class="badge-lock"><i class="bi bi-lock-fill"></i></span>
+                            </div>
+                            <div class="achievement-badge" data-bs-toggle="tooltip" title="Fine-tune Your First Model">
+                                <i class="bi bi-stars"></i>
+                                <span class="badge-lock"><i class="bi bi-lock-fill"></i></span>
+                            </div>
+                            <div class="achievement-badge" data-bs-toggle="tooltip" title="Memory Optimization Master">
+                                <i class="bi bi-gpu-card"></i>
+                                <span class="badge-lock"><i class="bi bi-lock-fill"></i></span>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="text-center">
-                        <button id="start-workshop-btn" class="btn btn-primary">Start Workshop</button>
+                        <button id="start-workshop-btn" class="btn btn-primary pulse-animation">
+                            <i class="bi bi-play-circle-fill me-2"></i>Start Your Learning Journey
+                        </button>
                     </div>
                 </div>
             </div>
@@ -389,13 +598,15 @@ pip install trl</code></pre>
                             </a>
                         {% else %}
                             <div class="alert alert-warning">
-                                <p><i class="bi bi-exclamation-triangle-fill me-2"></i> You need to be logged in to take the quiz.</p>
-                                <a href="{{ url_for('auth.login') }}" class="btn btn-primary me-2">
-                                    <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
-                                </a>
-                                <a href="{{ url_for('auth.register') }}" class="btn btn-outline-primary">
-                                    <i class="bi bi-person-plus me-1"></i> Register
-                                </a>
+                                <p><i class="bi bi-exclamation-triangle-fill me-2"></i> You need to be logged in to use this feature.</p>
+                                <div class="d-flex justify-content-center">
+                                    <a href="{{ url_for('auth.login') }}" class="btn btn-primary me-3">
+                                        <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
+                                    </a>
+                                    <a href="{{ url_for('auth.register') }}" class="btn btn-dark">
+                                        <i class="bi bi-person-plus me-1"></i> Register
+                                    </a>
+                                </div>
                             </div>
                         {% endif %}
                     </div>
@@ -406,6 +617,7 @@ pip install trl</code></pre>
 </div>
 
 <style>
+    /* Module styling */
     .module-number {
         display: inline-flex;
         align-items: center;
@@ -417,48 +629,266 @@ pip install trl</code></pre>
         color: white;
         margin-right: 15px;
         font-weight: bold;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
     }
 
     .accordion-button:not(.collapsed) .module-number {
         background-color: white;
         color: var(--primary-color);
+        transform: scale(1.1);
     }
 
+    .accordion-button:hover .module-number {
+        transform: scale(1.1);
+    }
+
+    /* Exercise box styling */
     .exercise-box {
-        background-color: rgba(0, 102, 255, 0.05);
+        background: linear-gradient(135deg, rgba(0, 102, 255, 0.05), rgba(0, 198, 255, 0.08));
         border-left: 4px solid var(--primary-color);
-        padding: 15px;
-        border-radius: 5px;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .exercise-box::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100px;
+        height: 100px;
+        background: radial-gradient(circle, rgba(0, 198, 255, 0.1) 0%, rgba(0, 102, 255, 0) 70%);
+        border-radius: 50%;
+        z-index: 0;
+    }
+
+    .exercise-box:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        border-left-width: 6px;
+    }
+
+    .exercise-box h6 {
+        position: relative;
+        z-index: 1;
     }
 
     .time-estimate {
         font-style: italic;
         color: var(--text-secondary);
+        display: inline-block;
+        padding: 5px 10px;
+        background-color: rgba(0, 0, 0, 0.05);
+        border-radius: 20px;
+        font-size: 0.9rem;
     }
 
+    /* Resource styling */
     .resource-item {
         margin-bottom: 15px;
         font-size: 1.1rem;
+        padding: 8px 0;
+        border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .resource-item:hover {
+        transform: translateX(5px);
     }
 
     .resource-link {
         color: var(--primary-color);
         text-decoration: none;
         transition: all 0.2s ease;
+        display: inline-block;
     }
 
     .resource-link:hover {
         color: var(--secondary-color);
-        text-decoration: underline;
+        transform: translateX(3px);
     }
 
     .workshop-meta .badge {
         font-size: 0.9rem;
         padding: 8px 15px;
+        border-radius: 20px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .workshop-meta .badge:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
     }
 
     .feature-list li {
-        margin-bottom: 10px;
+        margin-bottom: 15px;
+        position: relative;
+        padding-left: 30px;
+    }
+
+    .feature-list li i {
+        position: absolute;
+        left: 0;
+        top: 3px;
+    }
+
+    /* Gamification elements */
+    .achievement-section {
+        background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 152, 0, 0.1));
+        border-radius: 10px;
+        padding: 15px;
+        border: 1px solid rgba(255, 193, 7, 0.2);
+    }
+
+    .achievement-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .achievement-badge {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #2b2b2b, #3a3a3a);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #aaa;
+        font-size: 1.5rem;
+        position: relative;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .achievement-badge.unlocked {
+        background: linear-gradient(135deg, #ffc107, #ff9800);
+        color: white;
+        animation: achievement-unlock 1s ease;
+    }
+
+    .badge-lock {
+        position: absolute;
+        bottom: -5px;
+        right: -5px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #dc3545;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .achievement-badge.unlocked .badge-lock {
+        display: none;
+    }
+
+    .achievement-badge:hover {
+        transform: translateY(-3px) scale(1.1);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    @keyframes achievement-unlock {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.3); }
+        100% { transform: scale(1); }
+    }
+
+    /* Button animations */
+    .pulse-animation {
+        animation: pulse 2s infinite;
+        box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3); }
+        50% { transform: scale(1.05); box-shadow: 0 8px 20px rgba(0, 123, 255, 0.5); }
+        100% { transform: scale(1); box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3); }
+    }
+
+    /* Fun elements */
+    .fun-fact {
+        position: relative;
+        background: linear-gradient(135deg, rgba(0, 198, 255, 0.1), rgba(0, 102, 255, 0.1));
+        border-radius: 10px;
+        padding: 15px;
+        margin: 20px 0;
+        border-left: 4px solid #00c6ff;
+    }
+
+    .fun-fact::before {
+        content: "💡";
+        position: absolute;
+        top: -15px;
+        left: 15px;
+        font-size: 1.5rem;
+        background-color: #121212;
+        padding: 5px;
+        border-radius: 50%;
+    }
+
+    .fun-fact h6 {
+        margin-top: 0;
+        color: #00c6ff;
+    }
+
+    /* Code block enhancements */
+    .code-block {
+        position: relative;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .code-block::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+        z-index: 1;
+    }
+
+    .code-block pre {
+        margin-bottom: 0;
+        padding-top: 20px;
+    }
+
+    /* Interactive elements */
+    .interactive-tip {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: rgba(0, 198, 255, 0.2);
+        color: #00c6ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 2;
+    }
+
+    .interactive-tip:hover {
+        background-color: rgba(0, 198, 255, 0.4);
+        transform: scale(1.2);
     }
 </style>
 
@@ -490,6 +920,508 @@ pip install trl</code></pre>
                 }, 100);
             });
         }
+
+        // Handle interactive tips
+        const interactiveTips = document.querySelectorAll('.interactive-tip');
+        interactiveTips.forEach(tip => {
+            tip.addEventListener('click', function() {
+                // Create and show a tip modal
+                const tipContent = getTipContent(this.closest('.exercise-box').querySelector('h6').textContent);
+                showTipModal(tipContent);
+            });
+        });
+
+        // Handle exercise completion
+        const completeButtons = document.querySelectorAll('.complete-exercise-btn');
+        completeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const exerciseId = this.getAttribute('data-exercise');
+                completeExercise(exerciseId);
+            });
+        });
+
+        // Key Concepts Popup
+        const showKeyConceptsBtn = document.getElementById('show-key-concepts');
+        if (showKeyConceptsBtn) {
+            showKeyConceptsBtn.addEventListener('click', function() {
+                // Create key concepts popup if it doesn't exist
+                if (!document.querySelector('.key-concepts-popup')) {
+                    const popup = document.createElement('div');
+                    popup.className = 'key-concepts-popup';
+                    popup.innerHTML = `
+                        <div class="key-concepts-header">
+                            <h5 class="key-concepts-title">
+                                <i class="bi bi-lightbulb-fill"></i>
+                                Key QLoRA Concepts
+                            </h5>
+                            <button class="key-concepts-close">
+                                <i class="bi bi-x"></i>
+                            </button>
+                        </div>
+                        <div class="key-concepts-body">
+                            <div class="concept-item">
+                                <div class="concept-name">Quantized Low-Rank Adaptation (QLoRA)</div>
+                                <div class="concept-description">A parameter-efficient fine-tuning technique that combines 4-bit quantization with low-rank adaptation to enable fine-tuning of large language models on consumer hardware.</div>
+                            </div>
+                            <div class="concept-item">
+                                <div class="concept-name">NormalFloat (NF4)</div>
+                                <div class="concept-description">A 4-bit data type optimized for normally distributed weights in neural networks, providing better accuracy than standard INT4 quantization.</div>
+                            </div>
+                            <div class="concept-item">
+                                <div class="concept-name">Double Quantization</div>
+                                <div class="concept-description">A technique that quantizes the quantization constants themselves, further reducing memory usage with minimal impact on model performance.</div>
+                            </div>
+                            <div class="concept-item">
+                                <div class="concept-name">Low-Rank Adaptation (LoRA)</div>
+                                <div class="concept-description">A technique that freezes the pre-trained model weights and injects trainable rank decomposition matrices into each layer of the Transformer architecture.</div>
+                            </div>
+                            <div class="concept-item">
+                                <div class="concept-name">Rank Decomposition</div>
+                                <div class="concept-description">Breaking down a matrix into the product of two lower-rank matrices, reducing the number of parameters that need to be trained.</div>
+                            </div>
+                        </div>
+                        <div class="key-concepts-footer">
+                            <button class="dismiss-concepts">Dismiss</button>
+                            <button class="next-concepts">Learn More <i class="bi bi-arrow-right"></i></button>
+                        </div>
+                    `;
+
+                    document.body.appendChild(popup);
+
+                    // Add event listeners
+                    popup.querySelector('.key-concepts-close').addEventListener('click', function() {
+                        popup.classList.remove('show');
+                    });
+
+                    popup.querySelector('.dismiss-concepts').addEventListener('click', function() {
+                        popup.classList.remove('show');
+                    });
+
+                    popup.querySelector('.next-concepts').addEventListener('click', function() {
+                        window.location.href = '/qlora-guide';
+                    });
+                }
+
+                // Show popup
+                const popup = document.querySelector('.key-concepts-popup');
+                popup.classList.add('show');
+            });
+        }
+
+        // Add quick navigation sidebar
+        const quickNav = document.createElement('div');
+        quickNav.className = 'quick-nav-sidebar';
+
+        // Add navigation dots for each module
+        const modules = document.querySelectorAll('.accordion-item');
+        modules.forEach((module, index) => {
+            const moduleTitle = module.querySelector('.accordion-button').textContent.trim();
+            const dot = document.createElement('div');
+            dot.className = 'nav-dot';
+            if (index === 0) dot.classList.add('active');
+            dot.setAttribute('data-title', moduleTitle.substring(moduleTitle.indexOf(' ') + 1));
+
+            // Add click event to open module
+            dot.addEventListener('click', () => {
+                const button = module.querySelector('.accordion-button');
+                if (button.classList.contains('collapsed')) {
+                    button.click();
+                }
+
+                // Scroll to module
+                module.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                // Update active dot
+                document.querySelectorAll('.nav-dot').forEach(d => d.classList.remove('active'));
+                dot.classList.add('active');
+            });
+
+            quickNav.appendChild(dot);
+        });
+
+        // Add to document
+        document.body.appendChild(quickNav);
+
+        // Add progress tracker
+        const progressTracker = document.createElement('div');
+        progressTracker.className = 'progress-tracker';
+        progressTracker.innerHTML = `
+            <div class="progress-icon">
+                <i class="bi bi-graph-up"></i>
+            </div>
+            <div class="progress-info">
+                <div class="progress-title">Workshop Progress</div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" style="width: 0%"></div>
+                </div>
+            </div>
+            <button class="progress-close">
+                <i class="bi bi-x"></i>
+            </button>
+        `;
+
+        document.body.appendChild(progressTracker);
+
+        // Add event listener to close button
+        progressTracker.querySelector('.progress-close').addEventListener('click', function() {
+            progressTracker.classList.remove('show');
+        });
+
+        // Show progress tracker after 3 seconds
+        setTimeout(() => {
+            progressTracker.classList.add('show');
+
+            // Update progress based on scroll position
+            let lastScrollTop = 0;
+            window.addEventListener('scroll', function() {
+                const st = window.pageYOffset || document.documentElement.scrollTop;
+                const documentHeight = Math.max(
+                    document.body.scrollHeight,
+                    document.body.offsetHeight,
+                    document.documentElement.clientHeight,
+                    document.documentElement.scrollHeight,
+                    document.documentElement.offsetHeight
+                );
+                const windowHeight = window.innerHeight;
+                const scrollableHeight = documentHeight - windowHeight;
+                const scrollPercentage = (st / scrollableHeight) * 100;
+
+                progressTracker.querySelector('.progress-bar-fill').style.width = `${scrollPercentage}%`;
+
+                lastScrollTop = st <= 0 ? 0 : st;
+            });
+
+            // Hide after 10 seconds
+            setTimeout(() => {
+                progressTracker.classList.remove('show');
+            }, 10000);
+        }, 3000);
+
+        // Helper function to get tip content based on exercise title
+        function getTipContent(exerciseTitle) {
+            const tips = {
+                'Exercise 1.1': {
+                    title: 'Quantization Tip',
+                    content: 'When implementing quantization, start with INT8 before trying INT4 or NF4. This helps you understand the trade-offs between precision and model size more gradually. Also, always compare the quantized model\'s performance with the original to measure the impact on accuracy.',
+                    code: 'model = AutoModelForCausalLM.from_pretrained(\n    "meta-llama/Llama-2-7b-hf",\n    load_in_8bit=True,  # Start with 8-bit quantization\n    device_map="auto"\n)'
+                },
+                'Exercise 1.2': {
+                    title: 'LoRA Implementation Tip',
+                    content: 'When configuring LoRA, the rank parameter (r) controls the trade-off between performance and parameter count. Start with r=8 or r=16 and adjust based on your results. Higher ranks give better performance but require more parameters.',
+                    code: 'lora_config = LoraConfig(\n    r=16,  # Try different rank values\n    lora_alpha=32,\n    target_modules=["q_proj", "v_proj"],\n    lora_dropout=0.05,\n    bias="none"\n)'
+                },
+                'Exercise 2.1': {
+                    title: 'NF4 Quantization Tip',
+                    content: 'NF4 works best for weights that follow a normal distribution, which is common in transformer models. When comparing with INT4, focus on attention layers where the difference is most noticeable.',
+                    code: 'bnb_config = BitsAndBytesConfig(\n    load_in_4bit=True,\n    bnb_4bit_quant_type="nf4",  # Use NF4 instead of INT4\n    bnb_4bit_compute_dtype=torch.float16\n)'
+                },
+                'Exercise 3.1': {
+                    title: 'QLoRA Implementation Tip',
+                    content: 'For best results with QLoRA, apply LoRA to all linear layers in the model. This includes query, key, value, output, and MLP layers. Also, use a higher alpha value (typically 2x the rank) for better stability.',
+                    code: 'target_modules = [\n    "q_proj", "k_proj", "v_proj", "o_proj",\n    "gate_proj", "up_proj", "down_proj"\n]'
+                }
+            };
+
+            // Extract exercise number from title
+            const match = exerciseTitle.match(/Exercise (\d+\.\d+)/);
+            if (match && tips[match[0]]) {
+                return tips[match[0]];
+            }
+
+            // Default tip if no match found
+            return {
+                title: 'General Tip',
+                content: 'Take your time to understand the concepts before implementing them. Experiment with different parameters to see how they affect the results.',
+                code: '# Experiment with different parameters\n# Compare results\n# Understand the trade-offs'
+            };
+        }
+
+        // Function to show tip modal
+        function showTipModal(tipData) {
+            // Create modal HTML
+            const modalHtml = `
+                <div class="modal fade" id="tipModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header bg-info text-white">
+                                <h5 class="modal-title">
+                                    <i class="bi bi-lightbulb-fill me-2"></i>${tipData.title}
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>${tipData.content}</p>
+                                <div class="code-block mt-3">
+                                    <pre><code>${tipData.code}</code></pre>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-info" id="copyTipCode">
+                                    <i class="bi bi-clipboard me-1"></i> Copy Code
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Add modal to document
+            const modalContainer = document.createElement('div');
+            modalContainer.innerHTML = modalHtml;
+            document.body.appendChild(modalContainer.firstChild);
+
+            // Show modal
+            const modal = new bootstrap.Modal(document.getElementById('tipModal'));
+            modal.show();
+
+            // Handle copy code button
+            document.getElementById('copyTipCode').addEventListener('click', function() {
+                navigator.clipboard.writeText(tipData.code).then(() => {
+                    this.innerHTML = '<i class="bi bi-check-lg me-1"></i> Copied!';
+                    this.classList.remove('btn-info');
+                    this.classList.add('btn-success');
+
+                    setTimeout(() => {
+                        this.innerHTML = '<i class="bi bi-clipboard me-1"></i> Copy Code';
+                        this.classList.remove('btn-success');
+                        this.classList.add('btn-info');
+                    }, 2000);
+                });
+            });
+
+            // Remove modal from DOM when hidden
+            document.getElementById('tipModal').addEventListener('hidden.bs.modal', function() {
+                this.remove();
+            });
+        }
+
+        // Function to handle exercise completion
+        function completeExercise(exerciseId) {
+            // Update button
+            const button = document.querySelector(`.complete-exercise-btn[data-exercise="${exerciseId}"]`);
+            button.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i> Completed!';
+            button.classList.remove('btn-outline-success');
+            button.classList.add('btn-success');
+            button.disabled = true;
+
+            // Add completed class to exercise box
+            const exerciseBox = button.closest('.exercise-box');
+            exerciseBox.classList.add('completed-exercise');
+
+            // Update progress
+            updateProgress();
+
+            // Unlock achievement based on exercise
+            if (exerciseId === '1.1') {
+                unlockAchievement(0); // First module achievement
+            } else if (exerciseId === '1.2') {
+                unlockAchievement(0); // First module achievement
+            } else if (exerciseId === '2.1') {
+                unlockAchievement(1); // Second module achievement
+            } else if (exerciseId === '3.1') {
+                unlockAchievement(2); // Third module achievement
+                unlockAchievement(3); // Fine-tune achievement
+            }
+
+            // Show congratulation message
+            showCongratulation(exerciseId);
+        }
+
+        // Function to update progress
+        function updateProgress() {
+            const totalExercises = document.querySelectorAll('.exercise-box').length;
+            const completedExercises = document.querySelectorAll('.completed-exercise').length;
+            const progressPercentage = (completedExercises / totalExercises) * 100;
+
+            // Update progress bar
+            const progressBar = document.querySelector('.progress-bar');
+            progressBar.style.width = `${progressPercentage}%`;
+            progressBar.setAttribute('aria-valuenow', progressPercentage);
+            progressBar.textContent = `${Math.round(progressPercentage)}%`;
+
+            // If all exercises completed, unlock final achievement
+            if (completedExercises === totalExercises) {
+                unlockAchievement(4); // Memory optimization master achievement
+            }
+        }
+
+        // Function to unlock achievement
+        function unlockAchievement(index) {
+            const badges = document.querySelectorAll('.achievement-badge');
+            if (badges[index]) {
+                badges[index].classList.add('unlocked');
+
+                // Show achievement notification
+                showAchievementNotification(badges[index].getAttribute('data-bs-original-title') || 'Achievement Unlocked');
+            }
+        }
+
+        // Function to show achievement notification
+        function showAchievementNotification(achievementTitle) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = 'achievement-notification';
+            notification.innerHTML = `
+                <div class="achievement-icon">
+                    <i class="bi bi-trophy-fill"></i>
+                </div>
+                <div class="achievement-text">
+                    <h6>Achievement Unlocked!</h6>
+                    <p>${achievementTitle}</p>
+                </div>
+            `;
+
+            // Add to document
+            document.body.appendChild(notification);
+
+            // Show notification
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+
+            // Remove after 5 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    notification.remove();
+                }, 500);
+            }, 5000);
+        }
+
+        // Function to show congratulation message
+        function showCongratulation(exerciseId) {
+            // Create congratulation element
+            const congratulation = document.createElement('div');
+            congratulation.className = 'congratulation-message';
+
+            // Set message based on exercise
+            let message = 'Great job completing this exercise!';
+            if (exerciseId === '1.1') {
+                message = 'Excellent! You\'ve mastered basic quantization techniques!';
+            } else if (exerciseId === '1.2') {
+                message = 'Amazing! You\'ve implemented your first LoRA adapter!';
+            } else if (exerciseId === '2.1') {
+                message = 'Outstanding! You\'ve mastered advanced NF4 quantization!';
+            } else if (exerciseId === '3.1') {
+                message = 'Congratulations! You\'ve successfully implemented QLoRA!';
+            }
+
+            congratulation.innerHTML = `
+                <div class="congratulation-content">
+                    <i class="bi bi-emoji-smile-fill"></i>
+                    <p>${message}</p>
+                </div>
+            `;
+
+            // Add to document
+            document.body.appendChild(congratulation);
+
+            // Show congratulation
+            setTimeout(() => {
+                congratulation.classList.add('show');
+            }, 100);
+
+            // Remove after 4 seconds
+            setTimeout(() => {
+                congratulation.classList.remove('show');
+                setTimeout(() => {
+                    congratulation.remove();
+                }, 500);
+            }, 4000);
+        }
+
+        // Add CSS for notifications
+        const notificationStyles = document.createElement('style');
+        notificationStyles.textContent = `
+            .achievement-notification {
+                position: fixed;
+                top: 20px;
+                right: -350px;
+                width: 300px;
+                background: linear-gradient(135deg, #ffc107, #ff9800);
+                border-radius: 10px;
+                padding: 15px;
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+                z-index: 9999;
+                transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+
+            .achievement-notification.show {
+                right: 20px;
+            }
+
+            .achievement-icon {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background-color: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #ff9800;
+                font-size: 1.5rem;
+                flex-shrink: 0;
+            }
+
+            .achievement-text {
+                flex-grow: 1;
+            }
+
+            .achievement-text h6 {
+                margin: 0;
+                color: white;
+                font-weight: 700;
+            }
+
+            .achievement-text p {
+                margin: 0;
+                color: white;
+                font-size: 0.9rem;
+            }
+
+            .congratulation-message {
+                position: fixed;
+                bottom: -100px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: linear-gradient(135deg, #4caf50, #8bc34a);
+                border-radius: 30px;
+                padding: 15px 30px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+                z-index: 9999;
+                transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+
+            .congratulation-message.show {
+                bottom: 20px;
+            }
+
+            .congratulation-content {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                color: white;
+            }
+
+            .congratulation-content i {
+                font-size: 1.5rem;
+            }
+
+            .congratulation-content p {
+                margin: 0;
+                font-weight: 600;
+            }
+
+            .completed-exercise {
+                border-left-color: #28a745;
+                background: linear-gradient(135deg, rgba(40, 167, 69, 0.05), rgba(76, 175, 80, 0.08));
+            }
+        `;
+        document.head.appendChild(notificationStyles);
     });
 </script>
 {% endblock %}

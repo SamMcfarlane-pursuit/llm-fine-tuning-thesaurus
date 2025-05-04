@@ -1,26 +1,47 @@
 /* Main Styles for Visual Thesaurus LLM - Tech Edition */
 
 :root {
-    --primary-color: #0077ff;
-    --secondary-color: #00d4ff;
-    --accent-color: #6a26ff;
+    --primary-color: #4361ee;  /* Deep blue - more readable and less harsh */
+    --secondary-color: #3a86ff; /* Bright blue - good contrast with dark backgrounds */
+    --accent-color: #7209b7;   /* Rich purple - complementary to blues */
     --dark-bg: #121212;
     --medium-bg: #1e1e1e;
     --light-bg: #2d2d2d;
     --text-primary: #ffffff;
     --text-secondary: #e0e0e0; /* Increased contrast for better readability */
-    --success-color: #00d463;
-    --warning-color: #ffdd20;
-    --danger-color: #ff4d10;
-    --info-color: #00c0ff;
+
+    /* Enhanced colors for better visibility and appeal */
+    --success-color: #38b000;  /* Vibrant green - high contrast and readable */
+    --warning-color: #fb8500;  /* Orange - better contrast than yellow */
+    --danger-color: #d00000;   /* Deep red - clear and visible */
+    --info-color: #4cc9f0;     /* Bright cyan - high contrast with dark backgrounds */
+
+    /* Darker shades for contrast and depth */
+    --primary-dark: #3a0ca3;   /* Darker blue/purple */
+    --success-dark: #008000;   /* Darker green */
+    --info-dark: #0077b6;      /* Darker blue */
+    --warning-dark: #e85d04;   /* Darker orange */
+
+    /* Text colors for cards to ensure readability */
+    --primary-text: #ffffff;   /* White text for blue backgrounds */
+    --success-text: #ffffff;   /* White text for green backgrounds */
+    --info-text: #ffffff;      /* White text for blue backgrounds */
+    --warning-text: #ffffff;   /* White text for orange backgrounds - changed from dark */
+
     --border-radius: 8px;
     --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-    --glow-effect: 0 0 10px rgba(0, 198, 255, 0.5);
+    --glow-effect: 0 0 10px rgba(76, 201, 240, 0.5);
+
+    /* Card background colors with better opacity for content areas */
+    --card-primary-bg: rgba(67, 97, 238, 0.08);
+    --card-success-bg: rgba(56, 176, 0, 0.08);
+    --card-info-bg: rgba(76, 201, 240, 0.08);
+    --card-warning-bg: rgba(251, 133, 0, 0.08);
 }
 
 body {
     font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--dark-bg) !important; /* Added !important to ensure it overrides Bootstrap */
+    background-color: var(--dark-bg);
     color: var(--text-primary);
     line-height: 1.8;
     overflow-x: hidden;
@@ -41,11 +62,9 @@ body::before {
     width: 100%;
     height: 100%;
     background-image:
-        linear-gradient(rgba(18, 18, 18, 0.92), rgba(18, 18, 18, 0.92)),
-        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231e90ff' fill-opacity='0.2'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        linear-gradient(rgba(18, 18, 18, 0.97), rgba(18, 18, 18, 0.97)),
+        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231e90ff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     z-index: -1;
-    opacity: 1 !important; /* Ensure the background is visible */
-    pointer-events: none; /* Allow clicking through the background */
 }
 
 /* Top Auth Bar */
@@ -111,14 +130,53 @@ body::before {
 }
 
 .compact-nav .nav-link {
-    padding: 0.75rem 0.7rem;
-    font-size: 0.95rem;
+    padding: 0.75rem 0.5rem;
+    font-size: 0.9rem;
+    letter-spacing: -0.01em;
 }
 
 .header-accent {
     height: 3px;
     background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
     box-shadow: 0 0 15px rgba(0, 198, 255, 0.5);
+}
+
+/* Mega Menu Styling */
+.dropdown-menu.mega-menu {
+    width: auto;
+    min-width: 600px;
+    padding: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.dropdown-menu.mega-menu .row {
+    width: 100%;
+    margin: 0;
+}
+
+.dropdown-menu.mega-menu .dropdown-header {
+    color: var(--primary-color);
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(0, 198, 255, 0.2);
+}
+
+.dropdown-menu.mega-menu .dropdown-item {
+    border-radius: 6px;
+    margin-bottom: 0.25rem;
+}
+
+@media (max-width: 992px) {
+    .dropdown-menu.mega-menu {
+        min-width: 100%;
+        left: 0;
+        transform: none;
+    }
 }
 
 /* Brand styling */
@@ -299,6 +357,496 @@ body::before {
 /* Container styling */
 .container {
     padding: 2rem 1.5rem;
+}
+
+/* Enhanced Card Styling for LLM Efficiency Section */
+#llm-efficiency .card {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    height: 100%;
+    background-color: var(--medium-bg);
+}
+
+#llm-efficiency .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+#llm-efficiency .card-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: none;
+    position: relative;
+}
+
+/* Add subtle pattern overlay to card headers */
+#llm-efficiency .card-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='1.5'/%3E%3Ccircle cx='13' cy='13' r='1.5'/%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+}
+
+#llm-efficiency .card-header h4 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    position: relative; /* To appear above the pattern */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Improve text readability */
+    letter-spacing: 0.01em;
+}
+
+#llm-efficiency .card-header h4 i {
+    margin-right: 0.75rem;
+    font-size: 1.5rem;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+#llm-efficiency .card-body {
+    padding: 1.75rem;
+    font-size: 1.05rem;
+    line-height: 1.6;
+    background-color: var(--medium-bg);
+    position: relative;
+}
+
+/* Add subtle highlight to card body */
+#llm-efficiency .card-body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg,
+        rgba(255, 255, 255, 0.05),
+        rgba(255, 255, 255, 0.2),
+        rgba(255, 255, 255, 0.05));
+}
+
+#llm-efficiency .card-body p {
+    margin-bottom: 1.25rem;
+    color: var(--text-primary);
+    font-weight: 400;
+    letter-spacing: 0.01em;
+}
+
+#llm-efficiency .card-body h5 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    position: relative;
+    display: inline-block;
+}
+
+/* Add underline to headings */
+#llm-efficiency .card-body h5::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background-color: currentColor;
+    opacity: 0.5;
+}
+
+#llm-efficiency .card-body ul {
+    padding-left: 0;
+    margin-bottom: 1.25rem;
+    list-style-type: none;
+}
+
+#llm-efficiency .card-body ul li {
+    margin-bottom: 0.75rem;
+    position: relative;
+    color: var(--text-secondary);
+    padding-left: 1.75rem;
+    font-weight: 400;
+}
+
+#llm-efficiency .card-body ul li::before {
+    content: '•';
+    position: absolute;
+    left: 0.5rem;
+    color: currentColor;
+    font-weight: bold;
+}
+
+/* Enhanced styling for list items with icons */
+#llm-efficiency .card-body ul li i {
+    position: absolute;
+    left: 0;
+    top: 0.25rem;
+}
+
+/* Specific card styling with enhanced colors and gradients */
+#llm-efficiency .border-success {
+    border: 1px solid rgba(16, 185, 129, 0.3) !important;
+}
+
+#llm-efficiency .border-primary {
+    border: 1px solid rgba(37, 99, 235, 0.3) !important;
+}
+
+#llm-efficiency .border-info {
+    border: 1px solid rgba(14, 165, 233, 0.3) !important;
+}
+
+#llm-efficiency .border-warning {
+    border: 1px solid rgba(245, 158, 11, 0.3) !important;
+}
+
+/* Enhanced gradient backgrounds for card headers */
+#llm-efficiency .bg-success {
+    background: linear-gradient(135deg, var(--success-color), var(--success-dark)) !important;
+    color: var(--success-text);
+    border-bottom: none;
+}
+
+#llm-efficiency .bg-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)) !important;
+    color: var(--primary-text);
+    border-bottom: none;
+}
+
+#llm-efficiency .bg-info {
+    background: linear-gradient(135deg, var(--info-color), var(--info-dark)) !important;
+    color: var(--info-text);
+    border-bottom: none;
+}
+
+#llm-efficiency .bg-warning {
+    background: linear-gradient(135deg, var(--warning-color), var(--warning-dark)) !important;
+    color: var(--warning-text);
+    border-bottom: none;
+}
+
+/* Text color enhancements for better visibility */
+#llm-efficiency .text-success {
+    color: var(--success-color) !important;
+    font-weight: 500;
+}
+
+#llm-efficiency .text-primary {
+    color: var(--primary-color) !important;
+    font-weight: 500;
+}
+
+#llm-efficiency .text-info {
+    color: var(--info-color) !important;
+    font-weight: 500;
+}
+
+#llm-efficiency .text-warning {
+    color: var(--warning-dark) !important;
+    font-weight: 500;
+}
+
+#llm-efficiency .btn-success {
+    background: linear-gradient(135deg, var(--success-color), var(--success-dark));
+    border: none;
+    color: white;
+    font-weight: 600;
+    padding: 0.6rem 1.5rem;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+    letter-spacing: 0.02em;
+    position: relative;
+    overflow: hidden;
+}
+
+#llm-efficiency .btn-success::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    border-radius: inherit;
+}
+
+#llm-efficiency .btn-success:hover {
+    background: linear-gradient(135deg, var(--success-color), var(--success-dark));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(16, 185, 129, 0.4);
+}
+
+#llm-efficiency .btn-success:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+}
+
+#llm-efficiency .btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    border: none;
+    color: white;
+    font-weight: 600;
+    padding: 0.6rem 1.5rem;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+    letter-spacing: 0.02em;
+    position: relative;
+    overflow: hidden;
+}
+
+#llm-efficiency .btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    border-radius: inherit;
+}
+
+#llm-efficiency .btn-primary:hover {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(37, 99, 235, 0.4);
+}
+
+/* Code container styling */
+.code-container {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.code-header {
+    background-color: #2d3748 !important;
+    color: #f7fafc !important;
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.code-content {
+    background-color: #1a202c !important;
+    padding: 1rem;
+    overflow-x: auto;
+}
+
+.code-content pre {
+    margin: 0;
+    padding: 0;
+}
+
+.code-content code {
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #f7fafc !important;
+}
+
+/* Syntax highlighting - Enhanced for better visibility */
+.python-keyword, .hljs-keyword {
+    color: #ff79c6 !important;
+    font-weight: bold;
+    text-shadow: 0 0 2px rgba(255, 121, 198, 0.4);
+}
+
+.python-string, .hljs-string {
+    color: #f1fa8c !important;
+    text-shadow: 0 0 2px rgba(241, 250, 140, 0.4);
+}
+
+.python-builtin {
+    color: #8be9fd !important;
+    font-style: italic;
+    text-shadow: 0 0 2px rgba(139, 233, 253, 0.4);
+}
+
+.python-comment, .hljs-comment {
+    color: #6272a4 !important;
+    font-style: italic;
+}
+
+.python-number, .hljs-number {
+    color: #bd93f9 !important;
+    text-shadow: 0 0 2px rgba(189, 147, 249, 0.4);
+}
+
+.python-function, .hljs-title.function_ {
+    color: #50fa7b !important;
+    text-shadow: 0 0 2px rgba(80, 250, 123, 0.4);
+}
+
+.hljs-title.class_ {
+    color: #8be9fd !important;
+    font-weight: bold;
+    text-shadow: 0 0 2px rgba(139, 233, 253, 0.4);
+}
+
+.hljs-variable.language_ {
+    color: #ff79c6 !important;
+    font-style: italic;
+    text-shadow: 0 0 2px rgba(255, 121, 198, 0.4);
+}
+
+.hljs-subst {
+    color: #f8f8f2 !important;
+}
+
+/* Deep Learning Section Styling */
+#deep-learning .card-header.bg-info {
+    background: linear-gradient(135deg, var(--info-color), var(--info-dark)) !important;
+    color: var(--info-text);
+    border-bottom: none;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+#deep-learning .card-header[style*="background-color: #FF6F00"] {
+    background: linear-gradient(135deg, #fb8500, #e85d04) !important; /* Changed to orange from our new palette */
+    color: white;
+    border-bottom: none;
+    position: relative;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+#deep-learning .card-header[style*="background-color: #EE4C2C"] {
+    background: linear-gradient(135deg, #d00000, #9d0208) !important; /* Changed to red from our new palette */
+    color: white;
+    border-bottom: none;
+    position: relative;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Fix for the blue cards in the deep learning section */
+#deep-learning .card-header.bg-primary {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)) !important;
+    color: white;
+    border-bottom: none;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+#deep-learning .card-header.bg-info {
+    background: linear-gradient(135deg, var(--info-color), var(--info-dark)) !important;
+    color: white;
+    border-bottom: none;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Ensure text is visible in all cards */
+#deep-learning .card-body {
+    color: var(--text-primary);
+    background-color: var(--medium-bg);
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    line-height: 1.6;
+}
+
+/* Ensure code blocks in deep learning section are perfectly visible */
+#deep-learning .code-container {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#deep-learning .code-header {
+    background-color: #2d3748 !important;
+    color: #f7fafc !important;
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#deep-learning .code-content {
+    background-color: #1a202c !important;
+    padding: 1rem;
+    overflow-x: auto;
+}
+
+#deep-learning .code-content pre {
+    margin: 0;
+    padding: 0;
+}
+
+#deep-learning .code-content code {
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #f7fafc !important;
+}
+
+#deep-learning .card-body h5 {
+    color: var(--text-primary);
+    font-weight: 600;
+    margin-top: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+#deep-learning .card-body p {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+#deep-learning .card-body ul li {
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+#deep-learning .card-body strong {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* Add subtle pattern overlay to deep learning card headers */
+#deep-learning .card-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='1.5'/%3E%3Ccircle cx='13' cy='13' r='1.5'/%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+}
+
+#deep-learning .card-header h4 {
+    position: relative;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    letter-spacing: 0.01em;
+}
+
+#deep-learning .card {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    margin-bottom: 2rem;
+    background-color: var(--medium-bg);
+}
+
+#deep-learning .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
 }
 
 /* Hero section styling */
@@ -1525,6 +2073,31 @@ ul li::marker {
     color: var(--dark-bg);
 }
 
+/* Login notification banner styling */
+.alert-warning {
+    background-color: #ffdd00;
+    color: #000000;
+    border: 2px solid #e6c700;
+    border-radius: 10px;
+    padding: 1.25rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.alert-warning p {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #000000;
+}
+
+.alert-warning .bi-exclamation-triangle-fill {
+    color: #e6c700;
+    font-size: 1.4rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
 /* List group styling */
 .list-group {
     border-radius: var(--border-radius);
@@ -1675,11 +2248,103 @@ footer h5::after {
     background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
 }
 
+/* UX Enhancement Styles */
+.search-suggestions {
+    border: 1px solid rgba(0, 198, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.suggestion-item {
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+}
+
+.suggestion-item:hover, .suggestion-item.focused {
+    background-color: rgba(0, 198, 255, 0.1);
+    color: var(--text-primary);
+}
+
+.confidence-panel {
+    transition: opacity 0.3s ease;
+}
+
+.feedback-container {
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.feedback-container:hover {
+    opacity: 1;
+}
+
+.feedback-btn, .concept-feedback-btn {
+    transition: all 0.3s ease;
+}
+
+.feedback-btn:hover, .concept-feedback-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.concept-feedback {
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.concept-feedback:hover {
+    opacity: 1;
+}
+
+/* Keyboard focus styles for accessibility */
+a:focus, button:focus, input:focus, select:focus, textarea:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Skip to content link for accessibility */
+.skip-to-content {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--primary-color);
+    color: white;
+    padding: 8px 15px;
+    z-index: 9999;
+    transition: top 0.3s ease;
+}
+
+.skip-to-content:focus {
+    top: 0;
+}
+
+/* Responsive adjustments for different devices */
+@media (max-width: 767px) {
+    .concept-card {
+        padding: 1rem;
+    }
+
+    .concept-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.8rem;
+    }
+
+    .concept-card h4 {
+        font-size: 1.2rem;
+    }
+
+    .feedback-container {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+}
+
 /* Animations */
 @keyframes glow {
-    0% { box-shadow: 0 0 5px rgba(0, 198, 255, 0.5); }
-    50% { box-shadow: 0 0 20px rgba(0, 198, 255, 0.8); }
-    100% { box-shadow: 0 0 5px rgba(0, 198, 255, 0.5); }
+    0% { box-shadow: 0 0 5px rgba(76, 201, 240, 0.5); } /* Updated to match new color scheme */
+    50% { box-shadow: 0 0 20px rgba(76, 201, 240, 0.8); }
+    100% { box-shadow: 0 0 5px rgba(76, 201, 240, 0.5); }
 }
 
 @keyframes pulse {
@@ -1874,4 +2539,117 @@ footer h5::after {
 
 .svg-loaded:hover {
     box-shadow: 0 0 30px rgba(66, 135, 245, 0.5);
+}
+
+/* Framework comparison table styling */
+.comparison-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+
+.comparison-table th,
+.comparison-table td {
+    padding: 12px 15px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.comparison-table thead th {
+    font-weight: 600;
+    text-align: center;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.comparison-table .feature-col {
+    background-color: var(--dark-bg);
+    color: var(--text-primary);
+    font-weight: 600;
+    width: 25%;
+}
+
+.comparison-table .feature-name {
+    font-weight: 600;
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+.comparison-table .tensorflow-data,
+.comparison-table .pytorch-data {
+    text-align: center;
+}
+
+.comparison-table tbody tr:hover {
+    background-color: rgba(76, 201, 240, 0.05);
+}
+
+/* Ensure high contrast for table text */
+.comparison-table tbody td {
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+/* Add visual indicators for better readability */
+.comparison-table .tensorflow-data {
+    border-left: 3px solid var(--primary-color);
+}
+
+.comparison-table .pytorch-data {
+    border-left: 3px solid var(--info-color);
+}
+
+/* Add responsive improvements */
+@media (max-width: 768px) {
+    .comparison-table th,
+    .comparison-table td {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+
+    .comparison-table .feature-name {
+        min-width: 120px;
+    }
+}
+
+/* Framework card headers */
+.tensorflow-header {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)) !important;
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    border-bottom: none;
+}
+
+.pytorch-header {
+    background: linear-gradient(135deg, var(--info-color), var(--info-dark)) !important;
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    border-bottom: none;
+}
+
+/* Framework comparison legend */
+.framework-legend {
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.legend-color {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+}
+
+.tensorflow-legend {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.pytorch-legend {
+    background: linear-gradient(135deg, var(--info-color), var(--info-dark));
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }

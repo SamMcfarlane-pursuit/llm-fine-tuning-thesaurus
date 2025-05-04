@@ -84,6 +84,14 @@ app.register_blueprint(analytics_bp, url_prefix='/analytics')
 from subscription import subscription as subscription_bp
 app.register_blueprint(subscription_bp, url_prefix='/subscription')
 
+# Register pipeline API blueprint
+try:
+    from api.pipeline_api import pipeline_api
+    app.register_blueprint(pipeline_api, url_prefix='/api')
+    print("Pipeline API blueprint registered successfully!")
+except ImportError:
+    print("Pipeline API module not found. Skipping blueprint registration.")
+
 # Register AI Thesaurus LLM blueprint if available
 try:
     from ai_thesaurus_llm.app_integration import init_app as init_thesaurus_llm
@@ -1016,6 +1024,70 @@ def pipeline():
     """Render the Hugging Face pipeline interactive page."""
     return render_template('pipeline.html')
 
+@app.route('/pipeline/interactive')
+def interactive_pipeline():
+    """Render the interactive pipeline demo page."""
+    return render_template('interactive_pipeline.html')
+
+@app.route('/google-ml-crash-course')
+def google_ml_crash_course():
+    """Render the Google ML Crash Course page."""
+    return render_template('google_ml_crash_course.html')
+
+@app.route('/view-google-ml-notebook/<notebook_name>')
+def view_google_ml_notebook(notebook_name):
+    """Render a Google ML Crash Course notebook viewer page."""
+    notebook_filename = f"{notebook_name}.ipynb"
+
+    # Get last modified date
+    import datetime
+    import os
+
+    notebook_path = os.path.join('colab_tutorials', 'google_ml_crash_course', notebook_filename)
+
+    if os.path.exists(notebook_path):
+        last_modified = datetime.datetime.fromtimestamp(os.path.getmtime(notebook_path))
+        last_updated = last_modified.strftime('%B %d, %Y')
+    else:
+        last_updated = 'Recently'
+
+    # Map notebook names to display names
+    notebook_display_names = {
+        'Intro_to_Pandas_DataFrame': 'Introduction to Pandas DataFrames',
+        'Intro_to_RAPIDS_cuDF': 'Introduction to RAPIDS cuDF',
+        'TensorFlow_with_GPUs_for_LLM_Finetuning': 'TensorFlow with GPUs for LLM Fine-tuning',
+        'TPUs_for_LLM_Finetuning': 'TPUs for LLM Fine-tuning'
+    }
+
+    # Map notebook names to Colab URLs
+    colab_urls = {
+        'Intro_to_Pandas_DataFrame': f"https://colab.research.google.com/github/SamMcfarlane-pursuit/llm-fine-tuning-thesaurus/blob/main/colab_tutorials/google_ml_crash_course/{notebook_filename}",
+        'Intro_to_RAPIDS_cuDF': f"https://colab.research.google.com/github/SamMcfarlane-pursuit/llm-fine-tuning-thesaurus/blob/main/colab_tutorials/google_ml_crash_course/{notebook_filename}",
+        'TensorFlow_with_GPUs_for_LLM_Finetuning': f"https://colab.research.google.com/github/SamMcfarlane-pursuit/llm-fine-tuning-thesaurus/blob/main/colab_tutorials/google_ml_crash_course/{notebook_filename}",
+        'TPUs_for_LLM_Finetuning': f"https://colab.research.google.com/github/SamMcfarlane-pursuit/llm-fine-tuning-thesaurus/blob/main/colab_tutorials/google_ml_crash_course/{notebook_filename}"
+    }
+
+    display_name = notebook_display_names.get(notebook_name, notebook_name)
+    colab_url = colab_urls.get(notebook_name, '')
+
+    # Track user progress if authenticated
+    user_progress = {}
+    if current_user.is_authenticated:
+        from user_progress import get_tutorial_progress, update_tutorial_progress
+
+        # Mark tutorial as in progress
+        update_tutorial_progress(f"google_ml_{notebook_name}", 'in_progress')
+
+        # Get current progress
+        user_progress = get_tutorial_progress(f"google_ml_{notebook_name}")
+
+    return render_template('enhanced_notebook_viewer.html',
+                          notebook_name=display_name,
+                          notebook_filename=f"google_ml_crash_course/{notebook_filename}",
+                          colab_url=colab_url,
+                          user_progress=user_progress,
+                          last_updated=last_updated)
+
 @app.route('/guide/data-preparation')
 def data_preparation():
     """Render the data preparation guide page."""
@@ -1477,11 +1549,67 @@ def view_notebook(notebook_name):
         # Get current progress
         user_progress = get_tutorial_progress(notebook_name)
 
-    return render_template('notebook_viewer.html',
+    # Get last modified date
+    import datetime
+    import os
+
+    notebook_path = os.path.join('colab_tutorials', notebook_filename)
+
+    if os.path.exists(notebook_path):
+        last_modified = datetime.datetime.fromtimestamp(os.path.getmtime(notebook_path))
+        last_updated = last_modified.strftime('%B %d, %Y')
+    else:
+        last_updated = 'Recently'
+
+    # Get related tutorials
+    related_tutorials = []
+    if notebook_name == 'LoRA_Fine_Tuning_Tutorial':
+        related_tutorials = [
+            {
+                'title': 'QLoRA Fine-Tuning Tutorial',
+                'description': 'Learn how to use QLoRA for memory-efficient fine-tuning',
+                'url': '/view-notebook/QLoRA_Fine_Tuning_Tutorial'
+            },
+            {
+                'title': 'Pipeline Inference Tutorial',
+                'description': 'Learn how to use the pipeline API with fine-tuned models',
+                'url': '/view-notebook/Pipeline_Inference_Tutorial'
+            }
+        ]
+    elif notebook_name == 'QLoRA_Fine_Tuning_Tutorial':
+        related_tutorials = [
+            {
+                'title': 'LoRA Fine-Tuning Tutorial',
+                'description': 'Learn how to use LoRA for parameter-efficient fine-tuning',
+                'url': '/view-notebook/LoRA_Fine_Tuning_Tutorial'
+            },
+            {
+                'title': 'Pipeline Inference Tutorial',
+                'description': 'Learn how to use the pipeline API with fine-tuned models',
+                'url': '/view-notebook/Pipeline_Inference_Tutorial'
+            }
+        ]
+    elif notebook_name == 'Pipeline_Inference_Tutorial':
+        related_tutorials = [
+            {
+                'title': 'LoRA Fine-Tuning Tutorial',
+                'description': 'Learn how to use LoRA for parameter-efficient fine-tuning',
+                'url': '/view-notebook/LoRA_Fine_Tuning_Tutorial'
+            },
+            {
+                'title': 'QLoRA Fine-Tuning Tutorial',
+                'description': 'Learn how to use QLoRA for memory-efficient fine-tuning',
+                'url': '/view-notebook/QLoRA_Fine_Tuning_Tutorial'
+            }
+        ]
+
+    return render_template('enhanced_notebook_viewer.html',
                            notebook_name=display_name,
                            notebook_filename=notebook_filename,
                            colab_url=colab_url,
-                           user_progress=user_progress)
+                           user_progress=user_progress,
+                           last_updated=last_updated,
+                           related_tutorials=related_tutorials)
 
 @app.route('/concept/<concept_name>')
 def concept_detail(concept_name):

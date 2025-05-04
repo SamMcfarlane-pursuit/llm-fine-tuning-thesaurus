@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800px" height="300px" viewBox="0 0 800 300" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#4287f5" offset="0%"></stop>
+            <stop stop-color="#3a75d8" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#32a852" offset="0%"></stop>
+            <stop stop-color="#4cd964" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="linearGradient-3">
+            <stop stop-color="#f5a742" offset="0%"></stop>
+            <stop stop-color="#f57c00" offset="100%"></stop>
+        </linearGradient>
+        <filter x="-15.0%" y="-15.0%" width="130.0%" height="130.0%" filterUnits="objectBoundingBox" id="filter-4">
+            <feGaussianBlur stdDeviation="5" in="SourceGraphic"></feGaussianBlur>
+        </filter>
+    </defs>
+    <g id="Pipeline-Diagram" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <!-- Background -->
+        <rect id="Background" fill="#1A1A1E" x="0" y="0" width="800" height="300" rx="10"></rect>
+        
+        <!-- Input Box -->
+        <g id="Input" transform="translate(50, 120)">
+            <rect id="Input-Box" fill="#2A2A30" x="0" y="0" width="150" height="80" rx="8"></rect>
+            <rect id="Input-Accent" fill="url(#linearGradient-1)" x="0" y="0" width="150" height="8" rx="4"></rect>
+            <text id="Input-Text" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#FFFFFF">
+                <tspan x="60" y="35">Input</tspan>
+            </text>
+            <text id="Input-Subtext" font-family="Arial, sans-serif" font-size="12" fill="#AAAAAA">
+                <tspan x="30" y="55">Text, Image, Audio</tspan>
+            </text>
+            <path d="M60,80 L90,80 L90,100 L75,110 L60,100 Z" fill="#2A2A30"></path>
+        </g>
+        
+        <!-- Pipeline Box -->
+        <g id="Pipeline" transform="translate(250, 100)">
+            <rect id="Pipeline-Box" fill="#2A2A30" x="0" y="0" width="300" height="120" rx="8"></rect>
+            <rect id="Pipeline-Accent" fill="url(#linearGradient-3)" x="0" y="0" width="300" height="8" rx="4"></rect>
+            <text id="Pipeline-Text" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#FFFFFF">
+                <tspan x="110" y="35">Pipeline</tspan>
+            </text>
+            <g id="Pipeline-Components" transform="translate(30, 50)">
+                <rect id="Tokenizer" fill="#3A3A40" x="0" y="0" width="70" height="40" rx="5"></rect>
+                <text font-family="Arial, sans-serif" font-size="12" fill="#FFFFFF">
+                    <tspan x="10" y="25">Tokenizer</tspan>
+                </text>
+                
+                <rect id="Model" fill="#3A3A40" x="90" y="0" width="70" height="40" rx="5"></rect>
+                <text font-family="Arial, sans-serif" font-size="12" fill="#FFFFFF">
+                    <tspan x="110" y="25">Model</tspan>
+                </text>
+                
+                <rect id="Post-Processing" fill="#3A3A40" x="180" y="0" width="70" height="40" rx="5"></rect>
+                <text font-family="Arial, sans-serif" font-size="10" fill="#FFFFFF">
+                    <tspan x="185" y="25">Post-Process</tspan>
+                </text>
+                
+                <!-- Arrows between components -->
+                <path d="M70,20 L90,20" stroke="#FFFFFF" stroke-width="2"></path>
+                <path d="M160,20 L180,20" stroke="#FFFFFF" stroke-width="2"></path>
+                
+                <!-- Arrow tips -->
+                <path d="M88,20 L84,17 L84,23 Z" fill="#FFFFFF"></path>
+                <path d="M178,20 L174,17 L174,23 Z" fill="#FFFFFF"></path>
+            </g>
+            <path d="M400,150 L430,150 L430,170 L415,180 L400,170 Z" fill="#2A2A30" transform="translate(415, 165) rotate(90) translate(-415, -165)"></path>
+        </g>
+        
+        <!-- Output Box -->
+        <g id="Output" transform="translate(600, 120)">
+            <rect id="Output-Box" fill="#2A2A30" x="0" y="0" width="150" height="80" rx="8"></rect>
+            <rect id="Output-Accent" fill="url(#linearGradient-2)" x="0" y="0" width="150" height="8" rx="4"></rect>
+            <text id="Output-Text" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#FFFFFF">
+                <tspan x="50" y="35">Output</tspan>
+            </text>
+            <text id="Output-Subtext" font-family="Arial, sans-serif" font-size="12" fill="#AAAAAA">
+                <tspan x="25" y="55">Structured Results</tspan>
+            </text>
+        </g>
+        
+        <!-- Arrows -->
+        <path id="Arrow1" d="M200,160 L250,160" stroke="#FFFFFF" stroke-width="2"></path>
+        <path id="Arrow1-Tip" d="M248,160 L244,157 L244,163 Z" fill="#FFFFFF"></path>
+        
+        <path id="Arrow2" d="M550,160 L600,160" stroke="#FFFFFF" stroke-width="2"></path>
+        <path id="Arrow2-Tip" d="M598,160 L594,157 L594,163 Z" fill="#FFFFFF"></path>
+        
+        <!-- Glow Effects -->
+        <circle id="Glow1" fill="#4287f5" opacity="0.2" cx="125" cy="160" r="20" filter="url(#filter-4)"></circle>
+        <circle id="Glow2" fill="#f5a742" opacity="0.2" cx="400" cy="160" r="30" filter="url(#filter-4)"></circle>
+        <circle id="Glow3" fill="#32a852" opacity="0.2" cx="675" cy="160" r="20" filter="url(#filter-4)"></circle>
+        
+        <!-- Title -->
+        <text id="Diagram-Title" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#FFFFFF">
+            <tspan x="300" y="50">Hugging Face Pipeline API</tspan>
+        </text>
+        
+        <!-- Subtitle -->
+        <text id="Diagram-Subtitle" font-family="Arial, sans-serif" font-size="14" fill="#AAAAAA">
+            <tspan x="250" y="75">Simplified workflow for inference with pre-trained models</tspan>
+        </text>
+        
+        <!-- Footer -->
+        <text id="Diagram-Footer" font-family="Arial, sans-serif" font-size="12" fill="#777777">
+            <tspan x="250" y="260">The pipeline API handles all the complexity of model loading, tokenization, and post-processing</tspan>
+        </text>
+    </g>
+</svg>

@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ notebook_name }} - Thesaurus LLM Fine-Tuning{% endblock %}
+
+{% block head %}
+{{ super() }}
+<!-- Add enhanced notebook viewer CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-notebook-viewer.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/tutorials">Tutorials</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ notebook_name }}</li>
+                </ol>
+            </nav>
+
+            <div class="enhanced-notebook-container">
+                <!-- Notebook header -->
+                <div class="notebook-header">
+                    <h1 class="notebook-title">
+                        <i class="bi bi-journal-code"></i>
+                        {{ notebook_name }}
+                    </h1>
+                    <p class="notebook-subtitle">Interactive Jupyter notebook for hands-on LLM fine-tuning practice</p>
+                </div>
+                
+                <!-- Notebook actions -->
+                <div class="notebook-actions">
+                    <div class="notebook-action-group">
+                        <a href="{{ colab_url }}" class="notebook-btn primary" data-colab-url="{{ colab_url }}" target="_blank">
+                            <i class="bi bi-box-arrow-up-right"></i>Open in Colab
+                        </a>
+                        <a href="{{ url_for('static', filename='notebooks/' + notebook_filename) }}" class="notebook-btn outline" download>
+                            <i class="bi bi-download"></i>Download Notebook
+                        </a>
+                        <a href="/tutorials" class="notebook-btn outline">
+                            <i class="bi bi-arrow-left"></i>Back to Tutorials
+                        </a>
+                    </div>
+                    <div class="notebook-action-group">
+                        <button id="mark-completed-btn" class="notebook-btn {% if user_progress and user_progress.status == 'completed' %}success{% else %}outline{% endif %}"
+                                data-tutorial-id="{{ notebook_filename.replace('.ipynb', '') }}"
+                                data-status="{{ user_progress.status|default('not_started') }}">
+                            {% if user_progress and user_progress.status == 'completed' %}
+                                <i class="bi bi-check-circle-fill"></i>Completed
+                            {% else %}
+                                <i class="bi bi-check-circle"></i>Mark as Completed
+                            {% endif %}
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Notebook info alert -->
+                <div class="notebook-info-alert">
+                    <i class="bi bi-info-circle-fill"></i>
+                    <div class="notebook-info-content">
+                        <h5>Interactive Notebook</h5>
+                        <p>
+                            This is a read-only preview. For the best interactive experience, click "Open in Colab" to run the notebook in Google Colab.
+                            You'll need a Google account to use Colab.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Notebook progress bar -->
+                <div class="notebook-progress">
+                    <div class="notebook-progress-bar"></div>
+                </div>
+                
+                <!-- Notebook iframe container -->
+                <div class="notebook-iframe-container">
+                    <iframe
+                        src="https://nbviewer.org/urls/raw.githubusercontent.com/SamMcfarlane-pursuit/llm-fine-tuning-thesaurus/main/colab_tutorials/{{ notebook_filename }}"
+                        class="notebook-iframe"
+                        data-notebook-path="colab_tutorials/{{ notebook_filename }}">
+                    </iframe>
+                    
+                    <!-- Loading indicator -->
+                    <div class="notebook-loading">
+                        <div class="notebook-loading-spinner"></div>
+                        <div class="notebook-loading-text">Loading Notebook...</div>
+                    </div>
+                </div>
+                
+                <!-- Notebook footer -->
+                <div class="notebook-footer">
+                    <div class="notebook-footer-text">
+                        Last updated: {{ last_updated|default('Recently', true) }}
+                    </div>
+                    <div class="notebook-footer-links">
+                        <a href="https://jupyter.org/try" target="_blank" class="notebook-footer-link">
+                            <i class="bi bi-info-circle me-1"></i>About Jupyter
+                        </a>
+                        <a href="https://colab.research.google.com/notebooks/intro.ipynb" target="_blank" class="notebook-footer-link">
+                            <i class="bi bi-question-circle me-1"></i>Colab Help
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Related tutorials -->
+            {% if related_tutorials %}
+            <div class="mt-5">
+                <h3>Related Tutorials</h3>
+                <div class="row">
+                    {% for tutorial in related_tutorials %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ tutorial.title }}</h5>
+                                <p class="card-text">{{ tutorial.description }}</p>
+                            </div>
+                            <div class="card-footer bg-transparent border-0">
+                                <a href="{{ tutorial.url }}" class="btn btn-outline-primary">View Tutorial</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<!-- Add enhanced notebook viewer JavaScript -->
+<script src="{{ url_for('static', filename='js/enhanced-notebook-viewer.js') }}"></script>
+{% endblock %}

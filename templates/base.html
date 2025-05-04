@@ -32,6 +32,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/progress-indicator.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/feature-buttons.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/integrated-learning.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navigation-buttons.css') }}">
     <!-- Libraries -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vis-network@9.1.2/dist/vis-network.min.js"></script>
@@ -108,7 +109,7 @@
                             <a class="nav-link" href="/"><i class="bi bi-house-door nav-icon"></i> Home</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="learnThesaurusDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="/learn-and-explore" id="learnThesaurusDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-diagram-3 nav-icon"></i> Learn & Explore
                             </a>
                             <ul class="dropdown-menu mega-menu" aria-labelledby="learnThesaurusDropdown">
@@ -132,7 +133,7 @@
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="workshopsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="/workshops" id="workshopsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-tools nav-icon"></i> Workshops
                             </a>
                             <ul class="dropdown-menu mega-menu" aria-labelledby="workshopsDropdown">
@@ -150,7 +151,7 @@
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="guidesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="/guide/finetuning-comparison" id="guidesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-book-half nav-icon"></i> Guides
                             </a>
                             <ul class="dropdown-menu mega-menu" aria-labelledby="guidesDropdown">
@@ -175,7 +176,7 @@
                             <a class="nav-link" href="/tutorials"><i class="bi bi-journal-code nav-icon"></i> Tutorials</a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="frameworksDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="/frameworks" id="frameworksDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-cpu nav-icon"></i> Frameworks
                             </a>
                             <ul class="dropdown-menu mega-menu" aria-labelledby="frameworksDropdown">
@@ -258,6 +259,8 @@
     <script src="{{ url_for('static', filename='js/razor-sharp-images.js') }}"></script>
     <script src="{{ url_for('static', filename='js/code-blocks.js') }}"></script>
     <script src="{{ url_for('static', filename='js/analytics-tracking.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/interactive-feature-buttons.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/navigation-buttons.js') }}"></script>
     <script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
     <script src="{{ url_for('static', filename='js/ux-enhancements.js') }}"></script>
     <script src="{{ url_for('static', filename='js/enhanced-exercises.js') }}"></script>

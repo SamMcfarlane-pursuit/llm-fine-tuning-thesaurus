@@ -1,0 +1,114 @@
+/**
+ * Navigation Buttons CSS
+ * Provides styles for the main navigation buttons in the header
+ */
+
+/* Improve hover effect for navigation links */
+.navbar-nav .nav-link {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #ffffff !important;
+    transform: translateY(-2px);
+}
+
+/* Add underline effect on hover */
+.navbar-nav .nav-link::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 50%;
+    background-color: #4361ee;
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.navbar-nav .nav-link:hover::after {
+    width: 100%;
+}
+
+/* Active state for navigation links */
+.navbar-nav .nav-link.active {
+    color: #ffffff !important;
+    font-weight: 500;
+}
+
+.navbar-nav .nav-link.active::after {
+    width: 100%;
+    background-color: #4361ee;
+}
+
+/* Dropdown toggle arrow animation */
+.navbar-nav .dropdown-toggle::after {
+    transition: transform 0.3s ease;
+}
+
+.navbar-nav .dropdown-toggle:hover::after {
+    transform: translateY(2px);
+}
+
+/* Improve dropdown menu appearance */
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+/* Add hover effect for dropdown items */
+.dropdown-item {
+    transition: all 0.2s ease;
+    border-radius: 4px;
+    margin: 2px 5px;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(67, 97, 238, 0.1);
+    transform: translateX(5px);
+}
+
+/* Active state for dropdown items */
+.dropdown-item.active {
+    background-color: rgba(67, 97, 238, 0.2);
+    color: #4361ee;
+    font-weight: 500;
+}
+
+/* Add click effect for navigation links */
+.navbar-nav .nav-link:active {
+    transform: scale(0.95);
+}
+
+/* Improve mobile navigation */
+@media (max-width: 991.98px) {
+    .navbar-nav .nav-link {
+        padding: 0.75rem 1rem;
+        border-radius: 6px;
+    }
+    
+    .navbar-nav .nav-link:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        transform: none;
+    }
+    
+    .navbar-nav .nav-link::after {
+        display: none;
+    }
+    
+    .dropdown-menu {
+        border: none;
+        box-shadow: none;
+        padding-left: 1rem;
+    }
+    
+    .dropdown-item {
+        padding: 0.5rem 1rem;
+    }
+    
+    .dropdown-item:hover {
+        transform: none;
+    }
+}

@@ -193,21 +193,27 @@ quantization_config = {
 
                             <div class="mb-4">
                                 <label for="lora-rank" class="form-label">LoRA Rank (r): <span id="rank-value">8</span></label>
-                                <input type="range" class="form-range parameter-slider" id="lora-rank" min="1" max="64" step="1" value="8" data-output="rank-value" data-memory-param="true">
+                                <input type="range" class="form-range parameter-slider" id="lora-rank" min="1" max="32" step="1" value="8" data-output="rank-value" data-memory-param="true">
                                 <div class="row">
                                     <div class="col-4 text-start"><small>Lower rank (Less memory)</small></div>
                                     <div class="col-4 text-center"><small>Medium rank</small></div>
                                     <div class="col-4 text-end"><small>Higher rank (Better performance)</small></div>
                                 </div>
+                                <div class="form-text text-muted">
+                                    <i class="bi bi-info-circle"></i> Typical values range from 4 to 32. Higher values increase model capacity but require more memory.
+                                </div>
                             </div>
 
                             <div class="mb-4">
-                                <label for="lora-alpha" class="form-label">LoRA Alpha: <span id="alpha-value">32</span></label>
-                                <input type="range" class="form-range parameter-slider" id="lora-alpha" min="1" max="64" step="1" value="32" data-output="alpha-value">
+                                <label for="lora-alpha" class="form-label">LoRA Alpha: <span id="alpha-value">16</span></label>
+                                <input type="range" class="form-range parameter-slider" id="lora-alpha" min="1" max="32" step="1" value="16" data-output="alpha-value">
                                 <div class="row">
                                     <div class="col-4 text-start"><small>Lower alpha</small></div>
                                     <div class="col-4 text-center"><small>Medium alpha</small></div>
                                     <div class="col-4 text-end"><small>Higher alpha</small></div>
+                                </div>
+                                <div class="form-text text-muted">
+                                    <i class="bi bi-info-circle"></i> Alpha is typically set to 2× the rank value. It controls the scaling of LoRA updates.
                                 </div>
                             </div>
 
@@ -256,7 +262,13 @@ quantization_config = {
                                 <h5><i class="bi bi-info-circle"></i> Performance vs. Memory Trade-off</h5>
                                 <p>Lower precision (fewer bits) reduces memory requirements but may impact model performance. The optimal configuration depends on your specific task and hardware constraints.</p>
                                 <ul>
-                                    <li><strong>Higher LoRA rank (r)</strong>: Better performance, more memory</li>
+                                    <li><strong>LoRA rank (r)</strong>: Typical values range from 4-32
+                                        <ul>
+                                            <li>Lower rank (4-8): Less memory, suitable for most fine-tuning tasks</li>
+                                            <li>Higher rank (16-32): Better performance, requires more memory</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>LoRA alpha</strong>: Typically set to 2× the rank value (controls update scaling)</li>
                                     <li><strong>Lower quantization bits</strong>: Less memory, potential performance impact</li>
                                     <li><strong>Double quantization</strong>: Further reduces memory with minimal performance impact</li>
                                 </ul>
@@ -306,8 +318,8 @@ model = prepare_model_for_kbit_training(model)
 
 # 4. Configure LoRA
 lora_config = LoraConfig(
-    r=16,                  # Rank dimension
-    lora_alpha=32,         # Alpha parameter for scaling
+    r=16,                  # Rank dimension (typically 4-32)
+    lora_alpha=32,         # Alpha parameter for scaling (typically 2× rank)
     target_modules=[       # Modules to apply LoRA to
         "q_proj", "k_proj", "v_proj", "o_proj",
         "gate_proj", "up_proj", "down_proj"

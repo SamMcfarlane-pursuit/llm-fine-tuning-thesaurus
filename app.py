@@ -19,6 +19,7 @@ from llm_concepts import LLMConceptsVisualizer
 from llm_thesaurus import LLMThesaurus
 from models import UserProgress
 from auth import auth_bp
+from enhanced_visualizations import EnhancedVisualizations
 from quiz import quiz_bp
 from analytics_routes import analytics_bp
 from dotenv import load_dotenv
@@ -187,6 +188,9 @@ llm_concepts_visualizer = LLMConceptsVisualizer()
 
 # Initialize the LLM thesaurus
 llm_thesaurus_instance = LLMThesaurus()
+
+# Initialize the enhanced visualizations
+enhanced_visualizations = EnhancedVisualizations()
 
 # Global variables for the model
 model = None
@@ -376,10 +380,14 @@ def learn_and_explore():
                 if node != concept:
                     related_concepts.append(node)
 
-            # Generate the visualization
+            # Generate both visualizations - standard and enhanced
             visual_thesaurus.graph = domain_graph
             vis_path = f'static/visualizations/{concept}_thesaurus.html'
             visual_thesaurus.visualize_interactive(save_path=vis_path)
+
+            # Generate the enhanced category-specific visualization
+            enhanced_vis_path = f'static/visualizations/{concept}_enhanced.html'
+            enhanced_visualizations.create_category_visualization(domain_graph, concept, enhanced_vis_path)
     except Exception as e:
         print(f"Error generating visualization for {concept}: {e}")
         # Fallback to fine-tuning if there's an error
@@ -392,10 +400,14 @@ def learn_and_explore():
                     if node != concept:
                         related_concepts.append(node)
 
-                # Generate the visualization
+                # Generate both visualizations - standard and enhanced
                 visual_thesaurus.graph = domain_graph
                 vis_path = f'static/visualizations/{concept}_thesaurus.html'
                 visual_thesaurus.visualize_interactive(save_path=vis_path)
+
+                # Generate the enhanced category-specific visualization
+                enhanced_vis_path = f'static/visualizations/{concept}_enhanced.html'
+                enhanced_visualizations.create_category_visualization(domain_graph, concept, enhanced_vis_path)
         except Exception as e:
             print(f"Error generating fallback visualization: {e}")
 
@@ -732,33 +744,247 @@ def advanced_qlora():
     return render_template('advanced_qlora.html', module_id='qlora', topic_id='advanced')
 
 @app.route('/workshops')
-@login_required
 def workshops():
     """Render the workshops overview page."""
     return render_template('workshops.html')
 
+@app.route('/workshop-progress')
+def workshop_progress():
+    """Render the workshop progress tracking page."""
+    # Sample data for workshop progress
+    workshops = [
+        {
+            'title': 'LoRA Fine-Tuning Workshop',
+            'status': 'completed',
+            'progress': 100,
+            'modules_completed': 4,
+            'total_modules': 4,
+            'url': '/workshop/lora-basics',
+            'modules': [
+                {
+                    'title': 'Module 1: Introduction to LoRA',
+                    'description': 'Understanding the fundamentals of Low-Rank Adaptation',
+                    'status': 'completed',
+                    'url': '/workshop/lora-basics#module-1'
+                },
+                {
+                    'title': 'Module 2: LoRA Implementation',
+                    'description': 'Step-by-step implementation of LoRA with PEFT library',
+                    'status': 'completed',
+                    'url': '/workshop/lora-basics#module-2'
+                },
+                {
+                    'title': 'Module 3: Hyperparameter Tuning',
+                    'description': 'Optimizing LoRA parameters for best performance',
+                    'status': 'completed',
+                    'url': '/workshop/lora-basics#module-3'
+                },
+                {
+                    'title': 'Module 4: Advanced Applications',
+                    'description': 'Real-world applications and case studies',
+                    'status': 'completed',
+                    'url': '/workshop/lora-basics#module-4'
+                }
+            ]
+        },
+        {
+            'title': 'QLoRA Deep Dive Workshop',
+            'status': 'in_progress',
+            'progress': 60,
+            'modules_completed': 3,
+            'total_modules': 5,
+            'url': '/workshop/qlora-deep-dive',
+            'modules': [
+                {
+                    'title': 'Module 1: Quantization Basics',
+                    'description': 'Understanding model quantization techniques',
+                    'status': 'completed',
+                    'url': '/workshop/qlora-deep-dive#module-1'
+                },
+                {
+                    'title': 'Module 2: NF4 Format',
+                    'description': 'Deep dive into the NF4 quantization format',
+                    'status': 'completed',
+                    'url': '/workshop/qlora-deep-dive#module-2'
+                },
+                {
+                    'title': 'Module 3: QLoRA Implementation',
+                    'description': 'Implementing QLoRA with the PEFT library',
+                    'status': 'completed',
+                    'url': '/workshop/qlora-deep-dive#module-3'
+                },
+                {
+                    'title': 'Module 4: Memory Optimization',
+                    'description': 'Advanced memory optimization techniques',
+                    'status': 'in-progress',
+                    'url': '/workshop/qlora-deep-dive#module-4'
+                },
+                {
+                    'title': 'Module 5: Scaling to Larger Models',
+                    'description': 'Techniques for fine-tuning 13B+ parameter models',
+                    'status': 'not-started',
+                    'url': '/workshop/qlora-deep-dive#module-5'
+                }
+            ]
+        },
+        {
+            'title': 'Advanced PEFT Techniques Workshop',
+            'status': 'in_progress',
+            'progress': 25,
+            'modules_completed': 1,
+            'total_modules': 4,
+            'url': '/workshop/advanced-peft',
+            'modules': [
+                {
+                    'title': 'Module 1: Introduction to Advanced PEFT',
+                    'description': 'Overview of parameter-efficient fine-tuning methods',
+                    'status': 'completed',
+                    'url': '/workshop/advanced-peft#module-1'
+                },
+                {
+                    'title': 'Module 2: Prefix Tuning Implementation',
+                    'description': 'Implementing Prefix Tuning for sequence generation',
+                    'status': 'in-progress',
+                    'url': '/workshop/advanced-peft#module-2'
+                },
+                {
+                    'title': 'Module 3: P-Tuning v2 Implementation',
+                    'description': 'Implementing P-Tuning v2 for natural language understanding',
+                    'status': 'not-started',
+                    'url': '/workshop/advanced-peft#module-3'
+                },
+                {
+                    'title': 'Module 4: Adapter Layers Implementation',
+                    'description': 'Implementing Adapter Layers for multi-task learning',
+                    'status': 'not-started',
+                    'url': '/workshop/advanced-peft#module-4'
+                }
+            ]
+        },
+        {
+            'title': 'Memory Efficiency Workshop',
+            'status': 'not_started',
+            'progress': 0,
+            'modules_completed': 0,
+            'total_modules': 4,
+            'url': '/workshop/memory-efficiency',
+            'modules': [
+                {
+                    'title': 'Module 1: Memory Challenges in LLM Fine-Tuning',
+                    'description': 'Understanding memory bottlenecks in LLM training',
+                    'status': 'not-started',
+                    'url': '/workshop/memory-efficiency#module-1'
+                },
+                {
+                    'title': 'Module 2: Gradient Checkpointing',
+                    'description': 'Trading computation for memory with gradient checkpointing',
+                    'status': 'not-started',
+                    'url': '/workshop/memory-efficiency#module-2'
+                },
+                {
+                    'title': 'Module 3: Mixed Precision Training',
+                    'description': 'Using FP16 and BF16 formats for memory-efficient training',
+                    'status': 'not-started',
+                    'url': '/workshop/memory-efficiency#module-3'
+                },
+                {
+                    'title': 'Module 4: Memory-Efficient Optimizers',
+                    'description': 'Optimizers designed for memory efficiency',
+                    'status': 'not-started',
+                    'url': '/workshop/memory-efficiency#module-4'
+                }
+            ]
+        }
+    ]
+
+    # Calculate overall progress statistics
+    total_workshops = len(workshops)
+    completed_workshops = sum(1 for w in workshops if w['status'] == 'completed')
+    in_progress_workshops = sum(1 for w in workshops if w['status'] == 'in_progress')
+
+    # Calculate percentages
+    completed_percentage = int((completed_workshops / total_workshops) * 100) if total_workshops > 0 else 0
+    in_progress_percentage = int((in_progress_workshops / total_workshops) * 100) if total_workshops > 0 else 0
+    not_started_percentage = 100 - completed_percentage - in_progress_percentage
+
+    # Calculate overall progress
+    total_modules = sum(w['total_modules'] for w in workshops)
+    completed_modules = sum(w['modules_completed'] for w in workshops)
+    overall_progress = int((completed_modules / total_modules) * 100) if total_modules > 0 else 0
+
+    # Sample streak data
+    current_streak = 5
+    longest_streak = 12
+    total_learning_days = 28
+    streak_progress = int((current_streak / 7) * 100)  # Progress toward 7-day streak
+    streak_message = "Keep going! You're on your way to a 7-day streak."
+
+    # Next steps recommendations
+    next_steps = [
+        {
+            'title': 'Complete QLoRA Workshop',
+            'description': 'Continue with Module 4: Memory Optimization',
+            'icon': 'bi-arrow-right-circle',
+            'url': '/workshop/qlora-deep-dive#module-4'
+        },
+        {
+            'title': 'Explore Prefix Tuning',
+            'description': 'Continue with the Advanced PEFT Techniques Workshop',
+            'icon': 'bi-lightbulb',
+            'url': '/workshop/advanced-peft#module-2'
+        },
+        {
+            'title': 'Start Memory Efficiency Workshop',
+            'description': 'Learn techniques to optimize memory usage in LLM fine-tuning',
+            'icon': 'bi-cpu',
+            'url': '/workshop/memory-efficiency'
+        }
+    ]
+
+    return render_template(
+        'workshop_progress.html',
+        workshops=workshops,
+        total_workshops=total_workshops,
+        completed_workshops=completed_workshops,
+        in_progress_workshops=in_progress_workshops,
+        completed_percentage=completed_percentage,
+        in_progress_percentage=in_progress_percentage,
+        not_started_percentage=not_started_percentage,
+        overall_progress=overall_progress,
+        current_streak=current_streak,
+        longest_streak=longest_streak,
+        total_learning_days=total_learning_days,
+        streak_progress=streak_progress,
+        streak_message=streak_message,
+        next_steps=next_steps
+    )
+
 @app.route('/workshop/qlora-deep-dive')
-@login_required
 def workshop_qlora():
     """Render the QLoRA deep dive workshop page."""
     return render_template('workshop_qlora.html', module_id='qlora', topic_id='deep-dive')
 
 @app.route('/workshop/memory-efficiency')
-@login_required
 def workshop_memory_efficiency():
     """Render the memory efficiency in LLM fine-tuning workshop page."""
     return render_template('workshop_memory_efficiency.html', module_id='memory', topic_id='efficiency')
 
 @app.route('/workshop/lora-basics')
-@login_required
 def workshop_lora_basics():
     """Render the LoRA basics workshop page."""
     return render_template('workshop_lora_basics.html', module_id='lora', topic_id='basics')
+
+@app.route('/workshop/advanced-peft')
+def workshop_advanced_peft():
+    """Render the advanced PEFT techniques workshop page."""
+    return render_template('workshop_advanced_peft.html', module_id='peft', topic_id='advanced')
 
 @app.route('/guide/lora-implementation')
 def lora_guide():
     """Render the LoRA implementation guide page."""
     return render_template('lora_guide.html', module_id='lora', topic_id='implementation')
+
+
 
 @app.route('/guide/lora-hands-on')
 def lora_hands_on():
@@ -1170,6 +1396,7 @@ def view_notebook(notebook_name):
 
     # Map notebook names to friendly display names
     notebook_display_names = {
+        # Original tutorials
         'Data_Preparation_Tutorial': 'Data Preparation for LLM Fine-Tuning',
         'Tuning_Approaches_Comparison': 'Comparison of LLM Fine-Tuning Approaches',
         'LoRA_Fine_Tuning_Tutorial': 'LoRA Fine-Tuning Tutorial',
@@ -1177,11 +1404,18 @@ def view_notebook(notebook_name):
         'Pipeline_Inference_Tutorial': 'Pipeline Inference Tutorial',
         'Gradient_Checkpointing_Tutorial': 'Gradient Checkpointing for Memory Optimization',
         'Mixed_Precision_Training_Tutorial': 'Mixed Precision Training for Faster Fine-Tuning',
-        'Model_Deployment_Tutorial': 'Deploying Fine-Tuned Models to Production'
+        'Model_Deployment_Tutorial': 'Deploying Fine-Tuned Models to Production',
+
+        # Google ML Crash Course notebooks
+        'TensorFlow_with_GPUs_for_LLM_Finetuning': 'TensorFlow with GPUs for LLM Fine-Tuning',
+        'TPUs_for_LLM_Finetuning': 'TPUs for LLM Fine-Tuning',
+        'Intro_to_Pandas_DataFrame': 'Introduction to Pandas DataFrame for LLM Data Preparation',
+        'Intro_to_RAPIDS_cuDF': 'Introduction to RAPIDS cuDF for Accelerated Data Processing'
     }
 
     # Map notebook names to Colab URLs
     colab_urls = {
+        # Original tutorials
         'Data_Preparation_Tutorial': 'https://colab.research.google.com/drive/1-RfhVkZ3YFMbG5X5BWgO6CkVQs4Hh-Wy?usp=sharing',
         'Tuning_Approaches_Comparison': 'https://colab.research.google.com/drive/1Ej_MlmHpKJxmvADlFMJgJ8aF9Kt6d-0I?usp=sharing',
         'LoRA_Fine_Tuning_Tutorial': 'https://colab.research.google.com/drive/1Ej9vBLxCG9aJ8Hn0Z9NMZ9iQBKD7qkDQ?usp=sharing',
@@ -1189,7 +1423,13 @@ def view_notebook(notebook_name):
         'Pipeline_Inference_Tutorial': 'https://colab.research.google.com/drive/1EjCXGQNMnMM_1RLyoKBfCLKzRtKS8Aw-?usp=sharing',
         'Gradient_Checkpointing_Tutorial': 'https://colab.research.google.com/drive/1EjDWMQrjBbfxGk9GXRpRebRNwFicK-WR?usp=sharing',
         'Mixed_Precision_Training_Tutorial': 'https://colab.research.google.com/drive/1EjDWMQrjBbfxGk9GXRpRebRNwFicK-WR?usp=sharing',
-        'Model_Deployment_Tutorial': 'https://colab.research.google.com/drive/1EjCXGQNMnMM_1RLyoKBfCLKzRtKS8Aw-?usp=sharing'
+        'Model_Deployment_Tutorial': 'https://colab.research.google.com/drive/1EjCXGQNMnMM_1RLyoKBfCLKzRtKS8Aw-?usp=sharing',
+
+        # Google ML Crash Course notebooks
+        'TensorFlow_with_GPUs_for_LLM_Finetuning': 'https://colab.research.google.com/github/tensorflow/tensorflow/blob/master/tensorflow/lite/g3doc/examples/bert_qa/notebook.ipynb',
+        'TPUs_for_LLM_Finetuning': 'https://colab.research.google.com/github/tensorflow/tpu/blob/master/tools/colab/shakespeare_with_tpu_and_keras.ipynb',
+        'Intro_to_Pandas_DataFrame': 'https://colab.research.google.com/github/google/ml-style-transfer/blob/master/Style_Transfer_with_TensorFlow_Lite.ipynb',
+        'Intro_to_RAPIDS_cuDF': 'https://colab.research.google.com/github/rapidsai/notebooks-contrib/blob/main/getting_started_tutorials/intro_tutorials/01_Introduction_to_RAPIDS.ipynb'
     }
 
     display_name = notebook_display_names.get(notebook_name, notebook_name)
@@ -1390,6 +1630,61 @@ def get_learning_resources(topic):
                 'description': 'Guide to using Docker for LLM fine-tuning',
                 'url': '/guide/docker'
             }
+        ],
+        'gpu': [
+            {
+                'title': 'TensorFlow with GPUs for LLM Fine-Tuning',
+                'description': 'Learn how to use TensorFlow with GPU acceleration for fine-tuning language models',
+                'url': '/view-notebook/TensorFlow_with_GPUs_for_LLM_Finetuning'
+            },
+            {
+                'title': 'RAPIDS cuDF for Accelerated Data Processing',
+                'description': 'Learn how to use RAPIDS cuDF to accelerate data processing for LLM fine-tuning',
+                'url': '/view-notebook/Intro_to_RAPIDS_cuDF'
+            }
+        ],
+        'tpu': [
+            {
+                'title': 'TPUs for LLM Fine-Tuning',
+                'description': 'Learn how to use TPUs for accelerated fine-tuning of large language models',
+                'url': '/view-notebook/TPUs_for_LLM_Finetuning'
+            }
+        ],
+        'pandas': [
+            {
+                'title': 'Introduction to Pandas DataFrame',
+                'description': 'Learn how to use Pandas for data preparation in LLM fine-tuning',
+                'url': '/view-notebook/Intro_to_Pandas_DataFrame'
+            }
+        ],
+        'tensorflow': [
+            {
+                'title': 'TensorFlow with GPUs for LLM Fine-Tuning',
+                'description': 'Learn how to use TensorFlow with GPU acceleration for fine-tuning language models',
+                'url': '/view-notebook/TensorFlow_with_GPUs_for_LLM_Finetuning'
+            },
+            {
+                'title': 'TPUs for LLM Fine-Tuning',
+                'description': 'Learn how to use TPUs for accelerated fine-tuning of large language models',
+                'url': '/view-notebook/TPUs_for_LLM_Finetuning'
+            }
+        ],
+        'hardware': [
+            {
+                'title': 'TensorFlow with GPUs for LLM Fine-Tuning',
+                'description': 'Learn how to use TensorFlow with GPU acceleration for fine-tuning language models',
+                'url': '/view-notebook/TensorFlow_with_GPUs_for_LLM_Finetuning'
+            },
+            {
+                'title': 'TPUs for LLM Fine-Tuning',
+                'description': 'Learn how to use TPUs for accelerated fine-tuning of large language models',
+                'url': '/view-notebook/TPUs_for_LLM_Finetuning'
+            },
+            {
+                'title': 'RAPIDS cuDF for Accelerated Data Processing',
+                'description': 'Learn how to use RAPIDS cuDF to accelerate data processing for LLM fine-tuning',
+                'url': '/view-notebook/Intro_to_RAPIDS_cuDF'
+            }
         ]
     }
 
@@ -1480,6 +1775,79 @@ def get_related_terms(word):
         })
     else:
         return jsonify({'word': word, 'terms': []}), 200
+
+@app.route('/category-visualization/<concept>')
+def category_visualization(concept):
+    """Render the enhanced category-specific visualization for a concept."""
+    try:
+        # Sanitize the concept name
+        import re
+        concept = re.sub(r'[^a-z0-9\-]', '', concept.lower())
+
+        # Special case for hardware category
+        if concept in ['gpu', 'tpu', 'hardware']:
+            category = 'hardware'
+
+            # Check if visualization file exists, if not, use the one we created
+            vis_path = f'static/visualizations/{concept}_enhanced.html'
+            if not os.path.exists(vis_path):
+                # Use the GPU visualization as a fallback
+                concept = 'gpu'
+                vis_path = f'static/visualizations/gpu_enhanced.html'
+
+            # Get related concepts for hardware
+            related_concepts = [
+                'gpu', 'tpu', 'cuda', 'tensor cores', 'mixed precision',
+                'parallel processing', 'vram', 'tensorflow', 'pytorch'
+            ]
+
+            # Return the visualization page
+            return render_template(
+                'category_visualization.html',
+                concept=concept,
+                category=category,
+                visualization_path=f'/static/visualizations/{concept}_enhanced.html',
+                related_concepts=related_concepts
+            )
+
+        # Normal flow for other categories
+        domain_graph = llm_thesaurus_instance.build_domain_graph(concept)
+
+        if domain_graph:
+            # Determine the category for the concept
+            category = enhanced_visualizations.get_category_for_concept(concept)
+
+            # Create the visualization file
+            vis_path = f'static/visualizations/{concept}_enhanced.html'
+            enhanced_visualizations.create_category_visualization(domain_graph, concept, vis_path)
+
+            # Get related concepts
+            domain_info = llm_thesaurus_instance.get_domain_relationships(concept)
+            related_concepts = []
+            if domain_info:
+                # Get synonyms and related terms
+                synonyms = domain_info.get("synonyms", [])
+                related = domain_info.get("related", [])
+
+                # Combine and limit to 10 concepts
+                related_concepts = list(set(synonyms + related))[:10]
+
+            # Return the visualization page
+            return render_template(
+                'category_visualization.html',
+                concept=concept,
+                category=category,
+                visualization_path=f'/static/visualizations/{concept}_enhanced.html',
+                related_concepts=related_concepts
+            )
+        else:
+            # Fallback to fine-tuning if the concept is not found
+            flash(f"Concept '{concept}' not found. Showing visualization for 'fine-tuning' instead.", "warning")
+            return redirect(url_for('category_visualization', concept='fine-tuning'))
+    except Exception as e:
+        app.logger.error(f"Error in category_visualization: {e}")
+        flash(f"Error generating visualization: {str(e)}", "error")
+        return redirect(url_for('index'))
 
 @app.route('/api/llm-concepts')
 @csrf.exempt

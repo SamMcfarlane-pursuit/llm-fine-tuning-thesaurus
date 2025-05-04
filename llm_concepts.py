@@ -237,6 +237,30 @@ class LLMConceptsVisualizer:
                 ],
                 "color": "yellow",
                 "size": 18
+            },
+            "Attention Mechanism": {
+                "description": "A mechanism that allows models to focus on different parts of the input when generating outputs, crucial for transformer architectures.",
+                "related_concepts": [
+                    "Transformer", "Self-Attention", "Multi-Head Attention", "GPT", "BERT"
+                ],
+                "color": "#4cc9f0",
+                "size": 18
+            },
+            "Self-Attention": {
+                "description": "A type of attention mechanism where the model attends to different positions within the same sequence to compute a representation.",
+                "related_concepts": [
+                    "Attention Mechanism", "Transformer", "Multi-Head Attention"
+                ],
+                "color": "#4361ee",
+                "size": 15
+            },
+            "Multi-Head Attention": {
+                "description": "A technique that runs multiple attention mechanisms in parallel, allowing the model to focus on different parts of the input simultaneously.",
+                "related_concepts": [
+                    "Attention Mechanism", "Self-Attention", "Transformer"
+                ],
+                "color": "#3a86ff",
+                "size": 15
             }
         }
 
@@ -512,6 +536,37 @@ class LLMConceptsVisualizer:
             list: List of all concept names
         """
         return list(self.concepts.keys())
+
+    def get_visualization_data(self):
+        """
+        Get visualization data for the LLM concepts graph.
+
+        Returns:
+            dict: Visualization data with nodes and edges
+        """
+        nodes = []
+        for node in self.graph.nodes():
+            nodes.append({
+                'id': node,
+                'label': node,
+                'color': self.graph.nodes[node].get('color', '#97c2fc'),
+                'size': self.graph.nodes[node].get('size', 25) * 2,
+                'title': self.graph.nodes[node].get('description', '')
+            })
+
+        edges = []
+        for edge in self.graph.edges():
+            edges.append({
+                'from': edge[0],
+                'to': edge[1],
+                'color': '#848484',
+                'width': 2
+            })
+
+        return {
+            'nodes': nodes,
+            'edges': edges
+        }
 
     def create_web_visualization(self, output_dir='static/visualizations'):
         """

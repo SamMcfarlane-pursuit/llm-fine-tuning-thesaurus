@@ -1,0 +1,409 @@
+<!-- Hands-on Example Component -->
+<div class="hands-on-example">
+    <div class="example-header">
+        <div class="example-icon">
+            <i class="bi bi-code-square"></i>
+        </div>
+        <h4 class="example-title">{{ title }}</h4>
+    </div>
+    
+    <div class="example-description">
+        {{ description | safe }}
+    </div>
+    
+    <div class="example-steps">
+        <h5><i class="bi bi-list-ol me-2"></i>Step-by-Step Instructions</h5>
+        <ol class="steps-list">
+            {% for step in steps %}
+            <li class="step-item">
+                <div class="step-content">
+                    <div class="step-header">
+                        <span class="step-number">{{ loop.index }}</span>
+                        <h6 class="step-title">{{ step.title }}</h6>
+                    </div>
+                    <div class="step-description">
+                        {{ step.description | safe }}
+                    </div>
+                    {% if step.code %}
+                    <div class="step-code">
+                        <div class="code-header">
+                            <span class="code-language">{{ step.language | default('python') }}</span>
+                            <button class="btn btn-sm btn-outline-light copy-btn" data-clipboard-target="#code-{{ loop.index }}">
+                                <i class="bi bi-clipboard"></i> Copy
+                            </button>
+                        </div>
+                        <pre><code id="code-{{ loop.index }}" class="language-{{ step.language | default('python') }}">{{ step.code }}</code></pre>
+                    </div>
+                    {% endif %}
+                    {% if step.note %}
+                    <div class="step-note">
+                        <i class="bi bi-info-circle me-2"></i> {{ step.note | safe }}
+                    </div>
+                    {% endif %}
+                </div>
+            </li>
+            {% endfor %}
+        </ol>
+    </div>
+    
+    <div class="example-expected-output">
+        <h5><i class="bi bi-check-circle me-2"></i>Expected Output</h5>
+        <div class="output-container">
+            {{ expected_output | safe }}
+        </div>
+    </div>
+    
+    <div class="example-troubleshooting">
+        <h5><i class="bi bi-tools me-2"></i>Troubleshooting</h5>
+        <ul class="troubleshooting-list">
+            {% for issue in troubleshooting %}
+            <li class="troubleshooting-item">
+                <div class="issue-title"><i class="bi bi-exclamation-triangle me-2"></i> {{ issue.problem }}</div>
+                <div class="issue-solution">{{ issue.solution | safe }}</div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    
+    <div class="example-footer">
+        <div class="example-resources">
+            <h5><i class="bi bi-link-45deg me-2"></i>Additional Resources</h5>
+            <ul class="resources-list">
+                {% for resource in resources %}
+                <li><a href="{{ resource.url }}" target="_blank" rel="noopener">{{ resource.title }}</a> - {{ resource.description }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <div class="example-next-steps">
+            <h5><i class="bi bi-arrow-right-circle me-2"></i>Next Steps</h5>
+            <p>{{ next_steps | safe }}</p>
+            {% if next_example %}
+            <a href="{{ next_example.url }}" class="btn btn-primary">
+                <i class="bi bi-arrow-right me-2"></i> {{ next_example.title }}
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Hands-on Example Styles */
+    .hands-on-example {
+        background-color: #1a1a1f;
+        border-radius: 10px;
+        border: 1px solid rgba(66, 135, 245, 0.2);
+        padding: 25px;
+        margin-bottom: 30px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    .example-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .example-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #4287f5, #00c6ff);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+        font-size: 1.5rem;
+        color: white;
+        box-shadow: 0 5px 15px rgba(66, 135, 245, 0.3);
+    }
+    
+    .example-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: white;
+        margin: 0;
+    }
+    
+    .example-description {
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 25px;
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+    
+    .example-steps {
+        margin-bottom: 30px;
+    }
+    
+    .example-steps h5 {
+        color: #4287f5;
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+    
+    .steps-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .step-item {
+        margin-bottom: 25px;
+        position: relative;
+    }
+    
+    .step-content {
+        background-color: rgba(30, 30, 35, 0.5);
+        border-radius: 8px;
+        padding: 20px;
+        border-left: 3px solid #4287f5;
+    }
+    
+    .step-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    
+    .step-number {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background-color: #4287f5;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        margin-right: 10px;
+        font-size: 0.9rem;
+    }
+    
+    .step-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: white;
+        margin: 0;
+    }
+    
+    .step-description {
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 15px;
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+    
+    .step-code {
+        background-color: #121218;
+        border-radius: 6px;
+        margin-bottom: 15px;
+        overflow: hidden;
+    }
+    
+    .code-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 15px;
+        background-color: rgba(0, 0, 0, 0.3);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .code-language {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.6);
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+    
+    .copy-btn {
+        font-size: 0.8rem;
+        padding: 2px 8px;
+    }
+    
+    .step-code pre {
+        margin: 0;
+        padding: 15px;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    
+    .step-code code {
+        font-family: 'Fira Code', monospace;
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+    
+    .step-note {
+        background-color: rgba(66, 135, 245, 0.1);
+        border-left: 3px solid #4287f5;
+        padding: 10px 15px;
+        border-radius: 0 6px 6px 0;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.9rem;
+    }
+    
+    .example-expected-output {
+        margin-bottom: 30px;
+    }
+    
+    .example-expected-output h5 {
+        color: #00d463;
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+    
+    .output-container {
+        background-color: rgba(30, 30, 35, 0.5);
+        border-radius: 8px;
+        padding: 20px;
+        border-left: 3px solid #00d463;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+    
+    .example-troubleshooting {
+        margin-bottom: 30px;
+    }
+    
+    .example-troubleshooting h5 {
+        color: #ff9500;
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+    
+    .troubleshooting-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .troubleshooting-item {
+        background-color: rgba(30, 30, 35, 0.5);
+        border-radius: 8px;
+        padding: 15px 20px;
+        border-left: 3px solid #ff9500;
+        margin-bottom: 15px;
+    }
+    
+    .issue-title {
+        font-weight: 600;
+        color: #ff9500;
+        margin-bottom: 8px;
+        font-size: 1rem;
+    }
+    
+    .issue-solution {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+    
+    .example-footer {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+    }
+    
+    .example-resources {
+        flex: 1;
+        min-width: 300px;
+    }
+    
+    .example-resources h5 {
+        color: #4287f5;
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+    
+    .resources-list {
+        padding-left: 20px;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+    
+    .resources-list a {
+        color: #4287f5;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s ease;
+    }
+    
+    .resources-list a:hover {
+        color: #00d463;
+        text-decoration: underline;
+    }
+    
+    .example-next-steps {
+        flex: 1;
+        min-width: 300px;
+    }
+    
+    .example-next-steps h5 {
+        color: #00d463;
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+    
+    .example-next-steps p {
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 15px;
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .hands-on-example {
+            padding: 20px 15px;
+        }
+        
+        .example-title {
+            font-size: 1.3rem;
+        }
+        
+        .step-content {
+            padding: 15px;
+        }
+        
+        .step-title {
+            font-size: 1rem;
+        }
+        
+        .step-code pre {
+            padding: 10px;
+        }
+        
+        .step-code code {
+            font-size: 0.8rem;
+        }
+    }
+</style>
+
+<script>
+    // Initialize clipboard.js for code copying
+    document.addEventListener('DOMContentLoaded', function() {
+        var clipboard = new ClipboardJS('.copy-btn');
+        
+        clipboard.on('success', function(e) {
+            var button = e.trigger;
+            button.innerHTML = '<i class="bi bi-check"></i> Copied!';
+            
+            setTimeout(function() {
+                button.innerHTML = '<i class="bi bi-clipboard"></i> Copy';
+            }, 2000);
+            
+            e.clearSelection();
+        });
+    });
+</script>

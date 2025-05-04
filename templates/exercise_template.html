@@ -1,0 +1,515 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ exercise.title }} - Visual Thesaurus LLM{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/exercise.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/code-highlight.css') }}">
+<script src="{{ url_for('static', filename='js/highlight.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/clipboard.min.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/concepts-learning">Learn & Explore</a></li>
+                    <li class="breadcrumb-item"><a href="/exercises">Hands-on Exercises</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ exercise.title }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-3 col-md-4 mb-4">
+            <!-- Exercise Sidebar -->
+            <div class="sidebar-container">
+                <div class="sidebar-header">
+                    <div class="sidebar-title">
+                        <i class="bi bi-code-square"></i>
+                        <span>Exercise Guide</span>
+                    </div>
+                    <div class="sidebar-description">
+                        Step-by-step guide for completing this hands-on exercise.
+                    </div>
+                </div>
+                
+                <div class="sidebar-section">
+                    <div class="sidebar-section-title">
+                        <i class="bi bi-list-check"></i> Exercise Steps
+                    </div>
+                    <ul class="sidebar-nav" id="exercise-steps">
+                        {% for step in exercise.steps %}
+                        <li class="sidebar-nav-item">
+                            <a href="#step-{{ loop.index }}" class="sidebar-nav-link {% if loop.first %}active{% endif %}">
+                                <i class="bi bi-{{ loop.index }}-circle"></i> {{ step.title }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                
+                <div class="sidebar-section">
+                    <div class="sidebar-section-title">
+                        <i class="bi bi-info-circle"></i> Requirements
+                    </div>
+                    <div class="requirements-list">
+                        {% for req in exercise.requirements %}
+                        <div class="requirement-item">
+                            <i class="bi bi-check-circle-fill text-success me-2"></i>
+                            <span>{{ req }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="sidebar-section">
+                    <div class="sidebar-section-title">
+                        <i class="bi bi-lightning"></i> Quick Actions
+                    </div>
+                    <div class="quick-actions">
+                        {% if exercise.colab_url %}
+                        <a href="{{ exercise.colab_url }}" target="_blank" class="quick-action-btn">
+                            <i class="bi bi-laptop"></i> Open in Colab
+                        </a>
+                        {% endif %}
+                        {% if exercise.github_url %}
+                        <a href="{{ exercise.github_url }}" target="_blank" class="quick-action-btn">
+                            <i class="bi bi-github"></i> View on GitHub
+                        </a>
+                        {% endif %}
+                        <a href="/quiz/{{ exercise.quiz_id }}" class="quick-action-btn">
+                            <i class="bi bi-question-circle"></i> Take Quiz
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="sidebar-section">
+                    <div class="progress-section">
+                        <div class="progress-title">
+                            <i class="bi bi-graph-up"></i> Your Progress
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" style="width: 0%"></div>
+                        </div>
+                        <div class="progress-stats">
+                            <span>0% Complete</span>
+                            <span>0/{{ exercise.steps|length }} Steps</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-9 col-md-8">
+            <!-- Exercise Content -->
+            <div class="exercise-header">
+                <h1>{{ exercise.title }}</h1>
+                <p class="lead">{{ exercise.description }}</p>
+                
+                <div class="exercise-meta">
+                    <div class="meta-item">
+                        <i class="bi bi-clock"></i>
+                        <span>{{ exercise.duration }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="bi bi-bar-chart"></i>
+                        <span>{{ exercise.difficulty }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="bi bi-tags"></i>
+                        <span>
+                            {% for tag in exercise.tags %}
+                            <span class="badge bg-primary me-1">{{ tag }}</span>
+                            {% endfor %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="exercise-overview card mb-4">
+                <div class="card-header">
+                    <h3><i class="bi bi-info-circle me-2"></i>Overview</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <p>{{ exercise.overview }}</p>
+                            
+                            <h4 class="mt-4">What You'll Learn</h4>
+                            <ul class="learning-objectives">
+                                {% for objective in exercise.learning_objectives %}
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>{{ objective }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="exercise-image">
+                                <img src="{{ exercise.image_url }}" alt="{{ exercise.title }}" class="img-fluid rounded">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="exercise-steps">
+                {% for step in exercise.steps %}
+                <div class="exercise-step card mb-4" id="step-{{ loop.index }}">
+                    <div class="card-header">
+                        <h3><i class="bi bi-{{ loop.index }}-circle me-2"></i>{{ step.title }}</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="step-content">
+                            {{ step.content|safe }}
+                        </div>
+                        
+                        {% if step.code %}
+                        <div class="code-section mt-4">
+                            <div class="code-header d-flex justify-content-between align-items-center">
+                                <div class="code-language">{{ step.code_language }}</div>
+                                <button class="btn btn-sm btn-outline-light copy-btn" data-clipboard-target="#code-{{ loop.index }}">
+                                    <i class="bi bi-clipboard me-1"></i>Copy
+                                </button>
+                            </div>
+                            <pre><code class="language-{{ step.code_language }}" id="code-{{ loop.index }}">{{ step.code }}</code></pre>
+                        </div>
+                        {% endif %}
+                        
+                        {% if step.note %}
+                        <div class="alert alert-info mt-4">
+                            <div class="d-flex">
+                                <div class="me-3">
+                                    <i class="bi bi-info-circle-fill fs-3"></i>
+                                </div>
+                                <div>
+                                    <h5>Note</h5>
+                                    <p class="mb-0">{{ step.note }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if step.warning %}
+                        <div class="alert alert-warning mt-4">
+                            <div class="d-flex">
+                                <div class="me-3">
+                                    <i class="bi bi-exclamation-triangle-fill fs-3"></i>
+                                </div>
+                                <div>
+                                    <h5>Warning</h5>
+                                    <p class="mb-0">{{ step.warning }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if not loop.last %}
+                        <div class="step-navigation mt-4">
+                            <button class="btn btn-primary next-step-btn" data-next-step="#step-{{ loop.index + 1 }}">
+                                Next Step <i class="bi bi-arrow-right ms-1"></i>
+                            </button>
+                        </div>
+                        {% else %}
+                        <div class="step-navigation mt-4">
+                            <button class="btn btn-success complete-exercise-btn">
+                                Complete Exercise <i class="bi bi-check-circle ms-1"></i>
+                            </button>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <div class="exercise-completion card mb-4" style="display: none;">
+                <div class="card-header bg-success text-white">
+                    <h3><i class="bi bi-trophy me-2"></i>Exercise Completed!</h3>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <div class="completion-icon">
+                            <i class="bi bi-check-circle-fill"></i>
+                        </div>
+                        <h4>Congratulations!</h4>
+                        <p>You've successfully completed the {{ exercise.title }} exercise.</p>
+                    </div>
+                    
+                    <div class="next-steps">
+                        <h5>Next Steps</h5>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <a href="/quiz/{{ exercise.quiz_id }}" class="card h-100 next-step-card">
+                                    <div class="card-body">
+                                        <div class="next-step-icon">
+                                            <i class="bi bi-question-circle"></i>
+                                        </div>
+                                        <h6>Test Your Knowledge</h6>
+                                        <p>Take a quiz to reinforce what you've learned</p>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <a href="/concepts-learning?concept={{ exercise.related_concept }}" class="card h-100 next-step-card">
+                                    <div class="card-body">
+                                        <div class="next-step-icon">
+                                            <i class="bi bi-diagram-3"></i>
+                                        </div>
+                                        <h6>Explore Related Concepts</h6>
+                                        <p>Dive deeper into related concepts</p>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <a href="/exercises" class="card h-100 next-step-card">
+                                    <div class="card-body">
+                                        <div class="next-step-icon">
+                                            <i class="bi bi-code-square"></i>
+                                        </div>
+                                        <h6>More Exercises</h6>
+                                        <p>Continue your learning journey with more hands-on exercises</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="related-resources card mb-4">
+                <div class="card-header">
+                    <h3><i class="bi bi-link-45deg me-2"></i>Related Resources</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% for resource in exercise.related_resources %}
+                        <div class="col-md-6 mb-3">
+                            <div class="resource-card">
+                                <div class="resource-card-title">
+                                    <i class="bi {{ resource.icon }}"></i>
+                                    {{ resource.title }}
+                                </div>
+                                <div class="resource-card-description">
+                                    {{ resource.description }}
+                                </div>
+                                <a href="{{ resource.url }}" class="resource-card-link" {% if resource.external %}target="_blank"{% endif %}>
+                                    {% if resource.external %}
+                                    <i class="bi bi-box-arrow-up-right me-1"></i>
+                                    {% else %}
+                                    <i class="bi bi-arrow-right me-1"></i>
+                                    {% endif %}
+                                    {{ resource.link_text }}
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize syntax highlighting
+        hljs.highlightAll();
+        
+        // Initialize clipboard.js
+        new ClipboardJS('.copy-btn');
+        
+        // Handle copy button clicks
+        document.querySelectorAll('.copy-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="bi bi-check me-1"></i>Copied!';
+                this.classList.remove('btn-outline-light');
+                this.classList.add('btn-success');
+                
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.classList.remove('btn-success');
+                    this.classList.add('btn-outline-light');
+                }, 2000);
+            });
+        });
+        
+        // Handle sidebar navigation
+        document.querySelectorAll('.sidebar-nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all links
+                document.querySelectorAll('.sidebar-nav-link').forEach(l => {
+                    l.classList.remove('active');
+                });
+                
+                // Add active class to clicked link
+                this.classList.add('active');
+                
+                // Scroll to target section
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 20,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Update progress bar
+                    updateProgress();
+                }
+            });
+        });
+        
+        // Handle next step buttons
+        document.querySelectorAll('.next-step-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const nextStepId = this.getAttribute('data-next-step');
+                const nextStepElement = document.querySelector(nextStepId);
+                
+                if (nextStepElement) {
+                    // Find the corresponding sidebar link and activate it
+                    const sidebarLink = document.querySelector(`.sidebar-nav-link[href="${nextStepId}"]`);
+                    if (sidebarLink) {
+                        document.querySelectorAll('.sidebar-nav-link').forEach(l => {
+                            l.classList.remove('active');
+                        });
+                        sidebarLink.classList.add('active');
+                    }
+                    
+                    // Scroll to the next step
+                    window.scrollTo({
+                        top: nextStepElement.offsetTop - 20,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Update progress bar
+                    updateProgress();
+                }
+            });
+        });
+        
+        // Handle complete exercise button
+        const completeBtn = document.querySelector('.complete-exercise-btn');
+        if (completeBtn) {
+            completeBtn.addEventListener('click', function() {
+                // Hide all steps
+                document.querySelectorAll('.exercise-step').forEach(step => {
+                    step.style.display = 'none';
+                });
+                
+                // Show completion card
+                document.querySelector('.exercise-completion').style.display = 'block';
+                
+                // Update progress to 100%
+                const progressBar = document.querySelector('.progress-bar');
+                const progressStats = document.querySelector('.progress-stats');
+                const totalSteps = document.querySelectorAll('.exercise-step').length;
+                
+                progressBar.style.width = '100%';
+                progressStats.innerHTML = `
+                    <span>100% Complete</span>
+                    <span>${totalSteps}/${totalSteps} Steps</span>
+                `;
+                
+                // Scroll to completion card
+                window.scrollTo({
+                    top: document.querySelector('.exercise-completion').offsetTop - 20,
+                    behavior: 'smooth'
+                });
+                
+                // Save progress to localStorage
+                saveProgress(100, totalSteps);
+            });
+        }
+        
+        // Function to update progress based on visible steps
+        function updateProgress() {
+            const totalSteps = document.querySelectorAll('.exercise-step').length;
+            const activeStepIndex = Array.from(document.querySelectorAll('.sidebar-nav-link')).findIndex(link => link.classList.contains('active')) + 1;
+            
+            const progressPercentage = Math.round((activeStepIndex / totalSteps) * 100);
+            const progressBar = document.querySelector('.progress-bar');
+            const progressStats = document.querySelector('.progress-stats');
+            
+            progressBar.style.width = `${progressPercentage}%`;
+            progressStats.innerHTML = `
+                <span>${progressPercentage}% Complete</span>
+                <span>${activeStepIndex}/${totalSteps} Steps</span>
+            `;
+            
+            // Save progress to localStorage
+            saveProgress(progressPercentage, activeStepIndex);
+        }
+        
+        // Function to save progress to localStorage
+        function saveProgress(percentage, step) {
+            const exerciseId = window.location.pathname.split('/').pop();
+            localStorage.setItem(`exercise_progress_${exerciseId}`, JSON.stringify({
+                percentage: percentage,
+                step: step,
+                timestamp: new Date().toISOString()
+            }));
+        }
+        
+        // Load saved progress from localStorage
+        function loadProgress() {
+            const exerciseId = window.location.pathname.split('/').pop();
+            const savedProgress = localStorage.getItem(`exercise_progress_${exerciseId}`);
+            
+            if (savedProgress) {
+                const progress = JSON.parse(savedProgress);
+                const totalSteps = document.querySelectorAll('.exercise-step').length;
+                
+                // Update progress bar
+                const progressBar = document.querySelector('.progress-bar');
+                const progressStats = document.querySelector('.progress-stats');
+                
+                progressBar.style.width = `${progress.percentage}%`;
+                progressStats.innerHTML = `
+                    <span>${progress.percentage}% Complete</span>
+                    <span>${progress.step}/${totalSteps} Steps</span>
+                `;
+                
+                // If exercise was completed, show completion card
+                if (progress.percentage === 100) {
+                    document.querySelectorAll('.exercise-step').forEach(step => {
+                        step.style.display = 'none';
+                    });
+                    document.querySelector('.exercise-completion').style.display = 'block';
+                } else {
+                    // Activate the correct step in the sidebar
+                    const sidebarLinks = document.querySelectorAll('.sidebar-nav-link');
+                    if (sidebarLinks.length >= progress.step) {
+                        sidebarLinks.forEach(l => l.classList.remove('active'));
+                        sidebarLinks[progress.step - 1].classList.add('active');
+                        
+                        // Scroll to the saved step
+                        const stepId = sidebarLinks[progress.step - 1].getAttribute('href');
+                        const stepElement = document.querySelector(stepId);
+                        
+                        if (stepElement) {
+                            window.scrollTo({
+                                top: stepElement.offsetTop - 20,
+                                behavior: 'auto'
+                            });
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Load saved progress on page load
+        loadProgress();
+    });
+</script>
+{% endblock %}

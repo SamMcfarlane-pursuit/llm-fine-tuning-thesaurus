@@ -102,7 +102,21 @@
                     </div>
 
                     <div class="visualization-container">
-                        <iframe id="visualization-iframe" src="{{ url_for('static', filename='visualizations/' + concept + '_thesaurus.html') }}" frameborder="0"></iframe>
+                        <div class="visualization-tabs">
+                            <button class="vis-tab active" data-target="standard-vis">Standard View</button>
+                            <button class="vis-tab" data-target="enhanced-vis">Enhanced View</button>
+                            <a href="{{ url_for('category_visualization', concept=concept) }}" class="vis-tab-link">
+                                <i class="bi bi-arrows-fullscreen"></i> Full Screen
+                            </a>
+                        </div>
+
+                        <div id="standard-vis" class="vis-panel active">
+                            <iframe id="visualization-iframe" src="{{ url_for('static', filename='visualizations/' + concept + '_thesaurus.html') }}" frameborder="0"></iframe>
+                        </div>
+
+                        <div id="enhanced-vis" class="vis-panel">
+                            <iframe id="enhanced-visualization-iframe" src="{{ url_for('static', filename='visualizations/' + concept + '_enhanced.html') }}" frameborder="0"></iframe>
+                        </div>
 
                         <div class="visualization-legend">
                             <div class="legend-title">Legend</div>
@@ -269,9 +283,13 @@
         // Adjust iframe height to match container
         function adjustIframeHeight() {
             const container = document.querySelector('.visualization-container');
-            const iframe = document.getElementById('visualization-iframe');
-            if (container && iframe) {
-                iframe.style.height = container.clientHeight + 'px';
+            const standardIframe = document.getElementById('visualization-iframe');
+            const enhancedIframe = document.getElementById('enhanced-visualization-iframe');
+
+            if (container) {
+                const height = container.clientHeight - 50; // Subtract height of tabs
+                if (standardIframe) standardIframe.style.height = height + 'px';
+                if (enhancedIframe) enhancedIframe.style.height = height + 'px';
             }
         }
 
@@ -286,6 +304,30 @@
             if (href.includes(currentConcept)) {
                 item.classList.add('active');
             }
+        });
+
+        // Handle visualization tabs
+        const visTabs = document.querySelectorAll('.vis-tab');
+        const visPanels = document.querySelectorAll('.vis-panel');
+
+        visTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs and panels
+                visTabs.forEach(t => t.classList.remove('active'));
+                visPanels.forEach(p => p.classList.remove('active'));
+
+                // Add active class to clicked tab
+                this.classList.add('active');
+
+                // Show corresponding panel
+                const targetPanel = document.getElementById(this.dataset.target);
+                if (targetPanel) {
+                    targetPanel.classList.add('active');
+                }
+
+                // Adjust iframe height after tab change
+                setTimeout(adjustIframeHeight, 100);
+            });
         });
     });
 </script>

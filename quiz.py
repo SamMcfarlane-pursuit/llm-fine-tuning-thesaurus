@@ -725,7 +725,7 @@ def quiz_result(quiz_id, attempt_id):
                            answers=answer_dict)
 
 
-@quiz_bp.route('/module/<module_id>/topic/<topic_id>/quiz')
+@quiz_bp.route('/module/<module_id>/topic/<topic_id>')
 def module_topic_quiz(module_id, topic_id):
     """Show the quiz for a specific module and topic."""
     # Find the quiz for this module and topic

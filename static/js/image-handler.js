@@ -52,6 +52,11 @@ function initLazyLoading() {
                     img.classList.add('fade-in');
                     // Add success class for subtle highlight
                     img.classList.add('image-loaded');
+
+                    // Add loaded class after a small delay to trigger the transform
+                    setTimeout(() => {
+                        img.classList.add('loaded');
+                    }, 50);
                     // Stop observing the image
                     observer.unobserve(img);
                 };
@@ -306,23 +311,38 @@ function addImageZoom() {
 
         // Add click event for zooming
         img.addEventListener('click', function() {
-            // Create a modal for the zoomed image
-            const modal = document.createElement('div');
-            modal.classList.add('image-modal');
-            modal.innerHTML = `
-                <div class="image-modal-content">
-                    <span class="image-modal-close">&times;</span>
-                    <img src="${this.src}" alt="${this.alt || 'Image'}" class="image-modal-img">
-                    <div class="image-modal-caption">${this.alt || ''}</div>
-                    <div class="image-modal-controls">
-                        <button class="modal-control-btn zoom-in-btn" title="Zoom In"><i class="bi bi-zoom-in"></i></button>
-                        <button class="modal-control-btn zoom-out-btn" title="Zoom Out"><i class="bi bi-zoom-out"></i></button>
-                        <button class="modal-control-btn reset-btn" title="Reset"><i class="bi bi-arrow-counterclockwise"></i></button>
-                        <button class="modal-control-btn fullscreen-btn" title="Fullscreen"><i class="bi bi-fullscreen"></i></button>
-                        <button class="modal-control-btn download-btn" title="Download"><i class="bi bi-download"></i></button>
+            try {
+                // Create a modal for the zoomed image
+                const modal = document.createElement('div');
+                modal.classList.add('image-modal');
+
+                // Get image caption from alt text or parent container
+                let caption = this.alt || '';
+                if (!caption && this.parentElement && this.parentElement.querySelector('.image-caption')) {
+                    caption = this.parentElement.querySelector('.image-caption').textContent;
+                }
+
+                // Get the highest resolution version of the image
+                const highResImage = this.getAttribute('data-original-src') || this.src;
+
+                modal.innerHTML = `
+                    <div class="image-modal-content">
+                        <span class="image-modal-close">&times;</span>
+                        <div class="image-modal-loading">
+                            <div class="spinner"></div>
+                            <div>Loading high-resolution image...</div>
+                        </div>
+                        <img src="${highResImage}" alt="${caption || 'Image'}" class="image-modal-img">
+                        <div class="image-modal-caption">${caption || ''}</div>
+                        <div class="image-modal-controls">
+                            <button class="modal-control-btn zoom-in-btn" title="Zoom In"><i class="bi bi-zoom-in"></i></button>
+                            <button class="modal-control-btn zoom-out-btn" title="Zoom Out"><i class="bi bi-zoom-out"></i></button>
+                            <button class="modal-control-btn reset-btn" title="Reset"><i class="bi bi-arrow-counterclockwise"></i></button>
+                            <button class="modal-control-btn fullscreen-btn" title="Fullscreen"><i class="bi bi-fullscreen"></i></button>
+                            <button class="modal-control-btn download-btn" title="Download"><i class="bi bi-download"></i></button>
+                        </div>
                     </div>
-                </div>
-            `;
+                `;
 
             // Add the modal to the body
             document.body.appendChild(modal);
@@ -332,11 +352,43 @@ function addImageZoom() {
                 modal.classList.add('show');
             }, 10);
 
-            // Get the modal image
+            // Get the modal image and loading indicator
             const modalImg = modal.querySelector('.image-modal-img');
+            const loadingIndicator = modal.querySelector('.image-modal-loading');
+
+            // Hide loading indicator when image loads
+            modalImg.addEventListener('load', function() {
+                loadingIndicator.style.display = 'none';
+                modalImg.classList.add('loaded');
+            });
+
+            // Show error if image fails to load
+            modalImg.addEventListener('error', function() {
+                loadingIndicator.innerHTML = `
+                    <div class="error-icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
+                    <div>Failed to load high-resolution image</div>
+                    <button class="retry-btn">Retry</button>
+                `;
+
+                // Add retry functionality
+                modal.querySelector('.retry-btn').addEventListener('click', function() {
+                    loadingIndicator.innerHTML = `
+                        <div class="spinner"></div>
+                        <div>Retrying...</div>
+                    `;
+
+                    // Add cache-busting parameter
+                    const timestamp = new Date().getTime();
+                    modalImg.src = highResImage + (highResImage.includes('?') ? '&' : '?') + '_cb=' + timestamp;
+                });
+            });
+
             let scale = 1;
             let translateX = 0;
             let translateY = 0;
+
+            // Track if modal is still open
+            let isModalOpen = true;
 
             // Add zoom in functionality
             modal.querySelector('.zoom-in-btn').addEventListener('click', function() {
@@ -371,15 +423,29 @@ function addImageZoom() {
                 toggleFullscreen(modalImg);
             });
 
-            // Update transform
+            // Update transform with will-change optimization
             function updateTransform() {
+                if (!isModalOpen) return;
+
+                // Add will-change before transform
+                modalImg.style.willChange = 'transform';
+
+                // Apply transform
                 modalImg.style.transform = `scale(${scale}) translate(${translateX}px, ${translateY}px)`;
+
+                // Remove will-change after transform is complete
+                setTimeout(() => {
+                    if (isModalOpen) {
+                        modalImg.style.willChange = 'auto';
+                    }
+                }, 300);
             }
 
-            // Add drag functionality
+            // Add drag functionality for both mouse and touch
             let isDragging = false;
             let startX, startY, startTranslateX, startTranslateY;
 
+            // Mouse events
             modalImg.addEventListener('mousedown', function(e) {
                 if (scale > 1) {
                     isDragging = true;
@@ -388,11 +454,12 @@ function addImageZoom() {
                     startTranslateX = translateX;
                     startTranslateY = translateY;
                     modalImg.style.cursor = 'grabbing';
+                    e.preventDefault();
                 }
             });
 
             document.addEventListener('mousemove', function(e) {
-                if (isDragging) {
+                if (isDragging && isModalOpen) {
                     const dx = e.clientX - startX;
                     const dy = e.clientY - startY;
                     translateX = startTranslateX + dx / scale;
@@ -402,8 +469,70 @@ function addImageZoom() {
             });
 
             document.addEventListener('mouseup', function() {
-                isDragging = false;
-                modalImg.style.cursor = 'grab';
+                if (isDragging && isModalOpen) {
+                    isDragging = false;
+                    modalImg.style.cursor = 'grab';
+                }
+            });
+
+            // Touch events for mobile
+            modalImg.addEventListener('touchstart', function(e) {
+                if (scale > 1 && e.touches.length === 1) {
+                    isDragging = true;
+                    startX = e.touches[0].clientX;
+                    startY = e.touches[0].clientY;
+                    startTranslateX = translateX;
+                    startTranslateY = translateY;
+                    e.preventDefault();
+                }
+            });
+
+            document.addEventListener('touchmove', function(e) {
+                if (isDragging && isModalOpen && e.touches.length === 1) {
+                    const dx = e.touches[0].clientX - startX;
+                    const dy = e.touches[0].clientY - startY;
+                    translateX = startTranslateX + dx / scale;
+                    translateY = startTranslateY + dy / scale;
+                    updateTransform();
+                    e.preventDefault();
+                }
+            });
+
+            document.addEventListener('touchend', function() {
+                if (isDragging && isModalOpen) {
+                    isDragging = false;
+                }
+            });
+
+            // Pinch zoom for mobile
+            let initialDistance = 0;
+            let initialScale = 1;
+
+            modalImg.addEventListener('touchstart', function(e) {
+                if (e.touches.length === 2) {
+                    // Get initial distance between two fingers
+                    initialDistance = Math.hypot(
+                        e.touches[0].clientX - e.touches[1].clientX,
+                        e.touches[0].clientY - e.touches[1].clientY
+                    );
+                    initialScale = scale;
+                    e.preventDefault();
+                }
+            });
+
+            modalImg.addEventListener('touchmove', function(e) {
+                if (e.touches.length === 2 && isModalOpen) {
+                    // Calculate new distance
+                    const currentDistance = Math.hypot(
+                        e.touches[0].clientX - e.touches[1].clientX,
+                        e.touches[0].clientY - e.touches[1].clientY
+                    );
+
+                    // Calculate new scale
+                    scale = Math.min(5, Math.max(0.5, initialScale * (currentDistance / initialDistance)));
+                    updateTransform();
+                    e.preventDefault();
+                }
             });
 
             // Add wheel zoom functionality
@@ -421,31 +550,42 @@ function addImageZoom() {
 
             // Close the modal when clicking the close button
             modal.querySelector('.image-modal-close').addEventListener('click', function() {
-                modal.classList.remove('show');
-                setTimeout(() => {
-                    modal.remove();
-                }, 300);
+                closeModal();
             });
 
             // Close the modal when pressing Escape key
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    modal.classList.remove('show');
-                    setTimeout(() => {
-                        modal.remove();
-                    }, 300);
+            const escKeyHandler = function(e) {
+                if (e.key === 'Escape' && isModalOpen) {
+                    closeModal();
                 }
-            });
+            };
+            document.addEventListener('keydown', escKeyHandler);
 
             // Close the modal when clicking outside the image
             modal.addEventListener('click', function(e) {
-                if (e.target === modal) {
-                    modal.classList.remove('show');
-                    setTimeout(() => {
-                        modal.remove();
-                    }, 300);
+                if (e.target === modal && isModalOpen) {
+                    closeModal();
                 }
             });
+
+            // Function to close modal and clean up
+            function closeModal() {
+                isModalOpen = false;
+                modal.classList.remove('show');
+
+                // Clean up event listeners
+                document.removeEventListener('keydown', escKeyHandler);
+
+                setTimeout(() => {
+                    if (modal.parentNode) {
+                        modal.parentNode.removeChild(modal);
+                    }
+                }, 300);
+            }
+        } catch (error) {
+            console.error('Error opening image modal:', error);
+            alert('There was an error displaying the image. Please try again.');
+        }
         });
     });
 }
@@ -494,35 +634,45 @@ function applySyntaxHighlighting(codeBlock) {
     const lines = codeBlock.querySelectorAll('.code-line');
 
     lines.forEach(line => {
-        // Highlight strings
-        line.innerHTML = line.innerHTML.replace(/(["'])(.*?)\1/g, '<span class="string">$&</span>');
+        // First, clean up any existing class attributes that might be showing in the rendered output
+        let content = line.innerHTML;
+
+        // Remove any visible class attributes that might be showing in the rendered output
+        content = content.replace(/class=["'][^"']*["']/g, '');
+        content = content.replace(/class-class=["'][^"']*["']/g, '');
+
+        // Highlight strings - make sure to do this first to avoid conflicts
+        content = content.replace(/(["'])(.*?)\1/g, '<span class="string">$&</span>');
 
         // Highlight comments
-        line.innerHTML = line.innerHTML.replace(/(#.*$)/g, '<span class="comment">$&</span>');
+        content = content.replace(/(#.*$)/g, '<span class="comment">$&</span>');
 
         // Highlight numbers
-        line.innerHTML = line.innerHTML.replace(/\b(\d+)\b/g, '<span class="number">$&</span>');
+        content = content.replace(/\b(\d+)\b/g, '<span class="number">$&</span>');
 
         // Highlight keywords
         pythonKeywords.forEach(keyword => {
             const regex = new RegExp(`\\b(${keyword})\\b`, 'g');
-            line.innerHTML = line.innerHTML.replace(regex, '<span class="keyword">$&</span>');
+            content = content.replace(regex, '<span class="keyword">$&</span>');
         });
 
         // Highlight builtins
         pythonBuiltins.forEach(builtin => {
             const regex = new RegExp(`\\b(${builtin})\\b`, 'g');
-            line.innerHTML = line.innerHTML.replace(regex, '<span class="builtin">$&</span>');
+            content = content.replace(regex, '<span class="builtin">$&</span>');
         });
 
         // Highlight function definitions
-        line.innerHTML = line.innerHTML.replace(/\b(def)\s+([a-zA-Z_][a-zA-Z0-9_]*)/g, '<span class="keyword">def</span> <span class="function">$2</span>');
+        content = content.replace(/\b(def)\s+([a-zA-Z_][a-zA-Z0-9_]*)/g, '<span class="keyword">def</span> <span class="function">$2</span>');
 
         // Highlight class definitions
-        line.innerHTML = line.innerHTML.replace(/\b(class)\s+([a-zA-Z_][a-zA-Z0-9_]*)/g, '<span class="keyword">class</span> <span class="class">$2</span>');
+        content = content.replace(/\b(class)\s+([a-zA-Z_][a-zA-Z0-9_]*)/g, '<span class="keyword">class</span> <span class="class">$2</span>');
 
         // Highlight function calls
-        line.innerHTML = line.innerHTML.replace(/\b([a-zA-Z_][a-zA-Z0-9_]*)\(/g, '<span class="function">$1</span>(');
+        content = content.replace(/\b([a-zA-Z_][a-zA-Z0-9_]*)\(/g, '<span class="function">$1</span>(');
+
+        // Update the line content
+        line.innerHTML = content;
     });
 }
 
@@ -554,6 +704,65 @@ function addImageCaptions() {
 // Add CSS for the image modal
 const modalStyle = document.createElement('style');
 modalStyle.textContent = `
+/* Loading indicator for image modal */
+.image-modal-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 16px;
+    z-index: 10;
+    gap: 15px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #4287f5;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.error-icon {
+    color: #dc3545;
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.retry-btn {
+    background-color: #4287f5;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.retry-btn:hover {
+    background-color: #2d6ad9;
+    transform: translateY(-2px);
+}
+
+.retry-btn:active {
+    transform: translateY(1px);
+}
 .image-modal {
     position: fixed;
     top: 0;

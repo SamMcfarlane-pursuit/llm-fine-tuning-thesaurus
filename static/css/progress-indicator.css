@@ -1,0 +1,274 @@
+/**
+ * Enhanced Progress Indicator
+ * Provides a sleek, informative progress bar with user progress facts
+ */
+
+/* Progress container - Ultra Minimal */
+.reading-progress-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2000;
+    background-color: rgba(8, 8, 10, 0.8);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    box-shadow: none;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    border-bottom: none;
+    height: auto;
+    font-family: 'Roboto', sans-serif;
+    font-size: 8px;
+}
+
+/* Progress bar - Ultra Minimal */
+.reading-progress-bar {
+    height: 1px;
+    background-color: rgba(66, 135, 245, 0.5);
+    width: 0;
+    transition: width 0.2s ease;
+    position: relative;
+}
+
+/* Progress markers */
+.progress-markers {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+}
+
+.progress-marker {
+    width: 4px;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    position: absolute;
+    top: -1px;
+    transform: translateX(-50%);
+    transition: all 0.3s ease;
+}
+
+.progress-marker.active {
+    background-color: #ffffff;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    transform: translateX(-50%) scale(1.5);
+}
+
+.progress-marker.passed {
+    background-color: rgba(0, 212, 99, 0.7);
+}
+
+/* Progress text - Ultra Minimal */
+.reading-progress-text {
+    padding: 2px 8px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 7px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+}
+
+/* Current section styling - Ultra Minimal */
+.current-section {
+    display: flex;
+    align-items: center;
+    color: rgba(66, 135, 245, 0.8);
+    max-width: 60%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 7px;
+}
+
+.current-section i {
+    margin-right: 2px;
+    font-size: 6px;
+}
+
+/* Percentage styling - Ultra Minimal */
+.percentage {
+    color: rgba(0, 212, 99, 0.8);
+    font-weight: 500;
+    margin-left: 4px;
+    display: flex;
+    align-items: center;
+    font-size: 7px;
+}
+
+.percentage::before {
+    display: none;
+}
+
+/* Progress facts - Ultra Minimal */
+.progress-facts {
+    padding: 1px 8px;
+    background-color: transparent;
+    color: rgba(224, 224, 224, 0.6);
+    font-size: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: none;
+    font-weight: 400;
+}
+
+.progress-facts-left {
+    display: flex;
+    align-items: center;
+}
+
+.progress-facts-right {
+    display: flex;
+    align-items: center;
+}
+
+.progress-facts i {
+    margin-right: 2px;
+    color: rgba(0, 212, 99, 0.6);
+    font-size: 6px;
+}
+
+.progress-stat {
+    display: flex;
+    align-items: center;
+    margin-right: 6px;
+}
+
+.progress-stat:last-child {
+    margin-right: 0;
+}
+
+/* User progress badges - Ultra Minimal */
+.user-progress-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 3px;
+    border-radius: 3px;
+    font-size: 6px;
+    font-weight: 400;
+    margin-left: 3px;
+    background: transparent;
+    color: rgba(0, 212, 99, 0.7);
+    border: none;
+}
+
+.user-progress-badge i {
+    font-size: 5px;
+    margin-right: 1px;
+    color: rgba(0, 212, 99, 0.7);
+}
+
+/* Near complete state - Ultra Minimal */
+.reading-progress-container.near-complete .reading-progress-bar {
+    background-color: rgba(0, 212, 99, 0.5);
+}
+
+.reading-progress-container.near-complete .progress-facts i {
+    color: rgba(0, 212, 99, 0.7);
+}
+
+/* Removed animations for better performance */
+
+/* Responsive adjustments - Ultra Minimal */
+@media (max-width: 768px) {
+    .reading-progress-text {
+        font-size: 6px;
+        padding: 2px 8px;
+    }
+
+    .progress-facts {
+        font-size: 5px;
+        padding: 1px 8px;
+        flex-direction: row;
+    }
+
+    .current-section {
+        max-width: 50%;
+    }
+
+    .progress-stat {
+        margin-right: 4px;
+    }
+}
+
+/* Collapsed state for when scrolling down */
+.reading-progress-container.collapsed {
+    transform: translateY(-100%);
+}
+
+.reading-progress-container.collapsed:hover {
+    transform: translateY(0);
+}
+
+/* Show on hover when collapsed */
+body:hover .reading-progress-container.collapsed {
+    transform: translateY(0);
+}
+
+/* Minimize button */
+.minimize-progress {
+    position: absolute;
+    right: 3px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 7px;
+    transition: all 0.2s ease;
+    padding: 0;
+}
+
+.minimize-progress:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Compact mode */
+.reading-progress-container.compact .progress-facts {
+    display: none;
+}
+
+.reading-progress-container.compact .reading-progress-text {
+    padding: 2px 15px;
+}
+
+/* Progress tooltip - Ultra Minimal */
+.progress-tooltip {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: rgba(10, 10, 10, 0.8);
+    color: rgba(255, 255, 255, 0.8);
+    padding: 3px 6px;
+    border-radius: 2px;
+    font-size: 7px;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(-3px);
+    transition: opacity 0.2s ease;
+    z-index: 2001;
+    box-shadow: none;
+    border: none;
+    white-space: nowrap;
+}
+
+.progress-marker:hover .progress-tooltip {
+    opacity: 1;
+}

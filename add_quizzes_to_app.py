@@ -8,6 +8,228 @@ from models import db, Quiz, QuizQuestion, QuizOption
 # Define comprehensive quiz data
 COMPREHENSIVE_QUIZZES = [
     {
+        'module': 'fine-tuning',
+        'topic': 'basics',
+        'title': 'LLM Fine-Tuning Basics',
+        'description': 'Test your knowledge of the fundamental concepts and techniques in LLM fine-tuning.',
+        'passing_score': 70,
+        'questions': [
+            {
+                'question_text': 'What is the primary purpose of fine-tuning a pre-trained language model?',
+                'question_type': 'multiple_choice',
+                'explanation': 'Fine-tuning adapts a pre-trained model to specific tasks or domains by updating its parameters on a smaller, task-specific dataset.',
+                'points': 2,
+                'order': 1,
+                'options': [
+                    {'option_text': 'To create a completely new model architecture', 'is_correct': False},
+                    {'option_text': 'To adapt a pre-trained model to specific tasks or domains', 'is_correct': True},
+                    {'option_text': 'To reduce the model size and make it faster', 'is_correct': False},
+                    {'option_text': 'To increase the number of parameters in the model', 'is_correct': False}
+                ]
+            },
+            {
+                'question_text': 'Which of the following is an advantage of fine-tuning over training from scratch?',
+                'question_type': 'multiple_choice',
+                'explanation': 'Fine-tuning requires less data and computational resources compared to training from scratch because it leverages the knowledge already captured in the pre-trained model.',
+                'points': 2,
+                'order': 2,
+                'options': [
+                    {'option_text': 'Fine-tuning always results in better performance', 'is_correct': False},
+                    {'option_text': 'Fine-tuning requires more data than training from scratch', 'is_correct': False},
+                    {'option_text': 'Fine-tuning requires less data and computational resources', 'is_correct': True},
+                    {'option_text': 'Fine-tuning always produces smaller models', 'is_correct': False}
+                ]
+            },
+            {
+                'question_text': 'What is catastrophic forgetting in the context of fine-tuning?',
+                'question_type': 'multiple_choice',
+                'explanation': 'Catastrophic forgetting occurs when a model loses previously learned knowledge or capabilities after being fine-tuned on a new task or dataset.',
+                'points': 3,
+                'order': 3,
+                'options': [
+                    {'option_text': 'When a model loses previously learned knowledge after fine-tuning', 'is_correct': True},
+                    {'option_text': 'When a model fails to learn anything during fine-tuning', 'is_correct': False},
+                    {'option_text': 'When a model becomes too large to fit in memory', 'is_correct': False},
+                    {'option_text': 'When a model training crashes due to hardware limitations', 'is_correct': False}
+                ]
+            },
+            {
+                'question_text': 'Which of the following is a parameter-efficient fine-tuning technique?',
+                'question_type': 'multiple_choice',
+                'explanation': 'LoRA (Low-Rank Adaptation) is a parameter-efficient fine-tuning technique that adds trainable low-rank matrices to the model while keeping most of the pre-trained weights frozen.',
+                'points': 2,
+                'order': 4,
+                'options': [
+                    {'option_text': 'Full fine-tuning', 'is_correct': False},
+                    {'option_text': 'LoRA (Low-Rank Adaptation)', 'is_correct': True},
+                    {'option_text': 'Pre-training', 'is_correct': False},
+                    {'option_text': 'Model distillation', 'is_correct': False}
+                ]
+            },
+            {
+                'question_text': 'What is the recommended learning rate range for fine-tuning large language models?',
+                'question_type': 'multiple_choice',
+                'explanation': 'For fine-tuning large language models, a learning rate between 1e-5 and 5e-5 is typically recommended as a starting point, though this may vary depending on the specific model and task.',
+                'points': 2,
+                'order': 5,
+                'options': [
+                    {'option_text': '0.1 to 0.01', 'is_correct': False},
+                    {'option_text': '0.01 to 0.001', 'is_correct': False},
+                    {'option_text': '1e-3 to 1e-4', 'is_correct': False},
+                    {'option_text': '1e-5 to 5e-5', 'is_correct': True}
+                ]
+            }
+        ]
+    },
+    {
+        'module': 'lora',
+        'topic': 'basics',
+        'title': 'LoRA Basics',
+        'description': 'Test your knowledge of Low-Rank Adaptation (LoRA) for efficient fine-tuning of large language models.',
+        'passing_score': 70,
+        'questions': [
+            {
+                'question_text': 'What does LoRA stand for?',
+                'question_type': 'multiple_choice',
+                'explanation': 'LoRA stands for Low-Rank Adaptation, which refers to the technique of using low-rank matrices for efficient parameter updates during fine-tuning.',
+                'points': 2,
+                'order': 1,
+                'options': [
+                    {'option_text': 'Low-Rank Adaptation', 'is_correct': True},
+                    {'option_text': 'Long-Range Attention', 'is_correct': False},
+                    {'option_text': 'Local Response Activation', 'is_correct': False},
+                    {'option_text': 'Layered Representation Architecture', 'is_correct': False}
+                ]
+            },
+            {
+                'question_text': 'What is the main advantage of using LoRA for fine-tuning?',
+                'question_type': 'multiple_choice',
+                'explanation': 'LoRA significantly reduces the number of trainable parameters by freezing the pre-trained weights and only training small, low-rank update matrices, which reduces memory requirements and speeds up training.',
+                'points': 2,
+                'order': 2,
+                'options': [
+                    {'option_text': 'It always produces better results than full fine-tuning', 'is_correct': False},
+                    {'option_text': 'It reduces the number of trainable parameters and memory requirements', 'is_correct': True},
+                    {'option_text': 'It allows training without any pre-trained weights', 'is_correct': False},
+                    {'option_text': 'It completely eliminates the need for GPUs', 'is_correct': False}
+                ]
+            },
+            {
+                'question_text': 'How does LoRA work?',
+                'question_type': 'multiple_choice',
+                'explanation': 'LoRA freezes the pre-trained model weights and injects trainable rank decomposition matrices into each layer of the Transformer architecture, typically focusing on the attention weights.',
+                'points': 3,
+                'order': 3,
+                'options': [
+                    {'option_text': 'By training only the bias terms in the model', 'is_correct': False},
+                    {'option_text': 'By freezing pre-trained weights and adding trainable low-rank update matrices', 'is_correct': True},
+                    {'option_text': 'By reducing the vocabulary size of the model', 'is_correct': False},
+                    {'option_text': 'By removing layers from the original model', 'is_correct': False}
+                ]
+            },
+            {
+                'question_text': 'What is the rank in LoRA referring to?',
+                'question_type': 'multiple_choice',
+                'explanation': 'In LoRA, "rank" refers to the dimension of the low-rank matrices used for updates. Lower rank means fewer parameters but potentially less expressive power.',
+                'points': 2,
+                'order': 4,
+                'options': [
+                    {'option_text': 'The position of the model in a leaderboard', 'is_correct': False},
+                    {'option_text': 'The dimension of the low-rank matrices used for updates', 'is_correct': True},
+                    {'option_text': 'The number of layers in the model', 'is_correct': False},
+                    {'option_text': 'The batch size used during training', 'is_correct': False}
+                ]
+            },
+            {
+                'question_text': 'Which of the following is a key hyperparameter in LoRA?',
+                'question_type': 'multiple_choice',
+                'explanation': 'The rank (r) is a critical hyperparameter in LoRA that determines the size of the low-rank matrices and thus the number of trainable parameters and the capacity of the adaptation.',
+                'points': 2,
+                'order': 5,
+                'options': [
+                    {'option_text': 'The number of training epochs', 'is_correct': False},
+                    {'option_text': 'The batch size', 'is_correct': False},
+                    {'option_text': 'The rank (r) of the update matrices', 'is_correct': True},
+                    {'option_text': 'The number of attention heads', 'is_correct': False}
+                ]
+            }
+        ]
+    },
+    {
+        'module': 'qlora',
+        'topic': 'basics',
+        'title': 'QLoRA Basics',
+        'description': 'Test your knowledge of Quantized Low-Rank Adaptation (QLoRA) for memory-efficient fine-tuning of large language models.',
+        'passing_score': 70,
+        'questions': [
+            {
+                'question_text': 'What is QLoRA?',
+                'question_type': 'multiple_choice',
+                'explanation': 'QLoRA (Quantized Low-Rank Adaptation) combines quantization with LoRA to enable fine-tuning of large language models with even less memory by using 4-bit quantization for the frozen pre-trained weights.',
+                'points': 2,
+                'order': 1,
+                'options': [
+                    {'option_text': 'A technique that combines quantization with LoRA', 'is_correct': True},
+                    {'option_text': 'A new architecture for language models', 'is_correct': False},
+                    {'option_text': 'A dataset for fine-tuning language models', 'is_correct': False},
+                    {'option_text': 'A method for training models from scratch', 'is_correct': False}
+                ]
+            },
+            {
+                'question_text': 'What is the main advantage of QLoRA over standard LoRA?',
+                'question_type': 'multiple_choice',
+                'explanation': 'QLoRA further reduces memory usage compared to standard LoRA by quantizing the frozen pre-trained weights to 4-bit precision, allowing fine-tuning of much larger models on consumer hardware.',
+                'points': 2,
+                'order': 2,
+                'options': [
+                    {'option_text': 'It always produces better results', 'is_correct': False},
+                    {'option_text': 'It further reduces memory usage through quantization', 'is_correct': True},
+                    {'option_text': 'It trains faster than standard LoRA', 'is_correct': False},
+                    {'option_text': 'It requires less training data', 'is_correct': False}
+                ]
+            },
+            {
+                'question_text': 'What type of quantization is typically used in QLoRA?',
+                'question_type': 'multiple_choice',
+                'explanation': '4-bit NormalFloat (NF4) quantization is typically used in QLoRA, as it was specifically designed to better represent the weight distributions found in language models.',
+                'points': 3,
+                'order': 3,
+                'options': [
+                    {'option_text': '8-bit integer quantization', 'is_correct': False},
+                    {'option_text': '4-bit NormalFloat (NF4) quantization', 'is_correct': True},
+                    {'option_text': '2-bit binary quantization', 'is_correct': False},
+                    {'option_text': '16-bit floating point quantization', 'is_correct': False}
+                ]
+            },
+            {
+                'question_text': 'What is double quantization in the context of QLoRA?',
+                'question_type': 'multiple_choice',
+                'explanation': 'Double quantization in QLoRA refers to quantizing the quantization constants themselves, which further reduces memory usage by storing the quantization constants in a lower precision format.',
+                'points': 2,
+                'order': 4,
+                'options': [
+                    {'option_text': 'Applying quantization twice to the same weights', 'is_correct': False},
+                    {'option_text': 'Quantizing both the model weights and activations', 'is_correct': False},
+                    {'option_text': 'Quantizing the quantization constants themselves', 'is_correct': True},
+                    {'option_text': 'Using two different quantization methods simultaneously', 'is_correct': False}
+                ]
+            },
+            {
+                'question_text': 'Which of the following is a key component of QLoRA?',
+                'question_type': 'multiple_choice',
+                'explanation': 'Paged optimizers are a key component of QLoRA that enable efficient training by moving optimizer states to CPU when not in use, reducing GPU memory requirements.',
+                'points': 2,
+                'order': 5,
+                'options': [
+                    {'option_text': 'Paged optimizers for memory efficiency', 'is_correct': True},
+                    {'option_text': 'Specialized GPUs designed for quantization', 'is_correct': False},
+                    {'option_text': 'Custom tokenizers for quantized models', 'is_correct': False},
+                    {'option_text': 'Distributed training across multiple machines', 'is_correct': False}
+                ]
+            }
+        ]
+    },
+    {
         'module': 'pipeline',
         'topic': 'inference',
         'title': 'Hugging Face Pipeline Inference',
@@ -165,11 +387,11 @@ def add_quizzes():
             module=quiz_data['module'],
             topic=quiz_data['topic']
         ).first()
-        
+
         if existing_quiz:
             print(f"Quiz for {quiz_data['module']}/{quiz_data['topic']} already exists. Skipping.")
             continue
-            
+
         # Create new quiz
         quiz = Quiz(
             module=quiz_data['module'],
@@ -181,7 +403,7 @@ def add_quizzes():
         )
         db.session.add(quiz)
         db.session.flush()  # Get the quiz ID without committing
-        
+
         # Add questions and options
         for question_data in quiz_data['questions']:
             question = QuizQuestion(
@@ -194,7 +416,7 @@ def add_quizzes():
             )
             db.session.add(question)
             db.session.flush()  # Get the question ID without committing
-            
+
             # Add options for the question
             for i, option_data in enumerate(question_data.get('options', [])):
                 option = QuizOption(
@@ -204,8 +426,8 @@ def add_quizzes():
                     order=i
                 )
                 db.session.add(option)
-        
+
         db.session.commit()
         print(f"Added quiz: {quiz.title}")
-    
+
     print("Comprehensive quizzes added successfully!")

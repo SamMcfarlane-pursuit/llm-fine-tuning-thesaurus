@@ -1,0 +1,442 @@
+/**
+ * Robust Scrolling CSS - Fixed Version
+ * Provides enhanced scrollbar and scrolling features with visual feedback
+ */
+
+/* Reading Progress Indicator */
+.reading-progress-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    transition: height 0.3s ease;
+}
+
+.reading-progress-container:hover {
+    height: 20px;
+}
+
+.reading-progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #4287f5, #00ffdd);
+    transition: width 0.3s ease;
+    border-right: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.reading-progress-container.near-complete .reading-progress-bar {
+    background: linear-gradient(90deg, #00d463, #00ffdd);
+    box-shadow: 0 0 10px rgba(0, 212, 99, 0.5);
+}
+
+.reading-progress-text {
+    position: relative;
+    padding: 0 10px;
+    font-size: 10px;
+    color: #ffffff;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.reading-progress-container:hover .reading-progress-text {
+    opacity: 1;
+}
+
+/* Section Navigation */
+.section-navigation {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 9997;
+    display: flex;
+    flex-direction: column;
+    background: rgba(20, 20, 20, 0.95);
+    border-radius: 10px;
+    border: 1px solid rgba(66, 135, 245, 0.3);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+    padding: 10px 0;
+    max-height: 80vh;
+    width: 50px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+
+/* Left side positioning */
+.section-navigation.left-side {
+    right: auto;
+    left: 20px;
+}
+
+.section-navigation.expanded {
+    width: 250px;
+}
+
+.section-nav-title {
+    padding: 10px 15px;
+    font-weight: bold;
+    color: #4287f5;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 10px;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+}
+
+.section-nav-title i {
+    margin-right: 10px;
+}
+
+.section-nav-dots {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    overflow-y: auto;
+    max-height: calc(80vh - 100px);
+    padding: 0 10px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(66, 135, 245, 0.5) rgba(30, 30, 30, 0.5);
+}
+
+.section-nav-dots::-webkit-scrollbar {
+    width: 5px;
+}
+
+.section-nav-dots::-webkit-scrollbar-track {
+    background: rgba(30, 30, 30, 0.5);
+    border-radius: 3px;
+}
+
+.section-nav-dots::-webkit-scrollbar-thumb {
+    background: rgba(66, 135, 245, 0.5);
+    border-radius: 3px;
+}
+
+.section-nav-item {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.section-nav-item:hover {
+    background: rgba(66, 135, 245, 0.1);
+}
+
+.section-nav-item.active {
+    background: rgba(66, 135, 245, 0.2);
+}
+
+.section-nav-dot {
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+    position: relative;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    margin-right: 10px;
+}
+
+/* Different sizes for different heading levels */
+.section-nav-dot.level-1 {
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+}
+
+.section-nav-dot.level-2 {
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
+}
+
+.section-nav-dot.level-3, 
+.section-nav-dot.level-4, 
+.section-nav-dot.level-5, 
+.section-nav-dot.level-6 {
+    width: 12px;
+    height: 12px;
+    min-width: 12px;
+}
+
+.section-nav-dot::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border-radius: 50%;
+    border: 1px solid rgba(66, 135, 245, 0.3);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.section-nav-dot.active {
+    background: linear-gradient(135deg, #4287f5, #00ffdd);
+    transform: scale(1.2);
+    box-shadow: 0 0 10px rgba(66, 135, 245, 0.5);
+}
+
+.section-nav-dot.passed {
+    background: #00d463;
+}
+
+.section-nav-dot.active::before,
+.section-nav-item:hover .section-nav-dot::before {
+    opacity: 1;
+}
+
+.section-nav-label {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.8);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: all 0.3s ease;
+    opacity: 0;
+    max-width: 0;
+}
+
+.section-navigation.expanded .section-nav-label {
+    opacity: 1;
+    max-width: 180px;
+}
+
+.section-nav-item.active .section-nav-label {
+    color: #ffffff;
+    font-weight: 500;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* Toggle button positioning based on side */
+.section-nav-toggle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(66, 135, 245, 0.2);
+    border: none;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+    font-size: 12px;
+}
+
+.section-navigation.left-side .section-nav-toggle {
+    right: auto;
+    left: 10px;
+}
+
+.section-nav-toggle:hover {
+    background: rgba(66, 135, 245, 0.4);
+}
+
+/* Side toggle button */
+.section-nav-side-toggle {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(66, 135, 245, 0.2);
+    border: none;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+    font-size: 14px;
+    z-index: 1;
+}
+
+.section-navigation.left-side .section-nav-side-toggle {
+    right: auto;
+    left: 10px;
+}
+
+.section-nav-side-toggle:hover {
+    background: rgba(66, 135, 245, 0.4);
+    transform: scale(1.1);
+}
+
+/* Section highlight effect */
+.section-highlight {
+    position: relative;
+    z-index: 1;
+}
+
+.section-highlight::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    bottom: 0;
+    background: linear-gradient(to bottom, #4287f5, #00ffdd);
+    z-index: 2;
+    pointer-events: none;
+    box-shadow: 0 0 15px rgba(66, 135, 245, 0.7);
+    border-radius: 0 2px 2px 0;
+}
+
+.section-highlight::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 3px;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, rgba(66, 135, 245, 0.05), transparent);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+    .section-navigation {
+        right: 10px;
+        width: 40px;
+    }
+    
+    .section-navigation.expanded {
+        width: 220px;
+    }
+    
+    .section-nav-dot {
+        width: 12px;
+        height: 12px;
+        min-width: 12px;
+    }
+    
+    .section-nav-dot.level-1 {
+        width: 14px;
+        height: 14px;
+        min-width: 14px;
+    }
+    
+    .reading-progress-container:hover {
+        height: 15px;
+    }
+    
+    .reading-progress-text {
+        font-size: 9px;
+    }
+}
+
+@media (max-width: 768px) {
+    .section-navigation {
+        top: auto;
+        bottom: 20px;
+        right: 20px;
+        transform: none;
+        width: 40px;
+        max-height: 50vh;
+    }
+    
+    .section-navigation.left-side {
+        right: auto;
+        left: 20px;
+    }
+    
+    .section-navigation.expanded {
+        width: 220px;
+    }
+    
+    .section-nav-title {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+    
+    .section-nav-dots {
+        max-height: calc(50vh - 80px);
+    }
+    
+    .section-nav-item {
+        padding: 4px;
+    }
+    
+    .section-nav-label {
+        font-size: 12px;
+    }
+    
+    .reading-progress-container:hover {
+        height: 15px;
+    }
+    
+    .reading-progress-text {
+        font-size: 9px;
+    }
+}
+
+@media (max-width: 576px) {
+    .section-navigation {
+        bottom: 15px;
+        right: 15px;
+        width: 36px;
+    }
+    
+    .section-navigation.left-side {
+        right: auto;
+        left: 15px;
+    }
+    
+    .section-navigation.expanded {
+        width: 200px;
+    }
+    
+    .section-nav-title {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+    
+    .section-nav-dot {
+        width: 10px;
+        height: 10px;
+        min-width: 10px;
+    }
+    
+    .section-nav-dot.level-1 {
+        width: 12px;
+        height: 12px;
+        min-width: 12px;
+    }
+    
+    .reading-progress-container:hover {
+        height: 12px;
+    }
+    
+    .reading-progress-text {
+        font-size: 8px;
+        padding: 0 5px;
+    }
+}

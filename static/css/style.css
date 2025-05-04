@@ -10,6 +10,9 @@
     --text-primary: #ffffff;
     --text-secondary: #e0e0e0; /* Increased contrast for better readability */
 
+    /* Mobile viewport height fix */
+    --vh: 1vh;
+
     /* Enhanced colors for better visibility and appeal */
     --success-color: #38b000;  /* Vibrant green - high contrast and readable */
     --warning-color: #fb8500;  /* Orange - better contrast than yellow */
@@ -127,12 +130,20 @@ body::before {
     display: flex;
     justify-content: center;
     flex-wrap: nowrap;
+    width: 100%;
 }
 
 .compact-nav .nav-link {
-    padding: 0.75rem 0.5rem;
+    padding: 0.6rem 0.5rem;
     font-size: 0.9rem;
     letter-spacing: -0.01em;
+    white-space: nowrap;
+}
+
+/* Make sure all nav items fit in the container */
+.compact-nav .nav-item {
+    display: flex;
+    align-items: center;
 }
 
 .header-accent {
@@ -144,7 +155,8 @@ body::before {
 /* Mega Menu Styling */
 .dropdown-menu.mega-menu {
     width: auto;
-    min-width: 600px;
+    min-width: 550px;
+    max-width: 90vw;
     padding: 1rem;
     left: 50%;
     transform: translateX(-50%);
@@ -1660,6 +1672,17 @@ body::before {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
 }
 
+/* Fix for code display issues */
+pre code {
+    font-family: 'Fira Code', 'JetBrains Mono', 'Courier New', Courier, monospace !important;
+    white-space: pre-wrap !important;
+    word-break: break-word !important;
+    font-size: 1.1rem !important;
+    line-height: 1.6 !important;
+    color: #ffffff !important;
+    background: none !important;
+}
+
 /* Copy button for code blocks */
 .copy-btn {
     position: absolute;
@@ -1773,6 +1796,7 @@ body::before {
     text-shadow: 0 1px 2px rgba(0,0,0,0.4); /* Enhanced text shadow for better contrast */
     font-weight: 500; /* Bolder weight for better visibility */
     word-spacing: 2px; /* Add space between words */
+    font-family: 'Fira Code', 'JetBrains Mono', 'Courier New', Courier, monospace;
 }
 
 /* Syntax highlighting with improved colors for better contrast */
@@ -1786,14 +1810,18 @@ body::before {
 .code-block .class { color: #7df9ff; font-weight: 700; text-shadow: 0 0 3px rgba(125, 249, 255, 0.4); }
 .code-block .builtin { color: #7df9ff; font-weight: 600; }
 
-/* Special styling for class attributes to make them stand out */
-.code-block .attr-name[data-value="class"] {
-    color: #ff9c41;
-    font-weight: 700;
-    text-shadow: 0 0 3px rgba(255, 156, 65, 0.5);
-    background-color: rgba(255, 156, 65, 0.1);
-    padding: 0 3px;
-    border-radius: 3px;
+/* Ensure code blocks have proper spacing and no overflow of class attributes */
+.code-block pre code span.code-line {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    display: block;
+}
+
+/* Fix for any visible class attributes */
+code[class*="language-"], pre[class*="language-"] {
+    text-shadow: none;
+    font-family: 'Fira Code', 'JetBrains Mono', 'Courier New', Courier, monospace;
 }
 
 /* Exercise diagram styling for stunning display */
@@ -2652,4 +2680,97 @@ a:focus, button:focus, input:focus, select:focus, textarea:focus {
 .pytorch-legend {
     background: linear-gradient(135deg, var(--info-color), var(--info-dark));
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Zoom controls styling */
+.zoom-controls {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    gap: 8px;
+    z-index: 100;
+    background-color: rgba(30, 30, 30, 0.8);
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.zoom-controls:hover {
+    background-color: rgba(40, 40, 40, 0.9);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+}
+
+.zoom-controls button {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    background-color: rgba(60, 60, 60, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+    outline: none;
+}
+
+.zoom-controls button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    background-color: rgba(80, 80, 80, 0.9);
+    color: white;
+}
+
+.zoom-controls button:active,
+.zoom-controls button.active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.zoom-controls button i {
+    font-size: 1.2rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Tooltip for zoom controls */
+.zoom-controls button::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px 10px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-radius: 5px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    pointer-events: none;
+}
+
+.zoom-controls button:hover::before {
+    opacity: 1;
+    visibility: visible;
+    top: -35px;
+}
+
+#concepts-visualization {
+    height: 600px;
+    width: 100%;
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    background-color: var(--medium-bg);
 }

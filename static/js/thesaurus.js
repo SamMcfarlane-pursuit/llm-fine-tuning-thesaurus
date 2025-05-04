@@ -118,8 +118,76 @@ document.addEventListener('DOMContentLoaded', function() {
         // Create a network
         const container = networkContainer;
 
-        // Create an iframe to display the visualization with dark background
-        container.innerHTML = `<iframe src="${data.visualization_path}" style="width: 100%; height: 600px; border: none; background-color: #121212; display: block;"></iframe>`;
+        // Check if visualization_path exists
+        if (data.visualization_path) {
+            // Create an iframe to display the visualization with dark background
+            container.innerHTML = `<iframe src="${data.visualization_path}" style="width: 100%; height: 600px; border: none; background-color: #121212; display: block;"></iframe>`;
+        } else {
+            // Create a direct visualization using vis.js
+            container.innerHTML = '';
+
+            try {
+                // Create nodes and edges from data
+                const nodes = new vis.DataSet(data.nodes || []);
+                const edges = new vis.DataSet(data.edges || []);
+
+                const networkData = {
+                    nodes: nodes,
+                    edges: edges
+                };
+
+                const options = {
+                    nodes: {
+                        shape: 'dot',
+                        size: 16,
+                        font: {
+                            size: 14,
+                            face: 'Roboto, Arial, sans-serif',
+                            color: '#ffffff'
+                        },
+                        borderWidth: 2,
+                        shadow: true
+                    },
+                    edges: {
+                        width: 2,
+                        smooth: {
+                            type: 'continuous'
+                        },
+                        color: {
+                            color: '#848484',
+                            highlight: '#4287f5'
+                        }
+                    },
+                    physics: {
+                        stabilization: {
+                            iterations: 100
+                        },
+                        barnesHut: {
+                            gravitationalConstant: -80000,
+                            centralGravity: 0.3,
+                            springLength: 250,
+                            springConstant: 0.01,
+                            damping: 0.09
+                        }
+                    },
+                    interaction: {
+                        hover: true,
+                        tooltipDelay: 200,
+                        zoomView: true,
+                        dragView: true
+                    }
+                };
+
+                // Create the network
+                network = new vis.Network(container, networkData, options);
+
+                // Fit the network to the container
+                network.fit();
+            } catch (error) {
+                console.error('Error creating visualization:', error);
+                container.innerHTML = '<div class="alert alert-danger">Error creating visualization. Please try again.</div>';
+            }
+        }
     }
 
     // Fetch synonyms

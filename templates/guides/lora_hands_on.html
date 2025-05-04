@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block title %}LoRA Hands-On Example{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/guide.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/prism.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <div class="row">
+        <div class="col-lg-10 offset-lg-1">
+            <div class="guide-header">
+                <h1 class="guide-title">LoRA Fine-Tuning: Hands-On Example</h1>
+                <div class="guide-meta">
+                    <span class="guide-category"><i class="bi bi-tag"></i> Fine-Tuning</span>
+                    <span class="guide-difficulty"><i class="bi bi-bar-chart"></i> Intermediate</span>
+                    <span class="guide-time"><i class="bi bi-clock"></i> 30 minutes</span>
+                </div>
+            </div>
+            
+            <div class="guide-intro">
+                <p>In this hands-on example, we'll walk through the complete process of fine-tuning a language model using LoRA (Low-Rank Adaptation). By the end of this tutorial, you'll have a working implementation of LoRA fine-tuning that you can adapt to your own projects.</p>
+            </div>
+            
+            {% set title = "LoRA Fine-Tuning Implementation" %}
+            {% set description = "This hands-on example guides you through implementing LoRA fine-tuning on a pre-trained language model. We'll use the Hugging Face Transformers and PEFT libraries to fine-tune a model on a custom dataset with minimal computational resources." %}
+            
+            {% set steps = [
+                {
+                    "title": "Set Up Your Environment",
+                    "description": "Before we begin, make sure you have the necessary libraries installed. We'll need <code>transformers</code>, <code>peft</code>, <code>datasets</code>, and <code>torch</code>.",
+                    "code": "# Create a new virtual environment (optional but recommended)\npython -m venv lora-env\nsource lora-env/bin/activate  # On Windows: lora-env\\Scripts\\activate\n\n# Install required packages\npip install torch transformers datasets peft accelerate bitsandbytes tqdm",
+                    "language": "bash",
+                    "note": "If you're using a GPU, make sure to install the appropriate version of PyTorch for your CUDA version."
+                },
+                {
+                    "title": "Import Required Libraries",
+                    "description": "Let's start by importing all the necessary libraries for our LoRA fine-tuning implementation.",
+                    "code": "import os\nimport torch\nfrom datasets import load_dataset\nfrom transformers import (\n    AutoModelForCausalLM,\n    AutoTokenizer,\n    BitsAndBytesConfig,\n    TrainingArguments,\n    pipeline,\n    logging\n)\nfrom peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training\nfrom tqdm import tqdm",
+                    "language": "python"
+                },
+                {
+                    "title": "Load the Pre-trained Model",
+                    "description": "We'll load a pre-trained language model. For this example, we'll use a smaller model like 'facebook/opt-1.3b', but you can replace it with any model of your choice.",
+                    "code": "# Load the pre-trained model\nmodel_name = \"facebook/opt-1.3b\"  # You can change this to any model\n\n# Load tokenizer\ntokenizer = AutoTokenizer.from_pretrained(model_name)\ntokenizer.pad_token = tokenizer.eos_token\n\n# Load model\nmodel = AutoModelForCausalLM.from_pretrained(\n    model_name,\n    torch_dtype=torch.float16,\n    device_map=\"auto\",\n)\n\n# Make sure the model can work with the tokenizer's pad token\nmodel.config.pad_token_id = tokenizer.pad_token_id",
+                    "language": "python",
+                    "note": "For larger models, consider using quantization with BitsAndBytesConfig to reduce memory usage."
+                },
+                {
+                    "title": "Configure LoRA",
+                    "description": "Now we'll configure LoRA parameters. These settings determine how the fine-tuning will work and how much memory it will use.",
+                    "code": "# Configure LoRA\nlora_config = LoraConfig(\n    r=16,               # Rank of the update matrices\n    lora_alpha=32,      # Parameter for scaling\n    target_modules=[\"q_proj\", \"v_proj\"],  # Which modules to apply LoRA to\n    lora_dropout=0.05,  # Dropout probability for LoRA layers\n    bias=\"none\",        # Whether to train bias parameters\n    task_type=\"CAUSAL_LM\"  # Task type\n)\n\n# Apply LoRA to the model\nmodel = get_peft_model(model, lora_config)\nprint(model.print_trainable_parameters())",
+                    "language": "python",
+                    "note": "The <code>target_modules</code> parameter depends on the model architecture. For OPT models, we target 'q_proj' and 'v_proj'. For other models like LLaMA, you might need different modules."
+                },
+                {
+                    "title": "Prepare Your Dataset",
+                    "description": "For this example, we'll use a simple dataset from Hugging Face. In a real project, you would use your own custom dataset.",
+                    "code": "# Load a sample dataset (replace with your own dataset)\ndataset = load_dataset(\"Abirate/english_quotes\")\nprint(f\"Dataset size: {len(dataset['train'])}\")\n\n# Display a sample\nprint(dataset['train'][0])",
+                    "language": "python"
+                },
+                {
+                    "title": "Preprocess the Dataset",
+                    "description": "We need to tokenize our dataset and prepare it for training.",
+                    "code": "# Define a function to preprocess the data\ndef preprocess_function(examples):\n    return tokenizer(\n        examples[\"quote\"],\n        truncation=True,\n        max_length=256,\n        padding=\"max_length\"\n    )\n\n# Apply preprocessing to the dataset\ntokenized_dataset = dataset.map(\n    preprocess_function,\n    batched=True,\n    remove_columns=[\"quote\", \"author\"]\n)\n\n# Set the format for PyTorch\ntokenized_dataset.set_format(\"torch\")",
+                    "language": "python",
+                    "note": "Adjust the max_length parameter based on your model and dataset requirements."
+                },
+                {
+                    "title": "Set Up Training Arguments",
+                    "description": "Configure the training parameters such as batch size, learning rate, and number of epochs.",
+                    "code": "# Set up training arguments\ntraining_args = TrainingArguments(\n    output_dir=\"./lora-opt-quotes\",\n    learning_rate=3e-4,\n    num_train_epochs=3,\n    per_device_train_batch_size=4,\n    gradient_accumulation_steps=2,\n    save_steps=100,\n    logging_steps=20,\n    save_total_limit=3,\n    remove_unused_columns=False,\n    push_to_hub=False,\n    report_to=\"none\",\n    load_best_model_at_end=True,\n)",
+                    "language": "python",
+                    "note": "Adjust these parameters based on your GPU memory and dataset size. For larger models, you might need to reduce batch size and use gradient accumulation."
+                },
+                {
+                    "title": "Create a Custom Trainer",
+                    "description": "We'll create a custom trainer to handle our specific training requirements.",
+                    "code": "from transformers import Trainer\n\n# Define a custom data collator\ndef data_collator(features):\n    return {\n        \"input_ids\": torch.stack([f[\"input_ids\"] for f in features]),\n        \"attention_mask\": torch.stack([f[\"attention_mask\"] for f in features]),\n        \"labels\": torch.stack([f[\"input_ids\"] for f in features]),\n    }\n\n# Create the trainer\ntrainer = Trainer(\n    model=model,\n    args=training_args,\n    train_dataset=tokenized_dataset[\"train\"],\n    data_collator=data_collator,\n)",
+                    "language": "python"
+                },
+                {
+                    "title": "Train the Model",
+                    "description": "Now we're ready to start the training process.",
+                    "code": "# Train the model\ntrainer.train()",
+                    "language": "python",
+                    "note": "This step will take some time depending on your hardware and dataset size. On a modern GPU, this example should take about 10-15 minutes."
+                },
+                {
+                    "title": "Save the Fine-tuned Model",
+                    "description": "After training, we'll save our fine-tuned model for later use.",
+                    "code": "# Save the fine-tuned model\nmodel.save_pretrained(\"./lora-opt-quotes-final\")\ntokenizer.save_pretrained(\"./lora-opt-quotes-final\")",
+                    "language": "python"
+                },
+                {
+                    "title": "Test the Fine-tuned Model",
+                    "description": "Finally, let's test our fine-tuned model to see how it performs.",
+                    "code": "# Load the fine-tuned model\nfrom peft import PeftModel, PeftConfig\n\n# Load the base model\nbase_model = AutoModelForCausalLM.from_pretrained(\n    model_name,\n    torch_dtype=torch.float16,\n    device_map=\"auto\",\n)\n\n# Load the LoRA adapter\nmodel = PeftModel.from_pretrained(base_model, \"./lora-opt-quotes-final\")\n\n# Create a text generation pipeline\npipe = pipeline(\n    \"text-generation\",\n    model=model,\n    tokenizer=tokenizer,\n    max_length=100,\n    temperature=0.7,\n    top_p=0.9,\n    repetition_penalty=1.2\n)\n\n# Test with a prompt\nprompt = \"Life is like a\"\nresult = pipe(prompt)\nprint(result[0]['generated_text'])",
+                    "language": "python"
+                }
+            ] %}
+            
+            {% set expected_output = "When you run the final test, you should see the model generate text that completes your prompt. The output will vary, but it should reflect the style and content of the quotes dataset we fine-tuned on. For example:<br><br><code>Life is like a journey, not a destination. It's about the experiences along the way and the lessons we learn. Every step we take shapes who we become.</code>" %}
+            
+            {% set troubleshooting = [
+                {
+                    "problem": "Out of Memory Error",
+                    "solution": "If you encounter an out of memory error, try:<br>1. Reduce the batch size<br>2. Increase gradient accumulation steps<br>3. Use a smaller model<br>4. Apply quantization with <code>BitsAndBytesConfig</code><br>5. Reduce the LoRA rank (r parameter)"
+                },
+                {
+                    "problem": "Poor Generation Results",
+                    "solution": "If your model isn't generating good results:<br>1. Train for more epochs<br>2. Use a larger dataset<br>3. Adjust the LoRA parameters (try increasing r)<br>4. Experiment with different temperature and top_p values during generation<br>5. Consider using a larger base model"
+                },
+                {
+                    "problem": "Module Not Found Errors",
+                    "solution": "Make sure you've installed all required packages:<br><code>pip install torch transformers datasets peft accelerate bitsandbytes tqdm</code>"
+                },
+                {
+                    "problem": "CUDA/GPU Issues",
+                    "solution": "If you're having GPU issues:<br>1. Check your CUDA version with <code>nvidia-smi</code><br>2. Make sure PyTorch is installed with the correct CUDA version<br>3. Try setting <code>device_map='auto'</code> to let the library handle device placement<br>4. If all else fails, you can use CPU by setting <code>device_map='cpu'</code> (will be much slower)"
+                }
+            ] %}
+            
+            {% set resources = [
+                {
+                    "title": "PEFT Library Documentation",
+                    "url": "https://huggingface.co/docs/peft/",
+                    "description": "Official documentation for the PEFT library"
+                },
+                {
+                    "title": "LoRA Paper",
+                    "url": "https://arxiv.org/abs/2106.09685",
+                    "description": "The original research paper introducing LoRA"
+                },
+                {
+                    "title": "Hugging Face Transformers Documentation",
+                    "url": "https://huggingface.co/docs/transformers/",
+                    "description": "Documentation for the Transformers library"
+                },
+                {
+                    "title": "Fine-tuning Guide",
+                    "url": "https://huggingface.co/docs/transformers/training",
+                    "description": "Comprehensive guide to fine-tuning with Transformers"
+                }
+            ] %}
+            
+            {% set next_steps = "Now that you've successfully implemented LoRA fine-tuning, you can:<br>1. Try fine-tuning on your own custom dataset<br>2. Experiment with different base models<br>3. Adjust LoRA parameters to optimize performance<br>4. Explore other PEFT methods like QLoRA or Prefix Tuning<br>5. Deploy your fine-tuned model in a production environment" %}
+            
+            {% set next_example = {
+                "url": "/guide/qlora-implementation",
+                "title": "Try QLoRA Implementation"
+            } %}
+            
+            {% include "components/hands_on_example.html" %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='js/prism.js') }}"></script>
+{% endblock %}

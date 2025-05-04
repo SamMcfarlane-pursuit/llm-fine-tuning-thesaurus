@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/ai-assistant.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/clean-sidebar.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/image-styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/razor-sharp-images.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/home-features.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/progress-indicator.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/feature-buttons.css') }}">
@@ -138,10 +139,12 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <li><a class="dropdown-item" href="/workshops"><i class="bi bi-collection me-2"></i>All Workshops</a></li>
+                                        <li><a class="dropdown-item" href="/workshop-progress"><i class="bi bi-bar-chart-line me-2"></i>Track My Progress</a></li>
                                         <li><hr class="dropdown-divider"></li>
                                         <li><a class="dropdown-item" href="/workshop/lora-basics"><i class="bi bi-1-circle me-2"></i>LoRA Basics</a></li>
                                         <li><a class="dropdown-item" href="/workshop/qlora-deep-dive"><i class="bi bi-2-circle me-2"></i>QLoRA Deep Dive</a></li>
-                                        <li><a class="dropdown-item" href="/advanced-qlora"><i class="bi bi-3-circle me-2"></i>Advanced QLoRA</a></li>
+                                        <li><a class="dropdown-item" href="/workshop/advanced-peft"><i class="bi bi-3-circle me-2"></i>Advanced PEFT</a></li>
+                                        <li><a class="dropdown-item" href="/workshop/memory-efficiency"><i class="bi bi-4-circle me-2"></i>Memory Efficiency</a></li>
                                     </div>
                                 </div>
                             </ul>
@@ -252,6 +255,7 @@
     <script src="{{ url_for('static', filename='js/tech-ui.js') }}"></script>
     <script src="{{ url_for('static', filename='js/image-handler.js') }}"></script>
     <script src="{{ url_for('static', filename='js/image-error-handler.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/razor-sharp-images.js') }}"></script>
     <script src="{{ url_for('static', filename='js/code-blocks.js') }}"></script>
     <script src="{{ url_for('static', filename='js/analytics-tracking.js') }}"></script>
     <script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
@@ -264,6 +268,8 @@
     <script src="{{ url_for('static', filename='js/clean-sidebar.js') }}"></script>
     <script src="{{ url_for('static', filename='js/image-handler-fixed.js') }}"></script>
     <script src="{{ url_for('static', filename='js/integrated-learning.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/smooth-ux.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/workshop-enhancements.js') }}"></script>
     {% if current_user.is_authenticated %}
     <script src="{{ url_for('static', filename='js/pop_quiz.js') }}"></script>
     {% endif %}

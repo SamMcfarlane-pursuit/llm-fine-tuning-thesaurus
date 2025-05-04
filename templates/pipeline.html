@@ -1,0 +1,1132 @@
+{% extends 'base.html' %}
+
+{% block title %}Hugging Face Pipeline - Visual Thesaurus LLM{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<style>
+    .pipeline-header {
+        background: linear-gradient(135deg, #4287f5, #3a75d8);
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .pipeline-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 15px;
+        text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .pipeline-subtitle {
+        font-size: 1.2rem;
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 20px;
+        font-weight: 400;
+    }
+
+    .pipeline-card {
+        border-radius: 15px;
+        overflow: hidden;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        background-color: #1e1e1e;
+    }
+
+    .pipeline-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    }
+
+    .pipeline-card-header {
+        padding: 20px;
+        background: linear-gradient(135deg, #3a75d8, #2a65c8);
+        color: white;
+        position: relative;
+    }
+
+    .pipeline-card-content {
+        padding: 25px;
+    }
+
+    .code-block {
+        background-color: #1a1a1a;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 15px 0;
+        overflow-x: auto;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        position: relative;
+    }
+
+    .code-block pre {
+        margin: 0;
+        color: #e6e6e6;
+    }
+
+    .code-block code {
+        font-family: 'Fira Code', monospace;
+        font-size: 0.9rem;
+    }
+
+    .copy-btn {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: rgba(66, 135, 245, 0.2);
+        border: none;
+        border-radius: 4px;
+        color: #4287f5;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        opacity: 0.7;
+    }
+
+    .copy-btn:hover {
+        background: rgba(66, 135, 245, 0.4);
+        opacity: 1;
+    }
+
+    .code-block:hover .copy-btn {
+        opacity: 1;
+    }
+
+    .pipeline-input {
+        background-color: rgba(30, 30, 30, 0.9);
+        color: #ffffff;
+        border: 2px solid rgba(66, 135, 245, 0.4);
+        border-radius: 12px;
+        padding: 15px 25px;
+        font-size: 1.2rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), inset 0 2px 5px rgba(0, 0, 0, 0.2);
+        letter-spacing: 0.5px;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .pipeline-input:focus {
+        border-color: #4287f5;
+        box-shadow: 0 8px 25px rgba(66, 135, 245, 0.4), 0 0 15px rgba(66, 135, 245, 0.3), inset 0 2px 5px rgba(0, 0, 0, 0.2);
+        outline: none;
+        background-color: rgba(40, 40, 40, 0.95);
+    }
+
+    .pipeline-button {
+        background: #4287f5;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 12px 25px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(66, 135, 245, 0.4);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .pipeline-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(66, 135, 245, 0.6);
+        background: #5a9aff;
+    }
+
+    .pipeline-button:active {
+        transform: translateY(1px);
+    }
+
+    .pipeline-result {
+        background-color: #2a2a2a;
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        display: none;
+    }
+
+    .pipeline-result.show {
+        display: block;
+        animation: fadeIn 0.5s ease;
+    }
+
+    .result-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: #4287f5;
+    }
+
+    .result-content {
+        background-color: #1a1a1a;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 15px 0;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .pipeline-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .pipeline-option {
+        background-color: #2a2a2a;
+        border-radius: 8px;
+        padding: 10px 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .pipeline-option:hover {
+        background-color: #3a3a3a;
+        transform: translateY(-2px);
+    }
+
+    .pipeline-option.active {
+        background-color: rgba(66, 135, 245, 0.2);
+        border-color: rgba(66, 135, 245, 0.5);
+    }
+
+    .loading-spinner {
+        display: none;
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    .spinner {
+        border: 4px solid rgba(255, 255, 255, 0.1);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border-left-color: #4287f5;
+        animation: spin 1s linear infinite;
+        display: inline-block;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .model-selector {
+        margin-bottom: 20px;
+    }
+
+    .model-selector select {
+        background-color: #2a2a2a;
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        padding: 10px 15px;
+        width: 100%;
+        font-size: 1rem;
+    }
+
+    .model-selector select:focus {
+        outline: none;
+        border-color: #4287f5;
+    }
+
+    .pipeline-info {
+        background-color: rgba(66, 135, 245, 0.1);
+        border-left: 4px solid #4287f5;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 0 8px 8px 0;
+    }
+
+    .pipeline-info h4 {
+        margin-top: 0;
+        color: #4287f5;
+    }
+
+    .pipeline-info p {
+        margin-bottom: 0;
+    }
+
+    @media (max-width: 768px) {
+        .pipeline-options {
+            flex-direction: column;
+        }
+
+        .pipeline-title {
+            font-size: 2rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Hugging Face Pipeline</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="pipeline-header">
+        <div class="row">
+            <div class="col-md-8">
+                <h1 class="pipeline-title">Hugging Face Pipeline</h1>
+                <p class="pipeline-subtitle">Easily run inference on pre-trained models with the Hugging Face pipeline API</p>
+            </div>
+            <div class="col-md-4 d-flex align-items-center justify-content-center">
+                <div style="width: 120px; height: 120px; background: rgba(255, 255, 255, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="bi bi-cpu" style="font-size: 3rem; color: white;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="pipeline-card">
+                <div class="pipeline-card-header">
+                    <h2>Try the Pipeline API</h2>
+                </div>
+                <div class="pipeline-card-content">
+                    <div class="pipeline-info">
+                        <h4>What is the Pipeline API?</h4>
+                        <p>The Hugging Face pipeline API provides a simple way to use pre-trained models for various NLP tasks without having to handle the underlying model architecture details.</p>
+                    </div>
+
+                    <div class="pipeline-options">
+                        <div class="pipeline-option active" data-task="text-classification">
+                            <i class="bi bi-tag me-2"></i> Text Classification
+                        </div>
+                        <div class="pipeline-option" data-task="token-classification">
+                            <i class="bi bi-tags me-2"></i> Named Entity Recognition
+                        </div>
+                        <div class="pipeline-option" data-task="question-answering">
+                            <i class="bi bi-question-circle me-2"></i> Question Answering
+                        </div>
+                        <div class="pipeline-option" data-task="summarization">
+                            <i class="bi bi-file-text me-2"></i> Summarization
+                        </div>
+                        <div class="pipeline-option" data-task="text-generation">
+                            <i class="bi bi-pencil me-2"></i> Text Generation
+                        </div>
+                    </div>
+
+                    <div class="model-selector">
+                        <label for="model-select">Select a model:</label>
+                        <select id="model-select" class="form-select">
+                            <option value="default">Default model for selected task</option>
+                            <option value="distilbert-base-uncased-finetuned-sst-2-english">DistilBERT (Sentiment Analysis)</option>
+                            <option value="bert-base-uncased">BERT Base Uncased</option>
+                            <option value="gpt2">GPT-2</option>
+                            <option value="t5-small">T5 Small</option>
+                            <option value="facebook/bart-large-cnn">BART (Summarization)</option>
+                        </select>
+                    </div>
+
+                    <div id="text-classification-input" class="task-input">
+                        <label for="classification-text">Enter text to classify:</label>
+                        <textarea id="classification-text" class="pipeline-input" rows="3" placeholder="Enter text to analyze sentiment...">I really enjoyed this movie. The acting was great and the story was engaging.</textarea>
+                    </div>
+
+                    <div id="token-classification-input" class="task-input" style="display: none;">
+                        <label for="ner-text">Enter text for named entity recognition:</label>
+                        <textarea id="ner-text" class="pipeline-input" rows="3" placeholder="Enter text to identify entities...">Apple is looking at buying U.K. startup for $1 billion. The deal will be finalized in New York.</textarea>
+                    </div>
+
+                    <div id="question-answering-input" class="task-input" style="display: none;">
+                        <label for="qa-context">Context:</label>
+                        <textarea id="qa-context" class="pipeline-input" rows="4" placeholder="Enter context...">The Amazon rainforest, also known as Amazonia, is a moist broadleaf tropical rainforest in the Amazon biome that covers most of the Amazon basin of South America. This basin encompasses 7,000,000 km² (2,700,000 sq mi), of which 5,500,000 km² (2,100,000 sq mi) are covered by the rainforest. This region includes territory belonging to nine nations.</textarea>
+
+                        <label for="qa-question">Question:</label>
+                        <input type="text" id="qa-question" class="pipeline-input" placeholder="Enter your question..." value="How large is the Amazon rainforest?">
+                    </div>
+
+                    <div id="summarization-input" class="task-input" style="display: none;">
+                        <label for="summarization-text">Enter text to summarize:</label>
+                        <textarea id="summarization-text" class="pipeline-input" rows="6" placeholder="Enter long text to summarize...">The Amazon rainforest, also known as Amazonia, is a moist broadleaf tropical rainforest in the Amazon biome that covers most of the Amazon basin of South America. This basin encompasses 7,000,000 km² (2,700,000 sq mi), of which 5,500,000 km² (2,100,000 sq mi) are covered by the rainforest. This region includes territory belonging to nine nations. The majority of the forest is contained within Brazil, with 60% of the rainforest, followed by Peru with 13%, Colombia with 10%, and with minor amounts in Venezuela, Ecuador, Bolivia, Guyana, Suriname, and French Guiana. The Amazon represents over half of the planet's remaining rainforests, and comprises the largest and most biodiverse tract of tropical rainforest in the world, with an estimated 390 billion individual trees divided into 16,000 species.</textarea>
+                    </div>
+
+                    <div id="text-generation-input" class="task-input" style="display: none;">
+                        <label for="generation-text">Enter text prompt:</label>
+                        <textarea id="generation-text" class="pipeline-input" rows="3" placeholder="Enter text prompt...">Once upon a time in a land far away,</textarea>
+                    </div>
+
+                    <button id="run-pipeline" class="pipeline-button">
+                        <i class="bi bi-play-fill me-2"></i> Run Pipeline
+                    </button>
+
+                    <div class="loading-spinner" id="loading-spinner">
+                        <div class="spinner"></div>
+                        <p>Processing your request...</p>
+                    </div>
+
+                    <div class="pipeline-result" id="pipeline-result">
+                        <h3 class="result-title">Results</h3>
+                        <div class="result-content" id="result-content">
+                            <!-- Results will be displayed here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pipeline-card">
+                <div class="pipeline-card-header">
+                    <h2>Pipeline Code Example</h2>
+                </div>
+                <div class="pipeline-card-content">
+                    <p>Here's how to use the pipeline API in your own Python code:</p>
+
+                    <div class="code-block">
+                        <pre><code>from transformers import pipeline
+
+# Initialize a pipeline for sentiment analysis
+classifier = pipeline('sentiment-analysis')
+
+# Run inference
+result = classifier('I really enjoyed this movie. The acting was great!')
+
+print(result)
+# Output: [{'label': 'POSITIVE', 'score': 0.9998}]</code></pre>
+                    </div>
+
+                    <p>You can use different tasks by changing the pipeline type:</p>
+
+                    <div class="code-block">
+                        <pre><code># Named Entity Recognition
+ner = pipeline('ner')
+ner_results = ner('Apple is looking at buying U.K. startup for $1 billion')
+
+# Question Answering
+qa = pipeline('question-answering')
+qa_result = qa(
+    question='What is the capital of France?',
+    context='Paris is the capital and most populous city of France.'
+)
+
+# Text Generation
+generator = pipeline('text-generation')
+generator_result = generator('Once upon a time', max_length=50)
+
+# Summarization
+summarizer = pipeline('summarization')
+summarizer_result = summarizer('''
+    The Amazon rainforest, also known as Amazonia, is a moist broadleaf
+    tropical rainforest in the Amazon biome that covers most of the Amazon
+    basin of South America. This basin encompasses 7,000,000 km².
+''', max_length=100, min_length=30)</code></pre>
+                    </div>
+
+                    <p>You can also specify a particular model to use:</p>
+
+                    <div class="code-block">
+                        <pre><code># Use a specific model for sentiment analysis
+specific_classifier = pipeline(
+    'sentiment-analysis',
+    model='distilbert-base-uncased-finetuned-sst-2-english'
+)
+
+# Use a specific model for text generation
+specific_generator = pipeline(
+    'text-generation',
+    model='gpt2-medium'
+)</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="pipeline-card">
+                <div class="pipeline-card-header">
+                    <h2>Available Tasks</h2>
+                </div>
+                <div class="pipeline-card-content">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item bg-transparent">
+                            <h5><i class="bi bi-tag me-2"></i> Text Classification</h5>
+                            <p>Classify text into predefined categories, such as sentiment analysis (positive/negative).</p>
+                        </li>
+                        <li class="list-group-item bg-transparent">
+                            <h5><i class="bi bi-tags me-2"></i> Named Entity Recognition</h5>
+                            <p>Identify entities like people, organizations, locations, etc. in text.</p>
+                        </li>
+                        <li class="list-group-item bg-transparent">
+                            <h5><i class="bi bi-question-circle me-2"></i> Question Answering</h5>
+                            <p>Extract answers from a context given a question.</p>
+                        </li>
+                        <li class="list-group-item bg-transparent">
+                            <h5><i class="bi bi-file-text me-2"></i> Summarization</h5>
+                            <p>Generate concise summaries of longer texts.</p>
+                        </li>
+                        <li class="list-group-item bg-transparent">
+                            <h5><i class="bi bi-pencil me-2"></i> Text Generation</h5>
+                            <p>Generate text based on a prompt.</p>
+                        </li>
+                        <li class="list-group-item bg-transparent">
+                            <h5><i class="bi bi-translate me-2"></i> Translation</h5>
+                            <p>Translate text from one language to another.</p>
+                        </li>
+                        <li class="list-group-item bg-transparent">
+                            <h5><i class="bi bi-chat-dots me-2"></i> Conversational</h5>
+                            <p>Chat with a model in a conversational manner.</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pipeline-card">
+                <div class="pipeline-card-header">
+                    <h2>Resources</h2>
+                </div>
+                <div class="pipeline-card-content">
+                    <div class="list-group">
+                        <a href="https://huggingface.co/docs/transformers/main_classes/pipelines" target="_blank" class="list-group-item list-group-item-action bg-transparent">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">Pipeline Documentation</h5>
+                                <small><i class="bi bi-box-arrow-up-right"></i></small>
+                            </div>
+                            <p class="mb-1">Official Hugging Face documentation for the pipeline API</p>
+                        </a>
+                        <a href="https://huggingface.co/models" target="_blank" class="list-group-item list-group-item-action bg-transparent">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">Model Hub</h5>
+                                <small><i class="bi bi-box-arrow-up-right"></i></small>
+                            </div>
+                            <p class="mb-1">Browse thousands of pre-trained models</p>
+                        </a>
+                        <a href="https://colab.research.google.com/github/huggingface/notebooks/blob/main/transformers_doc/en/pipeline_tutorial.ipynb" target="_blank" class="list-group-item list-group-item-action bg-transparent">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">Pipeline Tutorial</h5>
+                                <small><i class="bi bi-box-arrow-up-right"></i></small>
+                            </div>
+                            <p class="mb-1">Interactive Colab notebook tutorial</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check browser compatibility
+        checkBrowserCompatibility();
+
+        // Task selection
+        const taskOptions = document.querySelectorAll('.pipeline-option');
+        const taskInputs = document.querySelectorAll('.task-input');
+
+        taskOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                // Update active state
+                taskOptions.forEach(opt => opt.classList.remove('active'));
+                this.classList.add('active');
+
+                // Show corresponding input
+                const task = this.dataset.task;
+                taskInputs.forEach(input => input.style.display = 'none');
+
+                const taskInput = document.getElementById(`${task}-input`);
+                if (taskInput) {
+                    taskInput.style.display = 'block';
+
+                    // Focus on the first input field
+                    const firstInput = taskInput.querySelector('textarea, input[type="text"]');
+                    if (firstInput) {
+                        setTimeout(() => {
+                            firstInput.focus();
+                        }, 100);
+                    }
+                } else {
+                    console.error(`Task input element not found for task: ${task}`);
+                    showErrorMessage(`Configuration error: Could not find input for ${task}`);
+                }
+
+                // Update model selector based on task
+                updateModelOptions(task);
+
+                // Clear previous results
+                const resultElement = document.getElementById('pipeline-result');
+                if (resultElement) {
+                    resultElement.classList.remove('show');
+                }
+            });
+        });
+
+        // Function to check browser compatibility
+        function checkBrowserCompatibility() {
+            // Check for basic features needed
+            const missingFeatures = [];
+
+            if (!window.fetch) missingFeatures.push('Fetch API');
+            if (!window.Promise) missingFeatures.push('Promises');
+            if (!window.localStorage) missingFeatures.push('Local Storage');
+            if (!window.JSON) missingFeatures.push('JSON');
+
+            // Check for clipboard API
+            if (!navigator.clipboard || !navigator.clipboard.writeText) {
+                // Clipboard API not available, add fallback for copy buttons
+                document.addEventListener('click', function(e) {
+                    if (e.target.closest('.copy-btn')) {
+                        const copyBtn = e.target.closest('.copy-btn');
+                        const codeBlock = copyBtn.closest('.code-block');
+                        if (codeBlock) {
+                            const code = codeBlock.querySelector('code').textContent;
+                            fallbackCopyTextToClipboard(code, copyBtn);
+                        }
+                    }
+                });
+            }
+
+            // If missing critical features, show warning
+            if (missingFeatures.length > 0) {
+                showCompatibilityWarning(missingFeatures);
+            }
+        }
+
+        // Fallback copy function for browsers without clipboard API
+        function fallbackCopyTextToClipboard(text, button) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-9999px';
+            textArea.style.top = '-9999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    button.innerHTML = '<i class="bi bi-check"></i>';
+                    setTimeout(() => {
+                        button.innerHTML = '<i class="bi bi-clipboard"></i>';
+                    }, 2000);
+                } else {
+                    showErrorMessage('Failed to copy text');
+                }
+            } catch (err) {
+                console.error('Fallback: Could not copy text', err);
+                showErrorMessage('Failed to copy text');
+            }
+
+            document.body.removeChild(textArea);
+        }
+
+        // Show compatibility warning
+        function showCompatibilityWarning(missingFeatures) {
+            const warningElement = document.createElement('div');
+            warningElement.className = 'alert alert-warning mt-3';
+            warningElement.innerHTML = `
+                <h5><i class="bi bi-exclamation-triangle me-2"></i> Browser Compatibility Warning</h5>
+                <p>Your browser is missing some features that may affect functionality:</p>
+                <ul>
+                    ${missingFeatures.map(feature => `<li>${feature}</li>`).join('')}
+                </ul>
+                <p>For the best experience, please use a modern browser like Chrome, Firefox, or Edge.</p>
+            `;
+
+            const container = document.querySelector('.container');
+            if (container) {
+                container.insertBefore(warningElement, container.firstChild);
+            }
+        }
+
+        // Show error message
+        function showErrorMessage(message) {
+            const errorElement = document.createElement('div');
+            errorElement.className = 'alert alert-danger mt-3 mb-3';
+            errorElement.innerHTML = `
+                <i class="bi bi-exclamation-circle me-2"></i> ${message}
+            `;
+
+            const resultContent = document.getElementById('result-content');
+            if (resultContent) {
+                resultContent.innerHTML = '';
+                resultContent.appendChild(errorElement);
+                document.getElementById('pipeline-result').classList.add('show');
+                document.getElementById('loading-spinner').style.display = 'none';
+            }
+        }
+
+        // Run pipeline button
+        document.getElementById('run-pipeline').addEventListener('click', function() {
+            const activeTask = document.querySelector('.pipeline-option.active').dataset.task;
+            const selectedModel = document.getElementById('model-select').value;
+
+            // Show loading spinner
+            document.getElementById('loading-spinner').style.display = 'block';
+            document.getElementById('pipeline-result').classList.remove('show');
+
+            // Get input based on active task
+            let input = '';
+            let context = '';
+            let question = '';
+
+            switch(activeTask) {
+                case 'text-classification':
+                    input = document.getElementById('classification-text').value;
+                    break;
+                case 'token-classification':
+                    input = document.getElementById('ner-text').value;
+                    break;
+                case 'question-answering':
+                    context = document.getElementById('qa-context').value;
+                    question = document.getElementById('qa-question').value;
+                    break;
+                case 'summarization':
+                    input = document.getElementById('summarization-text').value;
+                    break;
+                case 'text-generation':
+                    input = document.getElementById('generation-text').value;
+                    break;
+            }
+
+            // In a real app, this would be an actual API call to a backend endpoint
+            // For demonstration purposes, we'll simulate the API call with more robust error handling
+
+            // First, validate inputs
+            let isValid = true;
+            let errorMessage = '';
+
+            switch(activeTask) {
+                case 'text-classification':
+                    if (!input || input.trim().length < 5) {
+                        isValid = false;
+                        errorMessage = 'Please enter a longer text for classification (at least 5 characters).';
+                    }
+                    break;
+                case 'token-classification':
+                    if (!input || input.trim().length < 10) {
+                        isValid = false;
+                        errorMessage = 'Please enter a longer text for entity recognition (at least 10 characters).';
+                    }
+                    break;
+                case 'question-answering':
+                    if (!context || context.trim().length < 20) {
+                        isValid = false;
+                        errorMessage = 'Please enter a longer context for question answering (at least 20 characters).';
+                    } else if (!question || question.trim().length < 5) {
+                        isValid = false;
+                        errorMessage = 'Please enter a valid question (at least 5 characters).';
+                    }
+                    break;
+                case 'summarization':
+                    if (!input || input.trim().length < 100) {
+                        isValid = false;
+                        errorMessage = 'Please enter a longer text for summarization (at least 100 characters).';
+                    }
+                    break;
+                case 'text-generation':
+                    if (!input || input.trim().length < 5) {
+                        isValid = false;
+                        errorMessage = 'Please enter a longer prompt for text generation (at least 5 characters).';
+                    }
+                    break;
+            }
+
+            if (!isValid) {
+                // Show error message
+                document.getElementById('loading-spinner').style.display = 'none';
+
+                const resultContent = document.getElementById('result-content');
+                resultContent.innerHTML = `<div class="alert alert-danger">${errorMessage}</div>`;
+                document.getElementById('pipeline-result').classList.add('show');
+                return;
+            }
+
+            // Simulate API call with random chance of success/failure to demonstrate error handling
+            const simulateNetworkIssue = Math.random() < 0.05; // 5% chance of network issue
+
+            if (simulateNetworkIssue) {
+                setTimeout(() => {
+                    document.getElementById('loading-spinner').style.display = 'none';
+                    const resultContent = document.getElementById('result-content');
+                    resultContent.innerHTML = `
+                        <div class="alert alert-warning">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            Network issue simulated. In a real application, this would retry the request.
+                            <button class="btn btn-sm btn-warning mt-2" onclick="document.getElementById('run-pipeline').click()">
+                                <i class="bi bi-arrow-repeat me-1"></i> Retry
+                            </button>
+                        </div>
+                    `;
+                    document.getElementById('pipeline-result').classList.add('show');
+                }, 2000);
+                return;
+            }
+
+            // Simulate successful API call
+            setTimeout(() => {
+                let result = '';
+                let formattedResult = '';
+
+                // Generate mock results based on task
+                switch(activeTask) {
+                    case 'text-classification':
+                        // Determine sentiment based on input text
+                        const sentiment = input.toLowerCase().includes('bad') ||
+                                         input.toLowerCase().includes('terrible') ||
+                                         input.toLowerCase().includes('awful') ?
+                                         "NEGATIVE" : "POSITIVE";
+
+                        const score = sentiment === "POSITIVE" ?
+                                     (0.9 + Math.random() * 0.099).toFixed(4) :
+                                     (0.8 + Math.random() * 0.199).toFixed(4);
+
+                        result = JSON.stringify([
+                            {
+                                "label": sentiment,
+                                "score": parseFloat(score)
+                            }
+                        ], null, 2);
+
+                        // Create a more user-friendly display
+                        formattedResult = `
+                            <div class="mb-3">
+                                <strong>Classification Result:</strong>
+                                <div class="mt-2 p-3 rounded" style="background-color: ${sentiment === 'POSITIVE' ? 'rgba(40, 167, 69, 0.2)' : 'rgba(220, 53, 69, 0.2)'}">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="badge ${sentiment === 'POSITIVE' ? 'bg-success' : 'bg-danger'} p-2">${sentiment}</span>
+                                        <span>Confidence: ${(parseFloat(score) * 100).toFixed(2)}%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="code-block">
+                                <pre><code>${result}</code></pre>
+                            </div>
+                        `;
+                        break;
+
+                    case 'token-classification':
+                        // Extract entities from input text
+                        const entities = [];
+
+                        // Simple pattern matching for demonstration
+                        const patterns = [
+                            { regex: /\b[A-Z][a-z]+ [A-Z][a-z]+\b/g, type: "I-PER" },  // Person names
+                            { regex: /\b[A-Z][a-z]+\b/g, type: "I-ORG" },              // Organizations
+                            { regex: /\$\d+(\.\d+)? (billion|million|thousand)/g, type: "I-MONEY" }, // Money
+                            { regex: /\b\d+\b/g, type: "I-NUM" }                       // Numbers
+                        ];
+
+                        patterns.forEach(pattern => {
+                            let match;
+                            while ((match = pattern.regex.exec(input)) !== null) {
+                                entities.push({
+                                    entity: pattern.type,
+                                    score: (0.9 + Math.random() * 0.099).toFixed(4),
+                                    word: match[0],
+                                    start: match.index,
+                                    end: match.index + match[0].length
+                                });
+                            }
+                        });
+
+                        result = JSON.stringify(entities, null, 2);
+
+                        // Create a more user-friendly display
+                        let highlightedText = input;
+                        const colors = {
+                            "I-PER": "#ff9800",
+                            "I-ORG": "#2196f3",
+                            "I-LOC": "#4caf50",
+                            "I-MONEY": "#9c27b0",
+                            "I-NUM": "#607d8b"
+                        };
+
+                        // Sort entities by start position in reverse order to avoid index shifting
+                        entities.sort((a, b) => b.start - a.start);
+
+                        entities.forEach(entity => {
+                            const color = colors[entity.entity] || "#f44336";
+                            const highlight = `<span style="background-color: ${color}33; border-bottom: 2px solid ${color}; padding: 0 2px; border-radius: 2px;" title="${entity.entity} (${(entity.score * 100).toFixed(1)}%)">${entity.word}</span>`;
+                            highlightedText = highlightedText.substring(0, entity.start) + highlight + highlightedText.substring(entity.end);
+                        });
+
+                        formattedResult = `
+                            <div class="mb-3">
+                                <strong>Recognized Entities:</strong>
+                                <div class="mt-2 p-3 rounded" style="background-color: rgba(33, 150, 243, 0.1)">
+                                    ${highlightedText}
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <strong>Entity Legend:</strong>
+                                <div class="d-flex flex-wrap gap-2 mt-2">
+                                    ${Object.entries(colors).map(([type, color]) =>
+                                        `<span class="badge" style="background-color: ${color};">${type}</span>`
+                                    ).join('')}
+                                </div>
+                            </div>
+                            <div class="code-block mt-3">
+                                <pre><code>${result}</code></pre>
+                            </div>
+                        `;
+                        break;
+
+                    case 'question-answering':
+                        // Simple answer extraction for demonstration
+                        let answer = "No answer found";
+                        let answerScore = 0.7;
+                        let answerStart = 0;
+                        let answerEnd = 0;
+
+                        // Very simple pattern matching for demonstration
+                        const questionWords = question.toLowerCase().split(/\s+/);
+                        const contextWords = context.split(/\s+/);
+
+                        // Find the highest concentration of question words
+                        let bestMatchScore = 0;
+                        let bestMatchIndex = -1;
+
+                        for (let i = 0; i < contextWords.length - 5; i++) {
+                            let matchScore = 0;
+                            for (let j = 0; j < 10 && i + j < contextWords.length; j++) {
+                                if (questionWords.includes(contextWords[i + j].toLowerCase().replace(/[.,?!;:]/g, ''))) {
+                                    matchScore++;
+                                }
+                            }
+                            if (matchScore > bestMatchScore) {
+                                bestMatchScore = matchScore;
+                                bestMatchIndex = i;
+                            }
+                        }
+
+                        if (bestMatchIndex >= 0) {
+                            // Extract a reasonable answer span
+                            const answerLength = Math.min(15, contextWords.length - bestMatchIndex);
+                            answer = contextWords.slice(bestMatchIndex, bestMatchIndex + answerLength).join(' ');
+                            answerScore = (0.8 + Math.random() * 0.199).toFixed(4);
+
+                            // Find the position in the original text
+                            const contextUpToAnswer = contextWords.slice(0, bestMatchIndex).join(' ');
+                            answerStart = contextUpToAnswer.length > 0 ? contextUpToAnswer.length + 1 : 0;
+                            answerEnd = answerStart + answer.length;
+                        }
+
+                        result = JSON.stringify({
+                            score: parseFloat(answerScore),
+                            start: answerStart,
+                            end: answerEnd,
+                            answer: answer
+                        }, null, 2);
+
+                        // Create a more user-friendly display
+                        const highlightedContext = context.substring(0, answerStart) +
+                                                 `<span style="background-color: rgba(76, 175, 80, 0.3); font-weight: bold; padding: 0 2px; border-radius: 2px;">` +
+                                                 context.substring(answerStart, answerEnd) +
+                                                 `</span>` +
+                                                 context.substring(answerEnd);
+
+                        formattedResult = `
+                            <div class="mb-3">
+                                <strong>Question:</strong>
+                                <div class="mt-2 p-3 rounded" style="background-color: rgba(33, 150, 243, 0.1)">
+                                    ${question}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Answer:</strong>
+                                <div class="mt-2 p-3 rounded" style="background-color: rgba(76, 175, 80, 0.1); border-left: 4px solid #4caf50;">
+                                    ${answer}
+                                    <div class="mt-2 small text-muted">Confidence: ${(parseFloat(answerScore) * 100).toFixed(2)}%</div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Context with Answer Highlighted:</strong>
+                                <div class="mt-2 p-3 rounded" style="background-color: rgba(0, 0, 0, 0.05)">
+                                    ${highlightedContext}
+                                </div>
+                            </div>
+                            <div class="code-block">
+                                <pre><code>${result}</code></pre>
+                            </div>
+                        `;
+                        break;
+
+                    case 'summarization':
+                        // Simple summarization for demonstration
+                        // Just take the first few sentences
+                        const sentences = input.match(/[^.!?]+[.!?]+/g) || [];
+                        const summaryLength = Math.max(1, Math.min(3, Math.ceil(sentences.length / 3)));
+                        const summaryText = sentences.slice(0, summaryLength).join(' ');
+
+                        result = JSON.stringify([
+                            {
+                                "summary_text": summaryText
+                            }
+                        ], null, 2);
+
+                        // Create a more user-friendly display
+                        formattedResult = `
+                            <div class="mb-3">
+                                <strong>Summary:</strong>
+                                <div class="mt-2 p-3 rounded" style="background-color: rgba(33, 150, 243, 0.1); border-left: 4px solid #2196f3;">
+                                    ${summaryText}
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Original Text Length:</strong> ${input.length} characters
+                                <br>
+                                <strong>Summary Length:</strong> ${summaryText.length} characters
+                                <br>
+                                <strong>Compression Ratio:</strong> ${Math.round((summaryText.length / input.length) * 100)}%
+                            </div>
+                            <div class="code-block">
+                                <pre><code>${result}</code></pre>
+                            </div>
+                        `;
+                        break;
+
+                    case 'text-generation':
+                        // Simple text generation for demonstration
+                        const promptWords = input.split(/\s+/);
+                        const lastWord = promptWords[promptWords.length - 1].toLowerCase().replace(/[.,?!;:]/g, '');
+
+                        // Generate different continuations based on the last word
+                        let continuation = "";
+                        if (["once", "upon", "time", "story", "tale"].includes(lastWord)) {
+                            continuation = "there lived a young wizard named Elian. He was known throughout the magical realm for his unique ability to speak with dragons. One day, while practicing his spells in the ancient forest, he discovered a mysterious glowing stone that would change his destiny forever.";
+                        } else if (["future", "technology", "ai", "robot", "machine"].includes(lastWord)) {
+                            continuation = "artificial intelligence had evolved beyond simple task automation. Sentient AI companions had become commonplace, helping humans with everything from daily chores to complex emotional support. However, as these systems grew more sophisticated, questions about consciousness and rights began to emerge.";
+                        } else {
+                            continuation = "the team of researchers made a breakthrough discovery. Their findings suggested a completely new approach to solving the problem, one that could revolutionize the entire field. As they prepared to publish their results, they realized the implications would extend far beyond what they had initially imagined.";
+                        }
+
+                        const generatedText = input + " " + continuation;
+
+                        result = JSON.stringify([
+                            {
+                                "generated_text": generatedText
+                            }
+                        ], null, 2);
+
+                        // Create a more user-friendly display
+                        formattedResult = `
+                            <div class="mb-3">
+                                <strong>Generated Text:</strong>
+                                <div class="mt-2 p-3 rounded" style="background-color: rgba(156, 39, 176, 0.1);">
+                                    <span style="color: #9c27b0; font-weight: bold;">${input}</span>
+                                    <span>${continuation}</span>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <strong>Statistics:</strong>
+                                <br>
+                                <strong>Prompt Length:</strong> ${input.length} characters
+                                <br>
+                                <strong>Generated Length:</strong> ${continuation.length} characters
+                                <br>
+                                <strong>Total Length:</strong> ${generatedText.length} characters
+                            </div>
+                            <div class="code-block">
+                                <pre><code>${result}</code></pre>
+                            </div>
+                        `;
+                        break;
+                }
+
+                // Display results
+                const resultContent = document.getElementById('result-content');
+                resultContent.innerHTML = formattedResult || `<pre>${result}</pre>`;
+                document.getElementById('loading-spinner').style.display = 'none';
+                document.getElementById('pipeline-result').classList.add('show');
+
+                // Add copy button for code blocks
+                const codeBlocks = resultContent.querySelectorAll('.code-block');
+                codeBlocks.forEach(block => {
+                    const copyBtn = document.createElement('button');
+                    copyBtn.className = 'copy-btn';
+                    copyBtn.innerHTML = '<i class="bi bi-clipboard"></i>';
+                    copyBtn.title = 'Copy to clipboard';
+                    copyBtn.onclick = function() {
+                        const code = block.querySelector('code').textContent;
+                        navigator.clipboard.writeText(code).then(() => {
+                            copyBtn.innerHTML = '<i class="bi bi-check"></i>';
+                            setTimeout(() => {
+                                copyBtn.innerHTML = '<i class="bi bi-clipboard"></i>';
+                            }, 2000);
+                        });
+                    };
+                    block.appendChild(copyBtn);
+                });
+
+            }, 1500);
+        });
+
+        // Update model options based on selected task
+        function updateModelOptions(task) {
+            const modelSelect = document.getElementById('model-select');
+            modelSelect.innerHTML = ''; // Clear existing options
+
+            // Add default option
+            const defaultOption = document.createElement('option');
+            defaultOption.value = 'default';
+            defaultOption.textContent = 'Default model for selected task';
+            modelSelect.appendChild(defaultOption);
+
+            // Add task-specific options
+            switch(task) {
+                case 'text-classification':
+                    addModelOption(modelSelect, 'distilbert-base-uncased-finetuned-sst-2-english', 'DistilBERT (Sentiment Analysis)');
+                    addModelOption(modelSelect, 'roberta-large-mnli', 'RoBERTa (Natural Language Inference)');
+                    break;
+                case 'token-classification':
+                    addModelOption(modelSelect, 'dbmdz/bert-large-cased-finetuned-conll03-english', 'BERT (Named Entity Recognition)');
+                    addModelOption(modelSelect, 'Jean-Baptiste/roberta-large-ner-english', 'RoBERTa (Named Entity Recognition)');
+                    break;
+                case 'question-answering':
+                    addModelOption(modelSelect, 'distilbert-base-cased-distilled-squad', 'DistilBERT (SQuAD)');
+                    addModelOption(modelSelect, 'deepset/roberta-base-squad2', 'RoBERTa (SQuAD v2)');
+                    break;
+                case 'summarization':
+                    addModelOption(modelSelect, 'facebook/bart-large-cnn', 'BART (CNN/Daily Mail)');
+                    addModelOption(modelSelect, 't5-base', 'T5 Base');
+                    break;
+                case 'text-generation':
+                    addModelOption(modelSelect, 'gpt2', 'GPT-2 Small');
+                    addModelOption(modelSelect, 'gpt2-medium', 'GPT-2 Medium');
+                    addModelOption(modelSelect, 'EleutherAI/gpt-neo-125M', 'GPT-Neo 125M');
+                    break;
+            }
+        }
+
+        function addModelOption(select, value, text) {
+            const option = document.createElement('option');
+            option.value = value;
+            option.textContent = text;
+            select.appendChild(option);
+        }
+
+        // Initialize with default task
+        updateModelOptions('text-classification');
+    });
+</script>
+{% endblock %}

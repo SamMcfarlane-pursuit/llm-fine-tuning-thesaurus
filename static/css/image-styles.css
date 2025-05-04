@@ -1,0 +1,444 @@
+/**
+ * Image Styles
+ * Comprehensive styling for images to ensure they are clear, visible, and robust
+ */
+
+/* Base image styles - Enhanced for clarity and professionalism */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    will-change: transform, filter;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    object-fit: contain;
+    filter: contrast(1.05) brightness(1.02);
+}
+
+/* Image container */
+.image-container {
+    position: relative;
+    margin: 20px 0;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, rgba(250, 250, 250, 0.05), rgba(240, 240, 240, 0.05));
+    padding: 5px;
+    transition: all 0.3s ease;
+}
+
+.image-container:hover {
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+}
+
+.image-container img {
+    width: 100%;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.image-container:hover img {
+    filter: brightness(1.05) contrast(1.05);
+}
+
+/* Image captions */
+.image-caption {
+    padding: 12px 15px;
+    text-align: center;
+    font-style: italic;
+    color: #555;
+    background: rgba(250, 250, 250, 0.9);
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* Content images - Enhanced for professional appearance */
+.content-image {
+    max-width: 100%;
+    height: auto;
+    margin: 30px auto;
+    border-radius: 12px;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18);
+    transition: all 0.3s ease;
+    border: 6px solid rgba(255, 255, 255, 0.9);
+    filter: contrast(1.05) brightness(1.02);
+    object-fit: contain;
+    display: block;
+}
+
+.content-image:hover {
+    transform: scale(1.01);
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.25);
+    filter: contrast(1.08) brightness(1.05);
+}
+
+/* Diagram images - Enhanced for professional visualization */
+.diagram-image {
+    max-width: 100%;
+    height: auto;
+    margin: 35px auto;
+    border-radius: 14px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.22);
+    transition: all 0.3s ease;
+    border: 7px solid rgba(255, 255, 255, 0.95);
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    filter: contrast(1.08) brightness(1.03);
+    object-fit: contain;
+    display: block;
+}
+
+.diagram-image:hover {
+    transform: scale(1.02);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+    filter: contrast(1.1) brightness(1.05);
+}
+
+/* Exercise diagrams - Enhanced for learning clarity */
+.exercise-diagram {
+    max-width: 100%;
+    height: auto;
+    margin: 25px auto;
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+    transition: all 0.3s ease;
+    border: 5px solid rgba(255, 255, 255, 0.9);
+    filter: contrast(1.06) brightness(1.02);
+    object-fit: contain;
+    display: block;
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+.exercise-diagram:hover {
+    transform: scale(1.01);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22);
+    filter: contrast(1.08) brightness(1.04);
+}
+
+/* Image loading states */
+.image-placeholder {
+    background: linear-gradient(135deg, #f5f5f5, #e5e5e5);
+    min-height: 100px;
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.image-loading {
+    position: relative;
+}
+
+.image-loading::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+    animation: shimmer 1.5s infinite;
+    z-index: 1;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.image-loaded {
+    box-shadow: 0 0 20px rgba(66, 135, 245, 0.3);
+    animation: successPulse 1s ease-out;
+}
+
+@keyframes successPulse {
+    0% { box-shadow: 0 0 0 rgba(66, 135, 245, 0); }
+    50% { box-shadow: 0 0 30px rgba(66, 135, 245, 0.5); }
+    100% { box-shadow: 0 0 20px rgba(66, 135, 245, 0.3); }
+}
+
+.image-error {
+    opacity: 0.7;
+    filter: grayscale(1);
+    border: 2px solid rgba(220, 53, 69, 0.5);
+}
+
+.image-error-message {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(220, 53, 69, 0.9);
+    color: white;
+    padding: 10px;
+    text-align: center;
+    font-size: 0.95rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+    z-index: 5;
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+}
+
+.image-retry-button {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.image-retry-button:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+}
+
+.image-retry-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.image-retry-button i {
+    font-size: 0.9rem;
+}
+
+/* Zoom indicator */
+.zoom-indicator {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    z-index: 5;
+    font-size: 1.2rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.image-container:hover .zoom-indicator {
+    opacity: 0.8;
+}
+
+.zoom-indicator:hover {
+    opacity: 1 !important;
+    transform: scale(1.1);
+    background-color: rgba(66, 135, 245, 0.8);
+}
+
+/* SVG Animation - optimized for performance */
+@keyframes pulse {
+    0% { filter: brightness(1); }
+    50% { filter: brightness(1.05); }
+    100% { filter: brightness(1); }
+}
+
+.svg-loaded {
+    animation: pulse 2s ease-in-out infinite;
+    /* Apply scale with regular CSS instead of in the animation */
+    transition: transform 0.5s ease;
+}
+
+.svg-loaded:hover {
+    transform: scale(1.01);
+}
+
+/* Fade-in animation - optimized for performance */
+.fade-in {
+    opacity: 0;
+    animation: fadeIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Apply scale separately for better performance */
+.fade-in {
+    transform: scale(0.95);
+    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.fade-in.loaded {
+    transform: scale(1);
+}
+
+/* High-resolution image handling */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    img {
+        image-rendering: auto;
+    }
+
+    .content-image,
+    .diagram-image,
+    .exercise-diagram {
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.18);
+    }
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+    .image-container {
+        background: linear-gradient(135deg, rgba(30, 30, 30, 0.05), rgba(20, 20, 20, 0.05));
+    }
+
+    .image-caption {
+        background: rgba(30, 30, 30, 0.9);
+        color: #ddd;
+    }
+
+    .content-image,
+    .diagram-image,
+    .exercise-diagram {
+        border-color: rgba(50, 50, 50, 0.8);
+    }
+
+    .image-placeholder {
+        background: linear-gradient(135deg, #2a2a2a, #222);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .content-image,
+    .diagram-image,
+    .exercise-diagram {
+        margin: 20px auto;
+        border-width: 4px;
+    }
+
+    .image-container {
+        margin: 15px 0;
+    }
+
+    .image-caption {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+
+    .zoom-indicator {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .content-image,
+    .diagram-image,
+    .exercise-diagram {
+        margin: 15px auto;
+        border-width: 3px;
+    }
+
+    .image-container {
+        margin: 12px 0;
+        padding: 3px;
+    }
+
+    .image-caption {
+        padding: 8px;
+        font-size: 0.85rem;
+    }
+
+    .zoom-indicator {
+        width: 30px;
+        height: 30px;
+        font-size: 0.9rem;
+        top: 5px;
+        right: 5px;
+    }
+}
+
+/* Print styles */
+@media print {
+    img,
+    .content-image,
+    .diagram-image,
+    .exercise-diagram,
+    .image-container img {
+        max-width: 100% !important;
+        page-break-inside: avoid;
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+    }
+
+    .image-container {
+        box-shadow: none !important;
+        page-break-inside: avoid;
+        border: none !important;
+    }
+
+    .zoom-indicator {
+        display: none !important;
+    }
+}
+
+/* Accessibility improvements */
+@media (forced-colors: active) {
+    img,
+    .content-image,
+    .diagram-image,
+    .exercise-diagram {
+        border: 2px solid ButtonText;
+    }
+
+    .image-container {
+        border: 1px solid ButtonText;
+    }
+
+    .image-caption {
+        color: ButtonText;
+        background: Canvas;
+        border-top: 1px solid ButtonText;
+    }
+}
+
+/* Ensure images are visible in high contrast mode */
+@media (prefers-contrast: high) {
+    img,
+    .content-image,
+    .diagram-image,
+    .exercise-diagram {
+        filter: contrast(1.2);
+        border: 3px solid #000;
+    }
+
+    .image-caption {
+        background: #fff;
+        color: #000;
+        border: 1px solid #000;
+    }
+}

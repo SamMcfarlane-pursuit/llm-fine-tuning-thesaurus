@@ -2,6 +2,255 @@
 
 {% block title %}{{ title }} - Visual Thesaurus LLM{% endblock %}
 
+{% block styles %}
+{{ super() }}
+<style>
+    /* Navigation and Learning Path Styles */
+    .breadcrumb {
+        background-color: rgba(30, 30, 30, 0.7);
+        padding: 12px 20px;
+        border-radius: 10px;
+        border: 1px solid rgba(66, 135, 245, 0.3);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .breadcrumb-item a {
+        color: #4287f5;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .breadcrumb-item a:hover {
+        color: #00ffdd;
+        text-decoration: none;
+    }
+
+    .breadcrumb-item.active {
+        color: #ffffff;
+        font-weight: 600;
+    }
+
+    .breadcrumb-item+.breadcrumb-item::before {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Learning Path Navigation */
+    .learning-path-nav {
+        background-color: rgba(25, 25, 25, 0.9);
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        border: 2px solid rgba(66, 135, 245, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .learning-path-nav::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(to right, #4287f5, #00ffdd);
+        z-index: 1;
+    }
+
+    .path-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        padding: 0 10px;
+    }
+
+    .path-step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+        width: 120px;
+    }
+
+    .step-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: rgba(40, 40, 40, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 10px;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        font-size: 1.5rem;
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .path-step.active .step-icon {
+        background: linear-gradient(135deg, #4287f5, #00c6ff);
+        border-color: rgba(255, 255, 255, 0.8);
+        box-shadow: 0 0 20px rgba(66, 135, 245, 0.6);
+        color: white;
+        transform: scale(1.1);
+    }
+
+    .path-step.completed .step-icon {
+        background: linear-gradient(135deg, #00d463, #00c853);
+        border-color: rgba(255, 255, 255, 0.8);
+        color: white;
+    }
+
+    .step-label {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.7);
+        text-align: center;
+        margin-bottom: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .path-step.active .step-label {
+        color: white;
+        text-shadow: 0 0 10px rgba(66, 135, 245, 0.5);
+    }
+
+    .path-step.completed .step-label {
+        color: #00d463;
+    }
+
+    .path-connector {
+        flex-grow: 1;
+        height: 3px;
+        background-color: rgba(255, 255, 255, 0.2);
+        position: relative;
+        z-index: 1;
+        margin: 0 5px;
+        transform: translateY(-15px);
+    }
+
+    .path-connector.active {
+        background: linear-gradient(to right, #00d463, #4287f5);
+        box-shadow: 0 0 10px rgba(66, 135, 245, 0.4);
+    }
+
+    .step-action {
+        margin-top: 5px;
+    }
+
+    /* User Guidance Card */
+    .user-guidance-card {
+        background: linear-gradient(135deg, rgba(66, 135, 245, 0.1), rgba(0, 255, 221, 0.1));
+        border-radius: 15px;
+        padding: 20px;
+        display: flex;
+        align-items: flex-start;
+        border: 2px solid rgba(66, 135, 245, 0.3);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .guidance-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #4287f5, #00c6ff);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 20px;
+        flex-shrink: 0;
+        box-shadow: 0 5px 15px rgba(66, 135, 245, 0.4);
+        font-size: 1.5rem;
+        color: white;
+    }
+
+    .guidance-content {
+        flex-grow: 1;
+    }
+
+    .guidance-content h5 {
+        color: #4287f5;
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .guidance-content p {
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 15px;
+        font-size: 1rem;
+    }
+
+    .guidance-tips {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .tip {
+        display: flex;
+        align-items: center;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.95rem;
+    }
+
+    .tip i {
+        color: #00ffdd;
+        margin-right: 10px;
+        font-size: 1.1rem;
+    }
+
+    /* Responsive adjustments for navigation */
+    @media (max-width: 768px) {
+        .path-container {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .path-step {
+            flex-direction: row;
+            width: 100%;
+            align-items: center;
+        }
+
+        .step-icon {
+            margin-bottom: 0;
+            margin-right: 15px;
+        }
+
+        .step-label {
+            margin-bottom: 0;
+            text-align: left;
+        }
+
+        .path-connector {
+            width: 3px;
+            height: 20px;
+            margin: 0 0 0 25px;
+            transform: translateY(0);
+        }
+
+        .step-action {
+            margin-top: 0;
+            margin-left: auto;
+        }
+
+        .user-guidance-card {
+            flex-direction: column;
+        }
+
+        .guidance-icon {
+            margin-right: 0;
+            margin-bottom: 15px;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container mt-4">
     <div class="row">
@@ -9,9 +258,72 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/">Home</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Quizzes</li>
+                    <li class="breadcrumb-item active" aria-current="page">Knowledge Quizzes</li>
                 </ol>
             </nav>
+        </div>
+    </div>
+
+    <!-- Learning Path Navigation -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="learning-path-nav">
+                <div class="path-container">
+                    <div class="path-step completed">
+                        <div class="step-icon">
+                            <i class="bi bi-house-door"></i>
+                        </div>
+                        <div class="step-label">Home</div>
+                    </div>
+                    <div class="path-connector active"></div>
+                    <div class="path-step completed">
+                        <div class="step-icon">
+                            <i class="bi bi-diagram-3"></i>
+                        </div>
+                        <div class="step-label">Concept Maps</div>
+                        <div class="step-action">
+                            <a href="/thesaurus" class="btn btn-sm btn-outline-primary"><i class="bi bi-arrow-left"></i> View</a>
+                        </div>
+                    </div>
+                    <div class="path-connector active"></div>
+                    <div class="path-step completed">
+                        <div class="step-icon">
+                            <i class="bi bi-code-square"></i>
+                        </div>
+                        <div class="step-label">Exercises</div>
+                        <div class="step-action">
+                            <a href="/exercises" class="btn btn-sm btn-outline-primary"><i class="bi bi-arrow-left"></i> View</a>
+                        </div>
+                    </div>
+                    <div class="path-connector active"></div>
+                    <div class="path-step active">
+                        <div class="step-icon">
+                            <i class="bi bi-journal-check"></i>
+                        </div>
+                        <div class="step-label">Quizzes</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Guidance Card -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="user-guidance-card">
+                <div class="guidance-icon">
+                    <i class="bi bi-lightbulb"></i>
+                </div>
+                <div class="guidance-content">
+                    <h5>How to Use This Section</h5>
+                    <p>Test your knowledge of LLM fine-tuning concepts with our interactive quizzes. Complete quizzes to track your progress and identify areas for further study.</p>
+                    <div class="guidance-tips">
+                        <div class="tip"><i class="bi bi-1-circle"></i> Select a quiz from the cards below</div>
+                        <div class="tip"><i class="bi bi-2-circle"></i> Answer the questions to test your knowledge</div>
+                        <div class="tip"><i class="bi bi-3-circle"></i> Review your results and track your progress</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

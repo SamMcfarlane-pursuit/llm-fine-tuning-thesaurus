@@ -1,0 +1,277 @@
+/**
+ * Integrated Learning and Thesaurus Styles
+ * Combines learning resources with thesaurus functionality for a more accessible experience
+ */
+
+/* Related Concepts Section */
+.related-concepts {
+    background-color: rgba(30, 30, 35, 0.5);
+    border-radius: 10px;
+    margin: 1.5rem 0;
+    overflow: hidden;
+    border: 1px solid rgba(66, 135, 245, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.related-concepts:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+    border-color: rgba(66, 135, 245, 0.5);
+}
+
+.related-concepts-header {
+    background-color: rgba(66, 135, 245, 0.2);
+    padding: 12px 15px;
+    font-weight: 600;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(66, 135, 245, 0.3);
+}
+
+.related-concepts-header i {
+    margin-right: 8px;
+    color: #4287f5;
+}
+
+.related-concepts-content {
+    padding: 15px;
+    min-height: 100px;
+}
+
+.related-concepts-loading {
+    color: rgba(255, 255, 255, 0.7);
+    font-style: italic;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.related-concepts-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.related-concepts-list li {
+    margin: 0;
+}
+
+.concept-link {
+    display: inline-block;
+    background-color: rgba(66, 135, 245, 0.15);
+    color: #ffffff;
+    padding: 6px 12px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    border: 1px solid rgba(66, 135, 245, 0.3);
+    position: relative;
+}
+
+.concept-link:hover {
+    background-color: rgba(66, 135, 245, 0.3);
+    color: #ffffff;
+    text-decoration: none;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.related-concepts-footer {
+    padding: 10px 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: right;
+}
+
+.view-in-thesaurus {
+    color: #4287f5;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.view-in-thesaurus:hover {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.view-in-thesaurus i {
+    margin-right: 5px;
+}
+
+.no-concepts {
+    color: rgba(255, 255, 255, 0.7);
+    font-style: italic;
+    text-align: center;
+    padding: 20px 0;
+}
+
+/* Concept Tooltip */
+.concept-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(20, 20, 25, 0.95);
+    border-radius: 8px;
+    padding: 15px;
+    width: 300px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+    margin-bottom: 10px;
+    border: 1px solid rgba(66, 135, 245, 0.4);
+    pointer-events: none;
+    opacity: 0;
+    animation: fadeIn 0.3s ease forwards;
+}
+
+.concept-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 8px;
+    border-style: solid;
+    border-color: rgba(20, 20, 25, 0.95) transparent transparent transparent;
+}
+
+.concept-tooltip-loading {
+    color: rgba(255, 255, 255, 0.7);
+    font-style: italic;
+    text-align: center;
+    padding: 10px 0;
+}
+
+.concept-tooltip-title {
+    color: #4287f5;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+.concept-tooltip-definition {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* Learning Resources in Thesaurus */
+.thesaurus-learning-resources {
+    background-color: rgba(30, 30, 35, 0.5);
+    border-radius: 10px;
+    margin: 1.5rem 0;
+    overflow: hidden;
+    border: 1px solid rgba(0, 212, 99, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.thesaurus-learning-resources h3 {
+    background-color: rgba(0, 212, 99, 0.2);
+    padding: 12px 15px;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 212, 99, 0.3);
+}
+
+.thesaurus-learning-resources h3 i {
+    margin-right: 8px;
+    color: #00d463;
+}
+
+.learning-resources-content {
+    padding: 15px;
+    min-height: 100px;
+}
+
+.learning-resources-loading {
+    color: rgba(255, 255, 255, 0.7);
+    font-style: italic;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.learning-resources-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.learning-resources-list li {
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 15px;
+}
+
+.learning-resources-list li:last-child {
+    margin-bottom: 0;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.resource-link {
+    display: block;
+    color: #ffffff;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.resource-link:hover {
+    transform: translateX(5px);
+}
+
+.resource-title {
+    font-weight: 600;
+    color: #00d463;
+    margin-bottom: 5px;
+    font-size: 1rem;
+}
+
+.resource-description {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.no-resources {
+    color: rgba(255, 255, 255, 0.7);
+    font-style: italic;
+    text-align: center;
+    padding: 20px 0;
+}
+
+.error {
+    color: #ff5e5e;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .related-concepts-list {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .concept-tooltip {
+        width: 250px;
+    }
+}

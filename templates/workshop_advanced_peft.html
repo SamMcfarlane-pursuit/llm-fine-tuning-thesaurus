@@ -1,0 +1,656 @@
+{% extends 'base.html' %}
+
+{% block title %}Advanced PEFT Techniques Workshop{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<style>
+    /* Workshop-specific styles */
+    .workshop-header {
+        background: linear-gradient(135deg, #d63384, #b02a70);
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .workshop-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 15px;
+        text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .workshop-subtitle {
+        font-size: 1.2rem;
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 20px;
+        font-weight: 400;
+    }
+
+    .workshop-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .workshop-meta .badge {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        border-radius: 30px;
+    }
+
+    .module-card {
+        border-radius: 15px;
+        overflow: hidden;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .module-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    }
+
+    .module-header {
+        padding: 20px;
+        background: linear-gradient(135deg, #b02a70, #a02060);
+        color: white;
+        position: relative;
+    }
+
+    .module-number {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 40px;
+        height: 40px;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        font-weight: 700;
+    }
+
+    .module-content {
+        padding: 25px;
+        background-color: #1e1e1e;
+    }
+
+    .exercise-card {
+        background-color: #2a2a2a;
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .exercise-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: #d63384;
+    }
+
+    .code-block {
+        background-color: #1a1a1a;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 15px 0;
+        overflow-x: auto;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .code-block pre {
+        margin: 0;
+        color: #e6e6e6;
+    }
+
+    .code-block code {
+        font-family: 'Fira Code', monospace;
+        font-size: 0.9rem;
+    }
+
+    .resource-link {
+        display: block;
+        padding: 12px 15px;
+        background-color: #2a2a2a;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        color: #d63384;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(214, 51, 132, 0.2);
+    }
+
+    .resource-link:hover {
+        background-color: #333333;
+        transform: translateX(5px);
+        border-color: rgba(214, 51, 132, 0.5);
+    }
+
+    .resource-link i {
+        margin-right: 10px;
+    }
+
+    .progress-tracker {
+        background-color: #2a2a2a;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .progress-bar {
+        height: 10px;
+        border-radius: 5px;
+        background: linear-gradient(to right, #d63384, #ff6b9d);
+    }
+
+    .complete-module-btn {
+        background: linear-gradient(135deg, #00c853, #00d463);
+        border: none;
+        border-radius: 30px;
+        padding: 10px 20px;
+        color: white;
+        font-weight: 600;
+        margin-top: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .complete-module-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 200, 83, 0.4);
+    }
+
+    .module-nav {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+    }
+
+    .module-nav-btn {
+        padding: 10px 20px;
+        border-radius: 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .module-nav-btn:hover {
+        transform: translateY(-3px);
+    }
+
+    .module-nav-prev {
+        background-color: #2a2a2a;
+        color: white;
+    }
+
+    .module-nav-next {
+        background: linear-gradient(135deg, #d63384, #b02a70);
+        color: white;
+    }
+
+    @media (max-width: 768px) {
+        .workshop-meta {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .workshop-title {
+            font-size: 2rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('workshops') }}">Workshops</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Advanced PEFT Techniques</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="workshop-header">
+        <div class="row">
+            <div class="col-md-8">
+                <h1 class="workshop-title">Advanced PEFT Techniques Workshop</h1>
+                <p class="workshop-subtitle">Explore advanced Parameter-Efficient Fine-Tuning methods beyond LoRA for specialized LLM adaptation</p>
+
+                <div class="workshop-meta">
+                    <span class="badge bg-primary"><i class="bi bi-clock me-1"></i> 8 Hours</span>
+                    <span class="badge bg-success"><i class="bi bi-bar-chart-fill me-1"></i> Advanced</span>
+                    <span class="badge bg-info"><i class="bi bi-gpu-card me-1"></i> GPU Required</span>
+                    <span class="badge bg-warning text-dark"><i class="bi bi-tools me-1"></i> Hands-on</span>
+                </div>
+            </div>
+            <div class="col-md-4 d-flex align-items-center justify-content-center">
+                <div style="width: 120px; height: 120px; background: rgba(255, 255, 255, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="bi bi-braces" style="font-size: 3rem; color: white;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Module 1 -->
+            <div class="module-card" id="module-1">
+                <div class="module-header">
+                    <h2>Introduction to Advanced PEFT Methods</h2>
+                    <div class="module-number">1</div>
+                </div>
+                <div class="module-content">
+                    <p>Parameter-Efficient Fine-Tuning (PEFT) encompasses a variety of techniques beyond LoRA that enable efficient adaptation of large language models. In this module, we'll explore the landscape of PEFT methods and understand their relative strengths and applications.</p>
+
+                    <h3 class="mt-4">Key PEFT Methods</h3>
+                    <ul>
+                        <li><strong>Prefix Tuning:</strong> Prepends trainable continuous vectors to the input of each transformer layer</li>
+                        <li><strong>Prompt Tuning:</strong> Adds trainable soft prompt embeddings to the input sequence</li>
+                        <li><strong>P-Tuning v2:</strong> Combines aspects of prefix tuning and prompt tuning for improved performance</li>
+                        <li><strong>Adapter Layers:</strong> Inserts small trainable modules between layers of the pre-trained model</li>
+                        <li><strong>IA³:</strong> Infused Adapter by Inhibiting and Amplifying Inner Activations</li>
+                    </ul>
+
+                    <div class="exercise-card">
+                        <h4 class="exercise-title"><i class="bi bi-laptop me-2"></i>Exercise 1.1: Comparing PEFT Methods</h4>
+                        <p>In this exercise, we'll compare different PEFT methods in terms of parameter efficiency and performance:</p>
+
+                        <div class="code-block">
+                            <pre><code>import numpy as np
+import matplotlib.pyplot as plt
+
+# PEFT methods and their characteristics
+methods = [
+    "Full Fine-tuning",
+    "LoRA",
+    "Prefix Tuning",
+    "Prompt Tuning",
+    "P-Tuning v2",
+    "Adapter"
+]
+
+# Parameter efficiency (% of trainable parameters compared to full fine-tuning)
+param_efficiency = [100, 0.5, 0.1, 0.01, 0.2, 0.3]
+
+# Relative performance (example values, 100% = full fine-tuning performance)
+performance = [100, 97, 95, 90, 96, 94]
+
+# Create a comparison plot
+fig, ax = plt.subplots(figsize=(12, 6))
+
+x = np.arange(len(methods))
+width = 0.35
+
+ax.bar(x - width/2, param_efficiency, width, label='Parameter Efficiency (% of full model)')
+ax.bar(x + width/2, performance, width, label='Relative Performance (%)')
+
+ax.set_xticks(x)
+ax.set_xticklabels(methods)
+ax.legend()
+
+plt.title('Comparison of PEFT Methods')
+plt.xlabel('Method')
+plt.ylabel('Percentage')
+plt.ylim(0, 110)
+
+for i, v in enumerate(param_efficiency):
+    ax.text(i - width/2, v + 3, f"{v}%", ha='center')
+
+for i, v in enumerate(performance):
+    ax.text(i + width/2, v + 3, f"{v}%", ha='center')
+
+plt.tight_layout()
+plt.show()</code></pre>
+                        </div>
+
+                        <button class="btn btn-primary mt-3" onclick="alert('This feature will be implemented soon!')">
+                            <i class="bi bi-play-fill me-1"></i> Run in Colab
+                        </button>
+                    </div>
+
+                    <button class="complete-module-btn" onclick="alert('Module marked as complete!')">
+                        <i class="bi bi-check-circle me-1"></i> Mark Module as Complete
+                    </button>
+                </div>
+            </div>
+
+            <!-- Module 2 -->
+            <div class="module-card" id="module-2">
+                <div class="module-header">
+                    <h2>Prefix Tuning Implementation</h2>
+                    <div class="module-number">2</div>
+                </div>
+                <div class="module-content">
+                    <p>Prefix Tuning is a technique that prepends trainable continuous vectors (prefixes) to the keys and values in each transformer layer. This approach is particularly effective for sequence generation tasks.</p>
+
+                    <h3 class="mt-4">Key Concepts</h3>
+                    <ul>
+                        <li><strong>Prefix Tokens:</strong> Trainable vectors added to each transformer layer</li>
+                        <li><strong>Reparameterization Trick:</strong> Using a smaller MLP to generate the prefix parameters</li>
+                        <li><strong>Layer-wise Prefixes:</strong> Different prefixes for different layers</li>
+                    </ul>
+
+                    <div class="exercise-card">
+                        <h4 class="exercise-title"><i class="bi bi-laptop me-2"></i>Exercise 2.1: Implementing Prefix Tuning with PEFT</h4>
+                        <p>In this exercise, we'll implement Prefix Tuning using the PEFT library:</p>
+
+                        <div class="code-block">
+                            <pre><code>from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
+from peft import get_peft_model, PrefixTuningConfig, TaskType
+
+# 1. Load pre-trained model and tokenizer
+model_name = "t5-small"  # Using a small model for demonstration
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
+
+# 2. Configure Prefix Tuning
+peft_config = PrefixTuningConfig(
+    task_type=TaskType.SEQ_2_SEQ_LM,
+    num_virtual_tokens=20,  # Number of virtual tokens to add
+    prefix_projection=True,  # Use the reparameterization trick
+    encoder_hidden_size=512,  # Hidden size for the prefix MLP
+)
+
+# 3. Apply Prefix Tuning to the model
+model = get_peft_model(model, peft_config)
+
+# Print trainable parameters
+model.print_trainable_parameters()
+
+# Example inference with the model
+input_text = "translate English to French: Hello, how are you?"
+input_ids = tokenizer(input_text, return_tensors="pt").input_ids
+
+# Generate text
+output = model.generate(
+    input_ids=input_ids,
+    max_length=50,
+    num_return_sequences=1,
+)
+
+# Decode and print the generated text
+generated_text = tokenizer.decode(output[0], skip_special_tokens=True)
+print(f"Generated text: {generated_text}")</code></pre>
+                        </div>
+
+                        <button class="btn btn-primary mt-3" onclick="alert('This feature will be implemented soon!')">
+                            <i class="bi bi-play-fill me-1"></i> Run in Colab
+                        </button>
+                    </div>
+
+                    <button class="complete-module-btn" onclick="alert('Module marked as complete!')">
+                        <i class="bi bi-check-circle me-1"></i> Mark Module as Complete
+                    </button>
+                </div>
+            </div>
+
+            <!-- Module 3 -->
+            <div class="module-card" id="module-3">
+                <div class="module-header">
+                    <h2>P-Tuning v2 Implementation</h2>
+                    <div class="module-number">3</div>
+                </div>
+                <div class="module-content">
+                    <p>P-Tuning v2 is an improved version of prompt tuning that adds deep prompt embeddings to each layer of the transformer. It's particularly effective for natural language understanding tasks.</p>
+
+                    <h3 class="mt-4">Implementation Steps</h3>
+                    <ol>
+                        <li>Configure P-Tuning v2 parameters</li>
+                        <li>Apply P-Tuning to the model</li>
+                        <li>Fine-tune on a downstream task</li>
+                        <li>Evaluate the results</li>
+                    </ol>
+
+                    <div class="exercise-card">
+                        <h4 class="exercise-title"><i class="bi bi-laptop me-2"></i>Exercise 3.1: Implementing P-Tuning v2 with PEFT</h4>
+                        <p>In this exercise, we'll implement P-Tuning v2 for a classification task:</p>
+
+                        <div class="code-block">
+                            <pre><code>from transformers import AutoModelForSequenceClassification, AutoTokenizer
+from peft import get_peft_model, PromptTuningConfig, TaskType, PromptTuningInit
+
+# 1. Load pre-trained model and tokenizer
+model_name = "roberta-base"  # Using RoBERTa for classification
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=2)
+
+# 2. Configure P-Tuning v2
+peft_config = PromptTuningConfig(
+    task_type=TaskType.SEQ_CLS,
+    prompt_tuning_init=PromptTuningInit.TEXT,  # Initialize with text
+    num_virtual_tokens=20,  # Number of virtual tokens
+    tokenizer_name_or_path=model_name,
+    prompt_tuning_init_text="Classify the following text as positive or negative:",
+)
+
+# 3. Apply P-Tuning to the model
+model = get_peft_model(model, peft_config)
+
+# Print trainable parameters
+model.print_trainable_parameters()
+
+# Example inference with the model
+input_text = "I really enjoyed this movie, the acting was superb!"
+inputs = tokenizer(input_text, return_tensors="pt")
+
+# Get classification logits
+outputs = model(**inputs)
+logits = outputs.logits
+
+# Get predicted class (0 = negative, 1 = positive)
+predicted_class = logits.argmax(-1).item()
+print(f"Input: {input_text}")
+print(f"Predicted class: {'Positive' if predicted_class == 1 else 'Negative'}")</code></pre>
+                        </div>
+
+                        <button class="btn btn-primary mt-3" onclick="alert('This feature will be implemented soon!')">
+                            <i class="bi bi-play-fill me-1"></i> Run in Colab
+                        </button>
+                    </div>
+
+                    <button class="complete-module-btn" onclick="alert('Module marked as complete!')">
+                        <i class="bi bi-check-circle me-1"></i> Mark Module as Complete
+                    </button>
+                </div>
+            </div>
+
+            <!-- Module 4 -->
+            <div class="module-card" id="module-4">
+                <div class="module-header">
+                    <h2>Adapter Layers Implementation</h2>
+                    <div class="module-number">4</div>
+                </div>
+                <div class="module-content">
+                    <p>Adapter Layers are small trainable modules inserted between layers of the pre-trained model. They're particularly effective for multi-task learning and transfer learning scenarios.</p>
+
+                    <h3 class="mt-4">Key Concepts</h3>
+                    <ul>
+                        <li><strong>Bottleneck Architecture:</strong> Down-projection followed by up-projection</li>
+                        <li><strong>Residual Connections:</strong> Preserving the original signal through skip connections</li>
+                        <li><strong>Adapter Fusion:</strong> Combining multiple task-specific adapters</li>
+                    </ul>
+
+                    <div class="exercise-card">
+                        <h4 class="exercise-title"><i class="bi bi-laptop me-2"></i>Exercise 4.1: Implementing Adapter Layers</h4>
+                        <p>In this exercise, we'll implement Adapter Layers for a language model:</p>
+
+                        <div class="code-block">
+                            <pre><code>from transformers import AutoModelForCausalLM, AutoTokenizer
+from peft import get_peft_model, AdaptionPromptConfig, TaskType
+
+# 1. Load pre-trained model and tokenizer
+model_name = "gpt2"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(model_name)
+
+# 2. Configure Adapter
+peft_config = AdaptionPromptConfig(
+    task_type=TaskType.CAUSAL_LM,
+    adapter_layers=30,  # Number of adapter layers to add
+    adapter_len=32,     # Length of adapter tokens
+)
+
+# 3. Apply Adapter to the model
+model = get_peft_model(model, peft_config)
+
+# Print trainable parameters
+model.print_trainable_parameters()
+
+# Example inference with the model
+input_text = "Adapter layers in language models are useful because"
+input_ids = tokenizer(input_text, return_tensors="pt").input_ids
+
+# Generate text
+output = model.generate(
+    input_ids=input_ids,
+    max_length=50,
+    num_return_sequences=1,
+    temperature=0.7,
+)
+
+# Decode and print the generated text
+generated_text = tokenizer.decode(output[0], skip_special_tokens=True)
+print(f"Generated text: {generated_text}")</code></pre>
+                        </div>
+
+                        <button class="btn btn-primary mt-3" onclick="alert('This feature will be implemented soon!')">
+                            <i class="bi bi-play-fill me-1"></i> Run in Colab
+                        </button>
+                    </div>
+
+                    <button class="complete-module-btn" onclick="alert('Module marked as complete!')">
+                        <i class="bi bi-check-circle me-1"></i> Mark Module as Complete
+                    </button>
+                </div>
+            </div>
+
+            <div class="module-nav">
+                <button class="btn module-nav-btn module-nav-prev" disabled>
+                    <i class="bi bi-arrow-left me-1"></i> Previous Module
+                </button>
+                <button class="btn module-nav-btn module-nav-next" onclick="document.getElementById('module-2').scrollIntoView({behavior: 'smooth'})">
+                    Next Module <i class="bi bi-arrow-right ms-1"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="progress-tracker sticky-top" style="top: 20px;">
+                <h3>Your Progress</h3>
+                <div class="progress mt-3 mb-3" style="height: 10px;">
+                    <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <p><span id="completed-modules">0</span> of 4 modules completed</p>
+
+                <h4 class="mt-4">Workshop Modules</h4>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item bg-transparent text-white">
+                        <a href="#module-1" class="text-decoration-none d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-1-circle me-2"></i> Introduction to Advanced PEFT</span>
+                            <span class="badge bg-secondary">Not Started</span>
+                        </a>
+                    </li>
+                    <li class="list-group-item bg-transparent text-white">
+                        <a href="#module-2" class="text-decoration-none d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-2-circle me-2"></i> Prefix Tuning Implementation</span>
+                            <span class="badge bg-secondary">Not Started</span>
+                        </a>
+                    </li>
+                    <li class="list-group-item bg-transparent text-white">
+                        <a href="#module-3" class="text-decoration-none d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-3-circle me-2"></i> P-Tuning v2 Implementation</span>
+                            <span class="badge bg-secondary">Not Started</span>
+                        </a>
+                    </li>
+                    <li class="list-group-item bg-transparent text-white">
+                        <a href="#module-4" class="text-decoration-none d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-4-circle me-2"></i> Adapter Layers Implementation</span>
+                            <span class="badge bg-secondary">Not Started</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <h4 class="mt-4">Resources</h4>
+                <a href="https://huggingface.co/docs/peft/index" target="_blank" class="resource-link">
+                    <i class="bi bi-file-earmark-text"></i> Hugging Face PEFT Documentation
+                </a>
+                <a href="https://arxiv.org/abs/2101.00190" target="_blank" class="resource-link">
+                    <i class="bi bi-file-earmark-pdf"></i> Prefix Tuning Paper
+                </a>
+                <a href="https://arxiv.org/abs/2110.07602" target="_blank" class="resource-link">
+                    <i class="bi bi-file-earmark-pdf"></i> P-Tuning v2 Paper
+                </a>
+                <a href="https://arxiv.org/abs/1902.00751" target="_blank" class="resource-link">
+                    <i class="bi bi-file-earmark-pdf"></i> Adapter Layers Paper
+                </a>
+
+                <div class="mt-4">
+                    <a href="{{ url_for('workshop_progress') }}" class="btn btn-primary w-100 mb-3">
+                        <i class="bi bi-bar-chart-line me-2"></i>View My Progress
+                    </a>
+                    <a href="{{ url_for('workshops') }}" class="btn btn-outline-secondary w-100">
+                        <i class="bi bi-arrow-left me-2"></i>Back to Workshops
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Simple JavaScript to handle module completion
+    document.addEventListener('DOMContentLoaded', function() {
+        const completeButtons = document.querySelectorAll('.complete-module-btn');
+        const progressBar = document.querySelector('.progress-bar');
+        const completedModulesText = document.getElementById('completed-modules');
+        const moduleStatuses = document.querySelectorAll('.list-group-item .badge');
+
+        let completedModules = 0;
+        const totalModules = completeButtons.length;
+
+        completeButtons.forEach((button, index) => {
+            button.addEventListener('click', function() {
+                // Update button state
+                this.disabled = true;
+                this.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i> Module Completed';
+                this.classList.add('completed');
+
+                // Update progress
+                completedModules++;
+                const progressPercentage = (completedModules / totalModules) * 100;
+                progressBar.style.width = progressPercentage + '%';
+                completedModulesText.textContent = completedModules;
+
+                // Update module status in sidebar
+                moduleStatuses[index].textContent = 'Completed';
+                moduleStatuses[index].classList.remove('bg-secondary');
+                moduleStatuses[index].classList.add('bg-success');
+
+                // Show next module button if not the last module
+                if (index < totalModules - 1) {
+                    const nextModuleId = `module-${index + 2}`;
+                    const nextModule = document.getElementById(nextModuleId);
+                    if (nextModule) {
+                        nextModule.scrollIntoView({behavior: 'smooth'});
+                    }
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

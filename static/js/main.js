@@ -450,75 +450,325 @@ function hideLoading() {
 
 // Load LLM concepts visualization
 function loadLLMConceptsVisualization() {
-    fetch('/api/llm-concepts-visualization')
-        .then(response => response.json())
-        .then(data => {
-            const iframe = document.createElement('iframe');
-            iframe.src = data.visualization_path;
-            iframe.style.width = '100%';
-            iframe.style.height = '100%';
-            iframe.style.border = 'none';
-            iframe.id = 'concepts-iframe';
+    // Show loading indicator
+    if (conceptsVisualization) {
+        conceptsVisualization.innerHTML = `
+            <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <span class="ms-3">Loading visualization...</span>
+            </div>
+        `;
+    }
 
-            conceptsVisualization.innerHTML = '';
-            conceptsVisualization.appendChild(iframe);
+    fetch('/api/llm-concepts-visualization')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Create a visualization directly from the data
+            createConceptsVisualization(data);
         })
         .catch(error => {
             console.error('Error loading LLM concepts visualization:', error);
-            conceptsVisualization.innerHTML =
-                '<div class="alert alert-danger">Error loading visualization</div>';
+            if (conceptsVisualization) {
+                conceptsVisualization.innerHTML =
+                    '<div class="alert alert-danger"><i class="bi bi-exclamation-triangle-fill me-2"></i>Error loading visualization. Please try refreshing the page.</div>';
+            }
         });
+}
+
+// Create concepts visualization from data
+function createConceptsVisualization(data) {
+    try {
+        // Check if the visualization container exists
+        if (!conceptsVisualization) {
+            console.error('Concepts visualization container not found');
+            return;
+        }
+
+        // Check if the data is valid
+        if (!data || !data.nodes || !data.edges) {
+            console.error('Invalid visualization data:', data);
+            conceptsVisualization.innerHTML =
+                '<div class="alert alert-danger"><i class="bi bi-exclamation-triangle-fill me-2"></i>Invalid visualization data. Please try refreshing the page.</div>';
+            return;
+        }
+
+        // Create a container for the visualization
+        const visContainer = document.createElement('div');
+        visContainer.style.width = '100%';
+        visContainer.style.height = '100%';
+        visContainer.id = 'concepts-network';
+
+        // Clear the container and add the visualization container
+        conceptsVisualization.innerHTML = '';
+        conceptsVisualization.appendChild(visContainer);
+
+        // Create the network
+        const nodes = new vis.DataSet(data.nodes);
+        const edges = new vis.DataSet(data.edges);
+
+        const networkData = {
+            nodes: nodes,
+            edges: edges
+        };
+
+        // Enhanced options for better visualization
+        const options = {
+            nodes: {
+                shape: 'dot',
+                size: 18,
+                font: {
+                    size: 16,
+                    face: 'Roboto, Arial, sans-serif',
+                    color: '#ffffff',
+                    strokeWidth: 2,
+                    strokeColor: 'rgba(0, 0, 0, 0.5)'
+                },
+                borderWidth: 2,
+                shadow: true,
+                scaling: {
+                    label: {
+                        enabled: true,
+                        min: 14,
+                        max: 24
+                    }
+                }
+            },
+            edges: {
+                width: 2,
+                smooth: {
+                    type: 'continuous',
+                    forceDirection: 'none'
+                },
+                color: {
+                    color: '#848484',
+                    highlight: '#4287f5',
+                    hover: '#4287f5'
+                },
+                selectionWidth: 3
+            },
+            physics: {
+                stabilization: {
+                    iterations: 200,
+                    fit: true
+                },
+                barnesHut: {
+                    gravitationalConstant: -80000,
+                    centralGravity: 0.3,
+                    springLength: 250,
+                    springConstant: 0.01,
+                    damping: 0.09,
+                    avoidOverlap: 0.2
+                }
+            },
+            interaction: {
+                hover: true,
+                tooltipDelay: 200,
+                zoomView: true,
+                dragView: true,
+                navigationButtons: true,
+                keyboard: {
+                    enabled: true,
+                    bindToWindow: false
+                },
+                multiselect: false
+            },
+            layout: {
+                improvedLayout: true
+            }
+        };
+
+        // Create the network
+        const network = new vis.Network(visContainer, networkData, options);
+
+        // Make the network accessible to zoom functions
+        window.conceptsNetwork = network;
+
+        // Add loading indicator during stabilization
+        const loadingIndicator = document.createElement('div');
+        loadingIndicator.className = 'network-loading';
+        loadingIndicator.innerHTML = `
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Stabilizing network...</span>
+            </div>
+            <span class="ms-2">Stabilizing visualization...</span>
+        `;
+        loadingIndicator.style.position = 'absolute';
+        loadingIndicator.style.top = '50%';
+        loadingIndicator.style.left = '50%';
+        loadingIndicator.style.transform = 'translate(-50%, -50%)';
+        loadingIndicator.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        loadingIndicator.style.color = 'white';
+        loadingIndicator.style.padding = '15px 20px';
+        loadingIndicator.style.borderRadius = '8px';
+        loadingIndicator.style.display = 'flex';
+        loadingIndicator.style.alignItems = 'center';
+        loadingIndicator.style.zIndex = '1000';
+        conceptsVisualization.appendChild(loadingIndicator);
+
+        // Add event listeners
+        network.on('stabilizationProgress', function(params) {
+            const progress = Math.round(params.iterations / params.total * 100);
+            console.log(`Stabilization progress: ${progress}%`);
+        });
+
+        network.on('stabilizationIterationsDone', function() {
+            console.log('Stabilization complete');
+            // Remove loading indicator
+            if (loadingIndicator && loadingIndicator.parentNode) {
+                loadingIndicator.parentNode.removeChild(loadingIndicator);
+            }
+        });
+
+        network.on('click', function(params) {
+            if (params.nodes.length > 0) {
+                const nodeId = params.nodes[0];
+                console.log(`Clicked node: ${nodeId}`);
+
+                // Navigate to the concept page
+                window.location.href = `/concept/${encodeURIComponent(nodeId)}`;
+            }
+        });
+
+        // Fit the network to the container
+        network.once("afterDrawing", function() {
+            setTimeout(function() {
+                network.fit({
+                    animation: {
+                        duration: 1000,
+                        easingFunction: 'easeInOutQuad'
+                    }
+                });
+            }, 200);
+        });
+    } catch (error) {
+        console.error('Error creating concepts visualization:', error);
+        if (conceptsVisualization) {
+            conceptsVisualization.innerHTML =
+                '<div class="alert alert-danger"><i class="bi bi-exclamation-triangle-fill me-2"></i>Error creating visualization: ' + error.message + '. Please try refreshing the page.</div>';
+        }
+    }
 }
 
 // Zoom functions for concepts visualization
 function zoomInConcepts() {
     try {
-        const iframe = document.querySelector('#concepts-visualization iframe');
-        if (iframe && iframe.contentWindow && iframe.contentWindow.network) {
-            const network = iframe.contentWindow.network;
+        if (window.conceptsNetwork) {
+            const network = window.conceptsNetwork;
             const scale = network.getScale() * 1.2;
             const position = network.getViewPosition();
+
+            // Add visual feedback for zoom action
+            const zoomInBtn = document.getElementById('concepts-zoom-in-btn');
+            if (zoomInBtn) {
+                zoomInBtn.classList.add('active');
+                setTimeout(() => zoomInBtn.classList.remove('active'), 300);
+            }
+
             network.moveTo({
                 position: position,
-                scale: scale
+                scale: scale,
+                animation: {
+                    duration: 300,
+                    easingFunction: 'easeInOutQuad'
+                }
             });
+
+            // Log zoom level for debugging
+            console.log(`Zoomed in to scale: ${scale.toFixed(2)}`);
+        } else {
+            console.warn('Concepts network not initialized for zoom in');
         }
     } catch (e) {
         console.error('Error zooming in concepts:', e);
+        // Show error message to user
+        const errorToast = document.createElement('div');
+        errorToast.className = 'alert alert-warning position-fixed bottom-0 end-0 m-3';
+        errorToast.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-2"></i>Error zooming in';
+        errorToast.style.zIndex = '9999';
+        document.body.appendChild(errorToast);
+        setTimeout(() => errorToast.remove(), 3000);
     }
 }
 
 function zoomOutConcepts() {
     try {
-        const iframe = document.querySelector('#concepts-visualization iframe');
-        if (iframe && iframe.contentWindow && iframe.contentWindow.network) {
-            const network = iframe.contentWindow.network;
+        if (window.conceptsNetwork) {
+            const network = window.conceptsNetwork;
             const scale = network.getScale() / 1.2;
             const position = network.getViewPosition();
+
+            // Add visual feedback for zoom action
+            const zoomOutBtn = document.getElementById('concepts-zoom-out-btn');
+            if (zoomOutBtn) {
+                zoomOutBtn.classList.add('active');
+                setTimeout(() => zoomOutBtn.classList.remove('active'), 300);
+            }
+
             network.moveTo({
                 position: position,
-                scale: scale
+                scale: scale,
+                animation: {
+                    duration: 300,
+                    easingFunction: 'easeInOutQuad'
+                }
             });
+
+            // Log zoom level for debugging
+            console.log(`Zoomed out to scale: ${scale.toFixed(2)}`);
+        } else {
+            console.warn('Concepts network not initialized for zoom out');
         }
     } catch (e) {
         console.error('Error zooming out concepts:', e);
+        // Show error message to user
+        const errorToast = document.createElement('div');
+        errorToast.className = 'alert alert-warning position-fixed bottom-0 end-0 m-3';
+        errorToast.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-2"></i>Error zooming out';
+        errorToast.style.zIndex = '9999';
+        document.body.appendChild(errorToast);
+        setTimeout(() => errorToast.remove(), 3000);
     }
 }
 
 function resetZoomConcepts() {
     try {
-        const iframe = document.querySelector('#concepts-visualization iframe');
-        if (iframe && iframe.contentWindow && iframe.contentWindow.network) {
-            const network = iframe.contentWindow.network;
+        if (window.conceptsNetwork) {
+            const network = window.conceptsNetwork;
+
+            // Add visual feedback for reset action
+            const resetZoomBtn = document.getElementById('concepts-reset-zoom-btn');
+            if (resetZoomBtn) {
+                resetZoomBtn.classList.add('active');
+                setTimeout(() => resetZoomBtn.classList.remove('active'), 1000);
+            }
+
             network.fit({
                 animation: {
                     duration: 1000,
                     easingFunction: 'easeInOutQuad'
                 }
             });
+
+            console.log('Reset zoom to fit view');
+        } else {
+            console.warn('Concepts network not initialized for reset zoom');
         }
     } catch (e) {
         console.error('Error resetting zoom for concepts:', e);
+        // Show error message to user
+        const errorToast = document.createElement('div');
+        errorToast.className = 'alert alert-warning position-fixed bottom-0 end-0 m-3';
+        errorToast.innerHTML = '<i class="bi bi-exclamation-triangle-fill me-2"></i>Error resetting zoom';
+        errorToast.style.zIndex = '9999';
+        document.body.appendChild(errorToast);
+        setTimeout(() => errorToast.remove(), 3000);
     }
 }
 

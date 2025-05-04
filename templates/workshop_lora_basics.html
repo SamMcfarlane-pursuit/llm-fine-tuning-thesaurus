@@ -2,46 +2,550 @@
 
 {% block title %}LoRA Basics Workshop{% endblock %}
 
+{% block styles %}
+{{ super() }}
+<style>
+    /* Workshop-specific styles */
+    .workshop-header {
+        background: linear-gradient(135deg, #4287f5, #3a75d8);
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .workshop-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 15px;
+        text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .workshop-subtitle {
+        font-size: 1.2rem;
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 20px;
+        font-weight: 400;
+    }
+
+    .workshop-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .workshop-meta .badge {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        border-radius: 30px;
+    }
+
+    .module-card {
+        border-radius: 15px;
+        overflow: hidden;
+        margin-bottom: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .module-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    }
+
+    .module-header {
+        padding: 20px;
+        background: linear-gradient(135deg, #3a75d8, #2a65c8);
+        color: white;
+        position: relative;
+    }
+
+    .module-number {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 40px;
+        height: 40px;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        font-weight: 700;
+    }
+
+    .module-content {
+        padding: 25px;
+        background-color: #1e1e1e;
+    }
+
+    .exercise-card {
+        background-color: #2a2a2a;
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .exercise-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        color: #4287f5;
+    }
+
+    .code-block {
+        background-color: #1a1a1a;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 15px 0;
+        overflow-x: auto;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .code-block pre {
+        margin: 0;
+        color: #e6e6e6;
+    }
+
+    .code-block code {
+        font-family: 'Fira Code', monospace;
+        font-size: 0.9rem;
+    }
+
+    .resource-link {
+        display: block;
+        padding: 12px 15px;
+        background-color: #2a2a2a;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        color: #4287f5;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(66, 135, 245, 0.2);
+    }
+
+    .resource-link:hover {
+        background-color: #333333;
+        transform: translateX(5px);
+        border-color: rgba(66, 135, 245, 0.5);
+    }
+
+    .resource-link i {
+        margin-right: 10px;
+    }
+
+    .progress-tracker {
+        background-color: #2a2a2a;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .progress-bar {
+        height: 10px;
+        border-radius: 5px;
+        background: linear-gradient(to right, #4287f5, #00c6ff);
+    }
+
+    .complete-module-btn {
+        background: linear-gradient(135deg, #00c853, #00d463);
+        border: none;
+        border-radius: 30px;
+        padding: 10px 20px;
+        color: white;
+        font-weight: 600;
+        margin-top: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .complete-module-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 200, 83, 0.4);
+    }
+
+    .module-nav {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+    }
+
+    .module-nav-btn {
+        padding: 10px 20px;
+        border-radius: 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .module-nav-btn:hover {
+        transform: translateY(-3px);
+    }
+
+    .module-nav-prev {
+        background-color: #2a2a2a;
+        color: white;
+    }
+
+    .module-nav-next {
+        background: linear-gradient(135deg, #4287f5, #3a75d8);
+        color: white;
+    }
+
+    @media (max-width: 768px) {
+        .workshop-meta {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .workshop-title {
+            font-size: 2rem;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container mt-4 mb-5">
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h1 class="mb-0">LoRA Basics Workshop</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('workshops') }}">Workshops</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">LoRA Basics</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="workshop-header">
+        <div class="row">
+            <div class="col-md-8">
+                <h1 class="workshop-title">LoRA Basics Workshop</h1>
+                <p class="workshop-subtitle">Master the fundamentals of Low-Rank Adaptation (LoRA) for efficient fine-tuning of large language models</p>
+
+                <div class="workshop-meta">
+                    <span class="badge bg-primary"><i class="bi bi-clock me-1"></i> 4 Hours</span>
+                    <span class="badge bg-success"><i class="bi bi-bar-chart-fill me-1"></i> Beginner/Intermediate</span>
+                    <span class="badge bg-info"><i class="bi bi-gpu-card me-1"></i> GPU Recommended</span>
+                    <span class="badge bg-warning text-dark"><i class="bi bi-tools me-1"></i> Hands-on</span>
                 </div>
-                <div class="card-body">
-                    <div class="alert alert-info">
-                        <p>This is a placeholder page for the LoRA Basics Workshop. The full workshop content will be implemented soon.</p>
+            </div>
+            <div class="col-md-4 d-flex align-items-center justify-content-center">
+                <div style="width: 120px; height: 120px; background: rgba(255, 255, 255, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="bi bi-diagram-3" style="font-size: 3rem; color: white;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Module 1 -->
+            <div class="module-card" id="module-1">
+                <div class="module-header">
+                    <h2>Introduction to LoRA</h2>
+                    <div class="module-number">1</div>
+                </div>
+                <div class="module-content">
+                    <p>Low-Rank Adaptation (LoRA) is a technique for efficiently fine-tuning large language models by freezing the pre-trained model weights and injecting trainable rank decomposition matrices into each layer of the Transformer architecture.</p>
+
+                    <h3 class="mt-4">Key Concepts</h3>
+                    <ul>
+                        <li><strong>Parameter-Efficient Fine-Tuning (PEFT):</strong> Approaches that adapt pre-trained language models to specific tasks with significantly fewer trainable parameters</li>
+                        <li><strong>Low-Rank Decomposition:</strong> Approximating a large matrix using the product of two smaller matrices</li>
+                        <li><strong>Rank (r):</strong> A hyperparameter that determines the size of the low-rank matrices and the capacity of the adaptation</li>
+                        <li><strong>Alpha (α):</strong> A scaling factor that controls the magnitude of the LoRA update</li>
+                    </ul>
+
+                    <div class="exercise-card">
+                        <h4 class="exercise-title"><i class="bi bi-laptop me-2"></i>Exercise 1.1: Understanding LoRA Mathematics</h4>
+                        <p>In this exercise, we'll explore the mathematical foundations of LoRA and how it reduces the number of trainable parameters.</p>
+
+                        <div class="code-block">
+                            <pre><code>import numpy as np
+
+# Original weight matrix (pretrained, frozen)
+W = np.random.randn(768, 768)  # Example size for a transformer layer
+
+# LoRA parameters
+r = 8  # Rank
+alpha = 16  # Scaling factor
+
+# LoRA matrices (trainable)
+A = np.random.randn(768, r)  # Down-projection
+B = np.zeros((r, 768))  # Up-projection (initialized to zero)
+
+# LoRA update calculation
+delta_W = (alpha / r) * (A @ B)
+
+# Effective weight matrix during inference
+W_effective = W + delta_W
+
+# Calculate parameter counts
+params_original = W.size
+params_lora = A.size + B.size
+reduction_factor = params_original / params_lora
+
+print(f"Original parameters: {params_original:,}")
+print(f"LoRA parameters: {params_lora:,}")
+print(f"Parameter reduction: {reduction_factor:.2f}x")</code></pre>
+                        </div>
+
+                        <p>Try different values of rank (r) and observe how it affects the parameter count and reduction factor.</p>
+
+                        <button class="btn btn-primary mt-3" onclick="alert('This feature will be implemented soon!')">
+                            <i class="bi bi-play-fill me-1"></i> Run in Colab
+                        </button>
                     </div>
-                    
-                    <h2>Workshop Overview</h2>
-                    <p>This workshop will cover the basics of Low-Rank Adaptation (LoRA) for fine-tuning large language models. LoRA is a parameter-efficient fine-tuning technique that significantly reduces memory requirements while maintaining performance.</p>
-                    
-                    <h3>What You'll Learn</h3>
+
+                    <button class="complete-module-btn" onclick="alert('Module marked as complete!')">
+                        <i class="bi bi-check-circle me-1"></i> Mark Module as Complete
+                    </button>
+                </div>
+            </div>
+
+            <!-- Module 2 -->
+            <div class="module-card" id="module-2">
+                <div class="module-header">
+                    <h2>Setting Up Your Environment</h2>
+                    <div class="module-number">2</div>
+                </div>
+                <div class="module-content">
+                    <p>In this module, we'll set up the necessary environment for implementing LoRA fine-tuning using the Hugging Face Transformers and PEFT libraries.</p>
+
+                    <h3 class="mt-4">Required Libraries</h3>
                     <ul>
-                        <li>Understanding the core concepts of LoRA</li>
-                        <li>Setting up your environment for LoRA fine-tuning</li>
-                        <li>Preparing your dataset for fine-tuning</li>
-                        <li>Implementing LoRA with Hugging Face Transformers</li>
-                        <li>Evaluating your fine-tuned model</li>
+                        <li><strong>transformers:</strong> For accessing pre-trained models and tokenizers</li>
+                        <li><strong>peft:</strong> Parameter-Efficient Fine-Tuning library that implements LoRA</li>
+                        <li><strong>datasets:</strong> For loading and processing datasets</li>
+                        <li><strong>torch:</strong> The underlying deep learning framework</li>
                     </ul>
-                    
-                    <h3>Prerequisites</h3>
-                    <ul>
-                        <li>Basic understanding of neural networks and transformers</li>
-                        <li>Familiarity with Python and PyTorch</li>
-                        <li>Access to a GPU (recommended but not required)</li>
-                    </ul>
-                    
-                    <div class="mt-4">
-                        <a href="{{ url_for('workshops') }}" class="btn btn-outline-secondary">
-                            <i class="bi bi-arrow-left me-2"></i>Back to Workshops
+
+                    <div class="exercise-card">
+                        <h4 class="exercise-title"><i class="bi bi-laptop me-2"></i>Exercise 2.1: Environment Setup</h4>
+                        <p>Install the necessary libraries and verify the setup:</p>
+
+                        <div class="code-block">
+                            <pre><code>!pip install -q transformers peft datasets accelerate bitsandbytes
+!pip install -q torch==2.0.1
+
+import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from peft import get_peft_model, LoraConfig, TaskType
+
+# Check if GPU is available
+if torch.cuda.is_available():
+    print(f"GPU available: {torch.cuda.get_device_name(0)}")
+    print(f"CUDA Version: {torch.version.cuda}")
+else:
+    print("No GPU available, using CPU")
+
+# Verify transformers and peft versions
+import transformers
+import peft
+print(f"Transformers version: {transformers.__version__}")
+print(f"PEFT version: {peft.__version__}")</code></pre>
+                        </div>
+
+                        <button class="btn btn-primary mt-3" onclick="alert('This feature will be implemented soon!')">
+                            <i class="bi bi-play-fill me-1"></i> Run in Colab
+                        </button>
+                    </div>
+
+                    <button class="complete-module-btn" onclick="alert('Module marked as complete!')">
+                        <i class="bi bi-check-circle me-1"></i> Mark Module as Complete
+                    </button>
+                </div>
+            </div>
+
+            <!-- Module 3 -->
+            <div class="module-card" id="module-3">
+                <div class="module-header">
+                    <h2>Implementing LoRA Fine-Tuning</h2>
+                    <div class="module-number">3</div>
+                </div>
+                <div class="module-content">
+                    <p>Now we'll implement LoRA fine-tuning on a pre-trained language model for a specific task.</p>
+
+                    <h3 class="mt-4">Implementation Steps</h3>
+                    <ol>
+                        <li>Load a pre-trained model and tokenizer</li>
+                        <li>Configure LoRA parameters</li>
+                        <li>Apply LoRA to the model</li>
+                        <li>Prepare the dataset</li>
+                        <li>Fine-tune the model</li>
+                        <li>Evaluate the results</li>
+                    </ol>
+
+                    <div class="exercise-card">
+                        <h4 class="exercise-title"><i class="bi bi-laptop me-2"></i>Exercise 3.1: Implementing LoRA with PEFT</h4>
+                        <p>In this exercise, we'll implement LoRA fine-tuning on a small language model:</p>
+
+                        <div class="code-block">
+                            <pre><code>from transformers import AutoModelForCausalLM, AutoTokenizer
+from peft import get_peft_model, LoraConfig, TaskType
+
+# 1. Load pre-trained model and tokenizer
+model_name = "gpt2"  # Using a small model for demonstration
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(model_name)
+
+# 2. Configure LoRA
+peft_config = LoraConfig(
+    task_type=TaskType.CAUSAL_LM,
+    r=8,  # Rank
+    lora_alpha=16,  # Alpha parameter
+    lora_dropout=0.1,  # Dropout probability for LoRA layers
+    # Target the attention modules
+    target_modules=["c_attn", "c_proj"],
+    bias="none",  # Don't train bias parameters
+)
+
+# 3. Apply LoRA to the model
+model = get_peft_model(model, peft_config)
+
+# Print trainable parameters
+model.print_trainable_parameters()
+
+# Example inference with the model
+input_text = "Fine-tuning large language models with LoRA"
+input_ids = tokenizer(input_text, return_tensors="pt").input_ids
+
+# Generate text
+output = model.generate(
+    input_ids=input_ids,
+    max_length=50,
+    num_return_sequences=1,
+    temperature=0.7,
+)
+
+# Decode and print the generated text
+generated_text = tokenizer.decode(output[0], skip_special_tokens=True)
+print(f"Generated text: {generated_text}")</code></pre>
+                        </div>
+
+                        <button class="btn btn-primary mt-3" onclick="alert('This feature will be implemented soon!')">
+                            <i class="bi bi-play-fill me-1"></i> Run in Colab
+                        </button>
+                    </div>
+
+                    <button class="complete-module-btn" onclick="alert('Module marked as complete!')">
+                        <i class="bi bi-check-circle me-1"></i> Mark Module as Complete
+                    </button>
+                </div>
+            </div>
+
+            <div class="module-nav">
+                <button class="btn module-nav-btn module-nav-prev" disabled>
+                    <i class="bi bi-arrow-left me-1"></i> Previous Module
+                </button>
+                <button class="btn module-nav-btn module-nav-next" onclick="document.getElementById('module-2').scrollIntoView({behavior: 'smooth'})">
+                    Next Module <i class="bi bi-arrow-right ms-1"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="progress-tracker sticky-top" style="top: 20px;">
+                <h3>Your Progress</h3>
+                <div class="progress mt-3 mb-3" style="height: 10px;">
+                    <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <p><span id="completed-modules">0</span> of 3 modules completed</p>
+
+                <h4 class="mt-4">Workshop Modules</h4>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item bg-transparent text-white">
+                        <a href="#module-1" class="text-decoration-none d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-1-circle me-2"></i> Introduction to LoRA</span>
+                            <span class="badge bg-secondary">Not Started</span>
                         </a>
-                    </div>
+                    </li>
+                    <li class="list-group-item bg-transparent text-white">
+                        <a href="#module-2" class="text-decoration-none d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-2-circle me-2"></i> Setting Up Your Environment</span>
+                            <span class="badge bg-secondary">Not Started</span>
+                        </a>
+                    </li>
+                    <li class="list-group-item bg-transparent text-white">
+                        <a href="#module-3" class="text-decoration-none d-flex justify-content-between align-items-center">
+                            <span><i class="bi bi-3-circle me-2"></i> Implementing LoRA Fine-Tuning</span>
+                            <span class="badge bg-secondary">Not Started</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <h4 class="mt-4">Resources</h4>
+                <a href="https://huggingface.co/docs/peft/conceptual_guides/lora" target="_blank" class="resource-link">
+                    <i class="bi bi-file-earmark-text"></i> Hugging Face PEFT LoRA Guide
+                </a>
+                <a href="https://arxiv.org/abs/2106.09685" target="_blank" class="resource-link">
+                    <i class="bi bi-file-earmark-pdf"></i> LoRA: Low-Rank Adaptation Paper
+                </a>
+                <a href="https://colab.research.google.com/github/huggingface/peft/blob/main/examples/causal_language_modeling/peft_lora_clm_accelerate_ds_zero3.ipynb" target="_blank" class="resource-link">
+                    <i class="bi bi-google"></i> LoRA Fine-tuning Colab
+                </a>
+
+                <div class="mt-4">
+                    <a href="{{ url_for('workshop_progress') }}" class="btn btn-primary w-100 mb-3">
+                        <i class="bi bi-bar-chart-line me-2"></i>View My Progress
+                    </a>
+                    <a href="{{ url_for('workshops') }}" class="btn btn-outline-secondary w-100">
+                        <i class="bi bi-arrow-left me-2"></i>Back to Workshops
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    // Simple JavaScript to handle module completion
+    document.addEventListener('DOMContentLoaded', function() {
+        const completeButtons = document.querySelectorAll('.complete-module-btn');
+        const progressBar = document.querySelector('.progress-bar');
+        const completedModulesText = document.getElementById('completed-modules');
+        const moduleStatuses = document.querySelectorAll('.list-group-item .badge');
+
+        let completedModules = 0;
+        const totalModules = completeButtons.length;
+
+        completeButtons.forEach((button, index) => {
+            button.addEventListener('click', function() {
+                // Update button state
+                this.disabled = true;
+                this.innerHTML = '<i class="bi bi-check-circle-fill me-1"></i> Module Completed';
+                this.classList.add('completed');
+
+                // Update progress
+                completedModules++;
+                const progressPercentage = (completedModules / totalModules) * 100;
+                progressBar.style.width = progressPercentage + '%';
+                completedModulesText.textContent = completedModules;
+
+                // Update module status in sidebar
+                moduleStatuses[index].textContent = 'Completed';
+                moduleStatuses[index].classList.remove('bg-secondary');
+                moduleStatuses[index].classList.add('bg-success');
+
+                // Show next module button if not the last module
+                if (index < totalModules - 1) {
+                    const nextModuleId = `module-${index + 2}`;
+                    const nextModule = document.getElementById(nextModuleId);
+                    if (nextModule) {
+                        nextModule.scrollIntoView({behavior: 'smooth'});
+                    }
+                }
+            });
+        });
+    });
+</script>
 {% endblock %}

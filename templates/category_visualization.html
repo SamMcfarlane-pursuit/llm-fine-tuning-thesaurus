@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ concept|title }} - Category Visualization{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/category-visualization.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="category-visualization-container">
+    <div class="visualization-header">
+        <h1>{{ concept|title }} Visualization</h1>
+        <div class="category-badge {{ category }}">{{ category|title }}</div>
+        <p class="visualization-description">
+            Explore the relationships between concepts in the {{ category }} category.
+            This visualization shows how {{ concept }} relates to other concepts in the LLM fine-tuning domain.
+        </p>
+    </div>
+
+    <div class="visualization-controls">
+        <a href="{{ url_for('learn_and_explore', concept=concept) }}" class="control-button">
+            <i class="fas fa-book"></i> Learn & Explore
+        </a>
+        <a href="{{ url_for('thesaurus') }}" class="control-button">
+            <i class="fas fa-search"></i> Thesaurus Search
+        </a>
+        <div class="category-selector">
+            <label for="category-select">View Category:</label>
+            <select id="category-select" onchange="changeCategory(this.value)">
+                <option value="deployment" {% if category == 'deployment' %}selected{% endif %}>Deployment & Infrastructure</option>
+                <option value="optimization" {% if category == 'optimization' %}selected{% endif %}>Optimization Techniques</option>
+                <option value="architecture" {% if category == 'architecture' %}selected{% endif %}>Model Architecture</option>
+                <option value="training" {% if category == 'training' %}selected{% endif %}>Training Concepts</option>
+                <option value="hardware" {% if category == 'hardware' %}selected{% endif %}>Hardware Acceleration</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="visualization-frame-container">
+        <iframe id="visualization-frame" src="{{ visualization_path }}" frameborder="0"></iframe>
+    </div>
+
+    <div class="category-info-panel">
+        <h2>About {{ category|title }} Category</h2>
+        <div class="category-description">
+            {% if category == 'deployment' %}
+            <p>The <strong>Deployment & Infrastructure</strong> category covers concepts related to deploying and serving LLM models in production environments. This includes containerization technologies like Docker, orchestration with Kubernetes, and infrastructure considerations for scaling and serving models efficiently.</p>
+            <p>Key concepts in this category include containers, Docker, Kubernetes, scaling, and infrastructure requirements for LLM deployment.</p>
+            {% elif category == 'optimization' %}
+            <p>The <strong>Optimization Techniques</strong> category focuses on methods to make LLMs more efficient in terms of memory usage, inference speed, and training requirements. This includes quantization techniques like QLoRA, pruning methods, and knowledge distillation approaches.</p>
+            <p>Key concepts in this category include quantization, pruning, distillation, NF4 format, and memory-efficient fine-tuning techniques.</p>
+            {% elif category == 'architecture' %}
+            <p>The <strong>Model Architecture</strong> category explores the structural components and design of large language models. This includes transformer architectures, attention mechanisms, and the encoder/decoder components that make up modern LLMs.</p>
+            <p>Key concepts in this category include transformers, attention mechanisms, encoders, decoders, and specific architectures like GPT and BERT.</p>
+            {% elif category == 'training' %}
+            <p>The <strong>Training Concepts</strong> category covers methods and techniques for training and fine-tuning large language models. This includes parameter-efficient fine-tuning methods like LoRA, hyperparameter optimization, and training strategies.</p>
+            <p>Key concepts in this category include hyperparameters, learning rate scheduling, batch size optimization, and fine-tuning techniques like LoRA and PEFT.</p>
+            {% elif category == 'hardware' %}
+            <p>The <strong>Hardware Acceleration</strong> category focuses on specialized hardware and techniques for accelerating LLM training and inference. This includes GPUs, TPUs, and various optimization methods for hardware-efficient processing.</p>
+            <p>Key concepts in this category include GPU acceleration, TPU processing, mixed precision training, distributed training, and hardware-specific optimizations for TensorFlow and PyTorch.</p>
+            {% else %}
+            <p>This category includes various concepts related to LLM fine-tuning and deployment. Explore the visualization to discover relationships between different concepts.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="related-concepts">
+        <h2>Related Concepts</h2>
+        <div class="concept-buttons">
+            {% for related_concept in related_concepts %}
+            <a href="{{ url_for('category_visualization', concept=related_concept) }}" class="concept-button">{{ related_concept }}</a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function changeCategory(category) {
+        // This would typically change the visualization to show a different category view
+        // For now, we'll just redirect to the same concept with a different category parameter
+        window.location.href = "{{ url_for('category_visualization', concept=concept) }}?category=" + category;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add any initialization code here
+        console.log('Category visualization loaded for {{ concept }} in {{ category }} category');
+    });
+</script>
+{% endblock %}

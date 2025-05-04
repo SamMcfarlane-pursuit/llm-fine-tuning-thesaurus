@@ -15,22 +15,22 @@ document.addEventListener('DOMContentLoaded', function() {
 function initTracking() {
     // Track clicks on important elements
     trackClicks();
-    
+
     // Track form submissions
     trackForms();
-    
+
     // Track search interactions
     trackSearch();
-    
+
     // Track content engagement
     trackContentEngagement();
-    
+
     // Track tutorial progress
     trackTutorialProgress();
-    
+
     // Track quiz interactions
     trackQuizInteractions();
-    
+
     // Track exercise interactions
     trackExerciseInteractions();
 }
@@ -50,7 +50,7 @@ function trackClicks() {
             });
         });
     });
-    
+
     // Track button clicks
     document.querySelectorAll('button, .btn').forEach(button => {
         button.addEventListener('click', function(event) {
@@ -64,14 +64,14 @@ function trackClicks() {
             }
         });
     });
-    
+
     // Track card clicks
     document.querySelectorAll('.card').forEach(card => {
         card.addEventListener('click', function(event) {
             // Only track if the card itself was clicked (not a child element)
-            if (event.target === this || event.target.classList.contains('card-body') || 
+            if (event.target === this || event.target.classList.contains('card-body') ||
                 event.target.classList.contains('card-title') || event.target.classList.contains('card-text')) {
-                
+
                 const cardTitle = this.querySelector('.card-title');
                 trackEvent('card_click', {
                     card_title: cardTitle ? cardTitle.textContent.trim() : null,
@@ -81,7 +81,7 @@ function trackClicks() {
             }
         });
     });
-    
+
     // Track tab clicks
     document.querySelectorAll('[data-bs-toggle="tab"]').forEach(tab => {
         tab.addEventListener('shown.bs.tab', function(event) {
@@ -103,21 +103,21 @@ function trackForms() {
             // Get form data (excluding sensitive fields)
             const formData = {};
             const excludedFields = ['password', 'token', 'csrf', 'credit_card', 'card_number'];
-            
+
             // Get form fields
             const formElements = Array.from(this.elements);
             formElements.forEach(element => {
                 // Skip excluded fields and buttons
-                if (element.name && 
-                    !excludedFields.some(field => element.name.toLowerCase().includes(field)) && 
-                    element.type !== 'submit' && 
+                if (element.name &&
+                    !excludedFields.some(field => element.name.toLowerCase().includes(field)) &&
+                    element.type !== 'submit' &&
                     element.type !== 'button') {
-                    
+
                     // For checkboxes and radio buttons, only include if checked
                     if ((element.type === 'checkbox' || element.type === 'radio') && !element.checked) {
                         return;
                     }
-                    
+
                     // For select elements with multiple selection
                     if (element.type === 'select-multiple') {
                         formData[element.name] = Array.from(element.selectedOptions).map(option => option.value);
@@ -126,7 +126,7 @@ function trackForms() {
                     }
                 }
             });
-            
+
             trackEvent('form_submit', {
                 form_id: this.id || null,
                 form_action: this.action || null,
@@ -154,7 +154,7 @@ function trackSearch() {
             }
         });
     });
-    
+
     // Track search result clicks
     document.querySelectorAll('.search-results a, .search-result').forEach(result => {
         result.addEventListener('click', function(event) {
@@ -175,25 +175,25 @@ function trackContentEngagement() {
     let maxScrollDepth = 0;
     let contentStartTime = Date.now();
     let lastScrollTime = contentStartTime;
-    
+
     window.addEventListener('scroll', function() {
         // Calculate scroll depth as percentage
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
         const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
         const scrollDepth = Math.round((scrollTop / scrollHeight) * 100);
-        
+
         // Update max scroll depth
         if (scrollDepth > maxScrollDepth) {
             maxScrollDepth = scrollDepth;
             lastScrollTime = Date.now();
         }
     });
-    
+
     // Track time spent on page when user leaves
     window.addEventListener('beforeunload', function() {
         const timeSpent = Math.round((Date.now() - contentStartTime) / 1000); // in seconds
         const activeTime = Math.round((lastScrollTime - contentStartTime) / 1000); // in seconds
-        
+
         trackEvent('content_engagement', {
             max_scroll_depth: maxScrollDepth,
             time_spent: timeSpent,
@@ -201,13 +201,13 @@ function trackContentEngagement() {
             path: window.location.pathname
         });
     });
-    
+
     // Track copy events
     document.addEventListener('copy', function(event) {
         // Get selected text
         const selection = window.getSelection();
         const selectedText = selection.toString().substring(0, 100); // Limit to 100 chars
-        
+
         if (selectedText) {
             trackEvent('content_copy', {
                 text: selectedText,
@@ -234,7 +234,7 @@ function trackTutorialProgress() {
             }
         });
     });
-    
+
     // Track tutorial complete
     const tutorialCompleteButtons = document.querySelectorAll('.tutorial-complete-btn, .complete-tutorial');
     tutorialCompleteButtons.forEach(button => {
@@ -249,7 +249,7 @@ function trackTutorialProgress() {
             }
         });
     });
-    
+
     // Track tutorial progress
     const tutorialProgressElements = document.querySelectorAll('.tutorial-progress');
     tutorialProgressElements.forEach(element => {
@@ -259,7 +259,7 @@ function trackTutorialProgress() {
                 if (entry.isIntersecting) {
                     const progressStep = entry.target.dataset.step;
                     const tutorialId = getTutorialIdFromPath();
-                    
+
                     if (tutorialId && progressStep) {
                         trackEvent('tutorial_progress', {
                             tutorial_id: tutorialId,
@@ -267,13 +267,13 @@ function trackTutorialProgress() {
                             progress_percent: element.dataset.progress || null
                         });
                     }
-                    
+
                     // Unobserve after tracking
                     observer.unobserve(entry.target);
                 }
             });
         }, { threshold: 0.5 });
-        
+
         // Start observing
         observer.observe(element);
     });
@@ -296,7 +296,7 @@ function trackQuizInteractions() {
             }
         });
     });
-    
+
     // Track quiz complete
     const quizForms = document.querySelectorAll('form.quiz-form');
     quizForms.forEach(form => {
@@ -306,26 +306,26 @@ function trackQuizInteractions() {
                 // Count number of answered questions
                 const totalQuestions = form.querySelectorAll('.quiz-question').length;
                 let answeredQuestions = 0;
-                
+
                 // Check different question types
                 const radioInputs = form.querySelectorAll('input[type="radio"]:checked');
                 const checkboxInputs = form.querySelectorAll('input[type="checkbox"]:checked');
                 const textInputs = form.querySelectorAll('textarea, input[type="text"]');
-                
+
                 answeredQuestions += radioInputs.length;
-                
+
                 // Group checkboxes by name (each group is one question)
                 const checkboxGroups = new Set();
                 checkboxInputs.forEach(input => checkboxGroups.add(input.name));
                 answeredQuestions += checkboxGroups.size;
-                
+
                 // Count text inputs with content
                 textInputs.forEach(input => {
                     if (input.value.trim()) {
                         answeredQuestions++;
                     }
                 });
-                
+
                 trackEvent('quiz_complete', {
                     quiz_id: quizId,
                     quiz_title: getQuizTitle(),
@@ -336,7 +336,7 @@ function trackQuizInteractions() {
             }
         });
     });
-    
+
     // Track individual question answers
     document.querySelectorAll('.quiz-question').forEach(question => {
         // For radio buttons and checkboxes
@@ -344,7 +344,7 @@ function trackQuizInteractions() {
             input.addEventListener('change', function(event) {
                 const questionId = question.dataset.questionId || question.id;
                 const quizId = getQuizIdFromPath();
-                
+
                 if (questionId && quizId) {
                     trackEvent('quiz_answer', {
                         quiz_id: quizId,
@@ -355,14 +355,14 @@ function trackQuizInteractions() {
                 }
             });
         });
-        
+
         // For text inputs
         question.querySelectorAll('textarea, input[type="text"]').forEach(input => {
             input.addEventListener('blur', function(event) {
                 if (this.value.trim()) {
                     const questionId = question.dataset.questionId || question.id;
                     const quizId = getQuizIdFromPath();
-                    
+
                     if (questionId && quizId) {
                         trackEvent('quiz_answer', {
                             quiz_id: quizId,
@@ -394,7 +394,7 @@ function trackExerciseInteractions() {
             }
         });
     });
-    
+
     // Track exercise complete
     const exerciseCompleteButtons = document.querySelectorAll('.exercise-complete-btn, .complete-exercise');
     exerciseCompleteButtons.forEach(button => {
@@ -409,14 +409,14 @@ function trackExerciseInteractions() {
             }
         });
     });
-    
+
     // Track code execution
     const codeRunButtons = document.querySelectorAll('.run-code-btn, .execute-code');
     codeRunButtons.forEach(button => {
         button.addEventListener('click', function(event) {
             const exerciseId = this.dataset.exerciseId || getExerciseIdFromPath();
             const codeBlock = this.closest('.code-block');
-            
+
             if (exerciseId) {
                 trackEvent('code_execution', {
                     exercise_id: exerciseId,
@@ -436,25 +436,36 @@ function trackExerciseInteractions() {
 function trackEvent(eventType, eventData) {
     // Add timestamp
     eventData.timestamp = new Date().toISOString();
-    
+
     // Add page info
     eventData.page_url = window.location.href;
     eventData.page_title = document.title;
-    
-    // Send event to server
-    fetch('/api/analytics/track', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest'
-        },
-        body: JSON.stringify({
-            event_type: eventType,
-            event_data: eventData
-        })
-    }).catch(error => {
-        console.error('Error tracking event:', error);
-    });
+
+    // Check if the API endpoint exists
+    if (typeof window.apiEndpoints !== 'undefined' && window.apiEndpoints.analyticsTrack) {
+        const trackUrl = window.apiEndpoints.analyticsTrack;
+
+        // Send event to server
+        fetch(trackUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({
+                event_type: eventType,
+                event_data: eventData
+            })
+        }).catch(error => {
+            console.error('Error tracking event:', error);
+        });
+    } else {
+        // Log that we're skipping analytics tracking
+        console.log('Analytics tracking skipped: API endpoint not available');
+
+        // Don't attempt to fetch from a hardcoded URL to avoid 404 errors
+        // This prevents the "/undefined" 404 error
+    }
 }
 
 /**
@@ -522,12 +533,12 @@ function getTutorialTimeSpent() {
     // Check for stored start time
     const startTimeKey = `tutorial_start_time_${getTutorialIdFromPath()}`;
     const startTime = localStorage.getItem(startTimeKey);
-    
+
     if (startTime) {
         const timeSpent = Math.round((Date.now() - parseInt(startTime)) / 1000);
         return timeSpent;
     }
-    
+
     return 0;
 }
 
@@ -539,12 +550,12 @@ function getExerciseTimeSpent() {
     // Check for stored start time
     const startTimeKey = `exercise_start_time_${getExerciseIdFromPath()}`;
     const startTime = localStorage.getItem(startTimeKey);
-    
+
     if (startTime) {
         const timeSpent = Math.round((Date.now() - parseInt(startTime)) / 1000);
         return timeSpent;
     }
-    
+
     return 0;
 }
 
@@ -556,10 +567,10 @@ function getExerciseTimeSpent() {
 function getElementPosition(element) {
     let position = 1;
     let sibling = element;
-    
+
     while (sibling = sibling.previousElementSibling) {
         position++;
     }
-    
+
     return position;
 }

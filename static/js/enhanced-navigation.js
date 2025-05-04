@@ -1,11 +1,18 @@
 /**
  * Enhanced Navigation JavaScript
- * Provides robust scrolling features and section information
+ * Provides robust scrolling features, section information, and mobile optimizations
  */
 
 document.addEventListener('DOMContentLoaded', function() {
     try {
         console.log('Initializing enhanced navigation features...');
+
+        // Fix for iOS 100vh issue
+        setMobileViewportHeight();
+
+        // Handle mobile viewport height on resize and orientation change
+        window.addEventListener('resize', setMobileViewportHeight);
+        window.addEventListener('orientationchange', setMobileViewportHeight);
 
         // Create scroll indicator (always create this for all pages)
         createScrollIndicator();
@@ -31,6 +38,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Add hover effects to navigation items
         enhanceNavigationItems();
 
+        // Add mobile-specific navigation enhancements
+        enhanceMobileNavigation();
+
         // Add page-specific enhancements based on URL
         applyPageSpecificEnhancements();
 
@@ -47,6 +57,64 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+
+/**
+ * Fix for iOS 100vh issue
+ */
+function setMobileViewportHeight() {
+    // First we get the viewport height and multiply it by 1% to get a value for a vh unit
+    const vh = window.innerHeight * 0.01;
+    // Then we set the value in the --vh custom property to the root of the document
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+
+/**
+ * Enhance mobile navigation experience
+ */
+function enhanceMobileNavigation() {
+    // Close navbar collapse when clicking outside
+    document.addEventListener('click', function(event) {
+        const navbarCollapse = document.querySelector('.navbar-collapse.show');
+        if (navbarCollapse) {
+            // Check if click is outside navbar
+            if (!navbarCollapse.contains(event.target) &&
+                !event.target.classList.contains('navbar-toggler') &&
+                !event.target.closest('.navbar-toggler')) {
+                // Find the toggler button and click it to close the menu
+                const toggler = document.querySelector('.navbar-toggler');
+                if (toggler) toggler.click();
+            }
+        }
+    });
+
+    // Close navbar collapse when a nav item is clicked
+    const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            const navbarCollapse = document.querySelector('.navbar-collapse.show');
+            if (navbarCollapse) {
+                const toggler = document.querySelector('.navbar-toggler');
+                if (toggler) toggler.click();
+            }
+        });
+    });
+
+    // Add active state for touch feedback
+    const touchElements = document.querySelectorAll('.nav-link, .dropdown-item');
+    touchElements.forEach(element => {
+        element.addEventListener('touchstart', function() {
+            this.classList.add('touch-active');
+        }, { passive: true });
+
+        element.addEventListener('touchend', function() {
+            this.classList.remove('touch-active');
+        }, { passive: true });
+
+        element.addEventListener('touchcancel', function() {
+            this.classList.remove('touch-active');
+        }, { passive: true });
+    });
+}
 
 /**
  * Create scroll indicator at the top of the page
@@ -149,12 +217,31 @@ function createSectionIndicator() {
             <span>Current Section</span>
         </div>
         <p class="section-indicator-content">Scrolling to view content...</p>
+        <div class="section-indicator-stats">
+            <span class="section-position">Position: 0/0</span>
+            <span class="section-progress">0%</span>
+        </div>
         <div class="section-indicator-progress">
             <div class="section-indicator-progress-bar"></div>
+        </div>
+        <div class="section-indicator-nav">
+            <button class="section-nav-button prev-section" disabled>
+                <i class="bi bi-arrow-left"></i> Previous
+            </button>
+            <button class="section-nav-button next-section" disabled>
+                Next <i class="bi bi-arrow-right"></i>
+            </button>
         </div>
     `;
 
     document.body.appendChild(sectionIndicator);
+
+    // Add event listeners to navigation buttons
+    const prevButton = sectionIndicator.querySelector('.prev-section');
+    const nextButton = sectionIndicator.querySelector('.next-section');
+
+    prevButton.addEventListener('click', navigateToPreviousSection);
+    nextButton.addEventListener('click', navigateToNextSection);
 }
 
 /**
@@ -360,21 +447,41 @@ function updateSectionIndicator(sectionIndicator, sections) {
                 `Current section: ${sectionTitle}. Progress: ${Math.round(progressPercentage)}% of page`);
         }
 
+        // Update position and progress stats
+        const sectionPosition = sectionIndicator.querySelector('.section-position');
+        const sectionProgress = sectionIndicator.querySelector('.section-progress');
+
+        if (sectionPosition) {
+            sectionPosition.textContent = `Position: ${currentSectionIndex + 1}/${sections.length}`;
+        }
+
+        if (sectionProgress) {
+            sectionProgress.textContent = `${Math.round(progressPercentage)}%`;
+        }
+
+        // Update navigation buttons
+        const prevButton = sectionIndicator.querySelector('.prev-section');
+        const nextButton = sectionIndicator.querySelector('.next-section');
+
+        if (prevButton) {
+            prevButton.disabled = currentSectionIndex === 0;
+        }
+
+        if (nextButton) {
+            nextButton.disabled = currentSectionIndex === sections.length - 1;
+        }
+
         // Add additional information about the section if available
         const sectionDescription = getSectionDescription(currentSection);
         if (sectionDescription && !sectionIndicator.querySelector('.section-indicator-description')) {
             const descriptionElement = document.createElement('p');
             descriptionElement.className = 'section-indicator-description';
             descriptionElement.textContent = sectionDescription;
-            descriptionElement.style.fontSize = '0.85rem';
-            descriptionElement.style.color = 'rgba(255, 255, 255, 0.7)';
-            descriptionElement.style.marginTop = '5px';
-            descriptionElement.style.marginBottom = '0';
 
-            // Insert before progress bar
-            const progressElement = sectionIndicator.querySelector('.section-indicator-progress');
-            if (progressElement) {
-                sectionIndicator.insertBefore(descriptionElement, progressElement);
+            // Insert before progress stats
+            const statsElement = sectionIndicator.querySelector('.section-indicator-stats');
+            if (statsElement) {
+                sectionIndicator.insertBefore(descriptionElement, statsElement);
             }
         }
     }
@@ -585,6 +692,32 @@ function createBasicScrollIndicator() {
 }
 
 /**
+ * Navigate to the previous section
+ */
+function navigateToPreviousSection() {
+    const sections = getPageSections();
+    if (sections.length === 0) return;
+
+    const currentIndex = getCurrentSectionIndex(sections);
+    if (currentIndex > 0) {
+        sections[currentIndex - 1].scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+/**
+ * Navigate to the next section
+ */
+function navigateToNextSection() {
+    const sections = getPageSections();
+    if (sections.length === 0) return;
+
+    const currentIndex = getCurrentSectionIndex(sections);
+    if (currentIndex < sections.length - 1) {
+        sections[currentIndex + 1].scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+/**
  * Apply page-specific enhancements based on the current URL
  */
 function applyPageSpecificEnhancements() {
@@ -608,6 +741,11 @@ function applyPageSpecificEnhancements() {
     // Quiz pages - add progress tracking
     if (currentPath.includes('/quiz/')) {
         enhanceQuizPage();
+    }
+
+    // Exercises page - enhance hands-on exercises
+    if (currentPath.includes('/exercises')) {
+        enhanceExercisesPage();
     }
 }
 
@@ -672,6 +810,163 @@ function enhanceQuizPage() {
 }
 
 /**
+ * Enhance exercises page with improved hands-on functionality
+ */
+function enhanceExercisesPage() {
+    console.log('Enhancing exercises page...');
+
+    // Add exercise cards animation
+    const exerciseCards = document.querySelectorAll('.exercise-card, .hands-on-example');
+
+    exerciseCards.forEach(card => {
+        // Add hover effect
+        card.addEventListener('mouseenter', () => {
+            card.style.transform = 'translateY(-5px)';
+            card.style.boxShadow = '0 15px 30px rgba(0, 0, 0, 0.3)';
+            card.style.borderColor = 'rgba(66, 135, 245, 0.5)';
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'translateY(0)';
+            card.style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.2)';
+            card.style.borderColor = 'rgba(66, 135, 245, 0.2)';
+        });
+
+        // Add click animation
+        card.addEventListener('click', () => {
+            card.style.transform = 'scale(0.98)';
+            setTimeout(() => {
+                card.style.transform = 'translateY(-5px)';
+            }, 100);
+        });
+    });
+
+    // Add code copy functionality
+    const codeBlocks = document.querySelectorAll('pre code');
+
+    codeBlocks.forEach(block => {
+        // Create copy button if it doesn't exist
+        if (!block.parentNode.querySelector('.copy-btn')) {
+            const copyBtn = document.createElement('button');
+            copyBtn.className = 'copy-btn';
+            copyBtn.innerHTML = '<i class="bi bi-clipboard"></i> Copy';
+            copyBtn.style.position = 'absolute';
+            copyBtn.style.top = '5px';
+            copyBtn.style.right = '5px';
+            copyBtn.style.padding = '3px 8px';
+            copyBtn.style.fontSize = '0.8rem';
+            copyBtn.style.background = 'rgba(66, 135, 245, 0.2)';
+            copyBtn.style.color = 'white';
+            copyBtn.style.border = '1px solid rgba(66, 135, 245, 0.3)';
+            copyBtn.style.borderRadius = '4px';
+            copyBtn.style.cursor = 'pointer';
+
+            // Make sure parent has position relative
+            block.parentNode.style.position = 'relative';
+
+            // Add click event
+            copyBtn.addEventListener('click', () => {
+                const code = block.textContent;
+                navigator.clipboard.writeText(code).then(() => {
+                    copyBtn.innerHTML = '<i class="bi bi-check"></i> Copied!';
+                    setTimeout(() => {
+                        copyBtn.innerHTML = '<i class="bi bi-clipboard"></i> Copy';
+                    }, 2000);
+                });
+            });
+
+            block.parentNode.appendChild(copyBtn);
+        }
+    });
+
+    // Add progress tracking for multi-step exercises
+    const exerciseSteps = document.querySelectorAll('.exercise-step, .step-item');
+
+    if (exerciseSteps.length > 0) {
+        // Create progress indicator if it doesn't exist
+        if (!document.querySelector('.exercise-progress')) {
+            const progressContainer = document.createElement('div');
+            progressContainer.className = 'exercise-progress';
+            progressContainer.style.position = 'sticky';
+            progressContainer.style.top = '70px';
+            progressContainer.style.background = 'rgba(15, 15, 15, 0.9)';
+            progressContainer.style.padding = '10px 15px';
+            progressContainer.style.borderRadius = '8px';
+            progressContainer.style.margin = '20px 0';
+            progressContainer.style.zIndex = '100';
+            progressContainer.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.3)';
+            progressContainer.style.border = '1px solid rgba(66, 135, 245, 0.3)';
+
+            const progressTitle = document.createElement('div');
+            progressTitle.textContent = 'Exercise Progress';
+            progressTitle.style.fontWeight = 'bold';
+            progressTitle.style.marginBottom = '8px';
+
+            const progressBar = document.createElement('div');
+            progressBar.className = 'progress';
+            progressBar.style.height = '8px';
+            progressBar.style.background = 'rgba(255, 255, 255, 0.1)';
+            progressBar.style.borderRadius = '4px';
+            progressBar.style.overflow = 'hidden';
+
+            const progressBarInner = document.createElement('div');
+            progressBarInner.className = 'progress-bar';
+            progressBarInner.style.height = '100%';
+            progressBarInner.style.width = '0%';
+            progressBarInner.style.background = 'linear-gradient(90deg, #4287f5, #00ffdd)';
+            progressBarInner.style.transition = 'width 0.3s ease';
+
+            const progressStats = document.createElement('div');
+            progressStats.className = 'progress-stats';
+            progressStats.style.display = 'flex';
+            progressStats.style.justifyContent = 'space-between';
+            progressStats.style.fontSize = '0.8rem';
+            progressStats.style.marginTop = '5px';
+            progressStats.style.color = 'rgba(255, 255, 255, 0.7)';
+            progressStats.innerHTML = '<span>0% Complete</span><span>0/' + exerciseSteps.length + ' Steps</span>';
+
+            progressBar.appendChild(progressBarInner);
+            progressContainer.appendChild(progressTitle);
+            progressContainer.appendChild(progressBar);
+            progressContainer.appendChild(progressStats);
+
+            // Find a good place to insert the progress indicator
+            const container = document.querySelector('.container');
+            if (container) {
+                const firstHeading = container.querySelector('h1, h2');
+                if (firstHeading) {
+                    firstHeading.parentNode.insertBefore(progressContainer, firstHeading.nextSibling);
+                } else {
+                    container.prepend(progressContainer);
+                }
+            }
+
+            // Update progress as user scrolls
+            let currentStep = 0;
+
+            window.addEventListener('scroll', () => {
+                const scrollPosition = window.scrollY + window.innerHeight / 3;
+
+                for (let i = 0; i < exerciseSteps.length; i++) {
+                    const step = exerciseSteps[i];
+                    const stepTop = step.offsetTop;
+                    const stepBottom = stepTop + step.offsetHeight;
+
+                    if (scrollPosition >= stepTop && scrollPosition < stepBottom) {
+                        currentStep = i + 1;
+                        break;
+                    }
+                }
+
+                const progressPercentage = Math.round((currentStep / exerciseSteps.length) * 100);
+                progressBarInner.style.width = progressPercentage + '%';
+                progressStats.innerHTML = '<span>' + progressPercentage + '% Complete</span><span>' + currentStep + '/' + exerciseSteps.length + ' Steps</span>';
+            });
+        }
+    }
+}
+
+/**
  * Enhance navigation items with additional effects
  */
 function enhanceNavigationItems() {
@@ -728,6 +1023,49 @@ function enhanceNavigationItems() {
             // Also mark as active if current path includes the link path (for sub-pages)
             link.classList.add('active');
         }
+
+        // Add touch feedback for mobile devices
+        link.addEventListener('touchstart', function() {
+            this.classList.add('touch-active');
+        }, { passive: true });
+
+        link.addEventListener('touchend', function() {
+            this.classList.remove('touch-active');
+        }, { passive: true });
+
+        link.addEventListener('touchcancel', function() {
+            this.classList.remove('touch-active');
+        }, { passive: true });
+    });
+
+    // Also check dropdown items for current page
+    const dropdownItems = document.querySelectorAll('.dropdown-item');
+    dropdownItems.forEach(item => {
+        const href = item.getAttribute('href');
+        if (href && (href === currentPath || (href !== '/' && currentPath.includes(href)))) {
+            item.classList.add('active');
+            // Also activate parent dropdown
+            const parentDropdown = item.closest('.dropdown');
+            if (parentDropdown) {
+                const dropdownToggle = parentDropdown.querySelector('.dropdown-toggle');
+                if (dropdownToggle) {
+                    dropdownToggle.classList.add('active');
+                }
+            }
+        }
+
+        // Add touch feedback for mobile devices
+        item.addEventListener('touchstart', function() {
+            this.classList.add('touch-active');
+        }, { passive: true });
+
+        item.addEventListener('touchend', function() {
+            this.classList.remove('touch-active');
+        }, { passive: true });
+
+        item.addEventListener('touchcancel', function() {
+            this.classList.remove('touch-active');
+        }, { passive: true });
     });
 
     // Initialize tooltips

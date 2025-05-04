@@ -434,10 +434,16 @@ body {
     border-radius: 20px;
     overflow: hidden;
     margin: 4rem 0;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-    height: 700px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 100px rgba(66, 135, 245, 0.2);
+    height: 800px; /* Increased height for better visibility */
     border: 3px solid rgba(66, 135, 245, 0.5);
     position: relative;
+    transition: all 0.5s ease;
+}
+
+#visualization-container:hover {
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 120px rgba(66, 135, 245, 0.3);
+    transform: translateY(-5px);
 }
 
 #visualization-container::before {
@@ -457,6 +463,45 @@ body {
     border: none;
     background-color: var(--thesaurus-dark);
     background-image: radial-gradient(circle at 50% 50%, rgba(40, 40, 40, 0.3), rgba(20, 20, 20, 0.1));
+    transition: all 0.3s ease;
+    will-change: transform;
+}
+
+/* Add controls for the visualization */
+.visualization-controls {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+
+.visualization-control-btn {
+    background: rgba(40, 40, 40, 0.8);
+    border: 2px solid rgba(66, 135, 245, 0.5);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.visualization-control-btn:hover {
+    background: rgba(66, 135, 245, 0.8);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(66, 135, 245, 0.5);
+}
+
+.visualization-control-btn:active {
+    transform: translateY(1px);
 }
 
 /* Loading Indicator Styling */

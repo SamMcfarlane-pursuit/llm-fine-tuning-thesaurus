@@ -1,0 +1,485 @@
+{% extends 'base.html' %}
+
+{% block title %}Data Preparation Guide - Visual Thesaurus LLM{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <!-- Navigation Breadcrumbs -->
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="/exercises">Exercises</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Data Preparation Guide</li>
+        </ol>
+    </nav>
+    
+    <!-- Learning Path Navigation -->
+    <div class="learning-path-nav mb-4">
+        <div class="path-container">
+            <div class="path-step completed">
+                <div class="step-icon">
+                    <i class="bi bi-house-door"></i>
+                </div>
+                <div class="step-label">Home</div>
+            </div>
+            <div class="path-connector active"></div>
+            <div class="path-step completed">
+                <div class="step-icon">
+                    <i class="bi bi-diagram-3"></i>
+                </div>
+                <div class="step-label">Concept Maps</div>
+                <div class="step-action">
+                    <a href="/thesaurus" class="btn btn-sm btn-outline-primary"><i class="bi bi-arrow-left"></i> View</a>
+                </div>
+            </div>
+            <div class="path-connector active"></div>
+            <div class="path-step active">
+                <div class="step-icon">
+                    <i class="bi bi-code-square"></i>
+                </div>
+                <div class="step-label">Exercises</div>
+                <div class="step-action">
+                    <a href="/exercises" class="btn btn-sm btn-outline-primary"><i class="bi bi-arrow-left"></i> Back</a>
+                </div>
+            </div>
+            <div class="path-connector"></div>
+            <div class="path-step">
+                <div class="step-icon">
+                    <i class="bi bi-journal-check"></i>
+                </div>
+                <div class="step-label">Quizzes</div>
+                <div class="step-action">
+                    <a href="{{ url_for('quiz.quiz_list') }}" class="btn btn-sm btn-outline-primary">Next <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="page-header mb-4">
+                <h1 class="display-4">Data Preparation for LLM Fine-Tuning</h1>
+                <p class="lead">A comprehensive guide to preparing high-quality datasets for effective LLM fine-tuning</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Introduction Section -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h2 class="mb-0">Introduction</h2>
+        </div>
+        <div class="card-body">
+            <p>Proper data preparation is crucial for successful LLM fine-tuning. The quality, format, and structure of your training data directly impact the performance of your fine-tuned model.</p>
+            
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle-fill me-2"></i>
+                <strong>Why Data Preparation Matters:</strong>
+                <ul class="mb-0 mt-2">
+                    <li>High-quality data leads to better model performance</li>
+                    <li>Properly formatted data prevents training errors</li>
+                    <li>Well-structured data helps the model learn the desired patterns</li>
+                    <li>Clean data reduces the risk of biases and hallucinations</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Collection Section -->
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+            <h2 class="mb-0">Data Collection</h2>
+        </div>
+        <div class="card-body">
+            <p>The first step in data preparation is collecting relevant, high-quality data for your specific use case.</p>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card h-100 border-primary mb-3">
+                        <div class="card-header">Common Data Sources</div>
+                        <div class="card-body">
+                            <ul>
+                                <li><strong>Public Datasets:</strong> Hugging Face Datasets, Kaggle, etc.</li>
+                                <li><strong>Web Scraping:</strong> Collecting data from websites</li>
+                                <li><strong>APIs:</strong> Accessing data through public APIs</li>
+                                <li><strong>Existing Corpora:</strong> Books, articles, documentation</li>
+                                <li><strong>Synthetic Data:</strong> Generated using existing models</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 border-primary mb-3">
+                        <div class="card-header">Data Quality Considerations</div>
+                        <div class="card-body">
+                            <ul>
+                                <li><strong>Relevance:</strong> Data should be relevant to your task</li>
+                                <li><strong>Diversity:</strong> Cover a wide range of examples</li>
+                                <li><strong>Balance:</strong> Avoid overrepresentation of certain categories</li>
+                                <li><strong>Accuracy:</strong> Data should be factually correct</li>
+                                <li><strong>Recency:</strong> Data should be up-to-date if needed</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-4">
+                <h4>Example: Loading a Dataset from Hugging Face</h4>
+                <div class="code-block">
+                    <pre><code>from datasets import load_dataset
+
+# Load a public dataset
+dataset = load_dataset("tatsu-lab/alpaca")
+
+# Display information about the dataset
+print(dataset)
+print(f"Number of examples: {len(dataset['train'])}")
+print(f"Example data point: {dataset['train'][0]}")</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Cleaning Section -->
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            <h2 class="mb-0">Data Cleaning</h2>
+        </div>
+        <div class="card-body">
+            <p>Raw data often contains noise, errors, and inconsistencies that need to be addressed before fine-tuning.</p>
+            
+            <div class="step-container">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Remove Duplicates</h4>
+                        <p>Duplicate examples can lead to overfitting and bias the model toward repeated content.</p>
+                        <div class="code-block">
+                            <pre><code>import pandas as pd
+
+# Convert dataset to pandas DataFrame for easier manipulation
+df = pd.DataFrame(dataset['train'])
+
+# Check for duplicates
+print(f"Duplicates found: {df.duplicated().sum()}")
+
+# Remove duplicates
+df_cleaned = df.drop_duplicates()
+print(f"Dataset size after removing duplicates: {len(df_cleaned)}")</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Handle Missing Values</h4>
+                        <p>Missing values can cause issues during training and should be handled appropriately.</p>
+                        <div class="code-block">
+                            <pre><code># Check for missing values
+print(df.isnull().sum())
+
+# Option 1: Remove rows with missing values
+df_cleaned = df_cleaned.dropna()
+
+# Option 2: Fill missing values (for certain columns)
+df_cleaned['column_name'] = df_cleaned['column_name'].fillna('default_value')</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Clean Text Data</h4>
+                        <p>Text data often requires specific cleaning steps to ensure consistency.</p>
+                        <div class="code-block">
+                            <pre><code>import re
+
+def clean_text(text):
+    if not isinstance(text, str):
+        return ""
+    
+    # Remove HTML tags
+    text = re.sub(r'<.*?>', '', text)
+    
+    # Remove extra whitespace
+    text = re.sub(r'\s+', ' ', text).strip()
+    
+    # Remove URLs
+    text = re.sub(r'https?://\S+|www\.\S+', '', text)
+    
+    # Other cleaning steps as needed
+    
+    return text
+
+# Apply cleaning function to text columns
+df_cleaned['text_column'] = df_cleaned['text_column'].apply(clean_text)</code></pre>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>Filter Out Low-Quality Examples</h4>
+                        <p>Remove examples that are too short, too long, or contain inappropriate content.</p>
+                        <div class="code-block">
+                            <pre><code># Filter out examples that are too short
+min_length = 10
+df_cleaned = df_cleaned[df_cleaned['text_column'].str.len() >= min_length]
+
+# Filter out examples that are too long
+max_length = 1024
+df_cleaned = df_cleaned[df_cleaned['text_column'].str.len() <= max_length]
+
+# Filter out examples containing specific patterns (e.g., inappropriate content)
+df_cleaned = df_cleaned[~df_cleaned['text_column'].str.contains('inappropriate_pattern')]</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<style>
+    /* Step-by-step styling */
+    .step-container {
+        position: relative;
+    }
+    
+    .step {
+        display: flex;
+        margin-bottom: 30px;
+        position: relative;
+    }
+    
+    .step:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        left: 25px;
+        top: 50px;
+        bottom: -30px;
+        width: 3px;
+        background: linear-gradient(to bottom, #4287f5, rgba(66, 135, 245, 0.3));
+    }
+    
+    .step-number {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #4287f5, #00c6ff);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-right: 20px;
+        flex-shrink: 0;
+        box-shadow: 0 5px 15px rgba(66, 135, 245, 0.4);
+        z-index: 2;
+    }
+    
+    .step-content {
+        flex-grow: 1;
+    }
+    
+    .code-block {
+        background-color: #1e1e1e;
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        overflow-x: auto;
+    }
+    
+    .code-block pre {
+        margin: 0;
+    }
+    
+    .code-block code {
+        color: #e0e0e0;
+        font-family: 'Courier New', monospace;
+        font-size: 0.9rem;
+    }
+    
+    /* Navigation and Learning Path Styles */
+    .breadcrumb {
+        background-color: rgba(30, 30, 30, 0.7);
+        padding: 12px 20px;
+        border-radius: 10px;
+        border: 1px solid rgba(66, 135, 245, 0.3);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .breadcrumb-item a {
+        color: #4287f5;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+    
+    .breadcrumb-item a:hover {
+        color: #00ffdd;
+        text-decoration: none;
+    }
+    
+    .breadcrumb-item.active {
+        color: #ffffff;
+        font-weight: 600;
+    }
+    
+    .breadcrumb-item+.breadcrumb-item::before {
+        color: rgba(255, 255, 255, 0.5);
+    }
+    
+    /* Learning Path Navigation */
+    .learning-path-nav {
+        background-color: rgba(25, 25, 25, 0.9);
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        border: 2px solid rgba(66, 135, 245, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .learning-path-nav::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: linear-gradient(to right, #4287f5, #00ffdd);
+        z-index: 1;
+    }
+    
+    .path-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        padding: 0 10px;
+    }
+    
+    .path-step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+        width: 120px;
+    }
+    
+    .step-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: rgba(40, 40, 40, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 10px;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        font-size: 1.5rem;
+        color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .path-step.active .step-icon {
+        background: linear-gradient(135deg, #4287f5, #00c6ff);
+        border-color: rgba(255, 255, 255, 0.8);
+        box-shadow: 0 0 20px rgba(66, 135, 245, 0.6);
+        color: white;
+        transform: scale(1.1);
+    }
+    
+    .path-step.completed .step-icon {
+        background: linear-gradient(135deg, #00d463, #00c853);
+        border-color: rgba(255, 255, 255, 0.8);
+        color: white;
+    }
+    
+    .step-label {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.7);
+        text-align: center;
+        margin-bottom: 10px;
+        transition: all 0.3s ease;
+    }
+    
+    .path-step.active .step-label {
+        color: white;
+        text-shadow: 0 0 10px rgba(66, 135, 245, 0.5);
+    }
+    
+    .path-step.completed .step-label {
+        color: #00d463;
+    }
+    
+    .path-connector {
+        flex-grow: 1;
+        height: 3px;
+        background-color: rgba(255, 255, 255, 0.2);
+        position: relative;
+        z-index: 1;
+        margin: 0 5px;
+        transform: translateY(-15px);
+    }
+    
+    .path-connector.active {
+        background: linear-gradient(to right, #00d463, #4287f5);
+        box-shadow: 0 0 10px rgba(66, 135, 245, 0.4);
+    }
+    
+    .step-action {
+        margin-top: 5px;
+    }
+    
+    /* Responsive adjustments for navigation */
+    @media (max-width: 768px) {
+        .path-container {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        
+        .path-step {
+            flex-direction: row;
+            width: 100%;
+            align-items: center;
+        }
+        
+        .step-icon {
+            margin-bottom: 0;
+            margin-right: 15px;
+        }
+        
+        .step-label {
+            margin-bottom: 0;
+            text-align: left;
+        }
+        
+        .path-connector {
+            width: 3px;
+            height: 20px;
+            margin: 0 0 0 25px;
+            transform: translateY(0);
+        }
+        
+        .step-action {
+            margin-top: 0;
+            margin-left: auto;
+        }
+    }
+</style>
+{% endblock %}

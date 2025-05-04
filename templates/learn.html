@@ -528,9 +528,9 @@
                            Click on any concept to learn more about it.</p>
                         <div id="concepts-visualization" style="position: relative;"></div>
                         <div class="zoom-controls">
-                            <button id="zoom-in-btn" class="btn btn-sm btn-primary"><i class="bi bi-zoom-in"></i></button>
-                            <button id="zoom-out-btn" class="btn btn-sm btn-primary"><i class="bi bi-zoom-out"></i></button>
-                            <button id="reset-zoom-btn" class="btn btn-sm btn-secondary"><i class="bi bi-arrows-fullscreen"></i></button>
+                            <button id="concepts-zoom-in-btn" data-tooltip="Zoom In"><i class="bi bi-zoom-in"></i></button>
+                            <button id="concepts-zoom-out-btn" data-tooltip="Zoom Out"><i class="bi bi-zoom-out"></i></button>
+                            <button id="concepts-reset-zoom-btn" data-tooltip="Reset View"><i class="bi bi-arrows-fullscreen"></i></button>
                         </div>
                     </div>
                 </div>
@@ -2283,7 +2283,18 @@ trainable_params = <span class="python-builtin">sum</span>(p.numel() <span class
             .then(response => response.json())
             .then(data => {
                 iframe = document.createElement('iframe');
-                iframe.src = data.visualization_path;
+
+                // Check if visualization_path exists
+                if (data.visualization_path) {
+                    iframe.src = data.visualization_path;
+                } else {
+                    // Create a placeholder for direct visualization
+                    iframe.src = 'about:blank';
+
+                    // We'll handle this case with direct visualization in the container
+                    console.log('No visualization path provided, using direct visualization');
+                }
+
                 iframe.style.width = '100%';
                 iframe.style.height = '100%';
                 iframe.style.border = 'none';

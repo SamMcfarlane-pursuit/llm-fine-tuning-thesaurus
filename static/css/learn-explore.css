@@ -239,7 +239,75 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-#visualization-iframe {
+.visualization-tabs {
+    display: flex;
+    background-color: rgba(20, 20, 25, 0.95);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0 10px;
+}
+
+.vis-tab {
+    padding: 12px 20px;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.vis-tab:hover {
+    color: white;
+}
+
+.vis-tab.active {
+    color: white;
+}
+
+.vis-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #4287f5, #00d4ff);
+}
+
+.vis-tab-link {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.vis-tab-link:hover {
+    color: white;
+    text-decoration: none;
+}
+
+.vis-tab-link i {
+    margin-right: 5px;
+}
+
+.vis-panel {
+    display: none;
+    width: 100%;
+    height: calc(100% - 45px); /* Subtract height of tabs */
+}
+
+.vis-panel.active {
+    display: block;
+}
+
+#visualization-iframe,
+#enhanced-visualization-iframe {
     width: 100%;
     height: 100%;
     border: none;
@@ -531,12 +599,12 @@
     .visualization-container {
         height: 400px;
     }
-    
+
     .resource-icon {
         width: 50px;
         font-size: 1.5rem;
     }
-    
+
     .resource-title {
         font-size: 1rem;
     }
@@ -547,21 +615,21 @@
         padding-right: 12px;
         margin-bottom: 20px;
     }
-    
+
     .content-column {
         padding-left: 12px;
     }
-    
+
     .sidebar-container {
         position: relative;
         top: 0;
         max-height: none;
     }
-    
+
     .header-section h1 {
         font-size: 2rem;
     }
-    
+
     .section-header h2 {
         font-size: 1.5rem;
     }
@@ -571,19 +639,19 @@
     .visualization-container {
         height: 350px;
     }
-    
+
     .header-section {
         padding: 20px;
     }
-    
+
     .header-section h1 {
         font-size: 1.8rem;
     }
-    
+
     .header-section p.lead {
         font-size: 1rem;
     }
-    
+
     .resource-card, .exercise-card {
         margin-bottom: 15px;
     }
@@ -593,43 +661,43 @@
     .learn-explore-container {
         padding: 10px;
     }
-    
+
     .visualization-container {
         height: 300px;
     }
-    
-    .visualization-section, 
-    .learning-section, 
+
+    .visualization-section,
+    .learning-section,
     .exercises-section {
         padding: 15px;
     }
-    
+
     .section-header h2 {
         font-size: 1.3rem;
     }
-    
+
     .resource-icon {
         width: 40px;
         font-size: 1.2rem;
         padding: 10px;
     }
-    
+
     .resource-content {
         padding: 10px 10px 10px 0;
     }
-    
+
     .resource-title {
         font-size: 0.95rem;
     }
-    
+
     .resource-description {
         font-size: 0.85rem;
     }
-    
+
     .exercise-title {
         font-size: 1.1rem;
     }
-    
+
     .exercise-description {
         font-size: 0.85rem;
     }

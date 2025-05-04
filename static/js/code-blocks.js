@@ -129,4 +129,26 @@ function fixCodeBlockStyling() {
             }
         }
     });
+
+    // Clean up any visible class attributes in code blocks
+    cleanupCodeDisplay();
+}
+
+// Function to clean up code display by removing visible class attributes
+function cleanupCodeDisplay() {
+    // Get all code elements
+    const codeElements = document.querySelectorAll('pre code');
+
+    codeElements.forEach(function(codeElement) {
+        // Get the HTML content
+        let content = codeElement.innerHTML;
+
+        // Remove any visible class attributes
+        content = content.replace(/class=["'][^"']*["']/g, '');
+        content = content.replace(/class-class=["'][^"']*["']/g, '');
+        content = content.replace(/class=["']([^"']*)["']/g, '');
+
+        // Update the content
+        codeElement.innerHTML = content;
+    });
 }

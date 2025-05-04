@@ -1,12 +1,19 @@
 """
 Database models for the Visual Thesaurus LLM application.
 """
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
+import jwt
+from flask import current_app
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+import os
+import secrets
 
 # SQLAlchemy instance is imported from extensions
 from extensions import db
+
+# Secret key for JWT tokens (in a real app, this would be in environment variables)
+JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY', secrets.token_hex(32))
 
 class User(db.Model, UserMixin):
     """User model for authentication."""
@@ -99,6 +106,37 @@ class User(db.Model, UserMixin):
         """
         # All features are free, so always return True
         return True
+
+    def get_reset_password_token(self, expires_in=3600):
+        """Generate a password reset token.
+
+        Args:
+            expires_in (int): Token expiration time in seconds (default: 1 hour)
+
+        Returns:
+            str: JWT token
+        """
+        payload = {
+            'reset_password': self.id,
+            'exp': datetime.now(timezone.utc) + timedelta(seconds=expires_in)
+        }
+        return jwt.encode(payload, JWT_SECRET_KEY, algorithm='HS256')
+
+    @staticmethod
+    def verify_reset_password_token(token):
+        """Verify a password reset token.
+
+        Args:
+            token (str): JWT token
+
+        Returns:
+            int: User ID if token is valid, None otherwise
+        """
+        try:
+            payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=['HS256'])
+            return payload['reset_password']
+        except Exception:
+            return None
 
     def __repr__(self):
         return f"<User {self.username}>"

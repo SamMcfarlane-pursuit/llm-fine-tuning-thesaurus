@@ -1,0 +1,1077 @@
+{% extends "base.html" %}
+
+{% block title %}LLM Fine-Tuning Concepts & Learning{% endblock %}
+
+{% block head %}
+<!-- Additional head content specific to this page -->
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vis-network@9.1.2/dist/vis-network.min.js"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-thesaurus.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/concept-map-sidebar.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/professional-sidebar.css') }}">
+
+<style>
+    /* Integrated Learning Page Styles */
+    .integrated-container {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .integrated-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        text-align: center;
+    }
+
+    .integrated-header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(90deg, #ffffff, #f0f0f0);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .integrated-header p.lead {
+        font-size: 1.2rem;
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    .integrated-main {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .concept-visualization-row {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 20px;
+    }
+
+    .learning-resources-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+
+    @media (max-width: 992px) {
+        .concept-visualization-row,
+        .learning-resources-row {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .concept-card, .learning-card {
+        background-color: rgba(25, 25, 25, 0.9);
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        border: 2px solid rgba(66, 135, 245, 0.3);
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .concept-card:hover, .learning-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Different border colors for different card types */
+    .concept-card {
+        border-color: rgba(66, 135, 245, 0.3);
+    }
+
+    .learning-card {
+        border-color: rgba(0, 212, 99, 0.3);
+    }
+
+    .concept-card::before, .learning-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        z-index: 1;
+    }
+
+    .concept-card::before {
+        background: linear-gradient(to right, #4287f5, #00ffdd);
+    }
+
+    .learning-card::before {
+        background: linear-gradient(to right, #00d463, #ffdd00);
+    }
+
+    .card-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .card-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+        font-size: 1.5rem;
+        color: white;
+    }
+
+    .concept-card .card-icon {
+        background: linear-gradient(135deg, #4287f5, #00c6ff);
+    }
+
+    .learning-card .card-icon {
+        background: linear-gradient(135deg, #00d463, #ffdd00);
+    }
+
+    .card-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: white;
+        margin: 0;
+    }
+
+    .search-container {
+        margin-bottom: 20px;
+        background-color: rgba(255, 255, 255, 0.05);
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .search-input {
+        background-color: rgba(30, 30, 30, 0.9);
+        color: #ffffff;
+        border: 2px solid rgba(66, 135, 245, 0.4);
+        border-radius: 12px;
+        padding: 15px 25px;
+        font-size: 1.2rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), inset 0 2px 5px rgba(0, 0, 0, 0.2);
+        letter-spacing: 0.5px;
+    }
+
+    .search-input:focus {
+        border-color: #4287f5;
+        box-shadow: 0 8px 25px rgba(66, 135, 245, 0.4), 0 0 15px rgba(66, 135, 245, 0.3), inset 0 2px 5px rgba(0, 0, 0, 0.2);
+        outline: none;
+        background-color: rgba(40, 40, 40, 0.95);
+    }
+
+    .search-button {
+        background: #4287f5;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 12px 25px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(66, 135, 245, 0.4);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .search-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(66, 135, 245, 0.6);
+        background: #5a9aff;
+    }
+
+    #visualization-container {
+        background-color: #121212;
+        border-radius: 15px;
+        overflow: hidden;
+        margin-top: 20px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+        height: 600px;
+        border: 3px solid rgba(66, 135, 245, 0.6);
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    #visualization-container:hover {
+        box-shadow: 0 20px 50px rgba(66, 135, 245, 0.3);
+        transform: translateY(-5px);
+    }
+
+    #visualization-iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        background-color: #121212;
+        background-image: radial-gradient(circle at 50% 50%, rgba(40, 40, 40, 0.3) 0%, rgba(20, 20, 20, 0.1) 100%);
+        display: block;
+    }
+
+    .visualization-legend {
+        position: absolute;
+        bottom: 15px;
+        right: 15px;
+        background-color: rgba(0, 0, 0, 0.7);
+        padding: 10px;
+        border-radius: 10px;
+        z-index: 10;
+        font-size: 0.9rem;
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .legend-title {
+        font-weight: 600;
+        margin-bottom: 5px;
+        text-align: center;
+    }
+
+    .legend-items {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .legend-color {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+    }
+
+    .main-term {
+        background-color: #ff5555;
+    }
+
+    .synonym {
+        background-color: #ffdd00;
+    }
+
+    .related {
+        background-color: #00ffdd;
+    }
+
+    .keyboard-hint {
+        position: absolute;
+        bottom: 15px;
+        left: 15px;
+        background-color: rgba(0, 0, 0, 0.7);
+        padding: 8px 12px;
+        border-radius: 8px;
+        z-index: 10;
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .related-concepts {
+        margin-top: 20px;
+    }
+
+    .concept-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .concept-badge {
+        background-color: rgba(30, 30, 35, 0.5);
+        border-radius: 20px;
+        padding: 8px 15px;
+        color: white;
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(66, 135, 245, 0.3);
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .concept-badge:hover {
+        background-color: rgba(66, 135, 245, 0.2);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        border-color: rgba(66, 135, 245, 0.6);
+    }
+
+    .concept-badge::before {
+        content: "#";
+        font-size: 0.8rem;
+        color: rgba(66, 135, 245, 0.8);
+    }
+
+    .learning-resources {
+        margin-top: 20px;
+    }
+
+    .resource-list {
+        margin-top: 15px;
+    }
+
+    .resource-item {
+        background-color: rgba(30, 30, 35, 0.5);
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0, 212, 99, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .resource-item:hover {
+        background-color: rgba(0, 212, 99, 0.1);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        border-color: rgba(0, 212, 99, 0.5);
+    }
+
+    .resource-item::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 3px;
+        height: 100%;
+        background: linear-gradient(to bottom, #00d463, rgba(0, 212, 99, 0.2));
+    }
+
+    .resource-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #00d463;
+        margin-bottom: 8px;
+        padding-left: 10px;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        letter-spacing: 0.3px;
+    }
+
+    .resource-description {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.95rem;
+        margin-bottom: 12px;
+        padding-left: 10px;
+        line-height: 1.5;
+        letter-spacing: 0.2px;
+    }
+
+    .resource-link {
+        display: inline-block;
+        background-color: rgba(0, 212, 99, 0.2);
+        color: #00d463;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0, 212, 99, 0.4);
+        margin-left: 10px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    }
+
+    .resource-link:hover {
+        background-color: rgba(0, 212, 99, 0.4);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .loading {
+        text-align: center;
+        margin: 30px 0;
+        display: none;
+    }
+
+    .spinner {
+        border: 4px solid rgba(255, 255, 255, 0.1);
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border-left-color: var(--primary-color);
+        animation: spin 1s linear infinite;
+        display: inline-block;
+        box-shadow: 0 0 15px rgba(0, 119, 255, 0.3);
+    }
+
+    .loading p {
+        margin-top: 15px;
+        font-size: 1.1rem;
+        color: var(--text-secondary);
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Responsive styles */
+    @media (max-width: 992px) {
+        .integrated-main {
+            flex-direction: column;
+        }
+
+        .concept-section, .learning-section {
+            width: 100%;
+        }
+
+        #visualization-container {
+            height: 400px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .integrated-header h1 {
+            font-size: 2rem;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+        }
+
+        #visualization-container {
+            height: 350px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .integrated-header h1 {
+            font-size: 1.8rem;
+        }
+
+        .search-input {
+            font-size: 1rem;
+            padding: 12px 20px;
+        }
+
+        .search-button {
+            font-size: 1rem;
+            padding: 10px 20px;
+        }
+
+        #visualization-container {
+            height: 300px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Navigation Breadcrumbs -->
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Learn & Explore</li>
+            {% if initial_concept %}
+            <li class="breadcrumb-item active" aria-current="page">{{ initial_concept | capitalize }}</li>
+            {% endif %}
+        </ol>
+    </nav>
+
+    <div class="integrated-container">
+        <div class="integrated-header">
+            <h1>Learn & Explore LLM Fine-Tuning</h1>
+            <p class="lead">Your unified hub for exploring concepts, learning resources, and hands-on exercises</p>
+        </div>
+
+        <div class="search-container">
+            <div class="input-group">
+                <input type="text" id="concept-search" class="form-control search-input"
+                       placeholder="Search for a concept (e.g., 'fine-tuning', 'LoRA', 'quantization')"
+                       value="{{ initial_concept | default('') }}"
+                       aria-label="Search concept" list="concept-suggestions">
+                <datalist id="concept-suggestions"></datalist>
+                <div class="input-group-append">
+                    <button class="btn search-button" id="search-button">
+                        <i class="bi bi-search me-2"></i> Search
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Loading concept data...</p>
+        </div>
+
+        <!-- Mobile Sidebar Toggle Button -->
+        <button class="sidebar-toggle" id="sidebar-toggle">
+            <i class="bi bi-list"></i>
+        </button>
+
+        <!-- Mobile Sidebar Backdrop -->
+        <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+        <div class="row">
+            <!-- Professional Sidebar -->
+            <div class="col-lg-3 col-md-4">
+                <div class="sidebar-container" id="sidebar-container">
+                    <div class="sidebar-header">
+                        <div class="sidebar-title">
+                            <i class="bi bi-diagram-3"></i>
+                            <span id="sidebar-concept-title">Concept Explorer</span>
+                        </div>
+                        <div class="sidebar-description">
+                            Explore related concepts and access learning resources for <span id="sidebar-concept-name">fine-tuning</span>.
+                        </div>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <div class="sidebar-section-title">
+                            <i class="bi bi-link-45deg"></i> Related Concepts
+                        </div>
+                        <div id="sidebar-related-concepts">
+                            <!-- Related concepts will be populated here -->
+                        </div>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <div class="sidebar-section-title">
+                            <i class="bi bi-book"></i> Learning Path
+                        </div>
+                        <ul class="sidebar-nav" id="sidebar-learning-path">
+                            <!-- Learning path will be populated here -->
+                            <li class="sidebar-nav-item">
+                                <a href="#concept-definition" class="sidebar-nav-link active">
+                                    <i class="bi bi-info-circle"></i> Concept Definition
+                                </a>
+                            </li>
+                            <li class="sidebar-nav-item">
+                                <a href="#visualization-container" class="sidebar-nav-link">
+                                    <i class="bi bi-diagram-3"></i> Visual Exploration
+                                </a>
+                            </li>
+                            <li class="sidebar-nav-item">
+                                <a href="#learning-resources-list" class="sidebar-nav-link">
+                                    <i class="bi bi-journal-text"></i> Learning Resources
+                                </a>
+                            </li>
+                            <li class="sidebar-nav-item">
+                                <a href="#exercises-list" class="sidebar-nav-link">
+                                    <i class="bi bi-code-square"></i> Hands-on Exercises
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <div class="sidebar-section-title">
+                            <i class="bi bi-lightning"></i> Quick Actions
+                        </div>
+                        <div class="quick-actions">
+                            <a href="/learn" class="quick-action-btn">
+                                <i class="bi bi-book"></i> All Learning Modules
+                            </a>
+                            <a href="/workshops" class="quick-action-btn">
+                                <i class="bi bi-tools"></i> Workshops
+                            </a>
+                            <a href="/quiz/dashboard" class="quick-action-btn">
+                                <i class="bi bi-question-circle"></i> Knowledge Quizzes
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <div class="progress-section">
+                            <div class="progress-title">
+                                <i class="bi bi-graph-up"></i> Your Progress
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar" style="width: 45%"></div>
+                            </div>
+                            <div class="progress-stats">
+                                <span>45% Complete</span>
+                                <span>3/7 Concepts</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="col-lg-9 col-md-8">
+                <div class="integrated-main">
+            <!-- Concept Definition Section -->
+            <div class="concept-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="bi bi-lightbulb"></i>
+                    </div>
+                    <h3 class="card-title">Concept Definition</h3>
+                </div>
+                <div id="concept-definition">
+                    <h4 id="concept-title">Fine-Tuning</h4>
+                    <p id="concept-description">Fine-tuning is the process of taking a pre-trained language model and further training it on a specific dataset to adapt it for a particular task or domain.</p>
+                </div>
+
+                <div class="related-concepts">
+                    <h4><i class="bi bi-link-45deg me-2"></i>Related Concepts</h4>
+                    <div class="concept-list" id="related-concepts-list">
+                        <!-- Related concepts will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visualization and Learning Resources Row -->
+            <div class="concept-visualization-row">
+                <!-- Visualization Section -->
+                <div class="concept-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="bi bi-diagram-3"></i>
+                        </div>
+                        <h3 class="card-title">Concept Visualization</h3>
+                    </div>
+                    <p>Explore the relationships between different concepts in LLM fine-tuning.</p>
+
+                    <div id="visualization-container">
+                        <iframe id="visualization-iframe" src="about:blank"></iframe>
+                        <div class="visualization-legend">
+                            <div class="legend-title">Legend</div>
+                            <div class="legend-items">
+                                <div class="legend-item">
+                                    <div class="legend-color main-term"></div>
+                                    <div class="legend-label">Main Term</div>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color synonym"></div>
+                                    <div class="legend-label">Synonyms</div>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color related"></div>
+                                    <div class="legend-label">Related Terms</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="keyboard-hint">
+                            <i class="bi bi-keyboard me-2"></i> Keyboard: Arrow keys to pan, +/- to zoom, 0 to reset
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Learning Resources Section -->
+                <div class="learning-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="bi bi-book"></i>
+                        </div>
+                        <h3 class="card-title">Learning Resources</h3>
+                    </div>
+                    <p>Access learning resources related to the selected concept.</p>
+
+                    <div class="learning-resources">
+                        <div class="resource-list" id="learning-resources-list">
+                            <!-- Learning resources will be populated here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hands-on Exercises and Colab Tutorials Row -->
+            <div class="learning-resources-row">
+                <!-- Hands-on Exercises Section -->
+                <div class="learning-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="bi bi-code-square"></i>
+                        </div>
+                        <h3 class="card-title">Hands-on Exercises</h3>
+                    </div>
+                    <p>Practice what you learn with hands-on exercises.</p>
+
+                    <div class="resource-list" id="exercises-list">
+                        <!-- Exercises will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Colab Tutorials Section -->
+                <div class="learning-card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: linear-gradient(135deg, #F9AB00, #EA4335);">
+                            <i class="bi bi-laptop"></i>
+                        </div>
+                        <h3 class="card-title">Colab Tutorials</h3>
+                    </div>
+                    <p>Interactive Google Colab notebooks for hands-on learning.</p>
+
+                    <div class="resource-list" id="colab-tutorials-list">
+                        <!-- Colab tutorials will be populated here -->
+                        <div class="resource-item">
+                            <div class="resource-title">LoRA Fine-Tuning Tutorial</div>
+                            <div class="resource-description">Learn how to fine-tune a model using LoRA with this interactive Colab notebook.</div>
+                            <a href="/colab/lora-tutorial" class="resource-link">
+                                <i class="bi bi-laptop me-1"></i> Open in Colab
+                            </a>
+                        </div>
+                        <div class="resource-item">
+                            <div class="resource-title">QLoRA Implementation Guide</div>
+                            <div class="resource-description">Step-by-step guide to implementing QLoRA for efficient fine-tuning.</div>
+                            <a href="/colab/qlora-tutorial" class="resource-link">
+                                <i class="bi bi-laptop me-1"></i> Open in Colab
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const conceptSearch = document.getElementById('concept-search');
+        const searchButton = document.getElementById('search-button');
+        const loadingElement = document.getElementById('loading');
+        const visualizationIframe = document.getElementById('visualization-iframe');
+        const relatedConceptsList = document.getElementById('related-concepts-list');
+        const learningResourcesList = document.getElementById('learning-resources-list');
+        const exercisesList = document.getElementById('exercises-list');
+        const colabTutorialsList = document.getElementById('colab-tutorials-list');
+        const conceptTitle = document.getElementById('concept-title');
+        const conceptDescription = document.getElementById('concept-description');
+        const conceptSuggestions = document.getElementById('concept-suggestions');
+
+        // Common LLM fine-tuning concepts for suggestions
+        const commonConcepts = [
+            'fine-tuning', 'lora', 'qlora', 'peft', 'transformer', 'attention',
+            'embedding', 'tokenizer', 'prompt', 'inference', 'hyperparameter',
+            'training', 'quantization', 'mixed precision', 'gradient checkpointing'
+        ];
+
+        // Add suggestions to datalist
+        commonConcepts.forEach(concept => {
+            const option = document.createElement('option');
+            option.value = concept;
+            conceptSuggestions.appendChild(option);
+        });
+
+        // Function to search for a concept
+        function searchConcept(concept) {
+            if (!concept) return;
+
+            // Show loading indicator
+            loadingElement.style.display = 'block';
+
+            // Call the API to get thesaurus data
+            fetch(`/api/thesaurus/${encodeURIComponent(concept)}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Update the visualization iframe
+                    visualizationIframe.src = data.visualization_path + '?t=' + new Date().getTime();
+                    visualizationIframe.style.backgroundColor = '#121212';
+                    visualizationIframe.style.backgroundImage = 'radial-gradient(circle at 50% 50%, rgba(40, 40, 40, 0.3) 0%, rgba(20, 20, 20, 0.1) 100%)';
+
+                    // Update concept title and fetch definition
+                    conceptTitle.textContent = data.word;
+
+                    // Fetch concept definition
+                    fetch(`/api/concept-definition/${encodeURIComponent(data.word)}`)
+                        .then(response => response.json())
+                        .then(definitionData => {
+                            conceptDescription.textContent = definitionData.definition;
+                        })
+                        .catch(error => {
+                            console.error('Error fetching concept definition:', error);
+                            conceptDescription.textContent = 'Definition not available.';
+                        });
+
+                    // Fetch related concepts
+                    fetch(`/api/related-concepts/${encodeURIComponent(data.word)}`)
+                        .then(response => response.json())
+                        .then(relatedData => {
+                            // Update related concepts list
+                            relatedConceptsList.innerHTML = '';
+                            if (relatedData.related && relatedData.related.length > 0) {
+                                relatedData.related.forEach(concept => {
+                                    const conceptBadge = document.createElement('div');
+                                    conceptBadge.className = 'concept-badge';
+                                    conceptBadge.textContent = concept;
+                                    conceptBadge.addEventListener('click', () => {
+                                        conceptSearch.value = concept;
+                                        searchConcept(concept);
+                                    });
+                                    relatedConceptsList.appendChild(conceptBadge);
+                                });
+
+                                // Also populate the sidebar related concepts
+                                populateSidebarRelatedConcepts(relatedData.related);
+
+                                // Update sidebar concept title and name
+                                document.getElementById('sidebar-concept-title').textContent = 'Concept: ' + data.word;
+                                document.getElementById('sidebar-concept-name').textContent = data.word;
+                            } else {
+                                relatedConceptsList.innerHTML = '<div style="color: rgba(255, 255, 255, 0.6); font-style: italic; padding: 10px;">No related concepts found</div>';
+                                populateSidebarRelatedConcepts([]);
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching related concepts:', error);
+                            relatedConceptsList.innerHTML = '<div style="color: #ff5555; padding: 10px;"><i class="bi bi-exclamation-triangle-fill me-2"></i>Error loading related concepts</div>';
+                        });
+
+                    // Fetch learning resources
+                    fetch(`/api/learning-resources/${encodeURIComponent(data.word)}`)
+                        .then(response => response.json())
+                        .then(resourcesData => {
+                            // Update learning resources list
+                            learningResourcesList.innerHTML = '';
+                            exercisesList.innerHTML = '';
+
+                            if (resourcesData.resources && resourcesData.resources.length > 0) {
+                                // Split resources into regular resources, exercises, and colab tutorials
+                                const exercises = resourcesData.resources.filter(resource =>
+                                    (resource.url.includes('exercise') ||
+                                    resource.url.includes('workshop') ||
+                                    resource.title.toLowerCase().includes('exercise') ||
+                                    resource.title.toLowerCase().includes('workshop') ||
+                                    resource.title.toLowerCase().includes('hands-on')) &&
+                                    !resource.url.includes('colab')
+                                );
+
+                                const colabTutorials = resourcesData.resources.filter(resource =>
+                                    resource.url.includes('colab') ||
+                                    resource.title.toLowerCase().includes('colab') ||
+                                    resource.title.toLowerCase().includes('notebook')
+                                );
+
+                                const regularResources = resourcesData.resources.filter(resource =>
+                                    !exercises.includes(resource) && !colabTutorials.includes(resource)
+                                );
+
+                                // Add regular resources
+                                if (regularResources.length > 0) {
+                                    regularResources.forEach(resource => {
+                                        const resourceItem = document.createElement('div');
+                                        resourceItem.className = 'resource-item';
+                                        resourceItem.innerHTML = `
+                                            <div class="resource-title">${resource.title}</div>
+                                            <div class="resource-description">${resource.description}</div>
+                                            <a href="${resource.url}" class="resource-link">
+                                                <i class="bi bi-book me-1"></i> Learn More
+                                            </a>
+                                        `;
+                                        learningResourcesList.appendChild(resourceItem);
+                                    });
+                                } else {
+                                    learningResourcesList.innerHTML = '<div style="color: rgba(255, 255, 255, 0.6); font-style: italic; padding: 10px;">No learning resources found</div>';
+                                }
+
+                                // Add exercises
+                                if (exercises.length > 0) {
+                                    exercises.forEach(exercise => {
+                                        const exerciseItem = document.createElement('div');
+                                        exerciseItem.className = 'resource-item';
+                                        exerciseItem.innerHTML = `
+                                            <div class="resource-title">${exercise.title}</div>
+                                            <div class="resource-description">${exercise.description}</div>
+                                            <a href="${exercise.url}" class="resource-link">
+                                                <i class="bi bi-code-square me-1"></i> Start Exercise
+                                            </a>
+                                        `;
+                                        exercisesList.appendChild(exerciseItem);
+                                    });
+                                } else {
+                                    exercisesList.innerHTML = '<div style="color: rgba(255, 255, 255, 0.6); font-style: italic; padding: 10px;">No exercises found</div>';
+                                }
+
+                                // Update Colab tutorials
+                                colabTutorialsList.innerHTML = '';
+
+                                // Add Colab tutorials from the API if available
+                                if (colabTutorials.length > 0) {
+                                    colabTutorials.forEach(tutorial => {
+                                        const tutorialItem = document.createElement('div');
+                                        tutorialItem.className = 'resource-item';
+                                        tutorialItem.innerHTML = `
+                                            <div class="resource-title">${tutorial.title}</div>
+                                            <div class="resource-description">${tutorial.description}</div>
+                                            <a href="${tutorial.url}" class="resource-link" target="_blank">
+                                                <i class="bi bi-laptop me-1"></i> Open in Colab
+                                            </a>
+                                        `;
+                                        colabTutorialsList.appendChild(tutorialItem);
+                                    });
+                                }
+
+                                // Add default Colab tutorials based on the concept
+                                if (data.word.toLowerCase() === 'lora' || data.word.toLowerCase() === 'fine-tuning') {
+                                    const loraItem = document.createElement('div');
+                                    loraItem.className = 'resource-item';
+                                    loraItem.innerHTML = `
+                                        <div class="resource-title">LoRA Fine-Tuning Tutorial</div>
+                                        <div class="resource-description">Learn how to fine-tune a model using LoRA with this interactive Colab notebook.</div>
+                                        <a href="/colab/lora-tutorial" class="resource-link" target="_blank">
+                                            <i class="bi bi-laptop me-1"></i> Open in Colab
+                                        </a>
+                                    `;
+                                    colabTutorialsList.appendChild(loraItem);
+                                }
+
+                                if (data.word.toLowerCase() === 'qlora' || data.word.toLowerCase() === 'quantization') {
+                                    const qloraItem = document.createElement('div');
+                                    qloraItem.className = 'resource-item';
+                                    qloraItem.innerHTML = `
+                                        <div class="resource-title">QLoRA Implementation Guide</div>
+                                        <div class="resource-description">Step-by-step guide to implementing QLoRA for efficient fine-tuning.</div>
+                                        <a href="/colab/qlora-tutorial" class="resource-link" target="_blank">
+                                            <i class="bi bi-laptop me-1"></i> Open in Colab
+                                        </a>
+                                    `;
+                                    colabTutorialsList.appendChild(qloraItem);
+                                }
+
+                                // If no Colab tutorials were added, show a message
+                                if (colabTutorialsList.children.length === 0) {
+                                    colabTutorialsList.innerHTML = '<div style="color: rgba(255, 255, 255, 0.6); font-style: italic; padding: 10px;">No Colab tutorials available for this concept</div>';
+                                }
+                            } else {
+                                learningResourcesList.innerHTML = '<div style="color: rgba(255, 255, 255, 0.6); font-style: italic; padding: 10px;">No learning resources found</div>';
+                                exercisesList.innerHTML = '<div style="color: rgba(255, 255, 255, 0.6); font-style: italic; padding: 10px;">No exercises found</div>';
+                                colabTutorialsList.innerHTML = '<div style="color: rgba(255, 255, 255, 0.6); font-style: italic; padding: 10px;">No Colab tutorials available for this concept</div>';
+                            }
+
+                            // Hide loading indicator
+                            loadingElement.style.display = 'none';
+                        })
+                        .catch(error => {
+                            console.error('Error fetching learning resources:', error);
+                            learningResourcesList.innerHTML = '<div style="color: #ff5555; padding: 10px;"><i class="bi bi-exclamation-triangle-fill me-2"></i>Error loading learning resources</div>';
+                            exercisesList.innerHTML = '<div style="color: #ff5555; padding: 10px;"><i class="bi bi-exclamation-triangle-fill me-2"></i>Error loading exercises</div>';
+                            colabTutorialsList.innerHTML = '<div style="color: #ff5555; padding: 10px;"><i class="bi bi-exclamation-triangle-fill me-2"></i>Error loading Colab tutorials</div>';
+                            loadingElement.style.display = 'none';
+                        });
+                })
+                .catch(error => {
+                    console.error('Error fetching thesaurus data:', error);
+                    loadingElement.style.display = 'none';
+                    alert('Error fetching concept data. Please try again.');
+                });
+        }
+
+        // Add event listener to search button
+        searchButton.addEventListener('click', function() {
+            const concept = conceptSearch.value.trim();
+            searchConcept(concept);
+        });
+
+        // Add event listener to search input for Enter key
+        conceptSearch.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                const concept = conceptSearch.value.trim();
+                searchConcept(concept);
+            }
+        });
+
+        // Search for the initial concept on page load
+        const initialConcept = '{{ initial_concept | default("fine-tuning") }}';
+        searchConcept(initialConcept);
+
+        // Update sidebar concept name
+        document.getElementById('sidebar-concept-name').textContent = initialConcept;
+
+        // Add event listeners for sidebar navigation
+        document.querySelectorAll('.sidebar-nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Remove active class from all links
+                document.querySelectorAll('.sidebar-nav-link').forEach(l => {
+                    l.classList.remove('active');
+                });
+
+                // Add active class to clicked link
+                this.classList.add('active');
+            });
+        });
+    });
+
+    // Function to populate sidebar related concepts
+    function populateSidebarRelatedConcepts(concepts) {
+        const sidebarRelatedConcepts = document.getElementById('sidebar-related-concepts');
+        sidebarRelatedConcepts.innerHTML = '';
+
+        if (concepts && concepts.length > 0) {
+            concepts.slice(0, 5).forEach(concept => {
+                const conceptItem = document.createElement('div');
+                conceptItem.className = 'related-concept-item';
+                conceptItem.innerHTML = `
+                    <div class="concept-icon">
+                        <i class="bi bi-hash"></i>
+                    </div>
+                    <div class="concept-info">
+                        <div class="concept-name">${concept}</div>
+                        <div class="concept-type">Related Concept</div>
+                    </div>
+                `;
+
+                // Add click event to search for this concept
+                conceptItem.addEventListener('click', function() {
+                    document.getElementById('concept-search').value = concept;
+                    document.getElementById('search-button').click();
+                });
+
+                sidebarRelatedConcepts.appendChild(conceptItem);
+            });
+        } else {
+            sidebarRelatedConcepts.innerHTML = '<div style="color: rgba(255, 255, 255, 0.6); font-style: italic; padding: 10px;">No related concepts found</div>';
+        }
+    }
+</script>
+{% endblock %}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Mobile Optimization Script -->
+<script>
+    // Add viewport meta tag dynamically if not present
+    if (!document.querySelector('meta[name="viewport"]')) {
+        const viewportMeta = document.createElement('meta');
+        viewportMeta.name = 'viewport';
+        viewportMeta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+        document.head.appendChild(viewportMeta);
+    }
+
+    // Detect touch capability
+    document.documentElement.className += (('ontouchstart' in document.documentElement) ? ' touch-device' : ' no-touch');
+
+    // Fix for iOS 100vh issue
+    function setMobileHeight() {
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+
+    window.addEventListener('resize', setMobileHeight);
+    window.addEventListener('orientationchange', setMobileHeight);
+    setMobileHeight();
+</script>
+
+<!-- Professional Sidebar JS -->
+<script src="{{ url_for('static', filename='js/professional-sidebar.js') }}"></script>

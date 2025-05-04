@@ -17,17 +17,19 @@
     color: var(--text-primary);
     transition: all 0.3s ease;
     position: relative;
-    padding: 0.8rem 1.2rem;
-    margin: 0 0.3rem;
+    padding: 0.6rem 0.8rem;
+    margin: 0 0.15rem;
     border-radius: 10px;
     font-weight: 600;
     display: flex;
     align-items: center;
-    letter-spacing: 0.02em;
-    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    font-size: 0.95rem;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
     background-color: rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.05);
+    -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+    touch-action: manipulation; /* Improve touch response */
 }
 
 .navbar-dark .navbar-nav .nav-link::after {
@@ -57,8 +59,8 @@
 }
 
 .nav-icon {
-    margin-right: 0.6rem;
-    font-size: 1.2rem;
+    margin-right: 0.4rem;
+    font-size: 1.1rem;
     transition: all 0.3s ease;
     filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
 }
@@ -83,10 +85,10 @@
     display: flex;
     align-items: center;
     font-weight: bold;
-    font-size: 1.6rem;
-    padding: 0.5rem 0;
+    font-size: 1.4rem;
+    padding: 0.4rem 0;
     position: relative;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.01em;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
@@ -94,11 +96,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
     background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    border-radius: 12px;
-    margin-right: 0.8rem;
+    border-radius: 10px;
+    margin-right: 0.6rem;
     box-shadow: 0 0 15px rgba(66, 135, 245, 0.5);
     transition: all 0.3s ease;
     border: 2px solid rgba(255, 255, 255, 0.1);
@@ -142,6 +144,10 @@
     font-weight: 500;
     letter-spacing: 0.01em;
     border-left: 3px solid transparent;
+    -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+    touch-action: manipulation; /* Improve touch response */
+    position: relative;
+    z-index: 1;
 }
 
 .dropdown-item:hover {
@@ -149,6 +155,13 @@
     color: var(--text-primary);
     border-left: 3px solid var(--secondary-color);
     transform: translateX(5px);
+}
+
+.dropdown-item.active {
+    background-color: rgba(66, 135, 245, 0.2);
+    color: var(--text-primary);
+    border-left: 3px solid var(--secondary-color);
+    font-weight: 600;
 }
 
 .dropdown-header {
@@ -194,16 +207,11 @@
     content: '';
     position: absolute;
     top: 0;
-    left: 0;
     right: 0;
-    bottom: 0;
-    background: linear-gradient(90deg,
-        rgba(255, 255, 255, 0.1),
-        rgba(255, 255, 255, 0.4),
-        rgba(255, 255, 255, 0.1));
-    animation: shimmer 2s linear infinite;
-    transform: translateX(-100%);
-    will-change: transform;
+    width: 15px;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 0 4px 4px 0;
 }
 
 .scroll-indicator-bar::after {
@@ -221,13 +229,9 @@
 
 /* Scroll indicator pulse effect when reaching important sections */
 .scroll-indicator-pulse {
-    animation: pulse-glow 2s ease-in-out;
-}
-
-@keyframes pulse-glow {
-    0% { box-shadow: 0 0 5px rgba(66, 135, 245, 0.7); }
-    50% { box-shadow: 0 0 25px rgba(66, 135, 245, 1); }
-    100% { box-shadow: 0 0 5px rgba(66, 135, 245, 0.7); }
+    position: relative;
+    background-color: rgba(66, 135, 245, 0.5);
+    box-shadow: 0 0 10px rgba(66, 135, 245, 0.7);
 }
 
 /* Add small dots to indicate sections */
@@ -260,11 +264,7 @@
     transform: translateX(-50%) scale(1.5);
 }
 
-@keyframes shimmer {
-    100% {
-        transform: translateX(100%);
-    }
-}
+/* Removed unused animation */
 
 /* Section Indicator */
 .section-indicator {
@@ -405,10 +405,89 @@
 }
 
 /* Responsive adjustments */
+@media (max-width: 1200px) {
+    .navbar-dark .navbar-nav .nav-link {
+        padding: 0.5rem 0.6rem;
+        margin: 0 0.1rem;
+        font-size: 0.9rem;
+    }
+
+    .nav-icon {
+        margin-right: 0.3rem;
+        font-size: 1rem;
+    }
+
+    /* Ensure all items fit in the container */
+    .compact-nav {
+        justify-content: space-between;
+    }
+}
+
 @media (max-width: 992px) {
+    .navbar {
+        padding: 0.6rem 0;
+    }
+
     .navbar-dark .navbar-nav .nav-link {
         padding: 0.7rem 1rem;
-        margin: 0.2rem 0;
+        margin: 0.3rem 0;
+        border-radius: 8px;
+        font-size: 1rem;
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .navbar-dark .navbar-toggler {
+        border: none;
+        padding: 0.5rem;
+        margin-right: 0.5rem;
+        background-color: rgba(66, 135, 245, 0.1);
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .navbar-dark .navbar-toggler:focus {
+        box-shadow: none;
+        outline: none;
+    }
+
+    .navbar-dark .navbar-toggler:hover {
+        background-color: rgba(66, 135, 245, 0.2);
+        transform: scale(1.05);
+    }
+
+    .navbar-toggler-icon {
+        width: 1.5em;
+        height: 1.5em;
+    }
+
+    .navbar-collapse {
+        background-color: rgba(15, 15, 15, 0.98);
+        border-radius: 12px;
+        padding: 1rem;
+        margin-top: 0.5rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(66, 135, 245, 0.2);
+        max-height: calc(100vh - 100px);
+        max-height: calc(var(--vh, 1vh) * 100 - 100px); /* Mobile viewport height fix */
+        overflow-y: auto;
+        scroll-behavior: smooth;
+    }
+
+    .dropdown-menu {
+        border: none;
+        background-color: rgba(30, 30, 35, 0.5);
+        box-shadow: none;
+        padding: 0.5rem 0;
+        margin: 0.5rem 0;
+        position: static !important;
+        transform: none !important;
+        width: 100%;
+    }
+
+    .dropdown-item {
+        padding: 0.6rem 1.5rem;
+        color: rgba(255, 255, 255, 0.8);
     }
 
     .section-indicator {
@@ -422,6 +501,145 @@
     .scroll-nav-dots {
         display: none;
     }
+
+    /* Ensure brand is visible on mobile */
+    .navbar-brand {
+        font-size: 1.4rem;
+    }
+
+    .brand-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .brand-icon i {
+        font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+
+    .brand-icon {
+        width: 35px;
+        height: 35px;
+        margin-right: 0.6rem;
+    }
+
+    .brand-icon i {
+        font-size: 1.2rem;
+    }
+
+    .navbar-dark .navbar-nav .nav-link {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.95rem;
+    }
+
+    .nav-icon {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar-brand {
+        font-size: 1.1rem;
+    }
+
+    .brand-icon {
+        width: 32px;
+        height: 32px;
+        margin-right: 0.5rem;
+    }
+
+    .brand-icon i {
+        font-size: 1.1rem;
+    }
+
+    /* Optimize for very small screens */
+    .navbar-dark .navbar-nav .nav-link {
+        padding: 0.5rem 0.7rem;
+        font-size: 0.9rem;
+    }
+
+    .dropdown-item {
+        padding: 0.5rem 1.2rem;
+        font-size: 0.9rem;
+    }
+
+    /* Compact mobile menu */
+    .navbar-collapse {
+        max-height: calc(100vh - 80px);
+        max-height: calc(var(--vh, 1vh) * 100 - 80px);
+        overflow-y: auto;
+    }
+
+    /* Improve touch targets */
+    .navbar-dark .navbar-nav .nav-link,
+    .dropdown-item {
+        min-height: 44px; /* Apple's recommended minimum touch target size */
+        display: flex;
+        align-items: center;
+    }
+
+    /* Ensure dropdown menus are fully visible */
+    .dropdown-menu.mega-menu {
+        min-width: 100%;
+        max-height: none;
+        overflow: visible;
+        padding: 0.5rem;
+    }
+
+    /* Stack columns in mobile view */
+    .dropdown-menu.mega-menu .row > div {
+        margin-bottom: 1rem;
+    }
+
+    /* Make dropdown headers more visible */
+    .dropdown-header {
+        padding: 0.5rem 1rem;
+        margin-top: 0.5rem;
+        background-color: rgba(66, 135, 245, 0.1);
+        border-radius: 5px;
+    }
+
+    /* Improve navbar toggler visibility */
+    .navbar-toggler {
+        padding: 0.5rem;
+        border: none;
+        background-color: rgba(66, 135, 245, 0.15);
+        border-radius: 8px;
+    }
+
+    .navbar-toggler:focus {
+        box-shadow: 0 0 0 3px rgba(66, 135, 245, 0.3);
+        outline: none;
+    }
+
+    /* Improve scrolling in dropdown menus */
+    .dropdown-menu.mega-menu .row {
+        margin-right: 0;
+        margin-left: 0;
+    }
+
+    /* Add visual feedback for active navigation items */
+    .navbar-dark .navbar-nav .nav-link.active {
+        background-color: rgba(66, 135, 245, 0.2);
+        border-left: 3px solid rgba(66, 135, 245, 0.8);
+    }
+}
+
+/* Touch active state for mobile devices */
+.touch-active {
+    background-color: rgba(66, 135, 245, 0.2) !important;
+    transform: scale(0.98) !important;
+    transition: all 0.1s ease !important;
+}
+
+/* Prevent content shift when scrollbar appears/disappears */
+html {
+    overflow-y: scroll;
 }
 
 /* High contrast mode */

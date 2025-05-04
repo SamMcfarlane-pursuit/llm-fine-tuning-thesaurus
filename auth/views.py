@@ -4,6 +4,9 @@ Authentication views.
 
 from flask import render_template, redirect, url_for, flash, request, session, current_app
 from flask_login import login_user, logout_user, login_required, current_user
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, HiddenField
+from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
 try:
     from werkzeug.urls import url_parse
 except ImportError:
@@ -33,12 +36,64 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        if user is None or not user.check_password(form.password.data):
-            flash('Invalid email or password', 'danger')
-            return redirect(url_for('auth.login'))
 
+        # Track login attempts in session
+        if 'login_attempts' not in session:
+            session['login_attempts'] = 0
+            session['last_attempt_time'] = datetime.now().timestamp()
+
+        # Check if user exists
+        if user is None:
+            # User doesn't exist - provide helpful message
+            flash('No account found with this email address. Please check your email or register for a new account.', 'danger')
+            session['login_attempts'] += 1
+
+            # Store the email for potential registration
+            session['attempted_email'] = form.email.data
+
+            return render_template('auth/login.html',
+                                  title='Sign In',
+                                  form=form,
+                                  oauth_providers=get_oauth_providers(),
+                                  show_register_prompt=True,
+                                  attempted_email=form.email.data)
+
+        # Check password
+        if not user.check_password(form.password.data):
+            # Incorrect password
+            session['login_attempts'] += 1
+
+            # Different message based on number of attempts
+            if session['login_attempts'] >= 3:
+                flash('Multiple failed login attempts. Did you forget your password? You can reset it below.', 'warning')
+                return render_template('auth/login.html',
+                                      title='Sign In',
+                                      form=form,
+                                      oauth_providers=get_oauth_providers(),
+                                      show_reset_prompt=True,
+                                      show_password_error=True,
+                                      user_email=form.email.data,
+                                      error_message="Incorrect password. Please try again or reset your password.")
+            else:
+                flash('Incorrect password. Please try again.', 'danger')
+                return render_template('auth/login.html',
+                                      title='Sign In',
+                                      form=form,
+                                      oauth_providers=get_oauth_providers(),
+                                      show_password_error=True,
+                                      error_message="Incorrect password. Please try again.")
+
+        # Successful login
         login_user(user, remember=form.remember_me.data)
         user.update_last_login()
+
+        # Reset login attempts
+        if 'login_attempts' in session:
+            session.pop('login_attempts')
+        if 'last_attempt_time' in session:
+            session.pop('last_attempt_time')
+        if 'attempted_email' in session:
+            session.pop('attempted_email')
 
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
@@ -47,14 +102,18 @@ def login():
         flash('You have been logged in successfully!', 'success')
         return redirect(next_page)
 
-    # Pass OAuth providers to template
-    oauth_providers = [
+    return render_template('auth/login.html',
+                          title='Sign In',
+                          form=form,
+                          oauth_providers=get_oauth_providers())
+
+def get_oauth_providers():
+    """Get OAuth providers for templates."""
+    return [
         {'name': 'Google', 'icon': 'google', 'url': url_for('auth.google')},
         {'name': 'GitHub', 'icon': 'github', 'url': url_for('auth.github')},
         {'name': 'Facebook', 'icon': 'facebook', 'url': url_for('auth.facebook')}
     ]
-
-    return render_template('auth/login.html', title='Sign In', form=form, oauth_providers=oauth_providers)
 
 
 @auth.route('/logout')
@@ -366,3 +425,84 @@ def transfer_guest_progress():
 
     flash('Your guest progress has been successfully transferred to your account!', 'success')
     return redirect(url_for('index'))
+
+
+@auth.route('/password-reset', methods=['GET', 'POST'])
+def password_reset_request():
+    """Request password reset."""
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+
+    # Create a simple form for email
+    class PasswordResetRequestForm(FlaskForm):
+        email = StringField('Email', validators=[DataRequired(), Email()])
+        submit = SubmitField('Request Password Reset')
+
+    form = PasswordResetRequestForm()
+
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+
+        if user:
+            # Generate a secure token
+            token = user.get_reset_password_token()
+
+            # In a real application, you would send an email here
+            # For now, we'll just show the reset link on the page
+            reset_url = url_for('auth.password_reset', token=token, _external=True)
+
+            flash('Password reset instructions have been sent to your email.', 'info')
+
+            # For demonstration purposes, we'll also show the link directly
+            # In a real application, you would remove this
+            flash(f'For demonstration purposes, here is the reset link: {reset_url}', 'info')
+
+            return redirect(url_for('auth.login'))
+        else:
+            # Don't reveal that the user doesn't exist
+            flash('Password reset instructions have been sent to your email if the account exists.', 'info')
+            return redirect(url_for('auth.login'))
+
+    # Pre-fill email if provided in query string
+    if request.args.get('email'):
+        form.email.data = request.args.get('email')
+
+    return render_template('auth/password_reset_request.html',
+                          title='Reset Password',
+                          form=form)
+
+
+@auth.route('/password-reset/<token>', methods=['GET', 'POST'])
+def password_reset(token):
+    """Reset password with token."""
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+
+    # Try to verify the token
+    try:
+        user_id = User.verify_reset_password_token(token)
+        user = User.query.get(user_id)
+        if not user:
+            flash('Invalid or expired reset link.', 'danger')
+            return redirect(url_for('auth.password_reset_request'))
+    except Exception:
+        flash('Invalid or expired reset link.', 'danger')
+        return redirect(url_for('auth.password_reset_request'))
+
+    # Create a form for the new password
+    class PasswordResetForm(FlaskForm):
+        password = PasswordField('New Password', validators=[DataRequired(), Length(min=8)])
+        password2 = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+        submit = SubmitField('Reset Password')
+
+    form = PasswordResetForm()
+
+    if form.validate_on_submit():
+        user.set_password(form.password.data)
+        db.session.commit()
+        flash('Your password has been reset successfully! You can now log in with your new password.', 'success')
+        return redirect(url_for('auth.login'))
+
+    return render_template('auth/password_reset.html',
+                          title='Reset Password',
+                          form=form)

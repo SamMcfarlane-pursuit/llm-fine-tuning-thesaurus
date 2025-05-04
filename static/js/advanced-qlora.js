@@ -124,6 +124,12 @@ function drawLoRAAdapters(ctx, width, height) {
             ctx.textAlign = 'center';
             ctx.fillText('LoRA (16-bit)', adapterStartX + adapterWidth / 2, y + layerHeight * 0.4);
 
+            // Add rank indicator
+            const rankValue = document.getElementById('rank-value');
+            const rankText = rankValue ? rankValue.textContent : '8';
+            ctx.font = '8px Roboto';
+            ctx.fillText(`r=${rankText}`, adapterStartX + adapterWidth / 2, y + layerHeight * 0.55);
+
             // Draw connection line
             ctx.beginPath();
             ctx.moveTo(mainStartX + mainLayerWidth, y + layerHeight * 0.35);
@@ -349,10 +355,27 @@ function setupParameterSliders() {
         slider.addEventListener('input', function() {
             output.textContent = this.value;
 
+            // If this is the rank slider, update the alpha value to 2x rank
+            if (this.id === 'lora-rank') {
+                const alphaSlider = document.getElementById('lora-alpha');
+                const alphaOutput = document.getElementById('alpha-value');
+                if (alphaSlider && alphaOutput) {
+                    const recommendedAlpha = parseInt(this.value) * 2;
+                    // Only update if within the slider range
+                    if (recommendedAlpha <= parseInt(alphaSlider.max)) {
+                        alphaSlider.value = recommendedAlpha;
+                        alphaOutput.textContent = recommendedAlpha;
+                    }
+                }
+            }
+
             // If this is a memory-related parameter, update the memory calculator
             if (this.dataset.memoryParam) {
                 updateMemoryUsage();
             }
+
+            // Redraw the architecture visualization when parameters change
+            drawArchitectureVisualization();
         });
 
         // Set initial value
@@ -413,6 +436,12 @@ function updateMemoryUsage() {
     // LoRA memory (much smaller, depends on rank)
     // Assuming LoRA is applied to about 40% of the parameters
     const loraParamCount = modelSize * 1000000000 * 0.4;
+
+    // Get alpha value (default to 2x rank if not available)
+    const alphaValue = document.getElementById('alpha-value');
+    const alpha = alphaValue ? parseInt(alphaValue.textContent) : rank * 2;
+
+    // Calculate LoRA memory based on rank and alpha
     const loraMemoryGB = (loraParamCount * rank * 2 * 16) / 8 / 1000000000;
 
     // Total memory for QLoRA

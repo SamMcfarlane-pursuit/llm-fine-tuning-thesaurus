@@ -171,6 +171,130 @@ class VisualThesaurus:
 
         return plt.gcf()
 
+    def _visualize_large_graph(self, word, height='500px', width='100%', save_path=None):
+        """
+        Simplified visualization for large graphs.
+
+        Args:
+            word (str): The word being visualized
+            height (str): Height of the visualization
+            width (str): Width of the visualization
+            save_path (str): Path to save the HTML file
+
+        Returns:
+            IPython.display.HTML: HTML display object
+        """
+        # Create a simplified visualization using matplotlib
+        plt.figure(figsize=(12, 12))
+
+        # Use a more efficient layout algorithm for large graphs
+        pos = nx.spring_layout(self.graph, k=0.3, iterations=50, seed=42)
+
+        # Draw nodes with minimal styling
+        nx.draw_networkx_nodes(
+            self.graph, pos,
+            node_size=100,
+            node_color='skyblue',
+            alpha=0.8
+        )
+
+        # Draw edges with minimal styling
+        nx.draw_networkx_edges(
+            self.graph, pos,
+            width=0.5,
+            alpha=0.5,
+            edge_color='gray'
+        )
+
+        # Draw labels for only the most important nodes
+        # Find the top 20 nodes by degree
+        top_nodes = sorted(self.graph.degree, key=lambda x: x[1], reverse=True)[:20]
+        top_node_dict = {n: pos[n] for n, _ in top_nodes}
+
+        nx.draw_networkx_labels(
+            self.graph, top_node_dict,
+            font_size=10,
+            font_family='sans-serif'
+        )
+
+        plt.axis('off')
+        plt.tight_layout()
+
+        # Save to a temporary file
+        if save_path:
+            temp_img_path = save_path.replace('.html', '.png')
+        else:
+            temp_img_path = f"static/visualizations/{word}_large_graph.png"
+
+        plt.savefig(temp_img_path, format='png', dpi=300, bbox_inches='tight')
+        plt.close()
+
+        # Create a simple HTML file that displays the image
+        html_content = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Large Graph Visualization for {word}</title>
+    <style>
+        body, html {{
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }}
+        .container {{
+            text-align: center;
+            max-width: 1000px;
+            padding: 20px;
+        }}
+        h1 {{
+            margin-bottom: 20px;
+        }}
+        .graph-image {{
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }}
+        .info {{
+            margin-top: 20px;
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            max-width: 600px;
+        }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Large Graph Visualization for "{word}"</h1>
+        <div class="info">
+            <p>This graph contains {len(self.graph.nodes())} nodes and {len(self.graph.edges())} connections.</p>
+            <p>A simplified static visualization is shown due to the large size of the graph.</p>
+        </div>
+        <img src="/{temp_img_path}" alt="Graph visualization for {word}" class="graph-image">
+    </div>
+</body>
+</html>"""
+
+        # Save the HTML file
+        if save_path:
+            with open(save_path, 'w', encoding='utf-8') as f:
+                f.write(html_content)
+            return HTML(f'<iframe src="{save_path}" height="{height}" width="{width}" style="border: none; background-color: #121212;"></iframe>')
+        else:
+            temp_html_path = f"static/visualizations/{word}_large_graph.html"
+            with open(temp_html_path, 'w', encoding='utf-8') as f:
+                f.write(html_content)
+            return HTML(f'<iframe src="{temp_html_path}" height="{height}" width="{width}" style="border: none; background-color: #121212;"></iframe>')
+
     def visualize_interactive(self, word=None, height='500px', width='100%', save_path=None):
         """
         Create an interactive visualization using pyvis.
@@ -184,107 +308,252 @@ class VisualThesaurus:
         Returns:
             IPython.display.HTML: HTML display object
         """
-        if word:
-            self.build_graph_for_word(word)
-
-        if not self.graph.nodes():
-            raise ValueError("Graph is empty. Please build a graph first.")
-
-        # Create a pyvis network
-        net = Network(height=height, width=width, notebook=True, directed=False)
-
-        # Add nodes and edges from the networkx graph
-        for node in self.graph.nodes():
-            # Get the definition for the node if available
-            definition = ""
-            synsets = wn.synsets(node)
-            if synsets:
-                definition = synsets[0].definition()
-
-            # Create a tooltip with the definition
-            tooltip = f"<div style='max-width:300px;'><b>{node}</b><br/>{definition}</div>"
-
-            net.add_node(
-                node,
-                label=self.graph.nodes[node].get('label', node),
-                color=self.graph.nodes[node].get('color', 'blue'),
-                size=self.graph.nodes[node].get('size', 25),
-                title=tooltip,
-                font={'size': 16, 'face': 'Arial'}
-            )
-
-        for edge in self.graph.edges():
-            net.add_edge(
-                edge[0],
-                edge[1],
-                color=self.graph.edges[edge].get('color', 'gray'),
-                title=self.graph.edges[edge].get('label', ''),
-                width=2
-            )
-
-        # Set physics layout for better stability and control
-        net.barnes_hut(
-            gravity=-30000,  # Reduced gravity for more stability
-            central_gravity=0.5,  # Increased central gravity to keep nodes closer to center
-            spring_length=200,  # Slightly reduced spring length
-            spring_strength=0.05,  # Increased spring strength for more stability
-            damping=0.15,  # Increased damping for less oscillation
-            overlap=0.2  # Increased overlap avoidance
-        )
-
-        # Add enhanced zoom options and other interactive features
-        options = {
-            "interaction": {
-                "hover": True,
-                "zoomView": True,
-                "dragView": True,
-                "navigationButtons": True,
-                "keyboard": {
-                    "enabled": True,
-                    "speed": {
-                        "x": 10,
-                        "y": 10,
-                        "zoom": 0.1
-                    },
-                    "bindToWindow": False  # Only respond when iframe is focused
-                },
-                "tooltipDelay": 100,
-                "multiselect": True,  # Allow selecting multiple nodes
-                "selectable": True,
-                "selectConnectedEdges": True,
-                "hoverConnectedEdges": True,
-                "zoomSpeed": 0.8  # Slower zoom for more control
-            },
-            "physics": {
-                "stabilization": {
-                    "enabled": True,
-                    "iterations": 200,  # More iterations for better stability
-                    "updateInterval": 50,
-                    "onlyDynamicEdges": False,
-                    "fit": True  # This helps fill the container
-                },
-                "adaptiveTimestep": True,  # Adaptive timestep for smoother physics
-                "maxVelocity": 30,  # Limit maximum velocity for stability
-                "minVelocity": 0.75,  # Higher minimum velocity threshold for stabilization
-                "solver": "barnesHut",
-                "timestep": 0.5,  # Smaller timestep for more stability
-                "wind": { "x": 0, "y": 0 }  # No wind force
-            },
-            "layout": {
-                "improvedLayout": True,
-                "randomSeed": 42  # Consistent layout between page loads
-            }
+        # Error HTML template for fallback
+        error_html = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualization Error</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
-        net.set_options(json.dumps(options))
+        .error-container {
+            text-align: center;
+            max-width: 600px;
+            padding: 30px;
+            background-color: rgba(255, 0, 0, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+        }
+        h1 {
+            color: #ff5555;
+        }
+        .error-details {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            text-align: left;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1>Visualization Error</h1>
+        <p>An error occurred while generating the visualization:</p>
+        <div class="error-details">ERROR_MESSAGE</div>
+        <p>Try with a different word or a smaller graph size.</p>
+    </div>
+</body>
+</html>"""
 
-        # Read the template file
-        template_path = 'static/visualizations/template.html'
         try:
-            with open(template_path, 'r', encoding='utf-8') as f:
-                html_template = f.read()
-        except FileNotFoundError:
-            # Fallback to embedded template if file not found
-            html_template = """<!DOCTYPE html>
+            # Build graph if word is provided
+            if word:
+                try:
+                    self.build_graph_for_word(word)
+                except Exception as e:
+                    print(f"Warning: Error building graph for '{word}': {e}")
+                    # If graph building fails, create a minimal graph with just the word
+                    self.graph = nx.Graph()
+                    self.graph.add_node(word, size=25, color='red', label=word)
+
+            # Check if graph is empty
+            if not self.graph.nodes():
+                print("Warning: Graph is empty. Creating a minimal graph.")
+                # Create a minimal graph with a placeholder node
+                self.graph.add_node("No data available", size=25, color='red', label="No data available")
+
+            # Determine graph size for adaptive visualization
+            graph_size = len(self.graph.nodes())
+            print(f"Graph size: {graph_size} nodes")
+
+            # Use different visualization approaches based on graph size
+            if graph_size > 100:
+                # For very large graphs, simplify the visualization
+                print("Using simplified visualization for large graph")
+                return self._visualize_large_graph(word, height, width, save_path)
+
+            # Create a pyvis network with error handling
+            try:
+                net = Network(height=height, width=width, notebook=True, directed=False)
+            except Exception as e:
+                print(f"Error creating Network: {e}")
+                # Fallback to a simpler network configuration
+                net = Network(height=height, width=width, notebook=True)
+
+            # Add nodes and edges from the networkx graph with error handling
+            for node in self.graph.nodes():
+                try:
+                    # Get the definition for the node if available
+                    definition = ""
+                    try:
+                        synsets = wn.synsets(node)
+                        if synsets:
+                            definition = synsets[0].definition()
+                    except Exception as e:
+                        print(f"Warning: Error getting definition for '{node}': {e}")
+
+                    # Create a tooltip with the definition
+                    tooltip = f"<div style='max-width:300px;'><b>{node}</b><br/>{definition}</div>"
+
+                    # Get node attributes with fallbacks
+                    label = self.graph.nodes[node].get('label', str(node))
+                    color = self.graph.nodes[node].get('color', 'blue')
+                    size = self.graph.nodes[node].get('size', 25)
+
+                    # Add node to network
+                    net.add_node(
+                        node,
+                        label=label,
+                        color=color,
+                        size=size,
+                        title=tooltip,
+                        font={'size': 16, 'face': 'Arial'}
+                    )
+                except Exception as e:
+                    print(f"Warning: Error adding node '{node}': {e}")
+                    # Add a simplified node as fallback
+                    try:
+                        net.add_node(str(node), label=str(node), color='gray', size=15)
+                    except:
+                        # If all else fails, skip this node
+                        continue
+
+            # Add edges with error handling
+            for edge in self.graph.edges():
+                try:
+                    source, target = edge
+                    # Check if both nodes exist in the network
+                    if source in net.nodes and target in net.nodes:
+                        color = self.graph.edges[edge].get('color', 'gray')
+                        title = self.graph.edges[edge].get('label', '')
+                        net.add_edge(source, target, color=color, title=title, width=2)
+                except Exception as e:
+                    print(f"Warning: Error adding edge {edge}: {e}")
+                    # Skip this edge if there's an error
+
+            # Adjust physics settings based on graph size
+            gravity = -30000
+            central_gravity = 0.5
+            spring_length = 200
+            spring_strength = 0.05
+            damping = 0.15
+            iterations = 200
+
+            if graph_size > 50:
+                # For larger graphs, use more restrictive physics
+                gravity = -15000
+                central_gravity = 0.8
+                spring_length = 120
+                spring_strength = 0.08
+                damping = 0.2
+                iterations = 100
+            elif graph_size > 30:
+                # For medium graphs, use moderate physics
+                gravity = -20000
+                central_gravity = 0.6
+                spring_length = 150
+                spring_strength = 0.06
+                damping = 0.18
+                iterations = 150
+
+            # Set physics layout with error handling
+            try:
+                net.barnes_hut(
+                    gravity=gravity,
+                    central_gravity=central_gravity,
+                    spring_length=spring_length,
+                    spring_strength=spring_strength,
+                    damping=damping,
+                    overlap=0.2
+                )
+            except Exception as e:
+                print(f"Warning: Error setting physics: {e}")
+                # Use default physics as fallback
+
+            # Add enhanced zoom options and other interactive features
+            options = {
+                "interaction": {
+                    "hover": True,
+                    "zoomView": True,
+                    "dragView": True,
+                    "navigationButtons": True,
+                    "keyboard": {
+                        "enabled": True,
+                        "speed": {
+                            "x": 10,
+                            "y": 10,
+                            "zoom": 0.1
+                        },
+                        "bindToWindow": False  # Only respond when iframe is focused
+                    },
+                    "tooltipDelay": 100,
+                    "multiselect": True,  # Allow selecting multiple nodes
+                    "selectable": True,
+                    "selectConnectedEdges": True,
+                    "hoverConnectedEdges": True,
+                    "zoomSpeed": 0.8  # Slower zoom for more control
+                },
+                "physics": {
+                    "stabilization": {
+                        "enabled": True,
+                        "iterations": iterations,
+                        "updateInterval": 50,
+                        "onlyDynamicEdges": False,
+                        "fit": True  # This helps fill the container
+                    },
+                    "adaptiveTimestep": True,  # Adaptive timestep for smoother physics
+                    "maxVelocity": 30,  # Limit maximum velocity for stability
+                    "minVelocity": 0.75,  # Higher minimum velocity threshold for stabilization
+                    "solver": "barnesHut",
+                    "timestep": 0.5,  # Smaller timestep for more stability
+                    "wind": { "x": 0, "y": 0 }  # No wind force
+                },
+                "layout": {
+                    "improvedLayout": True,
+                    "randomSeed": 42  # Consistent layout between page loads
+                }
+            }
+
+            try:
+                net.set_options(json.dumps(options))
+            except Exception as e:
+                print(f"Warning: Error setting options: {e}")
+                # Continue without custom options if there's an error
+
+            # Try to use the enhanced template first
+            template_path = 'static/visualizations/enhanced_template.html'
+            html_template = ""
+            try:
+                with open(template_path, 'r', encoding='utf-8') as f:
+                    html_template = f.read()
+                print(f"Using enhanced template: {template_path}")
+            except FileNotFoundError:
+                # Fall back to standard template
+                template_path = 'static/visualizations/template.html'
+                try:
+                    with open(template_path, 'r', encoding='utf-8') as f:
+                        html_template = f.read()
+                    print(f"Using standard template: {template_path}")
+                except FileNotFoundError:
+                    # Fallback to embedded template if file not found
+                    print("Using embedded template as fallback")
+                    html_template = """<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -326,191 +595,30 @@ class VisualThesaurus:
             -webkit-backdrop-filter: blur(5px);
             backdrop-filter: blur(5px);
         }
-
-        /* Custom node styling */
-        .vis-network .vis-node {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-weight: 600;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-        }
-
-        /* Controls styling */
-        .vis-navigation {
-            background-color: rgba(30, 30, 30, 0.7) !important;
-            border-radius: 8px !important;
-            border: 1px solid rgba(255, 255, 255, 0.1) !important;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3) !important;
-            -webkit-backdrop-filter: blur(5px) !important;
-            backdrop-filter: blur(5px) !important;
-        }
-
-        .vis-button {
-            background-color: rgba(255, 255, 255, 0.1) !important;
-            border: 1px solid rgba(255, 255, 255, 0.2) !important;
-            border-radius: 4px !important;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
-            transition: all 0.3s ease !important;
-        }
-
-        .vis-button:hover {
-            background-color: rgba(255, 255, 255, 0.2) !important;
-            transform: translateY(-2px) !important;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
-        }
-
-        .vis-button:active {
-            transform: translateY(1px) !important;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
-        }
     </style>
 </head>
 <body>
     <div id="mynetwork"></div>
-
-    <!-- Custom zoom controls -->
-    <div id="custom-zoom-controls" style="position: absolute; top: 15px; right: 15px; background: rgba(0, 0, 0, 0.7); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 8px; z-index: 1000; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); border: 1px solid rgba(66, 135, 245, 0.4); transition: all 0.3s ease;">
-        <div style="display: flex; gap: 8px; align-items: center;">
-            <button id="zoom-in-btn" style="width: 36px; height: 36px; border-radius: 50%; background: rgba(40, 40, 40, 0.9); border: 1px solid rgba(66, 135, 245, 0.4); color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); transition: all 0.2s ease;" onclick="zoomIn()" title="Zoom In">+</button>
-            <div id="zoom-display" style="background: rgba(20, 20, 20, 0.9); border-radius: 5px; padding: 5px 10px; color: white; min-width: 60px; text-align: center; border: 1px solid rgba(66, 135, 245, 0.3); transition: all 0.2s ease;">100%</div>
-            <button id="zoom-out-btn" style="width: 36px; height: 36px; border-radius: 50%; background: rgba(40, 40, 40, 0.9); border: 1px solid rgba(66, 135, 245, 0.4); color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); transition: all 0.2s ease;" onclick="zoomOut()" title="Zoom Out">-</button>
-        </div>
-        <div style="display: flex; gap: 8px;">
-            <button id="reset-zoom-btn" style="flex: 1; height: 32px; border-radius: 5px; background: rgba(40, 40, 40, 0.9); border: 1px solid rgba(66, 135, 245, 0.4); color: white; cursor: pointer; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); transition: all 0.2s ease;" onclick="resetZoom()" title="Reset View">Reset</button>
-            <button id="stabilize-btn" style="flex: 1; height: 32px; border-radius: 5px; background: rgba(40, 40, 40, 0.9); border: 1px solid rgba(66, 135, 245, 0.4); color: white; cursor: pointer; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); transition: all 0.2s ease;" onclick="stabilizeNetwork()" title="Stabilize Network">Stabilize</button>
-        </div>
-    </div>
-
-    <style>
-        /* Hover effects for custom zoom controls */
-        #custom-zoom-controls:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 10px rgba(66, 135, 245, 0.3);
-        }
-
-        #zoom-in-btn:hover, #zoom-out-btn:hover {
-            background: rgba(66, 135, 245, 0.8) !important;
-            transform: translateY(-2px) !important;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
-        }
-
-        #reset-zoom-btn:hover, #stabilize-btn:hover {
-            background: rgba(66, 135, 245, 0.8) !important;
-            transform: translateY(-2px) !important;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
-        }
-
-        #zoom-in-btn:active, #zoom-out-btn:active, #reset-zoom-btn:active, #stabilize-btn:active {
-            transform: translateY(1px) !important;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
-        }
-    </style>
-
-    <!-- Keyboard navigation hint -->
-    <div id="keyboard-hint" style="position: absolute; bottom: 15px; left: 15px; background: rgba(0, 0, 0, 0.7); color: white; padding: 8px 15px; border-radius: 8px; font-size: 14px; z-index: 1000; border: 1px solid rgba(66, 135, 245, 0.4); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); opacity: 0.7; transition: all 0.3s ease; cursor: help;">
-        <span style="opacity: 0.9;">⌨️ Keyboard: Arrow keys to pan, +/- to zoom, 0 to reset, R to stabilize</span>
-    </div>
-
-    <style>
-        /* Hover effect for keyboard hint */
-        #keyboard-hint:hover {
-            opacity: 1;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 10px rgba(66, 135, 245, 0.3);
-            background: rgba(0, 0, 0, 0.85);
-        }
-    </style>
     <script type="text/javascript">
         // Initialize the network
         var container = document.getElementById('mynetwork');
-
-        // Define custom node colors for dark theme
-        const nodeColors = {
-            main: "#ff4d4d",      // Bright red for main node
-            synonym: "#ffcc00",   // Bright gold/yellow for synonyms
-            related: "#00ffcc"    // Bright teal for related terms
-        };
-
-        // Define custom edge colors
-        const edgeColors = {
-            synonym: "#ffcc00",   // Bright gold/yellow for synonym connections
-            related: "#00ffcc"    // Bright teal for related connections
-        };
-
-        // Process the data to use our custom colors
-        var rawData = REPLACE_WITH_DATA;
-
-        // Update node colors for better visibility on dark background
-        rawData.nodes.forEach(node => {
-            if (node.color === "red") {
-                node.color = nodeColors.main;
-            } else if (node.color === "blue") {
-                node.color = nodeColors.synonym;
-            } else if (node.color === "green") {
-                node.color = nodeColors.related;
-            }
-
-            // Add shadow to nodes
-            node.shadow = {
-                enabled: true,
-                color: node.color,
-                size: 10,
-                x: 0,
-                y: 0
-            };
-
-            // Update tooltip styling
-            if (node.title) {
-                node.title = node.title.replace('<div style=\\'max-width:300px;\\'>', '<div style=\\'max-width:300px; color:#ffffff; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;\\'>');
-            }
-        });
-
-        // Update edge colors
-        rawData.edges.forEach(edge => {
-            if (edge.color === "blue") {
-                edge.color = edgeColors.synonym;
-            } else if (edge.color === "green") {
-                edge.color = edgeColors.related;
-            }
-
-            // Add smooth curves to edges
-            edge.smooth = {
-                type: 'dynamic',
-                roundness: 0.5
-            };
-        });
-
-        var data = rawData;
-
+        var data = REPLACE_WITH_DATA;
         var options = {
             nodes: {
                 font: {
                     color: '#ffffff',
                     size: 16,
-                    face: 'Segoe UI',
+                    face: 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif',
                     strokeWidth: 3,
                     strokeColor: '#1e1e1e'
                 },
                 borderWidth: 2,
                 borderWidthSelected: 4,
-                shadow: true,
-                scaling: {
-                    min: 16,
-                    max: 32,
-                    label: {
-                        enabled: true,
-                        min: 14,
-                        max: 24
-                    }
-                },
-                shape: 'dot',
-                shapeProperties: {
-                    interpolation: true,
-                    borderRadius: 6
-                }
+                shadow: true
             },
             edges: {
-                width: 3,
-                selectionWidth: 6,
+                width: 2,
+                selectionWidth: 4,
                 smooth: {
                     type: 'dynamic',
                     forceDirection: 'none',
@@ -520,47 +628,15 @@ class VisualThesaurus:
                 color: {
                     inherit: false,
                     opacity: 0.8
-                },
-                font: {
-                    color: '#ffffff',
-                    size: 14,
-                    face: 'Segoe UI',
-                    strokeWidth: 3,
-                    strokeColor: '#1e1e1e',
-                    background: 'rgba(30, 30, 30, 0.7)'
                 }
             },
-            interaction: {
-                hover: true,
-                zoomView: true,
-                dragView: true,
-                navigationButtons: true,
-                keyboard: {
-                    enabled: true,
-                    speed: {
-                        x: 10,
-                        y: 10,
-                        zoom: 0.1
-                    },
-                    bindToWindow: false
-                },
-                tooltipDelay: 100,
-                multiselect: true,
-                selectable: true,
-                selectConnectedEdges: true,
-                hoverConnectedEdges: true,
-                zoomSpeed: 0.8
-            },
             physics: {
-                enabled: true,
                 stabilization: {
                     enabled: true,
                     iterations: 200,
                     updateInterval: 50,
-                    onlyDynamicEdges: false,
                     fit: true
                 },
-                adaptiveTimestep: true,
                 barnesHut: {
                     gravitationalConstant: -30000,
                     centralGravity: 0.5,
@@ -568,301 +644,28 @@ class VisualThesaurus:
                     springConstant: 0.05,
                     damping: 0.15,
                     avoidOverlap: 0.2
-                },
-                maxVelocity: 30,
-                minVelocity: 0.75,
-                solver: 'barnesHut',
-                timestep: 0.5,
-                wind: { x: 0, y: 0 }
+                }
             },
-            layout: {
-                improvedLayout: true,
-                randomSeed: 42
-            },
-            configure: {
-                enabled: false,
-                filter: 'physics,layout',
-                showButton: true
+            interaction: {
+                hover: true,
+                zoomView: true,
+                dragView: true,
+                navigationButtons: true
             }
         };
-
         var network = new vis.Network(container, data, options);
-
-        // Make the network object globally accessible
-        window.network = network;
-
-        // Track zoom level for better control
-        var currentZoom = 1.0;
-        var zoomStep = 0.1;
-        var minZoom = 0.2;
-        var maxZoom = 3.0;
-
-        // Add stabilization progress indicator
-        var stabilizationDiv = document.createElement('div');
-        stabilizationDiv.id = 'stabilization-indicator';
-        stabilizationDiv.style.position = 'absolute';
-        stabilizationDiv.style.top = '50%';
-        stabilizationDiv.style.left = '50%';
-        stabilizationDiv.style.transform = 'translate(-50%, -50%)';
-        stabilizationDiv.style.background = 'rgba(0, 0, 0, 0.8)';
-        stabilizationDiv.style.color = 'white';
-        stabilizationDiv.style.padding = '20px';
-        stabilizationDiv.style.borderRadius = '10px';
-        stabilizationDiv.style.textAlign = 'center';
-        stabilizationDiv.style.zIndex = '1000';
-        stabilizationDiv.style.display = 'none';
-        stabilizationDiv.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.5)';
-        stabilizationDiv.style.border = '2px solid rgba(66, 135, 245, 0.5)';
-        stabilizationDiv.innerHTML = '<div style="width: 40px; height: 40px; border: 4px solid rgba(66, 135, 245, 0.3); border-radius: 50%; border-top-color: #4287f5; margin: 0 auto 15px; animation: spin 1s linear infinite;"></div><div>Stabilizing network...</div>';
-        document.body.appendChild(stabilizationDiv);
-
-        // Add stabilization progress style
-        var style = document.createElement('style');
-        style.textContent = '@keyframes spin { to { transform: rotate(360deg); } }';
-        document.head.appendChild(style);
-
-        // Show stabilization indicator
-        network.on("stabilizationStart", function() {
-            stabilizationDiv.style.display = 'block';
-        });
-
-        // Hide stabilization indicator
-        network.on("stabilizationDone", function() {
-            stabilizationDiv.style.display = 'none';
-        });
-
-        // Track zoom level and update display
-        network.on("zoom", function(params) {
-            currentZoom = params.scale;
-            updateZoomDisplay();
-        });
-
-        // Function to update zoom display
-        function updateZoomDisplay() {
-            var zoomDisplay = document.getElementById('zoom-display');
-            if (zoomDisplay) {
-                var percentage = Math.round(currentZoom * 100);
-                zoomDisplay.textContent = percentage + '%';
-            }
-        }
-
-        // Fit the network to the container on load with better animation
-        network.once("afterDrawing", function() {
-            setTimeout(function() {
-                stabilizationDiv.style.display = 'block';
-                network.fit({
-                    animation: {
-                        duration: 1000,
-                        easingFunction: 'easeInOutQuad'
-                    }
-                });
-                setTimeout(function() {
-                    stabilizationDiv.style.display = 'none';
-                }, 1200);
-            }, 200);
-        });
-
-        // Add custom zoom functions
-        window.zoomIn = function() {
-            currentZoom = Math.min(currentZoom + zoomStep, maxZoom);
-            var position = network.getViewPosition();
-            network.moveTo({
-                position: position,
-                scale: currentZoom,
-                animation: {
-                    duration: 300,
-                    easingFunction: 'easeInOutQuad'
-                }
-            });
-            updateZoomDisplay();
-
-            // Add visual feedback to the button
-            var zoomInBtn = document.getElementById('zoom-in-btn');
-            if (zoomInBtn) {
-                zoomInBtn.style.transform = 'scale(1.1)';
-                zoomInBtn.style.background = 'rgba(66, 135, 245, 0.8)';
-                setTimeout(function() {
-                    zoomInBtn.style.transform = 'scale(1)';
-                    zoomInBtn.style.background = 'rgba(40, 40, 40, 0.9)';
-                }, 200);
-            }
-        };
-
-        window.zoomOut = function() {
-            currentZoom = Math.max(currentZoom - zoomStep, minZoom);
-            var position = network.getViewPosition();
-            network.moveTo({
-                position: position,
-                scale: currentZoom,
-                animation: {
-                    duration: 300,
-                    easingFunction: 'easeInOutQuad'
-                }
-            });
-            updateZoomDisplay();
-
-            // Add visual feedback to the button
-            var zoomOutBtn = document.getElementById('zoom-out-btn');
-            if (zoomOutBtn) {
-                zoomOutBtn.style.transform = 'scale(1.1)';
-                zoomOutBtn.style.background = 'rgba(66, 135, 245, 0.8)';
-                setTimeout(function() {
-                    zoomOutBtn.style.transform = 'scale(1)';
-                    zoomOutBtn.style.background = 'rgba(40, 40, 40, 0.9)';
-                }, 200);
-            }
-        };
-
-        window.resetZoom = function() {
-            network.fit({
-                animation: {
-                    duration: 1000,
-                    easingFunction: 'easeInOutQuad'
-                }
-            });
-
-            // Update zoom level after animation
-            setTimeout(function() {
-                currentZoom = network.getScale();
-                updateZoomDisplay();
-            }, 1100);
-
-            // Add visual feedback to the button
-            var resetBtn = document.getElementById('reset-zoom-btn');
-            if (resetBtn) {
-                resetBtn.style.transform = 'scale(1.05)';
-                resetBtn.style.background = 'rgba(66, 135, 245, 0.8)';
-                setTimeout(function() {
-                    resetBtn.style.transform = 'scale(1)';
-                    resetBtn.style.background = 'rgba(40, 40, 40, 0.9)';
-                }, 200);
-            }
-        };
-
-        window.stabilizeNetwork = function() {
-            stabilizationDiv.style.display = 'block';
-
-            // Add visual feedback to the button
-            var stabilizeBtn = document.getElementById('stabilize-btn');
-            if (stabilizeBtn) {
-                stabilizeBtn.style.transform = 'scale(1.05)';
-                stabilizeBtn.style.background = 'rgba(66, 135, 245, 0.8)';
-                stabilizeBtn.textContent = 'Stabilizing...';
-
-                // Disable the button during stabilization
-                stabilizeBtn.disabled = true;
-
-                // Re-enable and reset the button after stabilization
-                setTimeout(function() {
-                    stabilizeBtn.style.transform = 'scale(1)';
-                    stabilizeBtn.style.background = 'rgba(40, 40, 40, 0.9)';
-                    stabilizeBtn.textContent = 'Stabilize';
-                    stabilizeBtn.disabled = false;
-                }, 2000);
-            }
-
-            // Stabilize with more iterations for better results
-            network.stabilize(200);
-
-            // Hide the indicator after a delay
-            setTimeout(function() {
-                stabilizationDiv.style.display = 'none';
-            }, 2000);
-        };
 
         // Add click event to nodes
         network.on("click", function(params) {
             if (params.nodes.length > 0) {
                 var nodeId = params.nodes[0];
                 if (nodeId !== '') {
-                    window.parent.location.href = '/visualize/' + encodeURIComponent(nodeId);
-                }
-            }
-        });
-
-        // Add double-click event for zooming in
-        network.on("doubleClick", function(params) {
-            if (params.nodes.length > 0) {
-                // Zoom in on the node
-                network.focus(params.nodes[0], {
-                    scale: currentZoom * 1.5,
-                    animation: {
-                        duration: 800,
-                        easingFunction: 'easeInOutQuad'
+                    try {
+                        window.parent.location.href = '/visualize/' + encodeURIComponent(nodeId);
+                    } catch (e) {
+                        console.error('Error navigating to node:', e);
+                        window.location.href = '/visualize/' + encodeURIComponent(nodeId);
                     }
-                });
-            } else {
-                // Reset zoom if double-clicking on empty space
-                resetZoom();
-            }
-        });
-
-        // Add keyboard shortcuts
-        document.addEventListener('keydown', function(e) {
-            // Only handle keyboard events if the iframe is focused
-            if (document.activeElement === document.body) {
-                switch (e.key) {
-                    case '+':
-                    case '=':
-                        zoomIn();
-                        e.preventDefault();
-                        break;
-                    case '-':
-                    case '_':
-                        zoomOut();
-                        e.preventDefault();
-                        break;
-                    case '0':
-                        resetZoom();
-                        e.preventDefault();
-                        break;
-                    case 'r':
-                        stabilizeNetwork();
-                        e.preventDefault();
-                        break;
-                    case 'ArrowUp':
-                        var position = network.getViewPosition();
-                        network.moveTo({
-                            position: {x: position.x, y: position.y - 50},
-                            animation: {duration: 300, easingFunction: 'easeInOutQuad'}
-                        });
-                        e.preventDefault();
-                        break;
-                    case 'ArrowDown':
-                        var position = network.getViewPosition();
-                        network.moveTo({
-                            position: {x: position.x, y: position.y + 50},
-                            animation: {duration: 300, easingFunction: 'easeInOutQuad'}
-                        });
-                        e.preventDefault();
-                        break;
-                    case 'ArrowLeft':
-                        var position = network.getViewPosition();
-                        network.moveTo({
-                            position: {x: position.x - 50, y: position.y},
-                            animation: {duration: 300, easingFunction: 'easeInOutQuad'}
-                        });
-                        e.preventDefault();
-                        break;
-                    case 'ArrowRight':
-                        var position = network.getViewPosition();
-                        network.moveTo({
-                            position: {x: position.x + 50, y: position.y},
-                            animation: {duration: 300, easingFunction: 'easeInOutQuad'}
-                        });
-                        e.preventDefault();
-                        break;
-                }
-            }
-        });
-
-        // Prevent errors when iframe is reloaded
-        window.addEventListener('unload', function() {
-            if (network) {
-                try {
-                    network.destroy();
-                } catch (e) {
-                    console.log('Network already destroyed');
                 }
             }
         });
@@ -870,52 +673,66 @@ class VisualThesaurus:
 </body>
 </html>"""
 
-        # Replace placeholders with actual data
-        nodes_data = []
-        for node in self.graph.nodes():
-            # Get the definition for the node if available
-            definition = ""
-            synsets = wn.synsets(node)
-            if synsets:
-                definition = synsets[0].definition()
+            # Replace placeholders with actual data
+            nodes_data = []
+            for node in self.graph.nodes():
+                # Get the definition for the node if available
+                definition = ""
+                try:
+                    synsets = wn.synsets(node)
+                    if synsets:
+                        definition = synsets[0].definition()
+                except Exception as e:
+                    print(f"Warning: Error getting definition for '{node}': {e}")
 
-            nodes_data.append({
-                'id': node,
-                'label': self.graph.nodes[node].get('label', node),
-                'color': self.graph.nodes[node].get('color', '#97c2fc'),
-                'size': self.graph.nodes[node].get('size', 25),
-                'title': f"<div style='max-width:300px;'><b>{node}</b><br/>{definition}</div>"
+                nodes_data.append({
+                    'id': node,
+                    'label': self.graph.nodes[node].get('label', node),
+                    'color': self.graph.nodes[node].get('color', '#97c2fc'),
+                    'size': self.graph.nodes[node].get('size', 25),
+                    'title': f"<div style='max-width:300px;'><b>{node}</b><br/>{definition}</div>"
+                })
+
+            edges_data = []
+            for edge in self.graph.edges():
+                edge_label = self.graph.edges[edge].get('label', '')
+                edges_data.append({
+                    'from': edge[0],
+                    'to': edge[1],
+                    'color': self.graph.edges[edge].get('color', '#848484'),
+                    'width': 2,
+                    'title': edge_label
+                })
+
+            network_data = json.dumps({
+                "nodes": nodes_data,
+                "edges": edges_data
             })
 
-        edges_data = []
-        for edge in self.graph.edges():
-            edge_label = self.graph.edges[edge].get('label', '')
-            edges_data.append({
-                'from': edge[0],
-                'to': edge[1],
-                'color': self.graph.edges[edge].get('color', '#848484'),
-                'width': 2,
-                'title': edge_label
-            })
+            # Replace the placeholder in the template with the actual data
+            html_content = html_template.replace("REPLACE_WITH_DATA", network_data)
 
-        network_data = json.dumps({
-            "nodes": nodes_data,
-            "edges": edges_data
-        })
+            # Save the HTML file
+            if save_path:
+                with open(save_path, 'w', encoding='utf-8') as f:
+                    f.write(html_content)
+                return HTML(f'<iframe src="{save_path}" height="{height}" width="{width}" style="border: none; background-color: #121212;"></iframe>')
+            else:
+                temp_path = "thesaurus_visualization.html"
+                with open(temp_path, 'w', encoding='utf-8') as f:
+                    f.write(html_content)
+                return HTML(f'<iframe src="{temp_path}" height="{height}" width="{width}" style="border: none; background-color: #121212;"></iframe>')
 
-        # Replace the placeholder in the template with the actual data
-        html_content = html_template.replace("REPLACE_WITH_DATA", network_data)
-
-        # Save the HTML file
-        if save_path:
-            with open(save_path, 'w', encoding='utf-8') as f:
-                f.write(html_content)
-            return HTML(f'<iframe src="{save_path}" height="{height}" width="{width}" style="border: none; background-color: #121212;"></iframe>')
-        else:
-            temp_path = "thesaurus_visualization.html"
-            with open(temp_path, 'w', encoding='utf-8') as f:
-                f.write(html_content)
-            return HTML(f'<iframe src="{temp_path}" height="{height}" width="{width}" style="border: none; background-color: #121212;"></iframe>')
+        except Exception as e:
+            # Handle any unexpected errors
+            print(f"Error in visualization: {e}")
+            # Create a simple error message HTML
+            error_content = error_html.replace("ERROR_MESSAGE", str(e))
+            # Save the error HTML
+            error_path = "thesaurus_visualization_error.html"
+            with open(error_path, 'w', encoding='utf-8') as f:
+                f.write(error_content)
+            return HTML(f'<iframe src="{error_path}" height="{height}" width="{width}" style="border: none; background-color: #121212;"></iframe>')
 
     def visualize_plotly(self, word=None, height=600, width=900):
         """

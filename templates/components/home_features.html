@@ -1,0 +1,120 @@
+<!-- Main Features Section -->
+<section class="main-features-container">
+    <div class="container">
+        <div class="section-header text-center">
+            <h2 class="section-title">Explore Our Interactive Learning Tools</h2>
+            <p class="section-subtitle">Access comprehensive resources to master LLM fine-tuning concepts</p>
+        </div>
+
+        <div class="features-grid">
+            <!-- Interactive Concept Maps -->
+            <div class="feature-card concept-maps">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <i class="bi bi-diagram-3"></i>
+                    </div>
+                    <h3 class="feature-title">Interactive Concept Maps</h3>
+                </div>
+                <div class="feature-body">
+                    <p class="feature-description">
+                        Explore visual representations of LLM fine-tuning concepts and their relationships.
+                        Our interactive maps help you understand complex topics through intuitive visualizations.
+                    </p>
+                    <div class="feature-links">
+                        <a href="{{ url_for('thesaurus') }}" class="feature-link">
+                            <i class="bi bi-diagram-3"></i>
+                            Visual Thesaurus Explorer
+                        </a>
+                        <a href="{{ url_for('guide', guide_name='qlora-implementation') }}" class="feature-link">
+                            <i class="bi bi-map"></i>
+                            Fine-Tuning Concept Map
+                        </a>
+                        <a href="{{ url_for('guide', guide_name='understanding-gpt') }}" class="feature-link">
+                            <i class="bi bi-layers"></i>
+                            Model Architecture Visualizer
+                        </a>
+                    </div>
+                </div>
+                <div class="feature-footer">
+                    <a href="{{ url_for('thesaurus') }}" class="feature-cta">
+                        <i class="bi bi-diagram-3 me-2"></i>
+                        Explore Concept Maps
+                    </a>
+                </div>
+            </div>
+
+            <!-- Hands-on Exercises -->
+            <div class="feature-card exercises">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <i class="bi bi-code-square"></i>
+                    </div>
+                    <h3 class="feature-title">Hands-on Exercises</h3>
+                </div>
+                <div class="feature-body">
+                    <p class="feature-description">
+                        Apply your knowledge with practical coding exercises.
+                        From basic LoRA implementation to advanced QLoRA techniques,
+                        our guided exercises help you build real-world skills.
+                    </p>
+                    <div class="feature-links">
+                        <a href="{{ url_for('guide', guide_name='lora-implementation') }}" class="feature-link">
+                            <i class="bi bi-code-slash"></i>
+                            LoRA Implementation
+                        </a>
+                        <a href="{{ url_for('guide', guide_name='qlora-implementation') }}" class="feature-link">
+                            <i class="bi bi-cpu"></i>
+                            QLoRA Fine-Tuning
+                        </a>
+                        <a href="{{ url_for('guide', guide_name='peft-guide') }}" class="feature-link">
+                            <i class="bi bi-gear"></i>
+                            Parameter-Efficient Techniques
+                        </a>
+                    </div>
+                </div>
+                <div class="feature-footer">
+                    <a href="{{ url_for('exercises') }}" class="feature-cta">
+                        <i class="bi bi-code-square me-2"></i>
+                        Start Exercises
+                    </a>
+                </div>
+            </div>
+
+            <!-- Knowledge Resources -->
+            <div class="feature-card knowledge">
+                <div class="feature-header">
+                    <div class="feature-icon">
+                        <i class="bi bi-journal-check"></i>
+                    </div>
+                    <h3 class="feature-title">Knowledge Resources</h3>
+                </div>
+                <div class="feature-body">
+                    <p class="feature-description">
+                        Deepen your understanding with comprehensive learning materials and assessments.
+                        Our structured content guides you from fundamentals to advanced topics in LLM fine-tuning.
+                    </p>
+                    <div class="feature-links">
+                        <a href="{{ url_for('learn') }}" class="feature-link">
+                            <i class="bi bi-book"></i>
+                            Learning Modules
+                        </a>
+                        <a href="{{ url_for('quiz.quiz_list') }}" class="feature-link">
+                            <i class="bi bi-check2-square"></i>
+                            Knowledge Quizzes
+                        </a>
+                        <a href="{{ url_for('guide', guide_name='finetuning-comparison') }}" class="feature-link">
+                            <i class="bi bi-file-text"></i>
+                            Implementation Guides
+                        </a>
+                    </div>
+                </div>
+                <div class="feature-footer">
+                    <a href="{{ url_for('learn') }}" class="feature-cta">
+                        <i class="bi bi-journal-check me-2"></i>
+                        Access Resources
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

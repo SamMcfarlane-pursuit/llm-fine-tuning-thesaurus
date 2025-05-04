@@ -1,0 +1,126 @@
+/**
+ * Feature Buttons CSS
+ * Provides quick access buttons for main features
+ */
+
+/* Quick Access Feature Buttons */
+.quick-access-features {
+    display: flex;
+    gap: 10px;
+}
+
+.feature-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(66, 135, 245, 0.2), rgba(0, 255, 221, 0.1));
+    color: #e0e0e0;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    border: 1px solid rgba(66, 135, 245, 0.3);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.feature-button i {
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.feature-button:hover {
+    transform: translateY(-3px);
+    background: linear-gradient(135deg, rgba(66, 135, 245, 0.3), rgba(0, 255, 221, 0.2));
+    color: #ffffff;
+    box-shadow: 0 5px 15px rgba(66, 135, 245, 0.4);
+}
+
+.feature-button:active {
+    transform: translateY(-1px);
+}
+
+.feature-button:nth-child(1) {
+    background: linear-gradient(135deg, rgba(66, 135, 245, 0.2), rgba(0, 255, 221, 0.1));
+    border-color: rgba(66, 135, 245, 0.4);
+}
+
+.feature-button:nth-child(2) {
+    background: linear-gradient(135deg, rgba(44, 120, 115, 0.2), rgba(82, 222, 151, 0.1));
+    border-color: rgba(82, 222, 151, 0.4);
+}
+
+.feature-button:nth-child(3) {
+    background: linear-gradient(135deg, rgba(123, 67, 151, 0.2), rgba(220, 36, 48, 0.1));
+    border-color: rgba(220, 36, 48, 0.4);
+}
+
+.feature-button:nth-child(4) {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 111, 0, 0.1));
+    border-color: rgba(255, 193, 7, 0.4);
+}
+
+.feature-button:nth-child(1):hover {
+    background: linear-gradient(135deg, rgba(66, 135, 245, 0.3), rgba(0, 255, 221, 0.2));
+    box-shadow: 0 5px 15px rgba(66, 135, 245, 0.4);
+}
+
+.feature-button:nth-child(2):hover {
+    background: linear-gradient(135deg, rgba(44, 120, 115, 0.3), rgba(82, 222, 151, 0.2));
+    box-shadow: 0 5px 15px rgba(82, 222, 151, 0.4);
+}
+
+.feature-button:nth-child(3):hover {
+    background: linear-gradient(135deg, rgba(123, 67, 151, 0.3), rgba(220, 36, 48, 0.2));
+    box-shadow: 0 5px 15px rgba(220, 36, 48, 0.4);
+}
+
+.feature-button:nth-child(4):hover {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.3), rgba(255, 111, 0, 0.2));
+    box-shadow: 0 5px 15px rgba(255, 193, 7, 0.4);
+}
+
+/* Badge dot for new content */
+.badge-dot {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 8px;
+    height: 8px;
+    background-color: #dc3545;
+    border-radius: 50%;
+    border: 1px solid rgba(20, 20, 25, 0.95);
+    animation: pulse-dot 1.5s infinite;
+}
+
+@keyframes pulse-dot {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.8;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0.8);
+        opacity: 0.8;
+    }
+}
+
+/* Responsive adjustments for feature buttons */
+@media (max-width: 768px) {
+    .quick-access-features {
+        gap: 5px;
+    }
+    
+    .feature-button {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .feature-button i {
+        font-size: 1rem;
+    }
+}

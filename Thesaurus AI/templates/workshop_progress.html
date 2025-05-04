@@ -1,0 +1,470 @@
+{% extends 'base.html' %}
+
+{% block title %}Workshop Progress - Thesaurus LLM Fine-Tuning{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<style>
+    .progress-card {
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        margin-bottom: 30px;
+        transition: transform 0.3s ease;
+    }
+    
+    .progress-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .workshop-progress-header {
+        background: linear-gradient(135deg, #4a6cf7, #2541b2);
+        padding: 25px;
+        color: white;
+        border-radius: 15px 15px 0 0;
+    }
+    
+    .workshop-progress-title {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+    
+    .workshop-progress-subtitle {
+        font-size: 1.1rem;
+        opacity: 0.9;
+    }
+    
+    .progress-circle-container {
+        position: relative;
+        width: 180px;
+        height: 180px;
+        margin: 0 auto;
+    }
+    
+    .progress-circle {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: conic-gradient(var(--bs-primary) var(--progress), #2a2a2a 0);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .progress-circle::before {
+        content: '';
+        position: absolute;
+        width: 70%;
+        height: 70%;
+        background-color: #1e1e1e;
+        border-radius: 50%;
+    }
+    
+    .progress-percentage {
+        position: relative;
+        font-size: 2rem;
+        font-weight: 700;
+        color: white;
+        z-index: 1;
+    }
+    
+    .workshop-module {
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        background-color: #2a2a2a;
+        border-left: 5px solid;
+        transition: all 0.3s ease;
+    }
+    
+    .workshop-module:hover {
+        transform: translateX(5px);
+    }
+    
+    .workshop-module.completed {
+        border-left-color: var(--bs-success);
+    }
+    
+    .workshop-module.in-progress {
+        border-left-color: var(--bs-warning);
+    }
+    
+    .workshop-module.not-started {
+        border-left-color: var(--bs-secondary);
+    }
+    
+    .module-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .module-title h5 {
+        margin-bottom: 0;
+    }
+    
+    .module-content {
+        margin-top: 10px;
+    }
+    
+    .achievement-card {
+        background-color: #2a2a2a;
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        height: 100%;
+        transition: all 0.3s ease;
+    }
+    
+    .achievement-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .achievement-icon {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+    }
+    
+    .achievement-card.unlocked .achievement-icon {
+        color: var(--bs-warning);
+    }
+    
+    .achievement-card.locked .achievement-icon {
+        color: var(--bs-secondary);
+    }
+    
+    .achievement-card.locked {
+        opacity: 0.7;
+    }
+    
+    .workshop-stats {
+        display: flex;
+        justify-content: space-around;
+        margin: 30px 0;
+    }
+    
+    .stat-item {
+        text-align: center;
+    }
+    
+    .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--bs-primary);
+    }
+    
+    .stat-label {
+        font-size: 0.9rem;
+        color: var(--bs-secondary);
+    }
+    
+    .next-steps-card {
+        background: linear-gradient(135deg, #2a2a2a, #333333);
+        border-radius: 15px;
+        padding: 25px;
+        margin-top: 30px;
+    }
+    
+    .next-steps-title {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+        color: white;
+    }
+    
+    .next-step-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        padding: 10px;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        transition: all 0.3s ease;
+    }
+    
+    .next-step-item:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+        transform: translateX(5px);
+    }
+    
+    .next-step-icon {
+        font-size: 1.5rem;
+        margin-right: 15px;
+        color: var(--bs-primary);
+    }
+    
+    .next-step-content {
+        flex: 1;
+    }
+    
+    .next-step-title {
+        font-size: 1.1rem;
+        margin-bottom: 5px;
+        color: white;
+    }
+    
+    .next-step-description {
+        font-size: 0.9rem;
+        color: var(--bs-secondary);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('workshops') }}">Workshops</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">My Progress</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="progress-card">
+                <div class="workshop-progress-header">
+                    <div class="workshop-progress-title">Workshop Progress</div>
+                    <div class="workshop-progress-subtitle">Track your journey through LLM fine-tuning workshops</div>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-4 text-center">
+                            <div class="progress-circle-container">
+                                <div class="progress-circle" style="--progress: {{ overall_progress }}%">
+                                    <span class="progress-percentage">{{ overall_progress }}%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="workshop-stats">
+                                <div class="stat-item">
+                                    <div class="stat-value">{{ completed_workshops }}</div>
+                                    <div class="stat-label">Completed</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value">{{ in_progress_workshops }}</div>
+                                    <div class="stat-label">In Progress</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value">{{ total_workshops }}</div>
+                                    <div class="stat-label">Total</div>
+                                </div>
+                            </div>
+                            
+                            <div class="progress mb-3" style="height: 10px;">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: {{ completed_percentage }}%;" 
+                                     aria-valuenow="{{ completed_percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: {{ in_progress_percentage }}%;" 
+                                     aria-valuenow="{{ in_progress_percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between small text-muted">
+                                <span>{{ completed_percentage }}% Completed</span>
+                                <span>{{ in_progress_percentage }}% In Progress</span>
+                                <span>{{ not_started_percentage }}% Not Started</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="mb-4">Workshop Modules</h3>
+            
+            {% for workshop in workshops %}
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">{{ workshop.title }}</h4>
+                    <span class="badge {% if workshop.status == 'completed' %}bg-success{% elif workshop.status == 'in_progress' %}bg-warning{% else %}bg-secondary{% endif %}">
+                        {% if workshop.status == 'completed' %}Completed{% elif workshop.status == 'in_progress' %}In Progress{% else %}Not Started{% endif %}
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="progress mb-3" style="height: 8px;">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: {{ workshop.progress }}%;" 
+                             aria-valuenow="{{ workshop.progress }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="text-muted">{{ workshop.progress }}% complete</span>
+                        <span class="text-muted">{{ workshop.modules_completed }} of {{ workshop.total_modules }} modules</span>
+                    </div>
+                    
+                    <div class="workshop-modules">
+                        {% for module in workshop.modules %}
+                        <div class="workshop-module {{ module.status }}">
+                            <div class="module-title">
+                                <h5>
+                                    {% if module.status == 'completed' %}
+                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                    {% elif module.status == 'in-progress' %}
+                                    <i class="bi bi-hourglass-split text-warning me-2"></i>
+                                    {% else %}
+                                    <i class="bi bi-circle text-secondary me-2"></i>
+                                    {% endif %}
+                                    {{ module.title }}
+                                </h5>
+                                <span class="badge {% if module.status == 'completed' %}bg-success{% elif module.status == 'in-progress' %}bg-warning{% else %}bg-secondary{% endif %}">
+                                    {% if module.status == 'completed' %}Completed{% elif module.status == 'in-progress' %}In Progress{% else %}Not Started{% endif %}
+                                </span>
+                            </div>
+                            <div class="module-content">
+                                <p>{{ module.description }}</p>
+                                <a href="{{ module.url }}" class="btn btn-sm btn-primary">Continue</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <a href="{{ workshop.url }}" class="btn btn-primary">
+                            {% if workshop.status == 'completed' %}Review Workshop{% elif workshop.status == 'in_progress' %}Continue Workshop{% else %}Start Workshop{% endif %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            
+            <div class="next-steps-card">
+                <div class="next-steps-title">Recommended Next Steps</div>
+                
+                {% for step in next_steps %}
+                <div class="next-step-item">
+                    <div class="next-step-icon">
+                        <i class="bi {{ step.icon }}"></i>
+                    </div>
+                    <div class="next-step-content">
+                        <div class="next-step-title">{{ step.title }}</div>
+                        <div class="next-step-description">{{ step.description }}</div>
+                    </div>
+                    <a href="{{ step.url }}" class="btn btn-sm btn-outline-primary">Start</a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="col-lg-4">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Achievements</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="achievement-card {% if overall_progress >= 25 %}unlocked{% else %}locked{% endif %}">
+                                <div class="achievement-icon">
+                                    <i class="bi bi-award"></i>
+                                </div>
+                                <h5>Getting Started</h5>
+                                <p class="small">Complete 25% of all workshops</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="achievement-card {% if completed_workshops >= 1 %}unlocked{% else %}locked{% endif %}">
+                                <div class="achievement-icon">
+                                    <i class="bi bi-trophy"></i>
+                                </div>
+                                <h5>First Workshop</h5>
+                                <p class="small">Complete your first workshop</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="achievement-card {% if overall_progress >= 50 %}unlocked{% else %}locked{% endif %}">
+                                <div class="achievement-icon">
+                                    <i class="bi bi-lightning-charge"></i>
+                                </div>
+                                <h5>Halfway There</h5>
+                                <p class="small">Complete 50% of all workshops</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="achievement-card {% if completed_workshops >= 3 %}unlocked{% else %}locked{% endif %}">
+                                <div class="achievement-icon">
+                                    <i class="bi bi-stars"></i>
+                                </div>
+                                <h5>Workshop Master</h5>
+                                <p class="small">Complete 3 workshops</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0">Learning Streak</h4>
+                </div>
+                <div class="card-body text-center">
+                    <div class="display-1 mb-2">{{ current_streak }}</div>
+                    <p>days in a row</p>
+                    <div class="progress mb-3" style="height: 8px;">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ streak_progress }}%;" 
+                             aria-valuenow="{{ streak_progress }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <p class="small text-muted">{{ streak_message }}</p>
+                    
+                    <div class="d-flex justify-content-between mt-4">
+                        <div>
+                            <div class="h4">{{ longest_streak }}</div>
+                            <div class="small text-muted">Longest Streak</div>
+                        </div>
+                        <div>
+                            <div class="h4">{{ total_learning_days }}</div>
+                            <div class="small text-muted">Total Learning Days</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0">Workshop Tips</h4>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h5><i class="bi bi-lightbulb me-2"></i>Consistency is Key</h5>
+                        <p>Try to complete at least one module per day to maintain your learning momentum.</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h5><i class="bi bi-lightbulb me-2"></i>Hands-on Practice</h5>
+                        <p>Don't just read the content—run the code examples and experiment with parameters.</p>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h5><i class="bi bi-lightbulb me-2"></i>Take Notes</h5>
+                        <p>Create your own notes to reinforce learning and have a quick reference for the future.</p>
+                    </div>
+                    
+                    <div>
+                        <h5><i class="bi bi-lightbulb me-2"></i>Join the Community</h5>
+                        <p>Share your progress and questions with other learners to enhance your understanding.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add any JavaScript functionality needed for the progress page
+        
+        // Example: Animate progress circles on page load
+        setTimeout(function() {
+            const progressCircles = document.querySelectorAll('.progress-circle');
+            progressCircles.forEach(circle => {
+                const progress = circle.style.getPropertyValue('--progress');
+                circle.style.setProperty('--progress', '0');
+                setTimeout(() => {
+                    circle.style.setProperty('--progress', progress);
+                }, 100);
+            });
+        }, 300);
+    });
+</script>
+{% endblock %}

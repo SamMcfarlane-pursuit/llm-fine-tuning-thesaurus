@@ -258,19 +258,150 @@ function initQuizTake() {
         firstNavBtn.classList.add('active');
     }
 
-    // Add form submission handler to show a summary before submitting
+    // Add form submission handler with improved error handling and user feedback
     if (quizForm) {
+        // Create a submission status element
+        const statusContainer = document.createElement('div');
+        statusContainer.id = 'submission-status';
+        statusContainer.className = 'd-none';
+        statusContainer.innerHTML = `
+            <div class="alert alert-info d-flex align-items-center" role="alert">
+                <div class="spinner-border spinner-border-sm me-2" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <div>
+                    <strong>Submitting your quiz...</strong> Please wait while we process your answers.
+                </div>
+            </div>
+        `;
+        quizForm.appendChild(statusContainer);
+
+        // Track submission state to prevent double submissions
+        let isSubmitting = false;
+
         quizForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Prevent double submissions
+            if (isSubmitting) {
+                console.log('Submission already in progress');
+                return false;
+            }
+
             const unansweredCount = totalQuestions - answeredQuestions.size;
 
+            // Create a confirmation modal instead of using the browser's confirm dialog
             if (unansweredCount > 0) {
-                if (!confirm(`You have ${unansweredCount} unanswered question(s). Are you sure you want to submit the quiz?`)) {
-                    e.preventDefault();
-                    return false;
+                const confirmModal = document.createElement('div');
+                confirmModal.className = 'modal fade';
+                confirmModal.id = 'confirmSubmissionModal';
+                confirmModal.setAttribute('tabindex', '-1');
+                confirmModal.setAttribute('aria-labelledby', 'confirmSubmissionModalLabel');
+                confirmModal.setAttribute('aria-hidden', 'true');
+
+                confirmModal.innerHTML = `
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header bg-warning text-dark">
+                                <h5 class="modal-title" id="confirmSubmissionModalLabel">
+                                    <i class="bi bi-exclamation-triangle me-2"></i>
+                                    Confirm Submission
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>You have <strong>${unansweredCount} unanswered question(s)</strong>.</p>
+                                <p>Unanswered questions will be marked as incorrect. Are you sure you want to submit the quiz?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <i class="bi bi-arrow-left me-1"></i> Continue Quiz
+                                </button>
+                                <button type="button" class="btn btn-warning" id="confirmSubmit">
+                                    <i class="bi bi-check-circle me-1"></i> Submit Anyway
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                document.body.appendChild(confirmModal);
+
+                // Initialize the modal
+                const modal = new bootstrap.Modal(confirmModal);
+                modal.show();
+
+                // Handle confirmation
+                document.getElementById('confirmSubmit').addEventListener('click', function() {
+                    modal.hide();
+                    submitQuiz();
+                });
+
+                // Clean up the modal when it's hidden
+                confirmModal.addEventListener('hidden.bs.modal', function() {
+                    confirmModal.remove();
+                });
+            } else {
+                // No unanswered questions, proceed with submission
+                submitQuiz();
+            }
+
+            function submitQuiz() {
+                try {
+                    // Set submitting state
+                    isSubmitting = true;
+
+                    // Show submission status
+                    statusContainer.classList.remove('d-none');
+
+                    // Disable form elements to prevent changes during submission
+                    Array.from(quizForm.elements).forEach(element => {
+                        element.disabled = true;
+                    });
+
+                    // Add a timestamp to the form
+                    const timeInput = document.createElement('input');
+                    timeInput.type = 'hidden';
+                    timeInput.name = 'completion_time';
+                    timeInput.value = Math.floor((new Date().getTime() - startTime) / 1000);
+                    quizForm.appendChild(timeInput);
+
+                    // Submit the form
+                    setTimeout(() => {
+                        quizForm.submit();
+                    }, 500);
+
+                } catch (error) {
+                    console.error('Error submitting quiz:', error);
+
+                    // Show error message
+                    statusContainer.innerHTML = `
+                        <div class="alert alert-danger" role="alert">
+                            <i class="bi bi-exclamation-circle-fill me-2"></i>
+                            <strong>Error submitting quiz:</strong> ${error.message || 'Unknown error'}
+                            <button type="button" class="btn btn-sm btn-danger mt-2" id="retry-submission">
+                                <i class="bi bi-arrow-repeat me-1"></i> Retry Submission
+                            </button>
+                        </div>
+                    `;
+
+                    // Re-enable form elements
+                    Array.from(quizForm.elements).forEach(element => {
+                        element.disabled = false;
+                    });
+
+                    // Reset submission state
+                    isSubmitting = false;
+
+                    // Add retry handler
+                    document.getElementById('retry-submission').addEventListener('click', function() {
+                        statusContainer.classList.add('d-none');
+                        submitQuiz();
+                    });
                 }
             }
 
-            return true;
+            return false;
         });
     }
 }

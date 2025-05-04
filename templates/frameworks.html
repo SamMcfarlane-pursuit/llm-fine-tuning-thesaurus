@@ -118,7 +118,13 @@
             <div class="framework-section" style="border-left: 5px solid #4287f5;">
                 <h2 style="color: #0062cc;">Hands-On Exercises</h2>
                 <p>The best way to learn is by doing. Our hands-on exercises will guide you through implementing real machine learning solutions using both TensorFlow and PyTorch. From basic neural networks to advanced deep learning architectures, these exercises will help you build practical skills that you can apply to your own projects.</p>
-                
+
+                <div class="text-center mb-4">
+                    <a href="{{ url_for('workshop_progress') }}" class="btn btn-primary btn-lg">
+                        <i class="bi bi-bar-chart-line me-2"></i>Track Your Learning Progress
+                    </a>
+                </div>
+
                 <div class="row mt-4">
                     <div class="col-md-6 mb-4">
                         <div class="card h-100" style="border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); border: none; overflow: hidden;">
@@ -138,7 +144,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="col-md-6 mb-4">
                         <div class="card h-100" style="border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); border: none; overflow: hidden;">
                             <div class="card-body p-4">
@@ -169,7 +175,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         // Add animation to cards on scroll
         const cards = document.querySelectorAll('.exercise-card, .card');
-        
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -178,7 +184,7 @@
                 }
             });
         }, { threshold: 0.1 });
-        
+
         cards.forEach(card => {
             card.style.opacity = '0';
             card.style.transform = 'translateY(20px)';

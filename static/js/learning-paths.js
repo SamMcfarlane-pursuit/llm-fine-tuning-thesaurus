@@ -39,29 +39,49 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Model_Deployment_Tutorial'
             ],
             icon: 'bi-cloud-upload-fill'
+        },
+        'hardware': {
+            name: 'Hardware Acceleration Path',
+            description: 'Learn how to use specialized hardware to accelerate LLM fine-tuning',
+            tutorials: [
+                'TensorFlow_with_GPUs_for_LLM_Finetuning',
+                'TPUs_for_LLM_Finetuning',
+                'Intro_to_RAPIDS_cuDF'
+            ],
+            icon: 'bi-cpu-fill'
+        },
+        'data': {
+            name: 'Data Processing Path',
+            description: 'Master data preparation and processing for LLM fine-tuning',
+            tutorials: [
+                'Data_Preparation_Tutorial',
+                'Intro_to_Pandas_DataFrame',
+                'Intro_to_RAPIDS_cuDF'
+            ],
+            icon: 'bi-database-fill'
         }
     };
-    
+
     // Get user progress from localStorage or initialize empty
     let userProgress = JSON.parse(localStorage.getItem('tutorialProgress')) || {};
-    
+
     // Function to render learning paths
     function renderLearningPaths() {
         const pathsContainer = document.getElementById('learning-paths-container');
         if (!pathsContainer) return;
-        
+
         // Clear container
         pathsContainer.innerHTML = '';
-        
+
         // Create path cards
         for (const [pathId, path] of Object.entries(learningPaths)) {
             // Calculate progress
             const totalTutorials = path.tutorials.length;
-            const completedTutorials = path.tutorials.filter(tutorialId => 
+            const completedTutorials = path.tutorials.filter(tutorialId =>
                 userProgress[tutorialId] && userProgress[tutorialId].completed
             ).length;
             const progressPercent = totalTutorials > 0 ? Math.round((completedTutorials / totalTutorials) * 100) : 0;
-            
+
             // Create path card
             const pathCard = document.createElement('div');
             pathCard.className = 'col-md-4 mb-4';
@@ -73,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="card-body">
                         <p class="card-text">${path.description}</p>
                         <div class="progress mb-3">
-                            <div class="progress-bar bg-success" role="progressbar" style="width: ${progressPercent}%" 
+                            <div class="progress-bar bg-success" role="progressbar" style="width: ${progressPercent}%"
                                 aria-valuenow="${progressPercent}" aria-valuemin="0" aria-valuemax="100">
                                 ${progressPercent}%
                             </div>
@@ -85,10 +105,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 </div>
             `;
-            
+
             pathsContainer.appendChild(pathCard);
         }
-        
+
         // Add event listeners to view path buttons
         document.querySelectorAll('.view-path-btn').forEach(button => {
             button.addEventListener('click', function() {
@@ -97,12 +117,12 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
-    
+
     // Function to show path details
     function showPathDetails(pathId) {
         const path = learningPaths[pathId];
         if (!path) return;
-        
+
         // Create modal content
         const modalContent = `
             <div class="modal fade" id="pathModal" tabindex="-1" aria-labelledby="pathModalLabel" aria-hidden="true">
@@ -140,25 +160,26 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             </div>
         `;
-        
+
         // Add modal to document
         const modalContainer = document.createElement('div');
         modalContainer.innerHTML = modalContent;
         document.body.appendChild(modalContainer.firstChild);
-        
+
         // Show modal
         const modal = new bootstrap.Modal(document.getElementById('pathModal'));
         modal.show();
-        
+
         // Remove modal from DOM when hidden
         document.getElementById('pathModal').addEventListener('hidden.bs.modal', function() {
             this.remove();
         });
     }
-    
+
     // Function to get tutorial name from ID
     function getTutorialName(tutorialId) {
         const tutorialNames = {
+            // Original tutorials
             'Data_Preparation_Tutorial': 'Data Preparation for LLM Fine-Tuning',
             'Tuning_Approaches_Comparison': 'Comparison of LLM Fine-Tuning Approaches',
             'LoRA_Fine_Tuning_Tutorial': 'LoRA Fine-Tuning Tutorial',
@@ -166,28 +187,34 @@ document.addEventListener('DOMContentLoaded', function() {
             'Pipeline_Inference_Tutorial': 'Pipeline Inference Tutorial',
             'Gradient_Checkpointing_Tutorial': 'Gradient Checkpointing for Memory Optimization',
             'Mixed_Precision_Training_Tutorial': 'Mixed Precision Training for Faster Fine-Tuning',
-            'Model_Deployment_Tutorial': 'Deploying Fine-Tuned Models to Production'
+            'Model_Deployment_Tutorial': 'Deploying Fine-Tuned Models to Production',
+
+            // Google ML Crash Course notebooks
+            'TensorFlow_with_GPUs_for_LLM_Finetuning': 'TensorFlow with GPUs for LLM Fine-Tuning',
+            'TPUs_for_LLM_Finetuning': 'TPUs for LLM Fine-Tuning',
+            'Intro_to_Pandas_DataFrame': 'Introduction to Pandas DataFrame for LLM Data Preparation',
+            'Intro_to_RAPIDS_cuDF': 'Introduction to RAPIDS cuDF for Accelerated Data Processing'
         };
-        
+
         return tutorialNames[tutorialId] || tutorialId;
     }
-    
+
     // Function to mark tutorial as completed
     function markTutorialCompleted(tutorialId) {
         userProgress[tutorialId] = {
             completed: true,
             completedAt: new Date().toISOString()
         };
-        
+
         localStorage.setItem('tutorialProgress', JSON.stringify(userProgress));
         updateTutorialStatus(tutorialId);
     }
-    
+
     // Function to update tutorial status in UI
     function updateTutorialStatus(tutorialId) {
         const tutorialCards = document.querySelectorAll(`.tutorial-card[data-tutorial-id="${tutorialId}"]`);
         const completed = userProgress[tutorialId] && userProgress[tutorialId].completed;
-        
+
         tutorialCards.forEach(card => {
             const statusBadge = card.querySelector('.tutorial-status');
             if (statusBadge) {
@@ -195,11 +222,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 statusBadge.innerHTML = completed ? '<i class="bi bi-check-circle-fill"></i> Completed' : 'Not Started';
             }
         });
-        
+
         // Update learning paths if they're rendered
         renderLearningPaths();
     }
-    
+
     // Add tutorial IDs to cards
     document.querySelectorAll('.tutorial-card').forEach(card => {
         const links = card.querySelectorAll('a[href*="view-notebook/"]');
@@ -207,7 +234,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const href = links[0].getAttribute('href');
             const tutorialId = href.split('/').pop();
             card.setAttribute('data-tutorial-id', tutorialId);
-            
+
             // Add status badge
             const cardBody = card.querySelector('.card-body');
             if (cardBody) {
@@ -223,7 +250,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
-    
+
     // Add mark as completed buttons to notebook viewer
     const markCompletedBtn = document.getElementById('mark-completed-btn');
     if (markCompletedBtn) {
@@ -233,14 +260,14 @@ document.addEventListener('DOMContentLoaded', function() {
             this.disabled = true;
             this.innerHTML = '<i class="bi bi-check-circle-fill me-2"></i>Marked as Completed';
         });
-        
+
         // Update button state
         if (userProgress[tutorialId] && userProgress[tutorialId].completed) {
             markCompletedBtn.disabled = true;
             markCompletedBtn.innerHTML = '<i class="bi bi-check-circle-fill me-2"></i>Marked as Completed';
         }
     }
-    
+
     // Initialize learning paths
     renderLearningPaths();
 });

@@ -28,6 +28,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/clean-sidebar.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/image-styles.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/razor-sharp-images.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/razor-sharp-images-enhanced.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/home-features.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/progress-indicator.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/feature-buttons.css') }}">
@@ -140,6 +141,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <li><a class="dropdown-item" href="/workshops"><i class="bi bi-collection me-2"></i>All Workshops</a></li>
+                                        <li><a class="dropdown-item" href="/workshop-steps"><i class="bi bi-diagram-3 me-2"></i>Workshop Steps</a></li>
                                         <li><a class="dropdown-item" href="/workshop-progress"><i class="bi bi-bar-chart-line me-2"></i>Track My Progress</a></li>
                                         <li><hr class="dropdown-divider"></li>
                                         <li><a class="dropdown-item" href="/workshop/lora-basics"><i class="bi bi-1-circle me-2"></i>LoRA Basics</a></li>
@@ -173,7 +175,7 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/tutorials"><i class="bi bi-journal-code nav-icon"></i> Tutorials</a>
+                            <a class="nav-link" href="{{ url_for('interactive_tutorials') }}"><i class="bi bi-journal-code nav-icon"></i> Tutorials</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="/frameworks" id="frameworksDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -240,7 +242,7 @@
                     <h5>Resources</h5>
                     <ul class="list-unstyled">
                         <li><a href="{{ url_for('contact') }}" class="text-light">Contact Us</a></li>
-                        <li><a href="{{ url_for('tutorials') }}" class="text-light">Tutorials</a></li>
+                        <li><a href="{{ url_for('interactive_tutorials') }}" class="text-light">Tutorials</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4 text-md-end">
@@ -257,6 +259,7 @@
     <script src="{{ url_for('static', filename='js/image-handler.js') }}"></script>
     <script src="{{ url_for('static', filename='js/image-error-handler.js') }}"></script>
     <script src="{{ url_for('static', filename='js/razor-sharp-images.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/razor-sharp-images-enhanced.js') }}</script>
     <script src="{{ url_for('static', filename='js/code-blocks.js') }}"></script>
     <script src="{{ url_for('static', filename='js/analytics-tracking.js') }}"></script>
     <script src="{{ url_for('static', filename='js/interactive-feature-buttons.js') }}"></script>
@@ -273,6 +276,8 @@
     <script src="{{ url_for('static', filename='js/integrated-learning.js') }}"></script>
     <script src="{{ url_for('static', filename='js/smooth-ux.js') }}"></script>
     <script src="{{ url_for('static', filename='js/workshop-enhancements.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/workshop-steps-enhanced.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/enhanced-current-section.js') }}"></script>
     {% if current_user.is_authenticated %}
     <script src="{{ url_for('static', filename='js/pop_quiz.js') }}"></script>
     {% endif %}

@@ -1321,6 +1321,22 @@ def workshop_lora_fine_tuning():
     """Render the LoRA fine-tuning workshop page."""
     return render_template('workshop_lora_fine_tuning.html')
 
+@app.route('/workshop/qlora-deep-dive')
+def workshop_qlora_deep_dive():
+    """Render the QLoRA deep dive workshop page."""
+    return render_template('workshop_qlora.html')
+
+@app.route('/interactive-tutorials')
+def interactive_tutorials():
+    """Render the interactive tutorials page."""
+    # Get user progress if authenticated
+    user_progress = []
+    if current_user.is_authenticated:
+        from user_progress import get_all_user_progress
+        user_progress = get_all_user_progress()
+
+    return render_template('tutorials.html', user_progress=user_progress)
+
 @app.route('/terms')
 def terms():
     """Render the terms of service page."""
@@ -1898,6 +1914,159 @@ def track_analytics():
     except Exception as e:
         app.logger.error(f"Error tracking analytics: {e}")
         return jsonify({'error': 'Error tracking analytics', 'message': str(e)}), 500
+
+@app.route('/api/ask', methods=['POST'])
+@csrf.exempt
+def ask_ai_assistant():
+    """API endpoint for the AI assistant."""
+    try:
+        data = request.json
+        question = data.get('question', '')
+
+        if not question:
+            return jsonify({'error': 'No question provided'}), 400
+
+        # Log the question for debugging
+        app.logger.info(f"AI Assistant question: {question}")
+
+        # Process the question and generate a response
+        # This is a simple implementation - in a production environment,
+        # you would use a more sophisticated approach
+
+        # Check for specific keywords to provide targeted responses
+        question_lower = question.lower()
+
+        if 'lora' in question_lower and 'qlora' not in question_lower:
+            answer = """**LoRA (Low-Rank Adaptation)** is a parameter-efficient fine-tuning technique that significantly reduces memory usage and training time.
+
+**How LoRA works:**
+1. It freezes the pre-trained model weights
+2. Injects trainable rank decomposition matrices into each layer of the Transformer architecture
+3. These low-rank matrices capture the task-specific adaptations
+
+**Key benefits:**
+- Reduces trainable parameters by 10,000x in some cases
+- Maintains 95%+ of full fine-tuning performance
+- Enables fine-tuning on consumer GPUs (even 8GB VRAM)
+- Allows for easy model switching by swapping adapters
+
+You can learn more in our [LoRA Workshop](/workshop/lora-fine-tuning) or check out the [LoRA Implementation Guide](/guide/lora-implementation)."""
+
+        elif 'qlora' in question_lower:
+            answer = """**QLoRA (Quantized Low-Rank Adaptation)** combines quantization with LoRA for extremely memory-efficient fine-tuning.
+
+**How QLoRA works:**
+1. Quantizes the pre-trained model weights to 4-bit precision (4-bit NormalFloat or 4-bit Integer)
+2. Uses a double quantization technique to further reduce memory
+3. Keeps a small set of 16-bit parameters for the LoRA adapters
+4. Uses paged optimizers to manage memory efficiently
+
+**Key benefits:**
+- Fine-tune 65B+ parameter models on a single consumer GPU (even 16GB VRAM)
+- Maintains full fine-tuning quality (often better than standard LoRA)
+- Reduces memory usage by up to 4x compared to standard LoRA
+- Enables fine-tuning of larger models for better performance
+
+You can learn more in our [QLoRA Deep Dive Workshop](/workshop/qlora-deep-dive) or check out the [QLoRA Implementation Guide](/guide/qlora-implementation)."""
+
+        elif any(term in question_lower for term in ['tutorial', 'workshop', 'learn']):
+            answer = """Our platform offers several interactive tutorials and workshops to help you master LLM fine-tuning:
+
+1. **Workshops:**
+   - [Full Fine-Tuning Workshop](/workshop/full-fine-tuning)
+   - [LoRA Fine-Tuning Workshop](/workshop/lora-fine-tuning)
+   - [QLoRA Deep Dive Workshop](/workshop/qlora-deep-dive)
+   - [Memory Efficiency Workshop](/workshop/memory-efficiency)
+   - [Advanced PEFT Workshop](/workshop/advanced-peft)
+
+2. **Interactive Tutorials:**
+   - [Data Preparation Tutorial](/tutorials)
+   - [LoRA Implementation Tutorial](/tutorials)
+   - [QLoRA Implementation Tutorial](/tutorials)
+   - [Model Deployment Tutorial](/tutorials)
+
+3. **Guides:**
+   - [Fine-Tuning Comparison Guide](/guide/finetuning-comparison)
+   - [LoRA Implementation Guide](/guide/lora-implementation)
+   - [QLoRA Implementation Guide](/guide/qlora-implementation)
+   - [Instruction Tuning Guide](/guide/instruction-tuning)
+
+All tutorials include interactive code examples that you can run directly in your browser or in Google Colab."""
+
+        elif 'memory' in question_lower or 'gpu' in question_lower:
+            answer = """**Memory Optimization Techniques for LLM Fine-Tuning**
+
+Here are comprehensive strategies to reduce memory usage during fine-tuning:
+
+**1. Parameter-Efficient Fine-Tuning (PEFT)**
+- **LoRA**: Trains only low-rank adapter matrices (reduces parameters by 10,000x)
+- **QLoRA**: Combines 4-bit quantization with LoRA (4x more efficient than LoRA)
+- **Prefix Tuning**: Adds trainable continuous vectors to each transformer layer
+- **Prompt Tuning**: Adds trainable vectors only to the input layer
+
+**2. Quantization Techniques**
+- **Post-Training Quantization**: Convert weights to INT8/INT4 after training
+- **Quantization-Aware Training**: Train with simulated quantization
+- **Mixed Precision Training**: Use FP16 or BF16 instead of FP32
+
+**3. Optimization Techniques**
+- **Gradient Checkpointing**: Trade computation for memory by recomputing activations
+- **Gradient Accumulation**: Update weights after multiple forward/backward passes
+- **Optimizer States**: Use memory-efficient optimizers like AdamW with 8-bit states
+- **Activation Offloading**: Move activations to CPU when not needed
+
+Check out our [Memory Efficiency Workshop](/workshop/memory-efficiency) for hands-on examples of these techniques."""
+
+        elif 'fine-tun' in question_lower:
+            answer = """**LLM Fine-Tuning Overview**
+
+Fine-tuning is the process of adapting a pre-trained language model to a specific task or domain by training it on a smaller, task-specific dataset.
+
+**Key Fine-Tuning Approaches:**
+
+1. **Full Fine-Tuning**
+   - Updates all model parameters
+   - Requires significant GPU memory (16GB+ for 7B models)
+   - Provides best performance but is resource-intensive
+   - Learn more in our [Full Fine-Tuning Workshop](/workshop/full-fine-tuning)
+
+2. **Parameter-Efficient Fine-Tuning (PEFT)**
+   - **LoRA**: Updates low-rank adapter matrices instead of full weights
+   - **QLoRA**: Combines quantization with LoRA for extreme memory efficiency
+   - **Prefix/Prompt Tuning**: Adds trainable vectors to inputs or activations
+   - Learn more in our [LoRA Workshop](/workshop/lora-fine-tuning) and [QLoRA Workshop](/workshop/qlora-deep-dive)
+
+3. **Instruction Tuning**
+   - Fine-tunes models to follow specific instructions
+   - Uses instruction-response pairs for training
+   - Creates more helpful, honest, and harmless models
+   - Learn more in our [Instruction Tuning Guide](/guide/instruction-tuning)
+
+Our platform provides comprehensive resources for all these approaches, including interactive tutorials, workshops, and implementation guides."""
+
+        else:
+            # Default response for other questions
+            answer = """I'm your AI assistant for LLM fine-tuning. I can help you with:
+
+1. **Learning about fine-tuning techniques** like LoRA, QLoRA, and full fine-tuning
+2. **Finding tutorials and workshops** on our platform
+3. **Understanding memory optimization** for training large models
+4. **Implementing specific techniques** with code examples
+5. **Troubleshooting common issues** in LLM fine-tuning
+
+Feel free to ask specific questions about any of these topics! You can also check out our [Workshops](/workshops) page for hands-on learning experiences."""
+
+        return jsonify({
+            'answer': answer,
+            'status': 'success'
+        }), 200
+
+    except Exception as e:
+        app.logger.error(f"Error in AI Assistant: {e}")
+        return jsonify({
+            'error': 'Error processing question',
+            'message': str(e)
+        }), 500
 
 if __name__ == '__main__':
     import argparse

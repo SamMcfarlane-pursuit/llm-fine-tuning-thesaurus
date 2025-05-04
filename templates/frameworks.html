@@ -8,6 +8,34 @@
 
 {% block content %}
 <div class="container mt-5 mb-5">
+    <!-- Enhanced Current Section Bar -->
+    <div class="current-section-container">
+        <div class="current-section-header">
+            <h3 class="current-section-title"><i class="bi bi-bookmark-star"></i> Current Section</h3>
+            <button class="current-section-cancel" aria-label="Close"><i class="bi bi-x"></i></button>
+        </div>
+        <a href="{{ url_for('frameworks') }}" class="current-concept-badge">
+            <i class="bi bi-cpu"></i> Frameworks
+        </a>
+        <div class="related-concepts-container">
+            <a href="{{ url_for('frameworks_page', framework='tensorflow') }}" class="related-concept-button">
+                <i class="bi bi-arrow-right-circle"></i> TensorFlow
+            </a>
+            <a href="{{ url_for('frameworks_page', framework='pytorch') }}" class="related-concept-button">
+                <i class="bi bi-arrow-right-circle"></i> PyTorch
+            </a>
+            <a href="{{ url_for('frameworks_page', framework='comparison') }}" class="related-concept-button">
+                <i class="bi bi-bar-chart-steps"></i> Comparison
+            </a>
+            <a href="{{ url_for('frameworks_exercises', framework='tensorflow') }}" class="related-concept-button">
+                <i class="bi bi-code-square"></i> TF Exercises
+            </a>
+            <a href="{{ url_for('frameworks_exercises', framework='pytorch') }}" class="related-concept-button">
+                <i class="bi bi-code-square"></i> PyTorch Exercises
+            </a>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-12">
             <div class="framework-header" style="background: linear-gradient(135deg, rgba(66, 135, 245, 0.9), rgba(0, 119, 255, 0.9)); border: 3px solid rgba(66, 135, 245, 0.5);">

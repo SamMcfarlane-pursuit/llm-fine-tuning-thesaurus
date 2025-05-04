@@ -1,0 +1,233 @@
+/**
+ * Enhanced Current Section Bar
+ * Provides a silky smooth, professional current section bar with cancel option
+ */
+
+/* Current Section Container */
+.current-section-container {
+    background: linear-gradient(135deg, rgba(25, 25, 30, 0.95), rgba(35, 35, 40, 0.95));
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(66, 135, 245, 0.3);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.current-section-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(to right, #4287f5, #00d463);
+    z-index: 1;
+}
+
+.current-section-container:hover {
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+    border-color: rgba(66, 135, 245, 0.5);
+}
+
+/* Current Section Header */
+.current-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.current-section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: white;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.current-section-title i {
+    color: #4287f5;
+    font-size: 1.2rem;
+}
+
+/* Cancel Button */
+.current-section-cancel {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+    font-size: 1rem;
+}
+
+.current-section-cancel:hover {
+    background: rgba(255, 75, 75, 0.2);
+    color: #ff4b4b;
+    transform: rotate(90deg);
+}
+
+.current-section-cancel:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(255, 75, 75, 0.3);
+}
+
+/* Current Concept Badge */
+.current-concept-badge {
+    display: inline-flex;
+    align-items: center;
+    background: linear-gradient(135deg, rgba(66, 135, 245, 0.15), rgba(0, 212, 255, 0.15));
+    border: 1px solid rgba(66, 135, 245, 0.3);
+    border-radius: 30px;
+    padding: 8px 15px;
+    color: white;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.current-concept-badge::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(66, 135, 245, 0.1), rgba(0, 212, 255, 0.1));
+    transform: translateX(-100%);
+    transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+    z-index: -1;
+}
+
+.current-concept-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    border-color: rgba(66, 135, 245, 0.5);
+}
+
+.current-concept-badge:hover::before {
+    transform: translateX(0);
+}
+
+.current-concept-badge i {
+    margin-right: 8px;
+    color: #4287f5;
+}
+
+/* Related Concepts Container */
+.related-concepts-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* Related Concept Button */
+.related-concept-button {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(30, 30, 35, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 6px 12px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.related-concept-button:hover {
+    background: rgba(66, 135, 245, 0.15);
+    color: white;
+    border-color: rgba(66, 135, 245, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+}
+
+.related-concept-button:active {
+    transform: translateY(0);
+}
+
+.related-concept-button i {
+    margin-right: 6px;
+    font-size: 0.85rem;
+    color: rgba(66, 135, 245, 0.8);
+}
+
+/* Animation for smooth transitions */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.current-section-container {
+    animation: fadeIn 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .current-section-container {
+        padding: 12px;
+    }
+    
+    .current-section-title {
+        font-size: 1rem;
+    }
+    
+    .current-concept-badge {
+        font-size: 0.9rem;
+        padding: 6px 12px;
+    }
+    
+    .related-concept-button {
+        font-size: 0.8rem;
+        padding: 5px 10px;
+    }
+}
+
+@media (max-width: 576px) {
+    .current-section-container {
+        padding: 10px;
+    }
+    
+    .current-section-title {
+        font-size: 0.95rem;
+    }
+    
+    .current-concept-badge {
+        font-size: 0.85rem;
+        padding: 5px 10px;
+    }
+    
+    .related-concept-button {
+        font-size: 0.75rem;
+        padding: 4px 8px;
+    }
+}

@@ -4,6 +4,34 @@
 
 {% block content %}
 <div class="container mt-4">
+    <!-- Enhanced Current Section Bar -->
+    <div class="current-section-container">
+        <div class="current-section-header">
+            <h3 class="current-section-title"><i class="bi bi-bookmark-star"></i> Current Section</h3>
+            <button class="current-section-cancel" aria-label="Close"><i class="bi bi-x"></i></button>
+        </div>
+        <a href="{{ url_for('qlora_guide') }}" class="current-concept-badge">
+            <i class="bi bi-cpu"></i> QLoRA Guide
+        </a>
+        <div class="related-concepts-container">
+            <a href="{{ url_for('qlora_guide_part', part=1) }}" class="related-concept-button">
+                <i class="bi bi-1-circle"></i> Part 1: Introduction
+            </a>
+            <a href="{{ url_for('qlora_guide_part', part=2) }}" class="related-concept-button">
+                <i class="bi bi-2-circle"></i> Part 2: Implementation
+            </a>
+            <a href="{{ url_for('qlora_guide_part', part=3) }}" class="related-concept-button">
+                <i class="bi bi-3-circle"></i> Part 3: Advanced Topics
+            </a>
+            <a href="{{ url_for('learn_and_explore', concept='qlora') }}" class="related-concept-button">
+                <i class="bi bi-diagram-3"></i> QLoRA Concept
+            </a>
+            <a href="{{ url_for('workshop', workshop_name='qlora-deep-dive') }}" class="related-concept-button">
+                <i class="bi bi-tools"></i> QLoRA Workshop
+            </a>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-md-12">
             <h1 class="mb-4">QLoRA Fine-Tuning Guide</h1>
@@ -20,7 +48,7 @@
                 </div>
                 <div class="card-body">
                     <p>This comprehensive guide covers everything you need to know about QLoRA (Quantized Low-Rank Adaptation), a parameter-efficient fine-tuning method that enables fine-tuning of large language models on consumer hardware with limited GPU memory.</p>
-                    
+
                     <div class="row mt-4">
                         <div class="col-md-4">
                             <div class="card h-100">
@@ -67,7 +95,7 @@
                 </div>
                 <div class="card-body">
                     <p>Want to get started quickly with QLoRA fine-tuning? Follow these essential steps:</p>
-                    
+
                     <div class="row">
                         <div class="col-md-6">
                             <h4>1. Install Required Libraries</h4>
@@ -96,7 +124,7 @@ model = AutoModelForCausalLM.from_pretrained(
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="row mt-3">
                         <div class="col-md-6">
                             <h4>3. Apply LoRA</h4>
@@ -150,7 +178,7 @@ trainer.train()</code></pre>
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="alert alert-info mt-4">
                         <h5><i class="bi bi-info-circle me-2"></i>Want More Details?</h5>
                         <p class="mb-0">This is just a quick overview. For a complete step-by-step guide, check out <a href="/qlora-guide-part2">Part 2: Implementation & Best Practices</a>.</p>
@@ -220,7 +248,7 @@ trainer.train()</code></pre>
                             </ul>
                         </div>
                     </div>
-                    
+
                     <h4>Community & Support</h4>
                     <div class="row">
                         <div class="col-md-4">

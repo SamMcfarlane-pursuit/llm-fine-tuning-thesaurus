@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='css/concept-map-sidebar.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/professional-sidebar.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/learn-explore.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-current-section.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -88,6 +89,24 @@
         <!-- Main content area -->
         <div class="col-lg-9 content-column">
             <div class="content-container">
+                <!-- Enhanced Current Section Bar -->
+                <div class="current-section-container">
+                    <div class="current-section-header">
+                        <h3 class="current-section-title"><i class="bi bi-bookmark-star"></i> Current Section</h3>
+                        <button class="current-section-cancel" aria-label="Close"><i class="bi bi-x"></i></button>
+                    </div>
+                    <a href="{{ url_for('learn_and_explore', concept=concept) }}" class="current-concept-badge">
+                        <i class="bi bi-bookmark-fill"></i> {{ concept | capitalize }}
+                    </a>
+                    <div class="related-concepts-container">
+                        {% for related in related_concepts[:5] %}
+                        <a href="{{ url_for('learn_and_explore', concept=related) }}" class="related-concept-button">
+                            <i class="bi bi-arrow-right-circle"></i> {{ related | capitalize }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
                 <!-- Header section -->
                 <div class="header-section">
                     <h1>{{ concept | capitalize }}</h1>

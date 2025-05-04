@@ -1,0 +1,232 @@
+{% extends "base.html" %}
+
+{% block title %}Learn & Explore LLM Fine-Tuning{% endblock %}
+
+{% block head %}
+<!-- Additional head content specific to this page -->
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vis-network@9.1.2/dist/vis-network.min.js"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-thesaurus.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/concept-map-sidebar.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/professional-sidebar.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/learn-explore.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid learn-explore-container">
+    <!-- Navigation Breadcrumbs -->
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Learn & Explore</li>
+            {% if concept %}
+            <li class="breadcrumb-item active" aria-current="page">{{ concept | capitalize }}</li>
+            {% endif %}
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Sidebar with related concepts -->
+        <div class="col-lg-3 sidebar-column">
+            <div class="sidebar-container">
+                <div class="sidebar-header">
+                    <h3><i class="bi bi-diagram-3"></i> Concept Explorer</h3>
+                </div>
+                
+                <div class="search-box">
+                    <form id="concept-search-form" action="{{ url_for('learn_and_explore') }}" method="get">
+                        <div class="input-group">
+                            <input type="text" id="concept-search" name="concept" class="form-control" placeholder="Search concepts..." value="{{ concept }}">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="sidebar-section">
+                    <h4>Current Concept</h4>
+                    <div class="current-concept">
+                        <span class="concept-badge main">{{ concept | capitalize }}</span>
+                    </div>
+                </div>
+                
+                <div class="sidebar-section">
+                    <h4>Related Concepts</h4>
+                    <div class="related-concepts">
+                        {% for related in related_concepts %}
+                        <a href="{{ url_for('learn_and_explore', concept=related) }}" class="concept-badge">
+                            {{ related | capitalize }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="sidebar-section">
+                    <h4>Popular Categories</h4>
+                    <div class="category-list">
+                        <a href="{{ url_for('learn_and_explore', concept='fine-tuning') }}" class="category-item">
+                            <i class="bi bi-gear"></i> Fine-Tuning Basics
+                        </a>
+                        <a href="{{ url_for('learn_and_explore', concept='lora') }}" class="category-item">
+                            <i class="bi bi-lightning"></i> LoRA
+                        </a>
+                        <a href="{{ url_for('learn_and_explore', concept='qlora') }}" class="category-item">
+                            <i class="bi bi-cpu"></i> QLoRA
+                        </a>
+                        <a href="{{ url_for('learn_and_explore', concept='quantization') }}" class="category-item">
+                            <i class="bi bi-calculator"></i> Quantization
+                        </a>
+                        <a href="{{ url_for('learn_and_explore', concept='peft') }}" class="category-item">
+                            <i class="bi bi-layers"></i> PEFT
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main content area -->
+        <div class="col-lg-9 content-column">
+            <div class="content-container">
+                <!-- Header section -->
+                <div class="header-section">
+                    <h1>{{ concept | capitalize }}</h1>
+                    <p class="lead">Explore concepts, learning resources, and hands-on exercises</p>
+                </div>
+                
+                <!-- Visualization section -->
+                <div class="visualization-section">
+                    <div class="section-header">
+                        <h2><i class="bi bi-diagram-3"></i> Concept Visualization</h2>
+                        <p>Interactive visualization of related concepts and terms</p>
+                    </div>
+                    
+                    <div class="visualization-container">
+                        <iframe id="visualization-iframe" src="{{ url_for('static', filename='visualizations/' + concept + '_thesaurus.html') }}" frameborder="0"></iframe>
+                        
+                        <div class="visualization-legend">
+                            <div class="legend-title">Legend</div>
+                            <div class="legend-items">
+                                <div class="legend-item">
+                                    <div class="legend-color main-term"></div>
+                                    <div>Main Term</div>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color synonym"></div>
+                                    <div>Synonym</div>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-color related"></div>
+                                    <div>Related Term</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="keyboard-hint">
+                            <i class="bi bi-info-circle"></i> Use mouse wheel to zoom, click and drag to move
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Learning resources section -->
+                <div class="learning-section">
+                    <div class="section-header">
+                        <h2><i class="bi bi-book"></i> Learning Resources</h2>
+                        <p>Comprehensive guides and tutorials for {{ concept | capitalize }}</p>
+                    </div>
+                    
+                    <div class="resources-container">
+                        <div class="row">
+                            {% for resource in learning_resources %}
+                            <div class="col-md-6 mb-4">
+                                <div class="resource-card {{ resource.type }}">
+                                    <div class="resource-icon">
+                                        {% if resource.type == 'guide' %}
+                                        <i class="bi bi-journal-text"></i>
+                                        {% elif resource.type == 'workshop' %}
+                                        <i class="bi bi-people"></i>
+                                        {% elif resource.type == 'exercise' %}
+                                        <i class="bi bi-code-square"></i>
+                                        {% else %}
+                                        <i class="bi bi-file-earmark-text"></i>
+                                        {% endif %}
+                                    </div>
+                                    <div class="resource-content">
+                                        <h3 class="resource-title">{{ resource.title }}</h3>
+                                        <p class="resource-description">{{ resource.description }}</p>
+                                        <a href="{{ resource.link }}" class="resource-link">
+                                            {% if resource.type == 'guide' %}
+                                            <i class="bi bi-book"></i> Read Guide
+                                            {% elif resource.type == 'workshop' %}
+                                            <i class="bi bi-people"></i> Join Workshop
+                                            {% elif resource.type == 'exercise' %}
+                                            <i class="bi bi-code-square"></i> Try Exercise
+                                            {% else %}
+                                            <i class="bi bi-arrow-right"></i> Learn More
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Hands-on exercises section -->
+                <div class="exercises-section">
+                    <div class="section-header">
+                        <h2><i class="bi bi-code-slash"></i> Hands-on Exercises</h2>
+                        <p>Practice your skills with these interactive exercises</p>
+                    </div>
+                    
+                    <div class="exercises-container">
+                        <div class="row">
+                            {% for exercise in exercises %}
+                            <div class="col-md-6 mb-4">
+                                <div class="exercise-card {{ exercise.difficulty }}">
+                                    <div class="difficulty-badge {{ exercise.difficulty }}">
+                                        {{ exercise.difficulty | capitalize }}
+                                    </div>
+                                    <h3 class="exercise-title">{{ exercise.title }}</h3>
+                                    <p class="exercise-description">{{ exercise.description }}</p>
+                                    <a href="{{ exercise.link }}" class="exercise-link">
+                                        <i class="bi bi-code-square"></i> Start Exercise
+                                    </a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Adjust iframe height to match container
+        function adjustIframeHeight() {
+            const container = document.querySelector('.visualization-container');
+            const iframe = document.getElementById('visualization-iframe');
+            if (container && iframe) {
+                iframe.style.height = container.clientHeight + 'px';
+            }
+        }
+        
+        // Call on load and on resize
+        adjustIframeHeight();
+        window.addEventListener('resize', adjustIframeHeight);
+        
+        // Highlight current category in sidebar
+        const currentConcept = '{{ concept }}';
+        document.querySelectorAll('.category-item').forEach(item => {
+            const href = item.getAttribute('href');
+            if (href.includes(currentConcept)) {
+                item.classList.add('active');
+            }
+        });
+    });
+</script>
+{% endblock %}

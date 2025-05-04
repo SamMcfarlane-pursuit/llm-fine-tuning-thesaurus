@@ -1885,4 +1885,15 @@ def track_analytics():
         return jsonify({'error': 'Error tracking analytics', 'message': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5035, debug=True)
+    import argparse
+
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description='Run the Thesaurus AI LLM Fine-Tuning web application')
+    parser.add_argument('--port', type=int, default=5035, help='Port to run the server on')
+    parser.add_argument('--host', type=str, default='0.0.0.0', help='Host to run the server on')
+    parser.add_argument('--debug', action='store_true', default=True, help='Run in debug mode')
+
+    args = parser.parse_args()
+
+    print(f"Starting server on {args.host}:{args.port} (debug={args.debug})")
+    app.run(host=args.host, port=args.port, debug=args.debug)

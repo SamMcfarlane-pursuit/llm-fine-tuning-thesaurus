@@ -1,0 +1,20 @@
+fine-tuning
+LoRA
+QLoRA
+quantization
+parameter-efficient fine-tuning
+prompt engineering
+transformer
+attention mechanism
+tokenization
+embedding
+language model
+neural network
+deep learning
+machine learning
+natural language processing
+transfer learning
+hyperparameter
+gradient descent
+backpropagation
+overfitting

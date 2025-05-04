@@ -10,23 +10,23 @@
             <h3 class="current-section-title"><i class="bi bi-bookmark-star"></i> Current Section</h3>
             <button class="current-section-cancel" aria-label="Close"><i class="bi bi-x"></i></button>
         </div>
-        <a href="{{ url_for('qlora_guide') }}" class="current-concept-badge">
+        <a href="/qlora-guide" class="current-concept-badge">
             <i class="bi bi-cpu"></i> QLoRA Guide
         </a>
         <div class="related-concepts-container">
-            <a href="{{ url_for('qlora_guide_part', part=1) }}" class="related-concept-button">
+            <a href="/qlora-guide-part1" class="related-concept-button">
                 <i class="bi bi-1-circle"></i> Part 1: Introduction
             </a>
-            <a href="{{ url_for('qlora_guide_part', part=2) }}" class="related-concept-button">
+            <a href="/qlora-guide-part2" class="related-concept-button">
                 <i class="bi bi-2-circle"></i> Part 2: Implementation
             </a>
-            <a href="{{ url_for('qlora_guide_part', part=3) }}" class="related-concept-button">
+            <a href="/qlora-guide-part3" class="related-concept-button">
                 <i class="bi bi-3-circle"></i> Part 3: Advanced Topics
             </a>
             <a href="{{ url_for('learn_and_explore', concept='qlora') }}" class="related-concept-button">
                 <i class="bi bi-diagram-3"></i> QLoRA Concept
             </a>
-            <a href="{{ url_for('workshop', workshop_name='qlora-deep-dive') }}" class="related-concept-button">
+            <a href="{{ url_for('workshops') }}#qlora-deep-dive" class="related-concept-button">
                 <i class="bi bi-tools"></i> QLoRA Workshop
             </a>
         </div>

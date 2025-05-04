@@ -399,50 +399,29 @@ def learn_and_explore():
         except Exception as e:
             print(f"Error generating fallback visualization: {e}")
 
-    # Get learning resources for the concept
-    learning_resources = get_learning_resources(concept)
+    try:
+        # Get learning resources for the concept
+        learning_resources = get_learning_resources(concept)
 
-    # Get hands-on exercises for the concept
-    exercises = get_exercises_for_concept(concept)
+        # Get hands-on exercises for the concept
+        exercises = get_exercises_for_concept(concept)
 
-    return render_template(
-        'learn_and_explore.html',
-        concept=concept,
-        related_concepts=related_concepts[:10],  # Limit to 10 related concepts
-        learning_resources=learning_resources,
-        exercises=exercises
-    )
-
-def get_learning_resources(concept):
-    """Get learning resources for a specific concept."""
-    # This would typically come from a database, but for now we'll use a static mapping
-    resources_map = {
-        "fine-tuning": [
+        return render_template(
+            'learn_and_explore.html',
+            concept=concept,
+            related_concepts=related_concepts[:10],  # Limit to 10 related concepts
+            learning_resources=learning_resources,
+            exercises=exercises
+        )
+    except Exception as e:
+        app.logger.error(f"Error rendering learn_and_explore: {e}")
+        # Provide default resources and exercises if there's an error
+        default_resources = [
             {
                 "title": "Introduction to LLM Fine-Tuning",
                 "description": "Learn the basics of fine-tuning large language models for specific tasks.",
                 "link": "/guide/finetuning-comparison",
                 "type": "guide"
-            },
-            {
-                "title": "Fine-Tuning vs Pre-Training",
-                "description": "Understand the differences between pre-training and fine-tuning in LLMs.",
-                "link": "/guide/finetuning-comparison",
-                "type": "guide"
-            },
-            {
-                "title": "Fine-Tuning Techniques Workshop",
-                "description": "Hands-on workshop covering various fine-tuning techniques.",
-                "link": "/workshops",
-                "type": "workshop"
-            }
-        ],
-        "lora": [
-            {
-                "title": "LoRA Basics",
-                "description": "Learn the fundamentals of Low-Rank Adaptation (LoRA) for efficient fine-tuning.",
-                "link": "/workshop/lora-basics",
-                "type": "workshop"
             },
             {
                 "title": "LoRA Implementation Guide",
@@ -451,111 +430,14 @@ def get_learning_resources(concept):
                 "type": "guide"
             },
             {
-                "title": "Hands-on LoRA Example",
-                "description": "Practical example of using LoRA for fine-tuning.",
-                "link": "/guide/lora-hands-on",
-                "type": "exercise"
-            }
-        ],
-        "qlora": [
-            {
-                "title": "QLoRA Deep Dive",
-                "description": "In-depth exploration of Quantized Low-Rank Adaptation (QLoRA).",
-                "link": "/workshop/qlora-deep-dive",
-                "type": "workshop"
-            },
-            {
                 "title": "QLoRA Implementation Guide",
                 "description": "Comprehensive guide to implementing QLoRA for memory-efficient fine-tuning.",
                 "link": "/guide/qlora-implementation",
                 "type": "guide"
-            },
-            {
-                "title": "Advanced QLoRA Techniques",
-                "description": "Advanced techniques and optimizations for QLoRA fine-tuning.",
-                "link": "/advanced-qlora",
-                "type": "guide"
-            }
-        ],
-        "quantization": [
-            {
-                "title": "Introduction to Model Quantization",
-                "description": "Learn the basics of quantizing large language models.",
-                "link": "/guide/qlora-implementation",
-                "type": "guide"
-            },
-            {
-                "title": "4-bit Quantization Techniques",
-                "description": "Detailed guide to 4-bit quantization methods for LLMs.",
-                "link": "/guide/qlora-implementation",
-                "type": "guide"
-            },
-            {
-                "title": "Memory Efficiency Workshop",
-                "description": "Workshop on memory-efficient techniques including quantization.",
-                "link": "/workshop/memory-efficiency",
-                "type": "workshop"
-            }
-        ],
-        "peft": [
-            {
-                "title": "Parameter-Efficient Fine-Tuning Guide",
-                "description": "Comprehensive guide to PEFT techniques for LLMs.",
-                "link": "/peft-guide",
-                "type": "guide"
-            },
-            {
-                "title": "PEFT vs Full Fine-Tuning",
-                "description": "Comparison of parameter-efficient methods with traditional fine-tuning.",
-                "link": "/peft-guide",
-                "type": "guide"
             }
         ]
-    }
 
-    # Default resources if the concept is not in our map
-    default_resources = [
-        {
-            "title": "Introduction to LLM Fine-Tuning",
-            "description": "Learn the basics of fine-tuning large language models for specific tasks.",
-            "link": "/guide/finetuning-comparison",
-            "type": "guide"
-        },
-        {
-            "title": "LoRA Basics Workshop",
-            "description": "Learn the fundamentals of Low-Rank Adaptation (LoRA) for efficient fine-tuning.",
-            "link": "/workshop/lora-basics",
-            "type": "workshop"
-        },
-        {
-            "title": "QLoRA Implementation Guide",
-            "description": "Comprehensive guide to implementing QLoRA for memory-efficient fine-tuning.",
-            "link": "/guide/qlora-implementation",
-            "type": "guide"
-        }
-    ]
-
-    return resources_map.get(concept, default_resources)
-
-def get_exercises_for_concept(concept):
-    """Get hands-on exercises for a specific concept."""
-    # This would typically come from a database, but for now we'll use a static mapping
-    exercises_map = {
-        "fine-tuning": [
-            {
-                "title": "Basic Fine-Tuning Exercise",
-                "description": "Learn how to fine-tune a small language model on a custom dataset.",
-                "link": "/guide/instruction-tuning",
-                "difficulty": "beginner"
-            },
-            {
-                "title": "Instruction Fine-Tuning",
-                "description": "Fine-tune a model to follow specific instructions.",
-                "link": "/guide/instruction-tuning",
-                "difficulty": "intermediate"
-            }
-        ],
-        "lora": [
+        default_exercises = [
             {
                 "title": "LoRA Hands-on Exercise",
                 "description": "Implement LoRA fine-tuning on a pre-trained model.",
@@ -563,73 +445,286 @@ def get_exercises_for_concept(concept):
                 "difficulty": "intermediate"
             },
             {
-                "title": "LoRA Hyperparameter Tuning",
-                "description": "Experiment with different LoRA hyperparameters to optimize performance.",
-                "link": "/guide/lora-hands-on",
+                "title": "QLoRA Implementation Exercise",
+                "description": "Implement QLoRA fine-tuning on a large language model.",
+                "link": "/guide/qlora-implementation",
                 "difficulty": "advanced"
             }
-        ],
-        "qlora": [
+        ]
+
+        return render_template(
+            'learn_and_explore.html',
+            concept=concept,
+            related_concepts=related_concepts[:10],  # Limit to 10 related concepts
+            learning_resources=default_resources,
+            exercises=default_exercises
+        )
+
+def get_learning_resources(concept):
+    """Get learning resources for a specific concept."""
+    try:
+        # This would typically come from a database, but for now we'll use a static mapping
+        resources_map = {
+            "fine-tuning": [
+                {
+                    "title": "Introduction to LLM Fine-Tuning",
+                    "description": "Learn the basics of fine-tuning large language models for specific tasks.",
+                    "link": "/guide/finetuning-comparison",
+                    "type": "guide"
+                },
+                {
+                    "title": "Fine-Tuning vs Pre-Training",
+                    "description": "Understand the differences between pre-training and fine-tuning in LLMs.",
+                    "link": "/guide/finetuning-comparison",
+                    "type": "guide"
+                },
+                {
+                    "title": "Fine-Tuning Techniques",
+                    "description": "Overview of various fine-tuning techniques.",
+                    "link": "/guide/finetuning-comparison",
+                    "type": "guide"
+                }
+            ],
+            "lora": [
+                {
+                    "title": "LoRA Implementation Guide",
+                    "description": "Step-by-step guide to implementing LoRA for LLM fine-tuning.",
+                    "link": "/guide/lora-implementation",
+                    "type": "guide"
+                },
+                {
+                    "title": "Hands-on LoRA Example",
+                    "description": "Practical example of using LoRA for fine-tuning.",
+                    "link": "/guide/lora-hands-on",
+                    "type": "exercise"
+                },
+                {
+                    "title": "LoRA Basics",
+                    "description": "Learn the fundamentals of Low-Rank Adaptation (LoRA).",
+                    "link": "/guide/lora-implementation",
+                    "type": "guide"
+                }
+            ],
+            "qlora": [
+                {
+                    "title": "QLoRA Implementation Guide",
+                    "description": "Comprehensive guide to implementing QLoRA for memory-efficient fine-tuning.",
+                    "link": "/guide/qlora-implementation",
+                    "type": "guide"
+                },
+                {
+                    "title": "Advanced QLoRA Techniques",
+                    "description": "Advanced techniques and optimizations for QLoRA fine-tuning.",
+                    "link": "/advanced-qlora",
+                    "type": "guide"
+                },
+                {
+                    "title": "QLoRA vs LoRA",
+                    "description": "Comparison between QLoRA and LoRA approaches.",
+                    "link": "/guide/qlora-implementation",
+                    "type": "guide"
+                }
+            ],
+            "quantization": [
+                {
+                    "title": "Introduction to Model Quantization",
+                    "description": "Learn the basics of quantizing large language models.",
+                    "link": "/guide/qlora-implementation",
+                    "type": "guide"
+                },
+                {
+                    "title": "4-bit Quantization Techniques",
+                    "description": "Detailed guide to 4-bit quantization methods for LLMs.",
+                    "link": "/guide/qlora-implementation",
+                    "type": "guide"
+                },
+                {
+                    "title": "Memory Efficiency Techniques",
+                    "description": "Overview of memory-efficient techniques including quantization.",
+                    "link": "/guide/qlora-implementation",
+                    "type": "guide"
+                }
+            ],
+            "peft": [
+                {
+                    "title": "Parameter-Efficient Fine-Tuning Guide",
+                    "description": "Comprehensive guide to PEFT techniques for LLMs.",
+                    "link": "/peft-guide",
+                    "type": "guide"
+                },
+                {
+                    "title": "PEFT vs Full Fine-Tuning",
+                    "description": "Comparison of parameter-efficient methods with traditional fine-tuning.",
+                    "link": "/peft-guide",
+                    "type": "guide"
+                },
+                {
+                    "title": "PEFT Methods Overview",
+                    "description": "Overview of different parameter-efficient fine-tuning methods.",
+                    "link": "/peft-guide",
+                    "type": "guide"
+                }
+            ]
+        }
+
+        # Default resources if the concept is not in our map
+        default_resources = [
+            {
+                "title": "Introduction to LLM Fine-Tuning",
+                "description": "Learn the basics of fine-tuning large language models for specific tasks.",
+                "link": "/guide/finetuning-comparison",
+                "type": "guide"
+            },
+            {
+                "title": "LoRA Implementation Guide",
+                "description": "Step-by-step guide to implementing LoRA for LLM fine-tuning.",
+                "link": "/guide/lora-implementation",
+                "type": "guide"
+            },
+            {
+                "title": "QLoRA Implementation Guide",
+                "description": "Comprehensive guide to implementing QLoRA for memory-efficient fine-tuning.",
+                "link": "/guide/qlora-implementation",
+                "type": "guide"
+            }
+        ]
+
+        return resources_map.get(concept, default_resources)
+    except Exception as e:
+        app.logger.error(f"Error in get_learning_resources: {e}")
+        # Return a safe default if there's an error
+        return [
+            {
+                "title": "Introduction to LLM Fine-Tuning",
+                "description": "Learn the basics of fine-tuning large language models for specific tasks.",
+                "link": "/guide/finetuning-comparison",
+                "type": "guide"
+            },
+            {
+                "title": "LoRA Implementation Guide",
+                "description": "Step-by-step guide to implementing LoRA for LLM fine-tuning.",
+                "link": "/guide/lora-implementation",
+                "type": "guide"
+            },
+            {
+                "title": "QLoRA Implementation Guide",
+                "description": "Comprehensive guide to implementing QLoRA for memory-efficient fine-tuning.",
+                "link": "/guide/qlora-implementation",
+                "type": "guide"
+            }
+        ]
+
+def get_exercises_for_concept(concept):
+    """Get hands-on exercises for a specific concept."""
+    try:
+        # This would typically come from a database, but for now we'll use a static mapping
+        exercises_map = {
+            "fine-tuning": [
+                {
+                    "title": "Basic Fine-Tuning Exercise",
+                    "description": "Learn how to fine-tune a small language model on a custom dataset.",
+                    "link": "/guide/instruction-tuning",
+                    "difficulty": "beginner"
+                },
+                {
+                    "title": "Instruction Fine-Tuning",
+                    "description": "Fine-tune a model to follow specific instructions.",
+                    "link": "/guide/instruction-tuning",
+                    "difficulty": "intermediate"
+                }
+            ],
+            "lora": [
+                {
+                    "title": "LoRA Hands-on Exercise",
+                    "description": "Implement LoRA fine-tuning on a pre-trained model.",
+                    "link": "/guide/lora-hands-on",
+                    "difficulty": "intermediate"
+                },
+                {
+                    "title": "LoRA Hyperparameter Tuning",
+                    "description": "Experiment with different LoRA hyperparameters to optimize performance.",
+                    "link": "/guide/lora-hands-on",
+                    "difficulty": "advanced"
+                }
+            ],
+            "qlora": [
+                {
+                    "title": "QLoRA Implementation Exercise",
+                    "description": "Implement QLoRA fine-tuning on a large language model.",
+                    "link": "/guide/qlora-implementation",
+                    "difficulty": "advanced"
+                },
+                {
+                    "title": "Memory-Efficient Fine-Tuning",
+                    "description": "Optimize memory usage during fine-tuning with QLoRA.",
+                    "link": "/guide/qlora-implementation",
+                    "difficulty": "advanced"
+                }
+            ],
+            "quantization": [
+                {
+                    "title": "4-bit Quantization Exercise",
+                    "description": "Apply 4-bit quantization to a pre-trained model.",
+                    "link": "/guide/qlora-implementation",
+                    "difficulty": "intermediate"
+                },
+                {
+                    "title": "Post-Training Quantization",
+                    "description": "Apply quantization to a model after training.",
+                    "link": "/guide/qlora-implementation",
+                    "difficulty": "intermediate"
+                }
+            ],
+            "peft": [
+                {
+                    "title": "PEFT Methods Comparison",
+                    "description": "Compare different parameter-efficient fine-tuning methods.",
+                    "link": "/peft-guide",
+                    "difficulty": "advanced"
+                },
+                {
+                    "title": "Implementing Adapter Layers",
+                    "description": "Add adapter layers to a pre-trained model for efficient fine-tuning.",
+                    "link": "/peft-guide",
+                    "difficulty": "advanced"
+                }
+            ]
+        }
+
+        # Default exercises if the concept is not in our map
+        default_exercises = [
+            {
+                "title": "LoRA Hands-on Exercise",
+                "description": "Implement LoRA fine-tuning on a pre-trained model.",
+                "link": "/guide/lora-hands-on",
+                "difficulty": "intermediate"
+            },
             {
                 "title": "QLoRA Implementation Exercise",
                 "description": "Implement QLoRA fine-tuning on a large language model.",
                 "link": "/guide/qlora-implementation",
                 "difficulty": "advanced"
-            },
-            {
-                "title": "Memory-Efficient Fine-Tuning",
-                "description": "Optimize memory usage during fine-tuning with QLoRA.",
-                "link": "/workshop/memory-efficiency",
-                "difficulty": "advanced"
             }
-        ],
-        "quantization": [
+        ]
+
+        return exercises_map.get(concept, default_exercises)
+    except Exception as e:
+        app.logger.error(f"Error in get_exercises_for_concept: {e}")
+        # Return a safe default if there's an error
+        return [
             {
-                "title": "4-bit Quantization Exercise",
-                "description": "Apply 4-bit quantization to a pre-trained model.",
-                "link": "/guide/qlora-implementation",
+                "title": "LoRA Hands-on Exercise",
+                "description": "Implement LoRA fine-tuning on a pre-trained model.",
+                "link": "/guide/lora-hands-on",
                 "difficulty": "intermediate"
             },
             {
-                "title": "Post-Training Quantization",
-                "description": "Apply quantization to a model after training.",
+                "title": "QLoRA Implementation Exercise",
+                "description": "Implement QLoRA fine-tuning on a large language model.",
                 "link": "/guide/qlora-implementation",
-                "difficulty": "intermediate"
-            }
-        ],
-        "peft": [
-            {
-                "title": "PEFT Methods Comparison",
-                "description": "Compare different parameter-efficient fine-tuning methods.",
-                "link": "/peft-guide",
-                "difficulty": "advanced"
-            },
-            {
-                "title": "Implementing Adapter Layers",
-                "description": "Add adapter layers to a pre-trained model for efficient fine-tuning.",
-                "link": "/peft-guide",
                 "difficulty": "advanced"
             }
         ]
-    }
-
-    # Default exercises if the concept is not in our map
-    default_exercises = [
-        {
-            "title": "LoRA Hands-on Exercise",
-            "description": "Implement LoRA fine-tuning on a pre-trained model.",
-            "link": "/guide/lora-hands-on",
-            "difficulty": "intermediate"
-        },
-        {
-            "title": "QLoRA Implementation Exercise",
-            "description": "Implement QLoRA fine-tuning on a large language model.",
-            "link": "/guide/qlora-implementation",
-            "difficulty": "advanced"
-        }
-    ]
-
-    return exercises_map.get(concept, default_exercises)
 
 @app.route('/advanced-qlora')
 def advanced_qlora():

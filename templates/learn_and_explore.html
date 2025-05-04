@@ -32,7 +32,7 @@
                 <div class="sidebar-header">
                     <h3><i class="bi bi-diagram-3"></i> Concept Explorer</h3>
                 </div>
-                
+
                 <div class="search-box">
                     <form id="concept-search-form" action="{{ url_for('learn_and_explore') }}" method="get">
                         <div class="input-group">
@@ -43,14 +43,14 @@
                         </div>
                     </form>
                 </div>
-                
+
                 <div class="sidebar-section">
                     <h4>Current Concept</h4>
                     <div class="current-concept">
                         <span class="concept-badge main">{{ concept | capitalize }}</span>
                     </div>
                 </div>
-                
+
                 <div class="sidebar-section">
                     <h4>Related Concepts</h4>
                     <div class="related-concepts">
@@ -61,7 +61,7 @@
                         {% endfor %}
                     </div>
                 </div>
-                
+
                 <div class="sidebar-section">
                     <h4>Popular Categories</h4>
                     <div class="category-list">
@@ -84,7 +84,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Main content area -->
         <div class="col-lg-9 content-column">
             <div class="content-container">
@@ -93,17 +93,17 @@
                     <h1>{{ concept | capitalize }}</h1>
                     <p class="lead">Explore concepts, learning resources, and hands-on exercises</p>
                 </div>
-                
+
                 <!-- Visualization section -->
                 <div class="visualization-section">
                     <div class="section-header">
                         <h2><i class="bi bi-diagram-3"></i> Concept Visualization</h2>
                         <p>Interactive visualization of related concepts and terms</p>
                     </div>
-                    
+
                     <div class="visualization-container">
                         <iframe id="visualization-iframe" src="{{ url_for('static', filename='visualizations/' + concept + '_thesaurus.html') }}" frameborder="0"></iframe>
-                        
+
                         <div class="visualization-legend">
                             <div class="legend-title">Legend</div>
                             <div class="legend-items">
@@ -121,81 +121,141 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="keyboard-hint">
                             <i class="bi bi-info-circle"></i> Use mouse wheel to zoom, click and drag to move
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Learning resources section -->
                 <div class="learning-section">
                     <div class="section-header">
                         <h2><i class="bi bi-book"></i> Learning Resources</h2>
                         <p>Comprehensive guides and tutorials for {{ concept | capitalize }}</p>
                     </div>
-                    
+
                     <div class="resources-container">
                         <div class="row">
-                            {% for resource in learning_resources %}
-                            <div class="col-md-6 mb-4">
-                                <div class="resource-card {{ resource.type }}">
-                                    <div class="resource-icon">
-                                        {% if resource.type == 'guide' %}
-                                        <i class="bi bi-journal-text"></i>
-                                        {% elif resource.type == 'workshop' %}
-                                        <i class="bi bi-people"></i>
-                                        {% elif resource.type == 'exercise' %}
-                                        <i class="bi bi-code-square"></i>
-                                        {% else %}
-                                        <i class="bi bi-file-earmark-text"></i>
-                                        {% endif %}
-                                    </div>
-                                    <div class="resource-content">
-                                        <h3 class="resource-title">{{ resource.title }}</h3>
-                                        <p class="resource-description">{{ resource.description }}</p>
-                                        <a href="{{ resource.link }}" class="resource-link">
+                            {% if learning_resources is iterable and learning_resources is not string %}
+                                {% for resource in learning_resources %}
+                                <div class="col-md-6 mb-4">
+                                    <div class="resource-card {{ resource.type }}">
+                                        <div class="resource-icon">
                                             {% if resource.type == 'guide' %}
-                                            <i class="bi bi-book"></i> Read Guide
+                                            <i class="bi bi-journal-text"></i>
                                             {% elif resource.type == 'workshop' %}
-                                            <i class="bi bi-people"></i> Join Workshop
+                                            <i class="bi bi-people"></i>
                                             {% elif resource.type == 'exercise' %}
-                                            <i class="bi bi-code-square"></i> Try Exercise
+                                            <i class="bi bi-code-square"></i>
                                             {% else %}
-                                            <i class="bi bi-arrow-right"></i> Learn More
+                                            <i class="bi bi-file-earmark-text"></i>
                                             {% endif %}
-                                        </a>
+                                        </div>
+                                        <div class="resource-content">
+                                            <h3 class="resource-title">{{ resource.title }}</h3>
+                                            <p class="resource-description">{{ resource.description }}</p>
+                                            <a href="{{ resource.link }}" class="resource-link">
+                                                {% if resource.type == 'guide' %}
+                                                <i class="bi bi-book"></i> Read Guide
+                                                {% elif resource.type == 'workshop' %}
+                                                <i class="bi bi-people"></i> Join Workshop
+                                                {% elif resource.type == 'exercise' %}
+                                                <i class="bi bi-code-square"></i> Try Exercise
+                                                {% else %}
+                                                <i class="bi bi-arrow-right"></i> Learn More
+                                                {% endif %}
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            {% endfor %}
+                                {% endfor %}
+                            {% else %}
+                                <!-- Default resources if learning_resources is not iterable -->
+                                <div class="col-md-6 mb-4">
+                                    <div class="resource-card guide">
+                                        <div class="resource-icon">
+                                            <i class="bi bi-journal-text"></i>
+                                        </div>
+                                        <div class="resource-content">
+                                            <h3 class="resource-title">Introduction to LLM Fine-Tuning</h3>
+                                            <p class="resource-description">Learn the basics of fine-tuning large language models for specific tasks.</p>
+                                            <a href="/guide/finetuning-comparison" class="resource-link">
+                                                <i class="bi bi-book"></i> Read Guide
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <div class="resource-card guide">
+                                        <div class="resource-icon">
+                                            <i class="bi bi-journal-text"></i>
+                                        </div>
+                                        <div class="resource-content">
+                                            <h3 class="resource-title">LoRA Implementation Guide</h3>
+                                            <p class="resource-description">Step-by-step guide to implementing LoRA for LLM fine-tuning.</p>
+                                            <a href="/guide/lora-implementation" class="resource-link">
+                                                <i class="bi bi-book"></i> Read Guide
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Hands-on exercises section -->
                 <div class="exercises-section">
                     <div class="section-header">
                         <h2><i class="bi bi-code-slash"></i> Hands-on Exercises</h2>
                         <p>Practice your skills with these interactive exercises</p>
                     </div>
-                    
+
                     <div class="exercises-container">
                         <div class="row">
-                            {% for exercise in exercises %}
-                            <div class="col-md-6 mb-4">
-                                <div class="exercise-card {{ exercise.difficulty }}">
-                                    <div class="difficulty-badge {{ exercise.difficulty }}">
-                                        {{ exercise.difficulty | capitalize }}
+                            {% if exercises is iterable and exercises is not string %}
+                                {% for exercise in exercises %}
+                                <div class="col-md-6 mb-4">
+                                    <div class="exercise-card {{ exercise.difficulty }}">
+                                        <div class="difficulty-badge {{ exercise.difficulty }}">
+                                            {{ exercise.difficulty | capitalize }}
+                                        </div>
+                                        <h3 class="exercise-title">{{ exercise.title }}</h3>
+                                        <p class="exercise-description">{{ exercise.description }}</p>
+                                        <a href="{{ exercise.link }}" class="exercise-link">
+                                            <i class="bi bi-code-square"></i> Start Exercise
+                                        </a>
                                     </div>
-                                    <h3 class="exercise-title">{{ exercise.title }}</h3>
-                                    <p class="exercise-description">{{ exercise.description }}</p>
-                                    <a href="{{ exercise.link }}" class="exercise-link">
-                                        <i class="bi bi-code-square"></i> Start Exercise
-                                    </a>
                                 </div>
-                            </div>
-                            {% endfor %}
+                                {% endfor %}
+                            {% else %}
+                                <!-- Default exercises if exercises is not iterable -->
+                                <div class="col-md-6 mb-4">
+                                    <div class="exercise-card intermediate">
+                                        <div class="difficulty-badge intermediate">
+                                            Intermediate
+                                        </div>
+                                        <h3 class="exercise-title">LoRA Hands-on Exercise</h3>
+                                        <p class="exercise-description">Implement LoRA fine-tuning on a pre-trained model.</p>
+                                        <a href="/guide/lora-hands-on" class="exercise-link">
+                                            <i class="bi bi-code-square"></i> Start Exercise
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <div class="exercise-card advanced">
+                                        <div class="difficulty-badge advanced">
+                                            Advanced
+                                        </div>
+                                        <h3 class="exercise-title">QLoRA Implementation Exercise</h3>
+                                        <p class="exercise-description">Implement QLoRA fine-tuning on a large language model.</p>
+                                        <a href="/guide/qlora-implementation" class="exercise-link">
+                                            <i class="bi bi-code-square"></i> Start Exercise
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -214,11 +274,11 @@
                 iframe.style.height = container.clientHeight + 'px';
             }
         }
-        
+
         // Call on load and on resize
         adjustIframeHeight();
         window.addEventListener('resize', adjustIframeHeight);
-        
+
         // Highlight current category in sidebar
         const currentConcept = '{{ concept }}';
         document.querySelectorAll('.category-item').forEach(item => {

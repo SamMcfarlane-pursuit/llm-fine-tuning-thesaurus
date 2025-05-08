@@ -188,6 +188,15 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/specific-back-button-fix.css') }}">
     <!-- Theme Fix - Ensures dark mode is purple and light mode is blue -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/theme-fix.css') }}">
+
+    <!-- Error Handler - Prevents the page from becoming unresponsive -->
+    <script src="{{ url_for('static', filename='js/error-handler.js') }}"></script>
+    <!-- Accessibility Fix - Ensures all accessibility features are working correctly -->
+    <script src="{{ url_for('static', filename='js/accessibility-fix.js') }}"></script>
+    <!-- Load Auth Buttons Fix - Ensures the direct-auth-buttons-fix.js script is loaded and executed -->
+    <script src="{{ url_for('static', filename='js/load-auth-buttons-fix.js') }}"></script>
+    <!-- Direct Auth Buttons Fix - Directly modifies the DOM to ensure the auth buttons are properly displayed -->
+    <script src="{{ url_for('static', filename='js/direct-auth-buttons-fix.js') }}"></script>
     <!-- Auth-Only Progress Bar JavaScript - Execute as early as possible -->
     <script src="{{ url_for('static', filename='js/auth-only-progress-bar.js') }}"></script>
     <!-- Emergency Blue Banner Fix JavaScript - Execute as early as possible -->

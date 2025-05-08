@@ -1,0 +1,331 @@
+/**
+ * Accessibility Enhancements CSS
+ * Improves accessibility with focus styles, ARIA support, and high contrast options
+ */
+
+/* Enhanced focus styles */
+:focus {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.3);
+    transition: outline-offset 0.1s ease;
+}
+
+/* Skip to content link */
+.skip-to-content {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--primary-color);
+    color: white;
+    padding: 8px 16px;
+    z-index: 10000;
+    transition: top 0.2s ease;
+    border-radius: 0 0 4px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.skip-to-content:focus {
+    top: 0;
+    outline: none;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Skip target styling */
+.skip-target {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 0;
+    width: 0;
+    outline: none;
+}
+
+/* ARIA landmarks styling */
+[role="banner"],
+[role="navigation"],
+[role="main"],
+[role="complementary"],
+[role="contentinfo"] {
+    position: relative;
+}
+
+/* Visually hidden elements (for screen readers) */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* Improved button focus states */
+button:focus,
+.btn:focus,
+[role="button"]:focus {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.3);
+}
+
+/* Improved link focus states */
+a:focus {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
+    text-decoration: underline;
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.3);
+}
+
+/* High contrast mode enhancements */
+@media (prefers-contrast: high) {
+    :root {
+        --primary-color: #0066cc;
+        --secondary-color: #0099ff;
+        --accent-color: #9900cc;
+        --success-color: #00cc00;
+        --warning-color: #ff9900;
+        --danger-color: #cc0000;
+        --info-color: #00ccff;
+    }
+
+    body {
+        color: #ffffff;
+        background-color: #000000;
+    }
+
+    a {
+        color: #4da6ff;
+        text-decoration: underline;
+    }
+
+    button,
+    .btn {
+        border: 2px solid currentColor;
+    }
+
+    .card {
+        border: 2px solid #ffffff;
+    }
+
+    .alert {
+        border: 2px solid currentColor;
+    }
+
+    /* Ensure all icons have sufficient contrast */
+    .bi {
+        color: inherit;
+    }
+
+    /* Ensure form controls have sufficient contrast */
+    input,
+    select,
+    textarea {
+        background-color: #000000;
+        color: #ffffff;
+        border: 2px solid #ffffff;
+    }
+
+    /* Ensure badges have sufficient contrast */
+    .badge {
+        border: 1px solid #ffffff;
+    }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Keyboard navigation indicators */
+body:not(.using-mouse) :focus {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.3);
+}
+
+/* Interactive elements keyboard focus */
+[role="button"]:focus,
+.llm-concept:focus,
+.badge[data-concept]:focus {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.3);
+    cursor: pointer;
+}
+
+/* Tutorial cards keyboard focus */
+.tutorial-card .card:focus {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 5px rgba(67, 97, 238, 0.3);
+    transform: translateY(-5px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Improved form accessibility */
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.3);
+}
+
+/* Improved dropdown accessibility */
+.dropdown-menu {
+    margin-top: 0.5rem;
+}
+
+.dropdown-item:focus {
+    outline: 3px solid var(--primary-color);
+    background-color: rgba(67, 97, 238, 0.1);
+}
+
+/* Improved modal accessibility */
+.modal-dialog {
+    outline: none;
+}
+
+.modal-content:focus {
+    outline: none;
+}
+
+/* Improved tooltip accessibility */
+.tooltip {
+    opacity: 0.95;
+}
+
+/* Improved tab accessibility */
+.nav-tabs .nav-link:focus {
+    outline: 3px solid var(--primary-color);
+    outline-offset: -3px;
+    box-shadow: none;
+}
+
+/* Improved card accessibility */
+.card:focus-within {
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.3);
+}
+
+/* Improved table accessibility */
+.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.table th {
+    background-color: rgba(67, 97, 238, 0.1);
+    font-weight: 600;
+}
+
+.table th[scope="col"] {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.table th[scope="row"] {
+    font-weight: 600;
+}
+
+/* Improved list accessibility */
+ul, ol {
+    padding-left: 2rem;
+}
+
+/* Improved image accessibility */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+img:not([alt]) {
+    outline: 3px dashed var(--danger-color);
+}
+
+/* Improved code block accessibility */
+pre, code {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+/* Improved form validation accessibility */
+.was-validated .form-control:invalid,
+.form-control.is-invalid {
+    border-color: var(--danger-color);
+    background-image: none;
+    padding-right: 0.75rem;
+}
+
+.was-validated .form-control:valid,
+.form-control.is-valid {
+    border-color: var(--success-color);
+    background-image: none;
+    padding-right: 0.75rem;
+}
+
+.invalid-feedback {
+    color: var(--danger-color);
+    font-weight: 600;
+}
+
+/* Improved progress bar accessibility */
+.progress {
+    height: 1.5rem;
+    font-size: 0.875rem;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.progress-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    color: #ffffff;
+    text-align: center;
+    white-space: nowrap;
+    background-color: var(--primary-color);
+    transition: width 0.6s ease;
+}
+
+/* Improved alert accessibility */
+.alert {
+    position: relative;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+}
+
+.alert-dismissible .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 1rem;
+    color: inherit;
+}
+
+/* Improved badge accessibility */
+.badge {
+    display: inline-block;
+    padding: 0.35em 0.65em;
+    font-size: 0.75em;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+}

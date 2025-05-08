@@ -1,0 +1,313 @@
+/**
+ * Auth Buttons Fix CSS
+ * Styled to exactly match the image with proper positioning and icons
+ * !important flags used to ensure styles are applied
+ */
+
+/* Auth buttons container */
+html body .auth-links {
+    display: flex !important;
+    align-items: center !important;
+    gap: 20px !important;
+    position: relative !important;
+    z-index: 1001 !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Theme toggle button positioning */
+html body .theme-toggle-button {
+    margin-right: 15px !important;
+    position: relative !important;
+    z-index: 1001 !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Auth buttons container */
+html body .auth-buttons-container {
+    display: flex !important;
+    align-items: center !important;
+    gap: 20px !important;
+    position: relative !important;
+    z-index: 1001 !important;
+    margin-top: 10px !important; /* Position buttons at the same height as in the image */
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Base styles for auth buttons */
+html body .auth-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 15px 30px !important;
+    border-radius: 50px !important;
+    font-weight: 500 !important;
+    font-size: 1.1rem !important;
+    letter-spacing: 0.02rem !important;
+    transition: all 0.3s ease !important;
+    text-decoration: none !important;
+    position: relative !important;
+    overflow: hidden !important;
+    border: 2px solid rgba(255, 255, 255, 0.2) !important;
+    color: #00c3ff !important;
+    min-width: 180px !important;
+    text-align: center !important;
+    cursor: pointer !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+    z-index: 1002 !important; /* Higher z-index to ensure visibility */
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+html body .auth-btn:hover {
+    color: #00c3ff !important;
+    text-decoration: none !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+html body .auth-btn i {
+    margin-right: 8px !important;
+    font-size: 1.1rem !important;
+    display: inline-block !important; /* Ensure icon is visible */
+    vertical-align: middle !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Sign In button */
+html body .sign-in-btn {
+    background-color: rgba(30, 0, 60, 0.5) !important;
+    border: 2px solid rgba(0, 195, 255, 0.3) !important;
+    color: #00c3ff !important;
+    width: 210px !important; /* Match width in image */
+    height: 60px !important; /* Match height in image */
+    box-shadow: 0 0 15px rgba(0, 195, 255, 0.2) !important;
+    position: relative !important;
+    z-index: 1002 !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+html body .sign-in-btn:hover {
+    background-color: rgba(30, 0, 60, 0.7) !important;
+    border-color: rgba(0, 195, 255, 0.5) !important;
+    box-shadow: 0 0 20px rgba(0, 195, 255, 0.3) !important;
+}
+
+/* Register button */
+html body .register-btn {
+    background-color: rgba(180, 70, 207, 0.8) !important;
+    border: 2px solid rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+    width: 210px !important; /* Match width in image */
+    height: 60px !important; /* Match height in image */
+    box-shadow: 0 0 15px rgba(180, 70, 207, 0.3) !important;
+    position: relative !important;
+    z-index: 1002 !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+html body .register-btn:hover {
+    background-color: rgba(180, 70, 207, 0.9) !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+    box-shadow: 0 0 20px rgba(180, 70, 207, 0.4) !important;
+}
+
+/* Dark mode styles - always use the dark purple background */
+html body .auth-btn {
+    box-shadow: 0 0 15px rgba(0, 195, 255, 0.2) !important;
+}
+
+html body .auth-btn:hover {
+    box-shadow: 0 0 20px rgba(0, 195, 255, 0.3) !important;
+}
+
+html body .sign-in-btn {
+    background-color: rgba(30, 0, 60, 0.5) !important;
+    border-color: rgba(0, 195, 255, 0.3) !important;
+    color: #00c3ff !important;
+}
+
+html body .sign-in-btn:hover {
+    background-color: rgba(30, 0, 60, 0.7) !important;
+    border-color: rgba(0, 195, 255, 0.5) !important;
+}
+
+html body .register-btn {
+    background-color: rgba(180, 70, 207, 0.8) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+}
+
+html body .register-btn:hover {
+    background-color: rgba(180, 70, 207, 0.9) !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Fix for button alignment */
+html body .auth-links {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+}
+
+/* Position the buttons at the top of the page as shown in the image */
+html body .top-auth-bar {
+    background-color: #2e0054 !important; /* Dark purple background */
+    padding: 10px 0 !important;
+    position: relative !important;
+    z-index: 1000 !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Position the blue circular buttons at the top as shown in the image */
+html body .quick-access-features {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+html body .feature-button {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 45px !important;
+    height: 45px !important;
+    border-radius: 50% !important;
+    background-color: #0088cc !important;
+    color: white !important;
+    text-decoration: none !important;
+    transition: all 0.3s ease !important;
+    margin-right: 5px !important; /* Add spacing between buttons */
+    box-shadow: 0 0 10px rgba(0, 136, 204, 0.3) !important; /* Add subtle glow effect */
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+html body .feature-button:hover {
+    background-color: #00a0e9 !important;
+    transform: scale(1.05) !important;
+    box-shadow: 0 0 15px rgba(0, 160, 233, 0.5) !important; /* Enhanced glow on hover */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    html body .auth-btn {
+        padding: 12px 25px !important;
+        font-size: 1rem !important;
+        min-width: 150px !important;
+        width: 180px !important;
+        height: 50px !important;
+    }
+
+    html body .sign-in-btn, html body .register-btn {
+        width: 180px !important;
+        height: 50px !important;
+    }
+}
+
+/* Fix for very small screens */
+@media (max-width: 480px) {
+    html body .auth-links {
+        flex-wrap: nowrap !important;
+    }
+    
+    html body .auth-btn {
+        padding: 10px 20px !important;
+        font-size: 0.9rem !important;
+        min-width: 120px !important;
+        width: 150px !important;
+        height: 45px !important;
+    }
+    
+    html body .sign-in-btn, html body .register-btn {
+        width: 150px !important;
+        height: 45px !important;
+    }
+    
+    html body .theme-toggle-button {
+        margin-right: 10px !important;
+    }
+}
+
+/* Override any other styles to ensure our design is applied */
+html body .auth-btn, html body .sign-in-btn, html body .register-btn {
+    text-transform: none !important;
+}
+
+html body .sign-in-btn {
+    color: #00c3ff !important;
+}
+
+html body .register-btn {
+    color: white !important;
+}
+
+/* Ensure icons are visible and properly positioned */
+html body .sign-in-btn i, html body .register-btn i {
+    display: inline-block !important;
+    margin-right: 8px !important;
+    font-size: 1.1rem !important;
+    vertical-align: middle !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Additional overrides to ensure our styles are applied */
+html body .top-auth-bar {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+html body .auth-buttons-container {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Force the buttons to be visible */
+html body .auth-btn.sign-in-btn, html body .auth-btn.register-btn {
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Fix for any potential conflicts with other styles */
+html body .top-auth-bar * {
+    box-sizing: border-box !important;
+}
+
+/* Ensure the buttons are clickable */
+html body .auth-btn.sign-in-btn, html body .auth-btn.register-btn {
+    pointer-events: auto !important;
+}
+
+/* Fix for any potential conflicts with Bootstrap */
+html body .auth-btn.sign-in-btn, html body .auth-btn.register-btn {
+    margin: 0 !important;
+    padding: 15px 30px !important;
+}
+
+/* Fix for any potential conflicts with other frameworks */
+html body .auth-btn.sign-in-btn, html body .auth-btn.register-btn {
+    float: none !important;
+    clear: none !important;
+}
+
+/* Ensure the buttons are properly positioned */
+html body .auth-buttons-container {
+    position: relative !important;
+    float: none !important;
+    clear: none !important;
+}

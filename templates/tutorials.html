@@ -3,45 +3,31 @@
 {% block title %}Interactive Tutorials - Thesaurus LLM Fine-Tuning{% endblock %}
 
 {% block head %}
-<style>
-    .category-header {
-        border-bottom: 1px solid #eee;
-        padding-bottom: 10px;
-        margin-top: 20px;
-    }
-
-    .tutorial-card .card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .tutorial-card .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    }
-
-    .badge {
-        font-size: 0.75rem;
-    }
-</style>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-tutorials.css') }}">
 {% endblock %}
 
 {% block content %}
 <div class="container-fluid mt-5">
+    <!-- Skip to content target -->
+    <a id="skip-target" class="skip-target"></a>
+
     <div class="row">
         <div class="col-12">
-            <h1 class="mb-4"><i class="bi bi-journal-code me-2"></i>Interactive LLM Fine-Tuning Tutorials</h1>
-            <p class="lead">
-                Explore our comprehensive collection of tutorials to master LLM fine-tuning techniques.
-                These interactive notebooks allow you to run code and experiments directly in your browser.
-            </p>
+            <header role="banner">
+                <h1 class="mb-4"><i class="bi bi-journal-code me-2"></i>Interactive LLM Fine-Tuning Tutorials</h1>
+                <p class="lead">
+                    Explore our comprehensive collection of tutorials to master LLM fine-tuning techniques.
+                    These interactive notebooks allow you to run code and experiments directly in your browser.
+                </p>
+            </header>
 
-            <div class="alert alert-info">
+            <div class="alert alert-info" role="region" aria-labelledby="tutorial-instructions-heading">
                 <div class="d-flex">
                     <div class="me-3">
-                        <i class="bi bi-info-circle-fill fs-3"></i>
+                        <i class="bi bi-info-circle-fill fs-3" aria-hidden="true"></i>
                     </div>
                     <div>
-                        <h5>How to Use These Tutorials</h5>
+                        <h5 id="tutorial-instructions-heading">How to Use These Tutorials</h5>
                         <p class="mb-0">
                             Click on any tutorial link below to open it in Google Colab. Make a copy to your Google Drive to save your work.
                             You'll need a Google account to use Colab. For QLoRA tutorials, Colab Pro is recommended for access to better GPUs.
@@ -52,52 +38,59 @@
         </div>
     </div>
 
+    <main id="main-content" role="main">
+
     <!-- Tutorial Categories Navigation -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="bi bi-filter-circle me-2"></i>Browse by Category</h5>
-                    <div class="d-flex flex-wrap gap-2 mt-3">
-                        <button class="btn btn-outline-primary active" data-category="all">All Tutorials</button>
-                        <button class="btn btn-outline-primary" data-category="fundamentals">Fundamentals</button>
-                        <button class="btn btn-outline-primary" data-category="techniques">Techniques</button>
-                        <button class="btn btn-outline-primary" data-category="advanced">Advanced</button>
-                        <button class="btn btn-outline-primary" data-category="applications">Applications</button>
-                        <button class="btn btn-outline-primary" data-category="deployment">Deployment</button>
+    <nav role="navigation" aria-label="Tutorial Categories">
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title" id="category-navigation-heading"><i class="bi bi-filter-circle me-2" aria-hidden="true"></i>Browse by Category</h5>
+                        <div class="d-flex flex-wrap gap-2 mt-3" role="tablist" aria-labelledby="category-navigation-heading">
+                            <button class="btn btn-outline-primary active" data-category="all" role="tab" aria-selected="true" aria-controls="all-tutorials">All Tutorials</button>
+                            <button class="btn btn-outline-primary" data-category="fundamentals" role="tab" aria-selected="false" aria-controls="fundamentals-tutorials">Fundamentals</button>
+                            <button class="btn btn-outline-primary" data-category="techniques" role="tab" aria-selected="false" aria-controls="techniques-tutorials">Techniques</button>
+                            <button class="btn btn-outline-primary" data-category="advanced" role="tab" aria-selected="false" aria-controls="advanced-tutorials">Advanced</button>
+                            <button class="btn btn-outline-primary" data-category="applications" role="tab" aria-selected="false" aria-controls="applications-tutorials">Applications</button>
+                            <button class="btn btn-outline-primary" data-category="deployment" role="tab" aria-selected="false" aria-controls="deployment-tutorials">Deployment</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </nav>
 
     <!-- Search Bar -->
     <div class="row mb-4">
         <div class="col-md-8">
-            <div class="input-group">
-                <span class="input-group-text"><i class="bi bi-search"></i></span>
-                <input type="text" class="form-control" id="tutorial-search" placeholder="Search tutorials...">
-                <button class="btn btn-primary" type="button">Search</button>
+            <div role="search" aria-label="Search tutorials">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-search" aria-hidden="true"></i></span>
+                    <label for="tutorial-search" class="visually-hidden">Search tutorials</label>
+                    <input type="text" class="form-control" id="tutorial-search" placeholder="Search tutorials..." aria-describedby="search-button">
+                    <button class="btn btn-primary" type="button" id="search-button">Search</button>
+                </div>
             </div>
         </div>
         <div class="col-md-4 d-flex justify-content-end align-items-center">
-            <button class="btn btn-outline-success" type="button" data-bs-toggle="modal" data-bs-target="#learningPathsModal">
-                <i class="bi bi-signpost-split-fill me-2"></i>Learning Paths
+            <button class="btn btn-outline-success" type="button" data-bs-toggle="modal" data-bs-target="#learningPathsModal" aria-label="View Learning Paths">
+                <i class="bi bi-signpost-split-fill me-2" aria-hidden="true"></i>Learning Paths
             </button>
         </div>
     </div>
 
     <!-- Learning Paths Modal -->
     <div class="modal fade" id="learningPathsModal" tabindex="-1" aria-labelledby="learningPathsModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title" id="learningPathsModalLabel"><i class="bi bi-signpost-split-fill me-2"></i>Learning Paths</h5>
+                    <h5 class="modal-title" id="learningPathsModalLabel"><i class="bi bi-signpost-split-fill me-2" aria-hidden="true"></i>Learning Paths</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p class="lead">Follow these curated learning paths to master LLM fine-tuning step by step.</p>
-                    <div class="row" id="learning-paths-container">
+                    <div class="row" id="learning-paths-container" role="list" aria-label="Available learning paths">
                         <!-- Learning paths will be inserted here by JavaScript -->
                     </div>
                 </div>
@@ -109,39 +102,40 @@
     </div>
 
     <!-- Key Concepts Section -->
-    <div class="row mb-4">
+    <section role="region" aria-labelledby="key-concepts-heading" class="row mb-4">
         <div class="col-12">
             <div class="card">
                 <div class="card-header bg-info text-white">
-                    <h5 class="mb-0"><i class="bi bi-lightbulb-fill me-2"></i>Key LLM Fine-Tuning Concepts</h5>
+                    <h5 class="mb-0" id="key-concepts-heading"><i class="bi bi-lightbulb-fill me-2" aria-hidden="true"></i>Key LLM Fine-Tuning Concepts</h5>
                 </div>
                 <div class="card-body">
                     <p>Click on any concept to learn more about it:</p>
-                    <div class="d-flex flex-wrap gap-2">
-                        <span class="badge bg-primary p-2 llm-concept" data-concept="llm">Large Language Model (LLM)</span>
-                        <span class="badge bg-primary p-2 llm-concept" data-concept="fine-tuning">Fine-Tuning</span>
-                        <span class="badge bg-primary p-2 llm-concept" data-concept="lora">LoRA</span>
-                        <span class="badge bg-primary p-2 llm-concept" data-concept="qlora">QLoRA</span>
-                        <a href="{{ url_for('peft_guide') }}" class="badge bg-success p-2">Parameter-Efficient Fine-Tuning (PEFT) <i class="bi bi-book ms-1"></i></a>
-                        <span class="badge bg-primary p-2 llm-concept" data-concept="gradient-checkpointing">Gradient Checkpointing</span>
-                        <span class="badge bg-primary p-2 llm-concept" data-concept="mixed-precision">Mixed Precision Training</span>
-                        <span class="badge bg-primary p-2 llm-concept" data-concept="instruction-tuning">Instruction Tuning</span>
-                        <span class="badge bg-primary p-2 llm-concept" data-concept="tokenization">Tokenization</span>
-                        <span class="badge bg-primary p-2 llm-concept" data-concept="quantization">Quantization</span>
-                        <span class="badge bg-primary p-2 llm-concept" data-concept="inference">Inference</span>
+                    <div class="d-flex flex-wrap gap-2" role="list" aria-label="Key LLM concepts">
+                        <span class="badge bg-primary p-2 llm-concept" data-concept="llm" role="button" tabindex="0" aria-label="Learn about Large Language Model (LLM)">Large Language Model (LLM)</span>
+                        <span class="badge bg-primary p-2 llm-concept" data-concept="fine-tuning" role="button" tabindex="0" aria-label="Learn about Fine-Tuning">Fine-Tuning</span>
+                        <span class="badge bg-primary p-2 llm-concept" data-concept="lora" role="button" tabindex="0" aria-label="Learn about LoRA">LoRA</span>
+                        <span class="badge bg-primary p-2 llm-concept" data-concept="qlora" role="button" tabindex="0" aria-label="Learn about QLoRA">QLoRA</span>
+                        <a href="{{ url_for('peft_guide') }}" class="badge bg-success p-2" aria-label="View guide on Parameter-Efficient Fine-Tuning (PEFT)">Parameter-Efficient Fine-Tuning (PEFT) <i class="bi bi-book ms-1" aria-hidden="true"></i></a>
+                        <span class="badge bg-primary p-2 llm-concept" data-concept="gradient-checkpointing" role="button" tabindex="0" aria-label="Learn about Gradient Checkpointing">Gradient Checkpointing</span>
+                        <span class="badge bg-primary p-2 llm-concept" data-concept="mixed-precision" role="button" tabindex="0" aria-label="Learn about Mixed Precision Training">Mixed Precision Training</span>
+                        <span class="badge bg-primary p-2 llm-concept" data-concept="instruction-tuning" role="button" tabindex="0" aria-label="Learn about Instruction Tuning">Instruction Tuning</span>
+                        <span class="badge bg-primary p-2 llm-concept" data-concept="tokenization" role="button" tabindex="0" aria-label="Learn about Tokenization">Tokenization</span>
+                        <span class="badge bg-primary p-2 llm-concept" data-concept="quantization" role="button" tabindex="0" aria-label="Learn about Quantization">Quantization</span>
+                        <span class="badge bg-primary p-2 llm-concept" data-concept="inference" role="button" tabindex="0" aria-label="Learn about Inference">Inference</span>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
     <!-- Tutorial Cards Container -->
-    <div class="row mt-4" id="tutorial-cards-container">
+    <div class="row mt-4" id="tutorial-cards-container" role="tabpanel" aria-label="Tutorial cards">
         <!-- Fundamentals Category -->
         <div class="col-12 mb-4 category-header" id="fundamentals-header">
-            <h3><i class="bi bi-book me-2"></i>Fundamentals</h3>
+            <h3 id="fundamentals-heading"><i class="bi bi-book me-2" aria-hidden="true"></i>Fundamentals</h3>
             <p>Master the basics of LLM fine-tuning with these introductory tutorials</p>
         </div>
+        <div role="region" aria-labelledby="fundamentals-heading" id="fundamentals-tutorials">
 
         <!-- Data Preparation Tutorial -->
         <div class="col-md-6 col-lg-4 mb-4 tutorial-card" data-category="fundamentals">
@@ -207,11 +201,14 @@
             </div>
         </div>
 
+        </div> <!-- End of fundamentals section -->
+
         <!-- Techniques Category -->
         <div class="col-12 mb-4 category-header" id="techniques-header">
-            <h3><i class="bi bi-diagram-3 me-2"></i>Fine-Tuning Techniques</h3>
+            <h3 id="techniques-heading"><i class="bi bi-diagram-3 me-2" aria-hidden="true"></i>Fine-Tuning Techniques</h3>
             <p>Learn different approaches to fine-tune language models efficiently</p>
         </div>
+        <div role="region" aria-labelledby="techniques-heading" id="techniques-tutorials">
 
         <!-- Tuning Approaches Comparison -->
         <div class="col-md-6 col-lg-4 mb-4 tutorial-card" data-category="techniques">
@@ -301,11 +298,14 @@
             </div>
         </div>
 
+        </div> <!-- End of techniques section -->
+
         <!-- Advanced Category -->
         <div class="col-12 mb-4 category-header" id="advanced-header">
-            <h3><i class="bi bi-lightning-charge me-2"></i>Advanced Techniques</h3>
+            <h3 id="advanced-heading"><i class="bi bi-lightning-charge me-2" aria-hidden="true"></i>Advanced Techniques</h3>
             <p>Master cutting-edge methods for fine-tuning large language models</p>
         </div>
+        <div role="region" aria-labelledby="advanced-heading" id="advanced-tutorials">
 
         <!-- PEFT Tutorial -->
         <div class="col-md-6 col-lg-4 mb-4 tutorial-card" data-category="techniques">
@@ -385,11 +385,14 @@
             </div>
         </div>
 
+        </div> <!-- End of advanced section -->
+
         <!-- Applications Category -->
         <div class="col-12 mb-4 category-header" id="applications-header">
-            <h3><i class="bi bi-gear me-2"></i>Applications & Deployment</h3>
+            <h3 id="applications-heading"><i class="bi bi-gear me-2" aria-hidden="true"></i>Applications & Deployment</h3>
             <p>Learn how to use fine-tuned models in real-world applications</p>
         </div>
+        <div role="region" aria-labelledby="applications-heading" id="applications-tutorials">
 
         <!-- Model Deployment Tutorial -->
         <div class="col-md-6 col-lg-4 mb-4 tutorial-card" data-category="applications">
@@ -566,16 +569,29 @@
 
     </div>
 
+        </div> <!-- End of applications section -->
+
     <!-- External Resources Section -->
-    <div class="row mt-5">
+    <section class="row mt-5">
         <div class="col-12">
-            <h2 class="mb-4"><i class="bi bi-globe me-2"></i>External Resources</h2>
+            <h2 class="mb-4" id="external-resources-heading"><i class="bi bi-globe me-2" aria-hidden="true"></i>External Resources</h2>
             <p class="lead">Explore these external resources to deepen your understanding of LLM fine-tuning.</p>
-            <div id="external-resources-container">
+            <div id="external-resources-container" role="complementary" aria-labelledby="external-resources-heading">
                 <!-- External resources will be inserted here by JavaScript -->
             </div>
         </div>
-    </div>
+    </section>
+    </main>
+
+    <footer role="contentinfo" class="mt-5 pt-4 border-top">
+        <div class="row">
+            <div class="col-12 text-center">
+                <p class="text-muted">
+                    <small>Visual Thesaurus LLM Fine-Tuning - A comprehensive resource for learning LLM fine-tuning techniques</small>
+                </p>
+            </div>
+        </div>
+    </footer>
 </div>
 {% endblock %}
 

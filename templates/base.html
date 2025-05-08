@@ -7,7 +7,7 @@
     {% if csrf_token %}
     <meta name="csrf-token" content="{{ csrf_token() }}">
     {% endif %}
-    <title>{% block title %}Visual Thesaurus LLM{% endblock %}</title>
+    <title>{% block title %}Visual LLM{% endblock %}</title>
     <!-- Google Fonts - Roboto -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,16 +25,179 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-navigation.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/improved-section-indicator.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/ai-assistant.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/voice-assistant.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/clean-sidebar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/lora-guide.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/improved-sidebar.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/image-styles.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/razor-sharp-images.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/razor-sharp-images-enhanced.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-code-blocks.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-readability.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/font-preloader.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom-scrollbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/page-transitions.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/print-styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/theme-toggle.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-theme-toggle.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/accessibility-enhancements.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/condensed-map-visualization.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/home-features.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/progress-indicator.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/feature-buttons.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/integrated-learning.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/navigation-buttons.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-code-readability.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/improved-theme-toggle.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ultra-readable-code.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ultra-high-contrast-code.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/how-to-use-site.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-contrast.css') }}">
+    <!-- Enhanced Image Visibility -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-image-visibility.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/image-modal.css') }}">
+    <!-- High Contrast Code Blocks -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/high-contrast-code-blocks.css') }}">
+    <!-- Enhanced Code Readability v2 - Significantly improved code block readability -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-code-readability-v2.css') }}">
+    <!-- Fine-Tuning Comparison Page -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fine-tuning-comparison.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fine-tuning-comparison-tables.css') }}">
+    <!-- Ultra Visibility -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ultra-visibility.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-table-visibility.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/contrast-toggle.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/high-contrast-mode.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pros-cons-fix.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/remove-sidebar-simplify-toggle.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/blue-background-fix.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/blue-banner-text-fix.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/specific-blue-banner-fix.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/extreme-blue-banner-fix.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-headings-visibility.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth-bar-theme-toggle.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-text-visibility.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-workshop-visibility.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/workshop-text-visibility.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/text-visibility-fix.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-visual-style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-visual-clarity.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-navigation-clarity.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-feature-buttons.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-guide-section.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-card-sections.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-auth-buttons.css') }}">
+    <!-- Enhanced Button Visibility - Improves button readability and visibility -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-button-visibility.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-theme-toggle-v2.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-dark-text-visibility.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-image-text-visibility.css') }}">
+    <!-- Auth Buttons Fix - Ensures the Sign In and Register buttons are properly aligned and styled -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth-buttons-fix.css') }}">
+    <!-- Standardized Accessibility CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/standardized-accessibility.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/wcag-color-contrast.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-accessibility.css') }}">
+    <!-- Enhanced Visibility Fixes -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-heading-visibility-fix.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navigation-visibility-fix.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/learn-explore-visibility-fix.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fine-tuning-comparison-visibility-fix.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/getting-started-visibility-fix.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/numbered-list-visibility-fix.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/image-numbered-list-fix.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/direct-text-fix.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/extreme-visibility-fix.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ultra-specific-fix.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-logo.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/improved-navigation-categories.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/compact-navbar-brand.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/improved-accessibility-controls.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/visual-thesaurus-diagram.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-llm-diagram.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/robust-diagram-display.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/vibrant-background.css') }}">
+    <!-- Global Vibrant Theme -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/vibrant-global-theme.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/visual-thesaurus-search-enhancement.css') }}">
+    <!-- Coherent UX Enhancement -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/coherent-ux-enhancement.css') }}">
+    <!-- Enhanced Text Visibility Fix -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-text-visibility-fix.css') }}">
+    <!-- Text Readability Enhancement - Comprehensive text readability improvements -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/text-readability.css') }}">
+    <!-- Purple Text Dark Mode - Adds vibrant purple text in dark mode for enhanced UI -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/purple-text-dark-mode.css') }}">
+    <!-- Purple UI Dark Mode - Adds vibrant purple UI elements in dark mode -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/purple-ui-dark-mode.css') }}">
+    <!-- Purple Background Dark Mode - Adds vibrant purple background effects in dark mode -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/purple-background-dark-mode.css') }}">
+    <!-- White Text Light Mode - Changes text to white in light mode -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/white-text-light-mode.css') }}">
+    <!-- Vibrant Light Mode Background - Adds vibrant background effects to light mode -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/vibrant-light-mode-background.css') }}">
+    <!-- Enhanced Section Headers - Improves visibility of section headers with optimal contrast -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-section-headers.css') }}">
+    <!-- Learn & Explore Header Fix - Specific fix for the "Learn & Explore LLM Fine-Tuning" header -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/learn-explore-header-fix.css') }}">
+    <!-- Ultra Vibrant Text - Makes text brighter and more vibrant in both modes -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ultra-vibrant-text.css') }}">
+    <!-- Maximum Brightness Learn & Explore Header - Makes the header extremely bright -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/max-brightness-learn-explore-header.css') }}">
+    <!-- Auth-Only Progress Bar - Hides progress bars for non-authenticated users -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth-only-progress-bar.css') }}">
+    <!-- Revised Guide Text - Ensures text in guide cards is clearly visible in both light and dark modes -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/revised-guide-text.css') }}">
+    <!-- Image Cards Fix - Directly targets the exact cards shown in the image with maximum visibility -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/image-cards-fix.css') }}">
+    <!-- Final Visibility Fix - Ensures maximum visibility for text in both light and dark modes -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/final-visibility-fix.css') }}">
+    <!-- Navigation Categories Fix -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navigation-categories-fix.css') }}">
+    <!-- Navigation Dropdown Fix -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nav-dropdown-fix.css') }}">
+    <!-- Guides Dropdown Fix -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/guides-dropdown-fix.css') }}">
+    <!-- Futuristic Header -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/futuristic-header.css') }}">
+    <!-- Enhanced Header Visibility -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-header-visibility.css') }}">
+    <!-- Enhanced Concept Map -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-concept-map.css') }}">
+    <!-- Enhanced Visual LLM -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-visual-llm.css') }}">
+    <!-- Visual LLM Logo Fix -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/visual-llm-logo-fix.css') }}">
+    <!-- Enhanced AI Assistant -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-ai-assistant.css') }}">
+    <!-- Accessibility Fixes -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/accessibility-fixes.css') }}">
+    <!-- Critical Blue Banner Fix - Must be last to override all other styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/critical-blue-banner-fix.css') }}">
+    <!-- Emergency Blue Banner Fix - Absolute last resort -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/emergency-blue-banner-fix.css') }}">
+    <!-- Absolute Banner Visibility Fix - Final override for maximum visibility -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/absolute-banner-visibility-fix.css') }}">
+    <!-- Direct Banner Fix - Specifically targets the blue banners in the images -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/direct-banner-fix.css') }}">
+    <!-- Back Button Visibility Fix - Specifically targets back buttons with blue background -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/back-button-visibility-fix.css') }}">
+    <!-- Specific Back Button Fix - Directly targets the specific back button in the image -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/specific-back-button-fix.css') }}">
+    <!-- Auth-Only Progress Bar JavaScript - Execute as early as possible -->
+    <script src="{{ url_for('static', filename='js/auth-only-progress-bar.js') }}"></script>
+    <!-- Emergency Blue Banner Fix JavaScript - Execute as early as possible -->
+    <script src="{{ url_for('static', filename='js/emergency-blue-banner-fix.js') }}"></script>
+    <!-- Absolute Banner Visibility Fix JavaScript - Final solution -->
+    <script src="{{ url_for('static', filename='js/absolute-banner-visibility-fix.js') }}"></script>
+    <!-- Replace Blue Banners JavaScript - Complete replacement solution -->
+    <script src="{{ url_for('static', filename='js/replace-blue-banners.js') }}"></script>
+    <!-- Direct Banner Replacement JavaScript - Targeted replacement solution -->
+    <script src="{{ url_for('static', filename='js/direct-banner-replacement.js') }}"></script>
+    <!-- Back Button Visibility Fix JavaScript - Specifically targets back buttons with blue background -->
+    <script src="{{ url_for('static', filename='js/back-button-visibility-fix.js') }}"></script>
+    <!-- Specific Back Button Fix JavaScript - Directly targets the specific back button in the image -->
+    <script src="{{ url_for('static', filename='js/specific-back-button-fix.js') }}"></script>
     <!-- Libraries -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vis-network@9.1.2/dist/vis-network.min.js"></script>
@@ -43,7 +206,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     {% block head %}{% endblock %}
 </head>
-<body data-topic-id="{{ topic_id|default('') }}" data-module-id="{{ module_id|default('') }}" data-user-logged-in="{{ current_user.is_authenticated|string|lower }}">
+<body class="{% block body_class %}{% endblock %}" data-topic-id="{{ topic_id|default('') }}" data-module-id="{{ module_id|default('') }}" data-user-logged-in="{{ current_user.is_authenticated|string|lower }}">
     <!-- Skip to content link for accessibility -->
     <a href="#main-content" class="skip-to-content">Skip to content</a>
 
@@ -53,26 +216,33 @@
             <div class="d-flex justify-content-between align-items-center">
                 <!-- Quick Access Feature Buttons -->
                 <div class="quick-access-features">
-                    <a href="{{ url_for('thesaurus') }}" class="feature-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Interactive Concept Maps">
+                    <a href="{{ url_for('thesaurus') }}" class="feature-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Interactive Concept Maps" data-label="Thesaurus">
                         <i class="bi bi-diagram-3"></i>
                     </a>
-                    <a href="{{ url_for('exercises') }}" class="feature-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Hands-on Exercises">
+                    <a href="{{ url_for('exercises') }}" class="feature-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Hands-on Exercises" data-label="Exercises">
                         <i class="bi bi-code-square"></i>
                     </a>
-                    <a href="{{ url_for('learn') }}" class="feature-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Learning Resources">
+                    <a href="{{ url_for('learn') }}" class="feature-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Learning Resources" data-label="Learn">
                         <i class="bi bi-book"></i>
                     </a>
-                    <a href="{{ url_for('quiz.quiz_list') }}" class="feature-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Knowledge Quizzes">
+                    <a href="{{ url_for('quiz.quiz_list') }}" class="feature-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Knowledge Quizzes" data-label="Quizzes">
                         <i class="bi bi-journal-check"></i>
                         {% if current_user.is_authenticated %}
                         <span class="badge-dot"></span>
                         {% endif %}
                     </a>
+                    <div class="how-to-use-site">
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#howToUseModal" class="how-to-use-link">
+                            <i class="bi bi-info-circle"></i> HOW TO USE THIS SITE
+                        </a>
+                    </div>
                 </div>
 
                 <!-- Auth Links -->
                 <div class="auth-links">
                     {% if current_user.is_authenticated %}
+                    <!-- Enhanced Theme Toggle Button -->
+                    <button id="themeToggleButton" class="theme-toggle-button" aria-label="Toggle dark/light mode"></button>
                     <div class="user-info me-3">
                         <i class="bi bi-person-circle me-1"></i> Welcome, {{ current_user.username }}
                     </div>
@@ -83,12 +253,16 @@
                         <i class="bi bi-box-arrow-right me-1"></i> Sign Out
                     </a>
                     {% else %}
-                    <a href="{{ url_for('auth.login') }}" class="top-auth-link me-3">
-                        <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
-                    </a>
-                    <a href="{{ url_for('auth.register') }}" class="top-auth-link register-link">
-                        <i class="bi bi-person-plus me-1"></i> Register
-                    </a>
+                    <!-- Enhanced Theme Toggle Button -->
+                    <button id="themeToggleButton" class="theme-toggle-button" aria-label="Toggle dark/light mode"></button>
+                    <div class="auth-buttons-container">
+                        <a href="{{ url_for('auth.login') }}" class="auth-btn sign-in-btn">
+                            <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
+                        </a>
+                        <a href="{{ url_for('auth.register') }}" class="auth-btn register-btn">
+                            <i class="bi bi-person-plus me-1"></i> Register
+                        </a>
+                    </div>
                     {% endif %}
                 </div>
             </div>
@@ -96,11 +270,16 @@
     </div>
 
     <header class="main-header">
+        <!-- Digital particles animation overlay -->
+        <div class="digital-particles"></div>
+
         <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container">
-                <a class="navbar-brand" href="/">
+                <a class="navbar-brand enhanced-logo" href="/">
                     <span class="brand-icon"><i class="bi bi-diagram-3"></i></span>
-                    <span class="brand-text">Visual Thesaurus LLM</span>
+                    <span class="brand-text">Visual LLM</span>
+                    <!-- Holographic glow effect -->
+                    <div class="holographic-glow"></div>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -127,6 +306,7 @@
                                         <h6 class="dropdown-header">Popular Concepts</h6>
                                         <li><a class="dropdown-item" href="/learn-and-explore?concept=fine-tuning"><i class="bi bi-hash me-2"></i>Fine-Tuning</a></li>
                                         <li><a class="dropdown-item" href="/learn-and-explore?concept=lora"><i class="bi bi-hash me-2"></i>LoRA</a></li>
+                                        <li><a class="dropdown-item" href="/guide/lora-implementation"><i class="bi bi-book me-2"></i>LoRA Implementation</a></li>
                                         <li><a class="dropdown-item" href="/learn-and-explore?concept=qlora"><i class="bi bi-hash me-2"></i>QLoRA</a></li>
                                         <li><a class="dropdown-item" href="/learn-and-explore?concept=quantization"><i class="bi bi-hash me-2"></i>Quantization</a></li>
                                         <li><a class="dropdown-item" href="/learn-and-explore?concept=peft"><i class="bi bi-hash me-2"></i>PEFT</a></li>
@@ -136,15 +316,19 @@
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="/workshops" id="workshopsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-tools nav-icon"></i> Workshops
+                                <i class="bi bi-wrench-adjustable nav-icon"></i> Workshops
                             </a>
                             <ul class="dropdown-menu mega-menu" aria-labelledby="workshopsDropdown">
                                 <div class="row">
-                                    <div class="col-12">
+                                    <div class="col-md-6">
+                                        <h6 class="dropdown-header">Workshop Resources</h6>
                                         <li><a class="dropdown-item" href="/workshops"><i class="bi bi-collection me-2"></i>All Workshops</a></li>
                                         <li><a class="dropdown-item" href="/workshop-steps"><i class="bi bi-diagram-3 me-2"></i>Workshop Steps</a></li>
+                                        <li><a class="dropdown-item" href="/workshop-exercises"><i class="bi bi-code-square me-2"></i>Workshop Exercises</a></li>
                                         <li><a class="dropdown-item" href="/workshop-progress"><i class="bi bi-bar-chart-line me-2"></i>Track My Progress</a></li>
-                                        <li><hr class="dropdown-divider"></li>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="dropdown-header">Featured Workshops</h6>
                                         <li><a class="dropdown-item" href="/workshop/lora-basics"><i class="bi bi-1-circle me-2"></i>LoRA Basics</a></li>
                                         <li><a class="dropdown-item" href="/workshop/qlora-deep-dive"><i class="bi bi-2-circle me-2"></i>QLoRA Deep Dive</a></li>
                                         <li><a class="dropdown-item" href="/workshop/advanced-peft"><i class="bi bi-3-circle me-2"></i>Advanced PEFT</a></li>
@@ -164,10 +348,15 @@
                                         <li><a class="dropdown-item" href="/qlora-guide"><i class="bi bi-cpu me-2"></i>QLoRA Fine-Tuning</a></li>
                                         <li><a class="dropdown-item" href="/docker-guide"><i class="bi bi-box-seam me-2"></i>Docker for LLM Fine-Tuning</a></li>
                                         <li><a class="dropdown-item" href="/huggingface-guide"><i class="bi bi-hdd-network me-2"></i>Hugging Face Integration</a></li>
+                                        <li><a class="dropdown-item" href="/langchain-guide"><i class="bi bi-link-45deg me-2"></i>LangChain Integration</a></li>
+                                        <li><a class="dropdown-item" href="/langgraph-guide"><i class="bi bi-diagram-3 me-2"></i>LangGraph Integration</a></li>
                                     </div>
                                     <div class="col-md-6">
                                         <h6 class="dropdown-header">Advanced Topics</h6>
                                         <li><a class="dropdown-item" href="/guide/lora-implementation"><i class="bi bi-diagram-3 me-2"></i>LoRA Implementation</a></li>
+                                        <li><a class="dropdown-item" href="/guide/lora-hands-on"><i class="bi bi-code-slash me-2"></i>LoRA Hands-on Exercise</a></li>
+                                        <li><a class="dropdown-item" href="/guide/qlora-implementation"><i class="bi bi-cpu me-2"></i>QLoRA Implementation</a></li>
+                                        <li><a class="dropdown-item" href="/guide/qlora-hands-on"><i class="bi bi-code-slash me-2"></i>QLoRA Hands-on Exercise</a></li>
                                         <li><a class="dropdown-item" href="/guide/instruction-tuning"><i class="bi bi-chat-square-text me-2"></i>Instruction Tuning</a></li>
                                         <li><a class="dropdown-item" href="/guide/understanding-gpt"><i class="bi bi-braces me-2"></i>Understanding GPT</a></li>
                                         <li><a class="dropdown-item" href="/guide/finetuning-comparison"><i class="bi bi-bar-chart-steps me-2"></i>Fine-Tuning Methods</a></li>
@@ -232,12 +421,20 @@
         {% block content %}{% endblock %}
     </main>
 
+    <!-- Include the How to Use This Site modal -->
+    {% include 'components/how_to_use_modal.html' %}
+
+
+
+
+
+
     <footer class="bg-dark text-white py-4">
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
-                    <h5>Visual Thesaurus LLM</h5>
-                    <p>A project demonstrating LLM fine-tuning for thesaurus applications</p>
+                    <h5>Visual LLM</h5>
+                    <p>A project demonstrating LLM fine-tuning with interactive visualizations</p>
                 </div>
                 <div class="col-md-4 text-center">
                     <h5>Resources</h5>
@@ -255,12 +452,24 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/robust-diagram-utils.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/svg-diagram-fixer.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/blue-banner-text-fixer.js') }}"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script src="{{ url_for('static', filename='js/tech-ui.js') }}"></script>
     <script src="{{ url_for('static', filename='js/image-handler.js') }}"></script>
     <script src="{{ url_for('static', filename='js/image-error-handler.js') }}"></script>
     <script src="{{ url_for('static', filename='js/razor-sharp-images.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/razor-sharp-images-enhanced.js') }}</script>
+    <script src="{{ url_for('static', filename='js/razor-sharp-images-enhanced.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/enhanced-image-quality.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/font-loader.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/page-transitions.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/theme-toggle.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/enhanced-theme-toggle.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/improved-theme-toggle.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/enhanced-theme-toggle-v2.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/enhanced-concept-map.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/condensed-map-visualization.js') }}</script>
     <script src="{{ url_for('static', filename='js/code-blocks.js') }}"></script>
     <script src="{{ url_for('static', filename='js/analytics-tracking.js') }}"></script>
     <script src="{{ url_for('static', filename='js/interactive-feature-buttons.js') }}"></script>
@@ -272,6 +481,7 @@
     <script src="{{ url_for('static', filename='js/help-button.js') }}"></script>
     <script src="{{ url_for('static', filename='js/enhanced-navigation.js') }}"></script>
     <script src="{{ url_for('static', filename='js/ai-assistant.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/voice-assistant.js') }}"></script>
     <script src="{{ url_for('static', filename='js/clean-sidebar.js') }}"></script>
     <script src="{{ url_for('static', filename='js/improved-sidebar.js') }}"></script>
     <script src="{{ url_for('static', filename='js/image-handler-fixed.js') }}"></script>
@@ -280,6 +490,39 @@
     <script src="{{ url_for('static', filename='js/workshop-enhancements.js') }}"></script>
     <script src="{{ url_for('static', filename='js/workshop-steps-enhanced.js') }}"></script>
     <script src="{{ url_for('static', filename='js/enhanced-current-section.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/how-to-use-guide.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/image-enhancer.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/fine-tuning-comparison-enhancer.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/table-visibility-enhancer.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/contrast-toggle.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/pros-cons-text-fix.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/enhanced-ux-animations.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/improved-accessibility-controls.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/visual-thesaurus-diagram.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/enhanced-llm-diagram.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/coherent-ux-enhancement.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/futuristic-header-effects.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/dropdown-fix.js') }}"></script>
+    <!-- Purple Text Enhancer - Adds subtle animations to purple text in dark mode -->
+    <script src="{{ url_for('static', filename='js/purple-text-enhancer.js') }}"></script>
+    <!-- White Text Enhancer - Adds subtle animations to white text in light mode -->
+    <script src="{{ url_for('static', filename='js/white-text-enhancer.js') }}"></script>
+    <!-- Section Header Enhancer - Improves visibility of section headers with optimal contrast -->
+    <script src="{{ url_for('static', filename='js/section-header-enhancer.js') }}"></script>
+    <!-- Learn & Explore Header Fix - Direct DOM manipulation for the specific header -->
+    <script src="{{ url_for('static', filename='js/learn-explore-header-fix.js') }}"></script>
+    <!-- Ultra Vibrant Text Enhancer - Makes text brighter and more vibrant in both modes -->
+    <script src="{{ url_for('static', filename='js/ultra-vibrant-text-enhancer.js') }}"></script>
+    <!-- Maximum Brightness Enhancer - Applies maximum brightness effects to specific elements -->
+    <script src="{{ url_for('static', filename='js/max-brightness-enhancer.js') }}"></script>
+    <!-- Revised Guide Text - Ensures text in guide cards is clearly visible in both light and dark modes -->
+    <script src="{{ url_for('static', filename='js/revised-guide-text.js') }}"></script>
+    <!-- Image Cards Fix - Directly targets the exact cards shown in the image with inline styles -->
+    <script src="{{ url_for('static', filename='js/image-cards-fix.js') }}"></script>
+    <!-- Auth Buttons Fix - Ensures the Sign In and Register buttons are properly aligned and styled -->
+    <script src="{{ url_for('static', filename='js/auth-buttons-fix.js') }}"></script>
+    <!-- Direct Auth Buttons Fix - Last resort fix for the auth buttons -->
+    <script src="{{ url_for('static', filename='js/direct-auth-buttons-fix.js') }}"></script>
     {% if current_user.is_authenticated %}
     <script src="{{ url_for('static', filename='js/pop_quiz.js') }}"></script>
     {% endif %}

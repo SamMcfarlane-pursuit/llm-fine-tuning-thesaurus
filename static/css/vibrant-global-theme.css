@@ -5,7 +5,7 @@
 
 /* Color Variables */
 :root {
-    /* Vibrant background colors */
+    /* Vibrant background colors - Dark Mode (Purple) */
     --vibrant-bg-primary: #1a0033;  /* Deep purple background */
     --vibrant-bg-secondary: #2d0052; /* Medium purple background */
     --vibrant-bg-gradient: linear-gradient(135deg, var(--vibrant-bg-primary), var(--vibrant-bg-secondary));
@@ -284,27 +284,27 @@ body::after {
     }
 }
 
-/* Light theme overrides */
+/* Light theme overrides - Blue Theme */
 body.light-theme {
-    --vibrant-bg-primary: #f3e5f5;  /* Light purple background */
-    --vibrant-bg-secondary: #e1bee7; /* Medium light purple background */
-    --vibrant-text-primary: #4a148c;     /* Deep purple for maximum contrast */
-    --vibrant-text-secondary: #6a1b9a;   /* Medium purple for secondary text */
+    --vibrant-bg-primary: #e3f2fd;  /* Light blue background */
+    --vibrant-bg-secondary: #bbdefb; /* Medium light blue background */
+    --vibrant-text-primary: #0d47a1;     /* Deep blue for maximum contrast */
+    --vibrant-text-secondary: #1565c0;   /* Medium blue for secondary text */
 }
 
 body.light-theme::before {
     background-image:
-        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C27B0' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231565C0' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
 
 body.light-theme .card {
-    background: linear-gradient(135deg, rgba(243, 229, 245, 0.95), rgba(225, 190, 231, 0.95));
-    border: 2px solid rgba(156, 39, 176, 0.2);
+    background: linear-gradient(135deg, rgba(227, 242, 253, 0.95), rgba(187, 222, 251, 0.95));
+    border: 2px solid rgba(21, 101, 192, 0.2);
 }
 
 body.light-theme .card-header {
-    background: linear-gradient(135deg, rgba(233, 219, 235, 0.95), rgba(215, 180, 221, 0.95));
-    border-bottom: 1px solid rgba(156, 39, 176, 0.2);
+    background: linear-gradient(135deg, rgba(207, 232, 253, 0.95), rgba(157, 202, 251, 0.95));
+    border-bottom: 1px solid rgba(21, 101, 192, 0.2);
 }
 
 body.light-theme .card-header h1,
@@ -318,8 +318,8 @@ body.light-theme .card-header h6 {
 }
 
 body.light-theme .navbar {
-    background: linear-gradient(135deg, rgba(233, 219, 235, 0.95), rgba(215, 180, 221, 0.95)) !important;
-    border-bottom: 1px solid rgba(156, 39, 176, 0.2);
+    background: linear-gradient(135deg, rgba(207, 232, 253, 0.95), rgba(157, 202, 251, 0.95)) !important;
+    border-bottom: 1px solid rgba(21, 101, 192, 0.2);
 }
 
 body.light-theme .navbar-brand,
@@ -329,8 +329,8 @@ body.light-theme .nav-link {
 }
 
 body.light-theme .dropdown-menu {
-    background: linear-gradient(135deg, rgba(243, 229, 245, 0.95), rgba(225, 190, 231, 0.95));
-    border: 1px solid rgba(156, 39, 176, 0.2);
+    background: linear-gradient(135deg, rgba(227, 242, 253, 0.95), rgba(187, 222, 251, 0.95));
+    border: 1px solid rgba(21, 101, 192, 0.2);
 }
 
 body.light-theme .dropdown-item {

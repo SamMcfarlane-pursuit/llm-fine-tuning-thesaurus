@@ -91,6 +91,9 @@ html body .sign-in-btn {
     z-index: 1002 !important;
     visibility: visible !important;
     opacity: 1 !important;
+    border-radius: 50px !important;
+    font-size: 1.2rem !important;
+    font-weight: 500 !important;
 }
 
 html body .sign-in-btn:hover {
@@ -111,6 +114,9 @@ html body .register-btn {
     z-index: 1002 !important;
     visibility: visible !important;
     opacity: 1 !important;
+    border-radius: 50px !important;
+    font-size: 1.2rem !important;
+    font-weight: 500 !important;
 }
 
 html body .register-btn:hover {
@@ -159,7 +165,7 @@ html body .auth-links {
 
 /* Position the buttons at the top of the page as shown in the image */
 html body .top-auth-bar {
-    background-color: #2e0054 !important; /* Dark purple background */
+    background-color: #2e0054 !important; /* Dark purple background - matches the image */
     padding: 10px 0 !important;
     position: relative !important;
     z-index: 1000 !important;
@@ -184,7 +190,7 @@ html body .feature-button {
     width: 45px !important;
     height: 45px !important;
     border-radius: 50% !important;
-    background-color: #0088cc !important;
+    background-color: #0088cc !important; /* Blue color matching the image */
     color: white !important;
     text-decoration: none !important;
     transition: all 0.3s ease !important;
@@ -221,7 +227,7 @@ html body .feature-button:hover {
     html body .auth-links {
         flex-wrap: nowrap !important;
     }
-    
+
     html body .auth-btn {
         padding: 10px 20px !important;
         font-size: 0.9rem !important;
@@ -229,12 +235,12 @@ html body .feature-button:hover {
         width: 150px !important;
         height: 45px !important;
     }
-    
+
     html body .sign-in-btn, html body .register-btn {
         width: 150px !important;
         height: 45px !important;
     }
-    
+
     html body .theme-toggle-button {
         margin-right: 10px !important;
     }

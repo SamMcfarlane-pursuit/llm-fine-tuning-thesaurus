@@ -94,6 +94,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-image-text-visibility.css') }}">
     <!-- Auth Buttons Fix - Ensures the Sign In and Register buttons are properly aligned and styled -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/auth-buttons-fix.css') }}">
+    <!-- Perfect Text Accessibility - Ensures all text is perfectly readable and accessible -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/perfect-text-accessibility.css') }}">
     <!-- Standardized Accessibility CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/standardized-accessibility.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/wcag-color-contrast.css') }}">
@@ -523,6 +525,8 @@
     <script src="{{ url_for('static', filename='js/auth-buttons-fix.js') }}"></script>
     <!-- Direct Auth Buttons Fix - Last resort fix for the auth buttons -->
     <script src="{{ url_for('static', filename='js/direct-auth-buttons-fix.js') }}"></script>
+    <!-- Text Accessibility Fix - Ensures all text is perfectly readable and accessible -->
+    <script src="{{ url_for('static', filename='js/text-accessibility-fix.js') }}"></script>
     {% if current_user.is_authenticated %}
     <script src="{{ url_for('static', filename='js/pop_quiz.js') }}"></script>
     {% endif %}

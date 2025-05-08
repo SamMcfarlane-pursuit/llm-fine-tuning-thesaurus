@@ -1,0 +1,316 @@
+/**
+ * Perfect Text Accessibility CSS
+ * Ensures all text meets WCAG 2.1 AAA standards for color contrast
+ * - Normal text: minimum contrast ratio of 7:1
+ * - Large text: minimum contrast ratio of 4.5:1
+ * - UI components and graphical objects: minimum contrast ratio of 3:1
+ * 
+ * This file overrides all other text color settings to ensure maximum readability
+ * and accessibility across the entire website.
+ */
+
+/* Define CSS variables with high-contrast colors */
+:root {
+  /* Dark mode - text on dark backgrounds */
+  --dark-text-primary: #ffffff; /* Pure white for maximum contrast on dark backgrounds */
+  --dark-text-secondary: #e6e6e6; /* Very light gray for secondary text */
+  --dark-text-tertiary: #cccccc; /* Light gray for tertiary text */
+  --dark-link-color: #7cc7ff; /* Bright blue for links - 7:1 contrast ratio on dark backgrounds */
+  --dark-link-hover: #b3dfff; /* Lighter blue for link hover states */
+  
+  /* Light mode - text on light backgrounds */
+  --light-text-primary: #121212; /* Near black for maximum contrast on light backgrounds */
+  --light-text-secondary: #333333; /* Dark gray for secondary text */
+  --light-text-tertiary: #555555; /* Medium gray for tertiary text */
+  --light-link-color: #0056b3; /* Dark blue for links - 7:1 contrast ratio on light backgrounds */
+  --light-link-hover: #003d80; /* Darker blue for link hover states */
+  
+  /* High contrast mode */
+  --hc-text-color: #ffffff; /* Pure white */
+  --hc-background: #000000; /* Pure black */
+  --hc-link-color: #ffff00; /* Bright yellow for maximum visibility */
+  --hc-border-color: #ffffff; /* White borders */
+}
+
+/* Base text styles - apply to all text elements */
+body {
+  color: var(--dark-text-primary) !important;
+  line-height: 1.8 !important; /* Improved line height for better readability */
+  font-size: 17px !important; /* Larger base font size */
+  letter-spacing: 0.3px !important; /* Slightly increased letter spacing */
+}
+
+/* Headings - ensure they stand out with proper contrast */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  color: var(--dark-text-primary) !important;
+  font-weight: 700 !important; /* Bold headings for better visibility */
+  margin-bottom: 1rem !important;
+  line-height: 1.4 !important;
+}
+
+h1, .h1 { font-size: 2.5rem !important; }
+h2, .h2 { font-size: 2rem !important; }
+h3, .h3 { font-size: 1.75rem !important; }
+h4, .h4 { font-size: 1.5rem !important; }
+h5, .h5 { font-size: 1.25rem !important; }
+h6, .h6 { font-size: 1.1rem !important; }
+
+/* Paragraphs and general text */
+p, span, div, li, td, th, label, input, textarea, select,
+.card-text, .alert-text, .toast-body, .popover-body, .tooltip-inner {
+  color: var(--dark-text-primary) !important;
+  margin-bottom: 1rem !important;
+}
+
+/* Links - ensure they stand out from regular text */
+a:not(.btn):not(.badge):not(.nav-link) {
+  color: var(--dark-link-color) !important;
+  text-decoration: underline !important; /* Always underline links for better accessibility */
+  text-underline-offset: 2px !important; /* Offset the underline for better readability */
+  transition: all 0.3s ease !important;
+  font-weight: 500 !important; /* Slightly bolder links */
+}
+
+a:not(.btn):not(.badge):not(.nav-link):hover,
+a:not(.btn):not(.badge):not(.nav-link):focus {
+  color: var(--dark-link-hover) !important;
+  text-decoration: underline !important;
+  text-underline-offset: 3px !important; /* Increase offset on hover */
+}
+
+/* Navigation links */
+.nav-link {
+  color: var(--dark-text-primary) !important;
+  font-weight: 600 !important; /* Bolder nav links */
+}
+
+.nav-link:hover, .nav-link:focus {
+  color: var(--dark-link-color) !important;
+}
+
+.nav-link.active {
+  color: var(--dark-link-color) !important;
+  font-weight: 700 !important; /* Even bolder active links */
+}
+
+/* Dropdown items */
+.dropdown-item {
+  color: var(--dark-text-primary) !important;
+  font-weight: 500 !important;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+  color: var(--dark-text-primary) !important;
+  background-color: rgba(124, 199, 255, 0.2) !important; /* Subtle highlight */
+}
+
+.dropdown-header {
+  color: var(--dark-link-color) !important;
+  font-weight: 700 !important;
+}
+
+/* Buttons - ensure text is readable */
+.btn {
+  font-weight: 600 !important;
+  letter-spacing: 0.3px !important;
+}
+
+.btn-primary, .btn-success, .btn-danger, .btn-dark {
+  color: #ffffff !important; /* White text on dark buttons */
+}
+
+.btn-light, .btn-warning, .btn-info {
+  color: #121212 !important; /* Dark text on light buttons */
+}
+
+/* Card elements */
+.card-title {
+  color: var(--dark-link-color) !important;
+  font-weight: 700 !important;
+}
+
+.card-header {
+  font-weight: 600 !important;
+}
+
+/* Tables */
+.table {
+  color: var(--dark-text-primary) !important;
+}
+
+.table th {
+  color: var(--dark-link-color) !important;
+  font-weight: 700 !important;
+}
+
+/* Code blocks */
+pre, code {
+  color: #e6e6e6 !important; /* Light gray for code text */
+  background-color: #1a1a1a !important; /* Darker background for code */
+}
+
+code {
+  color: #7cc7ff !important; /* Bright blue for inline code */
+  font-weight: 500 !important;
+}
+
+/* Blockquotes */
+blockquote {
+  color: var(--dark-text-primary) !important;
+  border-left: 4px solid var(--dark-link-color) !important;
+  padding-left: 1rem !important;
+}
+
+/* Form elements */
+label {
+  color: var(--dark-text-primary) !important;
+  font-weight: 600 !important;
+}
+
+.form-control {
+  color: var(--dark-text-primary) !important;
+}
+
+.form-control::placeholder {
+  color: var(--dark-text-tertiary) !important;
+  opacity: 1 !important;
+}
+
+/* Alerts */
+.alert {
+  color: var(--dark-text-primary) !important;
+}
+
+.alert-heading {
+  color: var(--dark-link-color) !important;
+  font-weight: 700 !important;
+}
+
+/* Badges */
+.badge {
+  font-weight: 600 !important;
+}
+
+/* Light mode overrides */
+body.light-theme {
+  color: var(--light-text-primary) !important;
+}
+
+body.light-theme h1, body.light-theme h2, body.light-theme h3, 
+body.light-theme h4, body.light-theme h5, body.light-theme h6,
+body.light-theme .h1, body.light-theme .h2, body.light-theme .h3, 
+body.light-theme .h4, body.light-theme .h5, body.light-theme .h6 {
+  color: var(--light-text-primary) !important;
+}
+
+body.light-theme p, body.light-theme span, body.light-theme div, 
+body.light-theme li, body.light-theme td, body.light-theme th, 
+body.light-theme label, body.light-theme input, body.light-theme textarea, 
+body.light-theme select, body.light-theme .card-text, body.light-theme .alert-text {
+  color: var(--light-text-primary) !important;
+}
+
+body.light-theme a:not(.btn):not(.badge):not(.nav-link) {
+  color: var(--light-link-color) !important;
+}
+
+body.light-theme a:not(.btn):not(.badge):not(.nav-link):hover,
+body.light-theme a:not(.btn):not(.badge):not(.nav-link):focus {
+  color: var(--light-link-hover) !important;
+}
+
+body.light-theme .nav-link {
+  color: var(--light-text-primary) !important;
+}
+
+body.light-theme .nav-link:hover, body.light-theme .nav-link:focus {
+  color: var(--light-link-color) !important;
+}
+
+body.light-theme .nav-link.active {
+  color: var(--light-link-color) !important;
+}
+
+body.light-theme .dropdown-item {
+  color: var(--light-text-primary) !important;
+}
+
+body.light-theme .dropdown-header {
+  color: var(--light-link-color) !important;
+}
+
+body.light-theme .card-title {
+  color: var(--light-link-color) !important;
+}
+
+body.light-theme .table {
+  color: var(--light-text-primary) !important;
+}
+
+body.light-theme .table th {
+  color: var(--light-link-color) !important;
+}
+
+body.light-theme pre, body.light-theme code {
+  color: #121212 !important;
+  background-color: #f5f5f5 !important;
+}
+
+body.light-theme code {
+  color: var(--light-link-color) !important;
+}
+
+body.light-theme blockquote {
+  color: var(--light-text-primary) !important;
+  border-left-color: var(--light-link-color) !important;
+}
+
+/* High contrast mode overrides */
+body.high-contrast-mode {
+  color: var(--hc-text-color) !important;
+  background-color: var(--hc-background) !important;
+}
+
+body.high-contrast-mode a {
+  color: var(--hc-link-color) !important;
+  text-decoration: underline !important;
+}
+
+body.high-contrast-mode a:hover, body.high-contrast-mode a:focus {
+  text-decoration: underline !important;
+  text-decoration-thickness: 3px !important;
+}
+
+body.high-contrast-mode .btn {
+  border: 2px solid var(--hc-border-color) !important;
+}
+
+body.high-contrast-mode .card, body.high-contrast-mode .alert, 
+body.high-contrast-mode .table, body.high-contrast-mode pre, 
+body.high-contrast-mode blockquote {
+  border: 2px solid var(--hc-border-color) !important;
+}
+
+/* Focus styles for keyboard navigation */
+a:focus, button:focus, input:focus, select:focus, textarea:focus, 
+.btn:focus, .form-control:focus, .nav-link:focus, .dropdown-item:focus {
+  outline: 3px solid var(--dark-link-color) !important;
+  outline-offset: 2px !important;
+}
+
+body.light-theme a:focus, body.light-theme button:focus, 
+body.light-theme input:focus, body.light-theme select:focus, 
+body.light-theme textarea:focus, body.light-theme .btn:focus, 
+body.light-theme .form-control:focus, body.light-theme .nav-link:focus, 
+body.light-theme .dropdown-item:focus {
+  outline: 3px solid var(--light-link-color) !important;
+}
+
+body.high-contrast-mode a:focus, body.high-contrast-mode button:focus, 
+body.high-contrast-mode input:focus, body.high-contrast-mode select:focus, 
+body.high-contrast-mode textarea:focus, body.high-contrast-mode .btn:focus, 
+body.high-contrast-mode .form-control:focus, body.high-contrast-mode .nav-link:focus, 
+body.high-contrast-mode .dropdown-item:focus {
+  outline: 3px solid var(--hc-link-color) !important;
+}

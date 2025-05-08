@@ -5,7 +5,7 @@ echo "Checking Thesaurus AI LLM Fine-Tuning server..."
 
 # Check server on port 5003
 echo "Checking server on port 5003..."
-curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:5003/ > /dev/null
+curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:5003/health > /dev/null
 if [ $? -eq 0 ]; then
     echo "✅ Server on port 5003 is running."
 else
@@ -15,8 +15,10 @@ fi
 # Print the URL for the server
 echo ""
 echo "Server URL:"
-echo "- http://127.0.0.1:5003/ (Test server)"
+echo "- http://127.0.0.1:5003/ (Main application server)"
 echo ""
-echo "This is a simplified test server that only provides a health check endpoint."
-echo "The main application server is currently experiencing technical difficulties."
-echo "Please try again later or contact support for assistance."
+echo "You can access all pages on this server."
+echo "For example:"
+echo "- http://127.0.0.1:5003/workshop-progress"
+echo "- http://127.0.0.1:5003/frameworks"
+echo "- http://127.0.0.1:5003/tutorials"

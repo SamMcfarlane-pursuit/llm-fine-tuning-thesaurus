@@ -1,0 +1,286 @@
+/**
+ * Final Visibility Fix
+ * Ensures maximum visibility for text in both light and dark modes with !important rules
+ */
+
+/* Light mode - Force all text in cards to be very dark purple */
+.card * {
+    color: #3b0764 !important;
+    text-shadow: 0 0 1px rgba(255, 255, 255, 1) !important;
+    font-weight: 700 !important;
+}
+
+/* Light mode - Force all headings in cards to be very dark purple */
+.card h1, 
+.card h2, 
+.card h3, 
+.card h4, 
+.card h5, 
+.card h6 {
+    color: #2e1065 !important;
+    text-shadow: 0 0 1px rgba(255, 255, 255, 1) !important;
+    font-weight: 900 !important;
+}
+
+/* Light mode - Force all paragraphs in cards to be very dark purple */
+.card p {
+    color: #3b0764 !important;
+    text-shadow: 0 0 1px rgba(255, 255, 255, 1) !important;
+    font-weight: 700 !important;
+}
+
+/* Light mode - Force all links in cards to be dark purple */
+.card a:not(.btn) {
+    color: #4c1d95 !important;
+    text-decoration: underline !important;
+    text-shadow: 0 0 1px rgba(255, 255, 255, 1) !important;
+    font-weight: bold !important;
+}
+
+/* Dark mode - Force all text in cards to be very bright purple */
+.dark-mode .card *,
+.dark .card * {
+    color: #e9d5ff !important;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 1) !important;
+    font-weight: 700 !important;
+}
+
+/* Dark mode - Force all headings in cards to be almost white purple */
+.dark-mode .card h1,
+.dark-mode .card h2,
+.dark-mode .card h3,
+.dark-mode .card h4,
+.dark-mode .card h5,
+.dark-mode .card h6,
+.dark .card h1,
+.dark .card h2,
+.dark .card h3,
+.dark .card h4,
+.dark .card h5,
+.dark .card h6 {
+    color: #f5f3ff !important;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 1) !important;
+    font-weight: 900 !important;
+}
+
+/* Dark mode - Force all paragraphs in cards to be very bright purple */
+.dark-mode .card p,
+.dark .card p {
+    color: #e9d5ff !important;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 1) !important;
+    font-weight: 700 !important;
+}
+
+/* Dark mode - Force all links in cards to be almost white purple */
+.dark-mode .card a:not(.btn),
+.dark .card a:not(.btn) {
+    color: #f3e8ff !important;
+    text-decoration: underline !important;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 1) !important;
+    font-weight: bold !important;
+}
+
+/* Make sure buttons remain visible in both modes */
+.card .btn,
+.card button,
+.card a.btn {
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7) !important;
+    font-weight: bold !important;
+}
+
+/* Make sure badges remain visible in both modes */
+.card .badge {
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7) !important;
+    font-weight: bold !important;
+}
+
+/* Add a distinct purple border to all cards */
+.card {
+    border: 3px solid rgba(91, 33, 182, 0.7) !important;
+    box-shadow: 0 6px 16px rgba(91, 33, 182, 0.5) !important;
+}
+
+/* Specific fix for the cards shown in the image */
+.row .col-md-4 .card,
+.row .col-md-6 .card,
+.row .col-lg-4 .card,
+.row .col-lg-6 .card,
+.row .col-sm-6 .card,
+.row .col-sm-4 .card,
+.card-deck .card {
+    border: 3px solid rgba(91, 33, 182, 0.7) !important;
+    box-shadow: 0 6px 16px rgba(91, 33, 182, 0.5) !important;
+}
+
+/* Light mode - Force all text in the specific cards to be very dark purple */
+.row .col-md-4 .card *:not(.btn):not(.badge),
+.row .col-md-6 .card *:not(.btn):not(.badge),
+.row .col-lg-4 .card *:not(.btn):not(.badge),
+.row .col-lg-6 .card *:not(.btn):not(.badge),
+.row .col-sm-6 .card *:not(.btn):not(.badge),
+.row .col-sm-4 .card *:not(.btn):not(.badge),
+.card-deck .card *:not(.btn):not(.badge) {
+    color: #3b0764 !important;
+    text-shadow: 0 0 1px rgba(255, 255, 255, 1) !important;
+    font-weight: 700 !important;
+}
+
+/* Light mode - Force all headings in the specific cards to be very dark purple */
+.row .col-md-4 .card h1,
+.row .col-md-4 .card h2,
+.row .col-md-4 .card h3,
+.row .col-md-4 .card h4,
+.row .col-md-4 .card h5,
+.row .col-md-4 .card h6,
+.row .col-md-6 .card h1,
+.row .col-md-6 .card h2,
+.row .col-md-6 .card h3,
+.row .col-md-6 .card h4,
+.row .col-md-6 .card h5,
+.row .col-md-6 .card h6,
+.row .col-lg-4 .card h1,
+.row .col-lg-4 .card h2,
+.row .col-lg-4 .card h3,
+.row .col-lg-4 .card h4,
+.row .col-lg-4 .card h5,
+.row .col-lg-4 .card h6,
+.row .col-lg-6 .card h1,
+.row .col-lg-6 .card h2,
+.row .col-lg-6 .card h3,
+.row .col-lg-6 .card h4,
+.row .col-lg-6 .card h5,
+.row .col-lg-6 .card h6,
+.row .col-sm-6 .card h1,
+.row .col-sm-6 .card h2,
+.row .col-sm-6 .card h3,
+.row .col-sm-6 .card h4,
+.row .col-sm-6 .card h5,
+.row .col-sm-6 .card h6,
+.row .col-sm-4 .card h1,
+.row .col-sm-4 .card h2,
+.row .col-sm-4 .card h3,
+.row .col-sm-4 .card h4,
+.row .col-sm-4 .card h5,
+.row .col-sm-4 .card h6,
+.card-deck .card h1,
+.card-deck .card h2,
+.card-deck .card h3,
+.card-deck .card h4,
+.card-deck .card h5,
+.card-deck .card h6 {
+    color: #2e1065 !important;
+    text-shadow: 0 0 1px rgba(255, 255, 255, 1) !important;
+    font-weight: 900 !important;
+}
+
+/* Dark mode - Force all text in the specific cards to be very bright purple */
+.dark-mode .row .col-md-4 .card *:not(.btn):not(.badge),
+.dark-mode .row .col-md-6 .card *:not(.btn):not(.badge),
+.dark-mode .row .col-lg-4 .card *:not(.btn):not(.badge),
+.dark-mode .row .col-lg-6 .card *:not(.btn):not(.badge),
+.dark-mode .row .col-sm-6 .card *:not(.btn):not(.badge),
+.dark-mode .row .col-sm-4 .card *:not(.btn):not(.badge),
+.dark-mode .card-deck .card *:not(.btn):not(.badge),
+.dark .row .col-md-4 .card *:not(.btn):not(.badge),
+.dark .row .col-md-6 .card *:not(.btn):not(.badge),
+.dark .row .col-lg-4 .card *:not(.btn):not(.badge),
+.dark .row .col-lg-6 .card *:not(.btn):not(.badge),
+.dark .row .col-sm-6 .card *:not(.btn):not(.badge),
+.dark .row .col-sm-4 .card *:not(.btn):not(.badge),
+.dark .card-deck .card *:not(.btn):not(.badge) {
+    color: #e9d5ff !important;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 1) !important;
+    font-weight: 700 !important;
+}
+
+/* Dark mode - Force all headings in the specific cards to be almost white purple */
+.dark-mode .row .col-md-4 .card h1,
+.dark-mode .row .col-md-4 .card h2,
+.dark-mode .row .col-md-4 .card h3,
+.dark-mode .row .col-md-4 .card h4,
+.dark-mode .row .col-md-4 .card h5,
+.dark-mode .row .col-md-4 .card h6,
+.dark-mode .row .col-md-6 .card h1,
+.dark-mode .row .col-md-6 .card h2,
+.dark-mode .row .col-md-6 .card h3,
+.dark-mode .row .col-md-6 .card h4,
+.dark-mode .row .col-md-6 .card h5,
+.dark-mode .row .col-md-6 .card h6,
+.dark-mode .row .col-lg-4 .card h1,
+.dark-mode .row .col-lg-4 .card h2,
+.dark-mode .row .col-lg-4 .card h3,
+.dark-mode .row .col-lg-4 .card h4,
+.dark-mode .row .col-lg-4 .card h5,
+.dark-mode .row .col-lg-4 .card h6,
+.dark-mode .row .col-lg-6 .card h1,
+.dark-mode .row .col-lg-6 .card h2,
+.dark-mode .row .col-lg-6 .card h3,
+.dark-mode .row .col-lg-6 .card h4,
+.dark-mode .row .col-lg-6 .card h5,
+.dark-mode .row .col-lg-6 .card h6,
+.dark-mode .row .col-sm-6 .card h1,
+.dark-mode .row .col-sm-6 .card h2,
+.dark-mode .row .col-sm-6 .card h3,
+.dark-mode .row .col-sm-6 .card h4,
+.dark-mode .row .col-sm-6 .card h5,
+.dark-mode .row .col-sm-6 .card h6,
+.dark-mode .row .col-sm-4 .card h1,
+.dark-mode .row .col-sm-4 .card h2,
+.dark-mode .row .col-sm-4 .card h3,
+.dark-mode .row .col-sm-4 .card h4,
+.dark-mode .row .col-sm-4 .card h5,
+.dark-mode .row .col-sm-4 .card h6,
+.dark-mode .card-deck .card h1,
+.dark-mode .card-deck .card h2,
+.dark-mode .card-deck .card h3,
+.dark-mode .card-deck .card h4,
+.dark-mode .card-deck .card h5,
+.dark-mode .card-deck .card h6,
+.dark .row .col-md-4 .card h1,
+.dark .row .col-md-4 .card h2,
+.dark .row .col-md-4 .card h3,
+.dark .row .col-md-4 .card h4,
+.dark .row .col-md-4 .card h5,
+.dark .row .col-md-4 .card h6,
+.dark .row .col-md-6 .card h1,
+.dark .row .col-md-6 .card h2,
+.dark .row .col-md-6 .card h3,
+.dark .row .col-md-6 .card h4,
+.dark .row .col-md-6 .card h5,
+.dark .row .col-md-6 .card h6,
+.dark .row .col-lg-4 .card h1,
+.dark .row .col-lg-4 .card h2,
+.dark .row .col-lg-4 .card h3,
+.dark .row .col-lg-4 .card h4,
+.dark .row .col-lg-4 .card h5,
+.dark .row .col-lg-4 .card h6,
+.dark .row .col-lg-6 .card h1,
+.dark .row .col-lg-6 .card h2,
+.dark .row .col-lg-6 .card h3,
+.dark .row .col-lg-6 .card h4,
+.dark .row .col-lg-6 .card h5,
+.dark .row .col-lg-6 .card h6,
+.dark .row .col-sm-6 .card h1,
+.dark .row .col-sm-6 .card h2,
+.dark .row .col-sm-6 .card h3,
+.dark .row .col-sm-6 .card h4,
+.dark .row .col-sm-6 .card h5,
+.dark .row .col-sm-6 .card h6,
+.dark .row .col-sm-4 .card h1,
+.dark .row .col-sm-4 .card h2,
+.dark .row .col-sm-4 .card h3,
+.dark .row .col-sm-4 .card h4,
+.dark .row .col-sm-4 .card h5,
+.dark .row .col-sm-4 .card h6,
+.dark .card-deck .card h1,
+.dark .card-deck .card h2,
+.dark .card-deck .card h3,
+.dark .card-deck .card h4,
+.dark .card-deck .card h5,
+.dark .card-deck .card h6 {
+    color: #f5f3ff !important;
+    text-shadow: 0 0 2px rgba(0, 0, 0, 1) !important;
+    font-weight: 900 !important;
+}

@@ -1,0 +1,292 @@
+/* Robust Sidebar Styles */
+
+.robust-sidebar {
+    position: sticky;
+    top: 20px;
+    background: linear-gradient(135deg, rgba(26, 26, 30, 0.85), rgba(13, 13, 15, 0.95));
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 12px;
+    border: 1px solid rgba(58, 134, 255, 0.2);
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform: translateZ(0);
+}
+
+.robust-sidebar:hover {
+    border-color: rgba(58, 134, 255, 0.4);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    transform: translateZ(10px) scale(1.01);
+}
+
+.sidebar-section {
+    padding: 20px;
+    position: relative;
+}
+
+.sidebar-section:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    width: 80%;
+    height: 1px;
+    background: linear-gradient(to right, 
+        rgba(58, 134, 255, 0), 
+        rgba(58, 134, 255, 0.3), 
+        rgba(58, 134, 255, 0));
+}
+
+.sidebar-title {
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sidebar-title::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background: linear-gradient(to right, #1a56db, #3a86ff);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.sidebar-title:hover::before {
+    width: 60px;
+}
+
+.sidebar-title i {
+    color: #3a86ff;
+}
+
+.sidebar-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-nav-item {
+    margin-bottom: 5px;
+    position: relative;
+}
+
+.sidebar-nav-link {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.sidebar-nav-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(58, 134, 255, 0.1), rgba(58, 134, 255, 0));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+}
+
+.sidebar-nav-link i {
+    margin-right: 10px;
+    font-size: 1.1rem;
+    color: #3a86ff;
+    transition: all 0.3s ease;
+}
+
+.sidebar-nav-link:hover {
+    color: white;
+    transform: translateX(5px);
+}
+
+.sidebar-nav-link:hover::before {
+    opacity: 1;
+}
+
+.sidebar-nav-link:hover i {
+    transform: scale(1.2);
+}
+
+.sidebar-nav-link.active {
+    background: linear-gradient(135deg, rgba(58, 134, 255, 0.15), rgba(58, 134, 255, 0.05));
+    color: white;
+    font-weight: 500;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-nav-link.active::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, #1a56db, #3a86ff);
+    border-radius: 0 2px 2px 0;
+}
+
+.sidebar-nav-link .badge {
+    margin-left: auto;
+    background-color: rgba(58, 134, 255, 0.2);
+    color: white;
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.sidebar-nav-link:hover .badge {
+    background-color: rgba(58, 134, 255, 0.4);
+}
+
+.resource-card {
+    background: rgba(26, 26, 30, 0.5);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(58, 134, 255, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.resource-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(58, 134, 255, 0.05), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 0;
+}
+
+.resource-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(58, 134, 255, 0.3);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.resource-card:hover::before {
+    opacity: 1;
+}
+
+.resource-card h5 {
+    font-size: 1rem;
+    color: white;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    z-index: 1;
+}
+
+.resource-card h5 i {
+    color: #3a86ff;
+}
+
+.resource-card p {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 1;
+}
+
+.resource-card .btn {
+    position: relative;
+    z-index: 1;
+}
+
+/* Sidebar toggle for mobile */
+.sidebar-toggle {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1a56db, #3a86ff);
+    color: white;
+    border: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sidebar-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar-toggle i {
+    font-size: 1.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .robust-sidebar {
+        position: fixed;
+        top: 0;
+        right: -320px;
+        width: 300px;
+        height: 100vh;
+        border-radius: 0;
+        z-index: 1001;
+        overflow-y: auto;
+        transition: right 0.3s ease;
+    }
+    
+    .robust-sidebar.active {
+        right: 0;
+    }
+    
+    .sidebar-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+    
+    .sidebar-overlay.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+}

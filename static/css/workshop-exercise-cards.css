@@ -1,0 +1,142 @@
+/**
+ * Workshop Exercise Cards CSS
+ * Improves visibility and clarity of workshop exercise cards
+ */
+
+/* Exercise card container */
+.exercise-card {
+    background-color: rgba(25, 25, 30, 0.95) !important;
+    border-radius: 12px !important;
+    border: 2px solid rgba(0, 229, 255, 0.4) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 15px rgba(0, 229, 255, 0.2) !important;
+    padding: 20px !important;
+    margin-bottom: 20px !important;
+    transition: all 0.3s ease !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.exercise-card:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 229, 255, 0.3) !important;
+    border-color: rgba(0, 229, 255, 0.6) !important;
+}
+
+/* Difficulty indicator */
+.difficulty-indicator {
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+    height: 4px !important;
+    background-color: rgba(0, 229, 255, 0.8) !important;
+    margin-bottom: 15px !important;
+    border-radius: 2px !important;
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.5) !important;
+}
+
+/* Difficulty label */
+.difficulty-label {
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    margin-bottom: 10px !important;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Time estimate */
+.time-estimate {
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    margin-bottom: 10px !important;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Exercise title */
+.exercise-title {
+    font-size: 1.2rem !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    margin-bottom: 15px !important;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Exercise description */
+.exercise-description {
+    font-size: 0.95rem !important;
+    color: #ffffff !important;
+    margin-bottom: 20px !important;
+    line-height: 1.5 !important;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Status indicator */
+.status-indicator {
+    font-size: 0.9rem !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+    font-style: italic !important;
+    margin-top: 10px !important;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Information icon */
+.info-icon {
+    position: absolute !important;
+    bottom: 15px !important;
+    left: 20px !important;
+    color: rgba(0, 229, 255, 0.8) !important;
+    font-size: 1.2rem !important;
+    text-shadow: 0 0 10px rgba(0, 229, 255, 0.5) !important;
+}
+
+/* Light mode overrides */
+body.light-theme .exercise-card {
+    background-color: #f8f9fa !important;
+    border: 2px solid rgba(0, 86, 179, 0.3) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 0 15px rgba(0, 86, 179, 0.1) !important;
+}
+
+body.light-theme .difficulty-indicator {
+    background-color: rgba(0, 86, 179, 0.8) !important;
+    box-shadow: 0 0 10px rgba(0, 86, 179, 0.3) !important;
+}
+
+body.light-theme .difficulty-label,
+body.light-theme .time-estimate,
+body.light-theme .exercise-title {
+    color: #0056b3 !important;
+    text-shadow: none !important;
+}
+
+body.light-theme .exercise-description,
+body.light-theme .status-indicator {
+    color: #212529 !important;
+    text-shadow: none !important;
+}
+
+body.light-theme .info-icon {
+    color: rgba(0, 86, 179, 0.8) !important;
+    text-shadow: 0 0 10px rgba(0, 86, 179, 0.3) !important;
+}
+
+/* High contrast mode overrides */
+body.high-contrast-mode .exercise-card {
+    background-color: #000000 !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: none !important;
+}
+
+body.high-contrast-mode .difficulty-indicator {
+    background-color: #ffffff !important;
+    box-shadow: none !important;
+}
+
+body.high-contrast-mode .difficulty-label,
+body.high-contrast-mode .time-estimate,
+body.high-contrast-mode .exercise-title,
+body.high-contrast-mode .exercise-description,
+body.high-contrast-mode .status-indicator,
+body.high-contrast-mode .info-icon {
+    color: #ffffff !important;
+    text-shadow: none !important;
+}

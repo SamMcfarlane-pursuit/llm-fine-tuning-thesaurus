@@ -8,23 +8,23 @@
     width: 100%;
     height: calc(100vh - 200px);
     min-height: 600px;
-    border: 1px solid rgba(66, 135, 245, 0.2);
+    border: 1px solid rgba(58, 134, 255, 0.2);
     border-radius: 15px;
     overflow: hidden;
     margin-bottom: 20px;
-    background-color: rgba(25, 25, 30, 0.8);
+    background-color: rgba(26, 26, 30, 0.8);
     position: relative;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
 }
 
 /* Notebook header */
 .notebook-header {
-    background: linear-gradient(135deg, #2b5cbe, #1e3c7b);
+    background: linear-gradient(135deg, #3a86ff, #4361ee);
     padding: 20px 25px;
     color: white;
     position: relative;
     overflow: hidden;
-    border-bottom: 1px solid rgba(66, 135, 245, 0.2);
+    border-bottom: 1px solid rgba(58, 134, 255, 0.2);
 }
 
 /* Shimmer effect for header */
@@ -35,9 +35,9 @@
     left: -100%;
     width: 50%;
     height: 100%;
-    background: linear-gradient(90deg, 
-        rgba(255, 255, 255, 0) 0%, 
-        rgba(255, 255, 255, 0.1) 50%, 
+    background: linear-gradient(90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.1) 50%,
         rgba(255, 255, 255, 0) 100%);
     animation: shimmer 3s infinite;
 }
@@ -73,8 +73,8 @@
     justify-content: space-between;
     align-items: center;
     padding: 15px 20px;
-    background-color: rgba(30, 30, 35, 0.7);
-    border-bottom: 1px solid rgba(66, 135, 245, 0.2);
+    background-color: rgba(26, 26, 30, 0.7);
+    border-bottom: 1px solid rgba(58, 134, 255, 0.2);
     flex-wrap: wrap;
     gap: 10px;
 }
@@ -104,29 +104,29 @@
 }
 
 .notebook-btn.primary {
-    background: linear-gradient(135deg, #4287f5, #3a75d8);
+    background: linear-gradient(135deg, #3a86ff, #4361ee);
     color: white;
-    box-shadow: 0 4px 10px rgba(66, 135, 245, 0.3);
+    box-shadow: 0 4px 10px rgba(58, 134, 255, 0.3);
 }
 
 .notebook-btn.primary:hover {
-    box-shadow: 0 6px 15px rgba(66, 135, 245, 0.4);
+    box-shadow: 0 6px 15px rgba(58, 134, 255, 0.4);
     transform: translateY(-2px);
 }
 
 .notebook-btn.primary:active {
     transform: translateY(0);
-    box-shadow: 0 2px 5px rgba(66, 135, 245, 0.2);
+    box-shadow: 0 2px 5px rgba(58, 134, 255, 0.2);
 }
 
 .notebook-btn.outline {
     background-color: transparent;
-    border: 1px solid rgba(66, 135, 245, 0.5);
-    color: #4287f5;
+    border: 1px solid rgba(58, 134, 255, 0.5);
+    color: #3a86ff;
 }
 
 .notebook-btn.outline:hover {
-    background-color: rgba(66, 135, 245, 0.1);
+    background-color: rgba(58, 134, 255, 0.1);
     transform: translateY(-2px);
 }
 
@@ -155,15 +155,15 @@
     margin: 15px 20px;
     padding: 15px;
     border-radius: 10px;
-    background-color: rgba(66, 135, 245, 0.1);
-    border-left: 4px solid #4287f5;
+    background-color: rgba(58, 134, 255, 0.1);
+    border-left: 4px solid #3a86ff;
     display: flex;
     align-items: flex-start;
 }
 
 .notebook-info-alert i {
     font-size: 1.5rem;
-    color: #4287f5;
+    color: #3a86ff;
     margin-right: 15px;
     margin-top: 3px;
 }
@@ -211,8 +211,8 @@
 .notebook-loading-spinner {
     width: 50px;
     height: 50px;
-    border: 5px solid rgba(66, 135, 245, 0.3);
-    border-top: 5px solid #4287f5;
+    border: 5px solid rgba(58, 134, 255, 0.3);
+    border-top: 5px solid #3a86ff;
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin-bottom: 20px;
@@ -275,8 +275,8 @@
 /* Notebook footer */
 .notebook-footer {
     padding: 15px 20px;
-    background-color: rgba(25, 25, 25, 0.7);
-    border-top: 1px solid rgba(66, 135, 245, 0.2);
+    background-color: rgba(26, 26, 30, 0.7);
+    border-top: 1px solid rgba(58, 134, 255, 0.2);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -293,7 +293,7 @@
 }
 
 .notebook-footer-link {
-    color: #4287f5;
+    color: #3a86ff;
     text-decoration: none;
     font-weight: 600;
     font-size: 0.9rem;
@@ -301,7 +301,7 @@
 }
 
 .notebook-footer-link:hover {
-    color: #00ffdd;
+    color: #4cc9f0;
 }
 
 /* Notebook progress */
@@ -314,7 +314,7 @@
 
 .notebook-progress-bar {
     height: 100%;
-    background: linear-gradient(90deg, #4287f5, #00ffdd);
+    background: linear-gradient(90deg, #3a86ff, #4cc9f0);
     width: 0;
     transition: width 0.5s ease;
 }
@@ -325,21 +325,21 @@
         flex-direction: column;
         align-items: flex-start;
     }
-    
+
     .notebook-action-group {
         width: 100%;
         justify-content: space-between;
     }
-    
+
     .notebook-btn {
         padding: 6px 12px;
         font-size: 0.85rem;
     }
-    
+
     .notebook-title {
         font-size: 1.5rem;
     }
-    
+
     .notebook-subtitle {
         font-size: 0.9rem;
         max-width: 100%;
@@ -350,35 +350,35 @@
     .enhanced-notebook-container {
         height: calc(100vh - 150px);
     }
-    
+
     .notebook-header {
         padding: 15px;
     }
-    
+
     .notebook-actions {
         padding: 10px 15px;
     }
-    
+
     .notebook-info-alert {
         margin: 10px 15px;
         padding: 10px;
     }
-    
+
     .notebook-btn {
         padding: 5px 10px;
         font-size: 0.8rem;
     }
-    
+
     .notebook-btn i {
         margin-right: 5px;
     }
-    
+
     .notebook-footer {
         padding: 10px 15px;
         flex-direction: column;
         gap: 10px;
     }
-    
+
     .notebook-footer-links {
         width: 100%;
         justify-content: space-between;
@@ -390,16 +390,16 @@
         flex-direction: column;
         width: 100%;
     }
-    
+
     .notebook-btn {
         width: 100%;
         justify-content: center;
     }
-    
+
     .notebook-info-alert {
         flex-direction: column;
     }
-    
+
     .notebook-info-alert i {
         margin-bottom: 10px;
         margin-right: 0;
@@ -412,7 +412,7 @@
         padding: 10px 15px;
         font-size: 1rem;
     }
-    
+
     .notebook-iframe-container {
         -webkit-overflow-scrolling: touch;
     }
@@ -423,19 +423,19 @@
     .enhanced-notebook-container {
         background-color: rgba(18, 18, 22, 0.9);
     }
-    
+
     .notebook-header {
-        background: linear-gradient(135deg, #1e4a9e, #15305f);
+        background: linear-gradient(135deg, #3a86ff, #4361ee);
     }
-    
+
     .notebook-actions {
         background-color: rgba(25, 25, 30, 0.8);
     }
-    
+
     .notebook-info-alert {
-        background-color: rgba(50, 100, 200, 0.1);
+        background-color: rgba(58, 134, 255, 0.1);
     }
-    
+
     .notebook-footer {
         background-color: rgba(20, 20, 20, 0.8);
     }

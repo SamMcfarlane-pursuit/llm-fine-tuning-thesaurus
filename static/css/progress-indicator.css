@@ -1,21 +1,22 @@
 /**
  * Enhanced Progress Indicator
  * Provides a sleek, informative progress bar with user progress facts
+ * Note: Progress bar has been disabled as per user request
  */
 
-/* Progress container - Ultra Minimal */
+/* Progress container - Ultra Minimal - DISABLED */
 .reading-progress-container {
+    display: none !important; /* Completely disable the progress bar */
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 2000;
     background-color: rgba(8, 8, 10, 0.8);
-    backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
     box-shadow: none;
     transition: all 0.2s ease;
-    display: flex;
     flex-direction: column;
     border-bottom: none;
     height: auto;

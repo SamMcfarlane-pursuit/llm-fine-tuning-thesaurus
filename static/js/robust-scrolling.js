@@ -657,6 +657,15 @@ function addKeyboardShortcuts() {
  * Add reading progress indicator to the top of the page
  */
 function addReadingProgressIndicator() {
+    // Check if user is authenticated
+    const isAuthenticated = document.body.getAttribute('data-user-logged-in') === 'true';
+
+    // Only add progress indicator for authenticated users
+    if (!isAuthenticated) {
+        console.log('Progress indicator not added: User not authenticated');
+        return;
+    }
+
     // Create progress container
     const progressContainer = document.createElement('div');
     progressContainer.className = 'reading-progress-container';

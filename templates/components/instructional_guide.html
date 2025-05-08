@@ -1,0 +1,171 @@
+<div class="instructional-guide">
+    <div class="guide-header">
+        <h3><i class="bi bi-lightbulb-fill"></i> Getting Started Guide</h3>
+        <p>Follow these steps to make the most of the Visual Thesaurus LLM platform</p>
+    </div>
+    
+    <div class="guide-steps">
+        <div class="guide-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h4>Explore the Concept Map</h4>
+                <p>Start by exploring the interactive concept map to understand how different LLM fine-tuning concepts relate to each other. Click on any node to learn more about that concept.</p>
+                <a href="#concepts-visualization" class="btn btn-sm btn-primary">Go to Concept Map</a>
+            </div>
+        </div>
+        
+        <div class="guide-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h4>Learn Core Concepts</h4>
+                <p>Dive deeper into the core concepts of LLM fine-tuning through our comprehensive learning materials. Each concept includes detailed explanations, diagrams, and examples.</p>
+                <a href="/concepts-learning" class="btn btn-sm btn-primary">Start Learning</a>
+            </div>
+        </div>
+        
+        <div class="guide-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h4>Try Hands-on Exercises</h4>
+                <p>Apply what you've learned through interactive exercises and tutorials. These hands-on activities will help you gain practical experience with LLM fine-tuning techniques.</p>
+                <a href="/tutorials" class="btn btn-sm btn-primary">View Tutorials</a>
+            </div>
+        </div>
+        
+        <div class="guide-step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+                <h4>Test Your Knowledge</h4>
+                <p>Take quizzes to test your understanding of the concepts and identify areas for further study. Each quiz provides immediate feedback and explanations.</p>
+                <a href="/quiz/quiz_list" class="btn btn-sm btn-primary">Take Quizzes</a>
+            </div>
+        </div>
+        
+        <div class="guide-step">
+            <div class="step-number">5</div>
+            <div class="step-content">
+                <h4>Explore Related Terms</h4>
+                <p>Use the Visual Thesaurus Search to discover related terms and concepts. This tool helps you build a comprehensive understanding of the LLM fine-tuning ecosystem.</p>
+                <a href="#word-input" class="btn btn-sm btn-primary">Try Thesaurus Search</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="guide-footer">
+        <div class="guide-tip">
+            <i class="bi bi-info-circle-fill"></i>
+            <span>Pro Tip: Create an account to track your progress and save your favorite concepts for later reference.</span>
+        </div>
+    </div>
+</div>
+
+<style>
+    .instructional-guide {
+        background-color: rgba(26, 26, 30, 0.7);
+        border-radius: 15px;
+        border: 1px solid rgba(58, 134, 255, 0.2);
+        padding: 2rem;
+        margin: 2rem 0;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+    
+    .guide-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .guide-header h3 {
+        color: var(--primary-color);
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+    }
+    
+    .guide-header p {
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+    }
+    
+    .guide-steps {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .guide-step {
+        display: flex;
+        gap: 1.5rem;
+        align-items: flex-start;
+        background-color: rgba(30, 30, 35, 0.5);
+        border-radius: 10px;
+        padding: 1.5rem;
+        transition: all 0.3s ease;
+        border-left: 4px solid var(--primary-color);
+    }
+    
+    .guide-step:hover {
+        transform: translateX(5px);
+        background-color: rgba(35, 35, 40, 0.6);
+    }
+    
+    .step-number {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .step-content {
+        flex-grow: 1;
+    }
+    
+    .step-content h4 {
+        color: var(--text-primary);
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+    }
+    
+    .step-content p {
+        color: var(--text-secondary);
+        margin-bottom: 1rem;
+    }
+    
+    .guide-footer {
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .guide-tip {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        background-color: rgba(58, 134, 255, 0.1);
+        padding: 1rem;
+        border-radius: 8px;
+        color: var(--text-secondary);
+    }
+    
+    .guide-tip i {
+        color: var(--primary-color);
+        font-size: 1.5rem;
+    }
+    
+    @media (max-width: 768px) {
+        .guide-step {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .step-number {
+            margin-bottom: 0.5rem;
+        }
+    }
+</style>

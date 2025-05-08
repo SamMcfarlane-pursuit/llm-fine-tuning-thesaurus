@@ -1,0 +1,78 @@
+/**
+ * Contrast Toggle CSS
+ * Styles for the contrast toggle button
+ */
+
+/* Contrast toggle container */
+.contrast-toggle-container {
+    position: fixed;
+    top: 120px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Contrast toggle button */
+.contrast-toggle-button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4a94ff, #5dd6ff);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.contrast-toggle-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.contrast-toggle-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Contrast toggle icon */
+.contrast-toggle-icon {
+    transition: all 0.3s ease;
+}
+
+/* High contrast mode styles */
+body.high-contrast-mode {
+    /* These styles will be applied when high contrast mode is enabled */
+}
+
+/* Light mode overrides */
+body.light-theme .contrast-toggle-button {
+    background: linear-gradient(135deg, #0056b3, #0088cc);
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+body.light-theme .contrast-toggle-button:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .contrast-toggle-container {
+        top: auto;
+        bottom: 80px;
+        right: 20px;
+    }
+    
+    .contrast-toggle-button {
+        width: 35px;
+        height: 35px;
+        font-size: 16px;
+    }
+}

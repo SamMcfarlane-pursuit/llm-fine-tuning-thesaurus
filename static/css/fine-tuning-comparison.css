@@ -1,0 +1,295 @@
+/**
+ * Fine-Tuning Comparison Page CSS
+ * Specific styles to enhance visibility on the fine-tuning comparison page
+ */
+
+/* Page container */
+.fine-tuning-comparison {
+    background-color: #121212;
+    padding: 2rem 0;
+}
+
+/* Page title */
+.fine-tuning-comparison h1 {
+    color: #5dd6ff !important;
+    text-shadow: 0 0 10px rgba(93, 214, 255, 0.5);
+    font-weight: 700;
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    background-color: rgba(25, 25, 30, 0.8);
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid rgba(93, 214, 255, 0.3);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Subtitle */
+.fine-tuning-comparison h2 {
+    color: #4a94ff !important;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.5rem;
+    background-color: rgba(25, 25, 30, 0.8);
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(93, 214, 255, 0.3);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Method sections */
+.method-section {
+    background-color: rgba(25, 25, 30, 0.95);
+    border: 1px solid rgba(93, 214, 255, 0.3);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.method-section h3 {
+    color: #5dd6ff !important;
+    border-bottom: 1px solid rgba(93, 214, 255, 0.3);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+}
+
+/* Method steps */
+.method-steps {
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 1.5rem;
+}
+
+.method-steps li {
+    color: #ffffff;
+    margin-bottom: 1rem;
+    position: relative;
+    padding-left: 2rem;
+    line-height: 1.6;
+}
+
+.method-steps li::before {
+    content: counter(step-counter);
+    counter-increment: step-counter;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 24px;
+    height: 24px;
+    background-color: #4a94ff;
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(74, 148, 255, 0.5);
+}
+
+/* Code blocks */
+.fine-tuning-comparison .code-block {
+    background-color: #121212;
+    border: 2px solid rgba(93, 214, 255, 0.4);
+    border-radius: 8px;
+    margin: 1.5rem 0;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(93, 214, 255, 0.2);
+}
+
+.fine-tuning-comparison .code-header {
+    background: linear-gradient(90deg, #1a1a1e, #26262e);
+    color: #ffffff;
+    padding: 0.6rem 1rem;
+    font-family: 'Fira Code', monospace;
+    font-weight: 500;
+    border-bottom: 2px solid rgba(93, 214, 255, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.fine-tuning-comparison .code-content {
+    background-color: #121212;
+    color: #ffffff;
+    padding: 1.2rem;
+    font-family: 'Fira Code', monospace;
+    font-size: 1rem;
+    line-height: 1.6;
+    overflow-x: auto;
+}
+
+.fine-tuning-comparison .code-content code {
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Pros and cons */
+.pros-cons-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.pros, 
+.cons {
+    flex: 1;
+    min-width: 250px;
+    background-color: rgba(25, 25, 30, 0.95);
+    border-radius: 8px;
+    padding: 1.2rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.pros {
+    border: 1px solid rgba(80, 250, 123, 0.3);
+}
+
+.cons {
+    border: 1px solid rgba(255, 85, 85, 0.3);
+}
+
+.pros h3 {
+    color: #50fa7b !important;
+    border-bottom: 1px solid rgba(80, 250, 123, 0.3);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.cons h3 {
+    color: #ff5555 !important;
+    border-bottom: 1px solid rgba(255, 85, 85, 0.3);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.pros ul, 
+.cons ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.pros ul li {
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.cons ul li {
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.pros ul li::before {
+    content: '✓';
+    color: #50fa7b;
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+}
+
+.cons ul li::before {
+    content: '✗';
+    color: #ff5555;
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+}
+
+/* Resource requirements */
+.resource-requirements {
+    background-color: rgba(25, 25, 30, 0.95);
+    border: 1px solid rgba(93, 214, 255, 0.3);
+    border-radius: 8px;
+    padding: 1.2rem;
+    margin: 1.5rem 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.resource-requirements h3 {
+    color: #5dd6ff !important;
+    border-bottom: 1px solid rgba(93, 214, 255, 0.3);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.resource-requirements table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 1rem;
+}
+
+.resource-requirements th,
+.resource-requirements td {
+    padding: 0.75rem;
+    border: 1px solid rgba(93, 214, 255, 0.2);
+    text-align: left;
+    color: #ffffff;
+}
+
+.resource-requirements th {
+    background-color: rgba(93, 214, 255, 0.1);
+    font-weight: 600;
+}
+
+.resource-requirements tr:nth-child(even) {
+    background-color: rgba(93, 214, 255, 0.05);
+}
+
+/* Breadcrumb navigation */
+.breadcrumb-nav {
+    margin-bottom: 2rem;
+    background-color: rgba(25, 25, 30, 0.8);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(93, 214, 255, 0.2);
+}
+
+.breadcrumb-nav a {
+    color: #4a94ff;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.breadcrumb-nav a:hover {
+    color: #5dd6ff;
+    text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .fine-tuning-comparison h1 {
+        font-size: 2rem;
+        padding: 1rem;
+    }
+    
+    .fine-tuning-comparison h2 {
+        font-size: 1.3rem;
+        padding: 0.8rem;
+    }
+    
+    .method-section {
+        padding: 1.2rem;
+    }
+    
+    .method-section h3 {
+        font-size: 1.5rem;
+    }
+    
+    .pros-cons-container {
+        flex-direction: column;
+    }
+    
+    .resource-requirements th,
+    .resource-requirements td {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+    }
+}

@@ -1,0 +1,334 @@
+/**
+ * High Contrast Mode CSS
+ * Applies maximum contrast for users with visibility issues
+ */
+
+/* Base high contrast styles */
+body.high-contrast-mode {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+}
+
+/* Text elements */
+body.high-contrast-mode p,
+body.high-contrast-mode span,
+body.high-contrast-mode div,
+body.high-contrast-mode li,
+body.high-contrast-mode td,
+body.high-contrast-mode th,
+body.high-contrast-mode label,
+body.high-contrast-mode input,
+body.high-contrast-mode textarea,
+body.high-contrast-mode select,
+body.high-contrast-mode button {
+    color: #ffffff !important;
+    text-shadow: none !important;
+    font-size: 1.1em !important;
+}
+
+/* Headings */
+body.high-contrast-mode h1,
+body.high-contrast-mode h2,
+body.high-contrast-mode h3,
+body.high-contrast-mode h4,
+body.high-contrast-mode h5,
+body.high-contrast-mode h6 {
+    color: #ffffff !important;
+    text-shadow: none !important;
+    border-bottom: 2px solid #ffffff !important;
+    padding-bottom: 0.5rem !important;
+    font-size: 1.2em !important;
+}
+
+body.high-contrast-mode h1 {
+    font-size: 2.2em !important;
+    -webkit-text-fill-color: #ffffff !important;
+    background: none !important;
+    filter: none !important;
+}
+
+/* Links */
+body.high-contrast-mode a {
+    color: #ffff00 !important;
+    text-decoration: underline !important;
+    text-shadow: none !important;
+    font-weight: bold !important;
+}
+
+body.high-contrast-mode a:hover {
+    color: #ffffff !important;
+    background-color: #0000ff !important;
+    text-decoration: underline !important;
+    text-shadow: none !important;
+}
+
+/* Buttons */
+body.high-contrast-mode .btn,
+body.high-contrast-mode button {
+    background: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #ffffff !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+    font-weight: bold !important;
+}
+
+body.high-contrast-mode .btn:hover,
+body.high-contrast-mode button:hover {
+    background: #0000ff !important;
+    color: #ffffff !important;
+    border: 2px solid #ffffff !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+}
+
+/* Cards */
+body.high-contrast-mode .card {
+    background-color: #000000 !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: none !important;
+}
+
+body.high-contrast-mode .card-header {
+    background-color: #000000 !important;
+    border-bottom: 2px solid #ffffff !important;
+    color: #ffffff !important;
+}
+
+/* Tables */
+body.high-contrast-mode table {
+    border: 2px solid #ffffff !important;
+    box-shadow: none !important;
+}
+
+body.high-contrast-mode th {
+    background: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #ffffff !important;
+    text-shadow: none !important;
+}
+
+body.high-contrast-mode td {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #ffffff !important;
+    text-shadow: none !important;
+}
+
+body.high-contrast-mode tr:nth-child(even) td {
+    background-color: #000000 !important;
+}
+
+body.high-contrast-mode tr:hover td {
+    background-color: #0000ff !important;
+}
+
+/* Lists */
+body.high-contrast-mode ul li::marker,
+body.high-contrast-mode ol li::marker {
+    color: #ffffff !important;
+}
+
+/* Code blocks */
+body.high-contrast-mode pre,
+body.high-contrast-mode code,
+body.high-contrast-mode .code-block {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: none !important;
+}
+
+body.high-contrast-mode code {
+    color: #ffff00 !important;
+    background-color: #000000 !important;
+    border: 1px solid #ffffff !important;
+}
+
+body.high-contrast-mode pre code {
+    color: #ffffff !important;
+}
+
+/* Form elements */
+body.high-contrast-mode input,
+body.high-contrast-mode textarea,
+body.high-contrast-mode select {
+    background-color: #000000 !important;
+    border: 2px solid #ffffff !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
+}
+
+body.high-contrast-mode input:focus,
+body.high-contrast-mode textarea:focus,
+body.high-contrast-mode select:focus {
+    border-color: #ffff00 !important;
+    box-shadow: none !important;
+    outline: 2px solid #ffff00 !important;
+}
+
+/* Navbar */
+body.high-contrast-mode .navbar {
+    background: #000000 !important;
+    border-bottom: 2px solid #ffffff !important;
+    box-shadow: none !important;
+}
+
+body.high-contrast-mode .navbar-brand {
+    color: #ffffff !important;
+    text-shadow: none !important;
+}
+
+body.high-contrast-mode .nav-link {
+    color: #ffffff !important;
+    text-shadow: none !important;
+}
+
+body.high-contrast-mode .nav-link:hover,
+body.high-contrast-mode .nav-link.active {
+    color: #ffff00 !important;
+    text-shadow: none !important;
+    text-decoration: underline !important;
+}
+
+/* Dropdown menus */
+body.high-contrast-mode .dropdown-menu {
+    background-color: #000000 !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: none !important;
+}
+
+body.high-contrast-mode .dropdown-item {
+    color: #ffffff !important;
+    text-shadow: none !important;
+}
+
+body.high-contrast-mode .dropdown-item:hover {
+    background-color: #0000ff !important;
+    color: #ffffff !important;
+}
+
+/* Badges */
+body.high-contrast-mode .badge {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border: 1px solid #ffffff !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+}
+
+/* Alerts */
+body.high-contrast-mode .alert {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: none !important;
+}
+
+/* Tooltips */
+body.high-contrast-mode .tooltip-inner {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+}
+
+/* Modals */
+body.high-contrast-mode .modal-content {
+    background-color: #000000 !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: none !important;
+}
+
+body.high-contrast-mode .modal-header,
+body.high-contrast-mode .modal-footer {
+    border-color: #ffffff !important;
+    background: #000000 !important;
+}
+
+/* Progress bars */
+body.high-contrast-mode .progress {
+    background-color: #000000 !important;
+    border: 1px solid #ffffff !important;
+    box-shadow: none !important;
+}
+
+body.high-contrast-mode .progress-bar {
+    background: #ffffff !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    color: #000000 !important;
+}
+
+/* Breadcrumbs */
+body.high-contrast-mode .breadcrumb {
+    background-color: #000000 !important;
+    border: 1px solid #ffffff !important;
+    box-shadow: none !important;
+}
+
+body.high-contrast-mode .breadcrumb-item {
+    color: #ffffff !important;
+    text-shadow: none !important;
+}
+
+body.high-contrast-mode .breadcrumb-item.active {
+    color: #ffff00 !important;
+}
+
+body.high-contrast-mode .breadcrumb-item + .breadcrumb-item::before {
+    color: #ffffff !important;
+}
+
+/* Pagination */
+body.high-contrast-mode .page-item .page-link {
+    background-color: #000000 !important;
+    border: 1px solid #ffffff !important;
+    color: #ffffff !important;
+    text-shadow: none !important;
+}
+
+body.high-contrast-mode .page-item.active .page-link {
+    background-color: #0000ff !important;
+    border-color: #ffffff !important;
+    box-shadow: none !important;
+}
+
+body.high-contrast-mode .page-item .page-link:hover {
+    background-color: #0000ff !important;
+    color: #ffffff !important;
+}
+
+/* Images */
+body.high-contrast-mode img {
+    border: 3px solid #ffffff !important;
+    box-shadow: none !important;
+    filter: contrast(1.5) brightness(1.2) !important;
+}
+
+body.high-contrast-mode img:hover {
+    border-color: #ffff00 !important;
+    box-shadow: none !important;
+}
+
+/* Specific elements */
+body.high-contrast-mode .theme-toggle-button,
+body.high-contrast-mode .contrast-toggle-button {
+    background: #000000 !important;
+    border: 2px solid #ffffff !important;
+    color: #ffffff !important;
+}
+
+body.high-contrast-mode .theme-toggle-icon,
+body.high-contrast-mode .contrast-toggle-icon {
+    color: #ffffff !important;
+}
+
+/* Fine-tuning comparison page */
+body.high-contrast-mode .fine-tuning-comparison h1,
+body.high-contrast-mode .fine-tuning-comparison h2 {
+    background-color: #000000 !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: none !important;
+}

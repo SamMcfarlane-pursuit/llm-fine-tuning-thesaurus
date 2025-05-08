@@ -1,0 +1,182 @@
+<div class="floating-help-container">
+    <button class="floating-help-button" id="floatingHelpButton">
+        <i class="bi bi-question-circle-fill"></i>
+    </button>
+    
+    <div class="floating-help-menu" id="floatingHelpMenu">
+        <div class="help-menu-header">
+            <h5>Quick Help</h5>
+            <button class="help-menu-close" id="helpMenuClose">
+                <i class="bi bi-x"></i>
+            </button>
+        </div>
+        
+        <div class="help-menu-items">
+            <a href="#" class="help-menu-item" data-bs-toggle="modal" data-bs-target="#howToUseModal">
+                <i class="bi bi-info-circle"></i>
+                <span>How to Use This Site</span>
+            </a>
+            
+            <a href="/concepts-learning" class="help-menu-item">
+                <i class="bi bi-book"></i>
+                <span>Learning Resources</span>
+            </a>
+            
+            <a href="/tutorials" class="help-menu-item">
+                <i class="bi bi-code-square"></i>
+                <span>Tutorials</span>
+            </a>
+            
+            <a href="/contact" class="help-menu-item">
+                <i class="bi bi-envelope"></i>
+                <span>Contact Support</span>
+            </a>
+            
+            <a href="/faq" class="help-menu-item">
+                <i class="bi bi-question-circle"></i>
+                <span>FAQ</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .floating-help-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
+    
+    .floating-help-button {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .floating-help-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    .floating-help-menu {
+        position: absolute;
+        bottom: 60px;
+        right: 0;
+        width: 250px;
+        background-color: rgba(26, 26, 30, 0.95);
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(58, 134, 255, 0.2);
+        overflow: hidden;
+        transform: scale(0.95);
+        transform-origin: bottom right;
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    .floating-help-menu.active {
+        transform: scale(1);
+        opacity: 1;
+        pointer-events: auto;
+    }
+    
+    .help-menu-header {
+        padding: 15px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .help-menu-header h5 {
+        margin: 0;
+        font-weight: 600;
+    }
+    
+    .help-menu-close {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.2rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+    }
+    
+    .help-menu-close:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .help-menu-items {
+        padding: 10px;
+    }
+    
+    .help-menu-item {
+        display: flex;
+        align-items: center;
+        padding: 12px 15px;
+        color: var(--text-primary);
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        margin-bottom: 5px;
+    }
+    
+    .help-menu-item:hover {
+        background-color: rgba(58, 134, 255, 0.1);
+        color: var(--primary-color);
+    }
+    
+    .help-menu-item i {
+        font-size: 1.2rem;
+        margin-right: 10px;
+        color: var(--primary-color);
+    }
+    
+    .help-menu-item span {
+        font-weight: 500;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const floatingHelpButton = document.getElementById('floatingHelpButton');
+        const floatingHelpMenu = document.getElementById('floatingHelpMenu');
+        const helpMenuClose = document.getElementById('helpMenuClose');
+        
+        // Toggle the help menu when the button is clicked
+        floatingHelpButton.addEventListener('click', function() {
+            floatingHelpMenu.classList.toggle('active');
+        });
+        
+        // Close the help menu when the close button is clicked
+        helpMenuClose.addEventListener('click', function() {
+            floatingHelpMenu.classList.remove('active');
+        });
+        
+        // Close the help menu when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!floatingHelpMenu.contains(event.target) && event.target !== floatingHelpButton) {
+                floatingHelpMenu.classList.remove('active');
+            }
+        });
+    });
+</script>

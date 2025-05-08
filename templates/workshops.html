@@ -17,6 +17,9 @@
             <a href="{{ url_for('workshop_progress') }}" class="related-concept-button">
                 <i class="bi bi-bar-chart-line"></i> Track Progress
             </a>
+            <a href="{{ url_for('workshop_exercises') }}" class="related-concept-button">
+                <i class="bi bi-code-square"></i> Exercises
+            </a>
             <a href="{{ url_for('workshops') }}#lora-basics" class="related-concept-button">
                 <i class="bi bi-arrow-right-circle"></i> LoRA Basics
             </a>
@@ -36,8 +39,11 @@
         <div class="col-md-12 text-center">
             <h1>LLM Fine-Tuning Workshops</h1>
             <p class="lead">Comprehensive hands-on workshops for mastering LLM fine-tuning techniques</p>
-            <a href="{{ url_for('workshop_progress') }}" class="btn btn-primary mt-2">
+            <a href="{{ url_for('workshop_progress') }}" class="btn btn-primary mt-2 me-2">
                 <i class="bi bi-bar-chart-line me-2"></i>Track My Progress
+            </a>
+            <a href="{{ url_for('workshop_exercises') }}" class="btn btn-success mt-2">
+                <i class="bi bi-code-square me-2"></i>View All Exercises
             </a>
         </div>
     </div>
@@ -176,7 +182,7 @@
                                         <li>Memory-efficient optimizers and attention mechanisms</li>
                                     </ul>
                                     <div class="text-center mt-3">
-                                        <a href="/workshop/memory-efficiency" class="btn btn-success">Start Workshop</a>
+                                        <a href="{{ url_for('workshop_memory_efficiency') }}" class="btn btn-success">Start Workshop</a>
                                     </div>
                                 </div>
                             </div>
@@ -198,7 +204,7 @@
                                         <li>Comparing PEFT methods and choosing the right approach</li>
                                     </ul>
                                     <div class="text-center mt-3">
-                                        <a href="/workshop/advanced-peft" class="btn btn-danger">Start Workshop</a>
+                                        <a href="{{ url_for('workshop_advanced_peft') }}" class="btn btn-danger">Start Workshop</a>
                                     </div>
                                 </div>
                             </div>
@@ -220,7 +226,7 @@
                                         <li>Evaluating instruction-following capabilities</li>
                                     </ul>
                                     <div class="text-center mt-3">
-                                        <a href="/workshop/instruction-fine-tuning" class="btn btn-secondary">Start Workshop</a>
+                                        <a href="{{ url_for('index') }}" class="btn btn-secondary">Start Workshop</a>
                                     </div>
                                 </div>
                             </div>
@@ -242,7 +248,7 @@
                                         <li>Deploying with Docker, FastAPI, and cloud services</li>
                                     </ul>
                                     <div class="text-center mt-3">
-                                        <a href="/workshop/deployment-optimization" class="btn btn-dark">Start Workshop</a>
+                                        <a href="{{ url_for('index') }}" class="btn btn-dark">Start Workshop</a>
                                     </div>
                                 </div>
                             </div>

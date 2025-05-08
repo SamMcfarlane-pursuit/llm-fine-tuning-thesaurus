@@ -1,0 +1,281 @@
+/**
+ * Navigation Visibility Fix
+ * Improves visibility of navigation elements, breadcrumbs, and section titles
+ * Specifically targets the issues shown in the screenshots
+ */
+
+/* Breadcrumb improvements */
+.breadcrumb {
+    background-color: transparent !important;
+    padding: 15px 0 !important;
+    margin-bottom: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.breadcrumb-item {
+    font-size: 1.1rem !important;
+    font-weight: 600 !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7) !important;
+}
+
+.breadcrumb-item a {
+    color: #5DD6FF !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7), 0 0 10px rgba(93, 214, 255, 0.4) !important;
+    transition: all 0.2s ease !important;
+    text-decoration: none !important;
+}
+
+.breadcrumb-item a:hover {
+    color: #FFFFFF !important;
+    text-decoration: underline !important;
+}
+
+.breadcrumb-item.active {
+    color: rgba(255, 255, 255, 0.9) !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7) !important;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    color: rgba(255, 255, 255, 0.7) !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7) !important;
+    content: "/ " !important;
+    padding: 0 10px !important;
+}
+
+/* Main heading improvements for Fine-Tuning Methods Comparison */
+.page-title, 
+h1.page-title,
+.comparison-title,
+h1.comparison-title {
+    color: #FFFFFF !important;
+    background: linear-gradient(135deg, rgba(74, 148, 255, 0.3), rgba(93, 214, 255, 0.3)) !important;
+    padding: 20px !important;
+    border-radius: 10px !important;
+    margin-bottom: 25px !important;
+    border: 2px solid rgba(93, 214, 255, 0.4) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), 0 0 15px rgba(93, 214, 255, 0.3) !important;
+    font-size: 2.5rem !important;
+    text-align: center !important;
+    font-weight: 800 !important;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.8), 0 0 15px rgba(93, 214, 255, 0.5) !important;
+    letter-spacing: 0.02em !important;
+}
+
+/* Subtitle improvements */
+.subtitle, 
+.page-subtitle,
+.comparison-subtitle {
+    color: #FFFFFF !important;
+    background-color: rgba(74, 148, 255, 0.2) !important;
+    padding: 15px 20px !important;
+    border-radius: 8px !important;
+    margin-bottom: 30px !important;
+    text-align: center !important;
+    font-size: 1.3rem !important;
+    max-width: 900px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    border: 1px solid rgba(93, 214, 255, 0.3) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7) !important;
+    font-weight: 500 !important;
+}
+
+/* Navigation tab improvements */
+.nav-tabs {
+    border-bottom: 2px solid rgba(93, 214, 255, 0.4) !important;
+    margin-bottom: 30px !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 5px !important;
+}
+
+.nav-tabs .nav-link {
+    color: #FFFFFF !important;
+    background-color: rgba(30, 30, 35, 0.8) !important;
+    border: 2px solid rgba(93, 214, 255, 0.3) !important;
+    border-bottom: none !important;
+    border-radius: 10px 10px 0 0 !important;
+    padding: 12px 25px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7) !important;
+    font-size: 1.1rem !important;
+    margin-right: 5px !important;
+}
+
+.nav-tabs .nav-link:hover {
+    color: #FFFFFF !important;
+    background-color: rgba(93, 214, 255, 0.2) !important;
+    border-color: rgba(93, 214, 255, 0.5) !important;
+    transform: translateY(-3px) !important;
+}
+
+.nav-tabs .nav-link.active {
+    color: #FFFFFF !important;
+    background: linear-gradient(135deg, rgba(74, 148, 255, 0.3), rgba(93, 214, 255, 0.3)) !important;
+    border-color: rgba(93, 214, 255, 0.5) !important;
+    border-bottom: none !important;
+    font-weight: 700 !important;
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.2), 0 0 10px rgba(93, 214, 255, 0.2) !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7), 0 0 10px rgba(93, 214, 255, 0.4) !important;
+}
+
+/* Navigation buttons improvements */
+.nav-button, 
+.btn-primary,
+.action-button {
+    background: linear-gradient(135deg, #4A94FF, #5DD6FF) !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 12px 25px !important;
+    font-weight: 700 !important;
+    font-size: 1.1rem !important;
+    letter-spacing: 0.01em !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), 0 0 10px rgba(93, 214, 255, 0.3) !important;
+    transition: all 0.3s ease !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-decoration: none !important;
+}
+
+.nav-button:hover, 
+.btn-primary:hover,
+.action-button:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(93, 214, 255, 0.4) !important;
+    color: #FFFFFF !important;
+    text-decoration: none !important;
+    background: linear-gradient(135deg, #5DD6FF, #4A94FF) !important;
+}
+
+.nav-button i, 
+.btn-primary i,
+.action-button i {
+    margin-right: 10px !important;
+    font-size: 1.2rem !important;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5)) !important;
+}
+
+/* Workshop button improvements */
+.workshop-button,
+a[href*="workshops"],
+.workshops-link {
+    background-color: rgba(93, 214, 255, 0.2) !important;
+    color: #FFFFFF !important;
+    border: 2px solid rgba(93, 214, 255, 0.4) !important;
+    border-radius: 8px !important;
+    padding: 15px 25px !important;
+    font-weight: 700 !important;
+    font-size: 1.2rem !important;
+    letter-spacing: 0.01em !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), 0 0 10px rgba(93, 214, 255, 0.2) !important;
+    transition: all 0.3s ease !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7) !important;
+    display: flex !important;
+    align-items: center !important;
+    text-decoration: none !important;
+}
+
+.workshop-button:hover,
+a[href*="workshops"]:hover,
+.workshops-link:hover {
+    background-color: rgba(93, 214, 255, 0.3) !important;
+    border-color: rgba(93, 214, 255, 0.6) !important;
+    transform: translateY(-3px) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(93, 214, 255, 0.3) !important;
+    color: #FFFFFF !important;
+    text-decoration: none !important;
+}
+
+.workshop-button i,
+a[href*="workshops"] i,
+.workshops-link i {
+    margin-right: 15px !important;
+    font-size: 1.5rem !important;
+    color: #5DD6FF !important;
+    filter: drop-shadow(0 0 8px rgba(93, 214, 255, 0.5)) !important;
+}
+
+.workshop-button:hover i,
+a[href*="workshops"]:hover i,
+.workshops-link:hover i {
+    color: #FFFFFF !important;
+    filter: drop-shadow(0 0 12px rgba(93, 214, 255, 0.7)) !important;
+}
+
+/* Guide button improvements */
+.guide-button,
+a[href*="guides"],
+.guides-link {
+    background-color: rgba(74, 148, 255, 0.2) !important;
+    color: #FFFFFF !important;
+    border: 2px solid rgba(74, 148, 255, 0.4) !important;
+    border-radius: 8px !important;
+    padding: 15px 25px !important;
+    font-weight: 700 !important;
+    font-size: 1.2rem !important;
+    letter-spacing: 0.01em !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), 0 0 10px rgba(74, 148, 255, 0.2) !important;
+    transition: all 0.3s ease !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7) !important;
+    display: flex !important;
+    align-items: center !important;
+    text-decoration: none !important;
+}
+
+.guide-button:hover,
+a[href*="guides"]:hover,
+.guides-link:hover {
+    background-color: rgba(74, 148, 255, 0.3) !important;
+    border-color: rgba(74, 148, 255, 0.6) !important;
+    transform: translateY(-3px) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(74, 148, 255, 0.3) !important;
+    color: #FFFFFF !important;
+    text-decoration: none !important;
+}
+
+.guide-button i,
+a[href*="guides"] i,
+.guides-link i {
+    margin-right: 15px !important;
+    font-size: 1.5rem !important;
+    color: #4A94FF !important;
+    filter: drop-shadow(0 0 8px rgba(74, 148, 255, 0.5)) !important;
+}
+
+.guide-button:hover i,
+a[href*="guides"]:hover i,
+.guides-link:hover i {
+    color: #FFFFFF !important;
+    filter: drop-shadow(0 0 12px rgba(74, 148, 255, 0.7)) !important;
+}
+
+/* Getting Started Guide improvements */
+.guide-title,
+.getting-started-title {
+    color: #5DD6FF !important;
+    font-size: 2rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 20px !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7), 0 0 15px rgba(93, 214, 255, 0.5) !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 15px !important;
+    border-radius: 10px !important;
+    background-color: rgba(30, 30, 35, 0.7) !important;
+    border: 1px solid rgba(93, 214, 255, 0.3) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+}
+
+.guide-title i,
+.getting-started-title i {
+    margin-right: 15px !important;
+    font-size: 2.2rem !important;
+    color: #5DD6FF !important;
+    filter: drop-shadow(0 0 15px rgba(93, 214, 255, 0.6)) !important;
+}

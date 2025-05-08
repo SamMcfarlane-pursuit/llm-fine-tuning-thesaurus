@@ -1,0 +1,355 @@
+/**
+ * Enhanced Workshop Visibility CSS
+ * Improves visibility of text in workshop sections
+ */
+
+/* Workshop container */
+.workshop-container,
+.workshop-section,
+.workshop-content {
+    background-color: rgba(25, 25, 30, 0.95) !important;
+    border: 2px solid rgba(93, 214, 255, 0.4) !important;
+    border-radius: 10px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(93, 214, 255, 0.3) !important;
+    margin-bottom: 2rem !important;
+    padding: 1.5rem !important;
+    position: relative !important;
+    overflow: visible !important;
+}
+
+/* Workshop headings */
+.workshop-heading,
+.workshop-title,
+.workshop-subtitle,
+.workshop-container h1,
+.workshop-container h2,
+.workshop-container h3,
+.workshop-section h1,
+.workshop-section h2,
+.workshop-section h3 {
+    color: #5dd6ff !important;
+    text-shadow: 0 0 15px rgba(93, 214, 255, 0.6) !important;
+    font-weight: 700 !important;
+    margin-bottom: 1.5rem !important;
+    font-size: 2rem !important;
+    letter-spacing: 0.5px !important;
+    border-bottom: 2px solid rgba(93, 214, 255, 0.3) !important;
+    padding-bottom: 0.75rem !important;
+}
+
+/* Workshop text */
+.workshop-description,
+.workshop-text,
+.workshop-container p,
+.workshop-section p {
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7) !important;
+    line-height: 1.7 !important;
+    margin-bottom: 1.5rem !important;
+    font-size: 1rem !important;
+    font-weight: 400 !important;
+}
+
+/* Workshop links */
+.workshop-link,
+.workshop-container a,
+.workshop-section a {
+    color: #5dd6ff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7) !important;
+    text-decoration: none !important;
+    transition: all 0.3s ease !important;
+    font-weight: 500 !important;
+}
+
+.workshop-link:hover,
+.workshop-container a:hover,
+.workshop-section a:hover {
+    color: #4a94ff !important;
+    text-shadow: 0 0 8px rgba(74, 148, 255, 0.5) !important;
+    text-decoration: underline !important;
+}
+
+/* Workshop lists */
+.workshop-container ul,
+.workshop-container ol,
+.workshop-section ul,
+.workshop-section ol {
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7) !important;
+    line-height: 1.7 !important;
+    margin-bottom: 1.5rem !important;
+    padding-left: 1.5rem !important;
+}
+
+.workshop-container li,
+.workshop-section li {
+    margin-bottom: 0.5rem !important;
+}
+
+/* Workshop code blocks */
+.workshop-container pre,
+.workshop-container code,
+.workshop-section pre,
+.workshop-section code {
+    background-color: rgba(20, 20, 25, 0.95) !important;
+    color: #ffffff !important;
+    text-shadow: none !important;
+    border: 1px solid rgba(93, 214, 255, 0.3) !important;
+    border-radius: 5px !important;
+    padding: 1rem !important;
+    margin-bottom: 1.5rem !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3) !important;
+    font-family: 'Fira Code', monospace !important;
+}
+
+.workshop-container code,
+.workshop-section code {
+    padding: 0.2rem 0.4rem !important;
+    font-size: 0.9rem !important;
+    color: #5dd6ff !important;
+}
+
+/* Workshop tables */
+.workshop-container table,
+.workshop-section table {
+    width: 100% !important;
+    margin-bottom: 1.5rem !important;
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7) !important;
+    border-collapse: collapse !important;
+}
+
+.workshop-container th,
+.workshop-container td,
+.workshop-section th,
+.workshop-section td {
+    padding: 0.75rem !important;
+    vertical-align: top !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.workshop-container th,
+.workshop-section th {
+    color: #5dd6ff !important;
+    text-shadow: 0 0 8px rgba(93, 214, 255, 0.5) !important;
+    font-weight: 700 !important;
+    background-color: rgba(20, 20, 25, 0.95) !important;
+}
+
+/* Workshop buttons */
+.workshop-button,
+.workshop-container .btn,
+.workshop-section .btn {
+    background: linear-gradient(135deg, #4a94ff, #5dd6ff) !important;
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7) !important;
+    border: none !important;
+    border-radius: 30px !important;
+    padding: 0.5rem 1.5rem !important;
+    font-size: 1rem !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 10px rgba(93, 214, 255, 0.3) !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+    margin: 0.5rem 0 !important;
+}
+
+.workshop-button:hover,
+.workshop-container .btn:hover,
+.workshop-section .btn:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(93, 214, 255, 0.4) !important;
+    text-decoration: none !important;
+}
+
+.workshop-button:active,
+.workshop-container .btn:active,
+.workshop-section .btn:active {
+    transform: translateY(1px) !important;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3), 0 0 5px rgba(93, 214, 255, 0.3) !important;
+}
+
+/* Light mode overrides */
+body.light-theme .workshop-container,
+body.light-theme .workshop-section,
+body.light-theme .workshop-content {
+    background-color: #f8f9fa !important;
+    border: 2px solid rgba(0, 86, 179, 0.3) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 0 20px rgba(0, 86, 179, 0.1) !important;
+}
+
+body.light-theme .workshop-heading,
+body.light-theme .workshop-title,
+body.light-theme .workshop-subtitle,
+body.light-theme .workshop-container h1,
+body.light-theme .workshop-container h2,
+body.light-theme .workshop-container h3,
+body.light-theme .workshop-section h1,
+body.light-theme .workshop-section h2,
+body.light-theme .workshop-section h3 {
+    color: #0056b3 !important;
+    text-shadow: none !important;
+    border-bottom: 2px solid rgba(0, 86, 179, 0.2) !important;
+}
+
+body.light-theme .workshop-description,
+body.light-theme .workshop-text,
+body.light-theme .workshop-container p,
+body.light-theme .workshop-section p,
+body.light-theme .workshop-container ul,
+body.light-theme .workshop-container ol,
+body.light-theme .workshop-section ul,
+body.light-theme .workshop-section ol,
+body.light-theme .workshop-container li,
+body.light-theme .workshop-section li {
+    color: #212529 !important;
+    text-shadow: none !important;
+}
+
+body.light-theme .workshop-link,
+body.light-theme .workshop-container a,
+body.light-theme .workshop-section a {
+    color: #0056b3 !important;
+    text-shadow: none !important;
+}
+
+body.light-theme .workshop-link:hover,
+body.light-theme .workshop-container a:hover,
+body.light-theme .workshop-section a:hover {
+    color: #0088cc !important;
+    text-shadow: none !important;
+}
+
+body.light-theme .workshop-container pre,
+body.light-theme .workshop-container code,
+body.light-theme .workshop-section pre,
+body.light-theme .workshop-section code {
+    background-color: #f1f1f1 !important;
+    color: #212529 !important;
+    border: 1px solid rgba(0, 86, 179, 0.2) !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1) !important;
+}
+
+body.light-theme .workshop-container code,
+body.light-theme .workshop-section code {
+    color: #0056b3 !important;
+}
+
+body.light-theme .workshop-container table,
+body.light-theme .workshop-section table {
+    color: #212529 !important;
+    text-shadow: none !important;
+}
+
+body.light-theme .workshop-container th,
+body.light-theme .workshop-container td,
+body.light-theme .workshop-section th,
+body.light-theme .workshop-section td {
+    border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+body.light-theme .workshop-container th,
+body.light-theme .workshop-section th {
+    color: #0056b3 !important;
+    text-shadow: none !important;
+    background-color: #f1f1f1 !important;
+}
+
+body.light-theme .workshop-button,
+body.light-theme .workshop-container .btn,
+body.light-theme .workshop-section .btn {
+    background: linear-gradient(135deg, #0056b3, #0088cc) !important;
+    text-shadow: none !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1), 0 0 10px rgba(0, 86, 179, 0.1) !important;
+}
+
+body.light-theme .workshop-button:hover,
+body.light-theme .workshop-container .btn:hover,
+body.light-theme .workshop-section .btn:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), 0 0 15px rgba(0, 86, 179, 0.2) !important;
+}
+
+body.light-theme .workshop-button:active,
+body.light-theme .workshop-container .btn:active,
+body.light-theme .workshop-section .btn:active {
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1), 0 0 5px rgba(0, 86, 179, 0.1) !important;
+}
+
+/* High contrast mode overrides */
+body.high-contrast-mode .workshop-container,
+body.high-contrast-mode .workshop-section,
+body.high-contrast-mode .workshop-content {
+    background-color: #000000 !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: none !important;
+}
+
+body.high-contrast-mode .workshop-heading,
+body.high-contrast-mode .workshop-title,
+body.high-contrast-mode .workshop-subtitle,
+body.high-contrast-mode .workshop-container h1,
+body.high-contrast-mode .workshop-container h2,
+body.high-contrast-mode .workshop-container h3,
+body.high-contrast-mode .workshop-section h1,
+body.high-contrast-mode .workshop-section h2,
+body.high-contrast-mode .workshop-section h3 {
+    color: #ffffff !important;
+    text-shadow: none !important;
+    border-bottom: 2px solid #ffffff !important;
+}
+
+body.high-contrast-mode .workshop-description,
+body.high-contrast-mode .workshop-text,
+body.high-contrast-mode .workshop-container p,
+body.high-contrast-mode .workshop-section p,
+body.high-contrast-mode .workshop-container ul,
+body.high-contrast-mode .workshop-container ol,
+body.high-contrast-mode .workshop-section ul,
+body.high-contrast-mode .workshop-section ol,
+body.high-contrast-mode .workshop-container li,
+body.high-contrast-mode .workshop-section li,
+body.high-contrast-mode .workshop-link,
+body.high-contrast-mode .workshop-container a,
+body.high-contrast-mode .workshop-section a {
+    color: #ffffff !important;
+    text-shadow: none !important;
+}
+
+body.high-contrast-mode .workshop-container pre,
+body.high-contrast-mode .workshop-container code,
+body.high-contrast-mode .workshop-section pre,
+body.high-contrast-mode .workshop-section code {
+    background-color: #333333 !important;
+    color: #ffffff !important;
+    border: 1px solid #ffffff !important;
+    box-shadow: none !important;
+}
+
+body.high-contrast-mode .workshop-container table,
+body.high-contrast-mode .workshop-section table {
+    color: #ffffff !important;
+}
+
+body.high-contrast-mode .workshop-container th,
+body.high-contrast-mode .workshop-container td,
+body.high-contrast-mode .workshop-section th,
+body.high-contrast-mode .workshop-section td {
+    border-top: 1px solid #ffffff !important;
+}
+
+body.high-contrast-mode .workshop-container th,
+body.high-contrast-mode .workshop-section th {
+    color: #ffffff !important;
+    background-color: #333333 !important;
+}
+
+body.high-contrast-mode .workshop-button,
+body.high-contrast-mode .workshop-container .btn,
+body.high-contrast-mode .workshop-section .btn {
+    background: #ffffff !important;
+    color: #000000 !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+}

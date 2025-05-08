@@ -1,0 +1,627 @@
+{% extends 'base.html' %}
+
+{% block title %}Interactive Pipeline Demo | Visual Thesaurus LLM{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pipeline-interactive.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/holographic-progress.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-scrolling.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="pipeline-interactive-container">
+    <!-- Breadcrumb Navigation -->
+    <div class="breadcrumb-container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+                <li class="breadcrumb-item"><a href="{{ url_for('pipeline.index') }}">Pipeline</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Interactive Demo</li>
+            </ol>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="pipeline-demo-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="pipeline-demo-title">Hugging Face Pipeline API</h1>
+                    <p class="pipeline-demo-subtitle">Powerful NLP capabilities with just a few lines of code. Explore transformer models for sentiment analysis, text generation, translation, and more.</p>
+                    <div class="header-badges mt-4">
+                        <span class="header-badge"><i class="bi bi-lightning-fill"></i> Fast Inference</span>
+                        <span class="header-badge"><i class="bi bi-boxes"></i> 10,000+ Models</span>
+                        <span class="header-badge"><i class="bi bi-code-slash"></i> Simple API</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <div class="pipeline-icon">
+                        <i class="bi bi-cpu-fill"></i>
+                        <div class="icon-glow"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid mt-4">
+        <!-- Main Content Area -->
+        <div class="pipeline-content-card">
+            <!-- Quick Navigation Pills -->
+            <div class="quick-nav-pills mb-4">
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="#how-it-works" class="nav-pill active">
+                        <i class="bi bi-info-circle"></i> How It Works
+                    </a>
+                    <a href="#workflow" class="nav-pill">
+                        <i class="bi bi-diagram-3"></i> Workflow
+                    </a>
+                    <a href="#interactive-demo" class="nav-pill">
+                        <i class="bi bi-play-circle"></i> Interactive Demo
+                    </a>
+                    <a href="https://huggingface.co/docs/transformers/index" target="_blank" class="nav-pill">
+                        <i class="bi bi-book"></i> Documentation
+                    </a>
+                    <a href="https://huggingface.co/models" target="_blank" class="nav-pill">
+                        <i class="bi bi-box"></i> Model Hub
+                    </a>
+                    <a href="{{ url_for('interactive_tutorials') }}" class="nav-pill">
+                        <i class="bi bi-journal-code"></i> Tutorials
+                    </a>
+                </div>
+            </div>
+
+            <section id="how-it-works" class="section-transition">
+                <h2 class="section-title text-center mb-4">How the Pipeline API Works</h2>
+
+                <div class="pipeline-api-box">
+                    <h3 class="text-center">Hugging Face Pipeline API</h3>
+                    <p class="text-center text-muted">Simplified workflow for inference with pre-trained models</p>
+
+                    <div class="pipeline-workflow mt-4">
+                        <div class="workflow-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>Import Pipeline</h4>
+                                <div class="code-snippet">
+                                    <div class="code-snippet-header">
+                                        <span>Import Pipeline</span>
+                                        <span class="language-tag">Python</span>
+                                    </div>
+                                    <pre><code class="language-python">from transformers import pipeline</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="workflow-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>Select a Model</h4>
+                                <div class="code-snippet">
+                                    <div class="code-snippet-header">
+                                        <span>Initialize Pipeline</span>
+                                        <span class="language-tag">Python</span>
+                                    </div>
+                                    <pre><code class="language-python">classifier = pipeline('sentiment-analysis')</code></pre>
+                                </div>
+                                <p class="text-muted">You can specify a model: <code>pipeline('task', model='model_name')</code></p>
+                            </div>
+                        </div>
+
+                        <div class="workflow-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>Enter Input</h4>
+                                <div class="code-snippet">
+                                    <div class="code-snippet-header">
+                                        <span>Process Input</span>
+                                        <span class="language-tag">Python</span>
+                                    </div>
+                                    <pre><code class="language-python">result = classifier('I love using Hugging Face transformers!')</code></pre>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="workflow-step">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h4>Get Results</h4>
+                                <div class="code-snippet">
+                                    <div class="code-snippet-header">
+                                        <span>View Results</span>
+                                        <span class="language-tag">Python</span>
+                                    </div>
+                                    <pre><code class="language-python">print(result)
+# [{'label': 'POSITIVE', 'score': 0.9998}]</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="resource-cards mt-5">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <div class="resource-card h-100">
+                                <div class="resource-icon">
+                                    <i class="bi bi-book"></i>
+                                </div>
+                                <h5>Official Documentation</h5>
+                                <p>Comprehensive guide to using the pipeline API</p>
+                                <a href="https://huggingface.co/docs/transformers/main_classes/pipelines" target="_blank" class="btn btn-sm btn-outline-primary">View</a>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="resource-card h-100">
+                                <div class="resource-icon">
+                                    <i class="bi bi-github"></i>
+                                </div>
+                                <h5>GitHub Repository</h5>
+                                <p>Source code and examples for transformers</p>
+                                <a href="https://github.com/huggingface/transformers" target="_blank" class="btn btn-sm btn-outline-primary">View</a>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="resource-card h-100">
+                                <div class="resource-icon">
+                                    <i class="bi bi-journal-code"></i>
+                                </div>
+                                <h5>Colab Notebooks</h5>
+                                <p>Interactive examples you can run in your browser</p>
+                                <a href="https://huggingface.co/docs/transformers/notebooks" target="_blank" class="btn btn-sm btn-outline-primary">View</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="interactive-demo" class="section-transition mt-5">
+                <h3 class="text-center mb-4">Try It Yourself</h3>
+
+                <div class="demo-controls">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="taskSelect" class="form-label">Select Task</label>
+                                <select class="form-select" id="taskSelect">
+                                    <option value="sentiment-analysis">Sentiment Analysis</option>
+                                    <option value="text-generation">Text Generation</option>
+                                    <option value="fill-mask">Fill Mask</option>
+                                    <option value="token-classification">Named Entity Recognition</option>
+                                    <option value="question-answering">Question Answering</option>
+                                    <option value="summarization">Summarization</option>
+                                    <option value="translation">Translation</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label for="modelSelect" class="form-label">Select Model (Optional)</label>
+                                <select class="form-select" id="modelSelect">
+                                    <option value="">Default for selected task</option>
+                                    <!-- Models will be populated based on selected task -->
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="inputText" class="form-label">Input Text</label>
+                        <textarea class="form-control" id="inputText" rows="3" placeholder="Enter text for processing..."></textarea>
+                    </div>
+
+                    <div id="additionalParams" class="mb-3">
+                        <!-- Additional parameters will be shown based on task -->
+                    </div>
+
+                    <button id="runPipeline" class="btn btn-primary w-100">
+                        <i class="bi bi-play-fill"></i> Run Pipeline
+                    </button>
+                </div>
+
+                <div class="results-container mt-4" style="display: none;">
+                    <h4>Results</h4>
+                    <div class="code-snippet">
+                        <div class="code-snippet-header">
+                            <span>Pipeline Output</span>
+                            <span class="language-tag">JSON</span>
+                        </div>
+                        <pre><code id="resultOutput" class="language-json"></code></pre>
+                    </div>
+                </div>
+
+                <div class="generated-code mt-4">
+                    <h4>Generated Code</h4>
+                    <div class="code-snippet">
+                        <div class="code-snippet-header">
+                            <span>Complete Example</span>
+                            <span class="language-tag">Python</span>
+                        </div>
+                        <pre><code id="generatedCode" class="language-python"></code></pre>
+                    </div>
+                    <div class="d-flex gap-2 mt-3">
+                        <button id="copyCode" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-clipboard"></i> Copy Code
+                        </button>
+                        <a href="#" id="openColab" class="btn btn-sm btn-outline-success">
+                            <i class="bi bi-google"></i> Open in Colab
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Popular Models Section -->
+            <section class="section-transition mt-5">
+                <h3 class="section-title text-center mb-4">Popular Models</h3>
+                <div class="model-cards">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <a href="https://huggingface.co/gpt2" target="_blank" class="model-card">
+                                <div class="model-icon">
+                                    <i class="bi bi-cpu"></i>
+                                </div>
+                                <h5>GPT-2</h5>
+                                <p>Generative Pre-trained Transformer for text generation</p>
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="https://huggingface.co/bert-base-uncased" target="_blank" class="model-card">
+                                <div class="model-icon">
+                                    <i class="bi bi-cpu"></i>
+                                </div>
+                                <h5>BERT</h5>
+                                <p>Bidirectional Encoder Representations from Transformers</p>
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="https://huggingface.co/t5-base" target="_blank" class="model-card">
+                                <div class="model-icon">
+                                    <i class="bi bi-cpu"></i>
+                                </div>
+                                <h5>T5</h5>
+                                <p>Text-to-Text Transfer Transformer for various NLP tasks</p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Scroll Progress Indicator -->
+    <div class="scroll-progress-container">
+        <div class="scroll-progress-bar"></div>
+    </div>
+</div>
+
+<!-- Holographic Progress Navigation -->
+<div class="holographic-progress-navigation" id="holographicProgress">
+    <div class="holographic-glow"></div>
+    <button class="toggle-progress" id="toggleProgress">
+        <i class="bi bi-x-lg"></i>
+    </button>
+    <div class="holographic-progress-icon">
+        <i class="bi bi-cpu"></i>
+    </div>
+
+    <div class="holographic-progress-info">
+        <h5>Col Md 4</h5>
+        <div class="holographic-progress-meta">
+            <span>© 2023 Thesaurus AI LLM FT Project</span>
+            <div class="holographic-progress-percentage">
+                <span>Position: 5/8</span>
+                <span>100%</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="holographic-progress-bar"></div>
+
+    <div class="holographic-progress-sections">
+        <div class="section-dot" data-section="Import"></div>
+        <div class="section-dot" data-section="Select Model"></div>
+        <div class="section-dot" data-section="Enter Input"></div>
+        <div class="section-dot active" data-section="Pipeline API"></div>
+        <div class="section-dot" data-section="Python Code"></div>
+        <div class="section-dot" data-section="Documentation"></div>
+        <div class="section-dot" data-section="Model Hub"></div>
+        <div class="section-dot" data-section="Tutorials"></div>
+    </div>
+
+    <div class="holographic-progress-buttons">
+        <a href="#" class="holographic-progress-button">
+            <i class="bi bi-arrow-left"></i> Previous
+        </a>
+        <a href="#" class="holographic-progress-button">
+            Next <i class="bi bi-arrow-right"></i>
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/json.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css" id="hljs-theme-dark">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-light.min.css" id="hljs-theme-light" disabled>
+<script src="{{ url_for('static', filename='js/pipeline-interactive.js') }}"></script>
+<script src="{{ url_for('static', filename='js/enhanced-scrolling.js') }}"></script>
+
+<!-- Theme-specific script for this page -->
+<script>
+    // Listen for theme changes to update syntax highlighting
+    document.addEventListener('themeChanged', function(e) {
+        const theme = e.detail.theme;
+
+        // Update syntax highlighting theme
+        const darkTheme = document.getElementById('hljs-theme-dark');
+        const lightTheme = document.getElementById('hljs-theme-light');
+
+        if (theme === 'light') {
+            darkTheme.disabled = true;
+            lightTheme.disabled = false;
+        } else {
+            darkTheme.disabled = false;
+            lightTheme.disabled = true;
+        }
+
+        // Re-highlight all code blocks
+        document.querySelectorAll('pre code').forEach(block => {
+            hljs.highlightBlock(block);
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize scroll progress indicator
+        initScrollProgress();
+
+        // Initialize section transitions
+        initSectionTransitions();
+
+        // Initialize navigation pills
+        initNavigationPills();
+
+        // Holographic Progress Indicator
+        const holographicProgress = document.getElementById('holographicProgress');
+        const toggleProgress = document.getElementById('toggleProgress');
+        const holographicGlow = document.querySelector('.holographic-glow');
+        const sectionDots = document.querySelectorAll('.section-dot');
+
+        if (holographicProgress && toggleProgress) {
+            // Toggle minimize/expand
+            toggleProgress.addEventListener('click', function() {
+                holographicProgress.classList.toggle('minimized');
+
+                // Change icon based on state
+                if (holographicProgress.classList.contains('minimized')) {
+                    toggleProgress.innerHTML = '<i class="bi bi-arrows-angle-expand"></i>';
+                } else {
+                    toggleProgress.innerHTML = '<i class="bi bi-x-lg"></i>';
+                }
+            });
+
+            // Holographic glow effect that follows mouse
+            holographicProgress.addEventListener('mousemove', function(e) {
+                const rect = holographicProgress.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+                holographicGlow.style.setProperty('--x', x + '%');
+                holographicGlow.style.setProperty('--y', y + '%');
+            });
+
+            // Section dots interaction
+            sectionDots.forEach(dot => {
+                dot.addEventListener('click', function() {
+                    // Remove active class from all dots
+                    sectionDots.forEach(d => d.classList.remove('active'));
+
+                    // Add active class to clicked dot
+                    this.classList.add('active');
+
+                    // Update progress info
+                    const sectionName = this.getAttribute('data-section');
+                    document.querySelector('.holographic-progress-info h5').textContent = sectionName;
+
+                    // Navigate to the section
+                    const sectionMap = {
+                        'Import': '#how-it-works',
+                        'Select Model': '#workflow',
+                        'Enter Input': '#interactive-demo',
+                        'Pipeline API': '#how-it-works',
+                        'Python Code': '#interactive-demo',
+                        'Documentation': 'https://huggingface.co/docs/transformers/index',
+                        'Model Hub': 'https://huggingface.co/models',
+                        'Tutorials': '/interactive_tutorials'
+                    };
+
+                    const target = sectionMap[sectionName];
+                    if (target) {
+                        if (target.startsWith('#')) {
+                            // Internal link
+                            document.querySelector(target).scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        } else if (target.startsWith('http')) {
+                            // External link
+                            window.open(target, '_blank');
+                        } else {
+                            // Route link
+                            window.location.href = target;
+                        }
+                    }
+                });
+            });
+        }
+
+        // 3D tilt effect for cards
+        const cards = document.querySelectorAll('.resource-card, .model-card');
+
+        cards.forEach(card => {
+            card.addEventListener('mousemove', function(e) {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const deltaX = (x - centerX) / centerX;
+                const deltaY = (y - centerY) / centerY;
+
+                card.style.transform = `perspective(1000px) rotateX(${-deltaY * 5}deg) rotateY(${deltaX * 5}deg) translateZ(10px)`;
+            });
+
+            card.addEventListener('mouseleave', function() {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
+            });
+        });
+    });
+
+    // Initialize scroll progress indicator
+    function initScrollProgress() {
+        // Update progress bar on scroll
+        window.addEventListener('scroll', function() {
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrollProgress = (scrollTop / scrollHeight) * 100;
+
+            const progressBar = document.querySelector('.scroll-progress-bar');
+            if (progressBar) {
+                progressBar.style.width = scrollProgress + '%';
+            }
+
+            // Update holographic progress
+            const holographicProgressBar = document.querySelector('.holographic-progress-bar');
+            if (holographicProgressBar) {
+                holographicProgressBar.style.transform = `scaleX(${scrollProgress / 100})`;
+            }
+
+            // Update active section in holographic progress
+            updateActiveSection(scrollTop);
+        });
+    }
+
+    // Update active section in holographic progress based on scroll position
+    function updateActiveSection(scrollTop) {
+        const sections = [
+            { id: 'how-it-works', dotIndex: 0 },
+            { id: 'workflow', dotIndex: 1 },
+            { id: 'interactive-demo', dotIndex: 2 }
+        ];
+
+        let activeIndex = 0;
+
+        sections.forEach((section, index) => {
+            const element = document.getElementById(section.id);
+            if (element) {
+                const rect = element.getBoundingClientRect();
+                if (rect.top <= 100) {
+                    activeIndex = index;
+                }
+            }
+        });
+
+        // Update dots
+        const sectionDots = document.querySelectorAll('.section-dot');
+        if (sectionDots.length > 0) {
+            sectionDots.forEach(dot => dot.classList.remove('active'));
+            sectionDots[sections[activeIndex].dotIndex].classList.add('active');
+
+            // Update progress info
+            const sectionName = sectionDots[sections[activeIndex].dotIndex].getAttribute('data-section');
+            const progressInfo = document.querySelector('.holographic-progress-info h5');
+            if (progressInfo) {
+                progressInfo.textContent = sectionName;
+            }
+        }
+    }
+
+    // Initialize section transitions
+    function initSectionTransitions() {
+        const sections = document.querySelectorAll('.section-transition');
+
+        // Create IntersectionObserver
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                    entry.target.classList.remove('fade-out');
+                } else {
+                    entry.target.classList.remove('fade-in');
+                    entry.target.classList.add('fade-out');
+                }
+            });
+        }, {
+            root: null,
+            threshold: 0.1,
+            rootMargin: '0px'
+        });
+
+        // Observe all sections
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+    }
+
+    // Initialize navigation pills
+    function initNavigationPills() {
+        const navPills = document.querySelectorAll('.nav-pill');
+
+        navPills.forEach(pill => {
+            pill.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+
+                if (href && href.startsWith('#')) {
+                    e.preventDefault();
+
+                    // Remove active class from all pills
+                    navPills.forEach(p => p.classList.remove('active'));
+
+                    // Add active class to clicked pill
+                    this.classList.add('active');
+
+                    // Scroll to section
+                    const targetSection = document.querySelector(href);
+                    if (targetSection) {
+                        targetSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            });
+        });
+
+        // Update active pill on scroll
+        window.addEventListener('scroll', function() {
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+
+            // Find the current section
+            let currentSectionId = null;
+            document.querySelectorAll('section[id]').forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= 100) {
+                    currentSectionId = section.id;
+                }
+            });
+
+            if (currentSectionId) {
+                // Update active pill
+                navPills.forEach(pill => {
+                    const href = pill.getAttribute('href');
+                    if (href === `#${currentSectionId}`) {
+                        pill.classList.add('active');
+                    } else if (href && href.startsWith('#')) {
+                        pill.classList.remove('active');
+                    }
+                });
+            }
+        });
+    }
+</script>
+{% endblock %}

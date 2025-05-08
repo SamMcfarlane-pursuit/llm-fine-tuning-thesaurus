@@ -1,0 +1,168 @@
+/**
+ * Getting Started Visibility Fix CSS
+ * Specifically fixes visibility issues with the numbered steps in the getting started guide
+ */
+
+/* Ensure all text in the getting started steps is fully visible */
+.getting-started-steps {
+    background-color: rgba(26, 26, 30, 0.7) !important;
+    border-radius: 10px;
+    padding: 1.5rem 1.5rem 1.5rem 3rem;
+    border: 1px solid rgba(93, 214, 255, 0.3);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.getting-started-steps li {
+    margin-bottom: 1rem !important;
+    color: rgba(255, 255, 255, 0.95) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+    font-weight: 400 !important;
+    line-height: 1.6 !important;
+    position: relative !important;
+    padding-left: 0.5rem !important;
+    opacity: 1 !important; /* Ensure full opacity */
+}
+
+.getting-started-steps li::marker {
+    color: #5dd6ff !important;
+    font-weight: 700 !important;
+    text-shadow: 0 0 8px rgba(93, 214, 255, 0.4) !important;
+    opacity: 1 !important; /* Ensure full opacity */
+}
+
+.getting-started-steps li strong {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7) !important;
+    opacity: 1 !important; /* Ensure full opacity */
+}
+
+/* Fix for the modal getting started steps */
+#howToUseModal .getting-started-steps {
+    background-color: rgba(26, 26, 30, 0.8) !important;
+}
+
+#howToUseModal .getting-started-steps li {
+    color: #ffffff !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: list-item !important;
+}
+
+#howToUseModal .getting-started-steps li strong {
+    color: #5dd6ff !important;
+    font-weight: 700 !important;
+    text-shadow: 0 0 10px rgba(93, 214, 255, 0.5) !important;
+}
+
+/* Fix for the specific numbered list in the image */
+.guide-steps {
+    background-color: rgba(26, 26, 30, 0.7) !important;
+    border-radius: 10px;
+    padding: 1.5rem !important;
+    border: 1px solid rgba(93, 214, 255, 0.3);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.guide-step {
+    display: flex !important;
+    align-items: flex-start !important;
+    margin-bottom: 1.5rem !important;
+    background-color: rgba(30, 30, 35, 0.7) !important;
+    border-radius: 10px !important;
+    padding: 1.5rem !important;
+    border-left: 4px solid #5dd6ff !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+}
+
+.guide-step:last-child {
+    margin-bottom: 0 !important;
+}
+
+.step-number {
+    background: linear-gradient(135deg, #4a94ff, #5dd6ff) !important;
+    color: #ffffff !important;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-weight: 700 !important;
+    font-size: 1.2rem !important;
+    margin-right: 1.5rem !important;
+    box-shadow: 0 0 15px rgba(93, 214, 255, 0.5) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+    flex-shrink: 0 !important;
+}
+
+.step-content h4 {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    margin-bottom: 0.5rem !important;
+    font-size: 1.2rem !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7) !important;
+}
+
+.step-content p {
+    color: rgba(255, 255, 255, 0.95) !important;
+    margin-bottom: 1rem !important;
+    line-height: 1.6 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Light mode overrides */
+body.light-mode .getting-started-steps,
+body.light-theme .getting-started-steps {
+    background-color: rgba(240, 240, 245, 0.7) !important;
+    border: 1px solid rgba(0, 86, 179, 0.2) !important;
+}
+
+body.light-mode .getting-started-steps li,
+body.light-theme .getting-started-steps li {
+    color: rgba(0, 0, 0, 0.9) !important;
+    text-shadow: none !important;
+}
+
+body.light-mode .getting-started-steps li::marker,
+body.light-theme .getting-started-steps li::marker {
+    color: #0056b3 !important;
+    text-shadow: none !important;
+}
+
+body.light-mode .getting-started-steps li strong,
+body.light-theme .getting-started-steps li strong {
+    color: #000000 !important;
+    text-shadow: none !important;
+}
+
+body.light-mode .guide-steps,
+body.light-theme .guide-steps {
+    background-color: rgba(240, 240, 245, 0.7) !important;
+    border: 1px solid rgba(0, 86, 179, 0.2) !important;
+}
+
+body.light-mode .guide-step,
+body.light-theme .guide-step {
+    background-color: rgba(245, 245, 250, 0.7) !important;
+    border-left: 4px solid #0056b3 !important;
+}
+
+body.light-mode .step-number,
+body.light-theme .step-number {
+    background: linear-gradient(135deg, #0056b3, #0088cc) !important;
+    box-shadow: 0 0 15px rgba(0, 86, 179, 0.3) !important;
+    text-shadow: none !important;
+}
+
+body.light-mode .step-content h4,
+body.light-theme .step-content h4 {
+    color: #000000 !important;
+    text-shadow: none !important;
+}
+
+body.light-mode .step-content p,
+body.light-theme .step-content p {
+    color: rgba(0, 0, 0, 0.9) !important;
+    text-shadow: none !important;
+}

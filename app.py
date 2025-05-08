@@ -17,13 +17,14 @@ from visual_thesaurus import VisualThesaurus
 from thesaurus_utils import ThesaurusLLM
 from llm_concepts import LLMConceptsVisualizer
 from llm_thesaurus import LLMThesaurus
-from models import UserProgress
+from models import UserProgress, Quiz
 from auth import auth_bp
 from enhanced_visualizations import EnhancedVisualizations
 from quiz import quiz_bp
 from analytics_routes import analytics_bp
 from dotenv import load_dotenv
 from extensions import db, login_manager, migrate, oauth, csrf
+from utils.email import mail
 from config import config
 
 # Load environment variables from .env file if it exists
@@ -63,6 +64,22 @@ migrate.init_app(app, db)
 oauth.init_app(app)
 csrf.init_app(app)
 
+# Initialize mail with proper configuration
+app.config['MAIL_SERVER'] = os.environ.get('MAIL_SERVER', 'smtp.gmail.com')
+app.config['MAIL_PORT'] = int(os.environ.get('MAIL_PORT', 587))
+app.config['MAIL_USE_TLS'] = os.environ.get('MAIL_USE_TLS', 'true').lower() in ['true', 'on', '1']
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = os.environ.get('MAIL_DEFAULT_SENDER', 'noreply@thesaurus-llm.com')
+mail.init_app(app)
+
+# Log mail configuration for debugging
+app.logger.info(f"Mail server: {app.config['MAIL_SERVER']}")
+app.logger.info(f"Mail port: {app.config['MAIL_PORT']}")
+app.logger.info(f"Mail use TLS: {app.config['MAIL_USE_TLS']}")
+app.logger.info(f"Mail username: {app.config['MAIL_USERNAME']}")
+app.logger.info(f"Mail default sender: {app.config['MAIL_DEFAULT_SENDER']}")
+
 # Initialize OAuth providers
 from auth.oauth import init_oauth
 init_oauth(app)
@@ -92,6 +109,14 @@ try:
 except ImportError:
     print("Pipeline API module not found. Skipping blueprint registration.")
 
+# Register pipeline blueprint
+try:
+    from pipeline import pipeline_bp
+    app.register_blueprint(pipeline_bp)
+    print("Pipeline blueprint registered successfully!")
+except ImportError:
+    print("Pipeline module not found. Skipping blueprint registration.")
+
 # Register AI Thesaurus LLM blueprint if available
 try:
     from ai_thesaurus_llm.app_integration import init_app as init_thesaurus_llm
@@ -116,6 +141,16 @@ import middleware
 middleware.init_app(app)
 
 # Error handlers
+@app.errorhandler(401)
+def unauthorized(e):
+    """Handle 401 errors by showing a custom page."""
+    return render_template('errors/401.html'), 401
+
+@app.errorhandler(403)
+def forbidden(e):
+    """Handle 403 errors by showing a custom page."""
+    return render_template('errors/403.html'), 403
+
 @app.errorhandler(404)
 def page_not_found(e):
     """Handle 404 errors by showing a custom page."""
@@ -130,12 +165,12 @@ def internal_server_error(e):
     return render_template('errors/500.html'), 500
 
 @app.errorhandler(502)
-def bad_gateway_error(e):
-    """Handle 502 Bad Gateway errors by showing a custom page and logging the error."""
+def bad_gateway(e):
+    """Handle 502 errors by showing a custom page."""
     # Log the error for debugging
-    app.logger.error(f"502 Bad Gateway error occurred: {str(e)}")
+    app.logger.error(f"502 error occurred: {str(e)}")
     app.logger.exception("Exception details:")
-    return render_template('errors/500.html', error_code=502, error_message="Bad Gateway"), 502
+    return render_template('errors/502.html'), 502
 
 
 
@@ -187,6 +222,22 @@ with app.app_context():
     # Import and add quiz data
     from add_quizzes_to_app import add_quizzes
     add_quizzes()
+
+    # Import and add LoRA concepts quiz
+    try:
+        from create_lora_quiz import create_lora_quiz
+        create_lora_quiz()
+        print("LoRA concepts quiz added successfully!")
+    except Exception as e:
+        print(f"Error adding LoRA concepts quiz: {e}")
+
+    # Add a route for the LoRA concepts quiz
+    @app.route('/quiz/lora/concepts')
+    def lora_concepts_quiz():
+        """Redirect to the LoRA concepts quiz."""
+        # Find the quiz for this module and topic
+        quiz = Quiz.query.filter_by(module='lora', topic='concepts').first_or_404()
+        return redirect(url_for('quiz.quiz_detail', quiz_id=quiz.id))
 
 # Initialize the visual thesaurus
 visual_thesaurus = VisualThesaurus()
@@ -309,10 +360,17 @@ def learn():
     """Render the learning page with LLM fine-tuning concepts."""
     return render_template('learn.html')
 
+@app.route('/learn/fine-tuning-methods-comparison')
+def learn_fine_tuning_methods_comparison():
+    """Render the fine-tuning methods comparison page."""
+    return render_template('finetuning_comparison.html', module_id='fine-tuning', topic_id='comparison')
+
 @app.route('/learn/exercise8')
 def learn_exercise8():
     """Render the Exercise 8 page with framework comparison."""
     return render_template('exercise8.html')
+
+# Routes for LoRA implementation and hands-on exercise are defined below
 
 @app.route('/llm-thesaurus')
 def llm_thesaurus():
@@ -990,14 +1048,23 @@ def workshop_advanced_peft():
 @app.route('/guide/lora-implementation')
 def lora_guide():
     """Render the LoRA implementation guide page."""
-    return render_template('lora_guide.html', module_id='lora', topic_id='implementation')
-
-
+    return render_template('lora_implementation_guide.html', module_id='lora', topic_id='implementation')
 
 @app.route('/guide/lora-hands-on')
-def lora_hands_on():
+def lora_hands_on_guide():
     """Render the LoRA hands-on example page."""
-    return render_template('guides/lora_hands_on.html', module_id='lora', topic_id='hands-on')
+    # Open the notebook in Google Colab
+    notebook_url = url_for('static', filename='notebooks/lora_fine_tuning.ipynb', _external=True)
+    colab_url = f"https://colab.research.google.com/github/googlecolab/colabtools/blob/master/notebooks/colab-github-demo.ipynb?{notebook_url}"
+    return render_template('lora_hands_on.html', notebook_url=notebook_url, colab_url=colab_url)
+
+@app.route('/guide/qlora-hands-on')
+def qlora_hands_on_guide():
+    """Render the QLoRA hands-on example page."""
+    # Open the notebook in Google Colab
+    notebook_url = url_for('static', filename='notebooks/qlora_fine_tuning.ipynb', _external=True)
+    colab_url = f"https://colab.research.google.com/github/googlecolab/colabtools/blob/master/notebooks/colab-github-demo.ipynb?{notebook_url}"
+    return render_template('qlora_hands_on.html', notebook_url=notebook_url, colab_url=colab_url)
 
 @app.route('/guide/instruction-tuning')
 def instruction_tuning_guide():
@@ -1019,15 +1086,12 @@ def pipeline_inference():
     """Render the pipeline inference guide page."""
     return render_template('exercise_pipeline.html', module_id='inference', topic_id='pipeline')
 
-@app.route('/pipeline')
-def pipeline():
-    """Render the Hugging Face pipeline interactive page."""
-    return render_template('pipeline.html')
+@app.route('/guide/model-deployment')
+def model_deployment():
+    """Render the model deployment guide page."""
+    return render_template('guides/model_deployment.html', module_id='deployment', topic_id='production')
 
-@app.route('/pipeline/interactive')
-def interactive_pipeline():
-    """Render the interactive pipeline demo page."""
-    return render_template('interactive_pipeline.html')
+# Pipeline routes are now handled by the pipeline blueprint
 
 @app.route('/google-ml-crash-course')
 def google_ml_crash_course():
@@ -1098,19 +1162,31 @@ def qlora_implementation():
     """Render the QLoRA implementation guide page."""
     return render_template('guides/qlora_implementation.html', module_id='qlora', topic_id='implementation')
 
+@app.route('/guides')
+def guides():
+    """Render the guides overview page or redirect to the first guide."""
+    # Redirect to the guides section with all available guides
+    return render_template('guides_overview.html')
+
 @app.route('/guide/<guide_name>')
 def guide(guide_name):
     """Generic guide route that maps guide_name to the appropriate route."""
     guide_routes = {
         'lora-implementation': lora_guide,
-        'lora-hands-on': lora_hands_on,
+        'lora-hands-on': lora_hands_on_guide,
+        'qlora-hands-on': qlora_hands_on_guide,
         'instruction-tuning': instruction_tuning_guide,
         'understanding-gpt': gpt_guide,
         'finetuning-comparison': finetuning_comparison,
         'pipeline-inference': pipeline_inference,
         'data-preparation': data_preparation,
         'qlora-implementation': qlora_implementation,
-        'peft-guide': peft_guide
+        'model-deployment': model_deployment,
+        'peft-guide': peft_guide,
+        'langgraph': langgraph_guide,
+        'langchain': langchain_guide,
+        'docker': docker_guide,
+        'huggingface': huggingface_guide
     }
 
     if guide_name in guide_routes:
@@ -1353,10 +1429,25 @@ def profile():
     """Render the profile page."""
     return redirect(url_for('auth.profile'))
 
+@app.route('/getting-started')
+def getting_started():
+    """Render the getting started guide page."""
+    return render_template('getting_started_page.html')
+
 @app.route('/huggingface-guide')
 def huggingface_guide():
     """Render the Hugging Face integration guide."""
     return render_template('huggingface_guide.html')
+
+@app.route('/langgraph-guide')
+def langgraph_guide():
+    """Render the LangGraph guide for LLM fine-tuning."""
+    return render_template('langgraph_guide.html')
+
+@app.route('/langchain-guide')
+def langchain_guide():
+    """Render the LangChain guide for LLM fine-tuning."""
+    return render_template('langchain_guide.html')
 
 @app.route('/qlora-guide')
 def qlora_guide_main():
@@ -1382,6 +1473,11 @@ def qlora_guide_part3():
 def workshop_steps():
     """Render the workshop steps visualization page."""
     return render_template('workshop_steps.html')
+
+@app.route('/workshop-exercises')
+def workshop_exercises():
+    """Render the workshop exercises page with improved visibility."""
+    return render_template('workshop_exercises.html')
 
 @app.route('/workshop/full-fine-tuning')
 def workshop_full_fine_tuning():
@@ -1787,7 +1883,28 @@ def get_learning_resources(topic):
             {
                 'title': 'Docker for LLM Fine-Tuning',
                 'description': 'Guide to using Docker for LLM fine-tuning',
-                'url': '/guide/docker'
+                'url': '/docker-guide'
+            }
+        ],
+        'huggingface': [
+            {
+                'title': 'Hugging Face Integration Guide',
+                'description': 'Comprehensive guide to using Hugging Face for LLM fine-tuning',
+                'url': '/huggingface-guide'
+            }
+        ],
+        'langgraph': [
+            {
+                'title': 'LangGraph for LLM Fine-Tuning',
+                'description': 'Guide to using LangGraph for building applications with fine-tuned LLMs',
+                'url': '/langgraph-guide'
+            }
+        ],
+        'langchain': [
+            {
+                'title': 'LangChain for LLM Fine-Tuning',
+                'description': 'Guide to using LangChain for building applications with fine-tuned LLMs',
+                'url': '/langchain-guide'
             }
         ],
         'gpu': [
@@ -2064,7 +2181,124 @@ def ask_ai_assistant():
         # Check for specific keywords to provide targeted responses
         question_lower = question.lower()
 
-        if 'lora' in question_lower and 'qlora' not in question_lower:
+        # Website-specific questions
+        if any(term in question_lower for term in ['website', 'site', 'platform']):
+            if any(term in question_lower for term in ['about', 'what is', 'purpose']):
+                answer = """**About the Visual Thesaurus LLM Website**
+
+This website is a comprehensive platform for learning about LLM fine-tuning techniques with hands-on exercises. Key features include:
+
+1. **Visual Thesaurus**: Interactive visualization of relationships between LLM fine-tuning concepts
+2. **Comprehensive Guides**: Detailed explanations of all fine-tuning techniques (LoRA, QLoRA, etc.)
+3. **Hands-on Exercises**: Interactive code examples using Google Colab integration
+4. **Workshops**: Step-by-step tutorials for implementing different fine-tuning approaches
+5. **Search Functionality**: Find related terms and concepts across the platform
+6. **AI Assistant**: Get instant answers to your questions (that's me!)
+
+The platform is designed to be a complete resource for anyone looking to learn about and implement LLM fine-tuning, from beginners to advanced practitioners."""
+
+            elif any(term in question_lower for term in ['navigate', 'use', 'find']):
+                answer = """**How to Navigate the Website**
+
+Here's how to get the most out of our platform:
+
+1. **Top Navigation Bar**: Access all main sections (Learn, Thesaurus, Workshops, Guides)
+2. **Visual Thesaurus**: Click on any concept to see its definition and related terms
+3. **Search Bar**: Search for specific concepts or techniques
+4. **Workshops**: Follow step-by-step tutorials with interactive code examples
+5. **Guides**: Read comprehensive explanations of fine-tuning techniques
+6. **AI Assistant** (that's me!): Click the robot icon in the bottom right to ask questions
+7. **Light/Dark Mode**: Toggle between light and dark mode using the button in the top right
+
+If you're new to the platform, I recommend starting with the [LoRA Implementation Guide](/guide/lora-implementation) or the [Fine-Tuning Comparison Guide](/guide/finetuning-comparison) to get a good overview of the different techniques."""
+
+            elif any(term in question_lower for term in ['feature', 'offer', 'provide']):
+                answer = """**Key Features of the Visual Thesaurus LLM Platform**
+
+Our platform offers a comprehensive set of features for learning about LLM fine-tuning:
+
+1. **Visual Thesaurus**: Interactive visualization of relationships between concepts
+2. **Comprehensive Guides**: Detailed explanations of all fine-tuning techniques
+3. **Hands-on Exercises**: Interactive code examples with Google Colab integration
+4. **Workshops**: Step-by-step tutorials for implementing different approaches
+5. **Search Functionality**: Find related terms and concepts across the platform
+6. **AI Assistant**: Get instant answers to your questions (that's me!)
+7. **Voice Interaction**: Speak to the AI assistant and listen to responses
+8. **Light/Dark Mode**: Choose your preferred visual theme
+9. **User Authentication**: Sign in with Gmail, GitHub, or other platforms
+10. **Mobile Compatibility**: Access the platform on any device
+
+All content is focused specifically on LLM fine-tuning, with real data and concise explanations."""
+
+        # Accessibility questions
+        elif any(term in question_lower for term in ['accessibility', 'accessible', 'disability']):
+            answer = """**Accessibility Features of the Website**
+
+Our platform is designed to be accessible to all users, including those with disabilities:
+
+1. **High Contrast Mode**: The website uses high contrast colors for better visibility
+2. **Screen Reader Compatibility**: All content is structured for screen readers
+3. **Keyboard Navigation**: Full keyboard accessibility throughout the site
+4. **Text Scaling**: Content scales properly when browser text size is increased
+5. **Voice Interaction**: Speak to the AI assistant and listen to responses
+6. **Alt Text**: All images have descriptive alt text
+7. **Focus Indicators**: Clear visual indicators for keyboard focus
+8. **Readable Fonts**: Fonts chosen for maximum readability
+9. **Mobile Accessibility**: Fully accessible on mobile devices
+10. **Color Schemes**: Color schemes designed for users with color vision deficiencies
+
+If you encounter any accessibility issues, please let us know through the feedback form."""
+
+        # Voice assistant questions
+        elif any(term in question_lower for term in ['voice', 'speak', 'talk', 'listen']):
+            answer = """**Voice Interaction with the AI Assistant**
+
+You can interact with me (the AI assistant) using voice commands:
+
+1. **Speak to Me**: Click the microphone button in the chat window to start speaking
+2. **Listen to Responses**: Click the speaker button to have me read my responses aloud
+3. **Stop Listening**: Click the microphone button again to stop voice recognition
+4. **Stop Speaking**: Click the speaker button again to stop me from speaking
+
+The voice functionality works best in modern browsers like Chrome, Edge, or Safari. Firefox has limited support for some voice features.
+
+To get started:
+1. Click the robot icon in the bottom right to open the chat
+2. Click the microphone button (next to the send button)
+3. Speak your question clearly
+4. I'll process your question and respond
+5. Click the speaker button to hear my response read aloud
+
+Voice interaction is fully integrated with the text chat, so you can switch between voice and text at any time."""
+
+        # Sign-in and authentication questions
+        elif any(term in question_lower for term in ['sign in', 'login', 'register', 'account', 'authentication']):
+            answer = """**Sign-in and Authentication**
+
+Our platform offers several authentication options:
+
+1. **Email/Password**: Traditional sign-in with email verification
+2. **Google Authentication**: Sign in with your Google account
+3. **GitHub Authentication**: Sign in with your GitHub account
+4. **Facebook Authentication**: Sign in with your Facebook account
+
+**Benefits of creating an account:**
+- Save your progress in workshops and tutorials
+- Bookmark favorite guides and resources
+- Access exclusive content
+- Sync your progress across devices
+
+**Password Reset:**
+If you forget your password, you can reset it by:
+1. Clicking "Sign In" in the top right
+2. Selecting "Forgot Password"
+3. Entering your email address
+4. Following the instructions in the reset email
+
+All authentication is handled securely through Supabase, and we never store your passwords in plain text."""
+
+        # LoRA-specific questions
+        elif 'lora' in question_lower and 'qlora' not in question_lower:
             answer = """**LoRA (Low-Rank Adaptation)** is a parameter-efficient fine-tuning technique that significantly reduces memory usage and training time.
 
 **How LoRA works:**
@@ -2078,8 +2312,18 @@ def ask_ai_assistant():
 - Enables fine-tuning on consumer GPUs (even 8GB VRAM)
 - Allows for easy model switching by swapping adapters
 
-You can learn more in our [LoRA Workshop](/workshop/lora-fine-tuning) or check out the [LoRA Implementation Guide](/guide/lora-implementation)."""
+**Implementation Resources:**
+- [LoRA Implementation Guide](/guide/lora-implementation): Comprehensive explanation with code examples
+- [LoRA Hands-on Exercise](/guide/lora-hands-on): Interactive Google Colab notebook
+- [LoRA Workshop](/workshop/lora-fine-tuning): Step-by-step tutorial
 
+**Related Concepts:**
+- QLoRA (Quantized LoRA)
+- PEFT (Parameter-Efficient Fine-Tuning)
+- Adapter Tuning
+- Rank Decomposition"""
+
+        # QLoRA-specific questions
         elif 'qlora' in question_lower:
             answer = """**QLoRA (Quantized Low-Rank Adaptation)** combines quantization with LoRA for extremely memory-efficient fine-tuning.
 
@@ -2095,32 +2339,47 @@ You can learn more in our [LoRA Workshop](/workshop/lora-fine-tuning) or check o
 - Reduces memory usage by up to 4x compared to standard LoRA
 - Enables fine-tuning of larger models for better performance
 
-You can learn more in our [QLoRA Deep Dive Workshop](/workshop/qlora-deep-dive) or check out the [QLoRA Implementation Guide](/guide/qlora-implementation)."""
+**Implementation Resources:**
+- [QLoRA Implementation Guide](/guide/qlora-implementation): Comprehensive explanation with code examples
+- [QLoRA Deep Dive Workshop](/workshop/qlora-deep-dive): Advanced techniques and optimizations
+- [Memory Efficiency Workshop](/workshop/memory-efficiency): Comparison with other memory-saving techniques
 
-        elif any(term in question_lower for term in ['tutorial', 'workshop', 'learn']):
-            answer = """Our platform offers several interactive tutorials and workshops to help you master LLM fine-tuning:
+**Related Concepts:**
+- LoRA (Low-Rank Adaptation)
+- Quantization
+- BitsAndBytes
+- 4-bit NormalFloat (NF4)"""
 
-1. **Workshops:**
+        # Tutorial and workshop questions
+        elif any(term in question_lower for term in ['tutorial', 'workshop', 'learn', 'guide']):
+            answer = """**Learning Resources on Our Platform**
+
+Our platform offers several interactive tutorials and workshops to help you master LLM fine-tuning:
+
+1. **Comprehensive Guides:**
+   - [LoRA Implementation Guide](/guide/lora-implementation)
+   - [QLoRA Implementation Guide](/guide/qlora-implementation)
+   - [Fine-Tuning Comparison Guide](/guide/finetuning-comparison)
+   - [Instruction Tuning Guide](/guide/instruction-tuning)
+   - [Understanding GPT Architecture](/guide/understanding-gpt)
+   - [Data Preparation Guide](/guide/data-preparation)
+   - [Pipeline Inference Guide](/guide/pipeline-inference)
+
+2. **Hands-on Workshops:**
    - [Full Fine-Tuning Workshop](/workshop/full-fine-tuning)
    - [LoRA Fine-Tuning Workshop](/workshop/lora-fine-tuning)
    - [QLoRA Deep Dive Workshop](/workshop/qlora-deep-dive)
    - [Memory Efficiency Workshop](/workshop/memory-efficiency)
    - [Advanced PEFT Workshop](/workshop/advanced-peft)
 
-2. **Interactive Tutorials:**
-   - [Data Preparation Tutorial](/tutorials)
-   - [LoRA Implementation Tutorial](/tutorials)
-   - [QLoRA Implementation Tutorial](/tutorials)
-   - [Model Deployment Tutorial](/tutorials)
+3. **Interactive Tutorials:**
+   - [LoRA Hands-on Exercise](/guide/lora-hands-on)
+   - [Google Colab Integration](/tutorials)
+   - [Hugging Face Pipeline Tutorial](/tutorials)
 
-3. **Guides:**
-   - [Fine-Tuning Comparison Guide](/guide/finetuning-comparison)
-   - [LoRA Implementation Guide](/guide/lora-implementation)
-   - [QLoRA Implementation Guide](/guide/qlora-implementation)
-   - [Instruction Tuning Guide](/guide/instruction-tuning)
+All tutorials include interactive code examples that you can run directly in your browser or in Google Colab. Each workshop includes quizzes to test your knowledge and assignments to apply what you've learned."""
 
-All tutorials include interactive code examples that you can run directly in your browser or in Google Colab."""
-
+        # Memory and GPU questions
         elif 'memory' in question_lower or 'gpu' in question_lower:
             answer = """**Memory Optimization Techniques for LLM Fine-Tuning**
 
@@ -2143,8 +2402,14 @@ Here are comprehensive strategies to reduce memory usage during fine-tuning:
 - **Optimizer States**: Use memory-efficient optimizers like AdamW with 8-bit states
 - **Activation Offloading**: Move activations to CPU when not needed
 
+**GPU Requirements:**
+- **Full Fine-Tuning**: 16GB+ VRAM for 7B models
+- **LoRA Fine-Tuning**: 8GB+ VRAM for 7B models
+- **QLoRA Fine-Tuning**: 4GB+ VRAM for 7B models (16GB for 65B models)
+
 Check out our [Memory Efficiency Workshop](/workshop/memory-efficiency) for hands-on examples of these techniques."""
 
+        # Fine-tuning overview questions
         elif 'fine-tun' in question_lower:
             answer = """**LLM Fine-Tuning Overview**
 
@@ -2172,17 +2437,63 @@ Fine-tuning is the process of adapting a pre-trained language model to a specifi
 
 Our platform provides comprehensive resources for all these approaches, including interactive tutorials, workshops, and implementation guides."""
 
+        # Mobile compatibility questions
+        elif any(term in question_lower for term in ['mobile', 'phone', 'tablet', 'ipad', 'responsive']):
+            answer = """**Mobile Compatibility**
+
+Our platform is fully responsive and works on all mobile devices:
+
+1. **Responsive Design**: Automatically adapts to any screen size
+2. **Touch-Friendly Interface**: All interactive elements are optimized for touch
+3. **Mobile Navigation**: Simplified navigation menu on smaller screens
+4. **Readable Text**: Font sizes adjusted for mobile readability
+5. **Optimized Visualizations**: Thesaurus visualizations work on mobile devices
+6. **Mobile Authentication**: Sign-in works seamlessly on mobile
+7. **Offline Capability**: Some content available offline after initial load
+8. **Performance Optimization**: Fast loading even on slower mobile connections
+
+The AI assistant (that's me!) is also fully functional on mobile devices, including voice interaction capabilities. You can speak to me and listen to my responses on your mobile device.
+
+For the best experience with code examples and notebooks, we recommend using a tablet or desktop, as coding on a small screen can be challenging. However, all content is accessible and readable on any device."""
+
+        # Thesaurus questions
+        elif any(term in question_lower for term in ['thesaurus', 'visualization', 'graph', 'concept map']):
+            answer = """**Visual Thesaurus LLM Feature**
+
+The Visual Thesaurus is a core feature of our platform that provides an interactive visualization of relationships between LLM fine-tuning concepts:
+
+1. **Interactive Graph**: Click on any concept to see its definition and related terms
+2. **Relationship Visualization**: See how different concepts are connected
+3. **Synonyms and Related Terms**: Discover alternative terminology
+4. **Domain-Specific Relationships**: Focused specifically on LLM fine-tuning concepts
+5. **Search Functionality**: Find concepts and see their place in the knowledge graph
+6. **Category Visualization**: View concepts grouped by category
+7. **Zoom and Pan**: Explore the concept map at different levels of detail
+
+**How to Use the Visual Thesaurus:**
+1. Navigate to the [Thesaurus](/thesaurus) section
+2. Click on any concept to see its definition
+3. Explore related concepts by following the connections
+4. Use the search bar to find specific concepts
+5. Zoom in/out using the mouse wheel or pinch gesture on mobile
+6. Pan around the visualization by clicking and dragging
+
+The Visual Thesaurus processes full sentences, not just individual words, making it a powerful tool for understanding the relationships between complex concepts in LLM fine-tuning."""
+
+        # Default response for other questions
         else:
-            # Default response for other questions
-            answer = """I'm your AI assistant for LLM fine-tuning. I can help you with:
+            answer = """I'm your AI assistant for the Visual Thesaurus LLM platform. I can help you with:
 
-1. **Learning about fine-tuning techniques** like LoRA, QLoRA, and full fine-tuning
-2. **Finding tutorials and workshops** on our platform
-3. **Understanding memory optimization** for training large models
-4. **Implementing specific techniques** with code examples
-5. **Troubleshooting common issues** in LLM fine-tuning
+1. **Learning about LLM fine-tuning techniques** like LoRA, QLoRA, and full fine-tuning
+2. **Navigating the website** and finding specific resources
+3. **Understanding the Visual Thesaurus** feature
+4. **Accessing workshops and tutorials** on our platform
+5. **Using the voice interaction features** (you can speak to me!)
+6. **Finding information about website accessibility**
+7. **Troubleshooting sign-in and authentication issues**
+8. **Getting started with hands-on exercises**
 
-Feel free to ask specific questions about any of these topics! You can also check out our [Workshops](/workshops) page for hands-on learning experiences."""
+Feel free to ask specific questions about any of these topics! You can also check out our [Guides](/guides) page for comprehensive explanations of LLM fine-tuning techniques."""
 
         return jsonify({
             'answer': answer,

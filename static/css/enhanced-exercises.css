@@ -6,16 +6,16 @@
 /* Enhanced Scrollbar */
 :root {
     --scrollbar-width: 16px;
-    --scrollbar-track: rgba(30, 30, 30, 0.8);
-    --scrollbar-thumb: linear-gradient(135deg, #4287f5, #00ffdd);
-    --scrollbar-thumb-hover: linear-gradient(135deg, #00ffdd, #4287f5);
-    --exercise-primary: #4287f5;
-    --exercise-secondary: #00ffdd;
-    --exercise-accent: #ffdd00;
-    --exercise-success: #00d463;
-    --exercise-warning: #ffdd20;
-    --exercise-danger: #ff4d10;
-    --exercise-info: #00c0ff;
+    --scrollbar-track: rgba(26, 26, 30, 0.8);
+    --scrollbar-thumb: linear-gradient(135deg, #3a86ff, #4cc9f0);
+    --scrollbar-thumb-hover: linear-gradient(135deg, #4cc9f0, #3a86ff);
+    --exercise-primary: #3a86ff;
+    --exercise-secondary: #4cc9f0;
+    --exercise-accent: #4361ee;
+    --exercise-success: #38b000;
+    --exercise-warning: #fb8500;
+    --exercise-danger: #d00000;
+    --exercise-info: #4cc9f0;
 }
 
 /* Custom Scrollbar */
@@ -43,11 +43,11 @@
 
 /* Exercise Connection Component */
 .exercise-connection {
-    background: linear-gradient(135deg, rgba(66, 135, 245, 0.1), rgba(0, 255, 221, 0.1));
+    background: linear-gradient(135deg, rgba(58, 134, 255, 0.1), rgba(76, 201, 240, 0.1));
     border-radius: 15px;
     padding: 1.5rem;
     margin: 2rem 0;
-    border: 1px solid rgba(66, 135, 245, 0.2);
+    border: 1px solid rgba(58, 134, 255, 0.2);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     position: relative;
     overflow: hidden;
@@ -132,7 +132,7 @@
     right: 20px;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(30, 30, 30, 0.8);
+    background: rgba(26, 26, 30, 0.8);
     border-radius: 30px;
     padding: 15px 10px;
     display: flex;
@@ -141,9 +141,9 @@
     gap: 15px;
     z-index: 100;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(66, 135, 245, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(58, 134, 255, 0.2);
 }
 
 .nav-dot {
@@ -190,12 +190,12 @@
     bottom: 30px;
     right: 30px;
     width: 350px;
-    background: rgba(30, 30, 30, 0.95);
+    background: rgba(26, 26, 30, 0.95);
     border-radius: 15px;
     padding: 0;
     z-index: 1000;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(66, 135, 245, 0.3);
+    border: 1px solid rgba(58, 134, 255, 0.3);
     overflow: hidden;
     transform: translateY(100px);
     opacity: 0;
@@ -303,12 +303,12 @@
     position: fixed;
     top: 30px;
     right: 30px;
-    background: rgba(30, 30, 30, 0.95);
+    background: rgba(26, 26, 30, 0.95);
     border-radius: 15px;
     padding: 15px;
     z-index: 1000;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(66, 135, 245, 0.3);
+    border: 1px solid rgba(58, 134, 255, 0.3);
     display: flex;
     align-items: center;
     gap: 15px;
@@ -386,7 +386,7 @@
     border-radius: 15px;
     padding: 1.5rem;
     margin: 1.5rem 0;
-    border: 1px solid rgba(66, 135, 245, 0.2);
+    border: 1px solid rgba(58, 134, 255, 0.2);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     position: relative;
     overflow: hidden;
@@ -396,7 +396,7 @@
 .exercise-box:hover {
     transform: translateY(-5px);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-    border-color: rgba(66, 135, 245, 0.4);
+    border-color: rgba(58, 134, 255, 0.4);
 }
 
 .exercise-box::before {
@@ -493,24 +493,24 @@
     .quick-nav-sidebar {
         display: none;
     }
-    
+
     .key-concepts-popup {
         width: 90%;
         left: 5%;
         right: 5%;
     }
-    
+
     .progress-tracker {
         width: 90%;
         left: 5%;
         right: 5%;
     }
-    
+
     .connection-map {
         flex-direction: column;
         gap: 40px;
     }
-    
+
     .connection-map::after {
         width: 2px;
         height: 100%;
@@ -518,12 +518,12 @@
         left: 50%;
         transform: translateX(-50%);
     }
-    
+
     .connection-node {
         width: 50px;
         height: 50px;
     }
-    
+
     .connection-label {
         bottom: auto;
         left: auto;

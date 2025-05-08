@@ -1,0 +1,627 @@
+{% extends 'base.html' %}
+
+{% block title %}LangGraph for LLM Fine-Tuning{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Current Section -->
+    <div class="current-section">
+        <h2><i class="bi bi-diagram-3"></i> LangGraph Guide</h2>
+        <div class="related-concepts-container">
+            <a href="{{ url_for('docker_guide') }}" class="related-concept-button">
+                <i class="bi bi-box-seam"></i> Docker Guide
+            </a>
+            <a href="{{ url_for('huggingface_guide') }}" class="related-concept-button">
+                <i class="bi bi-hdd-network"></i> Hugging Face Guide
+            </a>
+            <a href="{{ url_for('learn_and_explore') }}?concept=langchain" class="related-concept-button">
+                <i class="bi bi-link-45deg"></i> LangChain Concept
+            </a>
+            <a href="{{ url_for('learn_and_explore') }}?concept=fine-tuning" class="related-concept-button">
+                <i class="bi bi-gear"></i> Fine-Tuning Concept
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">LangGraph for LLM Fine-Tuning</h1>
+            <p class="lead">Learn how to use LangGraph to build advanced applications with fine-tuned language models</p>
+        </div>
+    </div>
+
+    <!-- Introduction Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2>Introduction to LangGraph</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <p>LangGraph is a library for building stateful, multi-actor applications with LLMs. It extends LangChain with a graph-based orchestration layer that allows you to build complex, multi-step workflows with fine-tuned language models.</p>
+                            
+                            <p>Key features of LangGraph include:</p>
+                            <ul>
+                                <li><strong>Stateful Workflows</strong>: Build applications that maintain state across multiple interactions</li>
+                                <li><strong>Multi-Actor Systems</strong>: Create systems with multiple LLM agents that collaborate</li>
+                                <li><strong>Graph-Based Orchestration</strong>: Define complex workflows using a graph structure</li>
+                                <li><strong>Seamless Integration</strong>: Works with fine-tuned models from Hugging Face, OpenAI, and other providers</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <img src="{{ url_for('static', filename='images/langgraph_diagram.png') }}" alt="LangGraph Diagram" class="img-fluid rounded" style="max-width: 100%;">
+                                <p class="text-muted mt-2">LangGraph orchestrates complex LLM workflows</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info mt-3">
+                        <h5><i class="bi bi-info-circle me-2"></i>What is LangGraph?</h5>
+                        <p>LangGraph is built on top of LangChain and provides a way to create stateful, multi-actor applications with LLMs. It's particularly useful for building complex applications that require multiple steps, memory, and reasoning.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Installation and Setup Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h2>Installation and Setup</h2>
+                </div>
+                <div class="card-body">
+                    <p>To get started with LangGraph, you'll need to install the library and its dependencies:</p>
+                    
+                    <div class="bg-light p-3 rounded">
+                        <pre><code># Install LangGraph and LangChain
+pip install langgraph langchain
+pip install langchain-openai  # For OpenAI models
+pip install langchain-huggingface  # For Hugging Face models</code></pre>
+                    </div>
+
+                    <p class="mt-3">For working with fine-tuned models, you'll also need to install the appropriate libraries:</p>
+                    
+                    <div class="bg-light p-3 rounded">
+                        <pre><code># For Hugging Face models
+pip install transformers accelerate
+
+# For local fine-tuned models with PEFT
+pip install peft bitsandbytes</code></pre>
+                    </div>
+
+                    <div class="alert alert-success mt-3">
+                        <h5><i class="bi bi-lightbulb me-2"></i>Pro Tip</h5>
+                        <p>It's recommended to use a virtual environment for your LangGraph projects to avoid dependency conflicts:</p>
+                        <pre><code>python -m venv langgraph-env
+source langgraph-env/bin/activate  # On Windows: langgraph-env\Scripts\activate
+pip install langgraph langchain</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Basic Concepts Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h2>Basic Concepts</h2>
+                </div>
+                <div class="card-body">
+                    <h4>Nodes and Edges</h4>
+                    <p>LangGraph uses a graph structure to define workflows. The key components are:</p>
+                    
+                    <ul>
+                        <li><strong>Nodes</strong>: Functions or components that perform specific tasks (e.g., generating text, making decisions)</li>
+                        <li><strong>Edges</strong>: Connections between nodes that define the flow of data and control</li>
+                        <li><strong>State</strong>: Information that persists across multiple steps in the workflow</li>
+                    </ul>
+                    
+                    <h4 class="mt-4">Building a Simple Graph</h4>
+                    <p>Here's a basic example of creating a simple LangGraph workflow:</p>
+                    
+                    <div class="bg-light p-3 rounded">
+                        <pre><code>from langgraph.graph import StateGraph
+from langchain_openai import ChatOpenAI
+from langchain_core.messages import HumanMessage, AIMessage
+
+# Define the state
+class GraphState(TypedDict):
+    messages: List[Union[HumanMessage, AIMessage]]
+    next_step: Optional[str]
+
+# Create a model
+model = ChatOpenAI(model="gpt-3.5-turbo")
+
+# Define nodes
+def generate_response(state: GraphState) -> GraphState:
+    messages = state["messages"]
+    response = model.invoke(messages)
+    return {"messages": messages + [response]}
+
+def decide_next_step(state: GraphState) -> GraphState:
+    messages = state["messages"]
+    response = model.invoke(
+        messages + [HumanMessage(content="Based on our conversation, what should we do next? Answer with either 'continue' or 'end'")]
+    )
+    decision = response.content.strip().lower()
+    return {"next_step": "continue" if "continue" in decision else "end"}
+
+# Create the graph
+graph = StateGraph(GraphState)
+
+# Add nodes
+graph.add_node("generate", generate_response)
+graph.add_node("decide", decide_next_step)
+
+# Add edges
+graph.add_edge("generate", "decide")
+graph.add_conditional_edges(
+    "decide",
+    lambda state: state["next_step"],
+    {
+        "continue": "generate",
+        "end": END
+    }
+)
+
+# Set the entry point
+graph.set_entry_point("generate")
+
+# Compile the graph
+app = graph.compile()</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Using Fine-Tuned Models Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2>Using Fine-Tuned Models with LangGraph</h2>
+                </div>
+                <div class="card-body">
+                    <p>LangGraph works seamlessly with fine-tuned models. Here's how to integrate your fine-tuned models into LangGraph workflows:</p>
+                    
+                    <h4>Integrating Hugging Face Fine-Tuned Models</h4>
+                    <div class="bg-light p-3 rounded">
+                        <pre><code>from langchain_huggingface import HuggingFaceEndpoint
+from langgraph.graph import StateGraph
+
+# Load a fine-tuned model from Hugging Face
+model = HuggingFaceEndpoint(
+    repo_id="your-username/your-fine-tuned-model",
+    task="text-generation",
+    huggingfacehub_api_token="your-hf-token"
+)
+
+# Define a node that uses the fine-tuned model
+def generate_thesaurus_entry(state):
+    word = state["word"]
+    prompt = f"Generate synonyms for the word '{word}':"
+    response = model.invoke(prompt)
+    return {"word": word, "synonyms": response}
+
+# Create the graph
+graph = StateGraph()
+graph.add_node("generate_synonyms", generate_thesaurus_entry)
+# ... add more nodes and edges as needed</code></pre>
+                    </div>
+                    
+                    <h4 class="mt-4">Using Local Fine-Tuned Models with PEFT</h4>
+                    <div class="bg-light p-3 rounded">
+                        <pre><code>from transformers import AutoModelForCausalLM, AutoTokenizer
+from peft import PeftModel
+from langchain_huggingface import HuggingFacePipeline
+from langchain_core.prompts import PromptTemplate
+from langgraph.graph import StateGraph
+import torch
+
+# Load a locally fine-tuned model with PEFT
+base_model = AutoModelForCausalLM.from_pretrained(
+    "distilgpt2",
+    device_map="auto",
+    torch_dtype=torch.float16
+)
+model = PeftModel.from_pretrained(base_model, "./thesaurus-model-lora")
+tokenizer = AutoTokenizer.from_pretrained("distilgpt2")
+
+# Create a LangChain pipeline
+pipeline = HuggingFacePipeline.from_model_id(
+    model_id=None,
+    task="text-generation",
+    model=model,
+    tokenizer=tokenizer,
+    max_new_tokens=100,
+    temperature=0.7
+)
+
+# Create a prompt template
+prompt_template = PromptTemplate.from_template(
+    "Generate synonyms for the word '{word}':\n\n"
+)
+
+# Define a node that uses the fine-tuned model
+def generate_synonyms(state):
+    word = state["word"]
+    prompt = prompt_template.format(word=word)
+    response = pipeline.invoke(prompt)
+    return {"word": word, "synonyms": response}
+
+# Create the graph
+graph = StateGraph()
+graph.add_node("generate_synonyms", generate_synonyms)
+# ... add more nodes and edges as needed</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Advanced Patterns Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h2>Advanced Patterns for LLM Fine-Tuning Applications</h2>
+                </div>
+                <div class="card-body">
+                    <h4>Multi-Model Workflows</h4>
+                    <p>You can create workflows that use multiple fine-tuned models for different tasks:</p>
+                    
+                    <div class="bg-light p-3 rounded">
+                        <pre><code>from langgraph.graph import StateGraph
+from langchain_huggingface import HuggingFaceEndpoint
+
+# Load multiple fine-tuned models
+synonym_model = HuggingFaceEndpoint(
+    repo_id="your-username/synonym-model",
+    task="text-generation"
+)
+
+definition_model = HuggingFaceEndpoint(
+    repo_id="your-username/definition-model",
+    task="text-generation"
+)
+
+example_model = HuggingFaceEndpoint(
+    repo_id="your-username/example-model",
+    task="text-generation"
+)
+
+# Define nodes for each model
+def generate_synonyms(state):
+    word = state["word"]
+    response = synonym_model.invoke(f"Generate synonyms for '{word}':")
+    return {"synonyms": response}
+
+def generate_definition(state):
+    word = state["word"]
+    response = definition_model.invoke(f"Define the term '{word}':")
+    return {"definition": response}
+
+def generate_examples(state):
+    word = state["word"]
+    response = example_model.invoke(f"Provide usage examples for '{word}':")
+    return {"examples": response}
+
+# Create the graph
+graph = StateGraph()
+graph.add_node("synonyms", generate_synonyms)
+graph.add_node("definition", generate_definition)
+graph.add_node("examples", generate_examples)
+graph.add_node("combine", lambda state: {
+    "word": state["word"],
+    "thesaurus_entry": {
+        "synonyms": state["synonyms"],
+        "definition": state["definition"],
+        "examples": state["examples"]
+    }
+})
+
+# Add edges
+graph.add_edge("synonyms", "definition")
+graph.add_edge("definition", "examples")
+graph.add_edge("examples", "combine")</code></pre>
+                    </div>
+                    
+                    <h4 class="mt-4">Feedback Loops and Refinement</h4>
+                    <p>You can create workflows that refine outputs through feedback loops:</p>
+                    
+                    <div class="bg-light p-3 rounded">
+                        <pre><code>from langgraph.graph import StateGraph
+from langchain_openai import ChatOpenAI
+
+# Create models
+generator = ChatOpenAI(model="gpt-3.5-turbo")
+evaluator = ChatOpenAI(model="gpt-4")
+
+# Define nodes
+def generate_content(state):
+    topic = state["topic"]
+    response = generator.invoke(f"Write a paragraph about {topic}.")
+    return {"draft": response.content}
+
+def evaluate_content(state):
+    draft = state["draft"]
+    evaluation = evaluator.invoke(
+        f"Evaluate this paragraph and suggest improvements:\n\n{draft}"
+    )
+    quality_score = 0
+    if "good" in evaluation.content.lower():
+        quality_score = 8
+    elif "excellent" in evaluation.content.lower():
+        quality_score = 10
+    else:
+        quality_score = 5
+    
+    return {
+        "evaluation": evaluation.content,
+        "quality_score": quality_score
+    }
+
+def refine_content(state):
+    draft = state["draft"]
+    evaluation = state["evaluation"]
+    
+    response = generator.invoke(
+        f"Refine this paragraph based on the feedback:\n\nParagraph: {draft}\n\nFeedback: {evaluation}"
+    )
+    
+    return {"draft": response.content}
+
+def decide_next_step(state):
+    score = state["quality_score"]
+    if score >= 8:
+        return {"next_step": "complete"}
+    else:
+        return {"next_step": "refine"}
+
+# Create the graph
+graph = StateGraph()
+graph.add_node("generate", generate_content)
+graph.add_node("evaluate", evaluate_content)
+graph.add_node("refine", refine_content)
+graph.add_node("decide", decide_next_step)
+
+# Add edges
+graph.add_edge("generate", "evaluate")
+graph.add_edge("evaluate", "decide")
+graph.add_conditional_edges(
+    "decide",
+    lambda state: state["next_step"],
+    {
+        "refine": "refine",
+        "complete": END
+    }
+)
+graph.add_edge("refine", "evaluate")</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Real-World Applications Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h2>Real-World Applications</h2>
+                </div>
+                <div class="card-body">
+                    <h4>Thesaurus Application with Fine-Tuned Models</h4>
+                    <p>Here's a complete example of building a thesaurus application using LangGraph and fine-tuned models:</p>
+                    
+                    <div class="bg-light p-3 rounded">
+                        <pre><code>from langgraph.graph import StateGraph
+from langchain_huggingface import HuggingFacePipeline
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from peft import PeftModel
+import torch
+from typing import TypedDict, List, Dict, Optional
+from fastapi import FastAPI
+from pydantic import BaseModel
+
+# Define the state
+class ThesaurusState(TypedDict):
+    word: str
+    synonyms: Optional[List[str]]
+    antonyms: Optional[List[str]]
+    related_terms: Optional[List[str]]
+    definition: Optional[str]
+    examples: Optional[List[str]]
+    complete: bool
+
+# Load fine-tuned model
+base_model = AutoModelForCausalLM.from_pretrained(
+    "distilgpt2",
+    device_map="auto",
+    torch_dtype=torch.float16
+)
+model = PeftModel.from_pretrained(base_model, "./thesaurus-model-lora")
+tokenizer = AutoTokenizer.from_pretrained("distilgpt2")
+
+# Create pipeline
+pipeline = HuggingFacePipeline.from_model_id(
+    model_id=None,
+    task="text-generation",
+    model=model,
+    tokenizer=tokenizer,
+    max_new_tokens=100,
+    temperature=0.7
+)
+
+# Define nodes
+def generate_synonyms(state: ThesaurusState) -> Dict:
+    word = state["word"]
+    prompt = f"Generate synonyms for the word '{word}':"
+    response = pipeline.invoke(prompt)
+    
+    # Extract synonyms from response
+    synonyms_text = response.split("Synonyms:")[1].split("\n")[0] if "Synonyms:" in response else response
+    synonyms = [s.strip() for s in synonyms_text.split(",")]
+    
+    return {"synonyms": synonyms}
+
+def generate_antonyms(state: ThesaurusState) -> Dict:
+    word = state["word"]
+    prompt = f"Generate antonyms for the word '{word}':"
+    response = pipeline.invoke(prompt)
+    
+    # Extract antonyms from response
+    antonyms_text = response.split("Antonyms:")[1].split("\n")[0] if "Antonyms:" in response else response
+    antonyms = [a.strip() for a in antonyms_text.split(",")]
+    
+    return {"antonyms": antonyms}
+
+def generate_related(state: ThesaurusState) -> Dict:
+    word = state["word"]
+    prompt = f"Generate related terms for the word '{word}':"
+    response = pipeline.invoke(prompt)
+    
+    # Extract related terms from response
+    related_text = response.split("Related Terms:")[1].split("\n")[0] if "Related Terms:" in response else response
+    related_terms = [r.strip() for r in related_text.split(",")]
+    
+    return {"related_terms": related_terms}
+
+def generate_definition(state: ThesaurusState) -> Dict:
+    word = state["word"]
+    prompt = f"Define the word '{word}':"
+    response = pipeline.invoke(prompt)
+    
+    # Extract definition from response
+    definition = response.split("Definition:")[1].split("\n")[0] if "Definition:" in response else response
+    
+    return {"definition": definition.strip()}
+
+def generate_examples(state: ThesaurusState) -> Dict:
+    word = state["word"]
+    prompt = f"Provide usage examples for the word '{word}':"
+    response = pipeline.invoke(prompt)
+    
+    # Extract examples from response
+    examples_text = response.split("Examples:")[1] if "Examples:" in response else response
+    examples = [e.strip() for e in examples_text.split("\n") if e.strip()]
+    
+    return {"examples": examples}
+
+def finalize_entry(state: ThesaurusState) -> Dict:
+    return {"complete": True}
+
+# Create the graph
+graph = StateGraph(ThesaurusState)
+
+# Add nodes
+graph.add_node("synonyms", generate_synonyms)
+graph.add_node("antonyms", generate_antonyms)
+graph.add_node("related", generate_related)
+graph.add_node("definition", generate_definition)
+graph.add_node("examples", generate_examples)
+graph.add_node("finalize", finalize_entry)
+
+# Add edges
+graph.add_edge("synonyms", "antonyms")
+graph.add_edge("antonyms", "related")
+graph.add_edge("related", "definition")
+graph.add_edge("definition", "examples")
+graph.add_edge("examples", "finalize")
+
+# Set entry point
+graph.set_entry_point("synonyms")
+
+# Compile the graph
+thesaurus_app = graph.compile()
+
+# Create FastAPI app
+app = FastAPI(title="Thesaurus API")
+
+class WordRequest(BaseModel):
+    word: str
+
+@app.post("/thesaurus")
+async def get_thesaurus_entry(request: WordRequest):
+    # Initialize state
+    initial_state = {"word": request.word, "complete": False}
+    
+    # Run the graph
+    result = thesaurus_app.invoke(initial_state)
+    
+    # Return the result
+    return {
+        "word": request.word,
+        "synonyms": result["synonyms"],
+        "antonyms": result["antonyms"],
+        "related_terms": result["related_terms"],
+        "definition": result["definition"],
+        "examples": result["examples"]
+    }</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Best Practices Section -->
+    <div class="row mt-4 mb-5">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h2>Best Practices</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Performance Optimization</h4>
+                            <ul>
+                                <li><strong>Batch Processing</strong>: Process multiple inputs in batches when possible</li>
+                                <li><strong>Caching</strong>: Use caching to avoid redundant model calls</li>
+                                <li><strong>Quantization</strong>: Use quantized models for faster inference</li>
+                                <li><strong>Parallel Execution</strong>: Use parallel execution for independent nodes</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Error Handling</h4>
+                            <ul>
+                                <li><strong>Graceful Fallbacks</strong>: Implement fallback mechanisms for when models fail</li>
+                                <li><strong>Retry Logic</strong>: Add retry logic for transient errors</li>
+                                <li><strong>Validation</strong>: Validate inputs and outputs at each step</li>
+                                <li><strong>Monitoring</strong>: Add monitoring to track performance and errors</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-warning mt-3">
+                        <h5><i class="bi bi-exclamation-triangle me-2"></i>Common Pitfalls</h5>
+                        <ul>
+                            <li><strong>Memory Leaks</strong>: Be careful with large state objects that can cause memory issues</li>
+                            <li><strong>Infinite Loops</strong>: Ensure your conditional edges have proper termination conditions</li>
+                            <li><strong>Error Propagation</strong>: Handle errors at each node to prevent cascading failures</li>
+                            <li><strong>State Mutation</strong>: Avoid mutating state directly; always return new state objects</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add any JavaScript needed for the LangGraph guide
+    });
+</script>
+{% endblock %}

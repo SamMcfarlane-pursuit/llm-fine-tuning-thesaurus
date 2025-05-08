@@ -1,0 +1,119 @@
+<div class="quick-access-nav">
+    <div class="quick-access-header">
+        <h4><i class="bi bi-lightning-charge-fill"></i> Quick Access</h4>
+    </div>
+    <div class="quick-access-buttons">
+        <a href="/concepts-learning" class="quick-access-button">
+            <i class="bi bi-book"></i>
+            <span>Learning Center</span>
+        </a>
+        <a href="/tutorials" class="quick-access-button">
+            <i class="bi bi-code-square"></i>
+            <span>Tutorials</span>
+        </a>
+        <a href="/workshops" class="quick-access-button">
+            <i class="bi bi-laptop"></i>
+            <span>Workshops</span>
+        </a>
+        <a href="/frameworks" class="quick-access-button">
+            <i class="bi bi-boxes"></i>
+            <span>Frameworks</span>
+        </a>
+        <a href="/quiz/quiz_list" class="quick-access-button">
+            <i class="bi bi-check2-circle"></i>
+            <span>Quizzes</span>
+        </a>
+        <a href="/user_progress" class="quick-access-button">
+            <i class="bi bi-graph-up"></i>
+            <span>My Progress</span>
+        </a>
+    </div>
+</div>
+
+<style>
+    .quick-access-nav {
+        background: linear-gradient(135deg, rgba(58, 134, 255, 0.1), rgba(76, 201, 240, 0.1));
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+        border: 1px solid rgba(58, 134, 255, 0.2);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .quick-access-header {
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    .quick-access-header h4 {
+        color: var(--text-primary);
+        font-weight: 700;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        font-size: 1.5rem;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .quick-access-header h4 i {
+        color: var(--primary-color);
+    }
+
+    .quick-access-buttons {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+    }
+
+    .quick-access-button {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(30, 30, 35, 0.9);
+        border-radius: 10px;
+        padding: 1.25rem 1rem;
+        color: var(--text-primary);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        text-align: center;
+        border: 1px solid rgba(74, 148, 255, 0.2);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .quick-access-button:hover {
+        transform: translateY(-5px);
+        background-color: rgba(74, 148, 255, 0.25);
+        color: var(--text-primary);
+        border-color: rgba(74, 148, 255, 0.5);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .quick-access-button i {
+        font-size: 2.2rem;
+        margin-bottom: 0.75rem;
+        color: var(--primary-color);
+        text-shadow: 0 0 10px rgba(74, 148, 255, 0.3);
+    }
+
+    .quick-access-button span {
+        font-weight: 600;
+        font-size: 1rem;
+        color: var(--text-primary);
+        margin-top: 0.25rem;
+    }
+
+    @media (max-width: 768px) {
+        .quick-access-buttons {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    @media (max-width: 576px) {
+        .quick-access-buttons {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+</style>

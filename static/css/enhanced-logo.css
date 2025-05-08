@@ -1,0 +1,144 @@
+/**
+ * Enhanced Logo CSS
+ * Improves the visibility and clarity of the Visual LLM logo
+ */
+
+/* Enhanced logo styling */
+.navbar-brand.enhanced-logo {
+    display: flex;
+    align-items: center;
+    padding: 10px 25px 10px 20px;
+    background: linear-gradient(135deg, rgba(66, 133, 244, 1), rgba(52, 168, 235, 1));
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    margin-right: 20px;
+    position: relative;
+    overflow: visible;
+    min-width: 180px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.navbar-brand.enhanced-logo:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(66, 133, 244, 0.5);
+    background: linear-gradient(135deg, rgba(74, 148, 255, 1), rgba(64, 185, 255, 1));
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.navbar-brand.enhanced-logo::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.1) 50%,
+        rgba(255, 255, 255, 0) 100%);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+}
+
+.navbar-brand.enhanced-logo:hover::before {
+    transform: translateX(100%);
+}
+
+.navbar-brand.enhanced-logo .brand-icon {
+    font-size: 1.8rem;
+    margin-right: 12px;
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.navbar-brand.enhanced-logo .brand-text {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    white-space: nowrap;
+    display: inline-block;
+    width: auto;
+}
+
+/* Dark mode adjustments */
+[data-bs-theme="dark"] .navbar-brand.enhanced-logo {
+    background: linear-gradient(135deg, rgba(66, 133, 244, 1), rgba(52, 168, 235, 1));
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+[data-bs-theme="dark"] .navbar-brand.enhanced-logo:hover {
+    background: linear-gradient(135deg, rgba(74, 148, 255, 1), rgba(64, 185, 255, 1));
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6), 0 0 15px rgba(66, 133, 244, 0.5);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* Add a subtle glow effect */
+.navbar-brand.enhanced-logo .holographic-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 50%,
+        rgba(255, 255, 255, 0.2) 0%,
+        rgba(255, 255, 255, 0) 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.navbar-brand.enhanced-logo:hover .holographic-glow {
+    opacity: 1;
+}
+
+/* High contrast mode */
+.high-contrast-mode .navbar-brand.enhanced-logo {
+    background: #ffffff;
+    border: 2px solid #000000;
+}
+
+.high-contrast-mode .navbar-brand.enhanced-logo .brand-icon,
+.high-contrast-mode .navbar-brand.enhanced-logo .brand-text {
+    color: #000000;
+    text-shadow: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .navbar-brand.enhanced-logo {
+        padding: 8px 15px;
+        min-width: 140px;
+        width: auto;
+    }
+
+    .navbar-brand.enhanced-logo .brand-icon {
+        font-size: 1.5rem;
+        margin-right: 8px;
+    }
+
+    .navbar-brand.enhanced-logo .brand-text {
+        font-size: 1.2rem;
+        white-space: nowrap;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 576px) {
+    .navbar-brand.enhanced-logo {
+        padding: 6px 12px;
+        min-width: 120px;
+    }
+
+    .navbar-brand.enhanced-logo .brand-icon {
+        font-size: 1.3rem;
+        margin-right: 6px;
+    }
+
+    .navbar-brand.enhanced-logo .brand-text {
+        font-size: 1.1rem;
+    }
+}

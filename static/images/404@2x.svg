@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1600px" height="800px" viewBox="0 0 1600 800" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>404 Error</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#0D6EFD" stop-opacity="0.2" offset="0%"></stop>
+            <stop stop-color="#0D6EFD" stop-opacity="0.1" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="404-Error" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Background" fill="url(#linearGradient-1)" x="0" y="0" width="1600" height="800" rx="40"></rect>
+        <text id="404" font-family="Arial-BoldMT, Arial" font-size="360" font-weight="bold" fill="#0D6EFD">
+            <tspan x="400" y="480">404</tspan>
+        </text>
+        <g id="Magnifying-Glass" transform="translate(1000.000000, 300.000000)">
+            <circle id="Glass" stroke="#0D6EFD" stroke-width="24" cx="120" cy="120" r="120"></circle>
+            <line x1="210" y1="210" x2="300" y2="300" id="Handle" stroke="#0D6EFD" stroke-width="24" stroke-linecap="round"></line>
+            <circle id="Question-Mark" fill="#0D6EFD" cx="120" cy="120" r="20"></circle>
+        </g>
+        <text id="Page-Not-Found" font-family="Arial-BoldMT, Arial" font-size="48" font-weight="bold" fill="#333333">
+            <tspan x="600" y="600">Page Not Found</tspan>
+        </text>
+    </g>
+</svg>

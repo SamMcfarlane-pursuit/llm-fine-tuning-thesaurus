@@ -1,0 +1,272 @@
+/**
+ * Purple Guide Text
+ * Makes text in guide cards purple for better readability
+ */
+
+/* Target guide cards and their text content */
+.guide-card,
+.guide-item,
+.guide-container,
+.guide-box,
+.guide-content,
+.guide-wrapper,
+.framework-card,
+.framework-item,
+.framework-container,
+.framework-box,
+.framework-content,
+.framework-wrapper,
+.tutorial-card,
+.tutorial-item,
+.tutorial-container,
+.tutorial-box,
+.tutorial-content,
+.tutorial-wrapper,
+.workshop-card,
+.workshop-item,
+.workshop-container,
+.workshop-box,
+.workshop-content,
+.workshop-wrapper,
+.card-with-guide-button,
+.card-with-view-guide,
+.card[data-card-type="guide"],
+.card-with-guide,
+.view-guide-container,
+.card:has(.view-guide),
+.card:has([class*="view-guide"]),
+.card:has(a[href*="guide"]),
+.card:has(button:contains("View Guide")),
+.card:has(a:contains("View Guide")) {
+    /* Add a subtle purple border for visual identification */
+    border-color: rgba(128, 0, 128, 0.3) !important;
+}
+
+/* Target all text elements within guide cards */
+.guide-card *,
+.guide-item *,
+.guide-container *,
+.guide-box *,
+.guide-content *,
+.guide-wrapper *,
+.framework-card *,
+.framework-item *,
+.framework-container *,
+.framework-box *,
+.framework-content *,
+.framework-wrapper *,
+.tutorial-card *,
+.tutorial-item *,
+.tutorial-container *,
+.tutorial-box *,
+.tutorial-content *,
+.tutorial-wrapper *,
+.workshop-card *,
+.workshop-item *,
+.workshop-container *,
+.workshop-box *,
+.workshop-content *,
+.workshop-wrapper *,
+.card-with-guide-button *,
+.card-with-view-guide *,
+.card[data-card-type="guide"] *,
+.card-with-guide *,
+.view-guide-container *,
+.card:has(.view-guide) *,
+.card:has([class*="view-guide"]) *,
+.card:has(a[href*="guide"]) *,
+.card:has(button:contains("View Guide")) *,
+.card:has(a:contains("View Guide")) * {
+    /* Set text color to purple */
+    color: #6a0dad !important;
+    /* Add text shadow for better readability */
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Target headings within guide cards for stronger purple */
+.guide-card h1, .guide-card h2, .guide-card h3, .guide-card h4, .guide-card h5, .guide-card h6,
+.guide-item h1, .guide-item h2, .guide-item h3, .guide-item h4, .guide-item h5, .guide-item h6,
+.guide-container h1, .guide-container h2, .guide-container h3, .guide-container h4, .guide-container h5, .guide-container h6,
+.guide-box h1, .guide-box h2, .guide-box h3, .guide-box h4, .guide-box h5, .guide-box h6,
+.guide-content h1, .guide-content h2, .guide-content h3, .guide-content h4, .guide-content h5, .guide-content h6,
+.guide-wrapper h1, .guide-wrapper h2, .guide-wrapper h3, .guide-wrapper h4, .guide-wrapper h5, .guide-wrapper h6,
+.framework-card h1, .framework-card h2, .framework-card h3, .framework-card h4, .framework-card h5, .framework-card h6,
+.framework-item h1, .framework-item h2, .framework-item h3, .framework-item h4, .framework-item h5, .framework-item h6,
+.framework-container h1, .framework-container h2, .framework-container h3, .framework-container h4, .framework-container h5, .framework-container h6,
+.framework-box h1, .framework-box h2, .framework-box h3, .framework-box h4, .framework-box h5, .framework-box h6,
+.framework-content h1, .framework-content h2, .framework-content h3, .framework-content h4, .framework-content h5, .framework-content h6,
+.framework-wrapper h1, .framework-wrapper h2, .framework-wrapper h3, .framework-wrapper h4, .framework-wrapper h5, .framework-wrapper h6,
+.tutorial-card h1, .tutorial-card h2, .tutorial-card h3, .tutorial-card h4, .tutorial-card h5, .tutorial-card h6,
+.tutorial-item h1, .tutorial-item h2, .tutorial-item h3, .tutorial-item h4, .tutorial-item h5, .tutorial-item h6,
+.tutorial-container h1, .tutorial-container h2, .tutorial-container h3, .tutorial-container h4, .tutorial-container h5, .tutorial-container h6,
+.tutorial-box h1, .tutorial-box h2, .tutorial-box h3, .tutorial-box h4, .tutorial-box h5, .tutorial-box h6,
+.tutorial-content h1, .tutorial-content h2, .tutorial-content h3, .tutorial-content h4, .tutorial-content h5, .tutorial-content h6,
+.tutorial-wrapper h1, .tutorial-wrapper h2, .tutorial-wrapper h3, .tutorial-wrapper h4, .tutorial-wrapper h5, .tutorial-wrapper h6,
+.workshop-card h1, .workshop-card h2, .workshop-card h3, .workshop-card h4, .workshop-card h5, .workshop-card h6,
+.workshop-item h1, .workshop-item h2, .workshop-item h3, .workshop-item h4, .workshop-item h5, .workshop-item h6,
+.workshop-container h1, .workshop-container h2, .workshop-container h3, .workshop-container h4, .workshop-container h5, .workshop-container h6,
+.workshop-box h1, .workshop-box h2, .workshop-box h3, .workshop-box h4, .workshop-box h5, .workshop-box h6,
+.workshop-content h1, .workshop-content h2, .workshop-content h3, .workshop-content h4, .workshop-content h5, .workshop-content h6,
+.workshop-wrapper h1, .workshop-wrapper h2, .workshop-wrapper h3, .workshop-wrapper h4, .workshop-wrapper h5, .workshop-wrapper h6,
+.card-with-guide-button h1, .card-with-guide-button h2, .card-with-guide-button h3, .card-with-guide-button h4, .card-with-guide-button h5, .card-with-guide-button h6,
+.card-with-view-guide h1, .card-with-view-guide h2, .card-with-view-guide h3, .card-with-view-guide h4, .card-with-view-guide h5, .card-with-view-guide h6,
+.card[data-card-type="guide"] h1, .card[data-card-type="guide"] h2, .card[data-card-type="guide"] h3, .card[data-card-type="guide"] h4, .card[data-card-type="guide"] h5, .card[data-card-type="guide"] h6,
+.card-with-guide h1, .card-with-guide h2, .card-with-guide h3, .card-with-guide h4, .card-with-guide h5, .card-with-guide h6,
+.view-guide-container h1, .view-guide-container h2, .view-guide-container h3, .view-guide-container h4, .view-guide-container h5, .view-guide-container h6,
+.card:has(.view-guide) h1, .card:has(.view-guide) h2, .card:has(.view-guide) h3, .card:has(.view-guide) h4, .card:has(.view-guide) h5, .card:has(.view-guide) h6,
+.card:has([class*="view-guide"]) h1, .card:has([class*="view-guide"]) h2, .card:has([class*="view-guide"]) h3, .card:has([class*="view-guide"]) h4, .card:has([class*="view-guide"]) h5, .card:has([class*="view-guide"]) h6,
+.card:has(a[href*="guide"]) h1, .card:has(a[href*="guide"]) h2, .card:has(a[href*="guide"]) h3, .card:has(a[href*="guide"]) h4, .card:has(a[href*="guide"]) h5, .card:has(a[href*="guide"]) h6,
+.card:has(button:contains("View Guide")) h1, .card:has(button:contains("View Guide")) h2, .card:has(button:contains("View Guide")) h3, .card:has(button:contains("View Guide")) h4, .card:has(button:contains("View Guide")) h5, .card:has(button:contains("View Guide")) h6,
+.card:has(a:contains("View Guide")) h1, .card:has(a:contains("View Guide")) h2, .card:has(a:contains("View Guide")) h3, .card:has(a:contains("View Guide")) h4, .card:has(a:contains("View Guide")) h5, .card:has(a:contains("View Guide")) h6 {
+    /* Set heading color to darker purple */
+    color: #4b0082 !important;
+    /* Add text shadow for better readability */
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.7) !important;
+    /* Make headings bold */
+    font-weight: bold !important;
+}
+
+/* Target paragraphs within guide cards */
+.guide-card p,
+.guide-item p,
+.guide-container p,
+.guide-box p,
+.guide-content p,
+.guide-wrapper p,
+.framework-card p,
+.framework-item p,
+.framework-container p,
+.framework-box p,
+.framework-content p,
+.framework-wrapper p,
+.tutorial-card p,
+.tutorial-item p,
+.tutorial-container p,
+.tutorial-box p,
+.tutorial-content p,
+.tutorial-wrapper p,
+.workshop-card p,
+.workshop-item p,
+.workshop-container p,
+.workshop-box p,
+.workshop-content p,
+.workshop-wrapper p,
+.card-with-guide-button p,
+.card-with-view-guide p,
+.card[data-card-type="guide"] p,
+.card-with-guide p,
+.view-guide-container p,
+.card:has(.view-guide) p,
+.card:has([class*="view-guide"]) p,
+.card:has(a[href*="guide"]) p,
+.card:has(button:contains("View Guide")) p,
+.card:has(a:contains("View Guide")) p {
+    /* Set paragraph color to medium purple */
+    color: #6a0dad !important;
+    /* Add text shadow for better readability */
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.5) !important;
+    /* Make text slightly bolder */
+    font-weight: 500 !important;
+}
+
+/* Target "View Guide" buttons specifically */
+a.btn:contains("View Guide"),
+button:contains("View Guide"),
+.btn:contains("View Guide"),
+a[href*="guide"].btn,
+.view-guide-btn,
+.view-guide-button,
+.guide-button,
+.btn-view-guide,
+a.view-guide,
+button.view-guide {
+    /* Keep the button's original background color */
+    /* Just ensure the text is visible */
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+    font-weight: bold !important;
+}
+
+/* Target any cards with white background that have "View Guide" buttons */
+.card.bg-white:has(a:contains("View Guide")),
+.card.bg-white:has(button:contains("View Guide")),
+.card.bg-light:has(a:contains("View Guide")),
+.card.bg-light:has(button:contains("View Guide")),
+.card[style*="background-color: white"]:has(a:contains("View Guide")),
+.card[style*="background-color: white"]:has(button:contains("View Guide")),
+.card[style*="background-color: #fff"]:has(a:contains("View Guide")),
+.card[style*="background-color: #fff"]:has(button:contains("View Guide")),
+.card[style*="background-color: #ffffff"]:has(a:contains("View Guide")),
+.card[style*="background-color: #ffffff"]:has(button:contains("View Guide")),
+.card[style*="background: white"]:has(a:contains("View Guide")),
+.card[style*="background: white"]:has(button:contains("View Guide")),
+.card[style*="background: #fff"]:has(a:contains("View Guide")),
+.card[style*="background: #fff"]:has(button:contains("View Guide")),
+.card[style*="background: #ffffff"]:has(a:contains("View Guide")),
+.card[style*="background: #ffffff"]:has(button:contains("View Guide")) {
+    /* Make sure all text in these cards is purple */
+    color: #6a0dad !important;
+}
+
+/* Target any white cards with guide-related content */
+.card.bg-white:has([class*="guide"]),
+.card.bg-light:has([class*="guide"]),
+.card[style*="background-color: white"]:has([class*="guide"]),
+.card[style*="background-color: #fff"]:has([class*="guide"]),
+.card[style*="background-color: #ffffff"]:has([class*="guide"]),
+.card[style*="background: white"]:has([class*="guide"]),
+.card[style*="background: #fff"]:has([class*="guide"]),
+.card[style*="background: #ffffff"]:has([class*="guide"]) {
+    /* Make sure all text in these cards is purple */
+    color: #6a0dad !important;
+}
+
+/* Specific fix for the cards shown in the image */
+.card.bg-white,
+.card.bg-light,
+.card[style*="background-color: white"],
+.card[style*="background-color: #fff"],
+.card[style*="background-color: #ffffff"],
+.card[style*="background: white"],
+.card[style*="background: #fff"],
+.card[style*="background: #ffffff"] {
+    /* Apply purple text to all white cards */
+    color: #6a0dad !important;
+}
+
+/* Make sure links within guide cards are properly styled */
+.guide-card a:not(.btn),
+.guide-item a:not(.btn),
+.guide-container a:not(.btn),
+.guide-box a:not(.btn),
+.guide-content a:not(.btn),
+.guide-wrapper a:not(.btn),
+.card:has(.view-guide) a:not(.btn),
+.card:has(a:contains("View Guide")) a:not(.btn) {
+    /* Set link color to purple */
+    color: #8a2be2 !important;
+    /* Add underline */
+    text-decoration: underline !important;
+    /* Add text shadow for better readability */
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Make sure the difficulty labels are visible */
+.guide-card .badge,
+.guide-item .badge,
+.guide-container .badge,
+.guide-box .badge,
+.guide-content .badge,
+.guide-wrapper .badge,
+.card:has(.view-guide) .badge,
+.card:has(a:contains("View Guide")) .badge,
+.difficulty-badge,
+.level-badge,
+.badge-intermediate,
+.badge-advanced,
+.badge-beginner {
+    /* Ensure text is visible against badge background */
+    color: white !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+    font-weight: bold !important;
+}

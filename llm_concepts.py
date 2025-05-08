@@ -332,50 +332,191 @@ class LLMConceptsVisualizer:
         # Create a pyvis network
         net = Network(height=height, width=width, notebook=False, directed=False)
 
-        # Add nodes
+        # Add nodes with enhanced styling for maximum visibility
         for node in self.graph.nodes():
-            net.add_node(
-                node,
-                label=node,
-                title=self.graph.nodes[node]["description"],
-                color=self.graph.nodes[node]["color"],
-                size=self.graph.nodes[node]["size"] * 2,
-                font={'size': 16, 'face': 'Arial'}
+            # Check if this is the central node (fine-tuning)
+            is_central = node.lower() in ["llm fine-tuning", "fine-tuning", "fine tuning", "finetuning"]
+
+            # Set enhanced styling based on node type
+            if is_central:
+                # Central node styling with maximum visibility
+                net.add_node(
+                    node,
+                    label=node,
+                    title=self.graph.nodes[node]["description"],
+                    color={
+                        'background': '#ff00ff', # Bright magenta
+                        'border': '#ffffff', # White border
+                        'highlight': {
+                            'background': '#ff00ff',
+                            'border': '#ffffff'
+                        },
+                        'hover': {
+                            'background': '#ff00ff',
+                            'border': '#ffffff'
+                        }
+                    },
+                    size=self.graph.nodes[node]["size"] * 3, # Even larger size
+                    font={
+                        'size': 22, # Larger font size
+                        'face': 'Arial',
+                        'color': '#ffffff',
+                        'bold': True,
+                        'strokeWidth': 4, # Text stroke for better visibility
+                        'strokeColor': 'rgba(0, 0, 0, 0.8)' # Black stroke
+                    },
+                    borderWidth=5, # Thicker border
+                    shadow={
+                        'enabled': True,
+                        'color': 'rgba(255, 0, 255, 0.9)', # Stronger shadow
+                        'size': 20, # Larger shadow
+                        'x': 0,
+                        'y': 0
+                    }
+                )
+            else:
+                # Regular node styling with enhanced visibility
+                net.add_node(
+                    node,
+                    label=node,
+                    title=self.graph.nodes[node]["description"],
+                    color={
+                        'background': 'rgba(0, 0, 0, 0.95)', # Darker background
+                        'border': '#00ffff', # Brighter cyan border
+                        'highlight': {
+                            'background': 'rgba(0, 0, 0, 1)',
+                            'border': '#ffffff'
+                        },
+                        'hover': {
+                            'background': 'rgba(0, 0, 0, 1)',
+                            'border': '#ffffff'
+                        }
+                    },
+                    size=self.graph.nodes[node]["size"] * 2.5, # Larger size
+                    font={
+                        'size': 18, # Larger font size
+                        'face': 'Arial',
+                        'color': '#ffffff',
+                        'bold': True,
+                        'strokeWidth': 3, # Text stroke for better visibility
+                        'strokeColor': 'rgba(0, 0, 0, 0.8)' # Black stroke
+                    },
+                    borderWidth=4, # Thicker border
+                    shadow={
+                        'enabled': True,
+                        'color': 'rgba(0, 255, 255, 0.8)', # Stronger shadow
+                        'size': 15, # Larger shadow
+                        'x': 0,
+                        'y': 0
+                    }
+                )
+
+        # Add edges with enhanced styling for maximum visibility
+        for edge in self.graph.edges():
+            net.add_edge(
+                edge[0],
+                edge[1],
+                color={
+                    'color': 'rgba(255, 0, 255, 1)', # Fully opaque magenta
+                    'highlight': 'rgba(255, 255, 255, 1)', # White on highlight
+                    'hover': 'rgba(255, 255, 255, 1)' # White on hover
+                },
+                width=4, # Thicker lines
+                selectionWidth=6, # Even thicker when selected
+                hoverWidth=5, # Thicker on hover
+                smooth={
+                    'type': 'dynamic',
+                    'forceDirection': 'none',
+                    'roundness': 0.5
+                },
+                shadow={
+                    'enabled': True,
+                    'color': 'rgba(255, 0, 255, 0.7)',
+                    'size': 10,
+                    'x': 0,
+                    'y': 0
+                }
             )
 
-        # Add edges
-        for edge in self.graph.edges():
-            net.add_edge(edge[0], edge[1], color="gray", width=2)
-
-        # Set physics layout for better filling of the screen
+        # Set enhanced physics layout for optimal visualization
         net.barnes_hut(
-            gravity=-80000,
-            central_gravity=0.3,
-            spring_length=250,
-            spring_strength=0.01,
+            gravity=-60000, # Less negative gravity for better spacing
+            central_gravity=0.4, # Stronger central gravity to keep nodes closer
+            spring_length=200, # Shorter springs for more compact layout
+            spring_strength=0.02, # Stronger springs for better stability
             damping=0.09,
-            overlap=0.1
+            overlap=0.2 # More overlap avoidance
         )
 
-        # Add zoom options and other interactive features
+        # Add enhanced zoom options and other interactive features
         options = {
             "interaction": {
                 "hover": True,
+                "hoverConnectedEdges": True,
+                "selectConnectedEdges": True,
+                "multiselect": True,
                 "zoomView": True,
                 "dragView": True,
                 "navigationButtons": True,
-                "keyboard": True
+                "keyboard": {
+                    "enabled": True,
+                    "speed": {
+                        "x": 10,
+                        "y": 10,
+                        "zoom": 0.1
+                    },
+                    "bindToWindow": False
+                },
+                "tooltipDelay": 200
             },
             "physics": {
                 "stabilization": {
-                    "iterations": 100,
+                    "enabled": True,
+                    "iterations": 150,
+                    "updateInterval": 25,
                     "fit": True  # This helps fill the container
+                },
+                "barnesHut": {
+                    "gravitationalConstant": -80000,
+                    "centralGravity": 0.3,
+                    "springLength": 250,
+                    "springConstant": 0.01,
+                    "damping": 0.09,
+                    "avoidOverlap": 0.1
                 }
             },
             "layout": {
                 "improvedLayout": True,
                 "hierarchical": {
                     "enabled": False
+                }
+            },
+            "nodes": {
+                "shape": "dot",
+                "scaling": {
+                    "min": 10,
+                    "max": 30,
+                    "label": {
+                        "enabled": True,
+                        "min": 14,
+                        "max": 24
+                    }
+                },
+                "shadow": {
+                    "enabled": True
+                }
+            },
+            "edges": {
+                "smooth": {
+                    "enabled": True,
+                    "type": "dynamic",
+                    "roundness": 0.5
+                },
+                "shadow": {
+                    "enabled": True,
+                    "size": 3,
+                    "x": 0,
+                    "y": 0
                 }
             }
         }
@@ -384,10 +525,11 @@ class LLMConceptsVisualizer:
         # Generate the HTML with the network object exposed globally
         html_template = """
         <!DOCTYPE html>
-        <html>
+        <html lang="en">
         <head>
             <meta charset="utf-8">
-            <title>LLM Concepts Visualization</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>LLM Fine-Tuning Concepts Map</title>
             <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vis-network@9.1.2/dist/vis-network.min.js"></script>
             <style type="text/css">
                 #mynetwork {
@@ -397,34 +539,156 @@ class LLMConceptsVisualizer:
                     top: 0;
                     left: 0;
                     border: none;
-                    background-color: #ffffff;
+                    background: linear-gradient(135deg, #1a0033, #2d0052);
+                    background-image:
+                        linear-gradient(rgba(255, 0, 255, 0.1) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255, 0, 255, 0.1) 1px, transparent 1px);
+                    background-size: 20px 20px;
+                    overflow: auto;
+                    touch-action: pan-x pan-y;
                 }
                 body, html {
                     height: 100%;
                     margin: 0;
                     padding: 0;
-                    overflow: hidden;
+                    overflow: auto;
+                    overscroll-behavior: none; /* Prevent bounce effects */
+                    touch-action: manipulation; /* Improve touch handling */
+                    -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
                 }
                 .vis-tooltip {
                     position: absolute;
                     visibility: hidden;
-                    padding: 5px;
-                    white-space: nowrap;
+                    padding: 12px;
+                    white-space: normal;
                     font-family: Arial, sans-serif;
                     font-size: 14px;
-                    color: #000000;
-                    background-color: #f5f5f5;
-                    border-radius: 3px;
-                    border: 1px solid #808080;
-                    box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+                    font-weight: 600;
+                    color: #ffffff;
+                    background-color: rgba(0, 0, 0, 0.95);
+                    border-radius: 8px;
+                    border: 2px solid #00e5ff;
+                    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 229, 255, 0.4);
                     max-width: 300px;
                     word-wrap: break-word;
                     z-index: 900;
+                    line-height: 1.5;
+                }
+                .vis-network:focus {
+                    outline: 3px solid #00e5ff;
+                }
+                .vis-navigation {
+                    background-color: rgba(0, 0, 0, 0.7) !important;
+                    border: 1px solid #00e5ff !important;
+                    border-radius: 8px !important;
+                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3) !important;
+                }
+                .vis-button {
+                    background-color: rgba(0, 0, 0, 0.8) !important;
+                    color: white !important;
+                    border: 1px solid #00e5ff !important;
+                    border-radius: 4px !important;
+                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+                }
+                .vis-button:hover {
+                    background-color: rgba(0, 229, 255, 0.3) !important;
+                }
+                /* Custom zoom controls */
+                .zoom-controls {
+                    position: absolute;
+                    bottom: 20px;
+                    right: 20px;
+                    display: flex;
+                    gap: 10px;
+                    z-index: 100;
+                }
+                .zoom-btn {
+                    background-color: rgba(0, 0, 0, 0.8);
+                    color: white;
+                    border: 2px solid #00e5ff;
+                    border-radius: 50%;
+                    width: 40px;
+                    height: 40px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    font-size: 20px;
+                    transition: all 0.3s ease;
+                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+                }
+                .zoom-btn:hover {
+                    background-color: rgba(0, 229, 255, 0.3);
+                    transform: translateY(-2px);
+                }
+                /* Screen reader only text */
+                .sr-only {
+                    position: absolute;
+                    width: 1px;
+                    height: 1px;
+                    padding: 0;
+                    margin: -1px;
+                    overflow: hidden;
+                    clip: rect(0, 0, 0, 0);
+                    white-space: nowrap;
+                    border-width: 0;
+                }
+                /* Loading indicator */
+                #loading-indicator {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(0, 0, 0, 0.7);
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 1000;
+                    color: white;
+                    font-family: Arial, sans-serif;
+                }
+                .spinner {
+                    width: 50px;
+                    height: 50px;
+                    border: 5px solid rgba(255, 255, 255, 0.3);
+                    border-radius: 50%;
+                    border-top-color: #ff00ff;
+                    animation: spin 1s linear infinite;
+                    margin-bottom: 15px;
+                }
+                @keyframes spin {
+                    to { transform: rotate(360deg); }
                 }
             </style>
         </head>
         <body>
-            <div id="mynetwork"></div>
+            <!-- Loading indicator -->
+            <div id="loading-indicator" role="status" aria-live="polite">
+                <div class="spinner" aria-hidden="true"></div>
+                <div>Loading visualization...</div>
+            </div>
+
+            <!-- Accessibility description -->
+            <div class="sr-only" id="network-description">
+                Interactive concept map showing relationships between LLM fine-tuning concepts.
+                Use arrow keys to navigate, plus and minus to zoom, and Enter to select a node.
+            </div>
+
+            <!-- Main visualization container -->
+            <div id="mynetwork" role="application" aria-labelledby="network-description" tabindex="0"></div>
+
+            <!-- Custom zoom controls -->
+            <div class="zoom-controls">
+                <button class="zoom-btn" id="zoom-in" aria-label="Zoom in">+</button>
+                <button class="zoom-btn" id="zoom-out" aria-label="Zoom out">-</button>
+                <button class="zoom-btn" id="zoom-reset" aria-label="Reset zoom">⟲</button>
+            </div>
+
+            <!-- Screen reader announcer -->
+            <div id="sr-announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
             <script type="text/javascript">
                 // Initialize the network
                 var container = document.getElementById('mynetwork');
@@ -435,7 +699,86 @@ class LLMConceptsVisualizer:
                 // Make the network object globally accessible
                 window.network = network;
 
-                // Fit the network to the container on load
+                // Get UI elements
+                const loadingIndicator = document.getElementById('loading-indicator');
+                const zoomInBtn = document.getElementById('zoom-in');
+                const zoomOutBtn = document.getElementById('zoom-out');
+                const zoomResetBtn = document.getElementById('zoom-reset');
+                const srAnnouncer = document.getElementById('sr-announcer');
+
+                // Function to announce to screen readers
+                function announceToScreenReader(message) {
+                    if (srAnnouncer) {
+                        srAnnouncer.textContent = message;
+                        // Clear after a delay
+                        setTimeout(() => {
+                            srAnnouncer.textContent = '';
+                        }, 3000);
+                    }
+                }
+
+                // Function to highlight the central node
+                function highlightCentralNode(nodeName) {
+                    // Find the central node
+                    const centralNode = data.nodes.find(node =>
+                        node.label.toLowerCase() === nodeName.toLowerCase() ||
+                        node.id.toLowerCase() === nodeName.toLowerCase()
+                    );
+
+                    if (centralNode) {
+                        // Update the node styling with maximum visibility
+                        const nodeId = centralNode.id;
+                        const updatedNode = {
+                            id: nodeId,
+                            color: {
+                                background: '#ff00ff', // Bright magenta
+                                border: '#ffffff', // White border
+                                highlight: {
+                                    background: '#ff00ff',
+                                    border: '#ffffff'
+                                },
+                                hover: {
+                                    background: '#ff00ff',
+                                    border: '#ffffff'
+                                }
+                            },
+                            font: {
+                                size: 22, // Larger font size
+                                color: '#ffffff', // White text
+                                face: 'Arial',
+                                bold: true,
+                                strokeWidth: 4, // Text stroke for better visibility
+                                strokeColor: 'rgba(0, 0, 0, 0.8)' // Black stroke
+                            },
+                            borderWidth: 5, // Thicker border
+                            shadow: {
+                                enabled: true,
+                                color: 'rgba(255, 0, 255, 0.9)', // Stronger shadow
+                                size: 20, // Larger shadow
+                                x: 0,
+                                y: 0
+                            },
+                            size: 40 // Larger node size
+                        };
+
+                        // Update the node
+                        data.nodes.update(updatedNode);
+
+                        // Focus on the central node
+                        network.focus(nodeId, {
+                            scale: 1.2,
+                            animation: {
+                                duration: 1000,
+                                easingFunction: 'easeInOutQuad'
+                            }
+                        });
+
+                        // Announce to screen readers
+                        announceToScreenReader('Visualization centered on ' + nodeName);
+                    }
+                }
+
+                // Fit the network to the container on load with enhanced animation
                 network.once("afterDrawing", function() {
                     setTimeout(function() {
                         network.fit({
@@ -444,16 +787,218 @@ class LLMConceptsVisualizer:
                                 easingFunction: 'easeInOutQuad'
                             }
                         });
+
+                        // Hide loading indicator
+                        if (loadingIndicator) {
+                            loadingIndicator.style.opacity = '0';
+                            setTimeout(() => {
+                                loadingIndicator.style.display = 'none';
+
+                                // Announce that the visualization is ready
+                                announceToScreenReader('Concept map visualization is now loaded and ready for interaction');
+
+                                // Highlight the central node
+                                highlightCentralNode('fine-tuning');
+                            }, 500);
+                        }
+
+                        // Notify parent window that network is stabilized
+                        try {
+                            window.parent.postMessage({ action: 'networkStabilized' }, '*');
+                        } catch (e) {
+                            console.log('Could not notify parent window');
+                        }
                     }, 200);
                 });
 
-                // Add click event to nodes
+                // Add click event to nodes with enhanced interaction
                 network.on("click", function(params) {
                     if (params.nodes.length > 0) {
                         var nodeId = params.nodes[0];
-                        window.parent.location.href = '/concept/' + encodeURIComponent(nodeId);
+
+                        // Add visual feedback before navigation
+                        var clickedNode = data.nodes.find(node => node.id === nodeId);
+                        if (clickedNode) {
+                            // Highlight the node
+                            network.selectNodes([nodeId]);
+
+                            // Announce to screen readers
+                            announceToScreenReader('Selected concept: ' + clickedNode.label);
+
+                            // Notify parent window
+                            try {
+                                window.parent.postMessage({
+                                    action: 'nodeClicked',
+                                    nodeId: nodeId,
+                                    nodeLabel: clickedNode.label
+                                }, '*');
+                            } catch (e) {
+                                console.log('Could not notify parent window');
+                            }
+
+                            // Add a brief delay for visual feedback before navigation
+                            setTimeout(function() {
+                                window.parent.location.href = '/concept/' + encodeURIComponent(nodeId);
+                            }, 300);
+                        }
                     }
                 });
+
+                // Add hover effects for better user experience
+                network.on("hoverNode", function(params) {
+                    document.body.style.cursor = 'pointer';
+
+                    // Get connected nodes
+                    var connectedNodes = network.getConnectedNodes(params.node);
+
+                    // Highlight connected edges
+                    network.selectEdges(network.getConnectedEdges(params.node));
+
+                    // Get node label for screen readers
+                    var hoveredNode = data.nodes.find(node => node.id === params.node);
+                    if (hoveredNode) {
+                        // Update aria-live region for screen readers
+                        announceToScreenReader('Hovering over: ' + hoveredNode.label);
+                    }
+                });
+
+                network.on("blurNode", function(params) {
+                    document.body.style.cursor = 'default';
+
+                    // Remove highlights
+                    network.selectEdges([]);
+                });
+
+                // Add keyboard navigation for accessibility
+                container.addEventListener('keydown', function(event) {
+                    // Only handle events when the network container is focused
+                    if (document.activeElement === container) {
+                        let handled = false;
+
+                        switch(event.key) {
+                            case '+':
+                            case '=':
+                                // Zoom in
+                                var scale = network.getScale() * 1.2;
+                                network.moveTo({scale: scale});
+                                announceToScreenReader('Zoomed in');
+                                handled = true;
+                                break;
+                            case '-':
+                                // Zoom out
+                                var scale = network.getScale() * 0.8;
+                                network.moveTo({scale: scale});
+                                announceToScreenReader('Zoomed out');
+                                handled = true;
+                                break;
+                            case '0':
+                            case 'Home':
+                                // Reset zoom
+                                network.fit({animation: {duration: 1000, easingFunction: 'easeInOutQuad'}});
+                                announceToScreenReader('View reset');
+                                handled = true;
+                                break;
+                            case 'ArrowUp':
+                            case 'ArrowDown':
+                            case 'ArrowLeft':
+                            case 'ArrowRight':
+                                // Pan the view
+                                const moveOptions = {
+                                    'ArrowUp': {y: -50},
+                                    'ArrowDown': {y: 50},
+                                    'ArrowLeft': {x: -50},
+                                    'ArrowRight': {x: 50}
+                                };
+                                network.moveTo({
+                                    position: moveOptions[event.key],
+                                    animation: {
+                                        duration: 300,
+                                        easingFunction: 'easeOutQuad'
+                                    }
+                                });
+                                handled = true;
+                                break;
+                        }
+
+                        if (handled) {
+                            event.preventDefault();
+                        }
+                    }
+                });
+
+                // Set up zoom control buttons
+                if (zoomInBtn) {
+                    zoomInBtn.addEventListener('click', function() {
+                        var scale = network.getScale() * 1.2;
+                        network.moveTo({scale: scale});
+                        announceToScreenReader('Zoomed in');
+                    });
+                }
+
+                if (zoomOutBtn) {
+                    zoomOutBtn.addEventListener('click', function() {
+                        var scale = network.getScale() * 0.8;
+                        network.moveTo({scale: scale});
+                        announceToScreenReader('Zoomed out');
+                    });
+                }
+
+                if (zoomResetBtn) {
+                    zoomResetBtn.addEventListener('click', function() {
+                        network.fit({animation: {duration: 1000, easingFunction: 'easeInOutQuad'}});
+                        announceToScreenReader('View reset');
+                    });
+                }
+
+                // Listen for messages from parent window
+                window.addEventListener('message', function(event) {
+                    if (event.data.action === 'zoomIn') {
+                        var scale = network.getScale() * 1.2;
+                        network.moveTo({scale: scale});
+                        announceToScreenReader('Zoomed in');
+                    } else if (event.data.action === 'zoomOut') {
+                        var scale = network.getScale() * 0.8;
+                        network.moveTo({scale: scale});
+                        announceToScreenReader('Zoomed out');
+                    } else if (event.data.action === 'resetZoom') {
+                        network.fit({animation: {duration: 1000, easingFunction: 'easeInOutQuad'}});
+                        announceToScreenReader('View reset');
+                    } else if (event.data.action === 'enhanceNetwork') {
+                        // Apply enhanced options if provided
+                        if (event.data.options) {
+                            network.setOptions(event.data.options);
+                        }
+                    } else if (event.data.action === 'highlightCentralNode') {
+                        if (event.data.nodeName) {
+                            highlightCentralNode(event.data.nodeName);
+                        }
+                    }
+                });
+
+                // Handle touch events for better mobile experience
+                let touchStartX, touchStartY;
+                let touchMoved = false;
+
+                container.addEventListener('touchstart', function(event) {
+                    if (event.touches.length === 1) {
+                        touchStartX = event.touches[0].clientX;
+                        touchStartY = event.touches[0].clientY;
+                        touchMoved = false;
+                    }
+                }, { passive: true });
+
+                container.addEventListener('touchmove', function(event) {
+                    if (event.touches.length === 1) {
+                        touchMoved = true;
+                    }
+                }, { passive: true });
+
+                container.addEventListener('touchend', function(event) {
+                    // If it was a tap (not a move), focus the container for keyboard navigation
+                    if (!touchMoved) {
+                        container.focus();
+                    }
+                }, { passive: true });
 
                 // Prevent errors when iframe is reloaded
                 window.addEventListener('unload', function() {

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Unauthorized - Visual LLM{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="error-container py-5">
+                <h1 class="display-1 text-warning">401</h1>
+                <h2 class="mb-4">Unauthorized Access</h2>
+                <p class="lead mb-4">You need to be logged in to access this page.</p>
+
+                <div class="error-image mb-4">
+                    <img src="{{ url_for('static', filename='images/401.svg') }}" alt="401 Error" class="img-fluid" style="max-height: 300px;">
+                </div>
+
+                <div class="mt-4">
+                    <a href="{{ url_for('index') }}" class="btn btn-outline-primary me-2">
+                        <i class="bi bi-house-door me-2"></i>Return to Home
+                    </a>
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-primary">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+                    </a>
+                </div>
+            </div>
+
+            <div class="card mt-5">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Need an account?</h5>
+                </div>
+                <div class="card-body">
+                    <p>Create an account to access all features:</p>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="bi bi-person-plus text-primary me-2"></i>Sign Up</h5>
+                                    <p class="card-text">Create a new account to track your progress and access all features.</p>
+                                    <a href="{{ url_for('auth.register') }}" class="btn btn-outline-primary">Register Now</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title"><i class="bi bi-question-circle text-primary me-2"></i>Learn More</h5>
+                                    <p class="card-text">Explore our learning resources without an account.</p>
+                                    <a href="{{ url_for('learn') }}" class="btn btn-outline-primary">Explore Resources</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

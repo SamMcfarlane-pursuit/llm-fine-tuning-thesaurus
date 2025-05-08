@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800px" height="500px" viewBox="0 0 800 500" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>LoRA Architecture Diagram</title>
+    <defs>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#4A94FF" stop-opacity="0.2" offset="0%"></stop>
+            <stop stop-color="#5DD6FF" stop-opacity="0.2" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="0%" y1="0%" x2="100%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#4A94FF" stop-opacity="0.4" offset="0%"></stop>
+            <stop stop-color="#5DD6FF" stop-opacity="0.4" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="LoRA-Diagram" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Background" fill="#1E1E23" x="0" y="0" width="800" height="500" rx="10"></rect>
+        
+        <!-- Title -->
+        <text id="LoRA-Architecture" font-family="Arial-BoldMT, Arial" font-size="24" font-weight="bold" fill="#FFFFFF">
+            <tspan x="300" y="40">LoRA Architecture</tspan>
+        </text>
+        
+        <!-- Original Pre-trained Weights -->
+        <rect id="Original-Weights-Box" fill="url(#linearGradient-1)" stroke="#4A94FF" stroke-width="2" x="100" y="100" width="600" height="100" rx="10"></rect>
+        <text id="Original-Weights-Text" font-family="Arial-BoldMT, Arial" font-size="18" font-weight="bold" fill="#FFFFFF">
+            <tspan x="250" y="150">Pre-trained Weights (W₀)</tspan>
+        </text>
+        <text id="Original-Weights-Frozen" font-family="Arial, Arial" font-size="14" font-style="italic" fill="#AAAAAA">
+            <tspan x="320" y="180">(Frozen during training)</tspan>
+        </text>
+        
+        <!-- LoRA Adapter Path -->
+        <rect id="LoRA-Box" fill="url(#linearGradient-2)" stroke="#5DD6FF" stroke-width="2" x="250" y="250" width="300" height="150" rx="10"></rect>
+        <text id="LoRA-Text" font-family="Arial-BoldMT, Arial" font-size="18" font-weight="bold" fill="#FFFFFF">
+            <tspan x="340" y="280">LoRA Adapter</tspan>
+        </text>
+        
+        <!-- Matrix A -->
+        <rect id="Matrix-A-Box" fill="#1E1E23" stroke="#5DD6FF" stroke-width="2" x="280" y="300" width="100" height="60" rx="5"></rect>
+        <text id="Matrix-A-Text" font-family="Arial-BoldMT, Arial" font-size="16" font-weight="bold" fill="#FFFFFF">
+            <tspan x="320" y="335">A</tspan>
+        </text>
+        
+        <!-- Matrix B -->
+        <rect id="Matrix-B-Box" fill="#1E1E23" stroke="#5DD6FF" stroke-width="2" x="420" y="300" width="100" height="60" rx="5"></rect>
+        <text id="Matrix-B-Text" font-family="Arial-BoldMT, Arial" font-size="16" font-weight="bold" fill="#FFFFFF">
+            <tspan x="460" y="335">B</tspan>
+        </text>
+        
+        <!-- Arrows -->
+        <path d="M400,100 L400,70 L200,70 L200,250 L280,300" id="Input-Path" stroke="#FFFFFF" stroke-width="2" stroke-dasharray="5,5"></path>
+        <path d="M380,330 L400,330 L400,350 L600,350 L600,200" id="Output-Path" stroke="#FFFFFF" stroke-width="2" stroke-dasharray="5,5"></path>
+        <path d="M380,330 L400,330 L400,350" id="A-to-B-Path" stroke="#5DD6FF" stroke-width="2"></path>
+        <path d="M400,330 L420,330" id="A-to-B-Path-2" stroke="#5DD6FF" stroke-width="2"></path>
+        
+        <!-- Addition Symbol -->
+        <circle id="Addition-Circle" fill="#1E1E23" stroke="#FFFFFF" stroke-width="2" cx="600" cy="250" r="20"></circle>
+        <line x1="585" y1="250" x2="615" y2="250" id="Plus-Horizontal" stroke="#FFFFFF" stroke-width="2"></line>
+        <line x1="600" y1="235" x2="600" y2="265" id="Plus-Vertical" stroke="#FFFFFF" stroke-width="2"></line>
+        
+        <!-- Output Arrow -->
+        <path d="M600,270 L600,300 L700,300" id="Final-Output-Path" stroke="#FFFFFF" stroke-width="2"></path>
+        <polygon id="Arrow-Head" fill="#FFFFFF" points="700,300 690,295 690,305"></polygon>
+        
+        <!-- Labels -->
+        <text id="Low-Rank" font-family="Arial, Arial" font-size="14" fill="#5DD6FF">
+            <tspan x="310" y="380">Low-Rank</tspan>
+        </text>
+        <text id="Trainable" font-family="Arial, Arial" font-size="14" fill="#5DD6FF">
+            <tspan x="420" y="380">Trainable</tspan>
+        </text>
+        <text id="Input" font-family="Arial, Arial" font-size="14" fill="#AAAAAA">
+            <tspan x="150" y="70">Input</tspan>
+        </text>
+        <text id="Output" font-family="Arial, Arial" font-size="14" fill="#AAAAAA">
+            <tspan x="710" y="300">Output</tspan>
+        </text>
+        <text id="r-dimension" font-family="Arial-ItalicMT, Arial" font-size="14" font-style="italic" fill="#5DD6FF">
+            <tspan x="390" y="320">r « min(m,n)</tspan>
+        </text>
+        
+        <!-- Formula -->
+        <text id="Formula" font-family="Arial, Arial" font-size="16" fill="#FFFFFF">
+            <tspan x="250" y="450">W = W₀ + ΔW = W₀ + BA</tspan>
+        </text>
+        <text id="Formula-Description" font-family="Arial, Arial" font-size="14" fill="#AAAAAA">
+            <tspan x="200" y="480">where B ∈ ℝᵐˣʳ, A ∈ ℝʳˣⁿ, and r is the low-rank dimension</tspan>
+        </text>
+    </g>
+</svg>

@@ -1,0 +1,244 @@
+/**
+ * Revised Guide Text
+ * Ensures text in guide cards is clearly visible in both light and dark modes
+ */
+
+/* Define color variables for both modes */
+:root {
+    /* Light mode colors - darker purple for better contrast on white */
+    --light-mode-heading: #4c1d95;  /* Very dark purple for headings in light mode */
+    --light-mode-text: #5b21b6;     /* Dark purple for text in light mode */
+    --light-mode-link: #6d28d9;     /* Medium-dark purple for links in light mode */
+    
+    /* Dark mode colors - bright purple for better contrast on dark */
+    --dark-mode-heading: #c4b5fd;   /* Bright purple for headings in dark mode */
+    --dark-mode-text: #ddd6fe;      /* Very bright purple for text in dark mode */
+    --dark-mode-link: #ede9fe;      /* Almost white purple for links in dark mode */
+    
+    /* Border and shadow */
+    --purple-border: rgba(91, 33, 182, 0.6);  /* Medium-dark purple for borders */
+    --purple-shadow: rgba(91, 33, 182, 0.4);  /* Medium-dark purple for shadows */
+}
+
+/* Base styles for all cards */
+.card {
+    /* Add a distinct purple border */
+    border: 2px solid var(--purple-border) !important;
+    /* Add a shadow for depth */
+    box-shadow: 0 4px 12px var(--purple-shadow) !important;
+}
+
+/* Light mode styles (default) */
+.card * {
+    /* Set default text color for light mode */
+    color: var(--light-mode-text) !important;
+    /* Add text shadow for better readability */
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.7) !important;
+    /* Make text slightly bolder */
+    font-weight: 500 !important;
+}
+
+/* Headings in light mode */
+.card h1, 
+.card h2, 
+.card h3, 
+.card h4, 
+.card h5, 
+.card h6 {
+    /* Set heading color for light mode */
+    color: var(--light-mode-heading) !important;
+    /* Add text shadow for better readability */
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.8) !important;
+    /* Make headings bold */
+    font-weight: bold !important;
+}
+
+/* Paragraphs in light mode */
+.card p {
+    /* Set paragraph color for light mode */
+    color: var(--light-mode-text) !important;
+    /* Add text shadow for better readability */
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.7) !important;
+    /* Make text slightly bolder */
+    font-weight: 500 !important;
+}
+
+/* Links in light mode */
+.card a:not(.btn) {
+    /* Set link color for light mode */
+    color: var(--light-mode-link) !important;
+    /* Add underline */
+    text-decoration: underline !important;
+    /* Add text shadow for better readability */
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.7) !important;
+    /* Make links bold */
+    font-weight: bold !important;
+}
+
+/* Dark mode styles */
+.dark-mode .card *,
+.dark .card * {
+    /* Set default text color for dark mode */
+    color: var(--dark-mode-text) !important;
+    /* Add text shadow for better readability */
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.7) !important;
+    /* Make text slightly bolder */
+    font-weight: 500 !important;
+}
+
+/* Headings in dark mode */
+.dark-mode .card h1,
+.dark-mode .card h2,
+.dark-mode .card h3,
+.dark-mode .card h4,
+.dark-mode .card h5,
+.dark-mode .card h6,
+.dark .card h1,
+.dark .card h2,
+.dark .card h3,
+.dark .card h4,
+.dark .card h5,
+.dark .card h6 {
+    /* Set heading color for dark mode */
+    color: var(--dark-mode-heading) !important;
+    /* Add text shadow for better readability */
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.8) !important;
+    /* Make headings bold */
+    font-weight: bold !important;
+}
+
+/* Paragraphs in dark mode */
+.dark-mode .card p,
+.dark .card p {
+    /* Set paragraph color for dark mode */
+    color: var(--dark-mode-text) !important;
+    /* Add text shadow for better readability */
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.7) !important;
+    /* Make text slightly bolder */
+    font-weight: 500 !important;
+}
+
+/* Links in dark mode */
+.dark-mode .card a:not(.btn),
+.dark .card a:not(.btn) {
+    /* Set link color for dark mode */
+    color: var(--dark-mode-link) !important;
+    /* Add underline */
+    text-decoration: underline !important;
+    /* Add text shadow for better readability */
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.7) !important;
+    /* Make links bold */
+    font-weight: bold !important;
+}
+
+/* Make sure buttons remain visible in both modes */
+.card .btn,
+.card button,
+.card a.btn {
+    /* Ensure button text is white */
+    color: white !important;
+    /* Add text shadow for better readability */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7) !important;
+    /* Make button text bold */
+    font-weight: bold !important;
+}
+
+/* Make sure badges remain visible in both modes */
+.card .badge {
+    /* Ensure badge text is white */
+    color: white !important;
+    /* Add text shadow for better readability */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7) !important;
+    /* Make badge text bold */
+    font-weight: bold !important;
+}
+
+/* Specific fix for the cards shown in the image */
+.row .col-md-4 .card,
+.row .col-md-6 .card,
+.row .col-lg-4 .card,
+.row .col-lg-6 .card,
+.row .col-sm-6 .card,
+.row .col-sm-4 .card,
+.card-deck .card {
+    /* Add a distinct purple border */
+    border: 2px solid var(--purple-border) !important;
+    /* Add a shadow for depth */
+    box-shadow: 0 4px 12px var(--purple-shadow) !important;
+}
+
+/* Specific fix for cards with badges */
+.card:has(.badge),
+.card:has(.difficulty-badge),
+.card:has(.level-badge),
+.card:has(.badge-intermediate),
+.card:has(.badge-advanced),
+.card:has(.badge-beginner) {
+    /* Add a distinct purple border */
+    border: 2px solid var(--purple-border) !important;
+    /* Add a shadow for depth */
+    box-shadow: 0 4px 12px var(--purple-shadow) !important;
+}
+
+/* Specific fix for cards with "View Guide" buttons */
+.card:has(a:contains("View Guide")),
+.card:has(button:contains("View Guide")),
+.card:has(a.btn[href*="guide"]),
+.card:has(.view-guide) {
+    /* Add a distinct purple border */
+    border: 2px solid var(--purple-border) !important;
+    /* Add a shadow for depth */
+    box-shadow: 0 4px 12px var(--purple-shadow) !important;
+}
+
+/* Additional contrast enhancement for light mode */
+@media (prefers-color-scheme: light), (not .dark-mode), (not .dark) {
+    .card * {
+        /* Darker text for better contrast in light mode */
+        color: #4c1d95 !important;
+        /* Stronger text shadow for better readability */
+        text-shadow: 0 0 1px rgba(255, 255, 255, 0.9) !important;
+        /* Make text bolder */
+        font-weight: 600 !important;
+    }
+    
+    .card h1, 
+    .card h2, 
+    .card h3, 
+    .card h4, 
+    .card h5, 
+    .card h6 {
+        /* Even darker headings for better contrast in light mode */
+        color: #3b0764 !important;
+        /* Stronger text shadow for better readability */
+        text-shadow: 0 0 1px rgba(255, 255, 255, 0.9) !important;
+        /* Make headings extra bold */
+        font-weight: 800 !important;
+    }
+}
+
+/* Additional contrast enhancement for dark mode */
+@media (prefers-color-scheme: dark), (.dark-mode), (.dark) {
+    .card * {
+        /* Brighter text for better contrast in dark mode */
+        color: #e9d5ff !important;
+        /* Stronger text shadow for better readability */
+        text-shadow: 0 0 2px rgba(0, 0, 0, 0.9) !important;
+        /* Make text bolder */
+        font-weight: 600 !important;
+    }
+    
+    .card h1, 
+    .card h2, 
+    .card h3, 
+    .card h4, 
+    .card h5, 
+    .card h6 {
+        /* Even brighter headings for better contrast in dark mode */
+        color: #f5f3ff !important;
+        /* Stronger text shadow for better readability */
+        text-shadow: 0 0 2px rgba(0, 0, 0, 0.9) !important;
+        /* Make headings extra bold */
+        font-weight: 800 !important;
+    }
+}

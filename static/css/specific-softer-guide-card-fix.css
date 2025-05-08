@@ -1,0 +1,205 @@
+/**
+ * Specific Softer Guide Card Fix
+ * Targets the exact guide cards shown in the image with softer purple tones
+ */
+
+/* Define softer purple color variables */
+:root {
+    /* Softer purple tones with reduced contrast */
+    --soft-purple-heading: #7e57c2;     /* Softer purple for headings */
+    --soft-purple-text: #9575cd;        /* Softer purple for regular text */
+    --soft-purple-link: #b39ddb;        /* Softer purple for links */
+    --soft-purple-border: rgba(126, 87, 194, 0.2); /* Softer purple for borders */
+    --soft-purple-shadow: rgba(126, 87, 194, 0.1); /* Softer purple for shadows */
+}
+
+/* Target the specific guide cards with white background and View Guide buttons */
+.card.bg-white:has(a.btn-primary:contains("View Guide")),
+.card.bg-light:has(a.btn-primary:contains("View Guide")),
+.card[style*="background-color: white"]:has(a.btn-primary:contains("View Guide")),
+.card[style*="background-color: #fff"]:has(a.btn-primary:contains("View Guide")),
+.card[style*="background-color: #ffffff"]:has(a.btn-primary:contains("View Guide")),
+.card[style*="background: white"]:has(a.btn-primary:contains("View Guide")),
+.card[style*="background: #fff"]:has(a.btn-primary:contains("View Guide")),
+.card[style*="background: #ffffff"]:has(a.btn-primary:contains("View Guide")),
+.card.bg-white:has(a.btn-secondary:contains("View Guide")),
+.card.bg-light:has(a.btn-secondary:contains("View Guide")),
+.card[style*="background-color: white"]:has(a.btn-secondary:contains("View Guide")),
+.card[style*="background-color: #fff"]:has(a.btn-secondary:contains("View Guide")),
+.card[style*="background-color: #ffffff"]:has(a.btn-secondary:contains("View Guide")),
+.card[style*="background: white"]:has(a.btn-secondary:contains("View Guide")),
+.card[style*="background: #fff"]:has(a.btn-secondary:contains("View Guide")),
+.card[style*="background: #ffffff"]:has(a.btn-secondary:contains("View Guide")),
+.card.bg-white:has(a.btn:contains("View Guide")),
+.card.bg-light:has(a.btn:contains("View Guide")),
+.card[style*="background-color: white"]:has(a.btn:contains("View Guide")),
+.card[style*="background-color: #fff"]:has(a.btn:contains("View Guide")),
+.card[style*="background-color: #ffffff"]:has(a.btn:contains("View Guide")),
+.card[style*="background: white"]:has(a.btn:contains("View Guide")),
+.card[style*="background: #fff"]:has(a.btn:contains("View Guide")),
+.card[style*="background: #ffffff"]:has(a.btn:contains("View Guide")),
+.card.bg-white:has(button:contains("View Guide")),
+.card.bg-light:has(button:contains("View Guide")),
+.card[style*="background-color: white"]:has(button:contains("View Guide")),
+.card[style*="background-color: #fff"]:has(button:contains("View Guide")),
+.card[style*="background-color: #ffffff"]:has(button:contains("View Guide")),
+.card[style*="background: white"]:has(button:contains("View Guide")),
+.card[style*="background: #fff"]:has(button:contains("View Guide")),
+.card[style*="background: #ffffff"]:has(button:contains("View Guide")) {
+    /* Add a subtle purple border */
+    border: 1px solid var(--soft-purple-border) !important;
+    /* Add a subtle shadow */
+    box-shadow: 0 4px 8px var(--soft-purple-shadow) !important;
+}
+
+/* Target all text elements within these specific cards */
+.card.bg-white:has(a.btn:contains("View Guide")) *:not(.btn):not(.badge),
+.card.bg-light:has(a.btn:contains("View Guide")) *:not(.btn):not(.badge),
+.card[style*="background-color: white"]:has(a.btn:contains("View Guide")) *:not(.btn):not(.badge),
+.card[style*="background-color: #fff"]:has(a.btn:contains("View Guide")) *:not(.btn):not(.badge),
+.card[style*="background-color: #ffffff"]:has(a.btn:contains("View Guide")) *:not(.btn):not(.badge),
+.card[style*="background: white"]:has(a.btn:contains("View Guide")) *:not(.btn):not(.badge),
+.card[style*="background: #fff"]:has(a.btn:contains("View Guide")) *:not(.btn):not(.badge),
+.card[style*="background: #ffffff"]:has(a.btn:contains("View Guide")) *:not(.btn):not(.badge),
+.card.bg-white:has(button:contains("View Guide")) *:not(.btn):not(.badge),
+.card.bg-light:has(button:contains("View Guide")) *:not(.btn):not(.badge),
+.card[style*="background-color: white"]:has(button:contains("View Guide")) *:not(.btn):not(.badge),
+.card[style*="background-color: #fff"]:has(button:contains("View Guide")) *:not(.btn):not(.badge),
+.card[style*="background-color: #ffffff"]:has(button:contains("View Guide")) *:not(.btn):not(.badge),
+.card[style*="background: white"]:has(button:contains("View Guide")) *:not(.btn):not(.badge),
+.card[style*="background: #fff"]:has(button:contains("View Guide")) *:not(.btn):not(.badge),
+.card[style*="background: #ffffff"]:has(button:contains("View Guide")) *:not(.btn):not(.badge) {
+    /* Set text color to softer purple */
+    color: var(--soft-purple-text) !important;
+    /* Remove text shadow for reduced contrast */
+    text-shadow: none !important;
+}
+
+/* Target headings within these specific cards */
+.card.bg-white:has(a.btn:contains("View Guide")) h1,
+.card.bg-white:has(a.btn:contains("View Guide")) h2,
+.card.bg-white:has(a.btn:contains("View Guide")) h3,
+.card.bg-white:has(a.btn:contains("View Guide")) h4,
+.card.bg-white:has(a.btn:contains("View Guide")) h5,
+.card.bg-white:has(a.btn:contains("View Guide")) h6,
+.card.bg-light:has(a.btn:contains("View Guide")) h1,
+.card.bg-light:has(a.btn:contains("View Guide")) h2,
+.card.bg-light:has(a.btn:contains("View Guide")) h3,
+.card.bg-light:has(a.btn:contains("View Guide")) h4,
+.card.bg-light:has(a.btn:contains("View Guide")) h5,
+.card.bg-light:has(a.btn:contains("View Guide")) h6,
+.card[style*="background-color: white"]:has(a.btn:contains("View Guide")) h1,
+.card[style*="background-color: white"]:has(a.btn:contains("View Guide")) h2,
+.card[style*="background-color: white"]:has(a.btn:contains("View Guide")) h3,
+.card[style*="background-color: white"]:has(a.btn:contains("View Guide")) h4,
+.card[style*="background-color: white"]:has(a.btn:contains("View Guide")) h5,
+.card[style*="background-color: white"]:has(a.btn:contains("View Guide")) h6,
+.card[style*="background-color: #fff"]:has(a.btn:contains("View Guide")) h1,
+.card[style*="background-color: #fff"]:has(a.btn:contains("View Guide")) h2,
+.card[style*="background-color: #fff"]:has(a.btn:contains("View Guide")) h3,
+.card[style*="background-color: #fff"]:has(a.btn:contains("View Guide")) h4,
+.card[style*="background-color: #fff"]:has(a.btn:contains("View Guide")) h5,
+.card[style*="background-color: #fff"]:has(a.btn:contains("View Guide")) h6,
+.card[style*="background-color: #ffffff"]:has(a.btn:contains("View Guide")) h1,
+.card[style*="background-color: #ffffff"]:has(a.btn:contains("View Guide")) h2,
+.card[style*="background-color: #ffffff"]:has(a.btn:contains("View Guide")) h3,
+.card[style*="background-color: #ffffff"]:has(a.btn:contains("View Guide")) h4,
+.card[style*="background-color: #ffffff"]:has(a.btn:contains("View Guide")) h5,
+.card[style*="background-color: #ffffff"]:has(a.btn:contains("View Guide")) h6,
+.card[style*="background: white"]:has(a.btn:contains("View Guide")) h1,
+.card[style*="background: white"]:has(a.btn:contains("View Guide")) h2,
+.card[style*="background: white"]:has(a.btn:contains("View Guide")) h3,
+.card[style*="background: white"]:has(a.btn:contains("View Guide")) h4,
+.card[style*="background: white"]:has(a.btn:contains("View Guide")) h5,
+.card[style*="background: white"]:has(a.btn:contains("View Guide")) h6,
+.card[style*="background: #fff"]:has(a.btn:contains("View Guide")) h1,
+.card[style*="background: #fff"]:has(a.btn:contains("View Guide")) h2,
+.card[style*="background: #fff"]:has(a.btn:contains("View Guide")) h3,
+.card[style*="background: #fff"]:has(a.btn:contains("View Guide")) h4,
+.card[style*="background: #fff"]:has(a.btn:contains("View Guide")) h5,
+.card[style*="background: #fff"]:has(a.btn:contains("View Guide")) h6,
+.card[style*="background: #ffffff"]:has(a.btn:contains("View Guide")) h1,
+.card[style*="background: #ffffff"]:has(a.btn:contains("View Guide")) h2,
+.card[style*="background: #ffffff"]:has(a.btn:contains("View Guide")) h3,
+.card[style*="background: #ffffff"]:has(a.btn:contains("View Guide")) h4,
+.card[style*="background: #ffffff"]:has(a.btn:contains("View Guide")) h5,
+.card[style*="background: #ffffff"]:has(a.btn:contains("View Guide")) h6 {
+    /* Set heading color to softer purple */
+    color: var(--soft-purple-heading) !important;
+    /* Remove text shadow for reduced contrast */
+    text-shadow: none !important;
+    /* Make headings medium weight instead of bold */
+    font-weight: 600 !important;
+}
+
+/* Target paragraphs within these specific cards */
+.card.bg-white:has(a.btn:contains("View Guide")) p,
+.card.bg-light:has(a.btn:contains("View Guide")) p,
+.card[style*="background-color: white"]:has(a.btn:contains("View Guide")) p,
+.card[style*="background-color: #fff"]:has(a.btn:contains("View Guide")) p,
+.card[style*="background-color: #ffffff"]:has(a.btn:contains("View Guide")) p,
+.card[style*="background: white"]:has(a.btn:contains("View Guide")) p,
+.card[style*="background: #fff"]:has(a.btn:contains("View Guide")) p,
+.card[style*="background: #ffffff"]:has(a.btn:contains("View Guide")) p,
+.card.bg-white:has(button:contains("View Guide")) p,
+.card.bg-light:has(button:contains("View Guide")) p,
+.card[style*="background-color: white"]:has(button:contains("View Guide")) p,
+.card[style*="background-color: #fff"]:has(button:contains("View Guide")) p,
+.card[style*="background-color: #ffffff"]:has(button:contains("View Guide")) p,
+.card[style*="background: white"]:has(button:contains("View Guide")) p,
+.card[style*="background: #fff"]:has(button:contains("View Guide")) p,
+.card[style*="background: #ffffff"]:has(button:contains("View Guide")) p {
+    /* Set paragraph color to softer purple */
+    color: var(--soft-purple-text) !important;
+    /* Remove text shadow for reduced contrast */
+    text-shadow: none !important;
+    /* Use normal font weight for better readability */
+    font-weight: normal !important;
+}
+
+/* Fallback for browsers that don't support :has() */
+.card.bg-white,
+.card.bg-light,
+.card[style*="background-color: white"],
+.card[style*="background-color: #fff"],
+.card[style*="background-color: #ffffff"],
+.card[style*="background: white"],
+.card[style*="background: #fff"],
+.card[style*="background: #ffffff"] {
+    /* Add a data attribute to identify these cards in JavaScript */
+    data-potential-guide-card: "true";
+}
+
+/* Target all cards in a grid layout like the one in the image */
+.row .col-md-4 .card,
+.row .col-md-6 .card,
+.row .col-lg-4 .card,
+.row .col-lg-6 .card,
+.row .col-sm-6 .card,
+.row .col-sm-4 .card,
+.card-deck .card {
+    /* Add a data attribute to identify these cards in JavaScript */
+    data-potential-guide-card: "true";
+}
+
+/* Target cards with difficulty badges */
+.card:has(.badge-intermediate),
+.card:has(.badge-advanced),
+.card:has(.badge-beginner),
+.card:has(.difficulty-badge),
+.card:has(.level-badge) {
+    /* Add a data attribute to identify these cards in JavaScript */
+    data-potential-guide-card: "true";
+}
+
+/* Specific fix for the exact cards shown in the image */
+.card.bg-white:has(.badge:contains("Intermediate")),
+.card.bg-white:has(.badge:contains("Advanced")),
+.card.bg-white:has(.badge:contains("Beginner")) {
+    /* Apply softer purple text to all content */
+    color: var(--soft-purple-text) !important;
+    /* Add a subtle purple border */
+    border: 1px solid var(--soft-purple-border) !important;
+    /* Add a subtle shadow */
+    box-shadow: 0 4px 8px var(--soft-purple-shadow) !important;
+}

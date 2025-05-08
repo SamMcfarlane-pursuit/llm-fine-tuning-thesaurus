@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Visual Thesaurus LLM | Advanced Fine-Tuning{% endblock %}
+{% block title %}Visual LLM | Advanced Fine-Tuning{% endblock %}
 
 {% block head %}
 <!-- Additional head content specific to this page -->
@@ -13,7 +13,7 @@
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-lg-7">
-                        <h1 class="hero-title">Visual Thesaurus <span class="highlight">LLM</span></h1>
+                        <h1 class="hero-title">Visual <span class="highlight">LLM</span></h1>
                         <p class="hero-subtitle">Explore the world of LLM fine-tuning through interactive visualizations and hands-on exercises</p>
                         <div class="hero-features">
                             <div class="feature-badge"><i class="bi bi-diagram-3"></i> Interactive Concept Maps</div>
@@ -70,17 +70,96 @@
             </div>
         </div>
         <div class="hero-wave">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#121212" fill-opacity="1" d="M0,160L48,144C96,128,192,96,288,106.7C384,117,480,171,576,186.7C672,203,768,181,864,154.7C960,128,1056,96,1152,90.7C1248,85,1344,107,1392,117.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#0f0f0f" fill-opacity="1" d="M0,160L48,144C96,128,192,96,288,106.7C384,117,480,171,576,186.7C672,203,768,181,864,154.7C960,128,1056,96,1152,90.7C1248,85,1344,107,1392,117.3L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>
         </div>
     </div>
 
     <div class="container">
+        <!-- Include the quick access navigation -->
+        {% include 'components/quick_access_nav.html' %}
+
+        <!-- Include the instructional guide component -->
+        {% include 'components/instructional_guide.html' %}
+
         <div class="section-header text-center">
             <h2 class="section-title">Explore LLM Fine-Tuning Concepts</h2>
             <p class="section-subtitle">Discover the relationships between key concepts in LLM fine-tuning</p>
         </div>
 
-        <!-- Include the new home features component -->
+        <!-- Visual Thesaurus Diagram -->
+        <div class="row mb-5">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3><i class="bi bi-diagram-3 me-2"></i> LLM Fine-Tuning Concept Map</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center mb-4">
+                            <p class="lead">Explore the relationships between key concepts in LLM fine-tuning with our interactive visualization</p>
+                        </div>
+                        <div id="thesaurus-visualization" class="thesaurus-visualization">
+                            <!-- Visual Thesaurus Diagram -->
+                            <div class="visual-thesaurus-container">
+                                <div class="visual-thesaurus-diagram">
+                                    <div class="central-node">fine-tuning</div>
+                                    <div class="node node-1">LoRA</div>
+                                    <div class="node node-2">QLoRA</div>
+                                    <div class="node node-3">PEFT</div>
+                                    <div class="node node-4">quantization</div>
+                                    <div class="node node-5">adapter</div>
+                                    <div class="node node-6">transformer</div>
+                                    <div class="node node-7">attention</div>
+                                    <div class="node node-8">prompt tuning</div>
+                                    <div class="node node-9">prefix tuning</div>
+                                    <div class="node node-10">instruction tuning</div>
+                                    <div class="node node-11">low-rank</div>
+                                    <div class="node node-12">parameter-efficient</div>
+                                    <div class="node node-13">hyperparameters</div>
+                                    <div class="node node-14">training</div>
+                                    <div class="node node-15">inference</div>
+                                    <div class="node node-16">GPU</div>
+                                    <div class="node node-17">TPU</div>
+                                    <div class="node node-18">hugging face</div>
+                                    <div class="node node-19">pytorch</div>
+                                    <div class="node node-20">dataset</div>
+                                    <div class="node node-21">model</div>
+                                    <div class="node node-22">weights</div>
+                                    <div class="connection c1"></div>
+                                    <div class="connection c2"></div>
+                                    <div class="connection c3"></div>
+                                    <div class="connection c4"></div>
+                                    <div class="connection c5"></div>
+                                    <div class="connection c6"></div>
+                                    <div class="connection c7"></div>
+                                    <div class="connection c8"></div>
+                                    <div class="connection c9"></div>
+                                    <div class="connection c10"></div>
+                                    <div class="connection c11"></div>
+                                    <div class="connection c12"></div>
+                                    <div class="connection c13"></div>
+                                    <div class="connection c14"></div>
+                                    <div class="connection c15"></div>
+                                    <div class="connection c16"></div>
+                                    <div class="connection c17"></div>
+                                    <div class="connection c18"></div>
+                                    <div class="connection c19"></div>
+                                    <div class="connection c20"></div>
+                                    <div class="connection c21"></div>
+                                    <div class="connection c22"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-4">
+                            <a href="/learn-and-explore?concept=fine-tuning" class="btn btn-primary btn-lg">
+                                <i class="bi bi-search me-2"></i> Explore All Fine-Tuning Concepts
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Include the home features component -->
         {% include 'components/home_features.html' %}
 
         <div class="row mt-4">

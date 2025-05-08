@@ -1,29 +1,29 @@
 /* Main Styles for Visual Thesaurus LLM - Tech Edition */
 
 :root {
-    --primary-color: #4361ee;  /* Deep blue - more readable and less harsh */
-    --secondary-color: #3a86ff; /* Bright blue - good contrast with dark backgrounds */
-    --accent-color: #7209b7;   /* Rich purple - complementary to blues */
-    --dark-bg: #121212;
-    --medium-bg: #1e1e1e;
-    --light-bg: #2d2d2d;
+    --primary-color: #4a94ff;  /* Brighter blue - enhanced contrast with dark backgrounds */
+    --secondary-color: #5dd6ff; /* Brighter cyan - higher contrast with dark backgrounds */
+    --accent-color: #5470ff;   /* Brighter deep blue - improved visibility */
+    --dark-bg: #0f0f0f;
+    --medium-bg: #1a1a1a;
+    --light-bg: #242424;
     --text-primary: #ffffff;
-    --text-secondary: #e0e0e0; /* Increased contrast for better readability */
+    --text-secondary: #e0e0e0; /* Significantly increased contrast for better readability */
 
     /* Mobile viewport height fix */
     --vh: 1vh;
 
     /* Enhanced colors for better visibility and appeal */
-    --success-color: #38b000;  /* Vibrant green - high contrast and readable */
-    --warning-color: #fb8500;  /* Orange - better contrast than yellow */
-    --danger-color: #d00000;   /* Deep red - clear and visible */
-    --info-color: #4cc9f0;     /* Bright cyan - high contrast with dark backgrounds */
+    --success-color: #45d400;  /* Brighter green - higher contrast and more readable */
+    --warning-color: #ff9500;  /* Brighter orange - better contrast */
+    --danger-color: #ff2222;   /* Brighter red - more visible */
+    --info-color: #5dd6ff;     /* Brighter cyan - higher contrast with dark backgrounds */
 
     /* Darker shades for contrast and depth */
-    --primary-dark: #3a0ca3;   /* Darker blue/purple */
-    --success-dark: #008000;   /* Darker green */
-    --info-dark: #0077b6;      /* Darker blue */
-    --warning-dark: #e85d04;   /* Darker orange */
+    --primary-dark: #0078ff;   /* Darker but vibrant blue */
+    --success-dark: #00a000;   /* Darker but visible green */
+    --info-dark: #0095e0;      /* Darker but bright blue */
+    --warning-dark: #ff7b00;   /* Darker but visible orange */
 
     /* Text colors for cards to ensure readability */
     --primary-text: #ffffff;   /* White text for blue backgrounds */
@@ -33,18 +33,18 @@
 
     --border-radius: 8px;
     --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-    --glow-effect: 0 0 10px rgba(76, 201, 240, 0.5);
+    --glow-effect: 0 0 10px rgba(93, 214, 255, 0.6);
 
     /* Card background colors with better opacity for content areas */
-    --card-primary-bg: rgba(67, 97, 238, 0.08);
-    --card-success-bg: rgba(56, 176, 0, 0.08);
-    --card-info-bg: rgba(76, 201, 240, 0.08);
-    --card-warning-bg: rgba(251, 133, 0, 0.08);
+    --card-primary-bg: rgba(74, 148, 255, 0.15);  /* Increased opacity for better visibility */
+    --card-success-bg: rgba(69, 212, 0, 0.15);    /* Increased opacity for better visibility */
+    --card-info-bg: rgba(93, 214, 255, 0.15);     /* Increased opacity for better visibility */
+    --card-warning-bg: rgba(255, 149, 0, 0.15);   /* Increased opacity for better visibility */
 }
 
 body {
     font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--dark-bg);
+    /* Background color is now set in vibrant-global-theme.css */
     color: var(--text-primary);
     line-height: 1.8;
     overflow-x: hidden;
@@ -56,27 +56,14 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* Tech-inspired background pattern */
-body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image:
-        linear-gradient(rgba(18, 18, 18, 0.97), rgba(18, 18, 18, 0.97)),
-        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231e90ff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    z-index: -1;
-}
+/* Tech-inspired background pattern is now in vibrant-global-theme.css */
 
 /* Top Auth Bar */
 .top-auth-bar {
-    background-color: rgba(10, 10, 10, 0.95);
-    padding: 8px 0;
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    /* Top auth bar styling is now in vibrant-global-theme.css */
+    padding: 12px 0;
+    color: var(--text-primary);
+    font-size: 1rem;
     z-index: 1001;
     position: relative;
 }
@@ -118,11 +105,26 @@ body::before {
 }
 
 .navbar {
-    background: linear-gradient(90deg, rgba(18, 18, 18, 0.95), rgba(30, 30, 30, 0.95)) !important;
+    /* Navbar styling is now in vibrant-global-theme.css */
     padding: 0.75rem 0;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
+    position: relative;
+    z-index: 1000;
+}
+
+.navbar::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg,
+        rgba(93, 214, 255, 0),
+        rgba(93, 214, 255, 0.5),
+        rgba(93, 214, 255, 0));
+    z-index: 1;
 }
 
 /* Compact Navigation */
@@ -131,25 +133,46 @@ body::before {
     justify-content: center;
     flex-wrap: nowrap;
     width: 100%;
+    margin: 0 auto;
 }
 
 .compact-nav .nav-link {
-    padding: 0.6rem 0.5rem;
-    font-size: 0.9rem;
-    letter-spacing: -0.01em;
+    padding: 0.6rem 0.7rem;
+    font-size: 0.95rem;
+    letter-spacing: 0;
     white-space: nowrap;
+    font-weight: 500;
 }
 
 /* Make sure all nav items fit in the container */
 .compact-nav .nav-item {
     display: flex;
     align-items: center;
+    margin: 0 2px;
 }
 
 .header-accent {
-    height: 3px;
-    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
-    box-shadow: 0 0 15px rgba(0, 198, 255, 0.5);
+    height: 4px;
+    background: linear-gradient(90deg,
+        #4a94ff,
+        #5dd6ff,
+        #5470ff,
+        #5dd6ff,
+        #4a94ff);
+    box-shadow: 0 0 20px rgba(93, 214, 255, 0.7);
+    position: relative;
+    z-index: 999;
+    animation: shimmer 3s infinite linear;
+    background-size: 200% 100%;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 0% 0%;
+    }
+    100% {
+        background-position: 200% 0%;
+    }
 }
 
 /* Mega Menu Styling */
@@ -175,7 +198,7 @@ body::before {
     font-weight: 600;
     padding: 0.5rem 1rem;
     margin-bottom: 0.5rem;
-    border-bottom: 1px solid rgba(0, 198, 255, 0.2);
+    border-bottom: 1px solid rgba(58, 134, 255, 0.2);
 }
 
 .dropdown-menu.mega-menu .dropdown-item {
@@ -205,26 +228,34 @@ body::before {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    border-radius: 10px;
-    margin-right: 0.75rem;
-    box-shadow: 0 0 10px rgba(0, 198, 255, 0.5);
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #4a94ff, #5dd6ff);
+    border-radius: 12px;
+    margin-right: 1rem;
+    box-shadow: 0 0 15px rgba(0, 198, 255, 0.7), inset 0 0 5px rgba(255, 255, 255, 0.5);
     transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
 .brand-icon i {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     color: white;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
 }
 
 .brand-text {
-    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    background: linear-gradient(90deg, #ffffff, #5dd6ff);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     position: relative;
+    font-size: 1.7rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    text-shadow: 0 2px 10px rgba(93, 214, 255, 0.8);
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.8));
 }
 
 .brand-text::after {
@@ -241,36 +272,49 @@ body::before {
 }
 
 .navbar-brand:hover .brand-icon {
-    transform: rotate(15deg);
-    box-shadow: 0 0 15px rgba(0, 198, 255, 0.7);
+    transform: rotate(15deg) scale(1.05);
+    box-shadow: 0 0 20px rgba(0, 198, 255, 0.9), inset 0 0 10px rgba(255, 255, 255, 0.8);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.navbar-brand:hover .brand-text {
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.9));
+    text-shadow: 0 2px 15px rgba(93, 214, 255, 1);
 }
 
 .navbar-brand:hover .brand-text::after {
     transform: scaleX(1);
+    height: 3px;
+    background: linear-gradient(90deg, #ffffff, #5dd6ff);
+    box-shadow: 0 0 10px rgba(93, 214, 255, 0.8);
 }
 
 /* Nav links styling */
 .navbar-dark .navbar-nav .nav-link {
-    color: var(--text-secondary);
+    color: var(--text-primary);
     transition: all 0.3s ease;
     position: relative;
     padding: 0.75rem 1rem;
     margin: 0 0.2rem;
     border-radius: 8px;
-    font-weight: 500;
+    font-weight: 600;
     display: flex;
     align-items: center;
+    letter-spacing: 0.01em;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .nav-icon {
     margin-right: 0.5rem;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     transition: transform 0.3s ease;
+    color: var(--primary-color);
 }
 
 .navbar-dark .navbar-nav .nav-link:hover {
     color: var(--text-primary);
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(74, 148, 255, 0.15);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-dark .navbar-nav .nav-link:hover .nav-icon {
@@ -280,8 +324,8 @@ body::before {
 
 .navbar-dark .navbar-nav .nav-link.active {
     color: var(--text-primary);
-    background-color: rgba(0, 198, 255, 0.1);
-    box-shadow: inset 0 0 0 1px rgba(0, 198, 255, 0.2);
+    background-color: rgba(74, 148, 255, 0.2);
+    box-shadow: inset 0 0 0 1px rgba(74, 148, 255, 0.3), 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-dark .navbar-nav .nav-link.active .nav-icon {
@@ -290,32 +334,74 @@ body::before {
 
 /* Dropdown styling */
 .dropdown-menu {
-    background-color: rgba(30, 30, 30, 0.95);
-    border: 1px solid rgba(0, 198, 255, 0.2);
+    background-color: rgba(30, 30, 35, 0.97);
+    border: 1px solid rgba(93, 214, 255, 0.3);
     border-radius: var(--border-radius);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(93, 214, 255, 0.2);
     padding: 0.75rem 0;
     margin-top: 0.5rem;
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
+    animation: fadeIn 0.3s ease-out;
+    transform-origin: top center;
+    overflow: hidden;
+}
+
+.dropdown-menu::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg,
+        rgba(93, 214, 255, 0),
+        rgba(93, 214, 255, 0.7),
+        rgba(93, 214, 255, 0));
+    z-index: 1;
 }
 
 .dropdown-item {
-    color: var(--text-secondary);
-    padding: 0.6rem 1.2rem;
-    transition: all 0.2s ease;
+    color: var(--text-primary);
+    padding: 0.7rem 1.3rem;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    position: relative;
+    margin: 0.2rem 0.5rem;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.dropdown-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(to bottom, #4a94ff, #5dd6ff);
+    opacity: 0;
+    transition: all 0.3s ease;
 }
 
 .dropdown-item:hover {
-    background-color: rgba(0, 198, 255, 0.1);
-    color: var(--text-primary);
+    background-color: rgba(93, 214, 255, 0.15);
+    color: #ffffff;
+    transform: translateX(3px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dropdown-item:hover::before {
+    opacity: 1;
 }
 
 .dropdown-header {
-    color: var(--text-secondary);
-    font-size: 0.8rem;
+    color: var(--primary-color);
+    font-size: 0.9rem;
     padding: 0.5rem 1.2rem;
-    opacity: 0.7;
+    font-weight: 600;
+    letter-spacing: 0.02em;
 }
 
 .dropdown-divider {

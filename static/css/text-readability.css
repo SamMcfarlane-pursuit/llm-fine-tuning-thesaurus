@@ -1,0 +1,448 @@
+/**
+ * Text Readability Enhancement CSS
+ * Improves text readability across the entire website with high contrast and optimal typography
+ */
+
+/* Global text enhancements */
+body {
+    /* Improved base font settings */
+    font-family: 'Roboto', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 18px; /* Larger base font size */
+    line-height: 1.8; /* Increased line height for better readability */
+    letter-spacing: 0.3px; /* Slight letter spacing for better readability */
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Enhanced text contrast for dark theme */
+body:not(.light-theme) {
+    /* Text colors with maximum contrast */
+    --text-primary: #ffffff; /* Pure white for maximum contrast */
+    --text-secondary: #f0f0f0; /* Very light gray for secondary text */
+    --text-tertiary: #e0e0e0; /* Light gray for tertiary text */
+    
+    /* Text shadow for better contrast against dark backgrounds */
+    --text-shadow-subtle: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --text-shadow-medium: 0 1px 3px rgba(0, 0, 0, 0.5);
+    --text-shadow-strong: 0 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* Enhanced text contrast for light theme */
+body.light-theme {
+    /* Text colors with maximum contrast */
+    --text-primary: #000000; /* Pure black for maximum contrast */
+    --text-secondary: #212121; /* Very dark gray for secondary text */
+    --text-tertiary: #424242; /* Dark gray for tertiary text */
+    
+    /* Text shadow for better contrast against light backgrounds */
+    --text-shadow-subtle: none;
+    --text-shadow-medium: none;
+    --text-shadow-strong: none;
+}
+
+/* Paragraph enhancements */
+p {
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem; /* Larger font size for paragraphs */
+    line-height: 1.8; /* Increased line height */
+    max-width: 80ch; /* Limit line length for better readability */
+    font-weight: 400; /* Regular weight for body text */
+}
+
+/* Heading enhancements */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary);
+    font-weight: 700; /* Bold weight for headings */
+    line-height: 1.3; /* Tighter line height for headings */
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    letter-spacing: 0.5px; /* Slight letter spacing for headings */
+    text-shadow: var(--text-shadow-subtle);
+}
+
+h1 {
+    font-size: 2.5rem;
+    text-shadow: var(--text-shadow-strong);
+}
+
+h2 {
+    font-size: 2.2rem;
+    text-shadow: var(--text-shadow-medium);
+}
+
+h3 {
+    font-size: 1.8rem;
+}
+
+h4 {
+    font-size: 1.5rem;
+}
+
+h5 {
+    font-size: 1.3rem;
+}
+
+h6 {
+    font-size: 1.1rem;
+}
+
+/* List enhancements */
+ul, ol {
+    color: var(--text-primary);
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+li {
+    margin-bottom: 0.8rem;
+    line-height: 1.7;
+    font-size: 1.1rem;
+}
+
+/* Link enhancements */
+a {
+    color: #42a5f5; /* Bright blue for dark theme */
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+a:hover, a:focus {
+    color: #64b5f6; /* Lighter blue on hover */
+    text-decoration: underline;
+}
+
+body.light-theme a {
+    color: #1976d2; /* Darker blue for light theme */
+}
+
+body.light-theme a:hover, 
+body.light-theme a:focus {
+    color: #1565c0; /* Even darker blue on hover for light theme */
+}
+
+/* Button text enhancements */
+.btn {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-shadow: var(--text-shadow-subtle);
+}
+
+/* Card text enhancements */
+.card-title {
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+    font-size: 1.4rem;
+}
+
+.card-subtitle {
+    font-weight: 500;
+    margin-bottom: 1rem;
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+.card-text {
+    color: var(--text-primary);
+    font-size: 1.05rem;
+    line-height: 1.7;
+}
+
+/* Table text enhancements */
+table {
+    color: var(--text-primary);
+    font-size: 1.05rem;
+}
+
+th {
+    font-weight: 700;
+}
+
+/* Code text enhancements */
+code, pre {
+    font-family: 'Fira Code', 'JetBrains Mono', 'Courier New', monospace;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    background-color: rgba(0, 0, 0, 0.2);
+    color: #ffffff;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+}
+
+pre code {
+    padding: 0;
+    background-color: transparent;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #ffffff;
+}
+
+/* Form text enhancements */
+label {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    color: var(--text-primary);
+    font-size: 1.05rem;
+}
+
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+body.light-theme .form-control::placeholder {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+/* Alert text enhancements */
+.alert {
+    font-weight: 500;
+    font-size: 1.05rem;
+}
+
+/* Badge text enhancements */
+.badge {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* Navbar text enhancements */
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: 0.5px;
+}
+
+.nav-link {
+    font-weight: 600;
+    font-size: 1.05rem;
+    letter-spacing: 0.3px;
+}
+
+/* Dropdown text enhancements */
+.dropdown-item {
+    font-weight: 500;
+    font-size: 1rem;
+    letter-spacing: 0.3px;
+}
+
+/* Blockquote enhancements */
+blockquote {
+    border-left: 4px solid #42a5f5;
+    padding-left: 1rem;
+    margin-left: 0;
+    margin-right: 0;
+    font-style: italic;
+    color: var(--text-secondary);
+}
+
+/* Small text enhancements */
+small, .small {
+    font-size: 0.9rem;
+    color: var(--text-tertiary);
+}
+
+/* Text selection enhancement */
+::selection {
+    background-color: rgba(66, 165, 245, 0.4);
+    color: #ffffff;
+}
+
+/* Back button specific enhancements */
+.btn-primary.back-button,
+a.btn-primary[href*="back"],
+button.btn-primary.back,
+.btn.btn-primary:contains("Back") {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8), 0 0 5px rgba(0, 0, 0, 0.5) !important;
+    letter-spacing: 0.05em !important;
+    -webkit-text-stroke: 0.5px #ffffff !important;
+}
+
+/* Ensure text is visible in all cards */
+.card-body {
+    color: var(--text-primary) !important;
+}
+
+/* Ensure text is visible in all alerts */
+.alert {
+    color: var(--text-primary) !important;
+}
+
+/* Ensure text is visible in all buttons */
+.btn {
+    color: #ffffff !important;
+}
+
+/* Ensure text is visible in all badges */
+.badge {
+    color: #ffffff !important;
+}
+
+/* Ensure text is visible in all navbars */
+.navbar {
+    color: var(--text-primary) !important;
+}
+
+/* Ensure text is visible in all dropdowns */
+.dropdown-menu {
+    color: var(--text-primary) !important;
+}
+
+/* Ensure text is visible in all modals */
+.modal {
+    color: var(--text-primary) !important;
+}
+
+/* Ensure text is visible in all tooltips */
+.tooltip {
+    color: #ffffff !important;
+}
+
+/* Ensure text is visible in all popovers */
+.popover {
+    color: var(--text-primary) !important;
+}
+
+/* Ensure text is visible in all breadcrumbs */
+.breadcrumb {
+    color: var(--text-primary) !important;
+}
+
+/* Ensure text is visible in all pagination */
+.pagination {
+    color: var(--text-primary) !important;
+}
+
+/* Ensure text is visible in all list groups */
+.list-group {
+    color: var(--text-primary) !important;
+}
+
+/* Ensure text is visible in all tables */
+.table {
+    color: var(--text-primary) !important;
+}
+
+/* Ensure text is visible in all forms */
+.form-control {
+    color: var(--text-primary) !important;
+}
+
+/* Ensure text is visible in all inputs */
+input, textarea, select {
+    color: var(--text-primary) !important;
+}
+
+/* Ensure text is visible in all code blocks */
+pre, code {
+    color: #ffffff !important;
+}
+
+/* Ensure text is visible in all blockquotes */
+blockquote {
+    color: var(--text-secondary) !important;
+}
+
+/* Ensure text is visible in all small text */
+small, .small {
+    color: var(--text-tertiary) !important;
+}
+
+/* Ensure text is visible in all headings */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary) !important;
+}
+
+/* Ensure text is visible in all paragraphs */
+p {
+    color: var(--text-primary) !important;
+}
+
+/* Ensure text is visible in all lists */
+ul, ol, li {
+    color: var(--text-primary) !important;
+}
+
+/* Ensure text is visible in all links */
+a {
+    color: #42a5f5 !important;
+}
+
+body.light-theme a {
+    color: #1976d2 !important;
+}
+
+/* Ensure text is visible in all buttons */
+.btn-primary {
+    color: #ffffff !important;
+}
+
+.btn-secondary {
+    color: #ffffff !important;
+}
+
+.btn-success {
+    color: #ffffff !important;
+}
+
+.btn-danger {
+    color: #ffffff !important;
+}
+
+.btn-warning {
+    color: #212121 !important;
+}
+
+.btn-info {
+    color: #212121 !important;
+}
+
+.btn-light {
+    color: #212121 !important;
+}
+
+.btn-dark {
+    color: #ffffff !important;
+}
+
+/* Ensure text is visible in all badges */
+.badge-primary {
+    color: #ffffff !important;
+}
+
+.badge-secondary {
+    color: #ffffff !important;
+}
+
+.badge-success {
+    color: #ffffff !important;
+}
+
+.badge-danger {
+    color: #ffffff !important;
+}
+
+.badge-warning {
+    color: #212121 !important;
+}
+
+.badge-info {
+    color: #212121 !important;
+}
+
+.badge-light {
+    color: #212121 !important;
+}
+
+.badge-dark {
+    color: #ffffff !important;
+}

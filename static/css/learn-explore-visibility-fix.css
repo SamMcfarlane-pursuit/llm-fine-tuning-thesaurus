@@ -1,0 +1,243 @@
+/**
+ * Learn & Explore Visibility Fix
+ * Improves visibility of Learn & Explore section, navigation tabs, and related elements
+ */
+
+/* Learn & Explore section improvements */
+.learn-explore-section,
+.learn-explore-container,
+.learn-explore-nav {
+    background-color: rgba(30, 30, 35, 0.8) !important;
+    border-radius: 12px !important;
+    padding: 20px !important;
+    border: 2px solid rgba(74, 148, 255, 0.3) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4) !important;
+    margin-bottom: 30px !important;
+}
+
+.learn-explore-title,
+.section-title.learn-explore {
+    color: #FFFFFF !important;
+    font-size: 2.2rem !important;
+    font-weight: 800 !important;
+    margin-bottom: 20px !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7), 0 0 15px rgba(93, 214, 255, 0.4) !important;
+    text-align: center !important;
+    letter-spacing: 0.02em !important;
+}
+
+.learn-explore-subtitle,
+.section-subtitle.learn-explore {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: 1.2rem !important;
+    margin-bottom: 30px !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7) !important;
+    text-align: center !important;
+    max-width: 800px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* Navigation tabs for Learn & Explore */
+.learn-explore-tabs,
+.nav-tabs.learn-explore {
+    border-bottom: 2px solid rgba(93, 214, 255, 0.4) !important;
+    margin-bottom: 30px !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 5px !important;
+    justify-content: center !important;
+}
+
+.learn-explore-tabs .nav-item,
+.nav-tabs.learn-explore .nav-item {
+    margin-bottom: -2px !important;
+}
+
+.learn-explore-tabs .nav-link,
+.nav-tabs.learn-explore .nav-link {
+    color: #FFFFFF !important;
+    background-color: rgba(30, 30, 35, 0.8) !important;
+    border: 2px solid rgba(93, 214, 255, 0.3) !important;
+    border-bottom: none !important;
+    border-radius: 10px 10px 0 0 !important;
+    padding: 15px 30px !important;
+    font-weight: 700 !important;
+    transition: all 0.3s ease !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7) !important;
+    font-size: 1.2rem !important;
+    margin-right: 5px !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.learn-explore-tabs .nav-link:hover,
+.nav-tabs.learn-explore .nav-link:hover {
+    color: #FFFFFF !important;
+    background-color: rgba(93, 214, 255, 0.2) !important;
+    border-color: rgba(93, 214, 255, 0.5) !important;
+    transform: translateY(-3px) !important;
+}
+
+.learn-explore-tabs .nav-link.active,
+.nav-tabs.learn-explore .nav-link.active {
+    color: #FFFFFF !important;
+    background: linear-gradient(135deg, rgba(74, 148, 255, 0.3), rgba(93, 214, 255, 0.3)) !important;
+    border-color: rgba(93, 214, 255, 0.5) !important;
+    border-bottom: none !important;
+    font-weight: 700 !important;
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.2), 0 0 10px rgba(93, 214, 255, 0.2) !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7), 0 0 10px rgba(93, 214, 255, 0.4) !important;
+}
+
+.learn-explore-tabs .nav-link i,
+.nav-tabs.learn-explore .nav-link i {
+    margin-right: 10px !important;
+    font-size: 1.3rem !important;
+    color: #5DD6FF !important;
+    filter: drop-shadow(0 0 8px rgba(93, 214, 255, 0.4)) !important;
+}
+
+.learn-explore-tabs .nav-link.active i,
+.nav-tabs.learn-explore .nav-link.active i {
+    color: #FFFFFF !important;
+    filter: drop-shadow(0 0 12px rgba(93, 214, 255, 0.6)) !important;
+}
+
+/* Tab content for Learn & Explore */
+.learn-explore-content,
+.tab-content.learn-explore {
+    background-color: rgba(30, 30, 35, 0.7) !important;
+    border-radius: 0 0 12px 12px !important;
+    padding: 30px !important;
+    border: 2px solid rgba(93, 214, 255, 0.3) !important;
+    border-top: none !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
+}
+
+.learn-explore-content .tab-pane,
+.tab-content.learn-explore .tab-pane {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: 1.1rem !important;
+    line-height: 1.7 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Navigation buttons in Learn & Explore */
+.learn-explore-nav-buttons,
+.nav-buttons.learn-explore {
+    display: flex !important;
+    justify-content: center !important;
+    gap: 20px !important;
+    margin-top: 30px !important;
+    flex-wrap: wrap !important;
+}
+
+.learn-explore-nav-button,
+.nav-button.learn-explore {
+    background: linear-gradient(135deg, #4A94FF, #5DD6FF) !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 15px 30px !important;
+    font-weight: 700 !important;
+    font-size: 1.2rem !important;
+    letter-spacing: 0.01em !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), 0 0 10px rgba(93, 214, 255, 0.3) !important;
+    transition: all 0.3s ease !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-decoration: none !important;
+    min-width: 200px !important;
+}
+
+.learn-explore-nav-button:hover,
+.nav-button.learn-explore:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(93, 214, 255, 0.4) !important;
+    color: #FFFFFF !important;
+    text-decoration: none !important;
+    background: linear-gradient(135deg, #5DD6FF, #4A94FF) !important;
+}
+
+.learn-explore-nav-button i,
+.nav-button.learn-explore i {
+    margin-right: 10px !important;
+    font-size: 1.3rem !important;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5)) !important;
+}
+
+/* Learn & Explore cards */
+.learn-explore-card,
+.card.learn-explore {
+    background-color: rgba(30, 30, 35, 0.8) !important;
+    border-radius: 12px !important;
+    border: 2px solid rgba(93, 214, 255, 0.3) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
+    transition: all 0.3s ease !important;
+    margin-bottom: 25px !important;
+    overflow: hidden !important;
+}
+
+.learn-explore-card:hover,
+.card.learn-explore:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), 0 0 15px rgba(93, 214, 255, 0.2) !important;
+    border-color: rgba(93, 214, 255, 0.5) !important;
+}
+
+.learn-explore-card .card-header,
+.card.learn-explore .card-header {
+    background: linear-gradient(135deg, rgba(74, 148, 255, 0.2), rgba(93, 214, 255, 0.2)) !important;
+    border-bottom: 2px solid rgba(93, 214, 255, 0.3) !important;
+    padding: 15px 20px !important;
+}
+
+.learn-explore-card .card-title,
+.card.learn-explore .card-title {
+    color: #FFFFFF !important;
+    font-size: 1.4rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 0 !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7), 0 0 10px rgba(93, 214, 255, 0.3) !important;
+}
+
+.learn-explore-card .card-body,
+.card.learn-explore .card-body {
+    padding: 20px !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: 1.05rem !important;
+    line-height: 1.6 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+.learn-explore-card .card-footer,
+.card.learn-explore .card-footer {
+    background-color: rgba(30, 30, 35, 0.7) !important;
+    border-top: 1px solid rgba(93, 214, 255, 0.2) !important;
+    padding: 15px 20px !important;
+}
+
+/* Learn & Explore icons */
+.learn-explore-icon,
+.icon.learn-explore {
+    color: #5DD6FF !important;
+    font-size: 2rem !important;
+    margin-right: 15px !important;
+    filter: drop-shadow(0 0 10px rgba(93, 214, 255, 0.5)) !important;
+}
+
+/* Learn & Explore badges */
+.learn-explore-badge,
+.badge.learn-explore {
+    background: linear-gradient(135deg, #4A94FF, #5DD6FF) !important;
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+    padding: 5px 10px !important;
+    border-radius: 20px !important;
+    font-size: 0.9rem !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2), 0 0 10px rgba(93, 214, 255, 0.2) !important;
+}

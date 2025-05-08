@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800px" height="400px" viewBox="0 0 800 400" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>401 Error</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#FFC107" stop-opacity="0.2" offset="0%"></stop>
+            <stop stop-color="#FFC107" stop-opacity="0.1" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="401-Error" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Background" fill="url(#linearGradient-1)" x="0" y="0" width="800" height="400" rx="20"></rect>
+        <text id="401" font-family="Arial-BoldMT, Arial" font-size="180" font-weight="bold" fill="#FFC107">
+            <tspan x="200" y="240">401</tspan>
+        </text>
+        <g id="Lock" transform="translate(500.000000, 150.000000)">
+            <rect id="Lock-Body" stroke="#FFC107" stroke-width="12" x="20" y="60" width="120" height="100" rx="10"></rect>
+            <path d="M40,60 L40,40 C40,17.90861 57.90861,0 80,0 C102.09139,0 120,17.90861 120,40 L120,60" id="Lock-Shackle" stroke="#FFC107" stroke-width="12"></path>
+            <circle id="Keyhole" fill="#FFC107" cx="80" cy="110" r="15"></circle>
+        </g>
+        <text id="Unauthorized" font-family="Arial-BoldMT, Arial" font-size="24" font-weight="bold" fill="#333333">
+            <tspan x="310" y="300">Unauthorized</tspan>
+        </text>
+    </g>
+</svg>

@@ -6,25 +6,25 @@
 /* Theme variables */
 :root {
     /* Dark theme (default) */
-    --dark-primary-color: #4361ee;
-    --dark-secondary-color: #3a86ff;
-    --dark-accent-color: #7209b7;
-    --dark-bg: #121212;
-    --dark-medium-bg: #1e1e1e;
-    --dark-light-bg: #2d2d2d;
+    --dark-primary-color: #3a86ff;
+    --dark-secondary-color: #4cc9f0;
+    --dark-accent-color: #4361ee;
+    --dark-bg: #0f0f0f;
+    --dark-medium-bg: #1a1a1a;
+    --dark-light-bg: #242424;
     --dark-text-primary: #ffffff;
-    --dark-text-secondary: #e0e0e0;
+    --dark-text-secondary: #cccccc;
     --dark-success-color: #38b000;
     --dark-warning-color: #fb8500;
     --dark-danger-color: #d00000;
     --dark-info-color: #4cc9f0;
     --dark-border-color: rgba(255, 255, 255, 0.1);
     --dark-card-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-    
+
     /* Light theme */
-    --light-primary-color: #3a56d4;
-    --light-secondary-color: #2563eb;
-    --light-accent-color: #6d28d9;
+    --light-primary-color: #3a86ff;
+    --light-secondary-color: #4cc9f0;
+    --light-accent-color: #4361ee;
     --light-bg: #f8f9fa;
     --light-medium-bg: #ffffff;
     --light-light-bg: #e9ecef;
@@ -36,7 +36,7 @@
     --light-info-color: #0dcaf0;
     --light-border-color: rgba(0, 0, 0, 0.1);
     --light-card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    
+
     /* Active theme variables (default to dark) */
     --primary-color: var(--dark-primary-color);
     --secondary-color: var(--dark-secondary-color);
@@ -52,11 +52,11 @@
     --info-color: var(--dark-info-color);
     --border-color: var(--dark-border-color);
     --card-shadow: var(--dark-card-shadow);
-    
+
     /* Transition settings */
-    --theme-transition: background-color 0.3s ease, 
-                        color 0.3s ease, 
-                        border-color 0.3s ease, 
+    --theme-transition: background-color 0.3s ease,
+                        color 0.3s ease,
+                        border-color 0.3s ease,
                         box-shadow 0.3s ease;
 }
 
@@ -101,7 +101,7 @@ body.light-theme {
     --info-color: var(--light-info-color);
     --border-color: var(--light-border-color);
     --card-shadow: var(--light-card-shadow);
-    
+
     /* Base styles */
     background-color: var(--bg);
     color: var(--text-primary);
@@ -252,7 +252,7 @@ body:not(.light-theme) .theme-toggle-btn .bi-sun-fill {
         --info-color: var(--light-info-color);
         --border-color: var(--light-border-color);
         --card-shadow: var(--light-card-shadow);
-        
+
         background-color: var(--bg);
         color: var(--text-primary);
     }
@@ -263,14 +263,14 @@ body:not(.light-theme) .theme-toggle-btn .bi-sun-fill {
     :root {
         --theme-transition: none !important;
     }
-    
+
     .theme-toggle-btn,
     .theme-toggle-btn:hover,
     .theme-toggle-btn:active {
         transition: none !important;
         transform: none !important;
     }
-    
+
     .theme-toggle-btn i {
         transition: none !important;
     }

@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <meta name="csrf-token" content="ImRmYzM4ZjI5Y2VkZWM1YzZkMTEyYzAzMzRiMzg3MGQxZmY4NjYyNDQi.aBP3Zw.uqjy5NCxrjM7NCviz6OCm_rvSXI">
-    
+
     <title>Visual Thesaurus LLM | Advanced Fine-Tuning</title>
     <!-- Google Fonts - Roboto -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,7 +24,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
     <!-- jQuery for tooltips -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
+
 <!-- Additional head content specific to this page -->
 
 </head>
@@ -33,14 +33,14 @@
     <div class="top-auth-bar">
         <div class="container">
             <div class="d-flex justify-content-end align-items-center">
-                
+
                 <a href="/auth/login" class="top-auth-link me-3">
                     <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
                 </a>
                 <a href="/auth/register" class="top-auth-link register-link">
                     <i class="bi bi-person-plus me-1"></i> Register
                 </a>
-                
+
             </div>
         </div>
     </div>
@@ -52,7 +52,7 @@
                     <span class="brand-icon"><i class="bi bi-diagram-3"></i></span>
                     <span class="brand-text">Visual Thesaurus LLM</span>
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
@@ -115,7 +115,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/quiz/quizzes">
                                 <i class="bi bi-journal-check nav-icon"></i> Quizzes
-                                
+
                             </a>
                         </li>
                     </ul>
@@ -130,7 +130,7 @@
         <div class="header-accent"></div>
     </header>
 
-    
+
 
     <div class="hero-section">
         <div class="hero-content">
@@ -149,7 +149,7 @@
                             <a href="#concepts-visualization" class="btn btn-outline-light btn-lg"><i class="bi bi-diagram-3"></i> Explore Concepts</a>
                         </div>
 
-                        
+
                         <div class="hero-auth-prompt mt-4">
                             <div class="auth-card">
                                 <div class="auth-card-content">
@@ -162,7 +162,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                     <div class="col-lg-5 d-none d-lg-block">
                         <div class="hero-visual">
@@ -199,7 +199,7 @@
                     </div>
                     <div class="card-body">
                         <p class="lead">Explore the relationships between LLM fine-tuning concepts in this interactive visualization. Click on any concept to learn more.</p>
-                        <div id="concepts-visualization" style="height: 500px; border: 1px solid #ddd; position: relative;"></div>
+                        <div id="concepts-visualization"></div>
                         <div class="mt-3">
                             <button type="button" id="concepts-zoom-in-btn" class="btn btn-sm btn-outline-primary"><i class="bi bi-zoom-in"></i> Zoom In</button>
                             <button type="button" id="concepts-zoom-out-btn" class="btn btn-sm btn-outline-primary"><i class="bi bi-zoom-out"></i> Zoom Out</button>
@@ -268,13 +268,13 @@
                             <div class="tab-pane fade show active" id="visualization" role="tabpanel"
                                  aria-labelledby="visualization-tab">
                                 <div id="visualization-container" class="visualization-container">
-                                    <div id="network-container" style="height: 500px;"></div>
+                                    <div id="network-container"></div>
                                     <div id="visualization-placeholder" class="text-center p-5">
                                         <h3>Enter a word above to see its visual thesaurus</h3>
                                         <p>The visualization will show synonyms, antonyms, and related terms</p>
                                     </div>
                                 </div>
-                                <div class="mt-3" id="zoom-controls" style="display: none;">
+                                <div class="mt-3" id="zoom-controls">
                                     <button type="button" id="zoom-in-btn" class="btn btn-sm btn-outline-primary"><i class="bi bi-zoom-in"></i> Zoom In</button>
                                     <button type="button" id="zoom-out-btn" class="btn btn-sm btn-outline-primary"><i class="bi bi-zoom-out"></i> Zoom Out</button>
                                     <button type="button" id="reset-zoom-btn" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrows-fullscreen"></i> Reset View</button>
@@ -363,17 +363,17 @@
                                             <li>Calibration data selection is critical for performance</li>
                                         </ul>
                                         <h5>Memory Savings:</h5>
-                                        <div class="progress mb-2" style="height: 25px;">
-                                            <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">FP32 (100%)</div>
+                                        <div class="progress memory-progress">
+                                            <div class="progress-bar fp32-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" title="FP32 Memory Usage">FP32 (100%)</div>
                                         </div>
-                                        <div class="progress mb-2" style="height: 25px;">
-                                            <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">FP16 (50%)</div>
+                                        <div class="progress memory-progress">
+                                            <div class="progress-bar bg-info fp16-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" title="FP16 Memory Usage">FP16 (50%)</div>
                                         </div>
-                                        <div class="progress mb-2" style="height: 25px;">
-                                            <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">INT8 (25%)</div>
+                                        <div class="progress memory-progress">
+                                            <div class="progress-bar bg-success int8-bar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" title="INT8 Memory Usage">INT8 (25%)</div>
                                         </div>
-                                        <div class="progress" style="height: 25px;">
-                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 12.5%" aria-valuenow="12.5" aria-valuemin="0" aria-valuemax="100">INT4 (12.5%)</div>
+                                        <div class="progress memory-progress">
+                                            <div class="progress-bar bg-warning int4-bar" role="progressbar" aria-valuenow="12.5" aria-valuemin="0" aria-valuemax="100" title="INT4 Memory Usage">INT4 (12.5%)</div>
                                         </div>
                                     </div>
                                 </div>
@@ -613,10 +613,10 @@
                                         <div id="quick-quiz-container">
                                             <div class="quick-quiz-intro">
                                                 <p>Test your knowledge with a quick 3-question quiz on LLM fine-tuning concepts.</p>
-                                                <button id="start-quick-quiz" class="btn btn-primary">Start Quick Quiz</button>
+                                                <button type="button" id="start-quick-quiz" class="btn btn-primary">Start Quick Quiz</button>
                                             </div>
 
-                                            <div id="quick-quiz-questions" style="display: none;">
+                                            <div id="quick-quiz-questions">
                                                 <div class="quick-quiz-question" data-question="1">
                                                     <h5>Question 1:</h5>
                                                     <p>What is the primary advantage of LoRA over full fine-tuning?</p>
@@ -640,7 +640,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="quick-quiz-question" data-question="2" style="display: none;">
+                                                <div class="quick-quiz-question" data-question="2">
                                                     <h5>Question 2:</h5>
                                                     <p>Which of the following is a key innovation in QLoRA?</p>
                                                     <div class="quick-quiz-options">
@@ -663,7 +663,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="quick-quiz-question" data-question="3" style="display: none;">
+                                                <div class="quick-quiz-question" data-question="3">
                                                     <h5>Question 3:</h5>
                                                     <p>What does the 'r' parameter represent in LoRA?</p>
                                                     <div class="quick-quiz-options">
@@ -687,13 +687,13 @@
                                                 </div>
 
                                                 <div class="mt-3 d-flex justify-content-between">
-                                                    <button id="prev-question" class="btn btn-outline-primary" disabled>Previous</button>
+                                                    <button type="button" id="prev-question" class="btn btn-outline-primary" disabled>Previous</button>
                                                     <span id="question-indicator">Question 1 of 3</span>
-                                                    <button id="next-question" class="btn btn-primary">Next</button>
+                                                    <button type="button" id="next-question" class="btn btn-primary">Next</button>
                                                 </div>
                                             </div>
 
-                                            <div id="quick-quiz-results" style="display: none;">
+                                            <div id="quick-quiz-results">
                                                 <div class="text-center mb-4">
                                                     <div class="result-circle">
                                                         <span id="result-score">0/3</span>
@@ -706,7 +706,7 @@
                                                 </div>
 
                                                 <div class="text-center">
-                                                    <button id="retake-quiz" class="btn btn-outline-primary me-2">Retake Quiz</button>
+                                                    <button type="button" id="retake-quiz" class="btn btn-outline-primary me-2">Retake Quiz</button>
                                                     <a href="/quiz/quizzes" class="btn btn-success">Take Full Quizzes</a>
                                                 </div>
                                             </div>
@@ -976,11 +976,11 @@
                     // Set result message
                     const resultMessage = document.getElementById('result-message');
                     if (score === totalQuestions) {
-                        resultMessage.textContent = 'Perfect! You're an expert!';
+                        resultMessage.textContent = "Perfect! You're an expert!";
                     } else if (score >= totalQuestions / 2) {
-                        resultMessage.textContent = 'Good job! You're on the right track.';
+                        resultMessage.textContent = "Good job! You're on the right track.";
                     } else {
-                        resultMessage.textContent = 'Keep learning! Review the concepts and try again.';
+                        resultMessage.textContent = "Keep learning! Review the concepts and try again.";
                     }
 
                     // Show results
@@ -1071,7 +1071,7 @@ for name, module in model.named_modules():
                                             </table>
                                         </div>
 
-                                        <a href="https://colab.research.google.com/github/huggingface/notebooks/blob/main/transformers_doc/en/quicktour.ipynb" target="_blank" class="btn btn-success mt-3">Try in Colab</a>
+                                        <a href="https://colab.research.google.com/github/huggingface/notebooks/blob/main/transformers_doc/en/quicktour.ipynb" target="_blank" rel="noopener" class="colab-button">Try in Colab <i class="bi bi-box-arrow-up-right"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -1146,7 +1146,7 @@ print(f"Dataset size: {len(dataset['train'])} training samples")</code></pre>
                                             </ul>
                                         </div>
 
-                                        <a href="https://colab.research.google.com/github/huggingface/peft/blob/main/examples/LoRA_finetuning.ipynb" target="_blank" class="btn btn-success mt-3">Try in Colab</a>
+                                        <a href="https://colab.research.google.com/github/huggingface/peft/blob/main/examples/LoRA_finetuning.ipynb" target="_blank" rel="noopener" class="colab-button">Try in Colab <i class="bi bi-box-arrow-up-right"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -1275,7 +1275,7 @@ curl -X POST \
                                             </ul>
                                         </div>
 
-                                        <a href="https://github.com/huggingface/transformers/tree/main/docker" target="_blank" class="btn btn-success mt-3">Hugging Face Docker Examples</a>
+                                        <a href="https://github.com/huggingface/transformers/tree/main/docker" target="_blank" rel="noopener" class="colab-button">Hugging Face Docker Examples <i class="bi bi-box-arrow-up-right"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -1364,7 +1364,7 @@ print(f"Model size: {model.get_memory_footprint() / (1024 ** 3):.2f} GB")</code>
                                             </ul>
                                         </div>
 
-                                        <a href="https://colab.research.google.com/github/huggingface/peft/blob/main/examples/qlora_example.ipynb" target="_blank" class="btn btn-success mt-3">Try QLoRA in Colab</a>
+                                        <a href="https://colab.research.google.com/github/huggingface/peft/blob/main/examples/qlora_example.ipynb" target="_blank" rel="noopener" class="colab-button">Try QLoRA in Colab <i class="bi bi-box-arrow-up-right"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -1554,7 +1554,7 @@ print(f"Evaluation results: {eval_results}")</code></pre>
                                             </ul>
                                         </div>
 
-                                        <a href="https://colab.research.google.com/github/huggingface/notebooks/blob/main/examples/text_classification.ipynb" target="_blank" class="btn btn-success mt-3">Try Data Preparation in Colab</a>
+                                        <a href="https://colab.research.google.com/github/huggingface/notebooks/blob/main/examples/text_classification.ipynb" target="_blank" rel="noopener" class="colab-button">Try Data Preparation in Colab <i class="bi bi-box-arrow-up-right"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -1692,7 +1692,7 @@ for i, result in enumerate(results):
                                             </ul>
                                         </div>
 
-                                        <a href="https://colab.research.google.com/github/huggingface/notebooks/blob/main/transformers_doc/en/pipeline_tutorial.ipynb" target="_blank" class="btn btn-success mt-3">Try Pipeline API in Colab</a>
+                                        <a href="https://colab.research.google.com/github/huggingface/notebooks/blob/main/transformers_doc/en/pipeline_tutorial.ipynb" target="_blank" rel="noopener" class="colab-button">Try Pipeline API in Colab <i class="bi bi-box-arrow-up-right"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -1860,7 +1860,7 @@ for i, result in enumerate(results):
                                    placeholder="E.g., What is the difference between a synonym and an antonym?">
                         </div>
                         <button type="button" class="btn btn-info" id="ask-btn">Ask</button>
-                        <div class="mt-3" id="answer-container" style="display: none;">
+                        <div class="mt-3" id="answer-container">
                             <div class="card">
                                 <div class="card-header">Answer</div>
                                 <div class="card-body">
@@ -1885,22 +1885,22 @@ for i, result in enumerate(results):
                                 <h4>Documentation</h4>
                                 <ul class="list-group">
                                     <li class="list-group-item">
-                                        <a href="https://huggingface.co/docs/transformers/index" target="_blank">
+                                        <a href="https://huggingface.co/docs/transformers/index" target="_blank" rel="noopener">
                                             <i class="bi bi-book"></i> Hugging Face Transformers
                                         </a>
                                     </li>
                                     <li class="list-group-item">
-                                        <a href="https://huggingface.co/docs/peft/index" target="_blank">
+                                        <a href="https://huggingface.co/docs/peft/index" target="_blank" rel="noopener">
                                             <i class="bi bi-book"></i> PEFT Library Documentation
                                         </a>
                                     </li>
                                     <li class="list-group-item">
-                                        <a href="https://pytorch.org/docs/stable/index.html" target="_blank">
+                                        <a href="https://pytorch.org/docs/stable/index.html" target="_blank" rel="noopener">
                                             <i class="bi bi-book"></i> PyTorch Documentation
                                         </a>
                                     </li>
                                     <li class="list-group-item">
-                                        <a href="https://docs.docker.com/" target="_blank">
+                                        <a href="https://docs.docker.com/" target="_blank" rel="noopener">
                                             <i class="bi bi-book"></i> Docker Documentation
                                         </a>
                                     </li>
@@ -1910,22 +1910,22 @@ for i, result in enumerate(results):
                                 <h4>Tutorials & Guides</h4>
                                 <ul class="list-group">
                                     <li class="list-group-item">
-                                        <a href="https://huggingface.co/blog/lora" target="_blank">
+                                        <a href="https://huggingface.co/blog/lora" target="_blank" rel="noopener">
                                             <i class="bi bi-journal-text"></i> LoRA: Low-Rank Adaptation Guide
                                         </a>
                                     </li>
                                     <li class="list-group-item">
-                                        <a href="https://www.philschmid.de/fine-tune-flan-t5-peft" target="_blank">
+                                        <a href="https://www.philschmid.de/fine-tune-flan-t5-peft" target="_blank" rel="noopener">
                                             <i class="bi bi-journal-text"></i> Fine-tuning with PEFT Tutorial
                                         </a>
                                     </li>
                                     <li class="list-group-item">
-                                        <a href="https://huggingface.co/docs/transformers/training" target="_blank">
+                                        <a href="https://huggingface.co/docs/transformers/training" target="_blank" rel="noopener">
                                             <i class="bi bi-journal-text"></i> Training Transformers Models
                                         </a>
                                     </li>
                                     <li class="list-group-item">
-                                        <a href="https://www.tensorflow.org/text/tutorials/fine_tune_bert" target="_blank">
+                                        <a href="https://www.tensorflow.org/text/tutorials/fine_tune_bert" target="_blank" rel="noopener">
                                             <i class="bi bi-journal-text"></i> Fine-tuning BERT Tutorial
                                         </a>
                                     </li>
@@ -1935,22 +1935,22 @@ for i, result in enumerate(results):
                                 <h4>Research Papers</h4>
                                 <ul class="list-group">
                                     <li class="list-group-item">
-                                        <a href="https://arxiv.org/abs/2106.09685" target="_blank">
+                                        <a href="https://arxiv.org/abs/2106.09685" target="_blank" rel="noopener">
                                             <i class="bi bi-file-earmark-text"></i> LoRA: Low-Rank Adaptation of Large Language Models
                                         </a>
                                     </li>
                                     <li class="list-group-item">
-                                        <a href="https://arxiv.org/abs/2110.04366" target="_blank">
+                                        <a href="https://arxiv.org/abs/2110.04366" target="_blank" rel="noopener">
                                             <i class="bi bi-file-earmark-text"></i> Prefix-Tuning: Optimizing Continuous Prompts
                                         </a>
                                     </li>
                                     <li class="list-group-item">
-                                        <a href="https://arxiv.org/abs/2303.15647" target="_blank">
+                                        <a href="https://arxiv.org/abs/2303.15647" target="_blank" rel="noopener">
                                             <i class="bi bi-file-earmark-text"></i> QLoRA: Efficient Finetuning of Quantized LLMs
                                         </a>
                                     </li>
                                     <li class="list-group-item">
-                                        <a href="https://arxiv.org/abs/2302.13971" target="_blank">
+                                        <a href="https://arxiv.org/abs/2302.13971" target="_blank" rel="noopener">
                                             <i class="bi bi-file-earmark-text"></i> LLaMA: Open and Efficient Foundation Language Models
                                         </a>
                                     </li>
@@ -2020,7 +2020,7 @@ for i, result in enumerate(results):
     <script src="/static/js/code-blocks.js"></script>
     <script src="/static/js/analytics-tracking.js"></script>
     <script src="/static/js/quiz.js"></script>
-    
+
 
     <!-- Initialize Bootstrap tooltips -->
     <script>
@@ -2037,7 +2037,7 @@ for i, result in enumerate(results):
         });
     </script>
 
-    
+
 <script src="/static/js/thesaurus.js"></script>
 <script src="/static/js/concepts.js"></script>
 

@@ -1,6 +1,7 @@
 /**
- * AI Assistant
- * Provides an intelligent assistant for the LLM Fine-Tuning platform
+ * Enhanced AI Assistant
+ * Provides a robust, intelligent assistant for the LLM Fine-Tuning platform
+ * with advanced features and improved user experience
  */
 
 class AIAssistant {
@@ -10,34 +11,59 @@ class AIAssistant {
         this.container = null;
         this.messages = [];
         this.isTyping = false;
-        this.typingSpeed = 30; // ms per character
+        this.typingSpeed = 25; // ms per character - slightly faster
+        this.voiceEnabled = false;
+        this.voiceRecognition = null;
+        this.isListening = false;
+        this.lastInteraction = Date.now();
+        this.inactivityTimeout = 300000; // 5 minutes
         this.suggestedQuestions = [
-            "How do I fine-tune an LLM?",
+            "What is this website about?",
+            "How do I use the Visual Thesaurus?",
+            "Tell me about LoRA fine-tuning",
+            "How can I access the hands-on exercises?",
+            "What accessibility features does this site have?",
+            "How do I use the voice features?",
             "What is the difference between LoRA and QLoRA?",
-            "How can I reduce memory usage during fine-tuning?",
-            "What datasets should I use for fine-tuning?",
-            "How do I evaluate my fine-tuned model?"
+            "Show me a complete LoRA implementation example",
+            "How do I optimize memory usage for fine-tuning?"
         ];
         this.contextualSuggestions = {
             '/': [
                 "What is this platform about?",
-                "How do I get started with LLM fine-tuning?",
-                "Show me the available learning resources"
+                "How do I navigate this website?",
+                "What features does this platform offer?",
+                "How do I get started with LLM fine-tuning?"
             ],
             '/learn': [
                 "What topics can I learn about?",
                 "How do I access the workshops?",
-                "What's the difference between LoRA and QLoRA?"
+                "What's the difference between LoRA and QLoRA?",
+                "How can I track my learning progress?"
             ],
             '/workshop': [
                 "How do I complete this workshop?",
                 "What are the prerequisites for this workshop?",
-                "Can you explain this concept in more detail?"
+                "Can you explain this concept in more detail?",
+                "How do I run the code examples?"
             ],
             '/thesaurus': [
                 "How does the thesaurus visualization work?",
-                "Can I add my own terms to the thesaurus?",
+                "Can I search for specific concepts?",
+                "How do I interpret the connections between concepts?",
                 "How is this related to LLM fine-tuning?"
+            ],
+            '/guide': [
+                "How do I implement this technique?",
+                "What are the advantages of this approach?",
+                "Are there any hands-on exercises for this topic?",
+                "How does this compare to other techniques?"
+            ],
+            '/guide/lora-hands-on': [
+                "How do I run this notebook in Google Colab?",
+                "What GPU requirements do I need for LoRA?",
+                "Can I modify the code for my own dataset?",
+                "How do I save and load the LoRA adapter?"
             ]
         };
     }
@@ -48,7 +74,7 @@ class AIAssistant {
     init() {
         if (this.initialized) return;
 
-        console.log('Initializing AI Assistant...');
+        console.log('Initializing Enhanced AI Assistant...');
 
         // Create the assistant UI
         this.createAssistantUI();
@@ -62,8 +88,84 @@ class AIAssistant {
         // Add contextual suggestions based on current page
         this.updateContextualSuggestions();
 
+        // Initialize voice recognition if supported
+        this.initVoiceRecognition();
+
+        // Set up inactivity tracking
+        this.setupInactivityTracking();
+
         this.initialized = true;
-        console.log('AI Assistant initialized successfully');
+        console.log('Enhanced AI Assistant initialized successfully');
+    }
+
+    /**
+     * Initialize voice recognition if supported by the browser
+     */
+    initVoiceRecognition() {
+        // Check if browser supports speech recognition
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            this.voiceRecognition = new SpeechRecognition();
+            this.voiceRecognition.continuous = false;
+            this.voiceRecognition.interimResults = false;
+            this.voiceRecognition.lang = 'en-US';
+
+            // Set up voice recognition event handlers
+            this.voiceRecognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                console.log('Voice recognized:', transcript);
+                this.textInput.value = transcript;
+                this.sendMessage(transcript);
+            };
+
+            this.voiceRecognition.onerror = (event) => {
+                console.error('Voice recognition error:', event.error);
+                this.isListening = false;
+                this.updateVoiceButton();
+            };
+
+            this.voiceRecognition.onend = () => {
+                this.isListening = false;
+                this.updateVoiceButton();
+            };
+
+            this.voiceEnabled = true;
+            console.log('Voice recognition initialized');
+        } else {
+            console.log('Voice recognition not supported by this browser');
+            this.voiceEnabled = false;
+        }
+    }
+
+    /**
+     * Set up tracking for user inactivity
+     */
+    setupInactivityTracking() {
+        // Update last interaction time on user activity
+        const updateLastInteraction = () => {
+            this.lastInteraction = Date.now();
+        };
+
+        // Track user interactions
+        document.addEventListener('mousemove', updateLastInteraction);
+        document.addEventListener('keydown', updateLastInteraction);
+        document.addEventListener('click', updateLastInteraction);
+        document.addEventListener('scroll', updateLastInteraction);
+
+        // Check for inactivity periodically
+        setInterval(() => {
+            const now = Date.now();
+            const timeSinceLastInteraction = now - this.lastInteraction;
+
+            // If assistant is open and user has been inactive
+            if (this.isOpen && timeSinceLastInteraction > this.inactivityTimeout) {
+                // Suggest something to the user
+                this.addMessage('assistant', "I noticed you've been inactive for a while. Can I help you with anything else about LLM fine-tuning?");
+
+                // Reset the timer
+                this.lastInteraction = now;
+            }
+        }, 60000); // Check every minute
     }
 
     /**
@@ -105,35 +207,17 @@ class AIAssistant {
             // Create chat window
             const chatWindow = document.createElement('div');
             chatWindow.className = 'ai-assistant-window';
-            chatWindow.style.width = '350px';
-            chatWindow.style.height = '500px';
-            chatWindow.style.background = 'rgba(20, 20, 20, 0.95)';
-            chatWindow.style.borderRadius = '15px';
-            chatWindow.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.4)';
-            chatWindow.style.marginBottom = '15px';
-            chatWindow.style.overflow = 'hidden';
-            chatWindow.style.display = 'none';
-            chatWindow.style.flexDirection = 'column';
-            chatWindow.style.border = '2px solid rgba(66, 135, 245, 0.3)';
-            chatWindow.style.backdropFilter = 'blur(10px)';
-            chatWindow.style.WebkitBackdropFilter = 'blur(10px)';
+            // Styles are now in CSS file
 
             // Create chat header
             const chatHeader = document.createElement('div');
             chatHeader.className = 'ai-assistant-header';
-            chatHeader.style.padding = '15px';
-            chatHeader.style.background = 'linear-gradient(135deg, rgba(66, 135, 245, 0.2), rgba(0, 255, 221, 0.2))';
-            chatHeader.style.borderBottom = '2px solid rgba(66, 135, 245, 0.2)';
-            chatHeader.style.display = 'flex';
-            chatHeader.style.alignItems = 'center';
-            chatHeader.style.justifyContent = 'space-between';
+            // Styles are now in CSS file
 
             const headerTitle = document.createElement('div');
             headerTitle.className = 'ai-assistant-title';
             headerTitle.innerHTML = '<i class="bi bi-robot me-2"></i> AI Assistant';
-            headerTitle.style.fontWeight = '700';
-            headerTitle.style.color = '#ffffff';
-            headerTitle.style.fontSize = '1.1rem';
+            // Styles are now in CSS file
 
             const closeButton = document.createElement('button');
             closeButton.className = 'ai-assistant-close';
@@ -155,66 +239,68 @@ class AIAssistant {
             // Create chat messages container
             const messagesContainer = document.createElement('div');
             messagesContainer.className = 'ai-assistant-messages';
-            messagesContainer.style.flex = '1';
-            messagesContainer.style.overflowY = 'auto';
-            messagesContainer.style.padding = '15px';
-            messagesContainer.style.display = 'flex';
-            messagesContainer.style.flexDirection = 'column';
-            messagesContainer.style.gap = '10px';
+            // Styles are now in CSS file
 
             // Create input area
             const inputArea = document.createElement('div');
             inputArea.className = 'ai-assistant-input';
-            inputArea.style.padding = '15px';
-            inputArea.style.borderTop = '2px solid rgba(66, 135, 245, 0.2)';
-            inputArea.style.background = 'rgba(30, 30, 30, 0.7)';
+            // Styles are now in CSS file
 
             const inputForm = document.createElement('form');
             inputForm.className = 'ai-assistant-form';
-            inputForm.style.display = 'flex';
-            inputForm.style.gap = '10px';
+            // Styles are now in CSS file
 
             const textInput = document.createElement('input');
             textInput.type = 'text';
             textInput.className = 'ai-assistant-text-input';
             textInput.placeholder = 'Ask me anything...';
-            textInput.style.flex = '1';
-            textInput.style.padding = '12px 15px';
-            textInput.style.borderRadius = '10px';
-            textInput.style.border = '2px solid rgba(66, 135, 245, 0.3)';
-            textInput.style.background = 'rgba(30, 30, 30, 0.7)';
-            textInput.style.color = '#ffffff';
-            textInput.style.fontSize = '1rem';
+            // Styles are now in CSS file
+
+            // Create voice input button if supported
+            const voiceButton = document.createElement('button');
+            voiceButton.type = 'button';
+            voiceButton.className = 'ai-assistant-voice';
+            voiceButton.innerHTML = '<i class="bi bi-mic"></i>';
+            voiceButton.style.width = '45px';
+            voiceButton.style.height = '45px';
+            voiceButton.style.borderRadius = '50%';
+            voiceButton.style.background = 'linear-gradient(135deg, rgba(0, 153, 255, 0.9), rgba(0, 102, 255, 0.9))';
+            voiceButton.style.border = 'none';
+            voiceButton.style.color = '#ffffff';
+            voiceButton.style.fontSize = '1.2rem';
+            voiceButton.style.display = 'flex';
+            voiceButton.style.alignItems = 'center';
+            voiceButton.style.justifyContent = 'center';
+            voiceButton.style.cursor = 'pointer';
+            voiceButton.style.transition = 'all 0.2s ease';
+            voiceButton.style.boxShadow = '0 3px 10px rgba(0, 0, 0, 0.2)';
+            voiceButton.setAttribute('aria-label', 'Voice Input');
+
+            // Only show voice button if supported
+            if (!this.voiceEnabled) {
+                voiceButton.style.display = 'none';
+            }
 
             const sendButton = document.createElement('button');
             sendButton.type = 'submit';
             sendButton.className = 'ai-assistant-send';
             sendButton.innerHTML = '<i class="bi bi-send-fill"></i>';
-            sendButton.style.width = '45px';
-            sendButton.style.height = '45px';
-            sendButton.style.borderRadius = '10px';
-            sendButton.style.background = 'linear-gradient(135deg, #4287f5, #3a75d8)';
-            sendButton.style.border = 'none';
-            sendButton.style.color = 'white';
-            sendButton.style.fontSize = '1.2rem';
-            sendButton.style.cursor = 'pointer';
-            sendButton.style.display = 'flex';
-            sendButton.style.alignItems = 'center';
-            sendButton.style.justifyContent = 'center';
+            // Styles are now in CSS file
 
             inputForm.appendChild(textInput);
+            if (this.voiceEnabled) {
+                inputForm.appendChild(voiceButton);
+            }
             inputForm.appendChild(sendButton);
             inputArea.appendChild(inputForm);
+
+            // Store reference to voice button
+            this.voiceButton = voiceButton;
 
             // Create suggestions area
             const suggestionsArea = document.createElement('div');
             suggestionsArea.className = 'ai-assistant-suggestions';
-            suggestionsArea.style.padding = '10px 15px';
-            suggestionsArea.style.display = 'flex';
-            suggestionsArea.style.flexWrap = 'wrap';
-            suggestionsArea.style.gap = '8px';
-            suggestionsArea.style.borderTop = '2px solid rgba(66, 135, 245, 0.2)';
-            suggestionsArea.style.background = 'rgba(25, 25, 25, 0.7)';
+            // Styles are now in CSS file
 
             // Add suggested questions
             this.suggestedQuestions.forEach(question => {
@@ -297,10 +383,132 @@ class AIAssistant {
             }
         });
 
+        // Voice button click
+        if (this.voiceEnabled && this.voiceButton) {
+            this.voiceButton.addEventListener('click', () => {
+                this.toggleVoiceInput();
+            });
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (event) => {
+            // Alt+A to toggle assistant
+            if (event.altKey && event.key === 'a') {
+                this.toggleAssistant();
+                event.preventDefault();
+            }
+
+            // Alt+V to toggle voice input when assistant is open
+            if (this.isOpen && this.voiceEnabled && event.altKey && event.key === 'v') {
+                this.toggleVoiceInput();
+                event.preventDefault();
+            }
+        });
+
         // Listen for page changes to update contextual suggestions
         window.addEventListener('popstate', () => {
             this.updateContextualSuggestions();
         });
+
+        // Add window resize handler to adjust UI
+        window.addEventListener('resize', () => {
+            this.adjustUIForScreenSize();
+        });
+    }
+
+    /**
+     * Toggle voice input on/off
+     */
+    toggleVoiceInput() {
+        if (!this.voiceEnabled) return;
+
+        if (this.isListening) {
+            // Stop listening
+            this.voiceRecognition.stop();
+            this.isListening = false;
+        } else {
+            // Start listening
+            try {
+                this.voiceRecognition.start();
+                this.isListening = true;
+
+                // Show feedback to user
+                this.textInput.placeholder = 'Listening...';
+                this.textInput.disabled = true;
+            } catch (error) {
+                console.error('Error starting voice recognition:', error);
+                this.isListening = false;
+            }
+        }
+
+        // Update button appearance
+        this.updateVoiceButton();
+    }
+
+    /**
+     * Update voice button appearance based on listening state
+     */
+    updateVoiceButton() {
+        if (!this.voiceEnabled || !this.voiceButton) return;
+
+        if (this.isListening) {
+            // Show active state
+            this.voiceButton.innerHTML = '<i class="bi bi-mic-fill"></i>';
+            this.voiceButton.style.background = 'linear-gradient(135deg, rgba(220, 53, 69, 0.9), rgba(178, 34, 52, 0.9))';
+            this.voiceButton.style.boxShadow = '0 0 15px rgba(220, 53, 69, 0.5)';
+            this.voiceButton.style.transform = 'scale(1.1)';
+            this.voiceButton.setAttribute('aria-label', 'Stop Voice Input');
+
+            // Pulse animation
+            this.voiceButton.style.animation = 'pulse-effect 1.5s infinite';
+        } else {
+            // Show inactive state
+            this.voiceButton.innerHTML = '<i class="bi bi-mic"></i>';
+            this.voiceButton.style.background = 'linear-gradient(135deg, rgba(0, 153, 255, 0.9), rgba(0, 102, 255, 0.9))';
+            this.voiceButton.style.boxShadow = '0 3px 10px rgba(0, 0, 0, 0.2)';
+            this.voiceButton.style.transform = 'none';
+            this.voiceButton.setAttribute('aria-label', 'Start Voice Input');
+
+            // Remove animation
+            this.voiceButton.style.animation = 'none';
+
+            // Re-enable text input
+            this.textInput.placeholder = 'Ask me anything...';
+            this.textInput.disabled = false;
+        }
+    }
+
+    /**
+     * Adjust UI based on screen size
+     */
+    adjustUIForScreenSize() {
+        const isMobile = window.innerWidth < 576;
+
+        if (isMobile) {
+            // Mobile adjustments
+            if (this.chatWindow) {
+                this.chatWindow.style.width = '100%';
+                this.chatWindow.style.height = '80vh';
+                this.chatWindow.style.position = 'fixed';
+                this.chatWindow.style.bottom = '0';
+                this.chatWindow.style.right = '0';
+                this.chatWindow.style.left = '0';
+                this.chatWindow.style.margin = '0';
+                this.chatWindow.style.borderRadius = '20px 20px 0 0';
+            }
+        } else {
+            // Desktop adjustments
+            if (this.chatWindow) {
+                this.chatWindow.style.width = '380px';
+                this.chatWindow.style.height = '500px';
+                this.chatWindow.style.position = 'relative';
+                this.chatWindow.style.bottom = 'auto';
+                this.chatWindow.style.right = 'auto';
+                this.chatWindow.style.left = 'auto';
+                this.chatWindow.style.margin = '0 0 15px 0';
+                this.chatWindow.style.borderRadius = '15px';
+            }
+        }
     }
 
     /**
@@ -358,6 +566,37 @@ class AIAssistant {
         // In a real implementation, this would call the backend API
         // For now, we'll simulate a response
 
+        // Show typing indicator
+        const typingIndicator = document.createElement('div');
+        typingIndicator.className = 'ai-assistant-message assistant-message typing-indicator';
+        typingIndicator.style.alignSelf = 'flex-start';
+        typingIndicator.style.background = 'rgba(40, 40, 40, 0.8)';
+        typingIndicator.style.color = '#e0e0e0';
+        typingIndicator.style.border = '1px solid rgba(66, 135, 245, 0.2)';
+        typingIndicator.style.maxWidth = '80%';
+        typingIndicator.style.padding = '10px 15px';
+        typingIndicator.style.borderRadius = '15px';
+        typingIndicator.style.marginBottom = '8px';
+
+        // Add typing dots
+        const dots = document.createElement('div');
+        dots.style.display = 'flex';
+        dots.style.gap = '5px';
+
+        for (let i = 0; i < 3; i++) {
+            const dot = document.createElement('span');
+            dot.style.width = '8px';
+            dot.style.height = '8px';
+            dot.style.borderRadius = '50%';
+            dot.style.background = '#b8e0ff';
+            dot.style.animation = `typing-animation 1s infinite ${i * 0.3}s`;
+            dots.appendChild(dot);
+        }
+
+        typingIndicator.appendChild(dots);
+        this.messagesContainer.appendChild(typingIndicator);
+        this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+
         fetch('/api/ask', {
             method: 'POST',
             headers: {
@@ -372,26 +611,43 @@ class AIAssistant {
             return response.json();
         })
         .then(data => {
+            // Remove typing indicator
+            this.messagesContainer.removeChild(typingIndicator);
+
+            // Get response text
+            const responseText = data.answer || this.getFallbackResponse(message);
+
             // Add assistant response
-            this.addMessage('assistant', data.answer || this.getFallbackResponse(message));
+            this.addMessage('assistant', responseText);
 
             // Save to conversation history
-            this.messages.push({ role: 'assistant', content: data.answer || this.getFallbackResponse(message) });
+            this.messages.push({ role: 'assistant', content: responseText });
             this.saveConversationHistory();
 
             // Re-enable input
             this.textInput.disabled = false;
             this.textInput.placeholder = 'Ask me anything...';
             this.textInput.focus();
+
+            // Trigger voice response if voice assistant is enabled and speaking is active
+            if (window.voiceAssistant && window.voiceAssistant.isSpeaking) {
+                window.voiceAssistant.speak(responseText);
+            }
         })
         .catch(error => {
             console.error('Error processing message:', error);
 
+            // Remove typing indicator
+            this.messagesContainer.removeChild(typingIndicator);
+
+            // Get fallback response
+            const fallbackResponse = this.getFallbackResponse(message);
+
             // Add error message
-            this.addMessage('assistant', this.getFallbackResponse(message));
+            this.addMessage('assistant', fallbackResponse);
 
             // Save to conversation history
-            this.messages.push({ role: 'assistant', content: this.getFallbackResponse(message) });
+            this.messages.push({ role: 'assistant', content: fallbackResponse });
             this.saveConversationHistory();
 
             // Re-enable input
@@ -407,24 +663,16 @@ class AIAssistant {
     addMessage(role, content) {
         const messageElement = document.createElement('div');
         messageElement.className = `ai-assistant-message ${role}-message`;
-        messageElement.style.maxWidth = '80%';
-        messageElement.style.padding = '10px 15px';
-        messageElement.style.borderRadius = '15px';
-        messageElement.style.marginBottom = '8px';
+        // Styles are now in CSS file
 
         if (role === 'user') {
-            messageElement.style.alignSelf = 'flex-end';
-            messageElement.style.background = 'linear-gradient(135deg, #4287f5, #3a75d8)';
-            messageElement.style.color = 'white';
+            // Styles are now in CSS file
             messageElement.textContent = content;
 
             this.messagesContainer.appendChild(messageElement);
             this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
         } else {
-            messageElement.style.alignSelf = 'flex-start';
-            messageElement.style.background = 'rgba(40, 40, 40, 0.8)';
-            messageElement.style.color = '#e0e0e0';
-            messageElement.style.border = '1px solid rgba(66, 135, 245, 0.2)';
+            // Styles are now in CSS file
 
             // Add typing effect for assistant messages
             this.messagesContainer.appendChild(messageElement);

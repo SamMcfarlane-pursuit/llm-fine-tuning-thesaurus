@@ -1,0 +1,241 @@
+/**
+ * Pros and Cons Text Visibility Fix
+ * Ensures text in pros and cons sections is fully visible
+ */
+
+/* Pros section */
+.pros, 
+.pros-list,
+.advantages {
+    background-color: rgba(25, 25, 30, 0.95) !important;
+    border: 2px solid rgba(80, 250, 123, 0.5) !important;
+    border-radius: 8px !important;
+    padding: 1.5rem !important;
+    margin: 1.5rem 0 !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4) !important;
+}
+
+.pros h3, 
+.advantages h3 {
+    color: #50fa7b !important;
+    border-bottom: 2px solid rgba(80, 250, 123, 0.5) !important;
+    padding-bottom: 0.5rem !important;
+    margin-bottom: 1rem !important;
+    font-size: 1.5rem !important;
+    text-shadow: 0 0 10px rgba(80, 250, 123, 0.5) !important;
+}
+
+/* Pros list items */
+.pros ul li, 
+.pros-list li,
+.advantages ul li {
+    color: #ffffff !important;
+    margin-bottom: 1rem !important;
+    position: relative !important;
+    padding-left: 2rem !important;
+    list-style-type: none !important;
+    font-size: 1.1rem !important;
+    line-height: 1.6 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7) !important;
+}
+
+.pros ul li::before, 
+.pros-list li::before,
+.advantages ul li::before {
+    content: '✓' !important;
+    color: #50fa7b !important;
+    position: absolute !important;
+    left: 0 !important;
+    font-weight: bold !important;
+    font-size: 1.2rem !important;
+    text-shadow: 0 0 8px rgba(80, 250, 123, 0.7) !important;
+}
+
+/* Cons section */
+.cons, 
+.cons-list,
+.disadvantages {
+    background-color: rgba(25, 25, 30, 0.95) !important;
+    border: 2px solid rgba(255, 85, 85, 0.5) !important;
+    border-radius: 8px !important;
+    padding: 1.5rem !important;
+    margin: 1.5rem 0 !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4) !important;
+}
+
+.cons h3, 
+.disadvantages h3 {
+    color: #ff5555 !important;
+    border-bottom: 2px solid rgba(255, 85, 85, 0.5) !important;
+    padding-bottom: 0.5rem !important;
+    margin-bottom: 1rem !important;
+    font-size: 1.5rem !important;
+    text-shadow: 0 0 10px rgba(255, 85, 85, 0.5) !important;
+}
+
+/* Cons list items */
+.cons ul li, 
+.cons-list li,
+.disadvantages ul li {
+    color: #ffffff !important;
+    margin-bottom: 1rem !important;
+    position: relative !important;
+    padding-left: 2rem !important;
+    list-style-type: none !important;
+    font-size: 1.1rem !important;
+    line-height: 1.6 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7) !important;
+}
+
+.cons ul li::before, 
+.cons-list li::before,
+.disadvantages ul li::before {
+    content: '✗' !important;
+    color: #ff5555 !important;
+    position: absolute !important;
+    left: 0 !important;
+    font-weight: bold !important;
+    font-size: 1.2rem !important;
+    text-shadow: 0 0 8px rgba(255, 85, 85, 0.7) !important;
+}
+
+/* Fix for specific text visibility issues */
+.pros ul li span,
+.cons ul li span,
+.pros-list li span,
+.cons-list li span,
+.advantages ul li span,
+.disadvantages ul li span {
+    color: #ffffff !important;
+    background-color: transparent !important;
+    display: inline !important;
+    padding: 0 !important;
+    font-size: 1.1rem !important;
+    line-height: 1.6 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Fix for blue background in pros/cons text */
+.pros ul li span[style*="background"],
+.cons ul li span[style*="background"],
+.pros-list li span[style*="background"],
+.cons-list li span[style*="background"] {
+    background-color: transparent !important;
+    color: #ffffff !important;
+}
+
+/* High contrast mode overrides */
+body.high-contrast-mode .pros,
+body.high-contrast-mode .pros-list,
+body.high-contrast-mode .advantages,
+body.high-contrast-mode .cons,
+body.high-contrast-mode .cons-list,
+body.high-contrast-mode .disadvantages {
+    background-color: #000000 !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: none !important;
+}
+
+body.high-contrast-mode .pros h3,
+body.high-contrast-mode .advantages h3,
+body.high-contrast-mode .cons h3,
+body.high-contrast-mode .disadvantages h3 {
+    color: #ffffff !important;
+    border-bottom: 2px solid #ffffff !important;
+    text-shadow: none !important;
+}
+
+body.high-contrast-mode .pros ul li,
+body.high-contrast-mode .pros-list li,
+body.high-contrast-mode .advantages ul li,
+body.high-contrast-mode .cons ul li,
+body.high-contrast-mode .cons-list li,
+body.high-contrast-mode .disadvantages ul li {
+    color: #ffffff !important;
+    text-shadow: none !important;
+}
+
+body.high-contrast-mode .pros ul li::before,
+body.high-contrast-mode .pros-list li::before,
+body.high-contrast-mode .advantages ul li::before {
+    color: #ffffff !important;
+    text-shadow: none !important;
+}
+
+body.high-contrast-mode .cons ul li::before,
+body.high-contrast-mode .cons-list li::before,
+body.high-contrast-mode .disadvantages ul li::before {
+    color: #ffffff !important;
+    text-shadow: none !important;
+}
+
+/* Light mode overrides */
+body.light-theme .pros,
+body.light-theme .pros-list,
+body.light-theme .advantages {
+    background-color: #f8f9fa !important;
+    border: 2px solid rgba(40, 167, 69, 0.3) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+body.light-theme .pros h3,
+body.light-theme .advantages h3 {
+    color: #28a745 !important;
+    border-bottom: 2px solid rgba(40, 167, 69, 0.3) !important;
+    text-shadow: none !important;
+}
+
+body.light-theme .pros ul li,
+body.light-theme .pros-list li,
+body.light-theme .advantages ul li {
+    color: #212529 !important;
+    text-shadow: none !important;
+}
+
+body.light-theme .pros ul li::before,
+body.light-theme .pros-list li::before,
+body.light-theme .advantages ul li::before {
+    color: #28a745 !important;
+    text-shadow: none !important;
+}
+
+body.light-theme .cons,
+body.light-theme .cons-list,
+body.light-theme .disadvantages {
+    background-color: #f8f9fa !important;
+    border: 2px solid rgba(220, 53, 69, 0.3) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+body.light-theme .cons h3,
+body.light-theme .disadvantages h3 {
+    color: #dc3545 !important;
+    border-bottom: 2px solid rgba(220, 53, 69, 0.3) !important;
+    text-shadow: none !important;
+}
+
+body.light-theme .cons ul li,
+body.light-theme .cons-list li,
+body.light-theme .disadvantages ul li {
+    color: #212529 !important;
+    text-shadow: none !important;
+}
+
+body.light-theme .cons ul li::before,
+body.light-theme .cons-list li::before,
+body.light-theme .disadvantages ul li::before {
+    color: #dc3545 !important;
+    text-shadow: none !important;
+}
+
+/* Fix for specific text visibility issues in light mode */
+body.light-theme .pros ul li span,
+body.light-theme .cons ul li span,
+body.light-theme .pros-list li span,
+body.light-theme .cons-list li span,
+body.light-theme .advantages ul li span,
+body.light-theme .disadvantages ul li span {
+    color: #212529 !important;
+    background-color: transparent !important;
+    text-shadow: none !important;
+}

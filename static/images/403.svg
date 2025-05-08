@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800px" height="400px" viewBox="0 0 800 400" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>403 Error</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#DC3545" stop-opacity="0.2" offset="0%"></stop>
+            <stop stop-color="#DC3545" stop-opacity="0.1" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="403-Error" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Background" fill="url(#linearGradient-1)" x="0" y="0" width="800" height="400" rx="20"></rect>
+        <text id="403" font-family="Arial-BoldMT, Arial" font-size="180" font-weight="bold" fill="#DC3545">
+            <tspan x="200" y="240">403</tspan>
+        </text>
+        <g id="Stop-Sign" transform="translate(500.000000, 150.000000)">
+            <polygon id="Octagon" stroke="#DC3545" stroke-width="12" points="80 0 148.2842712 31.7157288 180 100 148.2842712 168.2842712 80 200 11.7157288 168.2842712 0 100 11.7157288 31.7157288"></polygon>
+            <text id="STOP" font-family="Arial-BoldMT, Arial" font-size="48" font-weight="bold" fill="#DC3545">
+                <tspan x="40" y="115">STOP</tspan>
+            </text>
+        </g>
+        <text id="Forbidden" font-family="Arial-BoldMT, Arial" font-size="24" font-weight="bold" fill="#333333">
+            <tspan x="330" y="300">Forbidden</tspan>
+        </text>
+    </g>
+</svg>

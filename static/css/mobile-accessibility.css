@@ -1,0 +1,436 @@
+/**
+ * Mobile Accessibility CSS
+ * Enhances accessibility specifically for mobile devices
+ * Ensures proper touch targets, readability, and contrast on small screens
+ */
+
+/* Base mobile improvements */
+@media (max-width: 767px) {
+    /* Increase base font size for better readability on small screens */
+    body {
+        font-size: 16px;
+        line-height: 1.6;
+    }
+
+    /* Increase heading sizes for better visibility */
+    h1, .h1 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    h2, .h2 {
+        font-size: 1.75rem;
+        margin-bottom: 0.875rem;
+    }
+
+    h3, .h3 {
+        font-size: 1.5rem;
+        margin-bottom: 0.75rem;
+    }
+
+    h4, .h4 {
+        font-size: 1.25rem;
+        margin-bottom: 0.625rem;
+    }
+
+    /* Increase spacing between paragraphs */
+    p {
+        margin-bottom: 1rem;
+    }
+
+    /* Ensure proper touch target sizes (44x44px minimum per WCAG) */
+    button,
+    .btn,
+    .nav-link,
+    .dropdown-item,
+    input[type="checkbox"],
+    input[type="radio"],
+    input[type="submit"],
+    input[type="button"],
+    a.card,
+    a.list-group-item,
+    .page-link {
+        min-height: 44px;
+        min-width: 44px;
+        padding: 10px 16px;
+        touch-action: manipulation;
+    }
+
+    /* Ensure proper spacing between touch targets */
+    .btn + .btn,
+    .nav-item + .nav-item,
+    .list-group-item + .list-group-item {
+        margin-top: 8px;
+    }
+
+    /* Improve form controls for touch */
+    .form-control {
+        height: 44px;
+        padding: 10px 16px;
+        font-size: 16px; /* Prevents iOS zoom on focus */
+    }
+
+    textarea.form-control {
+        height: auto;
+        min-height: 44px;
+    }
+
+    /* Improve select dropdowns for touch */
+    select.form-control {
+        height: 44px;
+        padding: 10px 16px;
+        font-size: 16px;
+        background-position: right 16px center;
+    }
+
+    /* Improve checkboxes and radio buttons for touch */
+    .form-check-input {
+        width: 22px;
+        height: 22px;
+        margin-top: 2px;
+    }
+
+    .form-check-label {
+        margin-left: 8px;
+        padding-top: 3px;
+    }
+
+    /* Improve card spacing and sizing */
+    .card {
+        margin-bottom: 1.5rem;
+    }
+
+    .card-header {
+        padding: 12px 16px;
+    }
+
+    .card-body {
+        padding: 16px;
+    }
+
+    .card-footer {
+        padding: 12px 16px;
+    }
+
+    /* Improve table readability on small screens */
+    .table {
+        font-size: 14px;
+    }
+
+    .table th,
+    .table td {
+        padding: 10px 12px;
+    }
+
+    /* Make tables responsive */
+    .table-responsive {
+        border: 0;
+        margin-bottom: 1rem;
+    }
+
+    /* Improve alert readability */
+    .alert {
+        padding: 12px 16px;
+        margin-bottom: 1rem;
+    }
+
+    /* Improve modal usability */
+    .modal-header {
+        padding: 12px 16px;
+    }
+
+    .modal-body {
+        padding: 16px;
+    }
+
+    .modal-footer {
+        padding: 12px 16px;
+    }
+
+    /* Improve dropdown menu usability */
+    .dropdown-menu {
+        padding: 8px 0;
+    }
+
+    .dropdown-item {
+        padding: 10px 16px;
+    }
+
+    /* Improve navbar usability */
+    .navbar-toggler {
+        padding: 10px;
+        margin-right: 8px;
+    }
+
+    .navbar-brand {
+        font-size: 1.25rem;
+        padding: 10px 0;
+    }
+
+    /* Improve pagination usability */
+    .pagination {
+        margin-bottom: 1.5rem;
+    }
+
+    .page-link {
+        padding: 10px 16px;
+    }
+
+    /* Improve list group usability */
+    .list-group-item {
+        padding: 12px 16px;
+    }
+
+    /* Improve badge visibility */
+    .badge {
+        font-size: 0.875rem;
+        padding: 5px 10px;
+    }
+
+    /* Improve button group usability */
+    .btn-group > .btn {
+        padding: 10px 16px;
+    }
+
+    /* Improve tab navigation */
+    .nav-tabs .nav-link {
+        padding: 10px 16px;
+    }
+
+    /* Improve accordion usability */
+    .accordion-button {
+        padding: 12px 16px;
+    }
+
+    .accordion-body {
+        padding: 16px;
+    }
+
+    /* Improve toast notifications */
+    .toast {
+        max-width: 100%;
+        margin: 0 auto 1rem;
+    }
+
+    .toast-header {
+        padding: 10px 12px;
+    }
+
+    .toast-body {
+        padding: 12px;
+    }
+
+    /* Improve spacing for stacked elements */
+    .mb-3 {
+        margin-bottom: 1rem !important;
+    }
+
+    .mt-3 {
+        margin-top: 1rem !important;
+    }
+
+    .py-3 {
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+    }
+
+    .px-3 {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    /* Improve container padding */
+    .container,
+    .container-fluid {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    /* Improve row gutters */
+    .row {
+        margin-left: -8px;
+        margin-right: -8px;
+    }
+
+    .col, .col-1, .col-2, .col-3, .col-4, .col-5, .col-6,
+    .col-7, .col-8, .col-9, .col-10, .col-11, .col-12,
+    .col-sm, .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4,
+    .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9,
+    .col-sm-10, .col-sm-11, .col-sm-12 {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    /* Mobile-specific AI Assistant improvements */
+    .ai-assistant-window {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 80vh !important;
+        bottom: 0 !important;
+        right: 0 !important;
+        left: 0 !important;
+        border-radius: 12px 12px 0 0 !important;
+        box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    .ai-assistant-toggle {
+        bottom: 20px !important;
+        right: 20px !important;
+        width: 60px !important;
+        height: 60px !important;
+        border-radius: 30px !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    .ai-assistant-toggle i {
+        font-size: 24px !important;
+    }
+
+    .ai-assistant-header {
+        padding: 16px !important;
+    }
+
+    .ai-assistant-title {
+        font-size: 1.3rem !important;
+    }
+
+    .ai-assistant-messages {
+        height: calc(80vh - 140px) !important;
+        padding: 16px !important;
+    }
+
+    .ai-assistant-input {
+        padding: 12px !important;
+    }
+
+    .ai-assistant-text-input {
+        height: 50px !important;
+        font-size: 16px !important;
+        padding: 12px 16px !important;
+    }
+
+    .ai-assistant-send {
+        width: 50px !important;
+        height: 50px !important;
+    }
+
+    .ai-assistant-send i {
+        font-size: 20px !important;
+    }
+
+    /* Mobile-specific Instructional Guide improvements */
+    .instructional-guide {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 16px !important;
+        border-radius: 0 !important;
+    }
+
+    .guide-header {
+        padding: 16px !important;
+    }
+
+    .guide-header h3 {
+        font-size: 1.5rem !important;
+    }
+
+    .guide-steps {
+        padding: 0 !important;
+    }
+
+    .guide-step {
+        margin-bottom: 16px !important;
+        padding: 16px !important;
+    }
+
+    .step-number {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 1.2rem !important;
+        margin-right: 12px !important;
+    }
+
+    .step-content h4 {
+        font-size: 1.2rem !important;
+    }
+
+    .step-content p {
+        font-size: 1rem !important;
+    }
+
+    .guide-tip {
+        padding: 12px !important;
+        margin-top: 12px !important;
+    }
+}
+
+/* Small mobile devices (portrait phones, less than 576px) */
+@media (max-width: 575px) {
+    /* Further increase touch target sizes */
+    button,
+    .btn,
+    .nav-link,
+    .dropdown-item,
+    input[type="submit"],
+    input[type="button"],
+    a.card,
+    a.list-group-item,
+    .page-link {
+        padding: 12px 16px;
+    }
+
+    /* Adjust headings for very small screens */
+    h1, .h1 {
+        font-size: 1.75rem;
+    }
+
+    h2, .h2 {
+        font-size: 1.5rem;
+    }
+
+    h3, .h3 {
+        font-size: 1.25rem;
+    }
+
+    /* Improve container padding for small screens */
+    .container,
+    .container-fluid {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    /* Stack buttons on very small screens */
+    .btn-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .btn-group > .btn {
+        margin-bottom: 8px;
+        border-radius: 6px !important;
+    }
+
+    /* Improve modal sizing */
+    .modal-dialog {
+        margin: 10px;
+    }
+
+    /* Ensure tables can scroll horizontally */
+    .table-responsive {
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+    }
+
+    /* Improve form layout */
+    .form-row {
+        margin-left: -8px;
+        margin-right: -8px;
+    }
+
+    .form-row > .col,
+    .form-row > [class*="col-"] {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+}

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800px" height="400px" viewBox="0 0 800 400" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>502 Error</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#DC3545" stop-opacity="0.2" offset="0%"></stop>
+            <stop stop-color="#DC3545" stop-opacity="0.1" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="502-Error" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Background" fill="url(#linearGradient-1)" x="0" y="0" width="800" height="400" rx="20"></rect>
+        <text id="502" font-family="Arial-BoldMT, Arial" font-size="180" font-weight="bold" fill="#DC3545">
+            <tspan x="200" y="240">502</tspan>
+        </text>
+        <g id="Gateway" transform="translate(500.000000, 150.000000)">
+            <!-- Server 1 -->
+            <rect id="Server-1" stroke="#DC3545" stroke-width="8" x="0" y="40" width="60" height="120" rx="5"></rect>
+            <line x1="0" y1="60" x2="60" y2="60" id="Line-1" stroke="#DC3545" stroke-width="4"></line>
+            <line x1="0" y1="80" x2="60" y2="80" id="Line-2" stroke="#DC3545" stroke-width="4"></line>
+            <circle id="Light-1" fill="#DC3545" cx="15" cy="50" r="5"></circle>
+            <circle id="Light-2" fill="#DC3545" cx="30" cy="50" r="5"></circle>
+            
+            <!-- Server 2 -->
+            <rect id="Server-2" stroke="#DC3545" stroke-width="8" x="120" y="40" width="60" height="120" rx="5"></rect>
+            <line x1="120" y1="60" x2="180" y2="60" id="Line-3" stroke="#DC3545" stroke-width="4"></line>
+            <line x1="120" y1="80" x2="180" y2="80" id="Line-4" stroke="#DC3545" stroke-width="4"></line>
+            <circle id="Light-3" fill="#DC3545" cx="135" cy="50" r="5"></circle>
+            <circle id="Light-4" fill="#DC3545" cx="150" cy="50" r="5"></circle>
+            
+            <!-- Broken Connection -->
+            <path d="M60,100 L80,100" id="Connection-1" stroke="#DC3545" stroke-width="6" stroke-linecap="round"></path>
+            <path d="M100,100 L120,100" id="Connection-2" stroke="#DC3545" stroke-width="6" stroke-linecap="round"></path>
+            <path d="M80,100 L100,100" id="Broken-Connection" stroke="#DC3545" stroke-width="6" stroke-linecap="round" stroke-dasharray="5,5"></path>
+            
+            <!-- Lightning Bolt -->
+            <polygon id="Lightning" fill="#DC3545" points="90 70 80 100 95 100 85 130 105 95 90 95 100 70"></polygon>
+        </g>
+        <text id="Bad-Gateway" font-family="Arial-BoldMT, Arial" font-size="24" font-weight="bold" fill="#333333">
+            <tspan x="320" y="300">Bad Gateway</tspan>
+        </text>
+    </g>
+</svg>

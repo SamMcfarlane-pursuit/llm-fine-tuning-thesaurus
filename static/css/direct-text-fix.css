@@ -1,0 +1,180 @@
+/**
+ * Direct Text Fix CSS
+ * Extremely targeted fix for the specific numbered list in the image
+ */
+
+/* Force all text to be visible with !important flags */
+.step-number {
+    background: linear-gradient(135deg, #4a94ff, #5dd6ff) !important;
+    color: #ffffff !important;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-weight: 700 !important;
+    font-size: 1.2rem !important;
+    margin-right: 1.5rem !important;
+    box-shadow: 0 0 15px rgba(93, 214, 255, 0.5) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+    flex-shrink: 0 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Direct fix for the text in the numbered list */
+.guide-step h4,
+.step-content h4 {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    margin-bottom: 0.5rem !important;
+    font-size: 1.2rem !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.guide-step p,
+.step-content p {
+    color: rgba(255, 255, 255, 0.95) !important;
+    margin-bottom: 1rem !important;
+    line-height: 1.6 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Extremely specific fix for the numbered list in the image */
+ol li strong,
+.getting-started-steps li strong {
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Force all text to be visible in the specific list */
+.getting-started-steps li {
+    color: #ffffff !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Extremely targeted fix for the specific list in the image */
+[class*="step"] {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+[class*="step"] * {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Direct fix for the specific list in the image */
+.guide-steps .guide-step .step-number,
+.guide-steps .guide-step .step-content,
+.guide-steps .guide-step .step-content h4,
+.guide-steps .guide-step .step-content p {
+    opacity: 1 !important;
+    visibility: visible !important;
+    color: #ffffff !important;
+}
+
+/* Extremely specific fix for the exact list in the image */
+.guide-steps .guide-step:nth-child(1) .step-number,
+.guide-steps .guide-step:nth-child(2) .step-number,
+.guide-steps .guide-step:nth-child(3) .step-number,
+.guide-steps .guide-step:nth-child(4) .step-number,
+.guide-steps .guide-step:nth-child(5) .step-number {
+    background: linear-gradient(135deg, #4a94ff, #5dd6ff) !important;
+    color: #ffffff !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.guide-steps .guide-step:nth-child(1) .step-content h4,
+.guide-steps .guide-step:nth-child(2) .step-content h4,
+.guide-steps .guide-step:nth-child(3) .step-content h4,
+.guide-steps .guide-step:nth-child(4) .step-content h4,
+.guide-steps .guide-step:nth-child(5) .step-content h4 {
+    color: #ffffff !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Fix for the specific text in the image */
+.guide-step:nth-child(1) .step-content h4:contains("Create an account"),
+.guide-step:nth-child(2) .step-content h4:contains("Explore the concept map"),
+.guide-step:nth-child(3) .step-content h4:contains("Visit the Learning Center"),
+.guide-step:nth-child(4) .step-content h4:contains("Try the tutorials"),
+.guide-step:nth-child(5) .step-content h4:contains("Test your knowledge") {
+    color: #ffffff !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    font-weight: 700 !important;
+}
+
+/* Brute force approach to ensure all text is visible */
+body .guide-steps .guide-step .step-content h4,
+body .guide-steps .guide-step .step-content p,
+body .guide-steps .guide-step .step-number {
+    color: #ffffff !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Specific fix for the modal */
+#howToUseModal .getting-started-steps li,
+#howToUseModal .getting-started-steps li strong {
+    color: #ffffff !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Fix for any transparency issues */
+.guide-step {
+    background-color: rgba(30, 30, 35, 1) !important;
+}
+
+/* Fix for any z-index issues */
+.guide-step * {
+    z-index: 10 !important;
+    position: relative !important;
+}
+
+/* Fix for any overflow issues */
+.guide-steps {
+    overflow: visible !important;
+}
+
+/* Fix for any display issues */
+.guide-step, .step-number, .step-content, .step-content h4, .step-content p {
+    display: block !important;
+}
+
+.step-number {
+    display: flex !important;
+}
+
+/* Fix for any font issues */
+.guide-step * {
+    font-family: 'Roboto', 'Segoe UI', sans-serif !important;
+}
+
+/* Fix for any color issues with !important */
+.guide-step .step-content h4 {
+    color: #ffffff !important;
+}
+
+.guide-step .step-content p {
+    color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.guide-step .step-number {
+    color: #ffffff !important;
+}

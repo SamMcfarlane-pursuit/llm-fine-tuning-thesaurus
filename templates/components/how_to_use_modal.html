@@ -1,0 +1,305 @@
+<!-- How to Use This Site Modal -->
+<div class="modal fade" id="howToUseModal" tabindex="-1" aria-labelledby="howToUseModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="howToUseModalLabel">
+                    <i class="bi bi-info-circle-fill me-2"></i> How to Use This Site
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="how-to-use-content">
+                    <div class="welcome-section text-center mb-4">
+                        <h3>Welcome to Visual Thesaurus LLM</h3>
+                        <p class="lead">Your comprehensive resource for learning about LLM fine-tuning techniques</p>
+                    </div>
+
+                    <div class="site-sections mb-4">
+                        <h4>Main Sections</h4>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="section-card">
+                                    <div class="section-icon">
+                                        <i class="bi bi-book"></i>
+                                    </div>
+                                    <div class="section-info">
+                                        <h5>Learning Center</h5>
+                                        <p>Comprehensive guides and explanations of LLM fine-tuning concepts</p>
+                                        <a href="/concepts-learning" class="btn btn-sm btn-primary">Visit</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="section-card">
+                                    <div class="section-icon">
+                                        <i class="bi bi-code-square"></i>
+                                    </div>
+                                    <div class="section-info">
+                                        <h5>Tutorials</h5>
+                                        <p>Step-by-step interactive tutorials with code examples</p>
+                                        <a href="/tutorials" class="btn btn-sm btn-primary">Visit</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="section-card">
+                                    <div class="section-icon">
+                                        <i class="bi bi-laptop"></i>
+                                    </div>
+                                    <div class="section-info">
+                                        <h5>Workshops</h5>
+                                        <p>Hands-on workshops for practical experience</p>
+                                        <a href="/workshops" class="btn btn-sm btn-primary">Visit</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="section-card">
+                                    <div class="section-icon">
+                                        <i class="bi bi-check2-circle"></i>
+                                    </div>
+                                    <div class="section-info">
+                                        <h5>Quizzes</h5>
+                                        <p>Test your knowledge with interactive quizzes</p>
+                                        <a href="/quiz/quiz_list" class="btn btn-sm btn-primary">Visit</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="features-section mb-4">
+                        <h4>Key Features</h4>
+                        <div class="feature-list">
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="bi bi-diagram-3"></i>
+                                </div>
+                                <div class="feature-text">
+                                    <h5>Interactive Concept Maps</h5>
+                                    <p>Visualize relationships between LLM fine-tuning concepts. Click on nodes to explore details.</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="bi bi-search"></i>
+                                </div>
+                                <div class="feature-text">
+                                    <h5>Visual Thesaurus Search</h5>
+                                    <p>Search for terms and see related concepts, synonyms, and antonyms in an interactive visualization.</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="bi bi-journal-code"></i>
+                                </div>
+                                <div class="feature-text">
+                                    <h5>Interactive Notebooks</h5>
+                                    <p>Run code examples directly in your browser or open them in Google Colab for a hands-on experience.</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <div class="feature-icon">
+                                    <i class="bi bi-graph-up"></i>
+                                </div>
+                                <div class="feature-text">
+                                    <h5>Progress Tracking</h5>
+                                    <p>Create an account to track your progress through tutorials, workshops, and quizzes.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="getting-started mb-4">
+                        <h4>Getting Started</h4>
+                        {% include 'components/image_exact_steps.html' %}
+                    </div>
+
+                    <div class="tips-section">
+                        <h4>Pro Tips</h4>
+                        <div class="tips-list">
+                            <div class="tip-item">
+                                <i class="bi bi-lightbulb-fill"></i>
+                                <span>Use the <strong>Quick Access</strong> navigation on the homepage to jump directly to any section</span>
+                            </div>
+                            <div class="tip-item">
+                                <i class="bi bi-lightbulb-fill"></i>
+                                <span>Click on any concept in the visualization to see detailed information</span>
+                            </div>
+                            <div class="tip-item">
+                                <i class="bi bi-lightbulb-fill"></i>
+                                <span>Use the <strong>Visual Thesaurus Search</strong> to find related terms and concepts</span>
+                            </div>
+                            <div class="tip-item">
+                                <i class="bi bi-lightbulb-fill"></i>
+                                <span>Check your <strong>Progress</strong> page regularly to see what you've completed and what's next</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="startExploringBtn" data-bs-dismiss="modal">Start Exploring</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .how-to-use-content {
+        color: var(--text-primary);
+    }
+
+    .welcome-section h3 {
+        color: var(--primary-color);
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .site-sections h4,
+    .features-section h4,
+    .getting-started h4,
+    .tips-section h4 {
+        color: var(--primary-color);
+        font-weight: 600;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid rgba(58, 134, 255, 0.2);
+    }
+
+    .section-card {
+        display: flex;
+        background-color: rgba(26, 26, 30, 0.5);
+        border-radius: 10px;
+        padding: 1rem;
+        height: 100%;
+        border: 1px solid rgba(58, 134, 255, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .section-card:hover {
+        background-color: rgba(58, 134, 255, 0.1);
+        transform: translateY(-3px);
+    }
+
+    .section-icon {
+        font-size: 2rem;
+        color: var(--primary-color);
+        margin-right: 1rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .section-info {
+        flex-grow: 1;
+    }
+
+    .section-info h5 {
+        color: var(--text-primary);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .section-info p {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .feature-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .feature-item {
+        display: flex;
+        align-items: flex-start;
+        background-color: rgba(26, 26, 30, 0.5);
+        border-radius: 10px;
+        padding: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .feature-item:hover {
+        background-color: rgba(58, 134, 255, 0.1);
+    }
+
+    .feature-icon {
+        font-size: 1.5rem;
+        color: var(--primary-color);
+        margin-right: 1rem;
+        flex-shrink: 0;
+    }
+
+    .feature-text h5 {
+        color: var(--text-primary);
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+    }
+
+    .feature-text p {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        margin-bottom: 0;
+    }
+
+    .getting-started-steps {
+        background-color: rgba(26, 26, 30, 0.5);
+        border-radius: 10px;
+        padding: 1.5rem 1.5rem 1.5rem 3rem;
+    }
+
+    .getting-started-steps li {
+        margin-bottom: 0.75rem;
+        color: var(--text-secondary);
+    }
+
+    .getting-started-steps li strong {
+        color: var(--text-primary);
+    }
+
+    .tips-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .tip-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        background-color: rgba(26, 26, 30, 0.5);
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+    }
+
+    .tip-item i {
+        color: var(--primary-color);
+        font-size: 1.25rem;
+        flex-shrink: 0;
+    }
+
+    .tip-item span {
+        color: var(--text-secondary);
+    }
+
+    .tip-item span strong {
+        color: var(--text-primary);
+    }
+
+    @media (max-width: 768px) {
+        .section-card {
+            flex-direction: column;
+        }
+
+        .section-icon {
+            margin-right: 0;
+            margin-bottom: 0.75rem;
+        }
+    }
+</style>
+
+<!-- "How to Use This Site" button removed as requested -->

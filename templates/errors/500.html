@@ -10,11 +10,11 @@
                 <h1 class="display-1 text-danger">500</h1>
                 <h2 class="mb-4">Server Error</h2>
                 <p class="lead mb-4">Something went wrong on our end. We're working to fix the issue.</p>
-                
+
                 <div class="error-image mb-4">
                     <img src="{{ url_for('static', filename='images/500.svg') }}" alt="500 Error" class="img-fluid" style="max-height: 300px;">
                 </div>
-                
+
                 <div class="d-grid gap-3 d-md-flex justify-content-md-center">
                     <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg">
                         <i class="bi bi-house-door me-2"></i>Go to Home
@@ -22,12 +22,12 @@
                     <a href="javascript:window.location.reload();" class="btn btn-outline-primary btn-lg">
                         <i class="bi bi-arrow-clockwise me-2"></i>Try Again
                     </a>
-                    <a href="{{ url_for('contact') }}" class="btn btn-outline-danger btn-lg">
+                    <a href="{{ url_for('index') }}" class="btn btn-outline-danger btn-lg">
                         <i class="bi bi-envelope me-2"></i>Report Issue
                     </a>
                 </div>
             </div>
-            
+
             <div class="card mt-5">
                 <div class="card-header bg-light">
                     <h5 class="mb-0">What can you do?</h5>
@@ -46,7 +46,7 @@
                             <div class="card h-100">
                                 <div class="card-body">
                                     <h5 class="card-title"><i class="bi bi-envelope text-primary me-2"></i>Contact Support</h5>
-                                    <p class="card-text">If the problem persists, please <a href="{{ url_for('contact') }}">contact our support team</a>.</p>
+                                    <p class="card-text">If the problem persists, please <a href="{{ url_for('index') }}">return to the homepage</a>.</p>
                                 </div>
                             </div>
                         </div>

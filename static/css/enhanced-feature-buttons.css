@@ -1,0 +1,240 @@
+/**
+ * Enhanced Feature Buttons CSS
+ * Improves the visibility and usability of feature buttons and quick access icons
+ */
+
+/* Quick access features container */
+.quick-access-features {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+}
+
+/* Feature button improvements */
+.feature-button {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    border-radius: 15px;
+    background: linear-gradient(145deg, rgba(30, 30, 40, 0.8), rgba(20, 20, 30, 0.9));
+    border: 2px solid rgba(93, 214, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 0 10px rgba(93, 214, 255, 0.1);
+    overflow: hidden;
+    text-decoration: none;
+}
+
+.feature-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 30% 30%, rgba(93, 214, 255, 0.1), transparent 70%);
+    opacity: 0.5;
+    transition: all 0.3s ease;
+}
+
+.feature-button::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        45deg,
+        transparent 0%,
+        rgba(93, 214, 255, 0.05) 50%,
+        transparent 100%
+    );
+    transition: all 0.3s ease;
+}
+
+.feature-button i {
+    font-size: 28px;
+    color: #5dd6ff;
+    filter: drop-shadow(0 0 8px rgba(93, 214, 255, 0.4));
+    transition: all 0.3s ease;
+    z-index: 2;
+}
+
+.feature-button:hover {
+    transform: translateY(-5px) scale(1.05);
+    border-color: rgba(93, 214, 255, 0.6);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4), 0 0 15px rgba(93, 214, 255, 0.2);
+}
+
+.feature-button:hover i {
+    color: #8ae4ff;
+    filter: drop-shadow(0 0 12px rgba(93, 214, 255, 0.6));
+    transform: scale(1.1);
+}
+
+.feature-button:active {
+    transform: translateY(-2px) scale(0.98);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Feature button label */
+.feature-button::after {
+    content: attr(data-label);
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.feature-button:hover::after {
+    opacity: 1;
+    bottom: -30px;
+}
+
+/* Badge dot for notifications */
+.badge-dot {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 10px;
+    height: 10px;
+    background-color: #28a745;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(40, 167, 69, 0.6);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(40, 167, 69, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
+    }
+}
+
+/* Light mode styles */
+body.light-mode .feature-button {
+    background: linear-gradient(145deg, rgba(240, 240, 245, 0.8), rgba(230, 230, 240, 0.9));
+    border: 2px solid rgba(0, 86, 179, 0.3);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .feature-button::before {
+    background: radial-gradient(circle at 30% 30%, rgba(0, 86, 179, 0.1), transparent 70%);
+}
+
+body.light-mode .feature-button::after {
+    background: linear-gradient(
+        45deg,
+        transparent 0%,
+        rgba(0, 86, 179, 0.05) 50%,
+        transparent 100%
+    );
+}
+
+body.light-mode .feature-button i {
+    color: #0056b3;
+    filter: none;
+}
+
+body.light-mode .feature-button:hover {
+    border-color: rgba(0, 86, 179, 0.6);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+body.light-mode .feature-button:hover i {
+    color: #0088cc;
+    filter: drop-shadow(0 0 5px rgba(0, 86, 179, 0.3));
+}
+
+body.light-mode .feature-button::after {
+    color: rgba(0, 0, 0, 0.7);
+}
+
+/* How to use site link improvements */
+.how-to-use-site {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.how-to-use-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #4a94ff, #5dd6ff);
+    color: white;
+    text-decoration: none;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.05rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: none;
+    white-space: nowrap;
+    text-transform: uppercase;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.how-to-use-link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    color: white;
+    text-decoration: none;
+}
+
+.how-to-use-link:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.how-to-use-link i {
+    margin-right: 5px;
+}
+
+/* Light mode styles for how-to-use link */
+body.light-mode .how-to-use-link {
+    background: linear-gradient(135deg, #0056b3, #0088cc);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .how-to-use-link:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .quick-access-features {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+    
+    .feature-button {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .feature-button i {
+        font-size: 22px;
+    }
+    
+    .how-to-use-link {
+        padding: 8px 15px;
+        font-size: 0.8rem;
+    }
+}

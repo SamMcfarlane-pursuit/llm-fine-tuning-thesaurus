@@ -220,8 +220,10 @@ def quiz_detail(quiz_id):
 
     # Shuffle options for each question
     for question in questions:
-        question.options = list(question.options)
-        random.shuffle(question.options)
+        # Convert AppenderQuery to list before shuffling
+        options_list = list(question.options)
+        random.shuffle(options_list)
+        question.options = options_list
 
     return render_template('quiz/quiz_detail.html', quiz=quiz, questions=questions)
 
@@ -410,3 +412,25 @@ def api_check_answer():
         'correct_option_text': correct_option.text,
         'feedback': 'Correct!' if is_correct else f'Incorrect. The correct answer is: {correct_option.text}'
     })
+
+@quiz_bp.route('/<int:quiz_id>/take')
+def quiz_take(quiz_id):
+    """Take a quiz."""
+    quiz = Quiz.query.get_or_404(quiz_id)
+
+    # Shuffle questions for randomization
+    questions = list(quiz.questions)
+    random.shuffle(questions)
+
+    # Limit to 10 questions if there are more
+    if len(questions) > 10:
+        questions = questions[:10]
+
+    # Shuffle options for each question
+    for question in questions:
+        # Convert AppenderQuery to list before shuffling
+        options_list = list(question.options)
+        random.shuffle(options_list)
+        question.options = options_list
+
+    return render_template('quiz/quiz_take.html', quiz=quiz, questions=questions)

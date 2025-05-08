@@ -1,0 +1,177 @@
+/**
+ * Numbered List Visibility Fix CSS
+ * Specifically fixes visibility issues with the numbered steps in the getting started guide
+ * that appears on the main page (not in the modal)
+ */
+
+/* Fix for the standalone numbered list */
+.numbered-steps {
+    list-style-type: none;
+    counter-reset: step-counter;
+    padding-left: 0;
+    margin-top: 2rem;
+}
+
+.numbered-steps li {
+    position: relative;
+    padding-left: 60px;
+    margin-bottom: 1.5rem;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    color: #ffffff !important;
+    font-weight: 500 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.numbered-steps li::before {
+    content: counter(step-counter);
+    counter-increment: step-counter;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg, #4a94ff, #5dd6ff);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    box-shadow: 0 0 15px rgba(93, 214, 255, 0.5);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.numbered-steps li strong {
+    color: #5dd6ff !important;
+    font-weight: 700 !important;
+    text-shadow: 0 0 10px rgba(93, 214, 255, 0.5) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Fix for the specific numbered list in the image */
+.guide-steps-container {
+    background-color: rgba(26, 26, 30, 0.7);
+    border-radius: 10px;
+    padding: 2rem;
+    margin: 2rem 0;
+    border: 1px solid rgba(93, 214, 255, 0.3);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.guide-steps-container h3 {
+    color: #5dd6ff !important;
+    font-weight: 700 !important;
+    margin-bottom: 1.5rem !important;
+    text-shadow: 0 0 10px rgba(93, 214, 255, 0.5) !important;
+}
+
+.guide-steps-container ol {
+    list-style-type: none;
+    counter-reset: step-counter;
+    padding-left: 0;
+}
+
+.guide-steps-container ol li {
+    position: relative;
+    padding-left: 60px;
+    margin-bottom: 1.5rem;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    color: #ffffff !important;
+    font-weight: 500 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.guide-steps-container ol li::before {
+    content: counter(step-counter);
+    counter-increment: step-counter;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg, #4a94ff, #5dd6ff);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    box-shadow: 0 0 15px rgba(93, 214, 255, 0.5);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.guide-steps-container ol li strong {
+    color: #5dd6ff !important;
+    font-weight: 700 !important;
+    text-shadow: 0 0 10px rgba(93, 214, 255, 0.5) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Light mode overrides */
+body.light-mode .numbered-steps li,
+body.light-theme .numbered-steps li {
+    color: #000000 !important;
+    text-shadow: none !important;
+}
+
+body.light-mode .numbered-steps li::before,
+body.light-theme .numbered-steps li::before {
+    background: linear-gradient(135deg, #0056b3, #0088cc);
+    box-shadow: 0 0 15px rgba(0, 86, 179, 0.3);
+    text-shadow: none;
+}
+
+body.light-mode .numbered-steps li strong,
+body.light-theme .numbered-steps li strong {
+    color: #0056b3 !important;
+    text-shadow: none !important;
+}
+
+body.light-mode .guide-steps-container,
+body.light-theme .guide-steps-container {
+    background-color: rgba(240, 240, 245, 0.7);
+    border: 1px solid rgba(0, 86, 179, 0.2);
+}
+
+body.light-mode .guide-steps-container h3,
+body.light-theme .guide-steps-container h3 {
+    color: #0056b3 !important;
+    text-shadow: none !important;
+}
+
+body.light-mode .guide-steps-container ol li,
+body.light-theme .guide-steps-container ol li {
+    color: #000000 !important;
+    text-shadow: none !important;
+}
+
+body.light-mode .guide-steps-container ol li::before,
+body.light-theme .guide-steps-container ol li::before {
+    background: linear-gradient(135deg, #0056b3, #0088cc);
+    box-shadow: 0 0 15px rgba(0, 86, 179, 0.3);
+    text-shadow: none;
+}
+
+body.light-mode .guide-steps-container ol li strong,
+body.light-theme .guide-steps-container ol li strong {
+    color: #0056b3 !important;
+    text-shadow: none !important;
+}

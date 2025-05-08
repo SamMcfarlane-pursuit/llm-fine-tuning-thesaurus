@@ -1,0 +1,228 @@
+/**
+ * Direct Banner Fix CSS
+ * Directly targets and fixes specific blue banners
+ */
+
+/* Target the specific blue banners in the images with maximum specificity */
+html body div[style*="background-color: blue"],
+html body div[style*="background-color: rgb(0, 0, 255)"],
+html body div[style*="background-color: #0000ff"],
+html body div[style*="background: blue"],
+html body div[style*="background: rgb(0, 0, 255)"],
+html body div[style*="background: #0000ff"] {
+    /* Change background to a more visible gradient */
+    background: linear-gradient(to right, #000066, #0033cc) !important;
+    
+    /* Add a bright white border */
+    border: 5px solid #ffffff !important;
+    
+    /* Add a strong box shadow */
+    box-shadow: 
+        0 0 0 3px #000000,
+        0 0 25px 8px rgba(0, 0, 255, 0.8),
+        0 0 40px rgba(255, 255, 255, 0.4) !important;
+    
+    /* Ensure proper spacing */
+    padding: 25px !important;
+    margin: 25px 0 !important;
+    
+    /* Add rounded corners */
+    border-radius: 15px !important;
+    
+    /* Ensure proper display */
+    display: block !important;
+    width: auto !important;
+    max-width: 100% !important;
+    
+    /* Ensure proper position */
+    position: relative !important;
+    z-index: 100 !important;
+    
+    /* Ensure proper text alignment */
+    text-align: center !important;
+}
+
+/* Add a semi-transparent overlay for better contrast */
+html body div[style*="background-color: blue"]::before,
+html body div[style*="background-color: rgb(0, 0, 255)"]::before,
+html body div[style*="background-color: #0000ff"]::before,
+html body div[style*="background: blue"]::before,
+html body div[style*="background: rgb(0, 0, 255)"]::before,
+html body div[style*="background: #0000ff"]::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Style all text inside the specific blue banners */
+html body div[style*="background-color: blue"] *,
+html body div[style*="background-color: rgb(0, 0, 255)"] *,
+html body div[style*="background-color: #0000ff"] *,
+html body div[style*="background: blue"] *,
+html body div[style*="background: rgb(0, 0, 255)"] *,
+html body div[style*="background: #0000ff"] * {
+    /* Set text color to bright white */
+    color: #ffffff !important;
+    
+    /* Add multiple text shadows for maximum visibility */
+    text-shadow: 
+        0 0 5px #ffffff,
+        0 0 10px #ffffff,
+        0 0 15px #ffffff,
+        0 2px 4px rgba(0, 0, 0, 0.9) !important;
+    
+    /* Make text extra bold */
+    font-weight: 900 !important;
+    
+    /* Increase letter spacing */
+    letter-spacing: 0.08em !important;
+    
+    /* Increase font size */
+    font-size: 1.2em !important;
+    
+    /* Increase line height */
+    line-height: 1.8 !important;
+    
+    /* Add a white outline around text */
+    -webkit-text-stroke: 1px #ffffff !important;
+    
+    /* Ensure proper position */
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+/* Create a container for the text with better contrast */
+html body div[style*="background-color: blue"] .banner-text-container,
+html body div[style*="background-color: rgb(0, 0, 255)"] .banner-text-container,
+html body div[style*="background-color: #0000ff"] .banner-text-container,
+html body div[style*="background: blue"] .banner-text-container,
+html body div[style*="background: rgb(0, 0, 255)"] .banner-text-container,
+html body div[style*="background: #0000ff"] .banner-text-container {
+    /* Set background for better contrast */
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    
+    /* Add padding */
+    padding: 10px 15px !important;
+    
+    /* Add rounded corners */
+    border-radius: 8px !important;
+    
+    /* Add border */
+    border: 2px solid rgba(255, 255, 255, 0.7) !important;
+    
+    /* Add margin */
+    margin: 5px auto !important;
+    
+    /* Set width */
+    width: fit-content !important;
+    max-width: 90% !important;
+    
+    /* Center the container */
+    display: block !important;
+    
+    /* Add box shadow */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Style individual words for maximum visibility */
+html body div[style*="background-color: blue"] .banner-word,
+html body div[style*="background-color: rgb(0, 0, 255)"] .banner-word,
+html body div[style*="background-color: #0000ff"] .banner-word,
+html body div[style*="background: blue"] .banner-word,
+html body div[style*="background: rgb(0, 0, 255)"] .banner-word,
+html body div[style*="background: #0000ff"] .banner-word {
+    /* Set background for better contrast */
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    
+    /* Add padding */
+    padding: 5px 10px !important;
+    
+    /* Add rounded corners */
+    border-radius: 5px !important;
+    
+    /* Add margin */
+    margin: 3px !important;
+    
+    /* Set display */
+    display: inline-block !important;
+    
+    /* Add box shadow */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5) !important;
+    
+    /* Set text color to bright white */
+    color: #ffffff !important;
+    
+    /* Add multiple text shadows for maximum visibility */
+    text-shadow: 
+        0 0 5px #ffffff,
+        0 0 10px #ffffff,
+        0 2px 4px rgba(0, 0, 0, 0.9) !important;
+    
+    /* Make text extra bold */
+    font-weight: 900 !important;
+}
+
+/* Ensure visibility on all screen sizes */
+@media (max-width: 768px) {
+    html body div[style*="background-color: blue"],
+    html body div[style*="background-color: rgb(0, 0, 255)"],
+    html body div[style*="background-color: #0000ff"],
+    html body div[style*="background: blue"],
+    html body div[style*="background: rgb(0, 0, 255)"],
+    html body div[style*="background: #0000ff"] {
+        /* Adjust padding for smaller screens */
+        padding: 15px !important;
+        
+        /* Adjust margin for smaller screens */
+        margin: 15px 0 !important;
+    }
+    
+    html body div[style*="background-color: blue"] *,
+    html body div[style*="background-color: rgb(0, 0, 255)"] *,
+    html body div[style*="background-color: #0000ff"] *,
+    html body div[style*="background: blue"] *,
+    html body div[style*="background: rgb(0, 0, 255)"] *,
+    html body div[style*="background: #0000ff"] * {
+        /* Adjust font size for smaller screens */
+        font-size: 1.1em !important;
+        
+        /* Adjust letter spacing for smaller screens */
+        letter-spacing: 0.05em !important;
+    }
+}
+
+/* Ensure visibility on very small screens */
+@media (max-width: 480px) {
+    html body div[style*="background-color: blue"],
+    html body div[style*="background-color: rgb(0, 0, 255)"],
+    html body div[style*="background-color: #0000ff"],
+    html body div[style*="background: blue"],
+    html body div[style*="background: rgb(0, 0, 255)"],
+    html body div[style*="background: #0000ff"] {
+        /* Adjust padding for very small screens */
+        padding: 12px !important;
+        
+        /* Adjust margin for very small screens */
+        margin: 12px 0 !important;
+    }
+    
+    html body div[style*="background-color: blue"] *,
+    html body div[style*="background-color: rgb(0, 0, 255)"] *,
+    html body div[style*="background-color: #0000ff"] *,
+    html body div[style*="background: blue"] *,
+    html body div[style*="background: rgb(0, 0, 255)"] *,
+    html body div[style*="background: #0000ff"] * {
+        /* Adjust font size for very small screens */
+        font-size: 1em !important;
+        
+        /* Adjust letter spacing for very small screens */
+        letter-spacing: 0.03em !important;
+    }
+}

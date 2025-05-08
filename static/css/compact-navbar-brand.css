@@ -1,0 +1,60 @@
+/**
+ * Compact Navbar Brand CSS
+ * Makes the navbar brand more compact to allow more space for navigation
+ * (Modified to work with enhanced-logo.css)
+ */
+
+/* Compact navbar brand - not applied to enhanced-logo */
+.navbar-brand:not(.enhanced-logo) {
+    padding: 0.3rem 0;
+    margin-right: 0.5rem;
+}
+
+.navbar-brand:not(.enhanced-logo) .brand-icon {
+    width: 32px;
+    height: 32px;
+    margin-right: 0.4rem;
+}
+
+.navbar-brand:not(.enhanced-logo) .brand-icon i {
+    font-size: 1.3rem;
+}
+
+.navbar-brand:not(.enhanced-logo) .brand-text {
+    font-size: 1.2rem;
+    letter-spacing: -0.02em;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .navbar-brand:not(.enhanced-logo) {
+        padding: 0.2rem 0;
+        margin-right: 0.3rem;
+    }
+
+    .navbar-brand:not(.enhanced-logo) .brand-icon {
+        width: 28px;
+        height: 28px;
+        margin-right: 0.3rem;
+    }
+
+    .navbar-brand:not(.enhanced-logo) .brand-icon i {
+        font-size: 1.1rem;
+    }
+
+    .navbar-brand:not(.enhanced-logo) .brand-text {
+        font-size: 1.1rem;
+        letter-spacing: -0.03em;
+    }
+}
+
+@media (max-width: 992px) {
+    .navbar-brand:not(.enhanced-logo) {
+        padding: 0.2rem 0;
+    }
+
+    .navbar-brand:not(.enhanced-logo) .brand-icon {
+        width: 30px;
+        height: 30px;
+    }
+}

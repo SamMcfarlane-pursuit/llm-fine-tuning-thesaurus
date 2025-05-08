@@ -1,0 +1,319 @@
+/**
+ * White Text Light Mode Enhancement
+ * Changes text to white in light mode to match the theme
+ */
+
+/* Only apply these styles in light mode */
+body.light-theme {
+    /* Define white color variables for text */
+    --white-text-primary: #ffffff;     /* Pure white for primary text */
+    --white-text-secondary: #f0f0f0;   /* Very light gray for secondary text */
+    --white-text-tertiary: #e0e0e0;    /* Light gray for tertiary text */
+    --white-text-muted: #cccccc;       /* Muted white for less important text */
+    
+    /* Text shadow for better readability against light backgrounds */
+    --white-text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    --white-text-glow: 0 0 8px rgba(255, 255, 255, 0.5);
+    
+    /* Override the default text colors */
+    --text-primary: var(--white-text-primary);
+    --text-secondary: var(--white-text-secondary);
+    --text-tertiary: var(--white-text-tertiary);
+}
+
+/* Basic text elements */
+body.light-theme p,
+body.light-theme span,
+body.light-theme div,
+body.light-theme li,
+body.light-theme td,
+body.light-theme th,
+body.light-theme label,
+body.light-theme small {
+    color: var(--white-text-primary) !important;
+    text-shadow: var(--white-text-shadow);
+}
+
+/* Headings with enhanced visibility */
+body.light-theme h1,
+body.light-theme h2,
+body.light-theme h3,
+body.light-theme h4,
+body.light-theme h5,
+body.light-theme h6,
+body.light-theme .h1,
+body.light-theme .h2,
+body.light-theme .h3,
+body.light-theme .h4,
+body.light-theme .h5,
+body.light-theme .h6 {
+    color: var(--white-text-primary) !important;
+    text-shadow: var(--white-text-shadow);
+    font-weight: 700;
+}
+
+/* Add a subtle glow effect to headings */
+body.light-theme h1,
+body.light-theme h2,
+body.light-theme h3,
+body.light-theme .h1,
+body.light-theme .h2,
+body.light-theme .h3 {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* Links */
+body.light-theme a:not(.btn):not(.nav-link):not(.dropdown-item) {
+    color: var(--white-text-primary) !important;
+    text-decoration: none;
+    position: relative;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    text-shadow: var(--white-text-shadow);
+}
+
+body.light-theme a:not(.btn):not(.nav-link):not(.dropdown-item):hover,
+body.light-theme a:not(.btn):not(.nav-link):not(.dropdown-item):focus {
+    color: var(--white-text-primary) !important;
+    text-shadow: var(--white-text-glow);
+}
+
+body.light-theme a:not(.btn):not(.nav-link):not(.dropdown-item)::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--white-text-primary);
+    transition: width 0.3s ease;
+}
+
+body.light-theme a:not(.btn):not(.nav-link):not(.dropdown-item):hover::after,
+body.light-theme a:not(.btn):not(.nav-link):not(.dropdown-item):focus::after {
+    width: 100%;
+}
+
+/* Navigation links */
+body.light-theme .nav-link {
+    color: var(--white-text-primary) !important;
+    transition: all 0.3s ease;
+    text-shadow: var(--white-text-shadow);
+}
+
+body.light-theme .nav-link:hover,
+body.light-theme .nav-link:focus,
+body.light-theme .nav-link.active {
+    color: var(--white-text-primary) !important;
+    text-shadow: var(--white-text-glow);
+}
+
+/* Dropdown items */
+body.light-theme .dropdown-item {
+    color: var(--white-text-primary) !important;
+    text-shadow: var(--white-text-shadow);
+}
+
+body.light-theme .dropdown-item:hover,
+body.light-theme .dropdown-item:focus {
+    color: var(--white-text-primary) !important;
+    text-shadow: var(--white-text-glow);
+}
+
+/* Card titles and content */
+body.light-theme .card-title {
+    color: var(--white-text-primary) !important;
+    text-shadow: var(--white-text-shadow);
+    font-weight: 700;
+}
+
+body.light-theme .card-subtitle {
+    color: var(--white-text-secondary) !important;
+    text-shadow: var(--white-text-shadow);
+    font-weight: 600;
+}
+
+body.light-theme .card-text {
+    color: var(--white-text-primary) !important;
+    text-shadow: var(--white-text-shadow);
+}
+
+/* List items with enhanced styling */
+body.light-theme ul:not(.navbar-nav):not(.dropdown-menu) li::before {
+    color: var(--white-text-primary) !important;
+}
+
+body.light-theme ol li::marker {
+    color: var(--white-text-primary) !important;
+}
+
+/* Form elements */
+body.light-theme .form-control {
+    color: var(--white-text-primary) !important;
+    text-shadow: var(--white-text-shadow);
+}
+
+body.light-theme .form-control::placeholder {
+    color: var(--white-text-tertiary) !important;
+}
+
+/* Buttons with white text */
+body.light-theme .btn {
+    color: var(--white-text-primary) !important;
+    text-shadow: var(--white-text-shadow);
+}
+
+/* Table styling */
+body.light-theme .table {
+    color: var(--white-text-primary) !important;
+}
+
+body.light-theme .table thead th {
+    color: var(--white-text-primary) !important;
+    text-shadow: var(--white-text-shadow);
+    font-weight: 700;
+}
+
+/* Alerts with white text */
+body.light-theme .alert {
+    color: var(--white-text-primary) !important;
+    text-shadow: var(--white-text-shadow);
+}
+
+/* Badges with white text */
+body.light-theme .badge {
+    color: var(--white-text-primary) !important;
+    text-shadow: var(--white-text-shadow);
+}
+
+/* Code blocks with white text */
+body.light-theme code:not([class*="language-"]) {
+    color: var(--white-text-primary) !important;
+    text-shadow: var(--white-text-shadow);
+}
+
+/* Blockquotes with white text */
+body.light-theme blockquote {
+    color: var(--white-text-secondary) !important;
+    text-shadow: var(--white-text-shadow);
+}
+
+/* Footer text */
+body.light-theme footer {
+    color: var(--white-text-primary) !important;
+    text-shadow: var(--white-text-shadow);
+}
+
+/* Navbar brand */
+body.light-theme .navbar-brand .brand-text {
+    color: var(--white-text-primary) !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 10px rgba(255, 255, 255, 0.3);
+    font-weight: 700;
+}
+
+/* Top auth bar */
+body.light-theme .top-auth-bar {
+    color: var(--white-text-primary) !important;
+    text-shadow: var(--white-text-shadow);
+}
+
+body.light-theme .top-auth-link {
+    color: var(--white-text-secondary) !important;
+    text-shadow: var(--white-text-shadow);
+}
+
+body.light-theme .top-auth-link:hover {
+    color: var(--white-text-primary) !important;
+    text-shadow: var(--white-text-glow);
+}
+
+/* Feature buttons */
+body.light-theme .feature-button {
+    color: var(--white-text-primary) !important;
+    text-shadow: var(--white-text-shadow);
+}
+
+body.light-theme .feature-button:hover {
+    color: var(--white-text-primary) !important;
+    text-shadow: var(--white-text-glow);
+}
+
+/* Section titles */
+body.light-theme .section-title {
+    color: var(--white-text-primary) !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 10px rgba(255, 255, 255, 0.3);
+    font-weight: 700;
+}
+
+/* Ensure text is visible in all contexts */
+body.light-theme .text-dark {
+    color: var(--white-text-primary) !important;
+    text-shadow: var(--white-text-shadow);
+}
+
+body.light-theme .text-muted {
+    color: var(--white-text-muted) !important;
+    text-shadow: var(--white-text-shadow);
+}
+
+/* Special case for back buttons to ensure visibility */
+body.light-theme .btn-primary.back-button,
+body.light-theme a.btn-primary[href*="back"],
+body.light-theme button.btn-primary.back,
+body.light-theme .btn.btn-primary:contains("Back") {
+    color: var(--white-text-primary) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8), 0 0 5px rgba(0, 0, 0, 0.5) !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em !important;
+    -webkit-text-stroke: 0.5px var(--white-text-primary) !important;
+}
+
+/* Dropdown headers */
+body.light-theme .dropdown-header {
+    color: var(--white-text-primary) !important;
+    text-shadow: var(--white-text-shadow);
+    font-weight: 700;
+}
+
+/* Modal content */
+body.light-theme .modal-title,
+body.light-theme .modal-body {
+    color: var(--white-text-primary) !important;
+    text-shadow: var(--white-text-shadow);
+}
+
+/* Pagination */
+body.light-theme .page-link {
+    color: var(--white-text-primary) !important;
+    text-shadow: var(--white-text-shadow);
+}
+
+/* Nav tabs */
+body.light-theme .nav-tabs .nav-link {
+    color: var(--white-text-primary) !important;
+    text-shadow: var(--white-text-shadow);
+}
+
+/* Accordion */
+body.light-theme .accordion-button {
+    color: var(--white-text-primary) !important;
+    text-shadow: var(--white-text-shadow);
+}
+
+/* Tooltip */
+body.light-theme .tooltip {
+    color: var(--white-text-primary) !important;
+}
+
+/* Popover */
+body.light-theme .popover {
+    color: var(--white-text-primary) !important;
+    text-shadow: var(--white-text-shadow);
+}
+
+/* AI assistant */
+body.light-theme .ai-message,
+body.light-theme .user-message {
+    color: var(--white-text-primary) !important;
+    text-shadow: var(--white-text-shadow);
+}

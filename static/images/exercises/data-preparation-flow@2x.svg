@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="1600" height="800" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 800" preserveAspectRatio="xMidYMid meet">
+  <!-- Enhanced Background with gradient -->
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f0f8ff;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Glow filter for highlighting -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="10" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <!-- Shadow filter for depth -->
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="140%">
+      <feDropShadow dx="6" dy="8" stdDeviation="6" flood-color="#000" flood-opacity="0.3" />
+    </filter>
+
+    <!-- Arrowhead marker with enhanced styling -->
+    <marker id="arrowhead" markerWidth="20" markerHeight="14" refX="18" refY="7" orient="auto">
+      <polygon points="0 0, 20 7, 0 14" fill="#4287f5" />
+    </marker>
+
+    <!-- Gradients for boxes -->
+    <linearGradient id="raw-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e9ecef;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#dee2e6;stop-opacity:1" />
+    </linearGradient>
+
+    <linearGradient id="process-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#d0e8f2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#90cdf4;stop-opacity:1" />
+    </linearGradient>
+
+    <linearGradient id="train-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffe8d6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ffd8a8;stop-opacity:1" />
+    </linearGradient>
+
+    <linearGradient id="info-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#e6f2ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#c5e3ff;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Enhanced Background -->
+  <rect width="1600" height="800" fill="url(#bg-gradient)" rx="30" ry="30" filter="url(#shadow)" />
+
+  <!-- Enhanced Title with shadow -->
+  <text x="800" y="90" font-family="Arial, sans-serif" font-size="56" font-weight="bold" text-anchor="middle" fill="#1a365d" filter="url(#shadow)">Data Preparation & Evaluation Flow</text>
+
+  <!-- Flow Diagram with enhanced styling -->
+  <!-- Raw Data -->
+  <rect x="100" y="200" width="240" height="160" fill="url(#raw-gradient)" stroke="#4287f5" stroke-width="6" rx="24" ry="24" filter="url(#shadow)">
+    <animate attributeName="stroke-opacity" values="0.6;1;0.6" dur="3s" repeatCount="indefinite" />
+  </rect>
+  <text x="220" y="290" font-family="Arial, sans-serif" font-size="36" font-weight="bold" text-anchor="middle" fill="#1a365d">Raw Data</text>
+  <text x="220" y="330" font-family="Arial, sans-serif" font-size="24" text-anchor="middle" fill="#4a5568">Input Dataset</text>
+
+  <!-- Preprocessing -->
+  <rect x="480" y="200" width="240" height="160" fill="url(#process-gradient)" stroke="#4287f5" stroke-width="6" rx="24" ry="24" filter="url(#shadow)">
+    <animate attributeName="stroke-opacity" values="0.7;1;0.7" dur="3s" repeatCount="indefinite" begin="0.5s" />
+  </rect>
+  <text x="600" y="260" font-family="Arial, sans-serif" font-size="36" font-weight="bold" text-anchor="middle" fill="#1a365d">Preprocessing</text>
+  <text x="600" y="310" font-family="Arial, sans-serif" font-size="28" text-anchor="middle" fill="#2b6cb0">Cleaning, Formatting</text>
+
+  <!-- Train/Test Split -->
+  <rect x="860" y="200" width="240" height="160" fill="url(#process-gradient)" stroke="#4287f5" stroke-width="6" rx="24" ry="24" filter="url(#shadow)">
+    <animate attributeName="stroke-opacity" values="0.7;1;0.7" dur="3s" repeatCount="indefinite" begin="1s" />
+  </rect>
+  <text x="980" y="260" font-family="Arial, sans-serif" font-size="36" font-weight="bold" text-anchor="middle" fill="#1a365d">Train/Test</text>
+  <text x="980" y="310" font-family="Arial, sans-serif" font-size="28" text-anchor="middle" fill="#2b6cb0">90/10 Split</text>
+
+  <!-- Tokenization -->
+  <rect x="1240" y="200" width="240" height="160" fill="url(#process-gradient)" stroke="#4287f5" stroke-width="6" rx="24" ry="24" filter="url(#shadow)">
+    <animate attributeName="stroke-opacity" values="0.7;1;0.7" dur="3s" repeatCount="indefinite" begin="1.5s" />
+  </rect>
+  <text x="1360" y="260" font-family="Arial, sans-serif" font-size="36" font-weight="bold" text-anchor="middle" fill="#1a365d">Tokenization</text>
+  <text x="1360" y="310" font-family="Arial, sans-serif" font-size="28" text-anchor="middle" fill="#2b6cb0">Convert to IDs</text>
+
+  <!-- Training -->
+  <rect x="480" y="480" width="240" height="160" fill="url(#train-gradient)" stroke="#e67e22" stroke-width="6" rx="24" ry="24" filter="url(#shadow)">
+    <animate attributeName="stroke-opacity" values="0.7;1;0.7" dur="3s" repeatCount="indefinite" begin="2s" />
+  </rect>
+  <text x="600" y="540" font-family="Arial, sans-serif" font-size="36" font-weight="bold" text-anchor="middle" fill="#7b341e">Training</text>
+  <text x="600" y="590" font-family="Arial, sans-serif" font-size="28" text-anchor="middle" fill="#9c4221">Fine-tuning Model</text>
+
+  <!-- Evaluation -->
+  <rect x="860" y="480" width="240" height="160" fill="url(#train-gradient)" stroke="#e67e22" stroke-width="6" rx="24" ry="24" filter="url(#shadow)">
+    <animate attributeName="stroke-opacity" values="0.7;1;0.7" dur="3s" repeatCount="indefinite" begin="2.5s" />
+  </rect>
+  <text x="980" y="540" font-family="Arial, sans-serif" font-size="36" font-weight="bold" text-anchor="middle" fill="#7b341e">Evaluation</text>
+  <text x="980" y="590" font-family="Arial, sans-serif" font-size="28" text-anchor="middle" fill="#9c4221">Metrics: ROUGE, BLEU</text>
+
+  <!-- Deployment -->
+  <rect x="1240" y="480" width="240" height="160" fill="url(#train-gradient)" stroke="#e67e22" stroke-width="6" rx="24" ry="24" filter="url(#shadow)">
+    <animate attributeName="stroke-opacity" values="0.7;1;0.7" dur="3s" repeatCount="indefinite" begin="3s" />
+  </rect>
+  <text x="1360" y="540" font-family="Arial, sans-serif" font-size="36" font-weight="bold" text-anchor="middle" fill="#7b341e">Deployment</text>
+  <text x="1360" y="590" font-family="Arial, sans-serif" font-size="28" text-anchor="middle" fill="#9c4221">Inference API</text>
+
+  <!-- Enhanced Arrows with animation -->
+  <!-- Horizontal Arrows - Top Row -->
+  <path d="M 340 280 L 480 280" stroke="#4287f5" stroke-width="6" fill="none" marker-end="url(#arrowhead)">
+    <animate attributeName="stroke-opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite" begin="0.2s" />
+  </path>
+  <path d="M 720 280 L 860 280" stroke="#4287f5" stroke-width="6" fill="none" marker-end="url(#arrowhead)">
+    <animate attributeName="stroke-opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite" begin="0.7s" />
+  </path>
+  <path d="M 1100 280 L 1240 280" stroke="#4287f5" stroke-width="6" fill="none" marker-end="url(#arrowhead)">
+    <animate attributeName="stroke-opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite" begin="1.2s" />
+  </path>
+
+  <!-- Vertical Arrow with animation -->
+  <path d="M 1360 360 L 1360 420 L 600 420 L 600 480" stroke="#4287f5" stroke-width="6" fill="none" marker-end="url(#arrowhead)">
+    <animate attributeName="stroke-opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite" begin="1.7s" />
+  </path>
+
+  <!-- Horizontal Arrows - Bottom Row with animation -->
+  <path d="M 720 560 L 860 560" stroke="#4287f5" stroke-width="6" fill="none" marker-end="url(#arrowhead)">
+    <animate attributeName="stroke-opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite" begin="2.2s" />
+  </path>
+  <path d="M 1100 560 L 1240 560" stroke="#4287f5" stroke-width="6" fill="none" marker-end="url(#arrowhead)">
+    <animate attributeName="stroke-opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite" begin="2.7s" />
+  </path>
+
+  <!-- Enhanced Key Points with gradient and shadow -->
+  <rect x="100" y="680" width="1400" height="80" fill="url(#info-gradient)" stroke="#4287f5" stroke-width="4" rx="20" ry="20" filter="url(#shadow)" />
+  <text x="800" y="730" font-family="Arial, sans-serif" font-size="32" font-weight="bold" text-anchor="middle" fill="#1a365d">High-quality data preparation is crucial for successful fine-tuning • Always evaluate on held-out test data</text>
+</svg>

@@ -7,6 +7,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, HiddenField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
+from utils.email import send_password_reset_email
 try:
     from werkzeug.urls import url_parse
 except ImportError:
@@ -444,18 +445,31 @@ def password_reset_request():
         user = User.query.filter_by(email=form.email.data).first()
 
         if user:
-            # Generate a secure token
-            token = user.get_reset_password_token()
+            try:
+                # Send password reset email
+                from utils.email import send_password_reset_email
+                email_sent = send_password_reset_email(user)
 
-            # In a real application, you would send an email here
-            # For now, we'll just show the reset link on the page
-            reset_url = url_for('auth.password_reset', token=token, _external=True)
+                if email_sent:
+                    flash('Password reset instructions have been sent to your email.', 'info')
+                else:
+                    # If email sending fails, still show the token for development
+                    token = user.get_reset_password_token()
+                    reset_url = url_for('auth.password_reset', token=token, _external=True)
+                    flash('Email sending failed. For development purposes, here is the reset link:', 'warning')
+                    flash(reset_url, 'warning')
 
-            flash('Password reset instructions have been sent to your email.', 'info')
+                    # Log the error
+                    current_app.logger.error(f"Failed to send password reset email to {user.email}")
+            except Exception as e:
+                # Log the exception
+                current_app.logger.error(f"Exception sending password reset email: {str(e)}")
 
-            # For demonstration purposes, we'll also show the link directly
-            # In a real application, you would remove this
-            flash(f'For demonstration purposes, here is the reset link: {reset_url}', 'info')
+                # Show the token for development
+                token = user.get_reset_password_token()
+                reset_url = url_for('auth.password_reset', token=token, _external=True)
+                flash('Error sending email. For development purposes, here is the reset link:', 'warning')
+                flash(reset_url, 'warning')
 
             return redirect(url_for('auth.login'))
         else:
@@ -481,12 +495,19 @@ def password_reset(token):
     # Try to verify the token
     try:
         user_id = User.verify_reset_password_token(token)
+        if not user_id:
+            flash('Invalid or expired reset link.', 'danger')
+            current_app.logger.warning(f"Invalid reset token: {token}")
+            return redirect(url_for('auth.password_reset_request'))
+
         user = User.query.get(user_id)
         if not user:
-            flash('Invalid or expired reset link.', 'danger')
+            flash('User not found.', 'danger')
+            current_app.logger.error(f"User ID {user_id} from reset token not found")
             return redirect(url_for('auth.password_reset_request'))
-    except Exception:
+    except Exception as e:
         flash('Invalid or expired reset link.', 'danger')
+        current_app.logger.error(f"Exception verifying reset token: {str(e)}")
         return redirect(url_for('auth.password_reset_request'))
 
     # Create a form for the new password
@@ -498,10 +519,16 @@ def password_reset(token):
     form = PasswordResetForm()
 
     if form.validate_on_submit():
-        user.set_password(form.password.data)
-        db.session.commit()
-        flash('Your password has been reset successfully! You can now log in with your new password.', 'success')
-        return redirect(url_for('auth.login'))
+        try:
+            user.set_password(form.password.data)
+            db.session.commit()
+            flash('Your password has been reset successfully! You can now log in with your new password.', 'success')
+            current_app.logger.info(f"Password reset successful for user {user.email}")
+            return redirect(url_for('auth.login'))
+        except Exception as e:
+            db.session.rollback()
+            flash('An error occurred while resetting your password. Please try again.', 'danger')
+            current_app.logger.error(f"Error resetting password: {str(e)}")
 
     return render_template('auth/password_reset.html',
                           title='Reset Password',

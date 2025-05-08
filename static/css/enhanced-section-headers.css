@@ -1,0 +1,312 @@
+/**
+ * Enhanced Section Headers
+ * Improves visibility and readability of section headers with optimal contrast ratios
+ */
+
+/* Section header container enhancement */
+.section-header,
+.page-header,
+.content-header,
+.main-header,
+.feature-header,
+h1.display-4,
+h1.display-5,
+h2.display-4,
+h2.display-5,
+.hero-title,
+.section-title,
+.page-title,
+.content-title,
+.main-title,
+.feature-title,
+.learn-explore-header,
+.learn-header,
+.explore-header,
+.llm-header,
+.fine-tuning-header,
+.thesaurus-header,
+.visual-header,
+.workshop-header,
+.guide-header,
+.framework-header,
+.quiz-header,
+.exercise-header,
+.tutorial-header,
+.lesson-header,
+.module-header,
+.chapter-header,
+.topic-header,
+.concept-header,
+.category-header {
+    position: relative;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    border-radius: 8px;
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* Enhanced text visibility for section headers */
+.section-header h1,
+.section-header h2,
+.section-header h3,
+.page-header h1,
+.page-header h2,
+.content-header h1,
+.main-header h1,
+.feature-header h1,
+h1.display-4,
+h1.display-5,
+h2.display-4,
+h2.display-5,
+.hero-title,
+.section-title,
+.page-title,
+.content-title,
+.main-title,
+.feature-title,
+.learn-explore-header,
+.learn-header,
+.explore-header,
+.llm-header,
+.fine-tuning-header,
+.thesaurus-header,
+.visual-header,
+.workshop-header,
+.guide-header,
+.framework-header,
+.quiz-header,
+.exercise-header,
+.tutorial-header,
+.lesson-header,
+.module-header,
+.chapter-header,
+.topic-header,
+.concept-header,
+.category-header {
+    color: #ffffff !important;
+    text-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.7),
+        0 0 10px rgba(0, 0, 0, 0.5) !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+    position: relative;
+    z-index: 2;
+    -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.3);
+}
+
+/* Dark mode specific enhancements */
+body:not(.light-theme) .section-header h1,
+body:not(.light-theme) .section-header h2,
+body:not(.light-theme) .section-header h3,
+body:not(.light-theme) .page-header h1,
+body:not(.light-theme) .page-header h2,
+body:not(.light-theme) .content-header h1,
+body:not(.light-theme) .main-header h1,
+body:not(.light-theme) .feature-header h1,
+body:not(.light-theme) h1.display-4,
+body:not(.light-theme) h1.display-5,
+body:not(.light-theme) h2.display-4,
+body:not(.light-theme) h2.display-5,
+body:not(.light-theme) .hero-title,
+body:not(.light-theme) .section-title,
+body:not(.light-theme) .page-title,
+body:not(.light-theme) .content-title,
+body:not(.light-theme) .main-title,
+body:not(.light-theme) .feature-title,
+body:not(.light-theme) .learn-explore-header,
+body:not(.light-theme) .learn-header,
+body:not(.light-theme) .explore-header,
+body:not(.light-theme) .llm-header,
+body:not(.light-theme) .fine-tuning-header,
+body:not(.light-theme) .thesaurus-header,
+body:not(.light-theme) .visual-header,
+body:not(.light-theme) .workshop-header,
+body:not(.light-theme) .guide-header,
+body:not(.light-theme) .framework-header,
+body:not(.light-theme) .quiz-header,
+body:not(.light-theme) .exercise-header,
+body:not(.light-theme) .tutorial-header,
+body:not(.light-theme) .lesson-header,
+body:not(.light-theme) .module-header,
+body:not(.light-theme) .chapter-header,
+body:not(.light-theme) .topic-header,
+body:not(.light-theme) .concept-header,
+body:not(.light-theme) .category-header {
+    color: #e9d5ff !important; /* Light purple for dark mode */
+    text-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.7),
+        0 0 15px rgba(192, 132, 252, 0.7) !important;
+    -webkit-text-stroke: 0.5px rgba(255, 255, 255, 0.3);
+}
+
+/* Background overlay for better contrast */
+.section-header::before,
+.page-header::before,
+.content-header::before,
+.main-header::before,
+.feature-header::before,
+.hero-title::before,
+.section-title::before,
+.page-title::before,
+.content-title::before,
+.main-title::before,
+.feature-title::before,
+.learn-explore-header::before,
+.learn-header::before,
+.explore-header::before,
+.llm-header::before,
+.fine-tuning-header::before,
+.thesaurus-header::before,
+.visual-header::before,
+.workshop-header::before,
+.guide-header::before,
+.framework-header::before,
+.quiz-header::before,
+.exercise-header::before,
+.tutorial-header::before,
+.lesson-header::before,
+.module-header::before,
+.chapter-header::before,
+.topic-header::before,
+.concept-header::before,
+.category-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3));
+    z-index: 1;
+    border-radius: 8px;
+}
+
+/* Light mode specific background overlay */
+body.light-theme .section-header::before,
+body.light-theme .page-header::before,
+body.light-theme .content-header::before,
+body.light-theme .main-header::before,
+body.light-theme .feature-header::before,
+body.light-theme .hero-title::before,
+body.light-theme .section-title::before,
+body.light-theme .page-title::before,
+body.light-theme .content-title::before,
+body.light-theme .main-title::before,
+body.light-theme .feature-title::before,
+body.light-theme .learn-explore-header::before,
+body.light-theme .learn-header::before,
+body.light-theme .explore-header::before,
+body.light-theme .llm-header::before,
+body.light-theme .fine-tuning-header::before,
+body.light-theme .thesaurus-header::before,
+body.light-theme .visual-header::before,
+body.light-theme .workshop-header::before,
+body.light-theme .guide-header::before,
+body.light-theme .framework-header::before,
+body.light-theme .quiz-header::before,
+body.light-theme .exercise-header::before,
+body.light-theme .tutorial-header::before,
+body.light-theme .lesson-header::before,
+body.light-theme .module-header::before,
+body.light-theme .chapter-header::before,
+body.light-theme .topic-header::before,
+body.light-theme .concept-header::before,
+body.light-theme .category-header::before {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.2));
+}
+
+/* Dark mode specific background overlay */
+body:not(.light-theme) .section-header::before,
+body:not(.light-theme) .page-header::before,
+body:not(.light-theme) .content-header::before,
+body:not(.light-theme) .main-header::before,
+body:not(.light-theme) .feature-header::before,
+body:not(.light-theme) .hero-title::before,
+body:not(.light-theme) .section-title::before,
+body:not(.light-theme) .page-title::before,
+body:not(.light-theme) .content-title::before,
+body:not(.light-theme) .main-title::before,
+body:not(.light-theme) .feature-title::before,
+body:not(.light-theme) .learn-explore-header::before,
+body:not(.light-theme) .learn-header::before,
+body:not(.light-theme) .explore-header::before,
+body:not(.light-theme) .llm-header::before,
+body:not(.light-theme) .fine-tuning-header::before,
+body:not(.light-theme) .thesaurus-header::before,
+body:not(.light-theme) .visual-header::before,
+body:not(.light-theme) .workshop-header::before,
+body:not(.light-theme) .guide-header::before,
+body:not(.light-theme) .framework-header::before,
+body:not(.light-theme) .quiz-header::before,
+body:not(.light-theme) .exercise-header::before,
+body:not(.light-theme) .tutorial-header::before,
+body:not(.light-theme) .lesson-header::before,
+body:not(.light-theme) .module-header::before,
+body:not(.light-theme) .chapter-header::before,
+body:not(.light-theme) .topic-header::before,
+body:not(.light-theme) .concept-header::before,
+body:not(.light-theme) .category-header::before {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4));
+}
+
+/* Specific fix for "Learn & Explore LLM Fine-Tuning" header */
+.learn-explore-llm-header,
+.learn-explore-fine-tuning-header,
+h1:contains("Learn & Explore"),
+h2:contains("Learn & Explore"),
+h1:contains("LLM Fine-Tuning"),
+h2:contains("LLM Fine-Tuning") {
+    color: #ffffff !important;
+    text-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.8),
+        0 0 15px rgba(0, 0, 0, 0.6) !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.5px !important;
+    -webkit-text-stroke: 1px rgba(0, 0, 0, 0.5);
+    position: relative;
+    z-index: 2;
+    padding: 1rem;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5));
+    border-radius: 8px;
+    display: inline-block;
+    margin: 1rem 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Dark mode specific fix for "Learn & Explore LLM Fine-Tuning" header */
+body:not(.light-theme) .learn-explore-llm-header,
+body:not(.light-theme) .learn-explore-fine-tuning-header,
+body:not(.light-theme) h1:contains("Learn & Explore"),
+body:not(.light-theme) h2:contains("Learn & Explore"),
+body:not(.light-theme) h1:contains("LLM Fine-Tuning"),
+body:not(.light-theme) h2:contains("LLM Fine-Tuning") {
+    color: #e9d5ff !important; /* Light purple for dark mode */
+    text-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.8),
+        0 0 20px rgba(192, 132, 252, 0.8) !important;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3);
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6));
+}
+
+/* Direct fix for the specific header shown in the image */
+.learn-explore-llm-fine-tuning-header,
+h1:contains("Learn & Explore LLM Fine-Tuning"),
+h2:contains("Learn & Explore LLM Fine-Tuning") {
+    color: #ffffff !important;
+    text-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.9),
+        0 0 20px rgba(0, 0, 0, 0.7) !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.8px !important;
+    -webkit-text-stroke: 1.5px rgba(0, 0, 0, 0.6);
+    position: relative;
+    z-index: 2;
+    padding: 1.5rem;
+    background: linear-gradient(90deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6));
+    border-radius: 8px;
+    display: inline-block;
+    margin: 1.5rem 0;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}

@@ -1,0 +1,330 @@
+/**
+ * Maximum Brightness Learn & Explore Header
+ * Makes the "Learn & Explore LLM Fine-Tuning" header extremely bright and vibrant
+ */
+
+/* Target the specific header with maximum specificity */
+.learn-explore-llm-fine-tuning-header,
+.learn-explore-llm-fine-tuning-exact-match,
+h1:contains("Learn & Explore LLM Fine-Tuning"),
+h2:contains("Learn & Explore LLM Fine-Tuning"),
+h1.learn-explore-header,
+h2.learn-explore-header,
+.learn-explore-header,
+.llm-fine-tuning-header,
+h1[style*="background-color: rgb(0, 123, 255)"],
+h2[style*="background-color: rgb(0, 123, 255)"],
+h1[style*="background-color: #007bff"],
+h2[style*="background-color: #007bff"],
+h1[style*="background: rgb(0, 123, 255)"],
+h2[style*="background: rgb(0, 123, 255)"],
+h1[style*="background: #007bff"],
+h2[style*="background: #007bff"] {
+    /* Base styles for maximum visibility */
+    position: relative !important;
+    z-index: 10 !important;
+    padding: 1.5rem !important;
+    margin: 1.5rem 0 !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    display: inline-block !important;
+    
+    /* Add a semi-transparent overlay for better contrast */
+    background: linear-gradient(90deg, 
+        rgba(0, 0, 0, 0.7), 
+        rgba(0, 0, 0, 0.5), 
+        rgba(0, 0, 0, 0.7)) !important;
+    
+    /* Add a vibrant border */
+    border: 3px solid rgba(255, 255, 255, 0.9) !important;
+    
+    /* Add multiple layers of glow */
+    box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(255, 255, 255, 0.8),
+        0 0 40px rgba(93, 214, 255, 0.8),
+        0 0 80px rgba(255, 255, 255, 0.4) !important;
+    
+    /* Apply maximum brightness filter */
+    filter: brightness(1.4) contrast(1.2) !important;
+    
+    /* Add animation for pulsing glow */
+    animation: max-brightness-pulse 3s infinite alternate !important;
+}
+
+/* Light mode specific styles */
+body.light-theme .learn-explore-llm-fine-tuning-header,
+body.light-theme .learn-explore-llm-fine-tuning-exact-match,
+body.light-theme h1:contains("Learn & Explore LLM Fine-Tuning"),
+body.light-theme h2:contains("Learn & Explore LLM Fine-Tuning"),
+body.light-theme h1.learn-explore-header,
+body.light-theme h2.learn-explore-header,
+body.light-theme .learn-explore-header,
+body.light-theme .llm-fine-tuning-header,
+body.light-theme h1[style*="background-color: rgb(0, 123, 255)"],
+body.light-theme h2[style*="background-color: rgb(0, 123, 255)"],
+body.light-theme h1[style*="background-color: #007bff"],
+body.light-theme h2[style*="background-color: #007bff"],
+body.light-theme h1[style*="background: rgb(0, 123, 255)"],
+body.light-theme h2[style*="background: rgb(0, 123, 255)"],
+body.light-theme h1[style*="background: #007bff"],
+body.light-theme h2[style*="background: #007bff"] {
+    /* Ultra bright text styles for light mode */
+    color: #ffffff !important;
+    text-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.9),
+        0 0 30px rgba(93, 214, 255, 1),
+        0 0 50px rgba(255, 255, 255, 0.9),
+        0 0 70px rgba(93, 214, 255, 0.8) !important;
+    -webkit-text-stroke: 2px rgba(0, 0, 0, 0.8) !important;
+    font-weight: 900 !important;
+    letter-spacing: 1.5px !important;
+    
+    /* Add a vibrant border */
+    border: 3px solid rgba(255, 255, 255, 0.9) !important;
+    
+    /* Add multiple layers of glow */
+    box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(255, 255, 255, 0.8),
+        0 0 40px rgba(93, 214, 255, 0.8),
+        0 0 80px rgba(255, 255, 255, 0.4) !important;
+    
+    /* Light mode animation */
+    animation: max-brightness-pulse-light 3s infinite alternate !important;
+}
+
+/* Dark mode specific styles */
+body:not(.light-theme) .learn-explore-llm-fine-tuning-header,
+body:not(.light-theme) .learn-explore-llm-fine-tuning-exact-match,
+body:not(.light-theme) h1:contains("Learn & Explore LLM Fine-Tuning"),
+body:not(.light-theme) h2:contains("Learn & Explore LLM Fine-Tuning"),
+body:not(.light-theme) h1.learn-explore-header,
+body:not(.light-theme) h2.learn-explore-header,
+body:not(.light-theme) .learn-explore-header,
+body:not(.light-theme) .llm-fine-tuning-header,
+body:not(.light-theme) h1[style*="background-color: rgb(0, 123, 255)"],
+body:not(.light-theme) h2[style*="background-color: rgb(0, 123, 255)"],
+body:not(.light-theme) h1[style*="background-color: #007bff"],
+body:not(.light-theme) h2[style*="background-color: #007bff"],
+body:not(.light-theme) h1[style*="background: rgb(0, 123, 255)"],
+body:not(.light-theme) h2[style*="background: rgb(0, 123, 255)"],
+body:not(.light-theme) h1[style*="background: #007bff"],
+body:not(.light-theme) h2[style*="background: #007bff"] {
+    /* Ultra bright text styles for dark mode */
+    color: #f0b3ff !important; /* Ultra bright purple */
+    text-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.9),
+        0 0 30px rgba(192, 132, 252, 1),
+        0 0 50px rgba(240, 179, 255, 0.9),
+        0 0 70px rgba(192, 132, 252, 0.8) !important;
+    -webkit-text-stroke: 2px rgba(0, 0, 0, 0.8) !important;
+    font-weight: 900 !important;
+    letter-spacing: 1.5px !important;
+    
+    /* Add a vibrant border */
+    border: 3px solid rgba(240, 179, 255, 0.9) !important;
+    
+    /* Add multiple layers of glow */
+    box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(240, 179, 255, 0.8),
+        0 0 40px rgba(192, 132, 252, 0.8),
+        0 0 80px rgba(240, 179, 255, 0.4) !important;
+    
+    /* Dark mode animation */
+    animation: max-brightness-pulse-dark 3s infinite alternate !important;
+}
+
+/* Add a vibrant animated glow overlay */
+.learn-explore-llm-fine-tuning-header::after,
+.learn-explore-llm-fine-tuning-exact-match::after,
+h1:contains("Learn & Explore LLM Fine-Tuning")::after,
+h2:contains("Learn & Explore LLM Fine-Tuning")::after,
+h1.learn-explore-header::after,
+h2.learn-explore-header::after,
+.learn-explore-header::after,
+.llm-fine-tuning-header::after,
+h1[style*="background-color: rgb(0, 123, 255)"]::after,
+h2[style*="background-color: rgb(0, 123, 255)"]::after,
+h1[style*="background-color: #007bff"]::after,
+h2[style*="background-color: #007bff"]::after,
+h1[style*="background: rgb(0, 123, 255)"]::after,
+h2[style*="background: rgb(0, 123, 255)"]::after,
+h1[style*="background: #007bff"]::after,
+h2[style*="background: #007bff"]::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        rgba(255, 255, 255, 0), 
+        rgba(255, 255, 255, 0.2), 
+        rgba(255, 255, 255, 0));
+    z-index: 1;
+    animation: max-brightness-sweep 2s infinite;
+}
+
+/* Dark mode glow overlay */
+body:not(.light-theme) .learn-explore-llm-fine-tuning-header::after,
+body:not(.light-theme) .learn-explore-llm-fine-tuning-exact-match::after,
+body:not(.light-theme) h1:contains("Learn & Explore LLM Fine-Tuning")::after,
+body:not(.light-theme) h2:contains("Learn & Explore LLM Fine-Tuning")::after,
+body:not(.light-theme) h1.learn-explore-header::after,
+body:not(.light-theme) h2.learn-explore-header::after,
+body:not(.light-theme) .learn-explore-header::after,
+body:not(.light-theme) .llm-fine-tuning-header::after,
+body:not(.light-theme) h1[style*="background-color: rgb(0, 123, 255)"]::after,
+body:not(.light-theme) h2[style*="background-color: rgb(0, 123, 255)"]::after,
+body:not(.light-theme) h1[style*="background-color: #007bff"]::after,
+body:not(.light-theme) h2[style*="background-color: #007bff"]::after,
+body:not(.light-theme) h1[style*="background: rgb(0, 123, 255)"]::after,
+body:not(.light-theme) h2[style*="background: rgb(0, 123, 255)"]::after,
+body:not(.light-theme) h1[style*="background: #007bff"]::after,
+body:not(.light-theme) h2[style*="background: #007bff"]::after {
+    background: linear-gradient(90deg, 
+        rgba(192, 132, 252, 0), 
+        rgba(192, 132, 252, 0.2), 
+        rgba(192, 132, 252, 0));
+}
+
+/* Add a vibrant animated background */
+.learn-explore-llm-fine-tuning-header::before,
+.learn-explore-llm-fine-tuning-exact-match::before,
+h1:contains("Learn & Explore LLM Fine-Tuning")::before,
+h2:contains("Learn & Explore LLM Fine-Tuning")::before,
+h1.learn-explore-header::before,
+h2.learn-explore-header::before,
+.learn-explore-header::before,
+.llm-fine-tuning-header::before,
+h1[style*="background-color: rgb(0, 123, 255)"]::before,
+h2[style*="background-color: rgb(0, 123, 255)"]::before,
+h1[style*="background-color: #007bff"]::before,
+h2[style*="background-color: #007bff"]::before,
+h1[style*="background: rgb(0, 123, 255)"]::before,
+h2[style*="background: rgb(0, 123, 255)"]::before,
+h1[style*="background: #007bff"]::before,
+h2[style*="background: #007bff"]::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, 
+        rgba(0, 0, 0, 0.8), 
+        rgba(0, 0, 0, 0.6), 
+        rgba(0, 0, 0, 0.8));
+    z-index: -1;
+}
+
+/* Ensure the text is on top of the effects */
+.learn-explore-llm-fine-tuning-header *,
+.learn-explore-llm-fine-tuning-exact-match *,
+h1:contains("Learn & Explore LLM Fine-Tuning") *,
+h2:contains("Learn & Explore LLM Fine-Tuning") *,
+h1.learn-explore-header *,
+h2.learn-explore-header *,
+.learn-explore-header *,
+.llm-fine-tuning-header *,
+h1[style*="background-color: rgb(0, 123, 255)"] *,
+h2[style*="background-color: rgb(0, 123, 255)"] *,
+h1[style*="background-color: #007bff"] *,
+h2[style*="background-color: #007bff"] *,
+h1[style*="background: rgb(0, 123, 255)"] *,
+h2[style*="background: rgb(0, 123, 255)"] *,
+h1[style*="background: #007bff"] *,
+h2[style*="background: #007bff"] * {
+    position: relative;
+    z-index: 2;
+}
+
+/* Animation keyframes */
+@keyframes max-brightness-pulse {
+    0% {
+        filter: brightness(1.3) contrast(1.1);
+        box-shadow: 
+            0 10px 30px rgba(0, 0, 0, 0.5),
+            0 0 20px rgba(255, 255, 255, 0.7),
+            0 0 40px rgba(93, 214, 255, 0.7),
+            0 0 60px rgba(255, 255, 255, 0.3);
+    }
+    100% {
+        filter: brightness(1.5) contrast(1.3);
+        box-shadow: 
+            0 10px 30px rgba(0, 0, 0, 0.5),
+            0 0 30px rgba(255, 255, 255, 0.9),
+            0 0 60px rgba(93, 214, 255, 0.9),
+            0 0 90px rgba(255, 255, 255, 0.5);
+    }
+}
+
+@keyframes max-brightness-pulse-light {
+    0% {
+        text-shadow: 
+            0 2px 4px rgba(0, 0, 0, 0.9),
+            0 0 30px rgba(93, 214, 255, 0.9),
+            0 0 50px rgba(255, 255, 255, 0.8),
+            0 0 70px rgba(93, 214, 255, 0.7);
+        box-shadow: 
+            0 10px 30px rgba(0, 0, 0, 0.5),
+            0 0 20px rgba(255, 255, 255, 0.7),
+            0 0 40px rgba(93, 214, 255, 0.7),
+            0 0 60px rgba(255, 255, 255, 0.3);
+    }
+    100% {
+        text-shadow: 
+            0 2px 4px rgba(0, 0, 0, 0.9),
+            0 0 40px rgba(93, 214, 255, 1),
+            0 0 70px rgba(255, 255, 255, 0.9),
+            0 0 100px rgba(93, 214, 255, 0.8);
+        box-shadow: 
+            0 10px 30px rgba(0, 0, 0, 0.5),
+            0 0 30px rgba(255, 255, 255, 0.9),
+            0 0 60px rgba(93, 214, 255, 0.9),
+            0 0 90px rgba(255, 255, 255, 0.5);
+    }
+}
+
+@keyframes max-brightness-pulse-dark {
+    0% {
+        text-shadow: 
+            0 2px 4px rgba(0, 0, 0, 0.9),
+            0 0 30px rgba(192, 132, 252, 0.9),
+            0 0 50px rgba(240, 179, 255, 0.8),
+            0 0 70px rgba(192, 132, 252, 0.7);
+        box-shadow: 
+            0 10px 30px rgba(0, 0, 0, 0.5),
+            0 0 20px rgba(240, 179, 255, 0.7),
+            0 0 40px rgba(192, 132, 252, 0.7),
+            0 0 60px rgba(240, 179, 255, 0.3);
+    }
+    100% {
+        text-shadow: 
+            0 2px 4px rgba(0, 0, 0, 0.9),
+            0 0 40px rgba(192, 132, 252, 1),
+            0 0 70px rgba(240, 179, 255, 0.9),
+            0 0 100px rgba(192, 132, 252, 0.8);
+        box-shadow: 
+            0 10px 30px rgba(0, 0, 0, 0.5),
+            0 0 30px rgba(240, 179, 255, 0.9),
+            0 0 60px rgba(192, 132, 252, 0.9),
+            0 0 90px rgba(240, 179, 255, 0.5);
+    }
+}
+
+@keyframes max-brightness-sweep {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}

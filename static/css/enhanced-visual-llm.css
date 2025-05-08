@@ -1,0 +1,133 @@
+/**
+ * Enhanced Visual LLM CSS
+ * Improves the visibility and brightness of text throughout the Visual LLM application
+ */
+
+/* Enhanced text visibility for all text elements */
+body {
+    --llm-primary: #4285f4;
+    --llm-secondary: #34a8eb;
+    --llm-accent: #9c27b0;
+    --llm-bright: #00e5ff;
+    --llm-text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Enhance text visibility in the concept map */
+.central-node, .node {
+    color: #ffffff !important;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.6), 0 0 10px rgba(255, 255, 255, 0.3) !important;
+    font-weight: 700 !important;
+}
+
+.central-node {
+    background: linear-gradient(135deg, var(--llm-accent), #7b1fa2) !important;
+    box-shadow: 0 0 20px rgba(156, 39, 176, 0.5) !important;
+    color: #ffffff !important;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.6), 0 0 15px rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Enhance visibility of text in cards and sections */
+.card-header h3,
+.section-title,
+.concept-card h4 {
+    color: #ffffff !important;
+    text-shadow: var(--llm-text-shadow) !important;
+}
+
+.card-body p,
+.section-subtitle,
+.concept-card p {
+    color: rgba(255, 255, 255, 0.9) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Enhance visibility of text in the hero section */
+.hero-title {
+    color: #ffffff !important;
+    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.5), 0 0 20px rgba(66, 133, 244, 0.4) !important;
+    font-weight: 800 !important;
+}
+
+.hero-title .highlight {
+    color: var(--llm-bright) !important;
+    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.5), 0 0 25px rgba(0, 229, 255, 0.7) !important;
+}
+
+.hero-subtitle {
+    color: rgba(255, 255, 255, 0.95) !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4) !important;
+    font-weight: 500 !important;
+}
+
+/* Enhance visibility of feature badges */
+.feature-badge {
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Enhance visibility of buttons */
+.btn-primary {
+    background: linear-gradient(135deg, var(--llm-primary), var(--llm-secondary)) !important;
+    border: none !important;
+    box-shadow: 0 4px 10px rgba(66, 133, 244, 0.4) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #5294ff, #45b3ff) !important;
+    box-shadow: 0 6px 15px rgba(66, 133, 244, 0.5) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Enhance visibility of navigation links */
+.nav-link {
+    color: rgba(255, 255, 255, 0.9) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+    font-weight: 500 !important;
+}
+
+.nav-link:hover {
+    color: #ffffff !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4), 0 0 10px rgba(66, 133, 244, 0.4) !important;
+}
+
+/* Enhance visibility of dropdown menus */
+.dropdown-menu {
+    background: rgba(30, 30, 40, 0.95) !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.dropdown-item {
+    color: rgba(255, 255, 255, 0.9) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.dropdown-item:hover {
+    background: rgba(66, 133, 244, 0.2) !important;
+    color: #ffffff !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 10px rgba(66, 133, 244, 0.3) !important;
+}
+
+/* Enhance visibility of the concept map */
+#visualization-container {
+    background-color: rgba(20, 0, 35, 0.9) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 50px rgba(156, 39, 176, 0.3) !important;
+    border: 3px solid rgba(156, 39, 176, 0.5) !important;
+}
+
+/* Enhance visibility of the search input */
+.search-input {
+    background-color: rgba(20, 0, 35, 0.9) !important;
+    color: #ffffff !important;
+    border: 2px solid rgba(156, 39, 176, 0.4) !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), inset 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+}
+
+.search-input:focus {
+    border-color: rgba(156, 39, 176, 0.8) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), inset 0 2px 5px rgba(0, 0, 0, 0.2), 0 0 15px rgba(156, 39, 176, 0.4) !important;
+}

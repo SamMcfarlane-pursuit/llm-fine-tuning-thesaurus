@@ -1,0 +1,461 @@
+{% extends 'base.html' %}
+
+{% block title %}LoRA Implementation Guide - Visual Thesaurus LLM{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/guide/lora-implementation">Guides</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">LoRA Implementation</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h1 class="mb-0"><i class="bi bi-diagram-3 me-2"></i>LoRA Implementation Guide</h1>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <div class="d-flex">
+                            <div class="me-3">
+                                <i class="bi bi-info-circle-fill fs-3"></i>
+                            </div>
+                            <div>
+                                <h5>What is LoRA?</h5>
+                                <p class="mb-0">
+                                    LoRA (Low-Rank Adaptation) is a parameter-efficient fine-tuning technique that significantly reduces the number of trainable parameters by adding low-rank matrices to the weights of transformer layers. This guide will walk you through implementing LoRA for fine-tuning language models.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="mt-4">Getting Started with LoRA Fine-Tuning</h2>
+                    <p>
+                        LoRA is a technique that allows you to fine-tune large language models with significantly fewer resources than traditional fine-tuning. Instead of updating all parameters of a model, LoRA freezes the pre-trained model weights and injects trainable rank decomposition matrices into each layer of the Transformer architecture.
+                    </p>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header bg-success text-white">
+                                    <h3 class="mb-0"><i class="bi bi-check-circle me-2"></i>Advantages of LoRA</h3>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>Memory Efficiency:</strong> Requires significantly less GPU memory than full fine-tuning</li>
+                                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>Storage Efficiency:</strong> LoRA adapters are typically 10-100MB vs. full models (GB)</li>
+                                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>Training Speed:</strong> Faster training due to fewer parameters to update</li>
+                                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>Modularity:</strong> Multiple LoRA adapters can be trained for different tasks</li>
+                                        <li class="list-group-item"><i class="bi bi-check-circle-fill text-success me-2"></i><strong>Performance:</strong> Comparable performance to full fine-tuning in many cases</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header bg-warning text-dark">
+                                    <h3 class="mb-0"><i class="bi bi-exclamation-triangle me-2"></i>Limitations of LoRA</h3>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item"><i class="bi bi-exclamation-triangle-fill text-warning me-2"></i><strong>Limited Expressivity:</strong> May not capture all possible adaptations due to rank constraint</li>
+                                        <li class="list-group-item"><i class="bi bi-exclamation-triangle-fill text-warning me-2"></i><strong>Hyperparameter Sensitivity:</strong> Performance depends on rank, alpha, and which layers to adapt</li>
+                                        <li class="list-group-item"><i class="bi bi-exclamation-triangle-fill text-warning me-2"></i><strong>Task Dependency:</strong> Some tasks benefit more from LoRA than others</li>
+                                        <li class="list-group-item"><i class="bi bi-exclamation-triangle-fill text-warning me-2"></i><strong>Integration Complexity:</strong> Requires specific libraries and frameworks</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="mt-5">Step-by-Step Implementation</h2>
+                    <p>Follow these steps to implement LoRA fine-tuning for your language model:</p>
+
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="mb-0">Step 1: Environment Setup</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>First, set up your environment with the necessary libraries:</p>
+                            <pre class="bg-dark text-light p-3 rounded"><code>pip install transformers peft datasets accelerate bitsandbytes tqdm</code></pre>
+                            <p>These libraries provide the foundation for implementing LoRA:</p>
+                            <ul>
+                                <li><strong>transformers:</strong> Hugging Face's library for pre-trained models</li>
+                                <li><strong>peft:</strong> Parameter-Efficient Fine-Tuning library that implements LoRA</li>
+                                <li><strong>datasets:</strong> For data loading and preprocessing</li>
+                                <li><strong>accelerate:</strong> For distributed training and mixed precision</li>
+                                <li><strong>bitsandbytes:</strong> For quantization (optional, but recommended)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="mb-0">Step 2: Load the Base Model</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>Load a pre-trained model that you want to fine-tune:</p>
+                            <pre class="bg-dark text-light p-3 rounded"><code>from transformers import AutoModelForCausalLM, AutoTokenizer
+
+# Load model and tokenizer
+model_name = "gpt2"  # You can use larger models like "EleutherAI/gpt-j-6b"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(model_name)</code></pre>
+                            <div class="alert alert-warning">
+                                <i class="bi bi-lightbulb-fill me-2"></i>
+                                <strong>Tip:</strong> For larger models, consider using 8-bit or 4-bit quantization to reduce memory usage:
+                                <pre class="bg-dark text-light p-3 rounded mt-2"><code>from transformers import BitsAndBytesConfig
+
+# 8-bit quantization config
+quantization_config = BitsAndBytesConfig(
+    load_in_8bit=True,
+    llm_int8_threshold=6.0
+)
+
+# Load model with quantization
+model = AutoModelForCausalLM.from_pretrained(
+    model_name,
+    quantization_config=quantization_config,
+    device_map="auto"
+)</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="mb-0">Step 3: Configure LoRA</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>Configure the LoRA adapter with the PEFT library:</p>
+                            <pre class="bg-dark text-light p-3 rounded"><code>from peft import LoraConfig, get_peft_model
+
+# Define LoRA Config
+lora_config = LoraConfig(
+    r=8,                       # Rank of the update matrices
+    lora_alpha=32,             # Alpha parameter for scaling
+    target_modules=["q_proj", "v_proj"],  # Which modules to apply LoRA to
+    lora_dropout=0.05,         # Dropout probability for LoRA layers
+    bias="none",               # Add bias to LoRA layers
+    task_type="CAUSAL_LM"      # Task type
+)
+
+# Apply LoRA to the model
+peft_model = get_peft_model(model, lora_config)
+
+# Print trainable parameters
+print(f"Trainable parameters: {peft_model.print_trainable_parameters()}")</code></pre>
+                            <div class="alert alert-info mt-3">
+                                <h5><i class="bi bi-gear-fill me-2"></i>Key LoRA Parameters:</h5>
+                                <ul>
+                                    <li><strong>r:</strong> Rank of the low-rank matrices. Lower values = fewer parameters but less expressivity.</li>
+                                    <li><strong>lora_alpha:</strong> Scaling factor for the LoRA parameters. Higher values = stronger updates.</li>
+                                    <li><strong>target_modules:</strong> Which modules to apply LoRA to. For transformer models, typically attention layers.</li>
+                                </ul>
+                                <p class="mb-0">For different model architectures, the target modules will vary:</p>
+                                <ul>
+                                    <li><strong>GPT-2:</strong> ["c_attn"]</li>
+                                    <li><strong>GPT-J:</strong> ["q_proj", "v_proj"]</li>
+                                    <li><strong>LLaMA/Mistral:</strong> ["q_proj", "v_proj", "k_proj", "o_proj"]</li>
+                                    <li><strong>T5:</strong> ["q", "v"]</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="mb-0">Step 4: Prepare Your Dataset</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>Prepare your dataset for fine-tuning:</p>
+                            <pre class="bg-dark text-light p-3 rounded"><code>from datasets import load_dataset
+
+# Load a dataset (example: using a CSV file)
+dataset = load_dataset("csv", data_files="your_data.csv")
+
+# Or use a built-in dataset
+# dataset = load_dataset("imdb", split="train")
+
+# Function to tokenize inputs
+def tokenize_function(examples):
+    return tokenizer(
+        examples["text"],
+        padding="max_length",
+        truncation=True,
+        max_length=512
+    )
+
+# Tokenize the dataset
+tokenized_dataset = dataset.map(tokenize_function, batched=True)
+
+# Prepare dataset for training
+from torch.utils.data import DataLoader
+from transformers import DataCollatorForLanguageModeling
+
+# Data collator
+data_collator = DataCollatorForLanguageModeling(
+    tokenizer=tokenizer,
+    mlm=False  # Not using masked language modeling
+)
+
+# Create DataLoader
+train_dataloader = DataLoader(
+    tokenized_dataset["train"],
+    batch_size=8,
+    collate_fn=data_collator
+)</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="mb-0">Step 5: Train the Model</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>Set up the training loop and train your model:</p>
+                            <pre class="bg-dark text-light p-3 rounded"><code>from transformers import Trainer, TrainingArguments
+
+# Define training arguments
+training_args = TrainingArguments(
+    output_dir="./lora-model",
+    learning_rate=3e-4,
+    num_train_epochs=3,
+    per_device_train_batch_size=8,
+    gradient_accumulation_steps=1,
+    warmup_steps=100,
+    weight_decay=0.01,
+    logging_dir="./logs",
+    logging_steps=10,
+    save_strategy="epoch",
+    fp16=True,  # Use mixed precision training
+)
+
+# Initialize Trainer
+trainer = Trainer(
+    model=peft_model,
+    args=training_args,
+    train_dataset=tokenized_dataset["train"],
+    data_collator=data_collator,
+    tokenizer=tokenizer,
+)
+
+# Train the model
+trainer.train()</code></pre>
+                            <div class="alert alert-success mt-3">
+                                <i class="bi bi-lightbulb-fill me-2"></i>
+                                <strong>Tip:</strong> For more efficient training, consider using:
+                                <ul>
+                                    <li>Gradient accumulation for larger effective batch sizes</li>
+                                    <li>Mixed precision training (fp16) to reduce memory usage</li>
+                                    <li>DeepSpeed or Accelerate for distributed training</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="mb-0">Step 6: Save and Load the LoRA Adapter</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>Save your trained LoRA adapter:</p>
+                            <pre class="bg-dark text-light p-3 rounded"><code># Save the LoRA adapter only (not the full model)
+peft_model.save_pretrained("./lora-adapter")</code></pre>
+
+                            <p class="mt-3">To load and use your LoRA adapter later:</p>
+                            <pre class="bg-dark text-light p-3 rounded"><code>from peft import PeftModel, PeftConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+# Load the base model
+model_name = "gpt2"  # Use the same base model
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(model_name)
+
+# Load the LoRA adapter
+peft_model = PeftModel.from_pretrained(model, "./lora-adapter")
+
+# Merge adapter weights with base model (optional)
+merged_model = peft_model.merge_and_unload()</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="mb-0">Step 7: Generate Text with Your Fine-Tuned Model</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>Use your fine-tuned model to generate text:</p>
+                            <pre class="bg-dark text-light p-3 rounded"><code>from transformers import pipeline
+
+# Create a text generation pipeline
+generator = pipeline(
+    "text-generation",
+    model=peft_model,
+    tokenizer=tokenizer,
+    max_length=100
+)
+
+# Generate text
+prompt = "This is a test prompt for my fine-tuned model."
+generated_text = generator(prompt, max_length=100, do_sample=True, temperature=0.7)
+
+print(generated_text[0]['generated_text'])</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="mb-0">Step 8: Evaluate Your Model</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>Evaluate your fine-tuned model on a test dataset:</p>
+                            <pre class="bg-dark text-light p-3 rounded"><code>from datasets import load_dataset
+from transformers import pipeline
+import numpy as np
+
+# Load test dataset
+test_dataset = load_dataset("csv", data_files="your_test_data.csv")
+
+# Create evaluation pipeline
+eval_pipeline = pipeline(
+    "text-generation",
+    model=peft_model,
+    tokenizer=tokenizer,
+    max_length=100
+)
+
+# Evaluate on test examples
+results = []
+for example in test_dataset["test"]:
+    prompt = example["prompt"]
+    reference = example["completion"]
+
+    # Generate text
+    generated = eval_pipeline(prompt, max_length=100, do_sample=False)[0]['generated_text']
+
+    # Calculate metrics (e.g., ROUGE, BLEU, etc.)
+    # This is a simplified example
+    results.append({
+        "prompt": prompt,
+        "reference": reference,
+        "generated": generated
+    })
+
+# Print results
+for result in results[:5]:  # Show first 5 results
+    print(f"Prompt: {result['prompt']}")
+    print(f"Reference: {result['reference']}")
+    print(f"Generated: {result['generated']}")
+    print("-" * 50)</code></pre>
+                        </div>
+                    </div>
+
+                    <h2 class="mt-5">Advanced LoRA Techniques</h2>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header bg-info text-white">
+                                    <h3 class="mb-0">QLoRA</h3>
+                                </div>
+                                <div class="card-body">
+                                    <p>QLoRA (Quantized LoRA) combines quantization with LoRA for even more memory efficiency:</p>
+                                    <ul>
+                                        <li>Uses 4-bit quantization for the base model</li>
+                                        <li>Keeps LoRA adapters in full precision (16/32-bit)</li>
+                                        <li>Enables fine-tuning of much larger models on consumer hardware</li>
+                                    </ul>
+                                    <pre class="bg-dark text-light p-3 rounded"><code>from transformers import BitsAndBytesConfig
+
+# 4-bit quantization config
+quantization_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_compute_dtype=torch.float16,
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_use_double_quant=True
+)
+
+# Load model with 4-bit quantization
+model = AutoModelForCausalLM.from_pretrained(
+    "meta-llama/Llama-2-7b-hf",  # Much larger model
+    quantization_config=quantization_config,
+    device_map="auto"
+)
+
+# Apply LoRA as before
+peft_model = get_peft_model(model, lora_config)</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header bg-info text-white">
+                                    <h3 class="mb-0">LoRA for Multiple Tasks</h3>
+                                </div>
+                                <div class="card-body">
+                                    <p>Train and use multiple LoRA adapters for different tasks:</p>
+                                    <ol>
+                                        <li>Train separate LoRA adapters for each task</li>
+                                        <li>Save each adapter separately</li>
+                                        <li>Load the appropriate adapter based on the task</li>
+                                    </ol>
+                                    <pre class="bg-dark text-light p-3 rounded"><code># Train and save adapters for different tasks
+# Task 1: Summarization
+peft_model_summarization.save_pretrained("./lora-summarization")
+
+# Task 2: Question answering
+peft_model_qa.save_pretrained("./lora-qa")
+
+# Later, load the appropriate adapter
+from peft import PeftModel
+
+# Load base model
+base_model = AutoModelForCausalLM.from_pretrained(model_name)
+
+# For summarization task
+summarization_model = PeftModel.from_pretrained(
+    base_model,
+    "./lora-summarization"
+)
+
+# For QA task
+qa_model = PeftModel.from_pretrained(
+    base_model,
+    "./lora-qa"
+)</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-primary mt-5">
+                        <div class="d-flex">
+                            <div class="me-3">
+                                <i class="bi bi-book-fill fs-3"></i>
+                            </div>
+                            <div>
+                                <h4>Resources for Further Learning</h4>
+                                <ul class="mb-0">
+                                    <li><a href="https://huggingface.co/docs/peft/index" target="_blank">Hugging Face PEFT Documentation</a></li>
+                                    <li><a href="https://arxiv.org/abs/2106.09685" target="_blank">LoRA: Low-Rank Adaptation of Large Language Models (Original Paper)</a></li>
+                                    <li><a href="https://arxiv.org/abs/2305.14314" target="_blank">QLoRA: Efficient Finetuning of Quantized LLMs</a></li>
+                                    <li><a href="https://github.com/huggingface/peft/tree/main/examples" target="_blank">PEFT Examples on GitHub</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

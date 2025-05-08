@@ -7,6 +7,7 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 from authlib.integrations.flask_client import OAuth
 from flask_wtf.csrf import CSRFProtect
+from flask_mail import Mail
 
 # Initialize extensions
 db = SQLAlchemy()
@@ -14,6 +15,7 @@ login_manager = LoginManager()
 migrate = Migrate()
 oauth = OAuth()
 csrf = CSRFProtect()
+mail = Mail()
 
 # Configure login manager
 login_manager.login_view = 'auth.login'

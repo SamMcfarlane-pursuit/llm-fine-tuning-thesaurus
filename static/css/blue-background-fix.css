@@ -1,0 +1,113 @@
+/**
+ * Blue Background Fix
+ * Fixes the blue background in text across the entire website
+ */
+
+/* Fix blue background in text */
+span[style*="background-color: rgb(0, 0, 255)"],
+span[style*="background-color: #0000ff"],
+span[style*="background-color: blue"],
+span[style*="background-color:rgb(0, 0, 255)"],
+span[style*="background-color:#0000ff"],
+span[style*="background-color:blue"],
+span[style*="background: rgb(0, 0, 255)"],
+span[style*="background: #0000ff"],
+span[style*="background: blue"],
+span[style*="background:rgb(0, 0, 255)"],
+span[style*="background:#0000ff"],
+span[style*="background:blue"] {
+    background-color: transparent !important;
+    color: #ffffff !important;
+    padding: 0 !important;
+    display: inline !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Fix blue background in text in light mode */
+body.light-theme span[style*="background-color: rgb(0, 0, 255)"],
+body.light-theme span[style*="background-color: #0000ff"],
+body.light-theme span[style*="background-color: blue"],
+body.light-theme span[style*="background-color:rgb(0, 0, 255)"],
+body.light-theme span[style*="background-color:#0000ff"],
+body.light-theme span[style*="background-color:blue"],
+body.light-theme span[style*="background: rgb(0, 0, 255)"],
+body.light-theme span[style*="background: #0000ff"],
+body.light-theme span[style*="background: blue"],
+body.light-theme span[style*="background:rgb(0, 0, 255)"],
+body.light-theme span[style*="background:#0000ff"],
+body.light-theme span[style*="background:blue"] {
+    background-color: transparent !important;
+    color: #212529 !important;
+    text-shadow: none !important;
+}
+
+/* Fix blue background in text in high contrast mode */
+body.high-contrast-mode span[style*="background-color: rgb(0, 0, 255)"],
+body.high-contrast-mode span[style*="background-color: #0000ff"],
+body.high-contrast-mode span[style*="background-color: blue"],
+body.high-contrast-mode span[style*="background-color:rgb(0, 0, 255)"],
+body.high-contrast-mode span[style*="background-color:#0000ff"],
+body.high-contrast-mode span[style*="background-color:blue"],
+body.high-contrast-mode span[style*="background: rgb(0, 0, 255)"],
+body.high-contrast-mode span[style*="background: #0000ff"],
+body.high-contrast-mode span[style*="background: blue"],
+body.high-contrast-mode span[style*="background:rgb(0, 0, 255)"],
+body.high-contrast-mode span[style*="background:#0000ff"],
+body.high-contrast-mode span[style*="background:blue"] {
+    background-color: transparent !important;
+    color: #ffffff !important;
+    text-shadow: none !important;
+}
+
+/* Fix blue background in text in specific sections */
+.pros span[style*="background"],
+.pros-list span[style*="background"],
+.advantages span[style*="background"],
+.cons span[style*="background"],
+.cons-list span[style*="background"],
+.disadvantages span[style*="background"],
+.method-card span[style*="background"],
+.guide-section span[style*="background"],
+.getting-started-guide span[style*="background"],
+.getting-started-step span[style*="background"],
+.comprehensive-comparison span[style*="background"] {
+    background-color: transparent !important;
+    color: #ffffff !important;
+    padding: 0 !important;
+    display: inline !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Fix blue background in text in specific sections in light mode */
+body.light-theme .pros span[style*="background"],
+body.light-theme .pros-list span[style*="background"],
+body.light-theme .advantages span[style*="background"],
+body.light-theme .cons span[style*="background"],
+body.light-theme .cons-list span[style*="background"],
+body.light-theme .disadvantages span[style*="background"],
+body.light-theme .method-card span[style*="background"],
+body.light-theme .guide-section span[style*="background"],
+body.light-theme .getting-started-guide span[style*="background"],
+body.light-theme .getting-started-step span[style*="background"],
+body.light-theme .comprehensive-comparison span[style*="background"] {
+    background-color: transparent !important;
+    color: #212529 !important;
+    text-shadow: none !important;
+}
+
+/* Fix blue background in text in specific sections in high contrast mode */
+body.high-contrast-mode .pros span[style*="background"],
+body.high-contrast-mode .pros-list span[style*="background"],
+body.high-contrast-mode .advantages span[style*="background"],
+body.high-contrast-mode .cons span[style*="background"],
+body.high-contrast-mode .cons-list span[style*="background"],
+body.high-contrast-mode .disadvantages span[style*="background"],
+body.high-contrast-mode .method-card span[style*="background"],
+body.high-contrast-mode .guide-section span[style*="background"],
+body.high-contrast-mode .getting-started-guide span[style*="background"],
+body.high-contrast-mode .getting-started-step span[style*="background"],
+body.high-contrast-mode .comprehensive-comparison span[style*="background"] {
+    background-color: transparent !important;
+    color: #ffffff !important;
+    text-shadow: none !important;
+}

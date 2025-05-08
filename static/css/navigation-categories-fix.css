@@ -1,0 +1,307 @@
+/**
+ * Navigation Categories Fix
+ * Ensures all navigation categories match properly, are evenly spaced, and fit well
+ */
+
+/* Main navigation container */
+.navbar > .container {
+    max-width: 100%;
+    padding: 0 15px;
+}
+
+/* Compact navigation with even spacing */
+.compact-nav {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 100%;
+    overflow: visible;
+    padding: 0;
+    gap: 0; /* No gap, we'll use margins instead */
+}
+
+/* Standardize nav items */
+.navbar-nav .nav-item {
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+/* Standardize nav links for consistent appearance */
+.navbar-dark .navbar-nav .nav-link {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    white-space: nowrap;
+    letter-spacing: 0;
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    min-width: 100px; /* Ensure minimum width for consistency */
+    transition: all 0.3s ease;
+}
+
+/* Standardize nav icons */
+.nav-icon {
+    margin-right: 0.35rem;
+    font-size: 0.9rem;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+    color: #5dd6ff;
+}
+
+/* Enhance hover state */
+.navbar-dark .navbar-nav .nav-link:hover {
+    background-color: rgba(93, 214, 255, 0.2);
+    color: #ffffff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7), 0 0 10px rgba(93, 214, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+.navbar-dark .navbar-nav .nav-link:hover .nav-icon {
+    color: #ffffff;
+    filter: drop-shadow(0 0 5px rgba(93, 214, 255, 0.7));
+}
+
+/* Active state */
+.navbar-dark .navbar-nav .nav-link.active {
+    background-color: rgba(93, 214, 255, 0.25);
+    color: #ffffff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7), 0 0 10px rgba(93, 214, 255, 0.5);
+    border: 1px solid rgba(93, 214, 255, 0.3);
+}
+
+/* Ensure dropdown menus are properly visible */
+.dropdown-menu {
+    background-color: rgba(15, 15, 15, 0.98);
+    border: 1px solid rgba(93, 214, 255, 0.3);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 15px rgba(93, 214, 255, 0.2);
+}
+
+.dropdown-item {
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    font-weight: 500;
+}
+
+.dropdown-header {
+    color: #5dd6ff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7), 0 0 10px rgba(93, 214, 255, 0.3);
+    font-weight: 700;
+}
+
+/* Light theme overrides */
+body.light-theme .navbar-dark .navbar-nav .nav-link {
+    color: #212529;
+    text-shadow: none;
+    background-color: rgba(233, 236, 239, 0.5);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+body.light-theme .nav-icon {
+    color: #0056b3;
+    filter: none;
+}
+
+body.light-theme .navbar-dark .navbar-nav .nav-link:hover {
+    background-color: rgba(0, 86, 179, 0.1);
+    color: #0056b3;
+    text-shadow: none;
+}
+
+body.light-theme .navbar-dark .navbar-nav .nav-link:hover .nav-icon {
+    color: #0056b3;
+    filter: none;
+}
+
+body.light-theme .navbar-dark .navbar-nav .nav-link.active {
+    background-color: rgba(0, 86, 179, 0.15);
+    color: #0056b3;
+    text-shadow: none;
+    border: 1px solid rgba(0, 86, 179, 0.2);
+}
+
+body.light-theme .dropdown-menu {
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+body.light-theme .dropdown-item {
+    color: #212529;
+    text-shadow: none;
+}
+
+body.light-theme .dropdown-header {
+    color: #0056b3;
+    text-shadow: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .navbar-dark .navbar-nav .nav-link {
+        padding: 0.45rem 0.65rem;
+        font-size: 0.85rem;
+        min-width: 90px;
+        height: 38px;
+    }
+
+    .nav-icon {
+        margin-right: 0.25rem;
+        font-size: 0.85rem;
+    }
+
+    .compact-nav {
+        gap: 6px;
+    }
+}
+
+@media (max-width: 992px) {
+    .navbar-collapse {
+        background-color: rgba(15, 15, 15, 0.98);
+        border-radius: 12px;
+        padding: 1rem;
+        margin-top: 0.5rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(93, 214, 255, 0.2);
+        max-height: calc(100vh - 100px);
+        overflow-y: auto;
+    }
+
+    .navbar-dark .navbar-nav .nav-link {
+        padding: 0.7rem 1rem;
+        margin: 0.3rem 0;
+        font-size: 1rem;
+        width: 100%;
+        text-align: left;
+        justify-content: flex-start;
+        min-width: auto;
+        height: auto;
+    }
+
+    .dropdown-menu {
+        background-color: rgba(30, 30, 35, 0.5);
+        box-shadow: none;
+        border: none;
+        padding: 0.5rem 0;
+        margin: 0.5rem 0;
+    }
+
+    body.light-theme .navbar-collapse {
+        background-color: rgba(248, 249, 250, 0.98);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    body.light-theme .dropdown-menu {
+        background-color: rgba(233, 236, 239, 0.5);
+    }
+}
+
+/* Fix for the specific navigation categories in the screenshot */
+.navbar-nav .nav-item:nth-child(1) .nav-link,
+.navbar-nav .nav-item:nth-child(2) .nav-link,
+.navbar-nav .nav-item:nth-child(3) .nav-link,
+.navbar-nav .nav-item:nth-child(4) .nav-link,
+.navbar-nav .nav-item:nth-child(5) .nav-link,
+.navbar-nav .nav-item:nth-child(6) .nav-link,
+.navbar-nav .nav-item:nth-child(7) .nav-link {
+    min-width: 130px;
+    width: 130px;
+    padding: 0.5rem 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 40px;
+    margin: 0 3px;
+    background-color: rgba(93, 214, 255, 0.15);
+    border: 1px solid rgba(93, 214, 255, 0.2);
+}
+
+/* Specific fix for the Help button to match others */
+.navbar-nav .nav-item:last-child .nav-link {
+    min-width: 130px;
+    width: 130px;
+    padding: 0.5rem 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 40px;
+    margin: 0 3px;
+    background-color: rgba(93, 214, 255, 0.15);
+    border: 1px solid rgba(93, 214, 255, 0.2);
+}
+
+/* Ensure all nav links have the same height and vertical alignment */
+.navbar-dark .navbar-nav .nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+}
+
+/* Fix for dropdown toggle arrows */
+.navbar-dark .navbar-nav .dropdown-toggle::after {
+    margin-left: 0.5rem;
+    vertical-align: middle;
+}
+
+/* Ensure all navigation items have the same visual weight */
+.navbar-dark .navbar-nav .nav-link {
+    font-weight: 600;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Ensure all navigation items have the same background color */
+.navbar-dark .navbar-nav .nav-link {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Ensure all navigation items have the same border */
+.navbar-dark .navbar-nav .nav-link {
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Ensure all navigation items have the same text color */
+.navbar-dark .navbar-nav .nav-link {
+    color: #ffffff;
+}
+
+/* Ensure all navigation items have the same text shadow */
+.navbar-dark .navbar-nav .nav-link {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+/* Ensure all navigation items have the same border radius */
+.navbar-dark .navbar-nav .nav-link {
+    border-radius: 8px;
+}
+
+/* Ensure all navigation items have the same transition */
+.navbar-dark .navbar-nav .nav-link {
+    transition: all 0.3s ease;
+}
+
+/* Ensure all navigation items have the same hover effect */
+.navbar-dark .navbar-nav .nav-link:hover {
+    background-color: rgba(93, 214, 255, 0.2);
+    color: #ffffff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7), 0 0 10px rgba(93, 214, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+/* Ensure all navigation items have the same active effect */
+.navbar-dark .navbar-nav .nav-link.active {
+    background-color: rgba(93, 214, 255, 0.25);
+    color: #ffffff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7), 0 0 10px rgba(93, 214, 255, 0.5);
+    border: 1px solid rgba(93, 214, 255, 0.3);
+}

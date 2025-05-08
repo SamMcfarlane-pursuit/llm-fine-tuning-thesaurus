@@ -1,0 +1,91 @@
+/**
+ * Workshop Text Visibility CSS
+ * Improves visibility of text in workshop sections
+ */
+
+/* Workshop headings */
+.workshop-heading,
+.workshop-title,
+.workshop-subtitle,
+.workshop-section h1,
+.workshop-section h2,
+.workshop-section h3,
+.workshop-section h4,
+.workshop-section h5,
+.workshop-section h6 {
+    color: #5dd6ff !important;
+    text-shadow: 0 0 10px rgba(93, 214, 255, 0.5) !important;
+    font-weight: 700 !important;
+}
+
+/* Workshop text */
+.workshop-description,
+.workshop-text,
+.workshop-section p,
+.workshop-section li {
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Workshop links */
+.workshop-section a {
+    color: #5dd6ff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7) !important;
+}
+
+.workshop-section a:hover {
+    color: #4a94ff !important;
+    text-shadow: 0 0 8px rgba(74, 148, 255, 0.5) !important;
+}
+
+/* Current section text */
+.current-section h2 {
+    color: #5dd6ff !important;
+    text-shadow: 0 0 10px rgba(93, 214, 255, 0.5) !important;
+    font-weight: 700 !important;
+}
+
+.current-section a {
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7) !important;
+}
+
+.current-section a:hover {
+    color: #5dd6ff !important;
+    text-shadow: 0 0 8px rgba(93, 214, 255, 0.5) !important;
+}
+
+/* Light mode overrides */
+body.light-theme .workshop-heading,
+body.light-theme .workshop-title,
+body.light-theme .workshop-subtitle,
+body.light-theme .workshop-section h1,
+body.light-theme .workshop-section h2,
+body.light-theme .workshop-section h3,
+body.light-theme .workshop-section h4,
+body.light-theme .workshop-section h5,
+body.light-theme .workshop-section h6,
+body.light-theme .current-section h2 {
+    color: #0056b3 !important;
+    text-shadow: none !important;
+}
+
+body.light-theme .workshop-description,
+body.light-theme .workshop-text,
+body.light-theme .workshop-section p,
+body.light-theme .workshop-section li {
+    color: #212529 !important;
+    text-shadow: none !important;
+}
+
+body.light-theme .workshop-section a,
+body.light-theme .current-section a {
+    color: #0056b3 !important;
+    text-shadow: none !important;
+}
+
+body.light-theme .workshop-section a:hover,
+body.light-theme .current-section a:hover {
+    color: #0088cc !important;
+    text-shadow: none !important;
+}

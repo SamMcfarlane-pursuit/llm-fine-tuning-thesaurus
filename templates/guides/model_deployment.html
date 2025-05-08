@@ -1,0 +1,371 @@
+{% extends 'base.html' %}
+
+{% block title %}Model Deployment Guide - Visual Thesaurus LLM{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/guide-content.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-code-blocks.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('guides') }}">Guides</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Model Deployment</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1>Deploying Fine-Tuned Models to Production</h1>
+            <p class="lead">Learn how to deploy your fine-tuned models for inference using optimized serving techniques</p>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <div class="sticky-top" style="top: 2rem;">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Table of Contents</h5>
+                    </div>
+                    <div class="card-body">
+                        <nav id="toc" class="nav flex-column">
+                            <a class="nav-link" href="#introduction">Introduction</a>
+                            <a class="nav-link" href="#deployment-options">Deployment Options</a>
+                            <a class="nav-link" href="#huggingface-inference">Hugging Face Inference</a>
+                            <a class="nav-link" href="#optimizing-inference">Optimizing Inference</a>
+                            <a class="nav-link" href="#containerization">Containerization with Docker</a>
+                            <a class="nav-link" href="#cloud-deployment">Cloud Deployment</a>
+                            <a class="nav-link" href="#monitoring">Monitoring and Scaling</a>
+                            <a class="nav-link" href="#hands-on">Hands-on Exercise</a>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-body guide-content">
+                    <section id="introduction">
+                        <h2>Introduction to Model Deployment</h2>
+                        <p>After fine-tuning your LLM with techniques like LoRA or QLoRA, the next step is to deploy your model for inference in a production environment. Effective deployment requires balancing performance, cost, and scalability.</p>
+
+                        <div class="alert alert-info">
+                            <strong>Key Considerations for Deployment:</strong>
+                            <ul>
+                                <li>Inference latency requirements</li>
+                                <li>Throughput needs (requests per second)</li>
+                                <li>Hardware constraints and costs</li>
+                                <li>Scaling strategy (vertical vs. horizontal)</li>
+                                <li>Monitoring and observability</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <section id="deployment-options">
+                        <h2>Deployment Options for Fine-Tuned Models</h2>
+
+                        <h3>Self-Hosted Deployment</h3>
+                        <p>Self-hosted deployment gives you maximum control over your infrastructure and model serving:</p>
+                        <ul>
+                            <li><strong>FastAPI or Flask</strong>: Lightweight Python web frameworks for creating inference APIs</li>
+                            <li><strong>TorchServe</strong>: PyTorch's model serving library with production features</li>
+                            <li><strong>Triton Inference Server</strong>: NVIDIA's high-performance inference server</li>
+                            <li><strong>Docker containers</strong>: Package your model and dependencies for consistent deployment</li>
+                        </ul>
+
+                        <h3>Managed Services</h3>
+                        <p>Managed services reduce operational overhead but may have higher costs:</p>
+                        <ul>
+                            <li><strong>Hugging Face Inference Endpoints</strong>: Fully managed API for your models</li>
+                            <li><strong>AWS SageMaker</strong>: Managed ML deployment with auto-scaling</li>
+                            <li><strong>Google Vertex AI</strong>: Google Cloud's ML deployment platform</li>
+                            <li><strong>Azure Machine Learning</strong>: Microsoft's ML deployment service</li>
+                        </ul>
+                    </section>
+
+                    <section id="huggingface-inference">
+                        <h2>Hugging Face Inference API</h2>
+                        <p>The Hugging Face Inference API provides a simple way to deploy your fine-tuned models:</p>
+
+                        <h3>Using the Pipeline API</h3>
+                        <div class="code-block">
+                            <pre><code class="language-python">from transformers import pipeline
+
+# Load a fine-tuned model from Hugging Face Hub
+pipe = pipeline(
+    "text-generation",
+    model="your-username/your-fine-tuned-model",
+    device_map="auto"
+)
+
+# Generate text
+result = pipe("Your prompt here", max_new_tokens=100)
+print(result[0]['generated_text'])</code></pre>
+                        </div>
+
+                        <h3>Deploying with Gradio</h3>
+                        <p>Gradio provides a simple way to create a web interface for your model:</p>
+                        <div class="code-block">
+                            <pre><code class="language-python">import gradio as gr
+from transformers import pipeline
+
+# Load your fine-tuned model
+pipe = pipeline(
+    "text-generation",
+    model="your-username/your-fine-tuned-model",
+    device_map="auto"
+)
+
+def generate_text(prompt, max_length=100):
+    result = pipe(prompt, max_new_tokens=max_length)
+    return result[0]['generated_text']
+
+# Create a Gradio interface
+demo = gr.Interface(
+    fn=generate_text,
+    inputs=[
+        gr.Textbox(lines=5, placeholder="Enter your prompt here..."),
+        gr.Slider(minimum=10, maximum=500, value=100, label="Max Length")
+    ],
+    outputs=gr.Textbox(lines=10),
+    title="Fine-Tuned LLM Demo",
+    description="Generate text using your fine-tuned language model"
+)
+
+# Launch the interface
+demo.launch()</code></pre>
+                        </div>
+                    </section>
+
+                    <section id="optimizing-inference">
+                        <h2>Optimizing Inference Performance</h2>
+
+                        <h3>Quantization for Inference</h3>
+                        <p>Quantization reduces model size and improves inference speed:</p>
+                        <div class="code-block">
+                            <pre><code class="language-python">from transformers import AutoModelForCausalLM, AutoTokenizer
+import torch
+
+# Load model and tokenizer
+model_id = "your-username/your-fine-tuned-model"
+tokenizer = AutoTokenizer.from_pretrained(model_id)
+
+# Load in 8-bit quantization for faster inference
+model = AutoModelForCausalLM.from_pretrained(
+    model_id,
+    device_map="auto",
+    load_in_8bit=True  # Quantize to 8-bit
+)
+
+# Generate text
+inputs = tokenizer("Your prompt here", return_tensors="pt").to(model.device)
+outputs = model.generate(
+    inputs.input_ids,
+    max_new_tokens=100,
+    do_sample=True,
+    temperature=0.7
+)
+print(tokenizer.decode(outputs[0], skip_special_tokens=True))</code></pre>
+                        </div>
+
+                        <h3>Batch Processing</h3>
+                        <p>Process multiple requests in a batch for higher throughput:</p>
+                        <div class="code-block">
+                            <pre><code class="language-python"># Batch processing example
+prompts = [
+    "The best way to learn programming is",
+    "Fine-tuning language models requires",
+    "The future of AI will be shaped by"
+]
+
+# Tokenize batch
+batch_inputs = tokenizer(prompts, padding=True, return_tensors="pt").to(model.device)
+
+# Generate for the entire batch
+batch_outputs = model.generate(
+    batch_inputs.input_ids,
+    max_new_tokens=50,
+    do_sample=True,
+    temperature=0.7
+)
+
+# Decode outputs
+for i, output in enumerate(batch_outputs):
+    print(f"Prompt {i+1}: {tokenizer.decode(output, skip_special_tokens=True)}")</code></pre>
+                        </div>
+                    </section>
+
+                    <section id="containerization">
+                        <h2>Containerization with Docker</h2>
+                        <p>Docker containers provide a consistent environment for deploying your model:</p>
+
+                        <h3>Sample Dockerfile</h3>
+                        <div class="code-block">
+                            <pre><code class="language-dockerfile">FROM python:3.10-slim
+
+WORKDIR /app
+
+# Install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy model files and code
+COPY app.py .
+COPY models/ ./models/
+
+# Expose the port
+EXPOSE 8000
+
+# Run the API server
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]</code></pre>
+                        </div>
+
+                        <h3>FastAPI Example</h3>
+                        <div class="code-block">
+                            <pre><code class="language-python"># app.py
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+from transformers import AutoModelForCausalLM, AutoTokenizer
+import torch
+
+app = FastAPI(title="Fine-Tuned LLM API")
+
+# Load model and tokenizer at startup
+model_path = "./models/fine-tuned-model"
+tokenizer = AutoTokenizer.from_pretrained(model_path)
+model = AutoModelForCausalLM.from_pretrained(
+    model_path,
+    device_map="auto",
+    load_in_8bit=True
+)
+
+class GenerationRequest(BaseModel):
+    prompt: str
+    max_length: int = 100
+    temperature: float = 0.7
+    do_sample: bool = True
+
+class GenerationResponse(BaseModel):
+    generated_text: str
+
+@app.post("/generate", response_model=GenerationResponse)
+async def generate_text(request: GenerationRequest):
+    try:
+        inputs = tokenizer(request.prompt, return_tensors="pt").to(model.device)
+
+        outputs = model.generate(
+            inputs.input_ids,
+            max_new_tokens=request.max_length,
+            do_sample=request.do_sample,
+            temperature=request.temperature
+        )
+
+        generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
+        return {"generated_text": generated_text}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))</code></pre>
+                        </div>
+                    </section>
+
+                    <section id="cloud-deployment">
+                        <h2>Cloud Deployment Options</h2>
+
+                        <h3>AWS Deployment</h3>
+                        <p>Deploy your containerized model to AWS using ECS or Lambda:</p>
+                        <ul>
+                            <li><strong>EC2</strong>: For GPU-accelerated inference with full control</li>
+                            <li><strong>ECS/EKS</strong>: Container orchestration for scaling</li>
+                            <li><strong>SageMaker</strong>: Managed ML deployment with auto-scaling</li>
+                            <li><strong>Lambda</strong>: Serverless deployment for infrequent inference</li>
+                        </ul>
+
+                        <h3>Google Cloud Platform</h3>
+                        <ul>
+                            <li><strong>Vertex AI</strong>: Managed ML deployment platform</li>
+                            <li><strong>Cloud Run</strong>: Serverless containers for inference</li>
+                            <li><strong>GKE</strong>: Kubernetes for container orchestration</li>
+                        </ul>
+
+                        <h3>Azure</h3>
+                        <ul>
+                            <li><strong>Azure Machine Learning</strong>: End-to-end ML platform</li>
+                            <li><strong>Azure Container Instances</strong>: Simple container deployment</li>
+                            <li><strong>Azure Kubernetes Service</strong>: Managed Kubernetes</li>
+                        </ul>
+                    </section>
+
+                    <section id="monitoring">
+                        <h2>Monitoring and Scaling</h2>
+
+                        <h3>Key Metrics to Monitor</h3>
+                        <ul>
+                            <li><strong>Latency</strong>: Time to generate a response</li>
+                            <li><strong>Throughput</strong>: Requests processed per second</li>
+                            <li><strong>GPU/CPU Utilization</strong>: Resource usage</li>
+                            <li><strong>Memory Usage</strong>: RAM consumption</li>
+                            <li><strong>Error Rate</strong>: Failed requests percentage</li>
+                        </ul>
+
+                        <h3>Scaling Strategies</h3>
+                        <p>Implement auto-scaling based on load:</p>
+                        <ul>
+                            <li><strong>Vertical Scaling</strong>: Use larger instances with more GPU/CPU</li>
+                            <li><strong>Horizontal Scaling</strong>: Add more instances to handle increased load</li>
+                            <li><strong>Load Balancing</strong>: Distribute requests across multiple instances</li>
+                        </ul>
+                    </section>
+
+                    <section id="hands-on">
+                        <h2>Hands-on Exercise: Deploy a Fine-Tuned Model</h2>
+
+                        <div class="alert alert-primary">
+                            <h4>Exercise: Deploy a LoRA Fine-Tuned Model with FastAPI</h4>
+                            <p>In this exercise, you'll deploy a LoRA fine-tuned model using FastAPI and Docker.</p>
+
+                            <ol>
+                                <li>Set up a FastAPI application for model inference</li>
+                                <li>Containerize the application with Docker</li>
+                                <li>Deploy the container locally</li>
+                                <li>Test the API with sample requests</li>
+                            </ol>
+
+                            <p><a href="{{ url_for('static', filename='notebooks/model_deployment.ipynb') }}" class="btn btn-primary" target="_blank">
+                                <i class="bi bi-file-earmark-code me-2"></i>Download Notebook
+                            </a>
+                            <a href="https://colab.research.google.com/github/googlecolab/colabtools/blob/master/notebooks/colab-github-demo.ipynb" class="btn btn-success ms-2" target="_blank">
+                                <i class="bi bi-google me-2"></i>Open in Colab
+                            </a></p>
+                        </div>
+                    </section>
+
+                    <div class="mt-5 text-center">
+                        <a href="{{ url_for('pipeline_inference') }}" class="btn btn-outline-primary me-2">
+                            <i class="bi bi-arrow-left me-2"></i>Previous: Pipeline Inference
+                        </a>
+                        <a href="{{ url_for('data_preparation') }}" class="btn btn-outline-primary">
+                            Next: Data Preparation<i class="bi bi-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='js/guide-navigation.js') }}"></script>
+<script src="{{ url_for('static', filename='js/code-highlighting.js') }}"></script>
+{% endblock %}

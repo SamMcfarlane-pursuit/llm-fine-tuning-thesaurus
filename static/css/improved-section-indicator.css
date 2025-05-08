@@ -3,8 +3,9 @@
  * Enhanced styling for the current section indicator with better visual appeal and coherence
  */
 
-/* Main Section Indicator Container */
+/* Main Section Indicator Container - Hidden as requested */
 .section-indicator {
+    display: none; /* Hide the section indicator completely */
     position: fixed;
     top: 70px;
     right: 20px;

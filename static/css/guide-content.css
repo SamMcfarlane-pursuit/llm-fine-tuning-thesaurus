@@ -1,0 +1,283 @@
+/**
+ * Guide Content CSS
+ * Styles for guide content pages
+ */
+
+.guide-content {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #f8f9fa;
+}
+
+.guide-content h1, 
+.guide-content h2, 
+.guide-content h3, 
+.guide-content h4, 
+.guide-content h5, 
+.guide-content h6 {
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.guide-content h1 {
+    font-size: 2.5rem;
+    border-bottom: 2px solid rgba(0, 123, 255, 0.5);
+    padding-bottom: 0.5rem;
+}
+
+.guide-content h2 {
+    font-size: 2rem;
+    border-bottom: 1px solid rgba(0, 123, 255, 0.3);
+    padding-bottom: 0.3rem;
+}
+
+.guide-content h3 {
+    font-size: 1.5rem;
+}
+
+.guide-content h4 {
+    font-size: 1.25rem;
+}
+
+.guide-content p {
+    margin-bottom: 1.2rem;
+    color: #f8f9fa;
+}
+
+.guide-content ul, 
+.guide-content ol {
+    margin-bottom: 1.2rem;
+    padding-left: 1.5rem;
+}
+
+.guide-content li {
+    margin-bottom: 0.5rem;
+    color: #f8f9fa;
+}
+
+.guide-content a {
+    color: #00e5ff;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.guide-content a:hover {
+    color: #66f0ff;
+    text-decoration: underline;
+}
+
+.guide-content .alert {
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    border-left: 4px solid transparent;
+}
+
+.guide-content .alert-primary {
+    background-color: rgba(0, 123, 255, 0.15);
+    border-left-color: #007bff;
+}
+
+.guide-content .alert-info {
+    background-color: rgba(23, 162, 184, 0.15);
+    border-left-color: #17a2b8;
+}
+
+.guide-content .alert-warning {
+    background-color: rgba(255, 193, 7, 0.15);
+    border-left-color: #ffc107;
+}
+
+.guide-content .alert-danger {
+    background-color: rgba(220, 53, 69, 0.15);
+    border-left-color: #dc3545;
+}
+
+.guide-content .alert-success {
+    background-color: rgba(40, 167, 69, 0.15);
+    border-left-color: #28a745;
+}
+
+.guide-content .alert strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+}
+
+.guide-content .code-block {
+    background-color: #1a1a1a;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+}
+
+.guide-content .code-block pre {
+    margin: 0;
+    padding: 1rem;
+    overflow-x: auto;
+}
+
+.guide-content .code-block code {
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 0.9rem;
+    color: #f8f9fa;
+}
+
+.guide-content table {
+    width: 100%;
+    margin-bottom: 1.5rem;
+    border-collapse: collapse;
+}
+
+.guide-content table th,
+.guide-content table td {
+    padding: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.guide-content table th {
+    background-color: rgba(0, 123, 255, 0.1);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.guide-content table tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.guide-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.guide-content blockquote {
+    border-left: 4px solid #00e5ff;
+    padding-left: 1rem;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 1.5rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.guide-content hr {
+    margin: 2rem 0;
+    border: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Light mode overrides */
+body.light-theme .guide-content {
+    color: #212529;
+}
+
+body.light-theme .guide-content h1, 
+body.light-theme .guide-content h2, 
+body.light-theme .guide-content h3, 
+body.light-theme .guide-content h4, 
+body.light-theme .guide-content h5, 
+body.light-theme .guide-content h6 {
+    color: #0056b3;
+    text-shadow: none;
+}
+
+body.light-theme .guide-content p,
+body.light-theme .guide-content li {
+    color: #212529;
+}
+
+body.light-theme .guide-content a {
+    color: #0056b3;
+}
+
+body.light-theme .guide-content a:hover {
+    color: #003d7a;
+}
+
+body.light-theme .guide-content .code-block {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+}
+
+body.light-theme .guide-content .code-block code {
+    color: #212529;
+}
+
+body.light-theme .guide-content .alert strong {
+    color: #212529;
+}
+
+body.light-theme .guide-content table th {
+    background-color: rgba(0, 123, 255, 0.1);
+    color: #212529;
+}
+
+body.light-theme .guide-content blockquote {
+    color: #495057;
+}
+
+/* High contrast mode overrides */
+body.high-contrast-mode .guide-content {
+    color: #ffffff;
+}
+
+body.high-contrast-mode .guide-content h1, 
+body.high-contrast-mode .guide-content h2, 
+body.high-contrast-mode .guide-content h3, 
+body.high-contrast-mode .guide-content h4, 
+body.high-contrast-mode .guide-content h5, 
+body.high-contrast-mode .guide-content h6 {
+    color: #ffffff;
+    text-shadow: none;
+}
+
+body.high-contrast-mode .guide-content p,
+body.high-contrast-mode .guide-content li {
+    color: #ffffff;
+}
+
+body.high-contrast-mode .guide-content a {
+    color: #ffff00;
+}
+
+body.high-contrast-mode .guide-content a:hover {
+    color: #ffff99;
+}
+
+body.high-contrast-mode .guide-content .code-block {
+    background-color: #000000;
+    border: 1px solid #ffffff;
+}
+
+body.high-contrast-mode .guide-content .code-block code {
+    color: #ffffff;
+}
+
+body.high-contrast-mode .guide-content .alert {
+    background-color: #000000;
+    border: 1px solid #ffffff;
+}
+
+body.high-contrast-mode .guide-content .alert strong {
+    color: #ffffff;
+}
+
+body.high-contrast-mode .guide-content table th,
+body.high-contrast-mode .guide-content table td {
+    border: 1px solid #ffffff;
+}
+
+body.high-contrast-mode .guide-content table th {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+body.high-contrast-mode .guide-content blockquote {
+    border-left: 4px solid #ffffff;
+    color: #ffffff;
+}

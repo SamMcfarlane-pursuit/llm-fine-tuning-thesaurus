@@ -1,0 +1,311 @@
+/**
+ * Enhanced Button Visibility CSS
+ * Improves button visibility and readability across the entire website
+ */
+
+/* Global button enhancements */
+.btn {
+    font-weight: 700 !important;
+    font-size: 1.05rem !important;
+    letter-spacing: 0.5px !important;
+    padding: 0.6rem 1.5rem !important;
+    border-radius: 8px !important;
+    transition: all 0.3s ease !important;
+    position: relative !important;
+    overflow: hidden !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+    border: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+}
+
+.btn:hover, .btn:focus {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+.btn:active {
+    transform: translateY(1px) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Primary button */
+.btn-primary {
+    background: linear-gradient(135deg, #4a94ff, #0078ff) !important;
+    color: #ffffff !important;
+    border: 2px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    background: linear-gradient(135deg, #5aa0ff, #0080ff) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.btn-primary:active {
+    background: linear-gradient(135deg, #4a94ff, #0078ff) !important;
+}
+
+/* Secondary button */
+.btn-secondary {
+    background: linear-gradient(135deg, #6c757d, #495057) !important;
+    color: #ffffff !important;
+    border: 2px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.btn-secondary:hover, .btn-secondary:focus {
+    background: linear-gradient(135deg, #7d868e, #5a6268) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.btn-secondary:active {
+    background: linear-gradient(135deg, #6c757d, #495057) !important;
+}
+
+/* Success button */
+.btn-success {
+    background: linear-gradient(135deg, #45d400, #00a000) !important;
+    color: #ffffff !important;
+    border: 2px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.btn-success:hover, .btn-success:focus {
+    background: linear-gradient(135deg, #55e410, #00b000) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.btn-success:active {
+    background: linear-gradient(135deg, #45d400, #00a000) !important;
+}
+
+/* Danger button */
+.btn-danger {
+    background: linear-gradient(135deg, #ff2222, #cc0000) !important;
+    color: #ffffff !important;
+    border: 2px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.btn-danger:hover, .btn-danger:focus {
+    background: linear-gradient(135deg, #ff3333, #dd0000) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.btn-danger:active {
+    background: linear-gradient(135deg, #ff2222, #cc0000) !important;
+}
+
+/* Warning button */
+.btn-warning {
+    background: linear-gradient(135deg, #ff9500, #ff7b00) !important;
+    color: #ffffff !important;
+    border: 2px solid rgba(255, 255, 255, 0.2) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+.btn-warning:hover, .btn-warning:focus {
+    background: linear-gradient(135deg, #ffa520, #ff8c10) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.btn-warning:active {
+    background: linear-gradient(135deg, #ff9500, #ff7b00) !important;
+}
+
+/* Info button */
+.btn-info {
+    background: linear-gradient(135deg, #5dd6ff, #0095e0) !important;
+    color: #ffffff !important;
+    border: 2px solid rgba(255, 255, 255, 0.2) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+.btn-info:hover, .btn-info:focus {
+    background: linear-gradient(135deg, #6edfff, #00a5f0) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.btn-info:active {
+    background: linear-gradient(135deg, #5dd6ff, #0095e0) !important;
+}
+
+/* Light button */
+.btn-light {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef) !important;
+    color: #212529 !important;
+    border: 2px solid rgba(0, 0, 0, 0.1) !important;
+    text-shadow: none !important;
+}
+
+.btn-light:hover, .btn-light:focus {
+    background: linear-gradient(135deg, #ffffff, #f8f9fa) !important;
+    border-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+.btn-light:active {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef) !important;
+}
+
+/* Dark button */
+.btn-dark {
+    background: linear-gradient(135deg, #343a40, #212529) !important;
+    color: #ffffff !important;
+    border: 2px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.btn-dark:hover, .btn-dark:focus {
+    background: linear-gradient(135deg, #454d55, #32383e) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.btn-dark:active {
+    background: linear-gradient(135deg, #343a40, #212529) !important;
+}
+
+/* Outline buttons */
+.btn-outline-primary {
+    background: transparent !important;
+    color: #4a94ff !important;
+    border: 2px solid #4a94ff !important;
+    text-shadow: none !important;
+    box-shadow: 0 4px 15px rgba(74, 148, 255, 0.1) !important;
+}
+
+.btn-outline-primary:hover, .btn-outline-primary:focus {
+    background: rgba(74, 148, 255, 0.1) !important;
+    color: #4a94ff !important;
+    border-color: #4a94ff !important;
+    box-shadow: 0 6px 20px rgba(74, 148, 255, 0.2) !important;
+}
+
+.btn-outline-secondary {
+    background: transparent !important;
+    color: #6c757d !important;
+    border: 2px solid #6c757d !important;
+    text-shadow: none !important;
+    box-shadow: 0 4px 15px rgba(108, 117, 125, 0.1) !important;
+}
+
+.btn-outline-secondary:hover, .btn-outline-secondary:focus {
+    background: rgba(108, 117, 125, 0.1) !important;
+    color: #6c757d !important;
+    border-color: #6c757d !important;
+    box-shadow: 0 6px 20px rgba(108, 117, 125, 0.2) !important;
+}
+
+.btn-outline-success {
+    background: transparent !important;
+    color: #45d400 !important;
+    border: 2px solid #45d400 !important;
+    text-shadow: none !important;
+    box-shadow: 0 4px 15px rgba(69, 212, 0, 0.1) !important;
+}
+
+.btn-outline-success:hover, .btn-outline-success:focus {
+    background: rgba(69, 212, 0, 0.1) !important;
+    color: #45d400 !important;
+    border-color: #45d400 !important;
+    box-shadow: 0 6px 20px rgba(69, 212, 0, 0.2) !important;
+}
+
+.btn-outline-danger {
+    background: transparent !important;
+    color: #ff2222 !important;
+    border: 2px solid #ff2222 !important;
+    text-shadow: none !important;
+    box-shadow: 0 4px 15px rgba(255, 34, 34, 0.1) !important;
+}
+
+.btn-outline-danger:hover, .btn-outline-danger:focus {
+    background: rgba(255, 34, 34, 0.1) !important;
+    color: #ff2222 !important;
+    border-color: #ff2222 !important;
+    box-shadow: 0 6px 20px rgba(255, 34, 34, 0.2) !important;
+}
+
+.btn-outline-warning {
+    background: transparent !important;
+    color: #ff9500 !important;
+    border: 2px solid #ff9500 !important;
+    text-shadow: none !important;
+    box-shadow: 0 4px 15px rgba(255, 149, 0, 0.1) !important;
+}
+
+.btn-outline-warning:hover, .btn-outline-warning:focus {
+    background: rgba(255, 149, 0, 0.1) !important;
+    color: #ff9500 !important;
+    border-color: #ff9500 !important;
+    box-shadow: 0 6px 20px rgba(255, 149, 0, 0.2) !important;
+}
+
+.btn-outline-info {
+    background: transparent !important;
+    color: #5dd6ff !important;
+    border: 2px solid #5dd6ff !important;
+    text-shadow: none !important;
+    box-shadow: 0 4px 15px rgba(93, 214, 255, 0.1) !important;
+}
+
+.btn-outline-info:hover, .btn-outline-info:focus {
+    background: rgba(93, 214, 255, 0.1) !important;
+    color: #5dd6ff !important;
+    border-color: #5dd6ff !important;
+    box-shadow: 0 6px 20px rgba(93, 214, 255, 0.2) !important;
+}
+
+/* Button sizes */
+.btn-lg {
+    font-size: 1.2rem !important;
+    padding: 0.8rem 2rem !important;
+    border-radius: 10px !important;
+}
+
+.btn-sm {
+    font-size: 0.9rem !important;
+    padding: 0.4rem 1rem !important;
+    border-radius: 6px !important;
+}
+
+/* Button with icon */
+.btn i {
+    font-size: 1.2em !important;
+    margin-right: 0.5rem !important;
+}
+
+/* Button group */
+.btn-group {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+}
+
+.btn-group .btn {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+.btn-group .btn:first-child {
+    border-top-left-radius: 8px !important;
+    border-bottom-left-radius: 8px !important;
+}
+
+.btn-group .btn:last-child {
+    border-top-right-radius: 8px !important;
+    border-bottom-right-radius: 8px !important;
+}
+
+/* Back button specific enhancements */
+.btn-primary.back-button,
+a.btn-primary[href*="back"],
+button.btn-primary.back,
+.btn.btn-primary:contains("Back") {
+    background: linear-gradient(to right, #0033cc, #0066ff) !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: 0 0 10px rgba(0, 102, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.3) !important;
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8), 0 0 5px rgba(0, 0, 0, 0.5) !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.05em !important;
+    -webkit-text-stroke: 0.5px #ffffff !important;
+}

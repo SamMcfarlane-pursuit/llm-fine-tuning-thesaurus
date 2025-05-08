@@ -1,0 +1,30 @@
+<!-- Workshop Exercise Card Component -->
+<div class="exercise-card">
+    <div class="difficulty-label">DIFFICULTY</div>
+    <div class="difficulty-indicator"></div>
+    <div class="difficulty-value">{{ difficulty }}</div>
+
+    <div class="time-estimate">
+        <span class="time-value">{{ time }}</span>
+    </div>
+
+    {% if title %}
+    <h3 class="exercise-title">{{ title }}</h3>
+    {% endif %}
+
+    {% if description %}
+    <p class="exercise-description">{{ description }}</p>
+    {% endif %}
+
+    {% if status %}
+    <div class="status-indicator">{{ status }}</div>
+    {% endif %}
+
+    <div class="info-icon">
+        <i class="bi bi-info-circle"></i>
+    </div>
+
+    {% if url %}
+    <a href="{{ url }}" class="stretched-link" aria-label="View {{ title }} exercise"></a>
+    {% endif %}
+</div>

@@ -1,0 +1,93 @@
+/**
+ * Guides Dropdown Fix
+ * Specifically targets and fixes the black spot issue in the Guides dropdown
+ */
+
+/* ===== GUIDES DROPDOWN SPECIFIC FIXES ===== */
+
+/* Target the Guides dropdown specifically with multiple selectors for maximum coverage */
+.navbar-dark .navbar-nav .nav-item:nth-child(4) .nav-link.dropdown-toggle,
+#guidesDropdown,
+a[aria-labelledby="guidesDropdown"],
+.navbar-dark .navbar-nav .nav-link[href="/guide/finetuning-comparison"] {
+    background-color: rgba(93, 214, 255, 0.15) !important;
+    border: 1px solid rgba(93, 214, 255, 0.2) !important;
+    color: var(--text-primary) !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+/* Add a pseudo-element to cover any potential black spots */
+.navbar-dark .navbar-nav .nav-item:nth-child(4) .nav-link.dropdown-toggle::before,
+#guidesDropdown::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(93, 214, 255, 0.15) !important;
+    border-radius: 8px !important;
+    z-index: -1 !important;
+}
+
+/* Ensure the dropdown toggle text is visible */
+.navbar-dark .navbar-nav .nav-item:nth-child(4) .nav-link.dropdown-toggle span,
+#guidesDropdown span,
+.navbar-dark .navbar-nav .nav-item:nth-child(4) .nav-link.dropdown-toggle i,
+#guidesDropdown i {
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+/* Fix for the dropdown menu */
+.navbar-dark .navbar-nav .nav-item:nth-child(4) .dropdown-menu,
+.dropdown-menu[aria-labelledby="guidesDropdown"] {
+    background-color: rgba(15, 15, 15, 0.98) !important;
+    border: 1px solid rgba(93, 214, 255, 0.3) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 15px rgba(93, 214, 255, 0.2) !important;
+    z-index: 1000 !important;
+    position: absolute !important;
+}
+
+/* Fix for dropdown items */
+.navbar-dark .navbar-nav .nav-item:nth-child(4) .dropdown-menu .dropdown-item,
+.dropdown-menu[aria-labelledby="guidesDropdown"] .dropdown-item {
+    background-color: transparent !important;
+    color: var(--text-primary) !important;
+    position: relative !important;
+    z-index: 1001 !important;
+}
+
+/* Fix for dropdown items on hover */
+.navbar-dark .navbar-nav .nav-item:nth-child(4) .dropdown-menu .dropdown-item:hover,
+.dropdown-menu[aria-labelledby="guidesDropdown"] .dropdown-item:hover {
+    background-color: rgba(93, 214, 255, 0.15) !important;
+    color: var(--text-primary) !important;
+    border-left: 3px solid var(--secondary-color) !important;
+    transform: translateX(5px) !important;
+}
+
+/* Mobile-specific fixes */
+@media (max-width: 992px) {
+    /* Fix for Guides dropdown on mobile */
+    .navbar-dark .navbar-nav .nav-item:nth-child(4) .nav-link.dropdown-toggle,
+    #guidesDropdown {
+        background-color: rgba(93, 214, 255, 0.15) !important;
+        border: 1px solid rgba(93, 214, 255, 0.2) !important;
+        width: 100% !important;
+        justify-content: flex-start !important;
+    }
+    
+    /* Fix for Guides dropdown menu on mobile */
+    .navbar-dark .navbar-nav .nav-item:nth-child(4) .dropdown-menu,
+    .dropdown-menu[aria-labelledby="guidesDropdown"] {
+        background-color: rgba(30, 30, 35, 0.5) !important;
+        border: none !important;
+        box-shadow: none !important;
+        position: static !important;
+        width: 100% !important;
+    }
+}

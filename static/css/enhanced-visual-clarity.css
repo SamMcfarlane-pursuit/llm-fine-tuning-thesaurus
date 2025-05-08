@@ -1,0 +1,222 @@
+/**
+ * Enhanced Visual Clarity CSS
+ * Improves text contrast, readability, and overall visual clarity
+ */
+
+/* Global text improvements */
+body {
+    --text-primary: rgba(255, 255, 255, 0.95);
+    --text-secondary: rgba(255, 255, 255, 0.85);
+    --text-tertiary: rgba(255, 255, 255, 0.75);
+    --text-muted: rgba(255, 255, 255, 0.6);
+    --heading-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --link-color: #5dd6ff;
+    --link-hover: #8ae4ff;
+}
+
+body.light-mode {
+    --text-primary: rgba(0, 0, 0, 0.9);
+    --text-secondary: rgba(0, 0, 0, 0.8);
+    --text-tertiary: rgba(0, 0, 0, 0.7);
+    --text-muted: rgba(0, 0, 0, 0.6);
+    --heading-shadow: none;
+    --link-color: #0056b3;
+    --link-hover: #0088cc;
+}
+
+/* Enhanced text readability */
+p, li, td, th, .card-text, .dropdown-item, .nav-link {
+    font-weight: 400;
+    letter-spacing: 0.01rem;
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Improved heading visibility */
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    color: var(--text-primary);
+    font-weight: 700;
+    letter-spacing: -0.01rem;
+    margin-bottom: 1rem;
+    text-shadow: var(--heading-shadow);
+}
+
+/* Enhanced link visibility */
+a:not(.btn):not(.nav-link):not(.dropdown-item) {
+    color: var(--link-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+a:not(.btn):not(.nav-link):not(.dropdown-item):hover {
+    color: var(--link-hover);
+    text-decoration: underline;
+}
+
+/* Navigation improvements */
+.navbar-nav .nav-link {
+    font-weight: 600;
+    letter-spacing: 0.02rem;
+    padding: 0.75rem 1rem;
+    position: relative;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: var(--text-primary) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+body.light-mode .navbar-dark .navbar-nav .nav-link {
+    color: var(--text-primary) !important;
+    text-shadow: none;
+}
+
+/* Category labels */
+.nav-item .nav-link {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.nav-item .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 3px;
+    background: var(--link-color);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+    opacity: 0;
+}
+
+.nav-item .nav-link:hover::after,
+.nav-item .nav-link.active::after {
+    width: 80%;
+    opacity: 1;
+}
+
+/* Quick access section improvements */
+.quick-access {
+    text-align: center;
+    padding: 2rem 0;
+}
+
+.quick-access h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: var(--link-color);
+    text-shadow: 0 0 10px rgba(93, 214, 255, 0.3);
+}
+
+/* Feature buttons with enhanced visibility */
+.feature-button {
+    background: rgba(30, 30, 35, 0.7);
+    border: 1px solid rgba(93, 214, 255, 0.3);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 0.5rem;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.feature-button i {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--link-color);
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 0 5px rgba(93, 214, 255, 0.3));
+}
+
+.feature-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    border-color: rgba(93, 214, 255, 0.6);
+}
+
+.feature-button:hover i {
+    color: var(--link-hover);
+    filter: drop-shadow(0 0 10px rgba(93, 214, 255, 0.5));
+}
+
+body.light-mode .feature-button {
+    background: rgba(240, 240, 245, 0.7);
+    border: 1px solid rgba(0, 86, 179, 0.3);
+}
+
+body.light-mode .feature-button i {
+    color: var(--link-color);
+    filter: none;
+}
+
+body.light-mode .feature-button:hover {
+    border-color: rgba(0, 86, 179, 0.6);
+}
+
+body.light-mode .feature-button:hover i {
+    color: var(--link-hover);
+    filter: none;
+}
+
+/* Getting started guide improvements */
+.guide-step {
+    background: rgba(30, 30, 35, 0.7);
+    border-left: 4px solid var(--link-color);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.guide-step:hover {
+    transform: translateX(5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    border-left-width: 6px;
+}
+
+.step-number {
+    background: var(--link-color);
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-right: 1.5rem;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.guide-step h4 {
+    color: var(--link-color);
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+body.light-mode .guide-step {
+    background: rgba(240, 240, 245, 0.7);
+    border-left: 4px solid var(--link-color);
+}
+
+/* How to use site button improvements */
+.how-to-use-link {
+    font-weight: 700;
+    letter-spacing: 0.05rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.how-to-use-link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}

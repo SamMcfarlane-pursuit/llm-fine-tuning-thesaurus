@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Getting Started - Visual Thesaurus LLM{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h1 class="text-center mb-4">Getting Started Guide</h1>
+            <p class="lead text-center mb-5">Follow these steps to make the most of the Visual Thesaurus LLM platform</p>
+            
+            <!-- Include the exact steps from the image -->
+            {% include 'components/image_exact_steps.html' %}
+            
+            <div class="text-center mt-4">
+                <a href="{{ url_for('index') }}" class="btn btn-primary">Back to Home</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,7 +1,19 @@
 /**
  * AI Assistant Styles
- * Provides styling for the AI assistant component
+ * Provides styling for the AI assistant component with improved visibility
+ * Positioned at the bottom of the screen
  */
+
+/* Position the AI assistant container at the bottom right */
+.ai-assistant-container {
+    position: fixed !important;
+    bottom: 20px !important;
+    right: 20px !important;
+    z-index: 1000 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-end !important;
+}
 
 @keyframes typing-animation {
     0%, 100% {
@@ -28,10 +40,182 @@
 
 .ai-assistant-toggle {
     animation: pulse 2s infinite;
+    width: 60px !important;
+    height: 60px !important;
+    border-radius: 50% !important;
+    background: linear-gradient(135deg, #4287f5, #3a75d8) !important;
+    border: none !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3) !important;
+    color: white !important;
+    font-size: 24px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
 
 .ai-assistant-window {
     animation: fadeIn 0.3s ease-in-out;
+    width: 380px !important;
+    height: 550px !important;
+    background: rgba(15, 15, 15, 0.95) !important;
+    border-radius: 15px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+    margin-bottom: 15px !important;
+    overflow: hidden !important;
+    display: none;
+    flex-direction: column !important;
+    border: 2px solid rgba(66, 135, 245, 0.5) !important;
+}
+
+.ai-assistant-header {
+    padding: 15px !important;
+    background: linear-gradient(135deg, rgba(66, 135, 245, 0.3), rgba(0, 255, 221, 0.3)) !important;
+    border-bottom: 2px solid rgba(66, 135, 245, 0.3) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+}
+
+.ai-assistant-title {
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    font-size: 1.3rem !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+.ai-assistant-messages {
+    flex: 1 !important;
+    overflow-y: auto !important;
+    padding: 15px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    background-color: rgba(20, 20, 20, 0.95) !important;
+}
+
+.ai-assistant-messages::-webkit-scrollbar {
+    width: 10px !important;
+}
+
+.ai-assistant-messages::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2) !important;
+    border-radius: 5px !important;
+}
+
+.ai-assistant-messages::-webkit-scrollbar-thumb {
+    background: rgba(66, 135, 245, 0.6) !important;
+    border-radius: 5px !important;
+}
+
+.ai-assistant-messages::-webkit-scrollbar-thumb:hover {
+    background: rgba(66, 135, 245, 0.8) !important;
+}
+
+.user-message {
+    animation: slideInRight 0.3s ease-in-out;
+    align-self: flex-end !important;
+    background: linear-gradient(135deg, #4287f5, #3a75d8) !important;
+    color: white !important;
+    max-width: 80% !important;
+    padding: 12px 18px !important;
+    border-radius: 18px 18px 4px 18px !important;
+    margin-bottom: 10px !important;
+    font-size: 1.05rem !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+    word-wrap: break-word !important;
+    font-weight: 500 !important;
+}
+
+.assistant-message {
+    animation: slideInLeft 0.3s ease-in-out;
+    align-self: flex-start !important;
+    background: rgba(50, 50, 50, 0.9) !important;
+    color: #ffffff !important;
+    max-width: 80% !important;
+    padding: 12px 18px !important;
+    border-radius: 18px 18px 18px 4px !important;
+    margin-bottom: 10px !important;
+    font-size: 1.05rem !important;
+    border: 1px solid rgba(66, 135, 245, 0.3) !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+    word-wrap: break-word !important;
+    line-height: 1.5 !important;
+}
+
+.ai-assistant-input {
+    padding: 15px !important;
+    border-top: 2px solid rgba(66, 135, 245, 0.3) !important;
+    background: rgba(30, 30, 30, 0.8) !important;
+}
+
+.ai-assistant-form {
+    display: flex !important;
+    gap: 10px !important;
+}
+
+.ai-assistant-text-input {
+    flex: 1 !important;
+    padding: 12px 15px !important;
+    border-radius: 12px !important;
+    border: 2px solid rgba(66, 135, 245, 0.4) !important;
+    background: rgba(40, 40, 40, 0.8) !important;
+    color: #ffffff !important;
+    font-size: 1.05rem !important;
+    outline: none !important;
+}
+
+.ai-assistant-text-input:focus {
+    border-color: rgba(66, 135, 245, 0.7) !important;
+    box-shadow: 0 0 0 2px rgba(66, 135, 245, 0.2) !important;
+}
+
+.ai-assistant-send {
+    width: 45px !important;
+    height: 45px !important;
+    border-radius: 12px !important;
+    background: linear-gradient(135deg, #4287f5, #3a75d8) !important;
+    border: none !important;
+    color: white !important;
+    font-size: 1.2rem !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.2s ease !important;
+}
+
+.ai-assistant-send:hover {
+    background: linear-gradient(135deg, #3a75d8, #2a65c8) !important;
+    transform: translateY(-2px) !important;
+}
+
+.ai-assistant-suggestions {
+    padding: 12px 15px !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    border-top: 2px solid rgba(66, 135, 245, 0.3) !important;
+    background: rgba(25, 25, 25, 0.8) !important;
+}
+
+.ai-assistant-suggestion {
+    background: rgba(66, 135, 245, 0.15) !important;
+    border: 1px solid rgba(66, 135, 245, 0.4) !important;
+    border-radius: 15px !important;
+    padding: 8px 12px !important;
+    font-size: 0.9rem !important;
+    color: #d0e8ff !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    font-weight: 500 !important;
+}
+
+.ai-assistant-suggestion:hover {
+    background: rgba(66, 135, 245, 0.25) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
 }
 
 @keyframes fadeIn {
@@ -43,32 +227,6 @@
         opacity: 1;
         transform: translateY(0);
     }
-}
-
-.ai-assistant-messages::-webkit-scrollbar {
-    width: 8px;
-}
-
-.ai-assistant-messages::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 4px;
-}
-
-.ai-assistant-messages::-webkit-scrollbar-thumb {
-    background: rgba(66, 135, 245, 0.5);
-    border-radius: 4px;
-}
-
-.ai-assistant-messages::-webkit-scrollbar-thumb:hover {
-    background: rgba(66, 135, 245, 0.7);
-}
-
-.user-message {
-    animation: slideInRight 0.3s ease-in-out;
-}
-
-.assistant-message {
-    animation: slideInLeft 0.3s ease-in-out;
 }
 
 @keyframes slideInRight {
@@ -93,46 +251,65 @@
     }
 }
 
-.ai-assistant-suggestion:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
 /* Responsive styles */
 @media (max-width: 576px) {
     .ai-assistant-window {
-        width: 300px;
-        height: 450px;
+        width: 320px !important;
+        height: 480px !important;
     }
-    
+
     .ai-assistant-toggle {
-        width: 50px;
-        height: 50px;
-        font-size: 20px;
+        width: 55px !important;
+        height: 55px !important;
+        font-size: 22px !important;
+    }
+
+    .user-message, .assistant-message {
+        font-size: 1rem !important;
+        padding: 10px 15px !important;
+    }
+
+    .ai-assistant-suggestion {
+        font-size: 0.85rem !important;
+        padding: 6px 10px !important;
     }
 }
 
 /* High contrast mode */
 @media (prefers-contrast: high) {
     .ai-assistant-window {
-        background: #000000;
-        border: 2px solid #ffffff;
+        background: #000000 !important;
+        border: 3px solid #ffffff !important;
     }
-    
+
     .ai-assistant-toggle {
-        background: #0000ff;
-        color: #ffffff;
+        background: #0000ff !important;
+        color: #ffffff !important;
+        border: 2px solid #ffffff !important;
     }
-    
+
     .user-message {
-        background: #0000ff;
-        color: #ffffff;
+        background: #0000ff !important;
+        color: #ffffff !important;
+        border: 2px solid #ffffff !important;
     }
-    
+
     .assistant-message {
-        background: #000000;
-        color: #ffffff;
-        border: 1px solid #ffffff;
+        background: #000000 !important;
+        color: #ffffff !important;
+        border: 2px solid #ffffff !important;
+    }
+
+    .ai-assistant-suggestion {
+        background: #000000 !important;
+        color: #ffffff !important;
+        border: 2px solid #ffffff !important;
+    }
+
+    .ai-assistant-text-input {
+        background: #000000 !important;
+        color: #ffffff !important;
+        border: 2px solid #ffffff !important;
     }
 }
 
@@ -143,8 +320,8 @@
     .user-message,
     .assistant-message,
     .ai-assistant-suggestion:hover {
-        animation: none;
-        transition: none;
-        transform: none;
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
     }
 }

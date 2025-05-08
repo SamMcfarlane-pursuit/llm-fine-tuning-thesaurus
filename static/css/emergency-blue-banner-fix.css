@@ -1,0 +1,151 @@
+/**
+ * Emergency Blue Banner Fix CSS
+ * Last resort fix for blue banner text visibility with !important flags
+ */
+
+/* Direct targeting of the specific blue banner with maximum specificity */
+html body div[style*="background-color: rgb(0, 0, 255)"],
+html body div[style*="background-color: #0000ff"],
+html body div[style*="background-color: blue"],
+html body div[style*="background: rgb(0, 0, 255)"],
+html body div[style*="background: #0000ff"],
+html body div[style*="background: blue"],
+html body .blue-banner,
+html body .blue-header,
+html body .blue-section {
+    /* Override background with a more visible blue */
+    background: linear-gradient(to right, #0033cc, #0066ff) !important;
+    
+    /* Add a white border for contrast */
+    border: 3px solid #ffffff !important;
+    
+    /* Add a glow effect */
+    box-shadow: 
+        0 0 10px 5px rgba(0, 102, 255, 0.5),
+        0 0 20px rgba(255, 255, 255, 0.3) !important;
+    
+    /* Ensure text is visible */
+    color: #ffffff !important;
+    
+    /* Add multiple text shadows for maximum visibility */
+    text-shadow: 
+        0 0 5px #ffffff,
+        0 0 10px #ffffff,
+        0 0 15px #ffffff,
+        0 2px 4px rgba(0, 0, 0, 0.8) !important;
+    
+    /* Make text bold */
+    font-weight: 900 !important;
+    
+    /* Increase letter spacing */
+    letter-spacing: 0.08em !important;
+    
+    /* Increase font size */
+    font-size: 1.4em !important;
+    
+    /* Increase line height */
+    line-height: 1.8 !important;
+    
+    /* Center text */
+    text-align: center !important;
+    
+    /* Add padding */
+    padding: 25px !important;
+    
+    /* Add margin */
+    margin: 15px 0 !important;
+    
+    /* Add rounded corners */
+    border-radius: 10px !important;
+    
+    /* Ensure proper display */
+    display: block !important;
+    
+    /* Ensure proper width */
+    width: auto !important;
+    
+    /* Ensure proper max-width */
+    max-width: 100% !important;
+    
+    /* Ensure proper position */
+    position: relative !important;
+    
+    /* Ensure proper z-index */
+    z-index: 10 !important;
+    
+    /* Add a white outline around text */
+    -webkit-text-stroke: 1px #ffffff !important;
+}
+
+/* Target all text elements inside the blue banner */
+html body div[style*="background-color: rgb(0, 0, 255)"] *,
+html body div[style*="background-color: #0000ff"] *,
+html body div[style*="background-color: blue"] *,
+html body div[style*="background: rgb(0, 0, 255)"] *,
+html body div[style*="background: #0000ff"] *,
+html body div[style*="background: blue"] *,
+html body .blue-banner *,
+html body .blue-header *,
+html body .blue-section * {
+    /* Ensure text is visible */
+    color: #ffffff !important;
+    
+    /* Add multiple text shadows for maximum visibility */
+    text-shadow: 
+        0 0 5px #ffffff,
+        0 0 10px #ffffff,
+        0 0 15px #ffffff,
+        0 2px 4px rgba(0, 0, 0, 0.8) !important;
+    
+    /* Make text bold */
+    font-weight: 900 !important;
+    
+    /* Increase letter spacing */
+    letter-spacing: 0.08em !important;
+    
+    /* Add a white outline around text */
+    -webkit-text-stroke: 1px #ffffff !important;
+    
+    /* Ensure proper position */
+    position: relative !important;
+    
+    /* Ensure proper z-index */
+    z-index: 11 !important;
+}
+
+/* Add a special class for JavaScript to target */
+.emergency-visible-text {
+    /* Ensure text is visible */
+    color: #ffffff !important;
+    
+    /* Add multiple text shadows for maximum visibility */
+    text-shadow: 
+        0 0 5px #ffffff,
+        0 0 10px #ffffff,
+        0 0 15px #ffffff,
+        0 2px 4px rgba(0, 0, 0, 0.8) !important;
+    
+    /* Make text bold */
+    font-weight: 900 !important;
+    
+    /* Increase letter spacing */
+    letter-spacing: 0.08em !important;
+    
+    /* Add a white outline around text */
+    -webkit-text-stroke: 1px #ffffff !important;
+    
+    /* Add background for contrast */
+    background-color: rgba(0, 0, 0, 0.4) !important;
+    
+    /* Add padding */
+    padding: 5px 10px !important;
+    
+    /* Add rounded corners */
+    border-radius: 5px !important;
+    
+    /* Add margin */
+    margin: 5px !important;
+    
+    /* Ensure proper display */
+    display: inline-block !important;
+}

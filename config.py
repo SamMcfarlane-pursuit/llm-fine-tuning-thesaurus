@@ -42,6 +42,7 @@ class Config:
     # Application settings
     APP_NAME = 'Thesaurus LLM Fine-Tuning'
     ADMIN_EMAIL = os.environ.get('ADMIN_EMAIL', 'admin@example.com')
+    APP_URL = os.environ.get('APP_URL', 'http://localhost:5000')
 
     # File upload settings
     UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static/uploads')

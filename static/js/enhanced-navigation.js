@@ -120,6 +120,15 @@ function enhanceMobileNavigation() {
  * Create scroll indicator at the top of the page
  */
 function createScrollIndicator() {
+    // Check if user is authenticated
+    const isAuthenticated = document.body.getAttribute('data-user-logged-in') === 'true';
+
+    // Only add scroll indicator for authenticated users
+    if (!isAuthenticated) {
+        console.log('Scroll indicator not created: User not authenticated');
+        return;
+    }
+
     const scrollIndicatorContainer = document.createElement('div');
     scrollIndicatorContainer.className = 'scroll-indicator-container';
 

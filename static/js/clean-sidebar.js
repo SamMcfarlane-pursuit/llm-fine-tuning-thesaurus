@@ -372,6 +372,15 @@ function addReadingProgressIndicator() {
             return;
         }
 
+        // Check if user is authenticated
+        const isAuthenticated = document.body.getAttribute('data-user-logged-in') === 'true';
+
+        // Only add progress indicator for authenticated users
+        if (!isAuthenticated) {
+            console.log('Reading progress indicator not added: User not authenticated');
+            return;
+        }
+
         // Create progress container
         const progressContainer = document.createElement('div');
         progressContainer.className = 'reading-progress-container';

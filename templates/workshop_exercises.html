@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}Workshop Exercises - Visual Thesaurus LLM{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/workshop-exercise-cards.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('workshops') }}">Workshops</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Workshop Exercises</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1>Workshop Exercises</h1>
+            <p class="lead">Hands-on exercises to practice and reinforce your learning</p>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-4 mb-4">
+            {% with
+                difficulty="Medium",
+                time="10 min",
+                title="Basic LoRA Implementation",
+                description="Implement a basic LoRA fine-tuning setup for a small language model.",
+                status="You haven't attempted this exercise yet.",
+                url=url_for('guide.lora_hands_on')
+            %}
+                {% include 'components/workshop_exercise_card.html' %}
+            {% endwith %}
+        </div>
+
+        <div class="col-md-4 mb-4">
+            {% with
+                difficulty="Medium",
+                time="10 min",
+                title="QLoRA Configuration",
+                description="Configure QLoRA parameters for efficient fine-tuning of a medium-sized model.",
+                status="You haven't attempted this exercise yet.",
+                url=url_for('guide.qlora_hands_on')
+            %}
+                {% include 'components/workshop_exercise_card.html' %}
+            {% endwith %}
+        </div>
+
+        <div class="col-md-4 mb-4">
+            {% with
+                difficulty="Medium",
+                time="20 min",
+                title="Advanced Parameter Tuning",
+                description="Fine-tune advanced parameters for optimal model performance and efficiency.",
+                status="You haven't attempted this exercise yet.",
+                url=url_for('workshop.advanced_peft')
+            %}
+                {% include 'components/workshop_exercise_card.html' %}
+            {% endwith %}
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col-md-4 mb-4">
+            {% with
+                difficulty="Hard",
+                time="30 min",
+                title="Multi-GPU Training",
+                description="Set up distributed training across multiple GPUs for large model fine-tuning.",
+                status="You haven't attempted this exercise yet.",
+                url=url_for('workshop.memory_efficiency')
+            %}
+                {% include 'components/workshop_exercise_card.html' %}
+            {% endwith %}
+        </div>
+
+        <div class="col-md-4 mb-4">
+            {% with
+                difficulty="Easy",
+                time="5 min",
+                title="Model Evaluation",
+                description="Evaluate fine-tuned model performance using standard metrics and benchmarks.",
+                status="You haven't attempted this exercise yet.",
+                url=url_for('guide.pipeline_inference')
+            %}
+                {% include 'components/workshop_exercise_card.html' %}
+            {% endwith %}
+        </div>
+
+        <div class="col-md-4 mb-4">
+            {% with
+                difficulty="Medium",
+                time="15 min",
+                title="Model Deployment",
+                description="Deploy your fine-tuned model for inference using optimized serving techniques.",
+                status="You haven't attempted this exercise yet.",
+                url=url_for('guide.model_deployment')
+            %}
+                {% include 'components/workshop_exercise_card.html' %}
+            {% endwith %}
+        </div>
+    </div>
+</div>
+{% endblock %}

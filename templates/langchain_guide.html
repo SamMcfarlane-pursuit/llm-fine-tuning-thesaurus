@@ -1,0 +1,524 @@
+{% extends 'base.html' %}
+
+{% block title %}LangChain for LLM Fine-Tuning{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Current Section -->
+    <div class="current-section">
+        <h2><i class="bi bi-link-45deg"></i> LangChain Guide</h2>
+        <div class="related-concepts-container">
+            <a href="{{ url_for('docker_guide') }}" class="related-concept-button">
+                <i class="bi bi-box-seam"></i> Docker Guide
+            </a>
+            <a href="{{ url_for('huggingface_guide') }}" class="related-concept-button">
+                <i class="bi bi-hdd-network"></i> Hugging Face Guide
+            </a>
+            <a href="{{ url_for('langgraph_guide') }}" class="related-concept-button">
+                <i class="bi bi-diagram-3"></i> LangGraph Guide
+            </a>
+            <a href="{{ url_for('learn_and_explore') }}?concept=fine-tuning" class="related-concept-button">
+                <i class="bi bi-gear"></i> Fine-Tuning Concept
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">LangChain for LLM Fine-Tuning</h1>
+            <p class="lead">Learn how to use LangChain to build applications with fine-tuned language models</p>
+        </div>
+    </div>
+
+    <!-- Introduction Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2>Introduction to LangChain</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <p>LangChain is a framework for developing applications powered by language models. It enables the creation of applications that are context-aware, reason, and connect to other sources of data and computation.</p>
+                            
+                            <p>Key features of LangChain include:</p>
+                            <ul>
+                                <li><strong>Components</strong>: Abstractions for working with language models</li>
+                                <li><strong>Chains</strong>: Sequences of components for specific tasks</li>
+                                <li><strong>Memory</strong>: State persistence between chain runs</li>
+                                <li><strong>Agents</strong>: LLMs that can use tools and make decisions</li>
+                                <li><strong>Callbacks</strong>: Hooks for chain execution</li>
+                                <li><strong>Integrations</strong>: Connections to various data sources and tools</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <img src="https://python.langchain.com/assets/images/langchain_stack-f21828069f74484521f38199910007c1.svg" alt="LangChain Architecture" class="img-fluid rounded" style="max-width: 100%;">
+                                <p class="text-muted mt-2">LangChain's architecture for building LLM applications</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info mt-3">
+                        <h5><i class="bi bi-info-circle me-2"></i>What is LangChain?</h5>
+                        <p>LangChain is a framework designed to simplify the development of applications using large language models (LLMs). It provides a standard interface for chains, integrations with other tools, and end-to-end chains for common applications.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Installation and Setup Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h2>Installation and Setup</h2>
+                </div>
+                <div class="card-body">
+                    <p>To get started with LangChain, you'll need to install the library and its dependencies:</p>
+                    
+                    <div class="bg-light p-3 rounded">
+                        <pre><code># Install LangChain
+pip install langchain
+
+# Install integrations as needed
+pip install langchain-openai  # For OpenAI models
+pip install langchain-huggingface  # For Hugging Face models
+pip install langchain-community  # For community integrations</code></pre>
+                    </div>
+
+                    <p class="mt-3">For working with fine-tuned models, you'll also need to install the appropriate libraries:</p>
+                    
+                    <div class="bg-light p-3 rounded">
+                        <pre><code># For Hugging Face models
+pip install transformers accelerate
+
+# For local fine-tuned models with PEFT
+pip install peft bitsandbytes</code></pre>
+                    </div>
+
+                    <div class="alert alert-success mt-3">
+                        <h5><i class="bi bi-lightbulb me-2"></i>Pro Tip</h5>
+                        <p>It's recommended to use a virtual environment for your LangChain projects to avoid dependency conflicts:</p>
+                        <pre><code>python -m venv langchain-env
+source langchain-env/bin/activate  # On Windows: langchain-env\Scripts\activate
+pip install langchain</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Basic Concepts Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h2>Basic Concepts</h2>
+                </div>
+                <div class="card-body">
+                    <h4>Components</h4>
+                    <p>LangChain provides several key components for building LLM applications:</p>
+                    
+                    <ul>
+                        <li><strong>Models</strong>: Interfaces to language models (LLMs, Chat Models, Text Embedding Models)</li>
+                        <li><strong>Prompts</strong>: Templates and strategies for prompting language models</li>
+                        <li><strong>Indexes</strong>: Ways to structure documents for efficient retrieval</li>
+                        <li><strong>Memory</strong>: State persistence between chain runs</li>
+                        <li><strong>Chains</strong>: Sequences of calls to components</li>
+                        <li><strong>Agents</strong>: LLMs that can use tools and make decisions</li>
+                    </ul>
+                    
+                    <h4 class="mt-4">Working with Models</h4>
+                    <p>Here's a basic example of using LangChain with a language model:</p>
+                    
+                    <div class="bg-light p-3 rounded">
+                        <pre><code>from langchain_openai import ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate
+
+# Initialize the model
+model = ChatOpenAI(model="gpt-3.5-turbo")
+
+# Create a prompt template
+prompt = ChatPromptTemplate.from_template(
+    "You are a helpful assistant. Answer the following question: {question}"
+)
+
+# Create a simple chain
+chain = prompt | model
+
+# Run the chain
+response = chain.invoke({"question": "What is LangChain?"})
+print(response.content)</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Using Fine-Tuned Models Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2>Using Fine-Tuned Models with LangChain</h2>
+                </div>
+                <div class="card-body">
+                    <p>LangChain works seamlessly with fine-tuned models. Here's how to integrate your fine-tuned models into LangChain applications:</p>
+                    
+                    <h4>Integrating Hugging Face Fine-Tuned Models</h4>
+                    <div class="bg-light p-3 rounded">
+                        <pre><code>from langchain_huggingface import HuggingFaceEndpoint
+from langchain_core.prompts import PromptTemplate
+from langchain.chains import LLMChain
+
+# Load a fine-tuned model from Hugging Face
+model = HuggingFaceEndpoint(
+    repo_id="your-username/your-fine-tuned-model",
+    task="text-generation",
+    huggingfacehub_api_token="your-hf-token"
+)
+
+# Create a prompt template for thesaurus generation
+prompt = PromptTemplate.from_template(
+    "Generate synonyms for the word '{word}':"
+)
+
+# Create a chain
+chain = LLMChain(llm=model, prompt=prompt)
+
+# Run the chain
+result = chain.run(word="happy")
+print(result)</code></pre>
+                    </div>
+                    
+                    <h4 class="mt-4">Using Local Fine-Tuned Models with PEFT</h4>
+                    <div class="bg-light p-3 rounded">
+                        <pre><code>from transformers import AutoModelForCausalLM, AutoTokenizer
+from peft import PeftModel
+from langchain_huggingface import HuggingFacePipeline
+from langchain_core.prompts import PromptTemplate
+from langchain.chains import LLMChain
+import torch
+
+# Load a locally fine-tuned model with PEFT
+base_model = AutoModelForCausalLM.from_pretrained(
+    "distilgpt2",
+    device_map="auto",
+    torch_dtype=torch.float16
+)
+model = PeftModel.from_pretrained(base_model, "./thesaurus-model-lora")
+tokenizer = AutoTokenizer.from_pretrained("distilgpt2")
+
+# Create a LangChain pipeline
+pipeline = HuggingFacePipeline.from_model_id(
+    model_id=None,
+    task="text-generation",
+    model=model,
+    tokenizer=tokenizer,
+    max_new_tokens=100,
+    temperature=0.7
+)
+
+# Create a prompt template
+prompt = PromptTemplate.from_template(
+    "Generate synonyms for the word '{word}':\n\n"
+)
+
+# Create a chain
+chain = LLMChain(llm=pipeline, prompt=prompt)
+
+# Run the chain
+result = chain.run(word="happy")
+print(result)</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Advanced Patterns Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h2>Advanced Patterns for LLM Fine-Tuning Applications</h2>
+                </div>
+                <div class="card-body">
+                    <h4>Retrieval-Augmented Generation (RAG)</h4>
+                    <p>Combine your fine-tuned model with a retrieval system to provide relevant context:</p>
+                    
+                    <div class="bg-light p-3 rounded">
+                        <pre><code>from langchain_community.vectorstores import Chroma
+from langchain_huggingface import HuggingFaceEmbeddings, HuggingFaceEndpoint
+from langchain_core.prompts import PromptTemplate
+from langchain.chains import RetrievalQA
+from langchain_community.document_loaders import TextLoader
+from langchain.text_splitter import CharacterTextSplitter
+
+# Load and process documents
+loader = TextLoader("./thesaurus_data.txt")
+documents = loader.load()
+text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
+texts = text_splitter.split_documents(documents)
+
+# Create embeddings and vector store
+embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+db = Chroma.from_documents(texts, embeddings)
+
+# Load your fine-tuned model
+model = HuggingFaceEndpoint(
+    repo_id="your-username/your-fine-tuned-model",
+    task="text-generation",
+    huggingfacehub_api_token="your-hf-token"
+)
+
+# Create a retrieval QA chain
+retriever = db.as_retriever()
+qa_prompt = PromptTemplate.from_template(
+    """You are a thesaurus assistant. Use the following context to answer the question.
+    
+    Context: {context}
+    
+    Question: {question}
+    
+    Answer:"""
+)
+
+qa_chain = RetrievalQA.from_chain_type(
+    llm=model,
+    chain_type="stuff",
+    retriever=retriever,
+    chain_type_kwargs={"prompt": qa_prompt}
+)
+
+# Run the chain
+result = qa_chain.run("What are synonyms for 'happy'?")
+print(result)</code></pre>
+                    </div>
+                    
+                    <h4 class="mt-4">Conversational Chains with Memory</h4>
+                    <p>Create a conversational interface with your fine-tuned model that remembers previous interactions:</p>
+                    
+                    <div class="bg-light p-3 rounded">
+                        <pre><code>from langchain_huggingface import HuggingFaceEndpoint
+from langchain.chains import ConversationChain
+from langchain.memory import ConversationBufferMemory
+from langchain_core.prompts import PromptTemplate
+
+# Load your fine-tuned model
+model = HuggingFaceEndpoint(
+    repo_id="your-username/your-fine-tuned-model",
+    task="text-generation",
+    huggingfacehub_api_token="your-hf-token"
+)
+
+# Create a conversation memory
+memory = ConversationBufferMemory()
+
+# Create a conversation prompt
+prompt = PromptTemplate.from_template(
+    """The following is a conversation with a thesaurus AI assistant. The assistant provides synonyms, antonyms, and related terms.
+
+    Current conversation:
+    {history}
+    Human: {input}
+    AI:"""
+)
+
+# Create a conversation chain
+conversation = ConversationChain(
+    llm=model,
+    memory=memory,
+    prompt=prompt,
+    verbose=True
+)
+
+# Run the conversation
+response1 = conversation.predict(input="What are synonyms for 'happy'?")
+print(response1)
+
+response2 = conversation.predict(input="What about antonyms?")
+print(response2)</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Real-World Applications Section -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h2>Real-World Applications</h2>
+                </div>
+                <div class="card-body">
+                    <h4>Thesaurus Application with Fine-Tuned Models</h4>
+                    <p>Here's a complete example of building a thesaurus application using LangChain and fine-tuned models:</p>
+                    
+                    <div class="bg-light p-3 rounded">
+                        <pre><code>from langchain_huggingface import HuggingFacePipeline
+from langchain_core.prompts import PromptTemplate
+from langchain.chains import LLMChain
+from langchain.chains import SequentialChain
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from peft import PeftModel
+import torch
+from fastapi import FastAPI
+from pydantic import BaseModel
+
+# Load a locally fine-tuned model with PEFT
+base_model = AutoModelForCausalLM.from_pretrained(
+    "distilgpt2",
+    device_map="auto",
+    torch_dtype=torch.float16
+)
+model = PeftModel.from_pretrained(base_model, "./thesaurus-model-lora")
+tokenizer = AutoTokenizer.from_pretrained("distilgpt2")
+
+# Create a LangChain pipeline
+pipeline = HuggingFacePipeline.from_model_id(
+    model_id=None,
+    task="text-generation",
+    model=model,
+    tokenizer=tokenizer,
+    max_new_tokens=100,
+    temperature=0.7
+)
+
+# Create prompt templates for different thesaurus functions
+synonyms_prompt = PromptTemplate.from_template(
+    "Generate synonyms for the word '{word}':\n\n"
+)
+
+antonyms_prompt = PromptTemplate.from_template(
+    "Generate antonyms for the word '{word}':\n\n"
+)
+
+related_prompt = PromptTemplate.from_template(
+    "Generate related terms for the word '{word}':\n\n"
+)
+
+definition_prompt = PromptTemplate.from_template(
+    "Define the word '{word}':\n\n"
+)
+
+# Create individual chains
+synonyms_chain = LLMChain(
+    llm=pipeline,
+    prompt=synonyms_prompt,
+    output_key="synonyms"
+)
+
+antonyms_chain = LLMChain(
+    llm=pipeline,
+    prompt=antonyms_prompt,
+    output_key="antonyms"
+)
+
+related_chain = LLMChain(
+    llm=pipeline,
+    prompt=related_prompt,
+    output_key="related_terms"
+)
+
+definition_chain = LLMChain(
+    llm=pipeline,
+    prompt=definition_prompt,
+    output_key="definition"
+)
+
+# Create a sequential chain
+thesaurus_chain = SequentialChain(
+    chains=[synonyms_chain, antonyms_chain, related_chain, definition_chain],
+    input_variables=["word"],
+    output_variables=["synonyms", "antonyms", "related_terms", "definition"],
+    verbose=True
+)
+
+# Create FastAPI app
+app = FastAPI(title="Thesaurus API")
+
+class WordRequest(BaseModel):
+    word: str
+
+@app.post("/thesaurus")
+async def get_thesaurus_entry(request: WordRequest):
+    # Run the chain
+    result = thesaurus_chain({"word": request.word})
+    
+    # Process the results
+    synonyms = [s.strip() for s in result["synonyms"].split(",") if s.strip()]
+    antonyms = [a.strip() for a in result["antonyms"].split(",") if a.strip()]
+    related_terms = [r.strip() for r in result["related_terms"].split(",") if r.strip()]
+    
+    # Return the result
+    return {
+        "word": request.word,
+        "synonyms": synonyms,
+        "antonyms": antonyms,
+        "related_terms": related_terms,
+        "definition": result["definition"].strip()
+    }</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Best Practices Section -->
+    <div class="row mt-4 mb-5">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h2>Best Practices</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Performance Optimization</h4>
+                            <ul>
+                                <li><strong>Batch Processing</strong>: Use batch processing for multiple inputs</li>
+                                <li><strong>Caching</strong>: Implement caching to avoid redundant model calls</li>
+                                <li><strong>Quantization</strong>: Use quantized models for faster inference</li>
+                                <li><strong>Streaming</strong>: Use streaming for better user experience with long outputs</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Error Handling</h4>
+                            <ul>
+                                <li><strong>Graceful Fallbacks</strong>: Implement fallback mechanisms for when models fail</li>
+                                <li><strong>Retry Logic</strong>: Add retry logic for transient errors</li>
+                                <li><strong>Validation</strong>: Validate inputs and outputs at each step</li>
+                                <li><strong>Monitoring</strong>: Add monitoring to track performance and errors</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-warning mt-3">
+                        <h5><i class="bi bi-exclamation-triangle me-2"></i>Common Pitfalls</h5>
+                        <ul>
+                            <li><strong>Prompt Engineering</strong>: Fine-tuned models still need well-crafted prompts</li>
+                            <li><strong>Token Limits</strong>: Be aware of token limits, especially with memory and context</li>
+                            <li><strong>Error Propagation</strong>: Handle errors at each step to prevent cascading failures</li>
+                            <li><strong>Resource Management</strong>: Be mindful of memory usage, especially with large models</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add any JavaScript needed for the LangChain guide
+    });
+</script>
+{% endblock %}

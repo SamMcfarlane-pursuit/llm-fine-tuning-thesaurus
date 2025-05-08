@@ -8,11 +8,12 @@
     <nav aria-label="breadcrumb" class="mb-3">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="/guide/finetuning-comparison">Guides</a></li>
             <li class="breadcrumb-item"><a href="/exercises">Exercises</a></li>
             <li class="breadcrumb-item active" aria-current="page">QLoRA Implementation Guide</li>
         </ol>
     </nav>
-    
+
     <!-- Learning Path Navigation -->
     <div class="learning-path-nav mb-4">
         <div class="path-container">
@@ -71,7 +72,7 @@
         </div>
         <div class="card-body">
             <p>QLoRA (Quantized Low-Rank Adaptation) is an advanced technique for fine-tuning large language models (LLMs) that combines quantization with low-rank adaptation to significantly reduce memory requirements while maintaining performance.</p>
-            
+
             <div class="alert alert-info">
                 <i class="bi bi-info-circle-fill me-2"></i>
                 <strong>Key Benefits of QLoRA:</strong>
@@ -92,7 +93,7 @@
         </div>
         <div class="card-body">
             <p>Before implementing QLoRA, ensure you have the following:</p>
-            
+
             <div class="row">
                 <div class="col-md-6">
                     <div class="card h-100 border-primary mb-3">
@@ -121,7 +122,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="mt-4">
                 <h4>Installation Commands</h4>
                 <div class="code-block">
@@ -156,7 +157,7 @@ from datasets import load_dataset</code></pre>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="step">
                     <div class="step-number">2</div>
                     <div class="step-content">
@@ -176,7 +177,7 @@ bnb_config = BitsAndBytesConfig(
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="step">
                     <div class="step-number">3</div>
                     <div class="step-content">
@@ -193,7 +194,7 @@ tokenizer = AutoTokenizer.from_pretrained(model_id)</code></pre>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="step">
                     <div class="step-number">4</div>
                     <div class="step-content">
@@ -204,7 +205,7 @@ model = prepare_model_for_kbit_training(model)</code></pre>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="step">
                     <div class="step-number">5</div>
                     <div class="step-content">
@@ -226,7 +227,7 @@ lora_config = LoraConfig(
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="step">
                     <div class="step-number">6</div>
                     <div class="step-content">
@@ -237,7 +238,7 @@ model = get_peft_model(model, lora_config)</code></pre>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="step">
                     <div class="step-number">7</div>
                     <div class="step-content">
@@ -254,7 +255,7 @@ tokenized_dataset = dataset.map(tokenize_function, batched=True)</code></pre>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="step">
                     <div class="step-number">8</div>
                     <div class="step-content">
@@ -277,7 +278,7 @@ training_args = TrainingArguments(
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="step">
                     <div class="step-number">9</div>
                     <div class="step-content">
@@ -296,7 +297,7 @@ trainer.train()</code></pre>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="step">
                     <div class="step-number">10</div>
                     <div class="step-content">
@@ -337,7 +338,7 @@ model.gradient_checkpointing_enable()</code></pre>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="headingTwo">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
@@ -363,7 +364,7 @@ model = AutoModelForCausalLM.from_pretrained(
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="headingThree">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
@@ -500,13 +501,13 @@ merged_model.save_pretrained("./merged-model")</code></pre>
     .step-container {
         position: relative;
     }
-    
+
     .step {
         display: flex;
         margin-bottom: 30px;
         position: relative;
     }
-    
+
     .step:not(:last-child)::after {
         content: "";
         position: absolute;
@@ -516,7 +517,7 @@ merged_model.save_pretrained("./merged-model")</code></pre>
         width: 3px;
         background: linear-gradient(to bottom, #4287f5, rgba(66, 135, 245, 0.3));
     }
-    
+
     .step-number {
         width: 50px;
         height: 50px;
@@ -533,11 +534,11 @@ merged_model.save_pretrained("./merged-model")</code></pre>
         box-shadow: 0 5px 15px rgba(66, 135, 245, 0.4);
         z-index: 2;
     }
-    
+
     .step-content {
         flex-grow: 1;
     }
-    
+
     .code-block {
         background-color: #1e1e1e;
         border-radius: 8px;
@@ -546,17 +547,17 @@ merged_model.save_pretrained("./merged-model")</code></pre>
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         overflow-x: auto;
     }
-    
+
     .code-block pre {
         margin: 0;
     }
-    
+
     .code-block code {
         color: #e0e0e0;
         font-family: 'Courier New', monospace;
         font-size: 0.9rem;
     }
-    
+
     /* Navigation and Learning Path Styles */
     .breadcrumb {
         background-color: rgba(30, 30, 30, 0.7);
@@ -565,28 +566,28 @@ merged_model.save_pretrained("./merged-model")</code></pre>
         border: 1px solid rgba(66, 135, 245, 0.3);
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     }
-    
+
     .breadcrumb-item a {
         color: #4287f5;
         font-weight: 600;
         text-decoration: none;
         transition: all 0.3s ease;
     }
-    
+
     .breadcrumb-item a:hover {
         color: #00ffdd;
         text-decoration: none;
     }
-    
+
     .breadcrumb-item.active {
         color: #ffffff;
         font-weight: 600;
     }
-    
+
     .breadcrumb-item+.breadcrumb-item::before {
         color: rgba(255, 255, 255, 0.5);
     }
-    
+
     /* Learning Path Navigation */
     .learning-path-nav {
         background-color: rgba(25, 25, 25, 0.9);
@@ -597,7 +598,7 @@ merged_model.save_pretrained("./merged-model")</code></pre>
         position: relative;
         overflow: hidden;
     }
-    
+
     .learning-path-nav::before {
         content: "";
         position: absolute;
@@ -608,7 +609,7 @@ merged_model.save_pretrained("./merged-model")</code></pre>
         background: linear-gradient(to right, #4287f5, #00ffdd);
         z-index: 1;
     }
-    
+
     .path-container {
         display: flex;
         align-items: center;
@@ -616,7 +617,7 @@ merged_model.save_pretrained("./merged-model")</code></pre>
         position: relative;
         padding: 0 10px;
     }
-    
+
     .path-step {
         display: flex;
         flex-direction: column;
@@ -625,7 +626,7 @@ merged_model.save_pretrained("./merged-model")</code></pre>
         z-index: 2;
         width: 120px;
     }
-    
+
     .step-icon {
         width: 50px;
         height: 50px;
@@ -641,7 +642,7 @@ merged_model.save_pretrained("./merged-model")</code></pre>
         font-size: 1.5rem;
         color: rgba(255, 255, 255, 0.7);
     }
-    
+
     .path-step.active .step-icon {
         background: linear-gradient(135deg, #4287f5, #00c6ff);
         border-color: rgba(255, 255, 255, 0.8);
@@ -649,13 +650,13 @@ merged_model.save_pretrained("./merged-model")</code></pre>
         color: white;
         transform: scale(1.1);
     }
-    
+
     .path-step.completed .step-icon {
         background: linear-gradient(135deg, #00d463, #00c853);
         border-color: rgba(255, 255, 255, 0.8);
         color: white;
     }
-    
+
     .step-label {
         font-size: 0.9rem;
         font-weight: 600;
@@ -664,16 +665,16 @@ merged_model.save_pretrained("./merged-model")</code></pre>
         margin-bottom: 10px;
         transition: all 0.3s ease;
     }
-    
+
     .path-step.active .step-label {
         color: white;
         text-shadow: 0 0 10px rgba(66, 135, 245, 0.5);
     }
-    
+
     .path-step.completed .step-label {
         color: #00d463;
     }
-    
+
     .path-connector {
         flex-grow: 1;
         height: 3px;
@@ -683,16 +684,16 @@ merged_model.save_pretrained("./merged-model")</code></pre>
         margin: 0 5px;
         transform: translateY(-15px);
     }
-    
+
     .path-connector.active {
         background: linear-gradient(to right, #00d463, #4287f5);
         box-shadow: 0 0 10px rgba(66, 135, 245, 0.4);
     }
-    
+
     .step-action {
         margin-top: 5px;
     }
-    
+
     /* Responsive adjustments for navigation */
     @media (max-width: 768px) {
         .path-container {
@@ -700,30 +701,30 @@ merged_model.save_pretrained("./merged-model")</code></pre>
             align-items: flex-start;
             gap: 15px;
         }
-        
+
         .path-step {
             flex-direction: row;
             width: 100%;
             align-items: center;
         }
-        
+
         .step-icon {
             margin-bottom: 0;
             margin-right: 15px;
         }
-        
+
         .step-label {
             margin-bottom: 0;
             text-align: left;
         }
-        
+
         .path-connector {
             width: 3px;
             height: 20px;
             margin: 0 0 0 25px;
             transform: translateY(0);
         }
-        
+
         .step-action {
             margin-top: 0;
             margin-left: auto;

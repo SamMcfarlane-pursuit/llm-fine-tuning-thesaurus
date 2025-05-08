@@ -47,6 +47,7 @@ pre,
 .sidebar-content {
     scrollbar-width: thin;
     scrollbar-color: rgba(67, 97, 238, 0.7) rgba(30, 30, 35, 0.7);
+    overflow: auto;
 }
 
 .tutorial-card .card-body::-webkit-scrollbar,
@@ -115,16 +116,16 @@ pre::-webkit-scrollbar-thumb:hover,
         background: #000000;
         border: 1px solid #ffffff;
     }
-    
+
     ::-webkit-scrollbar-thumb {
         background: #ffffff;
         border: 1px solid #000000;
     }
-    
+
     ::-webkit-scrollbar-thumb:hover {
         background: #cccccc;
     }
-    
+
     * {
         scrollbar-color: #ffffff #000000;
     }

@@ -1,0 +1,240 @@
+/**
+ * Enhanced Dark Text Visibility CSS
+ * Improves the visibility of text on dark backgrounds
+ */
+
+/* Base text improvements for dark backgrounds */
+.dark-bg-text {
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    font-weight: 500;
+    letter-spacing: 0.01rem;
+}
+
+/* Headings on dark backgrounds */
+.dark-bg-heading {
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 10px rgba(93, 214, 255, 0.3);
+    font-weight: 700;
+    letter-spacing: -0.01rem;
+}
+
+/* Links on dark backgrounds */
+.dark-bg-link {
+    color: #5dd6ff;
+    text-shadow: 0 0 8px rgba(93, 214, 255, 0.4);
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.dark-bg-link:hover {
+    color: #8ae4ff;
+    text-shadow: 0 0 12px rgba(93, 214, 255, 0.6);
+    text-decoration: none;
+}
+
+/* Apply to all text elements in dark sections */
+.dark-section p,
+.dark-section li,
+.dark-section td,
+.dark-section th,
+.dark-section .card-text,
+.dark-section .dropdown-item {
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.dark-section h1,
+.dark-section h2,
+.dark-section h3,
+.dark-section h4,
+.dark-section h5,
+.dark-section h6 {
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 10px rgba(93, 214, 255, 0.3);
+}
+
+.dark-section a:not(.btn) {
+    color: #5dd6ff;
+    text-shadow: 0 0 8px rgba(93, 214, 255, 0.4);
+}
+
+.dark-section a:not(.btn):hover {
+    color: #8ae4ff;
+    text-shadow: 0 0 12px rgba(93, 214, 255, 0.6);
+}
+
+/* Enhanced text visibility for all elements */
+body {
+    --text-shadow-dark: 0 1px 3px rgba(0, 0, 0, 0.5);
+    --text-shadow-light: none;
+}
+
+/* Apply enhanced text visibility to all text elements */
+p, li, td, th, .card-text, .dropdown-item, .nav-link {
+    text-shadow: var(--text-shadow-dark);
+}
+
+body.light-mode p, 
+body.light-mode li, 
+body.light-mode td, 
+body.light-mode th, 
+body.light-mode .card-text, 
+body.light-mode .dropdown-item, 
+body.light-mode .nav-link {
+    text-shadow: var(--text-shadow-light);
+}
+
+/* Enhanced visibility for headings */
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 10px rgba(93, 214, 255, 0.3);
+}
+
+body.light-mode h1, 
+body.light-mode h2, 
+body.light-mode h3, 
+body.light-mode h4, 
+body.light-mode h5, 
+body.light-mode h6, 
+body.light-mode .h1, 
+body.light-mode .h2, 
+body.light-mode .h3, 
+body.light-mode .h4, 
+body.light-mode .h5, 
+body.light-mode .h6 {
+    text-shadow: none;
+}
+
+/* Enhanced visibility for buttons */
+.btn {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    font-weight: 600;
+}
+
+body.light-mode .btn {
+    text-shadow: none;
+}
+
+/* Enhanced visibility for card titles */
+.card-title {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 10px rgba(93, 214, 255, 0.3);
+}
+
+body.light-mode .card-title {
+    text-shadow: none;
+}
+
+/* Enhanced visibility for navbar brand */
+.navbar-brand {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    font-weight: 700;
+}
+
+body.light-mode .navbar-brand {
+    text-shadow: none;
+}
+
+/* Enhanced visibility for dropdown items */
+.dropdown-item {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+body.light-mode .dropdown-item {
+    text-shadow: none;
+}
+
+/* Enhanced visibility for form labels */
+label {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    font-weight: 600;
+}
+
+body.light-mode label {
+    text-shadow: none;
+}
+
+/* Enhanced visibility for alerts */
+.alert {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+body.light-mode .alert {
+    text-shadow: none;
+}
+
+/* Enhanced visibility for badges */
+.badge {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    font-weight: 600;
+}
+
+body.light-mode .badge {
+    text-shadow: none;
+}
+
+/* Enhanced visibility for list group items */
+.list-group-item {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+body.light-mode .list-group-item {
+    text-shadow: none;
+}
+
+/* Enhanced visibility for modal titles */
+.modal-title {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    font-weight: 700;
+}
+
+body.light-mode .modal-title {
+    text-shadow: none;
+}
+
+/* Enhanced visibility for tooltips */
+.tooltip {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    font-weight: 600;
+}
+
+/* Enhanced visibility for popovers */
+.popover {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+body.light-mode .popover {
+    text-shadow: none;
+}
+
+/* Enhanced visibility for breadcrumbs */
+.breadcrumb {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+body.light-mode .breadcrumb {
+    text-shadow: none;
+}
+
+/* Enhanced visibility for pagination */
+.pagination {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+body.light-mode .pagination {
+    text-shadow: none;
+}
+
+/* Enhanced visibility for tables */
+.table {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+body.light-mode .table {
+    text-shadow: none;
+}
+
+/* Enhanced visibility for code blocks */
+pre, code {
+    text-shadow: none;
+    font-weight: 500;
+}

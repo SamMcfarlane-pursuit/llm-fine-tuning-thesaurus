@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+
+{% block title %}QLoRA Hands-on Exercise - Visual Thesaurus LLM{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/guide/qlora-implementation">Guides</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">QLoRA Hands-on Exercise</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h1 class="mb-0"><i class="bi bi-code-slash me-2"></i>QLoRA Hands-on Exercise</h1>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <div class="d-flex">
+                            <div class="me-3">
+                                <i class="bi bi-info-circle-fill fs-3"></i>
+                            </div>
+                            <div>
+                                <h5>Practical QLoRA Implementation</h5>
+                                <p class="mb-0">
+                                    In this hands-on exercise, you'll implement QLoRA (Quantized Low-Rank Adaptation) fine-tuning on a pre-trained language model using Google Colab. This exercise will guide you through the entire process from setting up your environment to generating text with your fine-tuned model, with a focus on memory efficiency through 4-bit quantization.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="mt-4">Exercise Overview</h2>
+                    <p>
+                        This exercise will walk you through the following steps:
+                    </p>
+                    <ol>
+                        <li>Setting up your environment with the necessary libraries (including bitsandbytes for 4-bit quantization)</li>
+                        <li>Loading a pre-trained language model with 4-bit quantization</li>
+                        <li>Configuring QLoRA for memory-efficient fine-tuning</li>
+                        <li>Preparing a dataset for fine-tuning</li>
+                        <li>Training the model with QLoRA</li>
+                        <li>Saving and loading the QLoRA adapter</li>
+                        <li>Generating text with your fine-tuned model</li>
+                        <li>Comparing memory usage with standard LoRA</li>
+                    </ol>
+
+                    <div class="card mb-4 border-success">
+                        <div class="card-header bg-success text-white">
+                            <h3 class="mb-0"><i class="bi bi-laptop me-2"></i>Google Colab Notebook</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>
+                                We've prepared a Google Colab notebook that contains all the code for this exercise. Google Colab provides free access to GPUs, making it perfect for fine-tuning language models with QLoRA.
+                            </p>
+                            
+                            <div class="d-flex justify-content-center my-4">
+                                <a href="https://colab.research.google.com/github/yourusername/visual-thesaurus-llm/blob/main/qlora_fine_tuning.ipynb" target="_blank" class="btn btn-primary btn-lg">
+                                    <i class="bi bi-google me-2"></i>Open in Google Colab
+                                </a>
+                            </div>
+                            
+                            <div class="alert alert-warning">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                <strong>Note:</strong> You'll need a Google account to use Google Colab. If you don't have one, you can create one for free.
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="mt-5">Exercise Instructions</h2>
+                    
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="mb-0">Step 1: Open the Notebook</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>Click the "Open in Google Colab" button above to open the notebook in Google Colab.</p>
+                            <p>Once the notebook is open, you can run each cell by clicking the play button on the left side of the cell or by pressing Shift+Enter.</p>
+                            <div class="text-center my-4">
+                                <img src="{{ url_for('static', filename='images/colab-run-cell.svg') }}" alt="Google Colab Run Cell" class="img-fluid rounded shadow" style="max-width: 600px;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="mb-0">Step 2: Enable GPU Acceleration</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>To speed up the fine-tuning process, you should enable GPU acceleration:</p>
+                            <ol>
+                                <li>Click on "Runtime" in the top menu</li>
+                                <li>Select "Change runtime type"</li>
+                                <li>Set "Hardware accelerator" to "GPU"</li>
+                                <li>Click "Save"</li>
+                            </ol>
+                            <div class="text-center my-4">
+                                <img src="{{ url_for('static', filename='images/colab-gpu.svg') }}" alt="Google Colab GPU Settings" class="img-fluid rounded shadow" style="max-width: 600px;">
+                            </div>
+                            <div class="alert alert-info">
+                                <i class="bi bi-lightbulb-fill me-2"></i>
+                                <strong>Tip:</strong> QLoRA is specifically designed to work with limited GPU memory. With a standard Colab GPU (T4 with 16GB VRAM), you can fine-tune models up to 13B parameters.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="mb-0">Step 3: Run the Notebook</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>Follow these steps to run the notebook:</p>
+                            <ol>
+                                <li>Read the explanations in each cell to understand what the code is doing</li>
+                                <li>Run each cell in order by clicking the play button or pressing Shift+Enter</li>
+                                <li>Wait for each cell to complete before moving to the next one</li>
+                                <li>Observe the outputs and make sure there are no errors</li>
+                                <li>Pay special attention to the memory usage statistics that are displayed</li>
+                            </ol>
+                            <div class="alert alert-info">
+                                <i class="bi bi-lightbulb-fill me-2"></i>
+                                <strong>Tip:</strong> You can run all cells at once by clicking "Runtime" > "Run all" in the top menu, but it's recommended to run them one by one to understand each step.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h3 class="mb-0">Step 4: Experiment with the Code</h3>
+                        </div>
+                        <div class="card-body">
+                            <p>Once you've run the notebook successfully, try experimenting with the code:</p>
+                            <ul>
+                                <li>Try different quantization settings (e.g., NF4 vs. INT4)</li>
+                                <li>Experiment with different model sizes (e.g., 7B vs. 13B)</li>
+                                <li>Modify the LoRA configuration (e.g., change the rank or target modules)</li>
+                                <li>Try different prompts for text generation</li>
+                                <li>Adjust the training parameters (e.g., learning rate, number of epochs)</li>
+                            </ul>
+                            <div class="text-center my-4">
+                                <img src="{{ url_for('static', filename='images/colab-advanced-options.svg') }}" alt="Advanced QLoRA Configuration Options" class="img-fluid rounded shadow" style="max-width: 600px;">
+                            </div>
+                            
+                            <div class="alert alert-success">
+                                <i class="bi bi-check-circle-fill me-2"></i>
+                                <strong>Challenge:</strong> Compare the memory usage between standard LoRA and QLoRA for the same model size. The notebook includes code to measure memory usage during training.
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="mt-5">Additional Resources</h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header bg-info text-white">
+                                    <h3 class="mb-0">Documentation</h3>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item"><a href="https://huggingface.co/docs/peft/index" target="_blank">Hugging Face PEFT Documentation</a></li>
+                                        <li class="list-group-item"><a href="https://huggingface.co/docs/transformers/index" target="_blank">Hugging Face Transformers Documentation</a></li>
+                                        <li class="list-group-item"><a href="https://github.com/TimDettmers/bitsandbytes" target="_blank">BitsAndBytes GitHub Repository</a></li>
+                                        <li class="list-group-item"><a href="https://arxiv.org/abs/2305.14314" target="_blank">QLoRA Research Paper</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card h-100">
+                                <div class="card-header bg-info text-white">
+                                    <h3 class="mb-0">Related Guides</h3>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item"><a href="/guide/qlora-implementation">QLoRA Implementation Guide</a></li>
+                                        <li class="list-group-item"><a href="/guide/lora-implementation">LoRA Implementation Guide</a></li>
+                                        <li class="list-group-item"><a href="/guide/lora-hands-on">LoRA Hands-on Exercise</a></li>
+                                        <li class="list-group-item"><a href="/guide/finetuning-comparison">Fine-Tuning Methods Comparison</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

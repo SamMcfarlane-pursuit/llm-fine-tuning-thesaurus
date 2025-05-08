@@ -1,22 +1,27 @@
 #!/bin/bash
 
-# Start a single server on port 5001
+# Start a single server on port 5003
 echo "Starting Thesaurus AI LLM Fine-Tuning server..."
 
 # Kill any existing Python processes
 echo "Killing any existing Python processes..."
-pkill -f "python app.py"
+pkill -f "python app.py" || true
+pkill -f "python test_server.py" || true
 
-# Start the server on port 5001 (to avoid conflicts)
-echo "Starting server on port 5001..."
-python app.py --port 5001 &
+# Make sure the port is not in use
+echo "Making sure port 5003 is not in use..."
+lsof -i:5003 | grep LISTEN | awk '{print $2}' | xargs kill -9 2>/dev/null || true
+
+# Start the test server on port 5003 (to avoid conflicts)
+echo "Starting test server on port 5003..."
+python test_server.py &
 SERVER_PID=$!
-echo "Server started with PID: $SERVER_PID"
+echo "Test server started with PID: $SERVER_PID"
 
 # Print the URL for the server
 echo ""
 echo "Server is now running at:"
-echo "- http://127.0.0.1:5001/ (Main server)"
+echo "- http://127.0.0.1:5003/ (Test server)"
 echo ""
 echo "Press Ctrl+C to stop the server."
 
@@ -26,5 +31,5 @@ wait
 # This part will execute when the user presses Ctrl+C
 echo ""
 echo "Stopping server..."
-kill $SERVER_PID
+kill $SERVER_PID 2>/dev/null || true
 echo "Server stopped."

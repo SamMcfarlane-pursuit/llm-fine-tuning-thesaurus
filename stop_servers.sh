@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# Stop all servers
-echo "Stopping Thesaurus AI LLM Fine-Tuning servers..."
+# Stop the server
+echo "Stopping Thesaurus AI LLM Fine-Tuning server..."
 
 # Kill any existing Python processes
 echo "Killing any existing Python processes..."
 pkill -f "python app.py"
 
-echo "All servers stopped."
+echo "Server stopped."

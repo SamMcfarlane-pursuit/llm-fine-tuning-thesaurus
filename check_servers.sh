@@ -1,44 +1,24 @@
 #!/bin/bash
 
-# Check the status of all servers
-echo "Checking Thesaurus AI LLM Fine-Tuning servers..."
+# Check the status of the server
+echo "Checking Thesaurus AI LLM Fine-Tuning server..."
 
-# Check server on port 5035
-echo "Checking server on port 5035..."
-curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:5035/ > /dev/null
+# Check server on port 5000
+echo "Checking server on port 5000..."
+curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:5000/ > /dev/null
 if [ $? -eq 0 ]; then
-    echo "✅ Server on port 5035 is running."
+    echo "✅ Server on port 5000 is running."
 else
-    echo "❌ Server on port 5035 is not running."
+    echo "❌ Server on port 5000 is not running."
 fi
 
-# Check server on port 5036
-echo "Checking server on port 5036..."
-curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:5036/ > /dev/null
-if [ $? -eq 0 ]; then
-    echo "✅ Server on port 5036 is running."
-else
-    echo "❌ Server on port 5036 is not running."
-fi
-
-# Check server on port 5037
-echo "Checking server on port 5037..."
-curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:5037/ > /dev/null
-if [ $? -eq 0 ]; then
-    echo "✅ Server on port 5037 is running."
-else
-    echo "❌ Server on port 5037 is not running."
-fi
-
-# Print the URLs for the servers
+# Print the URL for the server
 echo ""
-echo "Server URLs:"
-echo "- http://127.0.0.1:5035/ (Main server)"
-echo "- http://127.0.0.1:5036/ (Secondary server)"
-echo "- http://127.0.0.1:5037/ (Tertiary server)"
+echo "Server URL:"
+echo "- http://127.0.0.1:5000/ (Main server)"
 echo ""
-echo "You can access different pages on each server to distribute the load."
+echo "You can access all pages on this server."
 echo "For example:"
-echo "- http://127.0.0.1:5035/workshop-progress"
-echo "- http://127.0.0.1:5036/frameworks"
-echo "- http://127.0.0.1:5037/tutorials"
+echo "- http://127.0.0.1:5000/workshop-progress"
+echo "- http://127.0.0.1:5000/frameworks"
+echo "- http://127.0.0.1:5000/tutorials"

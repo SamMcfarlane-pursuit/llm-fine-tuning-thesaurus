@@ -76,10 +76,15 @@ This project demonstrates how to fine-tune a Large Language Model (LLM) to creat
 
 7. Launch the web application:
    ```bash
-   flask run
+   ./start_servers.sh
    ```
 
 8. Open your browser and navigate to `http://localhost:5000` to use the application.
+
+   You can also run the application directly with Flask:
+   ```bash
+   flask run
+   ```
 
 ### Fine-Tuning with QLoRA
 
@@ -302,7 +307,7 @@ We've created a deployment script to automate the deployment process. This scrip
    docker run -p 5000:5000 -e SECRET_KEY=your-secret-key visual-llm
    ```
 
-3. Access the application at `http://localhost:5000`
+3. Access the application at `http://localhost:5000` (single port for better accessibility)
 
 #### Using Docker Compose
 
@@ -317,7 +322,7 @@ We've created a deployment script to automate the deployment process. This scrip
    docker-compose up -d
    ```
 
-3. Access the application at `http://localhost:5000`
+3. Access the application at `http://localhost:5000` (single port for better accessibility)
 
 ## Requirements
 

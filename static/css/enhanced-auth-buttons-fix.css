@@ -1,0 +1,219 @@
+/**
+ * Enhanced Auth Buttons Fix CSS
+ * Ensures the auth buttons are properly styled and visible
+ * Uses !important flags to override any conflicting styles
+ */
+
+/* Auth buttons container */
+html body .auth-buttons-container {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 20px !important;
+    margin-top: 10px !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 9999 !important;
+}
+
+/* Sign In button */
+html body .sign-in-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background-color: rgba(30, 0, 60, 0.5) !important;
+    border: 2px solid rgba(0, 195, 255, 0.3) !important;
+    color: #00c3ff !important;
+    border-radius: 50px !important;
+    padding: 15px 30px !important;
+    height: 60px !important;
+    width: 210px !important;
+    font-size: 1.2rem !important;
+    font-weight: 500 !important;
+    text-align: center !important;
+    box-shadow: 0 0 15px rgba(0, 195, 255, 0.2) !important;
+    transition: all 0.3s ease !important;
+    text-decoration: none !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    z-index: 9999 !important;
+}
+
+html body .sign-in-btn:hover {
+    background-color: rgba(30, 0, 60, 0.7) !important;
+    border-color: rgba(0, 195, 255, 0.5) !important;
+    box-shadow: 0 0 20px rgba(0, 195, 255, 0.3) !important;
+}
+
+/* Register button */
+html body .register-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background-color: rgba(180, 70, 207, 0.8) !important;
+    border: 2px solid rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+    border-radius: 50px !important;
+    padding: 15px 30px !important;
+    height: 60px !important;
+    width: 210px !important;
+    font-size: 1.2rem !important;
+    font-weight: 500 !important;
+    text-align: center !important;
+    box-shadow: 0 0 15px rgba(180, 70, 207, 0.3) !important;
+    transition: all 0.3s ease !important;
+    text-decoration: none !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    z-index: 9999 !important;
+}
+
+html body .register-btn:hover {
+    background-color: rgba(180, 70, 207, 0.9) !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+    box-shadow: 0 0 20px rgba(180, 70, 207, 0.4) !important;
+}
+
+/* Button icons */
+html body .sign-in-btn i,
+html body .register-btn i {
+    display: inline-block !important;
+    margin-right: 8px !important;
+    font-size: 1.1rem !important;
+    vertical-align: middle !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Top auth bar */
+html body .top-auth-bar {
+    background-color: #2e0054 !important;
+    padding: 10px 0 !important;
+    position: relative !important;
+    z-index: 9998 !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Auth links */
+html body .auth-links {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 20px !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 9998 !important;
+}
+
+/* Theme toggle button */
+html body .theme-toggle-button {
+    margin-right: 15px !important;
+    position: relative !important;
+    z-index: 9998 !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Feature buttons */
+html body .feature-button {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 45px !important;
+    height: 45px !important;
+    border-radius: 50% !important;
+    background-color: #0088cc !important;
+    color: white !important;
+    text-decoration: none !important;
+    transition: all 0.3s ease !important;
+    margin-right: 5px !important;
+    box-shadow: 0 0 10px rgba(0, 136, 204, 0.3) !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    z-index: 9998 !important;
+}
+
+html body .feature-button:hover {
+    background-color: #00a0e9 !important;
+    transform: scale(1.05) !important;
+    box-shadow: 0 0 15px rgba(0, 160, 233, 0.5) !important;
+}
+
+/* Quick access features */
+html body .quick-access-features {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 9998 !important;
+}
+
+/* How to use site link */
+html body .how-to-use-site {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 9998 !important;
+}
+
+html body .how-to-use-link {
+    color: white !important;
+    text-decoration: none !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+}
+
+html body .how-to-use-link:hover {
+    color: #00c3ff !important;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    html body .sign-in-btn,
+    html body .register-btn {
+        padding: 12px 25px !important;
+        height: 50px !important;
+        width: 180px !important;
+        font-size: 1rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    html body .sign-in-btn,
+    html body .register-btn {
+        padding: 10px 20px !important;
+        height: 45px !important;
+        width: 150px !important;
+        font-size: 0.9rem !important;
+    }
+}
+
+/* Focus styles for accessibility */
+html body .sign-in-btn:focus,
+html body .register-btn:focus,
+html body .feature-button:focus,
+html body .how-to-use-link:focus,
+html body .theme-toggle-button:focus {
+    outline: 3px solid #00c3ff !important;
+    outline-offset: 2px !important;
+}
+
+/* Ensure buttons are accessible via keyboard */
+html body .sign-in-btn,
+html body .register-btn,
+html body .feature-button,
+html body .how-to-use-link,
+html body .theme-toggle-button {
+    cursor: pointer !important;
+}

@@ -47,6 +47,9 @@ function fixAccessibility() {
         // Fix font sizes
         fixFontSizes();
 
+        // Fix auth buttons
+        fixAuthButtons();
+
         console.log('Accessibility Fix: Accessibility features fixed successfully');
     } catch (error) {
         console.error('Accessibility Fix: Error fixing accessibility features', error);
@@ -174,7 +177,7 @@ function fixFocusStyles() {
             outline: 3px solid #00c3ff !important;
             outline-offset: 2px !important;
         }
-        
+
         a:focus, button:focus, input:focus, select:focus, textarea:focus {
             outline: 3px solid #00c3ff !important;
             outline-offset: 2px !important;
@@ -338,4 +341,99 @@ function colorToRgb(color) {
 
     // Return null if the color is invalid
     return null;
+}
+
+/**
+ * Fix auth buttons
+ */
+function fixAuthButtons() {
+    // Check if the auth buttons container exists
+    const authButtonsContainer = document.querySelector('.auth-buttons-container');
+    if (!authButtonsContainer) {
+        console.log('Accessibility Fix: Auth buttons container not found');
+        return;
+    }
+
+    console.log('Accessibility Fix: Fixing auth buttons...');
+
+    // Make sure the auth buttons container is visible
+    authButtonsContainer.style.display = 'flex';
+    authButtonsContainer.style.visibility = 'visible';
+    authButtonsContainer.style.opacity = '1';
+
+    // Get the sign in button
+    const signInBtn = authButtonsContainer.querySelector('.sign-in-btn');
+    if (signInBtn) {
+        // Make sure the sign in button is visible
+        signInBtn.style.display = 'inline-flex';
+        signInBtn.style.visibility = 'visible';
+        signInBtn.style.opacity = '1';
+        signInBtn.style.pointerEvents = 'auto';
+
+        // Add ARIA attributes
+        if (!signInBtn.hasAttribute('role')) {
+            signInBtn.setAttribute('role', 'button');
+        }
+        if (!signInBtn.hasAttribute('aria-label')) {
+            signInBtn.setAttribute('aria-label', 'Sign In');
+        }
+        if (!signInBtn.hasAttribute('tabindex')) {
+            signInBtn.setAttribute('tabindex', '0');
+        }
+
+        // Add keyboard accessibility
+        signInBtn.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.click();
+            }
+        });
+    }
+
+    // Get the register button
+    const registerBtn = authButtonsContainer.querySelector('.register-btn');
+    if (registerBtn) {
+        // Make sure the register button is visible
+        registerBtn.style.display = 'inline-flex';
+        registerBtn.style.visibility = 'visible';
+        registerBtn.style.opacity = '1';
+        registerBtn.style.pointerEvents = 'auto';
+
+        // Add ARIA attributes
+        if (!registerBtn.hasAttribute('role')) {
+            registerBtn.setAttribute('role', 'button');
+        }
+        if (!registerBtn.hasAttribute('aria-label')) {
+            registerBtn.setAttribute('aria-label', 'Register');
+        }
+        if (!registerBtn.hasAttribute('tabindex')) {
+            registerBtn.setAttribute('tabindex', '0');
+        }
+
+        // Add keyboard accessibility
+        registerBtn.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.click();
+            }
+        });
+    }
+
+    // Apply theme colors
+    const body = document.body;
+    const isLightTheme = body.classList.contains('light-theme');
+
+    if (isLightTheme) {
+        // Light mode (blue)
+        document.documentElement.style.setProperty('--vibrant-bg-primary', '#e3f2fd', 'important');
+        document.documentElement.style.setProperty('--vibrant-bg-secondary', '#bbdefb', 'important');
+        document.documentElement.style.setProperty('--vibrant-text-primary', '#0d47a1', 'important');
+        document.documentElement.style.setProperty('--vibrant-text-secondary', '#1565c0', 'important');
+        body.style.background = 'linear-gradient(135deg, #e3f2fd, #bbdefb) !important';
+    } else {
+        // Dark mode (purple)
+        document.documentElement.style.setProperty('--vibrant-bg-primary', '#1a0033', 'important');
+        document.documentElement.style.setProperty('--vibrant-bg-secondary', '#2d0052', 'important');
+        body.style.background = 'linear-gradient(135deg, #1a0033, #2d0052) !important';
+    }
 }

@@ -74,12 +74,32 @@ This project demonstrates how to fine-tune a Large Language Model (LLM) to creat
    python -c "import nltk; nltk.download('wordnet'); nltk.download('omw-1.4')"
    ```
 
-7. Launch the web application:
+7. Launch the web application using our robust server scripts:
    ```bash
-   ./start_servers.sh
+   ./robust_start_server.sh
    ```
 
-8. Open your browser and navigate to `http://localhost:5000` to use the application.
+   This script will:
+   - Kill any existing Python processes
+   - Find an available port (tries 5005-5010)
+   - Start the server on the available port
+   - Display the URL where the server is running
+
+8. Check the server status:
+   ```bash
+   ./robust_check_server.sh
+   ```
+
+   This script will tell you which port the server is running on.
+
+9. Open your browser and navigate to the URL displayed by the script (e.g., `http://127.0.0.1:5005/`).
+
+10. When you're done, stop the server:
+    ```bash
+    ./robust_stop_server.sh
+    ```
+
+    This script will kill all Python processes and free up all ports.
 
    You can also run the application directly with Flask:
    ```bash

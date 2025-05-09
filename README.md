@@ -74,37 +74,12 @@ This project demonstrates how to fine-tune a Large Language Model (LLM) to creat
    python -c "import nltk; nltk.download('wordnet'); nltk.download('omw-1.4')"
    ```
 
-7. Launch the web application using our robust server scripts:
-   ```bash
-   ./robust_start_server.sh
-   ```
-
-   This script will:
-   - Kill any existing Python processes
-   - Find an available port (tries 5005-5010)
-   - Start the server on the available port
-   - Display the URL where the server is running
-
-8. Check the server status:
-   ```bash
-   ./robust_check_server.sh
-   ```
-
-   This script will tell you which port the server is running on.
-
-9. Open your browser and navigate to the URL displayed by the script (e.g., `http://127.0.0.1:5005/`).
-
-10. When you're done, stop the server:
-    ```bash
-    ./robust_stop_server.sh
-    ```
-
-    This script will kill all Python processes and free up all ports.
-
-   You can also run the application directly with Flask:
+7. Launch the web application:
    ```bash
    flask run
    ```
+
+8. Open your browser and navigate to `http://localhost:5000` to use the application.
 
 ### Fine-Tuning with QLoRA
 
@@ -150,102 +125,36 @@ This project demonstrates how to fine-tune a Large Language Model (LLM) to creat
 
 ### Deployment
 
-#### Using the Deployment Script
+#### Using Docker
 
-We've created a deployment script to automate the deployment process. This script will check if all the required files are present, install dependencies, and deploy the application to your chosen platform.
-
-1. Make sure you're on the deployment branch:
+1. Build the Docker image:
    ```bash
-   git checkout deployment
+   docker build -t thesaurus-llm .
    ```
 
-2. Run the deployment script:
+2. Run the container:
    ```bash
-   chmod +x deploy.sh
-   ./deploy.sh
+   docker run -p 5000:5000 -e SECRET_KEY=your-secret-key thesaurus-llm
    ```
 
-3. Follow the instructions provided by the script to complete the deployment.
+3. Access the application at `http://localhost:5000`
 
-#### Manual Deployment to Cloud Providers
+#### Using Docker Compose
 
-##### Render (Recommended for Free Hosting)
-
-1. Fork this repository to your GitHub account
-
-2. Sign up for a free account at [render.com](https://render.com)
-
-3. Create a new Web Service and select your forked repository
-
-4. Use the following settings:
-   - Environment: Python
-   - Build Command: `pip install -r requirements.txt`
-   - Start Command: `gunicorn app:app`
-   - Branch: `deployment`
-
-5. Add the following environment variables:
-   - `SECRET_KEY`: A secure random string
-   - `FLASK_ENV`: production
-   - `DATABASE_URL`: Your database connection string (Render provides a free PostgreSQL database)
-   - `MAIL_SERVER`: Your mail server (e.g., smtp.gmail.com)
-   - `MAIL_PORT`: Your mail port (e.g., 587)
-   - `MAIL_USE_TLS`: true
-   - `MAIL_USERNAME`: Your email address
-   - `MAIL_PASSWORD`: Your email password or app password
-   - `MAIL_DEFAULT_SENDER`: Your default sender email
-   - `APP_URL`: Your application URL (provided by Render)
-
-6. Click "Create Web Service"
-
-7. Access your application at the provided Render URL (e.g., your-app-name.onrender.com)
-
-##### Heroku
-
-1. Create a Heroku account at [heroku.com](https://heroku.com)
-
-2. Install the Heroku CLI:
+1. Create a `.env` file based on `.env.example` with your configuration:
    ```bash
-   npm install -g heroku
+   cp .env.example .env
+   # Edit .env with your configuration
    ```
 
-3. Login to Heroku:
+2. Start the application with all services (web, database, Redis, Nginx):
    ```bash
-   heroku login
+   docker-compose up -d
    ```
 
-4. Create a new Heroku app:
-   ```bash
-   heroku create your-app-name
-   ```
+3. Access the application at `http://localhost:80` (or `https://localhost:443` if SSL is configured)
 
-5. Add a PostgreSQL database:
-   ```bash
-   heroku addons:create heroku-postgresql:hobby-dev
-   ```
-
-6. Add a Redis instance:
-   ```bash
-   heroku addons:create heroku-redis:hobby-dev
-   ```
-
-7. Set the environment variables:
-   ```bash
-   heroku config:set SECRET_KEY=your-secret-key
-   heroku config:set FLASK_ENV=production
-   # Add other environment variables as needed
-   ```
-
-8. Push the deployment branch to Heroku:
-   ```bash
-   git push heroku deployment:main
-   ```
-
-9. Initialize the database:
-   ```bash
-   heroku run flask db upgrade
-   ```
-
-10. Access your application at the provided Heroku URL (e.g., your-app-name.herokuapp.com)
+#### Deploying to Cloud Providers
 
 ##### AWS Elastic Beanstalk
 
@@ -254,95 +163,87 @@ We've created a deployment script to automate the deployment process. This scrip
    pip install awscli awsebcli
    ```
 
-2. Configure AWS credentials:
+2. Initialize the EB application:
    ```bash
-   aws configure
+   eb init -p docker
    ```
 
-3. Initialize the EB application:
+3. Create an environment and deploy:
    ```bash
-   eb init -p python-3.9 your-app-name
+   eb create thesaurus-llm-env
    ```
 
-4. Create an environment and deploy:
-   ```bash
-   eb create your-app-name-env
-   ```
-
-5. Set environment variables:
-   ```bash
-   eb setenv SECRET_KEY=your-secret-key FLASK_ENV=production
-   # Add other environment variables as needed
-   ```
-
-6. Deploy the application:
-   ```bash
-   eb deploy
-   ```
-
-7. Access your application at the provided AWS URL
+4. Access your application at the provided AWS URL
 
 ##### Google Cloud Run
 
 1. Install the Google Cloud SDK
 
-2. Configure Google Cloud credentials:
+2. Build and push the Docker image to Google Container Registry:
    ```bash
-   gcloud auth login
+   gcloud builds submit --tag gcr.io/your-project-id/thesaurus-llm
    ```
 
-3. Create a new project or select an existing one:
+3. Deploy to Cloud Run:
    ```bash
-   gcloud projects create your-project-id
-   gcloud config set project your-project-id
+   gcloud run deploy thesaurus-llm --image gcr.io/your-project-id/thesaurus-llm --platform managed
    ```
 
-4. Enable the required APIs:
+4. Access your application at the provided Google Cloud Run URL
+
+##### Render (Free Domain)
+
+1. Fork this repository to your GitHub account
+
+2. Sign up for a free account at [render.com](https://render.com)
+
+3. Create a new Web Service and select your forked repository
+
+4. Use the following settings:
+   - Environment: Docker
+   - Build Command: (leave empty)
+   - Start Command: (leave empty)
+
+5. Add the necessary environment variables from `.env.example`
+
+6. Click "Create Web Service"
+
+7. Access your application at the provided Render URL (e.g., your-app-name.onrender.com)
+
+#### Deploying to a Custom Domain with SSL
+
+1. Set up a server with Docker and Docker Compose installed
+
+2. Clone the repository to your server:
    ```bash
-   gcloud services enable cloudbuild.googleapis.com run.googleapis.com
+   git clone https://github.com/yourusername/llm-fine-tuning-thesaurus.git
+   cd llm-fine-tuning-thesaurus
    ```
 
-5. Build and deploy the application:
+3. Create a `.env` file based on `.env.example` with your configuration
+
+4. Create SSL certificates using Let's Encrypt:
    ```bash
-   gcloud run deploy your-app-name --source . --platform managed --region us-central1 --allow-unauthenticated
+   mkdir -p nginx/ssl
+   sudo certbot certonly --standalone -d yourdomain.com -d www.yourdomain.com
+   sudo cp /etc/letsencrypt/live/yourdomain.com/fullchain.pem nginx/ssl/
+   sudo cp /etc/letsencrypt/live/yourdomain.com/privkey.pem nginx/ssl/
+   sudo chmod 755 nginx/ssl
    ```
 
-6. Set environment variables:
-   ```bash
-   gcloud run services update your-app-name --set-env-vars SECRET_KEY=your-secret-key,FLASK_ENV=production
-   # Add other environment variables as needed
-   ```
+5. Update the Nginx configuration in `nginx/conf.d/app.conf` with your domain name
 
-7. Access your application at the provided Google Cloud Run URL
-
-#### Using Docker
-
-1. Build the Docker image:
-   ```bash
-   docker build -t visual-llm .
-   ```
-
-2. Run the container:
-   ```bash
-   docker run -p 5000:5000 -e SECRET_KEY=your-secret-key visual-llm
-   ```
-
-3. Access the application at `http://localhost:5000` (single port for better accessibility)
-
-#### Using Docker Compose
-
-1. Create a `.env` file with your configuration:
-   ```bash
-   cp .env.example .env
-   # Edit .env with your configuration
-   ```
-
-2. Start the application with all services:
+6. Start the application using Docker Compose:
    ```bash
    docker-compose up -d
    ```
 
-3. Access the application at `http://localhost:5000` (single port for better accessibility)
+7. Set up automatic SSL certificate renewal:
+   ```bash
+   sudo crontab -e
+   # Add the following line:
+   0 12 * * * certbot renew --quiet && cp /etc/letsencrypt/live/yourdomain.com/fullchain.pem /path/to/app/nginx/ssl/ && cp /etc/letsencrypt/live/yourdomain.com/privkey.pem /path/to/app/nginx/ssl/ && docker-compose restart nginx
+   ```
 
 ## Requirements
 

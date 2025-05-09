@@ -345,23 +345,10 @@ def load_model():
         app.logger.warning("Model files not found. Please fine-tune the model first.")
         return False
 
-@app.route('/health')
-def health_check():
-    """Health check endpoint to verify the server is running correctly."""
-    return jsonify({
-        'status': 'ok',
-        'message': 'Server is running correctly'
-    })
-
 @app.route('/')
 def index():
     """Render the main page."""
-    try:
-        return render_template('index.html')
-    except Exception as e:
-        app.logger.error(f"Error rendering index page: {e}")
-        # Return a simplified version of the index page
-        return render_template('errors/simplified_index.html')
+    return render_template('index.html')
 
 @app.route('/visualize/<word>')
 def visualize(word):

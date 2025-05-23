@@ -1,0 +1,263 @@
+/**
+ * Improved Text Visibility CSS
+ * Ensures all text is clearly visible in both dark and light modes
+ * without compromising other aspects of the application.
+ */
+
+/* 
+ * Root variables for consistent text colors
+ * These override any conflicting variables in other CSS files
+ */
+:root {
+    /* Dark mode text colors (default) */
+    --dark-text-primary: #ffffff;
+    --dark-text-secondary: #f0f0f0;
+    --dark-text-tertiary: #e0e0e0;
+    --dark-text-muted: #cccccc;
+    
+    /* Light mode text colors */
+    --light-text-primary: #000000;
+    --light-text-secondary: #212121;
+    --light-text-tertiary: #424242;
+    --light-text-muted: #666666;
+    
+    /* Active text colors (default to dark mode) */
+    --text-primary: var(--dark-text-primary);
+    --text-secondary: var(--dark-text-secondary);
+    --text-tertiary: var(--dark-text-tertiary);
+    --text-muted: var(--dark-text-muted);
+}
+
+/* 
+ * Dark mode (default) text styles
+ * These ensure all text is visible on dark backgrounds
+ */
+body {
+    color: var(--text-primary);
+}
+
+p, span, div, li, td, th, label, input, textarea, select {
+    color: var(--text-primary);
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    color: var(--text-primary);
+}
+
+a {
+    color: #5dd6ff;
+}
+
+a:hover {
+    color: #8ae4ff;
+}
+
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+/* 
+ * Light mode text styles
+ * These ensure all text is visible on light backgrounds
+ */
+body.light-theme {
+    /* Override text variables with light mode values */
+    --text-primary: var(--light-text-primary);
+    --text-secondary: var(--light-text-secondary);
+    --text-tertiary: var(--light-text-tertiary);
+    --text-muted: var(--light-text-muted);
+    color: var(--text-primary);
+}
+
+body.light-theme p, 
+body.light-theme span, 
+body.light-theme div, 
+body.light-theme li, 
+body.light-theme td, 
+body.light-theme th, 
+body.light-theme label, 
+body.light-theme input, 
+body.light-theme textarea, 
+body.light-theme select {
+    color: var(--text-primary);
+    text-shadow: none;
+}
+
+body.light-theme h1, 
+body.light-theme h2, 
+body.light-theme h3, 
+body.light-theme h4, 
+body.light-theme h5, 
+body.light-theme h6, 
+body.light-theme .h1, 
+body.light-theme .h2, 
+body.light-theme .h3, 
+body.light-theme .h4, 
+body.light-theme .h5, 
+body.light-theme .h6 {
+    color: var(--text-primary);
+    text-shadow: none;
+}
+
+body.light-theme a {
+    color: #0056b3;
+}
+
+body.light-theme a:hover {
+    color: #0088cc;
+}
+
+body.light-theme .text-muted {
+    color: var(--text-muted) !important;
+}
+
+/* 
+ * Fix specific components with visibility issues
+ */
+
+/* Cards */
+.card-title, .card-subtitle, .card-text {
+    color: var(--text-primary);
+}
+
+body.light-theme .card-title, 
+body.light-theme .card-subtitle, 
+body.light-theme .card-text {
+    color: var(--text-primary);
+}
+
+/* Buttons */
+.btn {
+    color: #ffffff;
+}
+
+body.light-theme .btn-outline-primary,
+body.light-theme .btn-outline-secondary,
+body.light-theme .btn-outline-success,
+body.light-theme .btn-outline-danger,
+body.light-theme .btn-outline-warning,
+body.light-theme .btn-outline-info {
+    color: var(--text-primary);
+}
+
+/* Navbar */
+.navbar-brand, .nav-link {
+    color: var(--text-primary);
+}
+
+body.light-theme .navbar-brand, 
+body.light-theme .nav-link {
+    color: var(--text-primary);
+}
+
+/* Alerts */
+.alert {
+    color: var(--text-primary);
+}
+
+body.light-theme .alert {
+    color: var(--text-primary);
+}
+
+/* Badges */
+.badge {
+    color: #ffffff;
+}
+
+/* Tooltips */
+.tooltip {
+    color: #ffffff;
+}
+
+/* Modals */
+.modal-title, .modal-body {
+    color: var(--text-primary);
+}
+
+body.light-theme .modal-title, 
+body.light-theme .modal-body {
+    color: var(--text-primary);
+}
+
+/* 
+ * Fix specific sections with visibility issues
+ */
+
+/* Workshop sections */
+.workshop-section p,
+.workshop-section li,
+.workshop-section a {
+    color: var(--text-primary);
+}
+
+body.light-theme .workshop-section p,
+body.light-theme .workshop-section li,
+body.light-theme .workshop-section a {
+    color: var(--text-primary);
+}
+
+/* Tutorial sections */
+.tutorial-section p,
+.tutorial-section li,
+.tutorial-section a {
+    color: var(--text-primary);
+}
+
+body.light-theme .tutorial-section p,
+body.light-theme .tutorial-section li,
+body.light-theme .tutorial-section a {
+    color: var(--text-primary);
+}
+
+/* Code sections */
+pre, code {
+    color: #f8f8f2;
+    background-color: #282a36;
+}
+
+body.light-theme pre,
+body.light-theme code {
+    color: #282a36;
+    background-color: #f8f8f2;
+}
+
+/* 
+ * Override any conflicting styles from other CSS files
+ * These !important rules ensure our visibility fixes take precedence
+ */
+body.light-theme p,
+body.light-theme span,
+body.light-theme div,
+body.light-theme li,
+body.light-theme td,
+body.light-theme th,
+body.light-theme label,
+body.light-theme input,
+body.light-theme textarea,
+body.light-theme select {
+    color: var(--text-primary) !important;
+}
+
+body.light-theme h1,
+body.light-theme h2,
+body.light-theme h3,
+body.light-theme h4,
+body.light-theme h5,
+body.light-theme h6 {
+    color: var(--text-primary) !important;
+}
+
+/* Fix white text in light mode issue */
+body.light-theme .white-text-light-mode-fix p,
+body.light-theme .white-text-light-mode-fix span,
+body.light-theme .white-text-light-mode-fix div,
+body.light-theme .white-text-light-mode-fix li,
+body.light-theme .white-text-light-mode-fix h1,
+body.light-theme .white-text-light-mode-fix h2,
+body.light-theme .white-text-light-mode-fix h3,
+body.light-theme .white-text-light-mode-fix h4,
+body.light-theme .white-text-light-mode-fix h5,
+body.light-theme .white-text-light-mode-fix h6 {
+    color: var(--text-primary) !important;
+    text-shadow: none !important;
+}

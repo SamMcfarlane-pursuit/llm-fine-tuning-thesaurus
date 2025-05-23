@@ -24,5 +24,6 @@ login_manager.login_message_category = 'info'
 
 @login_manager.user_loader
 def load_user(user_id):
+    print(f"Loading user with ID: {user_id}")
     from models import User
     return User.query.get(int(user_id))

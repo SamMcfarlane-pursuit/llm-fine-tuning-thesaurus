@@ -1,0 +1,658 @@
+/**
+ * Custom Light Mode Theme
+ * Implements a specific light mode color scheme with purple accents
+ * Based on the exact colors from the provided image
+ */
+
+/* Import Noto Sans Modi font from Google Fonts */
+@import url('https://fonts.googleapis.com/css?family=Noto%20Sans%20Modi:700|Noto%20Sans%20Modi:400');
+
+/* Apply these styles in light mode (when body has light-theme class) */
+body.light-theme {
+    /* Define custom color variables exactly as provided */
+    --text: #060e0c;             /* Dark text color */
+    --background: #f8fcfb;       /* Light background color */
+    --primary: #4db394;          /* Primary green color */
+    --secondary: #9c9bd4;        /* Secondary purple color */
+    --accent: #a082c9;           /* Accent purple color */
+
+    /* Linear and radial gradients */
+    --linearPrimarySecondary: linear-gradient(#4db394, #9c9bd4);
+    --linearPrimaryAccent: linear-gradient(#4db394, #a082c9);
+    --linearSecondaryAccent: linear-gradient(#9c9bd4, #a082c9);
+    --radialPrimarySecondary: radial-gradient(#4db394, #9c9bd4);
+    --radialPrimaryAccent: radial-gradient(#4db394, #a082c9);
+    --radialSecondaryAccent: radial-gradient(#9c9bd4, #a082c9);
+
+    /* Set font family for all elements */
+    font-family: 'Noto Sans Modi', sans-serif;
+    font-weight: 400;
+
+    /* Make sure these variables are applied at the root level */
+    color: var(--text) !important;
+    background-color: var(--background) !important;
+
+    /* Override the default theme variables with exact colors */
+    --light-bg-primary: var(--background);
+    --light-bg-secondary: var(--secondary);
+    --light-bg-tertiary: #f0f8f6; /* Light green for tertiary backgrounds */
+    --light-text-primary: var(--text);
+    --light-text-secondary: rgba(6, 14, 12, 0.85); /* Slightly transparent text */
+    --light-border-color: rgba(77, 179, 148, 0.3); /* Semi-transparent primary */
+    --light-primary-color: var(--primary);
+    --light-secondary-color: var(--secondary);
+    --light-accent-color: var(--accent);
+    --light-card-bg: rgba(255, 255, 255, 0.95); /* Semi-transparent white background */
+    --light-code-bg: #eef8f5; /* Light green for code backgrounds */
+    --light-shadow-color: rgba(77, 179, 148, 0.08); /* Primary-colored shadows */
+
+    /* Apply the background color */
+    background-color: var(--background) !important;
+    color: var(--text) !important;
+}
+
+/* Override specific elements in light mode */
+body.light-theme {
+    /* Main container backgrounds */
+    .container, .container-fluid {
+        background-color: var(--background);
+    }
+
+    /* Cards and panels - enhanced for a visually stunning appearance */
+    .card, .panel {
+        background-color: #FFFFFF; /* Pure white cards for better contrast with #f8fcfb background */
+        border-color: var(--secondary); /* #9c9bd4 border color */
+        box-shadow: 0 6px 16px rgba(77, 179, 148, 0.08); /* Subtle primary-colored shadow for depth */
+        border-radius: 8px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover, .panel:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(77, 179, 148, 0.12); /* Enhanced shadow on hover using primary color */
+    }
+
+    .card-header {
+        background-color: rgba(156, 155, 212, 0.1) !important; /* Light secondary color background */
+        border-bottom: 1px solid rgba(156, 155, 212, 0.2) !important;
+    }
+
+    /* Navigation - enhanced for a visually stunning appearance */
+    .navbar {
+        background-color: #ffffff !important; /* Pure white navbar for better contrast */
+        border-bottom: 1px solid rgba(77, 179, 148, 0.1) !important; /* Subtle border using primary color */
+        box-shadow: 0 4px 12px rgba(77, 179, 148, 0.08) !important; /* Subtle shadow using primary color */
+        padding: 0.75rem 1.5rem !important;
+    }
+
+    .navbar-brand {
+        color: var(--text) !important;
+        font-weight: 600 !important;
+    }
+
+    .nav-link {
+        color: var(--text) !important;
+        font-weight: 500 !important;
+    }
+
+    .nav-link:hover {
+        color: var(--primary) !important;
+    }
+
+    .nav-link.active {
+        color: var(--primary) !important;
+        border-bottom: 2px solid var(--primary) !important;
+    }
+
+    /* Header elements */
+    h1, h2, h3, h4, h5, h6 {
+        color: var(--text) !important;
+    }
+
+    h1 {
+        color: var(--primary) !important;
+        font-weight: 700 !important;
+    }
+
+    h2 {
+        color: var(--primary) !important;
+        font-weight: 600 !important;
+    }
+
+    /* Buttons - styled to match the exact colors from the image */
+    .btn-primary {
+        background-color: var(--primary) !important; /* #4db394 primary color */
+        border-color: var(--primary) !important;
+        color: #ffffff !important;
+        box-shadow: 0 4px 10px rgba(77, 179, 148, 0.25) !important;
+        border-radius: 6px !important;
+        padding: 0.5rem 1.25rem !important;
+        font-weight: 500 !important;
+        letter-spacing: 0.01em !important;
+        transition: all 0.2s ease !important;
+        font-family: 'Noto Sans Modi', sans-serif !important;
+    }
+
+    .btn-primary:hover {
+        background-color: var(--accent) !important; /* #a082c9 accent color */
+        border-color: var(--accent) !important;
+        box-shadow: 0 6px 14px rgba(160, 130, 201, 0.35) !important;
+        transform: translateY(-2px) !important;
+    }
+
+    /* Gradient button option */
+    .btn-gradient {
+        background: var(--linearPrimarySecondary) !important;
+        border: none !important;
+        color: #ffffff !important;
+        box-shadow: 0 4px 10px rgba(77, 179, 148, 0.25) !important;
+    }
+
+    .btn-gradient:hover {
+        background: var(--linearPrimaryAccent) !important;
+        box-shadow: 0 6px 14px rgba(160, 130, 201, 0.35) !important;
+        transform: translateY(-2px) !important;
+    }
+
+    .btn-secondary {
+        background-color: var(--secondary) !important; /* #9c9bd4 secondary color */
+        border-color: var(--secondary) !important;
+        color: var(--text) !important;
+        box-shadow: 0 4px 10px rgba(156, 155, 212, 0.6) !important;
+        border-radius: 6px !important;
+        padding: 0.5rem 1.25rem !important;
+        font-weight: 500 !important;
+        letter-spacing: 0.01em !important;
+        transition: all 0.2s ease !important;
+        font-family: 'Noto Sans Modi', sans-serif !important;
+    }
+
+    .btn-secondary:hover {
+        background-color: var(--accent) !important; /* #a082c9 accent color */
+        border-color: var(--accent) !important;
+        box-shadow: 0 6px 14px rgba(160, 130, 201, 0.7) !important;
+        transform: translateY(-2px) !important;
+    }
+
+    /* Button outlines - styled to match the exact colors from the image */
+    .btn-outline-primary {
+        background-color: transparent !important;
+        border-color: var(--primary) !important; /* #4db394 primary color */
+        color: var(--primary) !important;
+        border-width: 1.5px !important;
+        border-radius: 6px !important;
+        padding: 0.5rem 1.25rem !important;
+        font-weight: 500 !important;
+        letter-spacing: 0.01em !important;
+        transition: all 0.2s ease !important;
+        font-family: 'Noto Sans Modi', sans-serif !important;
+    }
+
+    .btn-outline-primary:hover {
+        background-color: var(--primary) !important;
+        color: #ffffff !important;
+        box-shadow: 0 6px 14px rgba(77, 179, 148, 0.25) !important;
+        transform: translateY(-2px) !important;
+    }
+
+    .btn-outline-secondary {
+        background-color: transparent !important;
+        border-color: var(--secondary) !important; /* #9c9bd4 secondary color */
+        color: var(--secondary) !important;
+        border-width: 1.5px !important;
+        border-radius: 6px !important;
+        padding: 0.5rem 1.25rem !important;
+        font-weight: 500 !important;
+        letter-spacing: 0.01em !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .btn-outline-secondary:hover {
+        background-color: var(--secondary) !important;
+        color: #ffffff !important;
+        box-shadow: 0 6px 14px rgba(156, 155, 212, 0.25) !important;
+        transform: translateY(-2px) !important;
+    }
+
+    /* Forms - styled to match the exact colors from the image */
+    input, select, textarea {
+        background-color: #FFFFFF; /* Pure white for better contrast */
+        border: 1px solid rgba(77, 179, 148, 0.2) !important; /* Subtle primary color border */
+        color: var(--text); /* #060e0c text color */
+        border-radius: 6px !important;
+        padding: 0.625rem 1rem !important;
+        box-shadow: 0 2px 6px rgba(77, 179, 148, 0.05) !important;
+        transition: all 0.2s ease !important;
+        font-family: 'Noto Sans Modi', sans-serif !important;
+    }
+
+    input:focus, select:focus, textarea:focus {
+        border-color: var(--primary) !important; /* #4db394 primary color */
+        box-shadow: 0 0 0 3px rgba(77, 179, 148, 0.15) !important;
+        outline: none !important;
+    }
+
+    /* Form labels */
+    label {
+        color: var(--text) !important; /* #060e0c text color */
+        font-weight: 500 !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    /* Form help text */
+    .form-text {
+        color: rgba(6, 14, 12, 0.7) !important; /* Slightly transparent text color */
+        font-size: 0.875rem !important;
+    }
+
+
+
+    /* Code blocks - styled to match the exact colors from the image */
+    pre, code {
+        background-color: var(--light-code-bg);
+        color: var(--text);
+        border-color: var(--secondary);
+        border-radius: 6px;
+        padding: 0.75rem 1rem;
+        font-family: 'Fira Code', Consolas, Monaco, 'Andale Mono', monospace;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        box-shadow: 0 3px 10px rgba(77, 179, 148, 0.05);
+    }
+
+    pre {
+        border-left: 3px solid var(--primary);
+        margin: 1.5rem 0;
+    }
+
+    /* Tables - styled to match the exact colors from the image */
+    table {
+        background-color: #FFFFFF; /* Pure white for better contrast */
+        color: var(--text);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(77, 179, 148, 0.08);
+        border-collapse: separate;
+        border-spacing: 0;
+        width: 100%;
+        margin: 1.5rem 0;
+        font-family: 'Noto Sans Modi', sans-serif;
+    }
+
+    th {
+        background-color: var(--secondary);
+        color: var(--text);
+        font-weight: 600;
+        text-align: left;
+        padding: 1rem;
+        border-bottom: 2px solid rgba(77, 179, 148, 0.1);
+    }
+
+    td {
+        padding: 0.875rem 1rem;
+        border-bottom: 1px solid rgba(77, 179, 148, 0.05);
+        vertical-align: middle;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    tr:hover td {
+        background-color: rgba(156, 155, 212, 0.2);
+    }
+
+    /* Links - styled to match the exact colors from the image */
+    a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+        position: relative;
+        transition: all 0.2s ease;
+        font-family: 'Noto Sans Modi', sans-serif;
+    }
+
+    a:hover {
+        color: var(--accent);
+    }
+
+    a:not(.btn):not(.nav-link):after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 1px;
+        bottom: 0;
+        left: 0;
+        background-color: var(--accent);
+        transform: scaleX(0);
+        transform-origin: bottom right;
+        transition: transform 0.3s ease;
+    }
+
+    a:not(.btn):not(.nav-link):hover:after {
+        transform: scaleX(1);
+        transform-origin: bottom left;
+    }
+
+    /* Headings - using the specified typography scale and colors from the image */
+    h1, h2, h3, h4, h5 {
+        color: var(--text);
+        font-family: 'Noto Sans Modi', sans-serif;
+        font-weight: 700;
+        line-height: 1.2;
+        margin-bottom: 1rem;
+    }
+
+    /* Typography scale as specified */
+    html {
+        font-size: 100%; /* 16px base */
+    }
+
+    h1 {
+        font-size: 4.210rem; /* 67.36px */
+        margin-bottom: 1.5rem;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+        -webkit-background-clip: text;
+        background-clip: text; /* Standard property for compatibility */
+        -webkit-text-fill-color: transparent;
+        display: inline-block;
+    }
+
+    h2 {
+        font-size: 3.158rem; /* 50.56px */
+        color: var(--primary);
+        margin-top: 2rem;
+        margin-bottom: 1.25rem;
+        position: relative;
+        padding-bottom: 0.5rem;
+    }
+
+    h2:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100px;
+        height: 3px;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+    }
+
+    h3 {
+        font-size: 2.369rem; /* 37.92px */
+        color: var(--primary);
+        margin-top: 1.75rem;
+    }
+
+    h4 {
+        font-size: 1.777rem; /* 28.48px */
+        margin-top: 1.5rem;
+    }
+
+    h5 {
+        font-size: 1.333rem; /* 21.28px */
+        margin-top: 1.25rem;
+    }
+
+    small {
+        font-size: 0.750rem; /* 12px */
+        font-family: 'Noto Sans Modi', sans-serif;
+    }
+
+    /* Ensure body text uses the correct font */
+    body {
+        font-family: 'Noto Sans Modi', sans-serif;
+        font-weight: 400;
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    /* Borders */
+    .border {
+        border-color: var(--secondary) !important;
+    }
+
+    /* Alerts */
+    .alert {
+        background-color: var(--background);
+        border-color: var(--secondary);
+        color: var(--text);
+    }
+
+    /* Badges */
+    .badge {
+        background-color: var(--primary);
+        color: #ffffff;
+    }
+
+    /* Modals */
+    .modal-content {
+        background-color: var(--background);
+        border-color: var(--secondary);
+        color: var(--text);
+    }
+
+    .modal-header, .modal-footer {
+        border-color: var(--secondary);
+    }
+
+    /* Dropdowns */
+    .dropdown-menu {
+        background-color: var(--background);
+        border-color: var(--secondary);
+    }
+
+    .dropdown-item {
+        color: var(--text);
+    }
+
+    .dropdown-item:hover {
+        background-color: var(--secondary);
+        color: var(--text);
+    }
+
+    /* List groups */
+    .list-group-item {
+        background-color: var(--background);
+        border-color: var(--secondary);
+        color: var(--text);
+    }
+
+    /* Progress bars */
+    .progress {
+        background-color: var(--secondary);
+    }
+
+    .progress-bar {
+        background-color: var(--primary);
+    }
+
+    /* Tooltips */
+    .tooltip-inner {
+        background-color: var(--primary);
+        color: #ffffff;
+    }
+}
+
+/* Ensure TensorFlow section works with our custom light mode - using exact colors from the image */
+body.light-theme .framework-section.tensorflow-section {
+    background-color: var(--background) !important;
+    border: 1px solid var(--secondary) !important;
+    box-shadow: 0 4px 15px rgba(156, 155, 212, 0.6) !important;
+    border-radius: 8px !important;
+    padding: 2rem !important;
+    margin: 2rem 0 !important;
+}
+
+body.light-theme .framework-section.tensorflow-section h2 {
+    color: var(--primary) !important;
+    font-weight: 700 !important;
+    margin-bottom: 1.2rem !important;
+    border-bottom: 2px solid rgba(77, 179, 148, 0.2) !important;
+    padding-bottom: 0.5rem !important;
+}
+
+body.light-theme .framework-section.tensorflow-section h3 {
+    color: var(--primary) !important;
+    font-weight: 600 !important;
+    margin-top: 1.8rem !important;
+    margin-bottom: 1rem !important;
+}
+
+body.light-theme .framework-section.tensorflow-section h4,
+body.light-theme .framework-section.tensorflow-section h5,
+body.light-theme .framework-section.tensorflow-section h6 {
+    color: var(--text) !important;
+    font-weight: 500 !important;
+}
+
+body.light-theme .framework-section.tensorflow-section p,
+body.light-theme .framework-section.tensorflow-section li {
+    color: var(--text) !important;
+    font-weight: 400 !important;
+    line-height: 1.7 !important;
+}
+
+body.light-theme .framework-section.tensorflow-section .btn {
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 5px rgba(77, 179, 148, 0.3) !important;
+    padding: 0.5rem 1.25rem !important;
+    border-radius: 4px !important;
+    font-weight: 500 !important;
+}
+
+body.light-theme .framework-section.tensorflow-section .btn:hover {
+    background-color: var(--accent) !important;
+    border-color: var(--accent) !important;
+    box-shadow: 0 3px 8px rgba(160, 130, 201, 0.4) !important;
+    transform: translateY(-1px) !important;
+}
+
+body.light-theme .framework-code.tensorflow-code {
+    background-color: var(--light-code-bg) !important;
+    border-left: 5px solid var(--primary) !important;
+    border-radius: 6px !important;
+    margin: 1.5rem 0 !important;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05) !important;
+}
+
+body.light-theme .framework-code.tensorflow-code .code-header {
+    background-color: var(--secondary) !important;
+    color: var(--text) !important;
+    font-weight: 600 !important;
+    border-bottom: 1px solid rgba(77, 179, 148, 0.2) !important;
+    padding: 0.6rem 1rem !important;
+}
+
+body.light-theme .framework-code.tensorflow-code pre,
+body.light-theme .framework-code.tensorflow-code code {
+    color: var(--text) !important;
+    font-family: 'Fira Code', Consolas, Monaco, 'Andale Mono', monospace !important;
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+}
+
+/* Links in TensorFlow section */
+body.light-theme .framework-section.tensorflow-section a:not(.btn) {
+    color: var(--primary) !important; /* #4db394 primary color */
+    font-weight: 500 !important;
+    text-decoration: none !important;
+    border-bottom: 1px solid rgba(77, 179, 148, 0.3) !important;
+    transition: all 0.2s ease !important;
+}
+
+body.light-theme .framework-section.tensorflow-section a:not(.btn):hover {
+    color: var(--accent) !important; /* #a082c9 accent color */
+    border-bottom: 1px solid rgba(160, 130, 201, 0.7) !important;
+}
+
+/* Quick Access Features Section - Ensure proper contrast and visibility */
+body.light-theme div.quick-access-features {
+    background-color: #FFFFFF !important; /* White background for better contrast */
+    border: 1px solid var(--secondary) !important; /* #9c9bd4 secondary color */
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(77, 179, 148, 0.1) !important;
+    padding: 20px !important;
+    margin: 15px 0 !important;
+    color: var(--text) !important; /* #060e0c text color */
+    font-family: 'Noto Sans Modi', sans-serif !important;
+    font-size: 17px !important;
+}
+
+body.light-theme div.quick-access-features a {
+    color: var(--primary) !important; /* #4db394 primary color */
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
+}
+
+body.light-theme div.quick-access-features a:hover {
+    color: var(--accent) !important; /* #a082c9 accent color */
+    text-decoration: underline !important;
+}
+
+body.light-theme div.quick-access-features h2,
+body.light-theme div.quick-access-features h3 {
+    color: var(--primary) !important; /* #4db394 primary color */
+    font-weight: 600 !important;
+    margin-bottom: 15px !important;
+}
+
+/* Main Content Section - Ensure proper contrast and visibility */
+body.light-theme main#main-content {
+    background-color: var(--background) !important; /* #f8fcfb background */
+    color: var(--text) !important; /* #060e0c text color */
+    font-family: 'Noto Sans Modi', sans-serif !important;
+    font-size: 18px !important;
+    line-height: 1.6 !important;
+    padding: 20px !important;
+}
+
+body.light-theme main#main-content h1,
+body.light-theme main#main-content h2,
+body.light-theme main#main-content h3 {
+    color: var(--primary) !important; /* #4db394 primary color */
+    font-weight: 600 !important;
+}
+
+body.light-theme main#main-content h4,
+body.light-theme main#main-content h5,
+body.light-theme main#main-content h6 {
+    color: var(--secondary) !important; /* #9c9bd4 secondary color */
+    font-weight: 600 !important;
+}
+
+body.light-theme main#main-content p,
+body.light-theme main#main-content li {
+    color: var(--text) !important; /* #060e0c text color */
+}
+
+/* Quick access features section */
+body.light-theme div.quick-access {
+    background: var(--linearPrimarySecondary) !important;
+    border-radius: 8px !important;
+    padding: 20px !important;
+    margin-bottom: 30px !important;
+    box-shadow: 0 8px 20px rgba(77, 179, 148, 0.15) !important;
+}
+
+body.light-theme div.quick-access h3 {
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+body.light-theme div.quick-access a {
+    color: #ffffff !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease !important;
+    display: inline-block !important;
+    padding: 5px 10px !important;
+    border-radius: 4px !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    margin: 5px !important;
+}
+
+body.light-theme div.quick-access a:hover {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    transform: translateY(-2px) !important;
+}

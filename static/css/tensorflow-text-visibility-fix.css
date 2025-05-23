@@ -1,0 +1,656 @@
+/**
+ * TensorFlow Text Visibility Fix
+ * Specifically targets and fixes text visibility issues in the TensorFlow section
+ * and ensures all text is clearly visible with proper contrast ratios
+ */
+
+/* TensorFlow section text visibility improvements */
+.framework-section.tensorflow-section {
+    /* Ensure the background is light enough for dark text but not too bright */
+    background-color: #F8F9FA !important; /* Slightly off-white for reduced eye strain */
+    border: 1px solid #E9ECEF !important; /* Subtle border */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important; /* Soft shadow */
+}
+
+/* Fix heading visibility */
+.framework-section.tensorflow-section h2 {
+    /* Balanced orange color with proper contrast ratio (at least 4.5:1) */
+    color: #B34700 !important; /* Perfectly balanced orange - not too bright */
+    font-weight: 700 !important;
+    text-shadow: none !important;
+    letter-spacing: 0.01em !important;
+    margin-bottom: 1.2rem !important;
+    border-bottom: 2px solid rgba(179, 71, 0, 0.2) !important; /* Subtle underline */
+    padding-bottom: 0.5rem !important;
+}
+
+.framework-section.tensorflow-section h3 {
+    /* Balanced orange color with proper contrast ratio (at least 4.5:1) */
+    color: #B34700 !important; /* Perfectly balanced orange - not too bright */
+    font-weight: 600 !important;
+    text-shadow: none !important;
+    letter-spacing: 0.01em !important;
+    margin-top: 1.8rem !important;
+    margin-bottom: 1rem !important;
+}
+
+/* Fix paragraph text visibility */
+.framework-section.tensorflow-section p {
+    /* Balanced dark text on light background for optimal contrast ratio (at least 7:1) */
+    color: #333333 !important; /* Dark gray but not pure black for reduced eye strain */
+    font-weight: 400 !important;
+    line-height: 1.7 !important;
+    text-shadow: none !important;
+    margin-bottom: 1.2rem !important;
+}
+
+/* Fix list item visibility */
+.framework-section.tensorflow-section ul,
+.framework-section.tensorflow-section ol {
+    /* Proper spacing for lists */
+    padding-left: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+}
+
+.framework-section.tensorflow-section li {
+    /* Balanced dark text for optimal readability */
+    color: #333333 !important; /* Dark gray but not pure black for reduced eye strain */
+    font-weight: 400 !important;
+    line-height: 1.7 !important;
+    text-shadow: none !important;
+    margin-bottom: 0.5rem !important; /* Space between list items */
+    position: relative !important;
+}
+
+/* Add custom bullet styling for better visibility */
+.framework-section.tensorflow-section ul li::before {
+    content: "•" !important;
+    color: #FF6F00 !important; /* TensorFlow orange for bullets */
+    display: inline-block !important;
+    width: 1em !important;
+    position: absolute !important;
+    left: -1.2em !important;
+}
+
+/* Fix code block visibility */
+.framework-code.tensorflow-code {
+    /* Ensure code blocks have proper contrast but aren't too dark */
+    background-color: #282C34 !important; /* Dark but not pure black background */
+    border-left: 5px solid #FF6F00 !important; /* TensorFlow orange */
+    border-radius: 6px !important;
+    margin: 1.5rem 0 !important;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1) !important; /* Subtle shadow */
+}
+
+.framework-code.tensorflow-code pre,
+.framework-code.tensorflow-code code {
+    /* Balanced light text on dark background for optimal contrast ratio (at least 7:1) */
+    color: #E6E6E6 !important; /* Off-white text - not too bright */
+    text-shadow: none !important;
+    font-family: 'Fira Code', Consolas, Monaco, 'Andale Mono', monospace !important;
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+}
+
+/* Fix code header visibility */
+.framework-code.tensorflow-code .code-header {
+    /* Ensure code headers have proper contrast with balanced colors */
+    background-color: #3A3F4B !important; /* Slightly lighter than code background */
+    color: #E6E6E6 !important; /* Off-white text - not too bright */
+    font-weight: 600 !important;
+    text-shadow: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    padding: 0.6rem 1rem !important;
+}
+
+/* Fix button visibility and layout */
+.framework-section.tensorflow-section .btn {
+    /* Ensure buttons have proper contrast with balanced colors */
+    color: #FFFFFF !important; /* White text */
+    background-color: #E65100 !important; /* Slightly darker TensorFlow orange - not too bright */
+    border-color: #E65100 !important;
+    font-weight: 600 !important;
+    text-shadow: none !important;
+    padding: 0.5rem 1.25rem !important; /* Slightly wider padding for better proportions */
+    border-radius: 4px !important;
+    transition: all 0.2s ease !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important; /* Subtle shadow */
+    margin: 0.5rem 1rem 0.5rem 0 !important; /* Proper spacing between buttons */
+    display: inline-flex !important; /* Use inline-flex for better alignment */
+    align-items: center !important; /* Vertically center content */
+    justify-content: center !important; /* Horizontally center content */
+    text-align: center !important;
+    vertical-align: middle !important;
+    -webkit-user-select: none !important; /* Safari support */
+    -moz-user-select: none !important; /* Firefox support */
+    -ms-user-select: none !important; /* IE/Edge support */
+    user-select: none !important;
+    line-height: 1.5 !important;
+    font-size: 0.95rem !important;
+    letter-spacing: 0.01em !important;
+    text-decoration: none !important;
+    white-space: nowrap !important; /* Prevent text wrapping */
+    border-width: 1px !important;
+    border-style: solid !important;
+    cursor: pointer !important;
+    min-height: 2.5rem !important; /* Ensure consistent height */
+    min-width: 6rem !important; /* Ensure minimum width */
+    max-width: 100% !important; /* Prevent overflow */
+    overflow: hidden !important; /* Prevent content overflow */
+    text-overflow: ellipsis !important; /* Add ellipsis for overflowing text */
+    position: relative !important; /* For proper stacking context */
+}
+
+.framework-section.tensorflow-section .btn:hover {
+    /* Ensure buttons have proper contrast on hover without being too dark */
+    background-color: #CC4900 !important; /* Slightly darker orange */
+    border-color: #CC4900 !important;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15) !important; /* Enhanced shadow on hover */
+    transform: translateY(-1px) !important; /* Subtle lift effect */
+    text-decoration: none !important;
+}
+
+/* Fix button container layout */
+.framework-section.tensorflow-section .button-container,
+.framework-section.tensorflow-section .action-buttons,
+.framework-section.tensorflow-section .button-row {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 0.75rem !important;
+    margin: 1.5rem 0 !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
+    position: relative !important;
+    padding: 0 !important;
+    clear: both !important; /* Prevent floating elements from interfering */
+}
+
+/* Ensure button containers don't interfere with other elements */
+.framework-section.tensorflow-section .button-container::before,
+.framework-section.tensorflow-section .action-buttons::before,
+.framework-section.tensorflow-section .button-row::before,
+.framework-section.tensorflow-section .button-container::after,
+.framework-section.tensorflow-section .action-buttons::after,
+.framework-section.tensorflow-section .button-row::after {
+    content: "" !important;
+    display: table !important;
+    clear: both !important;
+}
+
+/* Fix button sizes for consistency */
+.framework-section.tensorflow-section .btn-sm {
+    padding: 0.25rem 0.75rem !important;
+    font-size: 0.875rem !important;
+}
+
+.framework-section.tensorflow-section .btn-lg {
+    padding: 0.75rem 1.5rem !important;
+    font-size: 1.1rem !important;
+}
+
+/* Fix button variations */
+.framework-section.tensorflow-section .btn-primary {
+    background-color: #E65100 !important; /* TensorFlow orange */
+    border-color: #E65100 !important;
+}
+
+.framework-section.tensorflow-section .btn-secondary {
+    background-color: #757575 !important; /* Gray */
+    border-color: #757575 !important;
+}
+
+.framework-section.tensorflow-section .btn-success {
+    background-color: #43A047 !important; /* Green */
+    border-color: #43A047 !important;
+}
+
+.framework-section.tensorflow-section .btn-danger {
+    background-color: #D32F2F !important; /* Red */
+    border-color: #D32F2F !important;
+}
+
+.framework-section.tensorflow-section .btn-warning {
+    background-color: #FFA000 !important; /* Amber */
+    border-color: #FFA000 !important;
+}
+
+.framework-section.tensorflow-section .btn-info {
+    background-color: #1E88E5 !important; /* Blue */
+    border-color: #1E88E5 !important;
+}
+
+.framework-section.tensorflow-section .btn-light {
+    background-color: #F5F5F5 !important; /* Light gray */
+    border-color: #E0E0E0 !important;
+    color: #333333 !important;
+}
+
+.framework-section.tensorflow-section .btn-dark {
+    background-color: #333333 !important; /* Dark gray */
+    border-color: #333333 !important;
+}
+
+.framework-section.tensorflow-section .btn-outline-primary {
+    color: #E65100 !important;
+    border-color: #E65100 !important;
+    background-color: transparent !important;
+}
+
+.framework-section.tensorflow-section .btn-outline-primary:hover {
+    color: #FFFFFF !important;
+    background-color: #E65100 !important;
+}
+
+/* Fix button groups for proper layout */
+.framework-section.tensorflow-section .btn-group {
+    display: inline-flex !important;
+    position: relative !important;
+    vertical-align: middle !important;
+    margin: 0.5rem 1rem 0.5rem 0 !important;
+    border-radius: 4px !important; /* Match button border radius */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) !important; /* Match button shadow */
+    z-index: 1 !important; /* Ensure proper stacking */
+    isolation: isolate !important; /* Create stacking context */
+}
+
+/* Fix buttons within groups */
+.framework-section.tensorflow-section .btn-group > .btn {
+    position: relative !important;
+    flex: 0 1 auto !important;
+    margin: 0 !important; /* Override default margin */
+    border-radius: 0 !important; /* Remove border radius for all buttons in group */
+    box-shadow: none !important; /* Remove individual shadows */
+    min-width: auto !important; /* Allow buttons to size naturally */
+    z-index: 2 !important; /* Ensure buttons are above group */
+}
+
+/* First button in group */
+.framework-section.tensorflow-section .btn-group > .btn:first-child {
+    border-top-left-radius: 4px !important;
+    border-bottom-left-radius: 4px !important;
+}
+
+/* Last button in group */
+.framework-section.tensorflow-section .btn-group > .btn:last-child {
+    border-top-right-radius: 4px !important;
+    border-bottom-right-radius: 4px !important;
+}
+
+/* Middle buttons in group */
+.framework-section.tensorflow-section .btn-group > .btn:not(:first-child):not(:last-child) {
+    border-radius: 0 !important;
+}
+
+/* Fix border overlap */
+.framework-section.tensorflow-section .btn-group > .btn:not(:first-child) {
+    margin-left: -1px !important;
+}
+
+/* Fix hover state for buttons in groups */
+.framework-section.tensorflow-section .btn-group > .btn:hover {
+    z-index: 3 !important; /* Bring hovered button to front */
+    position: relative !important;
+}
+
+/* Fix active state for buttons in groups */
+.framework-section.tensorflow-section .btn-group > .btn:active,
+.framework-section.tensorflow-section .btn-group > .btn.active {
+    z-index: 3 !important; /* Bring active button to front */
+}
+
+/* Fix button toolbar for proper layout */
+.framework-section.tensorflow-section .btn-toolbar {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+    margin: 1.5rem 0 !important;
+    width: 100% !important;
+    position: relative !important;
+    padding: 0 !important;
+    clear: both !important; /* Prevent floating elements from interfering */
+}
+
+/* Ensure button toolbars don't interfere with other elements */
+.framework-section.tensorflow-section .btn-toolbar::before,
+.framework-section.tensorflow-section .btn-toolbar::after {
+    content: "" !important;
+    display: table !important;
+    clear: both !important;
+}
+
+/* Fix button groups within toolbars */
+.framework-section.tensorflow-section .btn-toolbar .btn-group {
+    margin: 0.25rem !important; /* Smaller margin within toolbar */
+    flex: 0 0 auto !important; /* Don't allow groups to grow/shrink */
+}
+
+/* Fix individual buttons within toolbars */
+.framework-section.tensorflow-section .btn-toolbar > .btn {
+    margin: 0.25rem !important; /* Smaller margin within toolbar */
+    flex: 0 0 auto !important; /* Don't allow buttons to grow/shrink */
+}
+
+/* Prevent buttons from interfering with other elements */
+.framework-section.tensorflow-section .btn-container {
+    isolation: isolate !important;
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+/* Fix button spacing in specific contexts */
+.framework-section.tensorflow-section h2 + .btn,
+.framework-section.tensorflow-section h3 + .btn,
+.framework-section.tensorflow-section p + .btn,
+.framework-section.tensorflow-section ul + .btn,
+.framework-section.tensorflow-section ol + .btn,
+.framework-section.tensorflow-section table + .btn,
+.framework-section.tensorflow-section blockquote + .btn,
+.framework-section.tensorflow-section .code-block + .btn {
+    margin-top: 1.5rem !important;
+}
+
+/* Fix button spacing before elements */
+.framework-section.tensorflow-section .btn + h2,
+.framework-section.tensorflow-section .btn + h3,
+.framework-section.tensorflow-section .btn + p,
+.framework-section.tensorflow-section .btn + ul,
+.framework-section.tensorflow-section .btn + ol,
+.framework-section.tensorflow-section .btn + table,
+.framework-section.tensorflow-section .btn + blockquote,
+.framework-section.tensorflow-section .btn + .code-block {
+    margin-top: 1.5rem !important;
+}
+
+/* Fix button alignment in flex containers */
+.framework-section.tensorflow-section .d-flex .btn,
+.framework-section.tensorflow-section .flex-container .btn {
+    align-self: center !important;
+}
+
+/* Fix button alignment in grid containers */
+.framework-section.tensorflow-section .grid-container .btn,
+.framework-section.tensorflow-section .row .btn {
+    justify-self: start !important;
+}
+
+/* Fix button alignment in absolute positioned containers */
+.framework-section.tensorflow-section .position-relative .btn {
+    position: relative !important;
+    z-index: 2 !important;
+}
+
+/* Fix link visibility */
+.framework-section.tensorflow-section a:not(.btn) {
+    /* Ensure links have proper contrast with balanced colors */
+    color: #0056b3 !important; /* Dark blue */
+    font-weight: 500 !important;
+    text-decoration: none !important; /* Remove underline by default */
+    border-bottom: 1px solid rgba(0, 86, 179, 0.3) !important; /* Subtle underline */
+    transition: all 0.2s ease !important;
+    text-shadow: none !important;
+    padding-bottom: 1px !important;
+}
+
+.framework-section.tensorflow-section a:not(.btn):hover {
+    /* Ensure links have proper contrast on hover without being too dark */
+    color: #004494 !important; /* Slightly darker blue - balanced */
+    border-bottom: 1px solid rgba(0, 68, 148, 0.7) !important; /* More visible underline on hover */
+}
+
+/* Fix table visibility */
+.framework-section.tensorflow-section table {
+    /* Ensure tables have proper contrast with balanced design */
+    border-collapse: collapse !important;
+    width: 100% !important;
+    margin: 1.5rem 0 !important;
+    border: 1px solid #E9ECEF !important;
+    border-radius: 6px !important;
+    overflow: hidden !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+}
+
+.framework-section.tensorflow-section th {
+    /* Ensure table headers have proper contrast with balanced colors */
+    background-color: #E67E22 !important; /* Balanced orange - not too bright */
+    color: #FFFFFF !important; /* White text */
+    font-weight: 600 !important;
+    padding: 0.75rem 1rem !important;
+    text-align: left !important;
+    text-shadow: none !important;
+    border-bottom: 2px solid #D35400 !important; /* Darker border for definition */
+}
+
+.framework-section.tensorflow-section td {
+    /* Ensure table cells have proper contrast with balanced colors */
+    background-color: #F8F9FA !important; /* Slightly off-white background */
+    color: #333333 !important; /* Dark gray but not pure black */
+    padding: 0.75rem 1rem !important;
+    border-top: 1px solid #E9ECEF !important;
+    text-shadow: none !important;
+}
+
+/* Add zebra striping for better readability */
+.framework-section.tensorflow-section tr:nth-child(even) td {
+    background-color: #F1F3F5 !important; /* Slightly darker for even rows */
+}
+
+/* Fix blockquote visibility */
+.framework-section.tensorflow-section blockquote {
+    /* Ensure blockquotes have proper contrast with balanced colors */
+    background-color: #FFF8E1 !important; /* Soft light orange background */
+    border-left: 4px solid #FF9800 !important; /* Balanced orange - not too bright */
+    padding: 1.2rem 1.5rem !important;
+    margin: 1.5rem 0 !important;
+    border-radius: 0 6px 6px 0 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+}
+
+.framework-section.tensorflow-section blockquote p {
+    /* Ensure blockquote text has proper contrast with balanced colors */
+    color: #333333 !important; /* Dark gray but not pure black */
+    font-style: italic !important;
+    margin-bottom: 0.5rem !important;
+    text-shadow: none !important;
+    line-height: 1.6 !important;
+}
+
+.framework-section.tensorflow-section blockquote p:last-child {
+    margin-bottom: 0 !important;
+}
+
+/* Fix note/warning/info box visibility */
+.framework-section.tensorflow-section .note,
+.framework-section.tensorflow-section .warning,
+.framework-section.tensorflow-section .info {
+    /* Ensure note boxes have proper contrast with balanced design */
+    padding: 1.2rem 1.5rem !important;
+    margin: 1.5rem 0 !important;
+    border-radius: 6px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.framework-section.tensorflow-section .note {
+    /* Blue note box with balanced colors */
+    background-color: #E3F2FD !important; /* Soft light blue */
+    border-left: 4px solid #1E88E5 !important; /* Balanced blue - not too bright */
+}
+
+.framework-section.tensorflow-section .note::before {
+    content: "Note" !important;
+    display: block !important;
+    font-weight: 700 !important;
+    color: #1E88E5 !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.framework-section.tensorflow-section .warning {
+    /* Orange warning box with balanced colors */
+    background-color: #FFF3E0 !important; /* Soft light orange */
+    border-left: 4px solid #F57C00 !important; /* Balanced orange - not too bright */
+}
+
+.framework-section.tensorflow-section .warning::before {
+    content: "Warning" !important;
+    display: block !important;
+    font-weight: 700 !important;
+    color: #F57C00 !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.framework-section.tensorflow-section .info {
+    /* Green info box with balanced colors */
+    background-color: #E8F5E9 !important; /* Soft light green */
+    border-left: 4px solid #43A047 !important; /* Balanced green - not too bright */
+}
+
+.framework-section.tensorflow-section .info::before {
+    content: "Info" !important;
+    display: block !important;
+    font-weight: 700 !important;
+    color: #43A047 !important;
+    margin-bottom: 0.5rem !important;
+}
+
+.framework-section.tensorflow-section .note p,
+.framework-section.tensorflow-section .warning p,
+.framework-section.tensorflow-section .info p {
+    /* Ensure note box text has proper contrast with balanced colors */
+    color: #333333 !important; /* Dark gray but not pure black */
+    margin-bottom: 0.5rem !important;
+    text-shadow: none !important;
+    line-height: 1.6 !important;
+}
+
+.framework-section.tensorflow-section .note p:last-child,
+.framework-section.tensorflow-section .warning p:last-child,
+.framework-section.tensorflow-section .info p:last-child {
+    margin-bottom: 0 !important;
+}
+
+/* Fix image caption visibility */
+.framework-section.tensorflow-section .figure-caption {
+    /* Ensure image captions have proper contrast with balanced colors */
+    color: #555555 !important; /* Medium gray - not too light */
+    font-style: italic !important;
+    margin-top: 0.75rem !important;
+    text-align: center !important;
+    text-shadow: none !important;
+    font-size: 0.9rem !important;
+}
+
+/* Fix code inline visibility */
+.framework-section.tensorflow-section code:not([class*="language-"]) {
+    /* Ensure inline code has proper contrast with balanced colors */
+    background-color: #F5F5F5 !important; /* Light gray background */
+    color: #D84315 !important; /* Balanced dark orange - not too bright */
+    padding: 0.2rem 0.4rem !important;
+    border-radius: 4px !important;
+    font-family: 'Fira Code', Consolas, Monaco, 'Andale Mono', monospace !important;
+    font-size: 0.9em !important;
+    text-shadow: none !important;
+    border: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Fix keyboard key visibility */
+.framework-section.tensorflow-section kbd {
+    /* Ensure keyboard keys have proper contrast */
+    background-color: #212121 !important; /* Very dark gray, almost black */
+    color: #FFFFFF !important; /* White text */
+    padding: 0.2rem 0.4rem !important;
+    border-radius: 0.25rem !important;
+    font-family: 'Fira Code', monospace !important;
+    font-size: 0.9em !important;
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.25) !important;
+    text-shadow: none !important;
+}
+
+/* Fix mark/highlight visibility */
+.framework-section.tensorflow-section mark {
+    /* Ensure highlighted text has proper contrast */
+    background-color: #FFF9C4 !important; /* Light yellow */
+    color: #212121 !important; /* Very dark gray, almost black */
+    padding: 0.2rem 0 !important;
+    text-shadow: none !important;
+}
+
+/* Fix small text visibility */
+.framework-section.tensorflow-section small {
+    /* Ensure small text has proper contrast */
+    color: #616161 !important; /* Medium gray */
+    font-size: 0.875em !important;
+    text-shadow: none !important;
+}
+
+/* Fix strong/bold text visibility */
+.framework-section.tensorflow-section strong,
+.framework-section.tensorflow-section b {
+    /* Ensure bold text has proper contrast */
+    color: #212121 !important; /* Very dark gray, almost black */
+    font-weight: 700 !important;
+    text-shadow: none !important;
+}
+
+/* Fix emphasis/italic text visibility */
+.framework-section.tensorflow-section em,
+.framework-section.tensorflow-section i {
+    /* Ensure italic text has proper contrast */
+    color: #212121 !important; /* Very dark gray, almost black */
+    font-style: italic !important;
+    text-shadow: none !important;
+}
+
+/* Fix definition list visibility */
+.framework-section.tensorflow-section dl {
+    /* Ensure definition lists have proper contrast */
+    margin-bottom: 1rem !important;
+}
+
+.framework-section.tensorflow-section dt {
+    /* Ensure definition terms have proper contrast */
+    color: #E65100 !important; /* TensorFlow dark */
+    font-weight: 700 !important;
+    margin-top: 1rem !important;
+    text-shadow: none !important;
+}
+
+.framework-section.tensorflow-section dd {
+    /* Ensure definition descriptions have proper contrast */
+    color: #212121 !important; /* Very dark gray, almost black */
+    margin-left: 1rem !important;
+    text-shadow: none !important;
+}
+
+/* Fix abbreviation visibility */
+.framework-section.tensorflow-section abbr {
+    /* Ensure abbreviations have proper contrast */
+    color: #212121 !important; /* Very dark gray, almost black */
+    text-decoration: underline dotted !important;
+    cursor: help !important;
+    text-shadow: none !important;
+}
+
+/* Fix address visibility */
+.framework-section.tensorflow-section address {
+    /* Ensure addresses have proper contrast */
+    color: #212121 !important; /* Very dark gray, almost black */
+    font-style: normal !important;
+    margin-bottom: 1rem !important;
+    text-shadow: none !important;
+}
+
+/* Fix pre-formatted text visibility */
+.framework-section.tensorflow-section pre:not([class*="language-"]) {
+    /* Ensure pre-formatted text has proper contrast */
+    background-color: #F5F5F5 !important; /* Light gray */
+    color: #212121 !important; /* Very dark gray, almost black */
+    padding: 1rem !important;
+    border-radius: 0.25rem !important;
+    margin-bottom: 1rem !important;
+    white-space: pre-wrap !important;
+    text-shadow: none !important;
+}

@@ -1,0 +1,951 @@
+/**
+ * Custom Dark Mode Theme
+ * Implements a specific dark mode color scheme with purple accents
+ */
+
+/* Import Noto Sans Modi font from Google Fonts */
+@import url('https://fonts.googleapis.com/css?family=Noto%20Sans%20Modi:700|Noto%20Sans%20Modi:400');
+
+/* Only apply these styles in dark mode (when body doesn't have light-theme class) */
+body:not(.light-theme) {
+    /* Base colors with improved contrast */
+    --text: #e2e8f0;           /* Lighter text for better readability */
+    --background: #0f172a;     /* Darker background for better contrast */
+    --primary: #6366f1;        /* Indigo primary color */
+    --secondary: #818cf8;      /* Lighter indigo for secondary elements */
+    --accent: #4f46e5;         /* Darker indigo for accents */
+    --muted: #94a3b8;          /* Muted text color */
+    --muted-background: #1e293b; /* Muted background color */
+    
+    /* Status colors with improved visibility */
+    --success: #22c55e;        /* Green */
+    --warning: #eab308;        /* Yellow */
+    --error: #ef4444;          /* Red */
+    --info: #3b82f6;          /* Blue */
+    
+    /* Code block colors */
+    --code-background: #1e293b;
+    --code-text: #e2e8f0;
+    --code-comment: #94a3b8;
+    --code-keyword: #818cf8;
+    --code-string: #34d399;
+    --code-function: #f472b6;
+    --code-variable: #fbbf24;
+    --code-number: #60a5fa;
+    
+    /* Apply base styles */
+    color: var(--text);
+    background-color: var(--background);
+
+    /* Linear and radial gradients */
+    --linearPrimarySecondary: linear-gradient(#4db394, #2c2b64);
+    --linearPrimaryAccent: linear-gradient(#4db394, #53367d);
+    --linearSecondaryAccent: linear-gradient(#2c2b64, #53367d);
+    --radialPrimarySecondary: radial-gradient(#4db394, #2c2b64);
+    --radialPrimaryAccent: radial-gradient(#4db394, #53367d);
+    --radialSecondaryAccent: radial-gradient(#2c2b64, #53367d);
+
+    /* Set font family for all elements */
+    font-family: 'Noto Sans Modi', sans-serif;
+    font-weight: 400;
+
+    /* Override the default theme variables */
+    --dark-bg-primary: var(--background);
+    --dark-bg-secondary: var(--secondary);
+    --dark-bg-tertiary: #081210; /* Slightly lighter than background */
+    --dark-text-primary: var(--text);
+    --dark-text-secondary: rgba(241, 249, 247, 0.85); /* Slightly transparent text */
+    --dark-border-color: rgba(77, 179, 148, 0.3); /* Semi-transparent primary */
+    --dark-primary-color: var(--primary);
+    --dark-secondary-color: var(--accent);
+    --dark-card-bg: rgba(44, 43, 100, 0.8); /* Semi-transparent secondary */
+    --dark-code-bg: #050c0a; /* Slightly lighter than background */
+    --dark-shadow-color: rgba(0, 0, 0, 0.5);
+
+    /* Typography scale as specified */
+    html {
+        font-size: 100%; /* 16px base */
+    }
+
+    h1, h2, h3, h4, h5 {
+        font-family: 'Noto Sans Modi', sans-serif;
+        font-weight: 700;
+        line-height: 1.2;
+        color: var(--text);
+    }
+
+    h1 {
+        font-size: 4.210rem; /* 67.36px */
+    }
+
+    h2 {
+        font-size: 3.158rem; /* 50.56px */
+    }
+
+    h3 {
+        font-size: 2.369rem; /* 37.92px */
+    }
+
+    h4 {
+        font-size: 1.777rem; /* 28.48px */
+    }
+
+    h5 {
+        font-size: 1.333rem; /* 21.28px */
+    }
+
+    small {
+        font-size: 0.750rem; /* 12px */
+    }
+}
+
+/* Container styling */
+body:not(.light-theme) .container {
+    background-color: var(--background);
+    color: var(--text);
+}
+
+/* Card styling with improved contrast */
+body:not(.light-theme) .card {
+    background-color: var(--muted-background);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Navigation styling */
+body:not(.light-theme) .navbar {
+    background-color: var(--muted-background);
+    border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+body:not(.light-theme) .nav-link {
+    color: var(--text) !important;
+}
+
+body:not(.light-theme) .nav-link:hover,
+body:not(.light-theme) .nav-link:focus {
+    color: var(--primary) !important;
+}
+
+/* Button styling with improved visibility */
+body:not(.light-theme) .btn-primary {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+body:not(.light-theme) .btn-primary:hover,
+body:not(.light-theme) .btn-primary:focus {
+    background-color: var(--accent);
+    border-color: var(--accent);
+}
+
+/* Form control styling */
+body:not(.light-theme) .form-control {
+    background-color: var(--muted-background);
+    border-color: rgba(148, 163, 184, 0.2);
+    color: var(--text);
+}
+
+body:not(.light-theme) .form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 0.2rem rgba(99, 102, 241, 0.25);
+}
+
+/* Table styling */
+body:not(.light-theme) .table {
+    color: var(--text);
+}
+
+body:not(.light-theme) .table thead th {
+    background-color: var(--muted-background);
+    border-bottom-color: rgba(148, 163, 184, 0.2);
+}
+
+body:not(.light-theme) .table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(148, 163, 184, 0.05);
+}
+
+/* Alert styling */
+body:not(.light-theme) .alert {
+    background-color: var(--muted-background);
+    border-color: rgba(148, 163, 184, 0.2);
+}
+
+/* Code block styling */
+body:not(.light-theme) pre {
+    background-color: var(--code-background);
+    color: var(--code-text);
+}
+
+/* Link styling */
+body:not(.light-theme) a {
+    color: var(--primary);
+}
+
+body:not(.light-theme) a:hover {
+    color: var(--secondary);
+}
+
+/* Ensure text is visible in all contexts */
+body:not(.light-theme) .text-white,
+body:not(.light-theme) .text-light {
+    color: var(--text) !important;
+}
+
+body:not(.light-theme) .text-muted {
+    color: var(--muted) !important;
+}
+
+/* Special case for back buttons to ensure visibility */
+body:not(.light-theme) .btn-primary.back-button,
+body:not(.light-theme) a.btn-primary[href*="back"],
+body:not(.light-theme) button.btn-primary.back,
+body:not(.light-theme) .btn.btn-primary:contains("Back") {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Override specific elements in dark mode */
+body:not(.light-theme) {
+    /* Main container backgrounds */
+    .container, .container-fluid {
+        background-color: var(--background);
+    }
+
+    /* Cards and panels */
+    .card, .panel {
+        background-color: rgba(44, 43, 100, 0.9); /* Semi-transparent secondary */
+        border-color: var(--primary);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        border-radius: 8px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover, .panel:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+    }
+
+    .card-header {
+        background-color: rgba(77, 179, 148, 0.1) !important; /* Light primary color background */
+        border-bottom: 1px solid rgba(77, 179, 148, 0.2) !important;
+    }
+
+    /* Navigation - enhanced for a visually stunning appearance */
+    .navbar {
+        background-color: rgba(44, 43, 100, 0.95) !important; /* Semi-transparent secondary */
+        border-bottom: 1px solid rgba(77, 179, 148, 0.2) !important; /* Subtle border using primary color */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important; /* Subtle shadow */
+        padding: 0.75rem 1.5rem !important;
+    }
+
+    .navbar-brand {
+        color: var(--text) !important;
+        font-weight: 600 !important;
+    }
+
+    .nav-link {
+        color: var(--text) !important;
+        font-weight: 500 !important;
+    }
+
+    .nav-link:hover {
+        color: var(--primary) !important;
+    }
+
+    .nav-link.active {
+        color: var(--primary) !important;
+        border-bottom: 2px solid var(--primary) !important;
+    }
+
+    /* Buttons - styled to match the exact colors */
+    .btn-primary {
+        background-color: var(--primary) !important; /* #4db394 primary color */
+        border-color: var(--primary) !important;
+        color: var(--text) !important;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3) !important;
+        border-radius: 6px !important;
+        padding: 0.5rem 1.25rem !important;
+        font-weight: 500 !important;
+        letter-spacing: 0.01em !important;
+        transition: all 0.2s ease !important;
+        font-family: 'Noto Sans Modi', sans-serif !important;
+    }
+
+    .btn-primary:hover {
+        background-color: var(--accent) !important; /* #53367d accent color */
+        border-color: var(--accent) !important;
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4) !important;
+        transform: translateY(-2px) !important;
+    }
+
+    /* Gradient button option */
+    .btn-gradient {
+        background: var(--linearPrimarySecondary) !important;
+        border: none !important;
+        color: var(--text) !important;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    .btn-gradient:hover {
+        background: var(--linearPrimaryAccent) !important;
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4) !important;
+        transform: translateY(-2px) !important;
+    }
+
+    .btn-secondary {
+        background-color: var(--secondary) !important; /* #2c2b64 secondary color */
+        border-color: var(--secondary) !important;
+        color: var(--text) !important;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3) !important;
+        border-radius: 6px !important;
+        padding: 0.5rem 1.25rem !important;
+        font-weight: 500 !important;
+        letter-spacing: 0.01em !important;
+        transition: all 0.2s ease !important;
+        font-family: 'Noto Sans Modi', sans-serif !important;
+    }
+
+    .btn-secondary:hover {
+        background-color: var(--accent) !important; /* #53367d accent color */
+        border-color: var(--accent) !important;
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4) !important;
+        transform: translateY(-2px) !important;
+    }
+
+    /* Button outlines */
+    .btn-outline-primary {
+        background-color: transparent !important;
+        border-color: var(--primary) !important; /* #4db394 primary color */
+        color: var(--primary) !important;
+        border-width: 1.5px !important;
+        border-radius: 6px !important;
+        padding: 0.5rem 1.25rem !important;
+        font-weight: 500 !important;
+        letter-spacing: 0.01em !important;
+        transition: all 0.2s ease !important;
+        font-family: 'Noto Sans Modi', sans-serif !important;
+    }
+
+    .btn-outline-primary:hover {
+        background-color: var(--primary) !important;
+        color: var(--background) !important;
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4) !important;
+        transform: translateY(-2px) !important;
+    }
+
+    .btn-outline-secondary {
+        background-color: transparent !important;
+        border-color: var(--secondary) !important; /* #2c2b64 secondary color */
+        color: var(--secondary) !important;
+        border-width: 1.5px !important;
+        border-radius: 6px !important;
+        padding: 0.5rem 1.25rem !important;
+        font-weight: 500 !important;
+        letter-spacing: 0.01em !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .btn-outline-secondary:hover {
+        background-color: var(--secondary) !important;
+        color: var(--text) !important;
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4) !important;
+        transform: translateY(-2px) !important;
+    }
+
+    /* Forms - styled to match the exact colors */
+    input, select, textarea {
+        background-color: rgba(44, 43, 100, 0.7); /* Semi-transparent secondary */
+        border: 1px solid rgba(77, 179, 148, 0.3) !important; /* Subtle primary color border */
+        color: var(--text) !important; /* #f1f9f7 text color */
+        border-radius: 6px !important;
+        padding: 0.625rem 1rem !important;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) !important;
+        transition: all 0.2s ease !important;
+        font-family: 'Noto Sans Modi', sans-serif !important;
+    }
+
+    input:focus, select:focus, textarea:focus {
+        border-color: var(--primary) !important; /* #4db394 primary color */
+        box-shadow: 0 0 0 3px rgba(77, 179, 148, 0.2) !important;
+        outline: none !important;
+    }
+
+    /* Form labels */
+    label {
+        color: var(--text) !important; /* #f1f9f7 text color */
+        font-weight: 500 !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    /* Form help text */
+    .form-text {
+        color: rgba(241, 249, 247, 0.7) !important; /* Slightly transparent text color */
+        font-size: 0.875rem !important;
+    }
+
+    /* Code blocks - styled to match the exact colors */
+    pre, code {
+        background-color: var(--dark-code-bg);
+        color: var(--text);
+        border-color: var(--primary);
+        border-radius: 6px;
+        padding: 0.75rem 1rem;
+        font-family: 'Fira Code', Consolas, Monaco, 'Andale Mono', monospace;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    pre {
+        border-left: 3px solid var(--primary);
+        margin: 1.5rem 0;
+    }
+
+    /* Tables - styled to match the exact colors */
+    table {
+        background-color: rgba(44, 43, 100, 0.8); /* Semi-transparent secondary */
+        color: var(--text);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        border-collapse: separate;
+        border-spacing: 0;
+        width: 100%;
+        margin: 1.5rem 0;
+        font-family: 'Noto Sans Modi', sans-serif;
+    }
+
+    th {
+        background-color: var(--primary);
+        color: var(--text);
+        font-weight: 600;
+        text-align: left;
+        padding: 1rem;
+        border-bottom: 2px solid rgba(83, 54, 125, 0.3);
+    }
+
+    td {
+        padding: 0.875rem 1rem;
+        border-bottom: 1px solid rgba(83, 54, 125, 0.2);
+        vertical-align: middle;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    tr:hover td {
+        background-color: rgba(77, 179, 148, 0.1);
+    }
+
+    /* Links - styled to match the exact colors */
+    a {
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+        position: relative;
+        transition: all 0.2s ease;
+        font-family: 'Noto Sans Modi', sans-serif;
+    }
+
+    a:hover {
+        color: var(--accent);
+    }
+
+    a:not(.btn):not(.nav-link):after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 1px;
+        bottom: 0;
+        left: 0;
+        background-color: var(--accent);
+        transform: scaleX(0);
+        transform-origin: bottom right;
+        transition: transform 0.3s ease;
+    }
+
+    a:not(.btn):not(.nav-link):hover:after {
+        transform: scaleX(1);
+        transform-origin: bottom left;
+    }
+
+    /* Headings - using the specified typography scale and colors */
+    h1, h2, h3, h4, h5 {
+        color: var(--text);
+        font-family: 'Noto Sans Modi', sans-serif;
+        font-weight: 700;
+        line-height: 1.2;
+        margin-bottom: 1rem;
+    }
+
+    h1 {
+        font-size: 4.210rem; /* 67.36px */
+        margin-bottom: 1.5rem;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+        -webkit-background-clip: text;
+        background-clip: text; /* Standard property for compatibility */
+        -webkit-text-fill-color: transparent;
+        display: inline-block;
+    }
+
+    h2 {
+        font-size: 3.158rem; /* 50.56px */
+        color: var(--primary);
+        margin-top: 2rem;
+        margin-bottom: 1.25rem;
+        position: relative;
+        padding-bottom: 0.5rem;
+    }
+
+    h2:after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100px;
+        height: 3px;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+    }
+
+    h3 {
+        font-size: 2.369rem; /* 37.92px */
+        color: var(--primary);
+        margin-top: 1.75rem;
+    }
+
+    h4 {
+        font-size: 1.777rem; /* 28.48px */
+        margin-top: 1.5rem;
+    }
+
+    h5 {
+        font-size: 1.333rem; /* 21.28px */
+        margin-top: 1.25rem;
+    }
+
+    /* Borders */
+    .border {
+        border-color: var(--primary) !important;
+    }
+
+    /* Alerts */
+    .alert {
+        background-color: var(--secondary);
+        border-color: var(--primary);
+        color: var(--text);
+    }
+
+    /* Badges */
+    .badge {
+        background-color: var(--primary);
+        color: var(--text);
+    }
+
+    /* Modals */
+    .modal-content {
+        background-color: var(--secondary);
+        border-color: var(--primary);
+        color: var(--text);
+    }
+
+    .modal-header, .modal-footer {
+        border-color: var(--primary);
+    }
+
+    /* Dropdowns */
+    .dropdown-menu {
+        background-color: var(--secondary);
+        border-color: var(--primary);
+    }
+
+    .dropdown-item {
+        color: var(--text);
+    }
+
+    .dropdown-item:hover {
+        background-color: var(--primary);
+        color: var(--text);
+    }
+
+    /* List groups */
+    .list-group-item {
+        background-color: var(--secondary);
+        border-color: var(--primary);
+        color: var(--text);
+    }
+
+    /* Progress bars */
+    .progress {
+        background-color: var(--secondary);
+    }
+
+    .progress-bar {
+        background-color: var(--primary);
+    }
+
+    /* Tooltips */
+    .tooltip-inner {
+        background-color: var(--primary);
+        color: var(--text);
+    }
+}
+
+/* Quick access features section */
+body:not(.light-theme) div.quick-access {
+    background: var(--linearPrimarySecondary) !important;
+    border-radius: 8px !important;
+    padding: 20px !important;
+    margin-bottom: 30px !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+body:not(.light-theme) div.quick-access h3 {
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4) !important;
+}
+
+body:not(.light-theme) div.quick-access a {
+    color: #ffffff !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease !important;
+    display: inline-block !important;
+    padding: 5px 10px !important;
+    border-radius: 4px !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    margin: 5px !important;
+}
+
+body:not(.light-theme) div.quick-access a:hover {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Quick Access Features Section */
+body:not(.light-theme) div.quick-access-features {
+    background-color: rgba(44, 43, 100, 0.7) !important; /* Semi-transparent secondary */
+    border: 1px solid var(--primary) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    padding: 20px !important;
+    margin: 15px 0 !important;
+    color: var(--text) !important;
+    font-family: 'Noto Sans Modi', sans-serif !important;
+    font-size: 17px !important;
+}
+
+body:not(.light-theme) div.quick-access-features a {
+    color: var(--primary) !important;
+    font-weight: 500 !important;
+    transition: all 0.2s ease !important;
+}
+
+body:not(.light-theme) div.quick-access-features a:hover {
+    color: var(--accent) !important;
+    text-decoration: underline !important;
+}
+
+body:not(.light-theme) div.quick-access-features h2,
+body:not(.light-theme) div.quick-access-features h3 {
+    color: var(--primary) !important;
+    font-weight: 600 !important;
+    margin-bottom: 15px !important;
+}
+
+/* Main Content Section */
+body:not(.light-theme) main#main-content {
+    background-color: var(--background) !important;
+    color: var(--text) !important;
+    font-family: 'Noto Sans Modi', sans-serif !important;
+    font-size: 18px !important;
+    line-height: 1.6 !important;
+    padding: 20px !important;
+}
+
+body:not(.light-theme) main#main-content h1,
+body:not(.light-theme) main#main-content h2,
+body:not(.light-theme) main#main-content h3 {
+    color: var(--primary) !important;
+    font-weight: 600 !important;
+}
+
+body:not(.light-theme) main#main-content h4,
+body:not(.light-theme) main#main-content h5,
+body:not(.light-theme) main#main-content h6 {
+    color: var(--text) !important;
+    font-weight: 600 !important;
+}
+
+body:not(.light-theme) main#main-content p,
+body:not(.light-theme) main#main-content li {
+    color: var(--text) !important;
+}
+
+/* Ensure TensorFlow section works with our custom dark mode */
+body:not(.light-theme) .framework-section.tensorflow-section {
+    background-color: rgba(44, 43, 100, 0.8) !important; /* Semi-transparent secondary */
+    border: 1px solid var(--primary) !important;
+    border-radius: 8px !important;
+    padding: 2rem !important;
+    margin: 2rem 0 !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+}
+
+body:not(.light-theme) .framework-section.tensorflow-section h2,
+body:not(.light-theme) .framework-section.tensorflow-section h3 {
+    color: var(--text) !important;
+}
+
+body:not(.light-theme) .framework-section.tensorflow-section p,
+body:not(.light-theme) .framework-section.tensorflow-section li {
+    color: var(--text) !important;
+}
+
+body:not(.light-theme) .framework-section.tensorflow-section .btn {
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
+    color: var(--text) !important;
+}
+
+body:not(.light-theme) .framework-section.tensorflow-section .btn:hover {
+    background-color: var(--accent) !important;
+    border-color: var(--accent) !important;
+}
+
+body:not(.light-theme) .framework-code.tensorflow-code {
+    background-color: var(--dark-code-bg) !important;
+    border-left: 5px solid var(--primary) !important;
+    border-radius: 6px !important;
+    margin: 1.5rem 0 !important;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3) !important;
+}
+
+body:not(.light-theme) .framework-code.tensorflow-code pre,
+body:not(.light-theme) .framework-code.tensorflow-code code {
+    color: var(--text) !important;
+    font-family: 'Fira Code', Consolas, Monaco, 'Andale Mono', monospace !important;
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+}
+
+body:not(.light-theme) .framework-code.tensorflow-code .code-header {
+    background-color: #0a1210 !important;
+    color: var(--text) !important;
+    font-weight: 600 !important;
+    border-bottom: 1px solid rgba(77, 179, 148, 0.3) !important;
+    padding: 0.6rem 1rem !important;
+    border-top-left-radius: 6px !important;
+    border-top-right-radius: 6px !important;
+}
+
+/* Links in TensorFlow section */
+body:not(.light-theme) .framework-section.tensorflow-section a:not(.btn) {
+    color: var(--primary) !important; /* #4db394 primary color */
+    font-weight: 500 !important;
+    text-decoration: none !important;
+    border-bottom: 1px solid rgba(77, 179, 148, 0.3) !important;
+    transition: all 0.2s ease !important;
+}
+
+body:not(.light-theme) .framework-section.tensorflow-section a:not(.btn):hover {
+    color: var(--accent) !important; /* #53367d accent color */
+    border-bottom: 1px solid rgba(83, 54, 125, 0.7) !important;
+}
+
+/* Dark mode styles */
+body.dark-mode {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+body.dark-mode .navbar {
+    background-color: #2d2d2d !important;
+}
+
+body.dark-mode .card {
+    background-color: #2d2d2d;
+    border-color: #404040;
+}
+
+body.dark-mode .form-control {
+    background-color: #2d2d2d;
+    border-color: #404040;
+    color: #ffffff;
+}
+
+body.dark-mode .form-control:focus {
+    background-color: #2d2d2d;
+    color: #ffffff;
+}
+
+body.dark-mode .btn-outline-light {
+    border-color: #ffffff;
+    color: #ffffff;
+}
+
+body.dark-mode .btn-outline-light:hover {
+    background-color: #ffffff;
+    color: #2d2d2d;
+}
+
+body.dark-mode .alert {
+    background-color: #2d2d2d;
+    border-color: #404040;
+}
+
+body.dark-mode .alert-success {
+    background-color: #1e4620;
+    border-color: #2d5a2f;
+}
+
+body.dark-mode .alert-danger {
+    background-color: #462020;
+    border-color: #5a2d2d;
+}
+
+body.dark-mode .alert-warning {
+    background-color: #463d20;
+    border-color: #5a4d2d;
+}
+
+body.dark-mode .alert-info {
+    background-color: #203d46;
+    border-color: #2d4d5a;
+}
+
+/* Dark mode transitions */
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.card, .form-control, .btn, .alert {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+/* Custom Dark Mode Styles */
+[data-theme="dark"] {
+    /* Background Colors */
+    --bs-body-bg: #212529;
+    --bs-body-color: #f8f9fa;
+    --bs-card-bg: #2c3034;
+    --bs-modal-bg: #2c3034;
+    --bs-dropdown-bg: #2c3034;
+    
+    /* Text Colors */
+    --bs-text-color: #f8f9fa;
+    --bs-text-muted: #adb5bd;
+    --bs-link-color: #6ea8fe;
+    --bs-link-hover-color: #8bb9fe;
+    
+    /* Border Colors */
+    --bs-border-color: #495057;
+    --bs-border-color-translucent: rgba(255, 255, 255, 0.15);
+    
+    /* Component Colors */
+    --bs-primary-rgb: 110, 168, 254;
+    --bs-secondary-rgb: 173, 181, 189;
+    --bs-success-rgb: 75, 192, 192;
+    --bs-info-rgb: 13, 202, 240;
+    --bs-warning-rgb: 255, 193, 7;
+    --bs-danger-rgb: 255, 107, 107;
+}
+
+/* Dark Mode Component Styles */
+[data-theme="dark"] .navbar {
+    background-color: #343a40 !important;
+}
+
+[data-theme="dark"] .card {
+    background-color: var(--bs-card-bg);
+    border-color: var(--bs-border-color);
+}
+
+[data-theme="dark"] .list-group-item {
+    background-color: var(--bs-card-bg);
+    border-color: var(--bs-border-color);
+    color: var(--bs-text-color);
+}
+
+[data-theme="dark"] .modal-content {
+    background-color: var(--bs-modal-bg);
+    border-color: var(--bs-border-color);
+}
+
+[data-theme="dark"] .dropdown-menu {
+    background-color: var(--bs-dropdown-bg);
+    border-color: var(--bs-border-color);
+}
+
+[data-theme="dark"] .dropdown-item {
+    color: var(--bs-text-color);
+}
+
+[data-theme="dark"] .dropdown-item:hover {
+    background-color: #495057;
+    color: var(--bs-text-color);
+}
+
+[data-theme="dark"] .text-muted {
+    color: var(--bs-text-muted) !important;
+}
+
+[data-theme="dark"] .btn-outline-light {
+    color: var(--bs-text-color);
+    border-color: var(--bs-border-color);
+}
+
+[data-theme="dark"] .btn-outline-light:hover {
+    background-color: #495057;
+    border-color: #6c757d;
+}
+
+/* Form Elements */
+[data-theme="dark"] .form-control {
+    background-color: #343a40;
+    border-color: var(--bs-border-color);
+    color: var(--bs-text-color);
+}
+
+[data-theme="dark"] .form-control:focus {
+    background-color: #343a40;
+    border-color: var(--bs-primary-rgb);
+    color: var(--bs-text-color);
+}
+
+[data-theme="dark"] .form-select {
+    background-color: #343a40;
+    border-color: var(--bs-border-color);
+    color: var(--bs-text-color);
+}
+
+/* Tables */
+[data-theme="dark"] .table {
+    color: var(--bs-text-color);
+}
+
+[data-theme="dark"] .table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Code Blocks */
+[data-theme="dark"] pre {
+    background-color: #343a40;
+    border-color: var(--bs-border-color);
+}
+
+[data-theme="dark"] code {
+    color: #e685b5;
+}
+
+/* Smooth Transitions */
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.card, .list-group-item, .modal-content, .dropdown-menu, .form-control, .form-select {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}

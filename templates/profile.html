@@ -1,196 +1,112 @@
-{% extends 'base.html' %}
+{% extends base_template|default('base-simple.html') %}
 
-{% block title %}User Profile{% endblock %}
+{% block title %}Profile{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
+<div class="container py-5">
     <div class="row">
         <div class="col-md-4">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h3>Profile</h3>
-                </div>
+            <div class="card mb-4">
                 <div class="card-body text-center">
-                    <div class="mb-3">
-                        <img src="{{ user.avatar_url or url_for('static', filename='img/default-avatar.svg') }}" alt="Profile Picture" class="rounded-circle img-fluid" style="width: 150px; height: 150px; object-fit: cover;">
-                    </div>
-                    <h4>{{ user.username }}</h4>
-                    <p class="text-muted">{{ user.email }}</p>
-                    <p>Member since: {{ user.created_at.strftime('%B %d, %Y') }}</p>
-
-                    <div class="d-grid gap-2 mt-3">
-                        <a href="{{ url_for('edit_profile') }}" class="btn btn-outline-primary">
-                            <i class="bi bi-pencil-square me-2"></i>Edit Profile
-                        </a>
+                    <img src="{{ current_user.avatar_url or url_for('static', filename='images/default-avatar.png') }}" 
+                         alt="Profile Picture" 
+                         class="rounded-circle img-fluid mb-3"
+                         style="width: 150px; height: 150px; object-fit: cover;">
+                    <h4 class="mb-1">{{ current_user.username }}</h4>
+                    <p class="text-muted mb-3">{{ current_user.email }}</p>
+                    <div class="d-grid">
+                        <a href="{{ url_for('edit_profile') }}" class="btn btn-primary">Edit Profile</a>
                     </div>
                 </div>
             </div>
-
-            <div class="card mt-4">
-                <div class="card-header bg-info text-white">
-                    <h4>Connected Accounts</h4>
-                </div>
+            
+            <div class="card">
                 <div class="card-body">
-                    <ul class="list-group">
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <div>
-                                <i class="bi bi-github me-2"></i>GitHub
-                            </div>
-                            {% if user.github_connected %}
-                                <span class="badge bg-success rounded-pill">Connected</span>
-                            {% else %}
-                                <a href="{{ url_for('oauth_login', provider='github') }}" class="btn btn-sm btn-outline-dark">Connect</a>
-                            {% endif %}
+                    <h5 class="card-title">Account Information</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <strong>Member since:</strong><br>
+                            {{ current_user.created_at.strftime('%B %d, %Y') }}
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <div>
-                                <i class="bi bi-hdd-network me-2"></i>Hugging Face
-                            </div>
-                            {% if user.huggingface_connected %}
-                                <span class="badge bg-success rounded-pill">Connected</span>
-                            {% else %}
-                                <a href="{{ url_for('oauth_login', provider='huggingface') }}" class="btn btn-sm btn-outline-primary">Connect</a>
-                            {% endif %}
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <div>
-                                <i class="bi bi-google me-2"></i>Google
-                            </div>
-                            {% if user.google_connected %}
-                                <span class="badge bg-success rounded-pill">Connected</span>
-                            {% else %}
-                                <a href="{{ url_for('oauth_login', provider='google') }}" class="btn btn-sm btn-outline-danger">Connect</a>
-                            {% endif %}
+                        <li class="mb-2">
+                            <strong>Last login:</strong><br>
+                            {{ current_user.last_login.strftime('%B %d, %Y %H:%M') if current_user.last_login else 'N/A' }}
                         </li>
                     </ul>
                 </div>
             </div>
         </div>
-
+        
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h3>Learning Progress</h3>
-                </div>
+            <div class="card mb-4">
                 <div class="card-body">
-                    <h4>Course Completion</h4>
-                    <div class="progress mb-4" style="height: 25px;">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ user.course_progress }}%;" aria-valuenow="{{ user.course_progress }}" aria-valuemin="0" aria-valuemax="100">{{ user.course_progress }}%</div>
+                    <h5 class="card-title">Learning Progress</h5>
+                    <div class="progress mb-3">
+                        <div class="progress-bar" role="progressbar" 
+                             style="width: {{ current_user.progress.percentage_complete }}%"
+                             aria-valuenow="{{ current_user.progress.percentage_complete }}" 
+                             aria-valuemin="0" 
+                             aria-valuemax="100">
+                            {{ current_user.progress.percentage_complete }}%
+                        </div>
                     </div>
-
-                    <h4>Completed Exercises</h4>
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Exercise</th>
-                                    <th>Completed On</th>
-                                    <th>Score</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for exercise in completed_exercises %}
-                                <tr>
-                                    <td>{{ exercise.title }}</td>
-                                    <td>{{ exercise.completed_at.strftime('%Y-%m-%d %H:%M') }}</td>
-                                    <td>
-                                        {% if exercise.score >= 80 %}
-                                            <span class="badge bg-success">{{ exercise.score }}%</span>
-                                        {% elif exercise.score >= 60 %}
-                                            <span class="badge bg-warning text-dark">{{ exercise.score }}%</span>
-                                        {% else %}
-                                            <span class="badge bg-danger">{{ exercise.score }}%</span>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                                {% else %}
-                                <tr>
-                                    <td colspan="3" class="text-center">No completed exercises yet.</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <h4 class="mt-4">Your Models</h4>
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Model Name</th>
-                                    <th>Created On</th>
-                                    <th>Type</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for model in user_models %}
-                                <tr>
-                                    <td>{{ model.name }}</td>
-                                    <td>{{ model.created_at.strftime('%Y-%m-%d') }}</td>
-                                    <td>{{ model.type }}</td>
-                                    <td>
-                                        <a href="{{ url_for('view_model', model_id=model.id) }}" class="btn btn-sm btn-outline-primary">View</a>
-                                        <a href="{{ url_for('download_model', model_id=model.id) }}" class="btn btn-sm btn-outline-success">Download</a>
-                                    </td>
-                                </tr>
-                                {% else %}
-                                <tr>
-                                    <td colspan="4" class="text-center">No models created yet.</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="d-grid gap-2 mt-4">
-                        <a href="{{ url_for('create_model') }}" class="btn btn-primary">
-                            <i class="bi bi-plus-circle me-2"></i>Create New Model
-                        </a>
+                    <div class="row text-center">
+                        <div class="col">
+                            <h6>Completed</h6>
+                            <p class="h4">{{ current_user.progress.completed_exercises }}</p>
+                        </div>
+                        <div class="col">
+                            <h6>In Progress</h6>
+                            <p class="h4">{{ current_user.progress.in_progress_exercises }}</p>
+                        </div>
+                        <div class="col">
+                            <h6>Quizzes</h6>
+                            <p class="h4">{{ current_user.progress.quiz_score }}%</p>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <div class="card mt-4">
-                <div class="card-header bg-info text-white">
-                    <h3>Quiz Results</h3>
-                </div>
+            
+            <div class="card mb-4">
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Quiz</th>
-                                    <th>Date</th>
-                                    <th>Score</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for quiz in quiz_results %}
-                                <tr>
-                                    <td>{{ quiz.title }}</td>
-                                    <td>{{ quiz.completed_at.strftime('%Y-%m-%d %H:%M') }}</td>
-                                    <td>
-                                        {% if quiz.score >= 80 %}
-                                            <span class="badge bg-success">{{ quiz.score }}%</span>
-                                        {% elif quiz.score >= 60 %}
-                                            <span class="badge bg-warning text-dark">{{ quiz.score }}%</span>
-                                        {% else %}
-                                            <span class="badge bg-danger">{{ quiz.score }}%</span>
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        <a href="{{ url_for('view_quiz_result', result_id=quiz.id) }}" class="btn btn-sm btn-outline-primary">View Results</a>
-                                    </td>
-                                </tr>
-                                {% else %}
-                                <tr>
-                                    <td colspan="4" class="text-center">No quiz results yet.</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                    <h5 class="card-title">Recent Activity</h5>
+                    {% if current_user.recent_activities %}
+                        <div class="list-group">
+                            {% for activity in current_user.recent_activities %}
+                                <div class="list-group-item">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">{{ activity.title }}</h6>
+                                        <small>{{ activity.timestamp.strftime('%B %d, %Y') }}</small>
+                                    </div>
+                                    <p class="mb-1">{{ activity.description }}</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No recent activity to show.</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Achievements</h5>
+                    <div class="row">
+                        {% for achievement in current_user.achievements %}
+                            <div class="col-md-4 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-body text-center">
+                                        <i class="bi bi-trophy display-4 text-warning mb-2"></i>
+                                        <h6>{{ achievement.title }}</h6>
+                                        <p class="small text-muted">{{ achievement.description }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="col-12">
+                                <p class="text-muted">No achievements yet. Keep learning!</p>
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>

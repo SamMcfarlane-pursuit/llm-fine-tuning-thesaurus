@@ -5,11 +5,26 @@
 
 /* Enhanced text visibility for all text elements */
 body {
-    --llm-primary: #4285f4;
-    --llm-secondary: #34a8eb;
-    --llm-accent: #9c27b0;
-    --llm-bright: #00e5ff;
+    --llm-primary: #4db394;
+    --llm-secondary: #2c2b64;
+    --llm-accent: #53367d;
+    --llm-bright: #4db394;
     --llm-text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    --llm-linearPrimarySecondary: linear-gradient(#4db394, #2c2b64);
+    --llm-linearPrimaryAccent: linear-gradient(#4db394, #53367d);
+    --llm-linearSecondaryAccent: linear-gradient(#2c2b64, #53367d);
+}
+
+/* Light theme specific colors */
+body.light-theme {
+    --llm-primary: #4db394; /* Primary green color */
+    --llm-secondary: #9c9bd4; /* Secondary purple color */
+    --llm-accent: #a082c9; /* Accent purple color */
+    --llm-bright: #4db394; /* Bright version of primary */
+    --llm-text-shadow: 0 1px 2px rgba(77, 179, 148, 0.2);
+    --llm-linearPrimarySecondary: linear-gradient(#4db394, #9c9bd4);
+    --llm-linearPrimaryAccent: linear-gradient(#4db394, #a082c9);
+    --llm-linearSecondaryAccent: linear-gradient(#9c9bd4, #a082c9);
 }
 
 /* Enhance text visibility in the concept map */
@@ -20,8 +35,8 @@ body {
 }
 
 .central-node {
-    background: linear-gradient(135deg, var(--llm-accent), #7b1fa2) !important;
-    box-shadow: 0 0 20px rgba(156, 39, 176, 0.5) !important;
+    background: var(--llm-linearSecondaryAccent) !important;
+    box-shadow: 0 0 20px rgba(83, 54, 125, 0.5) !important;
     color: #ffffff !important;
     text-shadow: 0 2px 5px rgba(0, 0, 0, 0.6), 0 0 15px rgba(255, 255, 255, 0.4) !important;
 }
@@ -70,15 +85,15 @@ body {
 
 /* Enhance visibility of buttons */
 .btn-primary {
-    background: linear-gradient(135deg, var(--llm-primary), var(--llm-secondary)) !important;
+    background: var(--llm-linearPrimarySecondary) !important;
     border: none !important;
-    box-shadow: 0 4px 10px rgba(66, 133, 244, 0.4) !important;
+    box-shadow: 0 4px 10px rgba(77, 179, 148, 0.4) !important;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
 }
 
 .btn-primary:hover {
-    background: linear-gradient(135deg, #5294ff, #45b3ff) !important;
-    box-shadow: 0 6px 15px rgba(66, 133, 244, 0.5) !important;
+    background: var(--llm-linearPrimaryAccent) !important;
+    box-shadow: 0 6px 15px rgba(77, 179, 148, 0.5) !important;
     transform: translateY(-2px) !important;
 }
 
@@ -107,27 +122,27 @@ body {
 }
 
 .dropdown-item:hover {
-    background: rgba(66, 133, 244, 0.2) !important;
+    background: rgba(77, 179, 148, 0.2) !important;
     color: #ffffff !important;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 10px rgba(66, 133, 244, 0.3) !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 0 10px rgba(77, 179, 148, 0.3) !important;
 }
 
 /* Enhance visibility of the concept map */
 #visualization-container {
-    background-color: rgba(20, 0, 35, 0.9) !important;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 50px rgba(156, 39, 176, 0.3) !important;
-    border: 3px solid rgba(156, 39, 176, 0.5) !important;
+    background-color: rgba(3, 7, 6, 0.9) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 50px rgba(83, 54, 125, 0.3) !important;
+    border: 3px solid rgba(83, 54, 125, 0.5) !important;
 }
 
 /* Enhance visibility of the search input */
 .search-input {
-    background-color: rgba(20, 0, 35, 0.9) !important;
+    background-color: rgba(3, 7, 6, 0.9) !important;
     color: #ffffff !important;
-    border: 2px solid rgba(156, 39, 176, 0.4) !important;
+    border: 2px solid rgba(77, 179, 148, 0.4) !important;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), inset 0 2px 5px rgba(0, 0, 0, 0.2) !important;
 }
 
 .search-input:focus {
-    border-color: rgba(156, 39, 176, 0.8) !important;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), inset 0 2px 5px rgba(0, 0, 0, 0.2), 0 0 15px rgba(156, 39, 176, 0.4) !important;
+    border-color: rgba(77, 179, 148, 0.8) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), inset 0 2px 5px rgba(0, 0, 0, 0.2), 0 0 15px rgba(77, 179, 148, 0.4) !important;
 }

@@ -5,21 +5,21 @@
 
 /* Only apply these styles in dark mode (when body doesn't have light-theme class) */
 body:not(.light-theme) {
-    /* Define purple color variables for text */
-    --purple-text-primary: #d8b4fe;    /* Light purple for primary text */
-    --purple-text-secondary: #c084fc;  /* Medium purple for secondary text */
-    --purple-text-accent: #a855f7;     /* Darker purple for accent text */
-    --purple-text-bright: #e9d5ff;     /* Bright purple for highlights */
-    --purple-text-muted: #9d4edd;      /* Muted purple for less important text */
-    --purple-text-link: #c084fc;       /* Medium purple for links */
-    --purple-text-link-hover: #e9d5ff; /* Bright purple for link hover */
+    /* Define purple color variables for text with improved contrast */
+    --purple-text-primary: #c4b5fd;    /* Lighter purple for primary text */
+    --purple-text-secondary: #a78bfa;  /* Medium purple for secondary text */
+    --purple-text-accent: #8b5cf6;     /* Bright purple for accent text */
+    --purple-text-bright: #ddd6fe;     /* Very light purple for highlights */
+    --purple-text-muted: #7c3aed;      /* Muted purple */
+    --purple-text-link: #a78bfa;       /* Light purple for links */
+    --purple-text-link-hover: #c4b5fd; /* Lighter purple for link hover */
     
-    /* Text shadow for better readability against dark backgrounds */
-    --purple-text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-    --purple-text-glow: 0 0 8px rgba(192, 132, 252, 0.5);
+    /* Reduced text shadow for better readability */
+    --purple-text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    --purple-text-glow: 0 0 4px rgba(167, 139, 250, 0.3);
 }
 
-/* Basic text elements */
+/* Basic text elements with improved contrast */
 body:not(.light-theme) p,
 body:not(.light-theme) span,
 body:not(.light-theme) div,
@@ -32,7 +32,7 @@ body:not(.light-theme) small {
     text-shadow: var(--purple-text-shadow);
 }
 
-/* Headings with gradient effect */
+/* Headings with improved gradient effect */
 body:not(.light-theme) h1,
 body:not(.light-theme) h2,
 body:not(.light-theme) h3,
@@ -45,18 +45,18 @@ body:not(.light-theme) .h3,
 body:not(.light-theme) .h4,
 body:not(.light-theme) .h5,
 body:not(.light-theme) .h6 {
-    background: linear-gradient(90deg, #c084fc, #e9d5ff);
+    background: linear-gradient(90deg, #a78bfa, #c4b5fd);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     text-shadow: none;
-    font-weight: 700;
+    font-weight: 600;
     letter-spacing: 0.5px;
     position: relative;
     display: inline-block;
 }
 
-/* Add subtle glow effect to headings */
+/* Reduced glow effect for headings */
 body:not(.light-theme) h1::after,
 body:not(.light-theme) h2::after,
 body:not(.light-theme) h3::after,
@@ -69,16 +69,16 @@ body:not(.light-theme) .h3::after {
     left: 0;
     width: 100%;
     height: 100%;
-    filter: blur(8px);
-    opacity: 0.5;
-    background: linear-gradient(90deg, #c084fc, #e9d5ff);
+    filter: blur(4px);
+    opacity: 0.3;
+    background: linear-gradient(90deg, #8b5cf6, #a78bfa);
     -webkit-background-clip: text;
     background-clip: text;
     z-index: -1;
     pointer-events: none;
 }
 
-/* Links */
+/* Links with improved visibility */
 body:not(.light-theme) a:not(.btn):not(.nav-link):not(.dropdown-item) {
     color: var(--purple-text-link) !important;
     text-decoration: none;
@@ -133,7 +133,7 @@ body:not(.light-theme) .dropdown-item:focus {
     background-color: rgba(192, 132, 252, 0.2) !important;
 }
 
-/* Card titles and content */
+/* Card titles and content with improved contrast */
 body:not(.light-theme) .card-title {
     color: var(--purple-text-bright) !important;
     -webkit-text-fill-color: var(--purple-text-bright) !important;
@@ -159,19 +159,19 @@ body:not(.light-theme) ol li::marker {
     color: var(--purple-text-accent) !important;
 }
 
-/* Form elements */
+/* Form elements with improved visibility */
 body:not(.light-theme) .form-control {
     color: var(--purple-text-primary) !important;
-    border-color: rgba(192, 132, 252, 0.3) !important;
+    border-color: rgba(167, 139, 250, 0.3) !important;
 }
 
 body:not(.light-theme) .form-control:focus {
-    border-color: rgba(192, 132, 252, 0.7) !important;
-    box-shadow: 0 0 0 0.25rem rgba(192, 132, 252, 0.25) !important;
+    border-color: rgba(167, 139, 250, 0.7) !important;
+    box-shadow: 0 0 0 0.25rem rgba(167, 139, 250, 0.25) !important;
 }
 
 body:not(.light-theme) .form-control::placeholder {
-    color: rgba(192, 132, 252, 0.6) !important;
+    color: rgba(167, 139, 250, 0.6) !important;
 }
 
 /* Buttons with purple accents */
@@ -197,14 +197,14 @@ body:not(.light-theme) .btn-outline-primary:focus {
     color: #e9d5ff !important;
 }
 
-/* Table styling */
+/* Table styling with improved contrast */
 body:not(.light-theme) .table {
     color: var(--purple-text-primary) !important;
 }
 
 body:not(.light-theme) .table thead th {
     color: var(--purple-text-bright) !important;
-    border-bottom-color: rgba(192, 132, 252, 0.5) !important;
+    border-bottom-color: rgba(167, 139, 250, 0.5) !important;
 }
 
 body:not(.light-theme) .table-striped tbody tr:nth-of-type(odd) {
@@ -215,10 +215,10 @@ body:not(.light-theme) .table-hover tbody tr:hover {
     background-color: rgba(192, 132, 252, 0.1) !important;
 }
 
-/* Alerts with purple styling */
+/* Alerts with improved visibility */
 body:not(.light-theme) .alert-primary {
-    background-color: rgba(192, 132, 252, 0.2) !important;
-    border-color: rgba(192, 132, 252, 0.5) !important;
+    background-color: rgba(167, 139, 250, 0.2) !important;
+    border-color: rgba(167, 139, 250, 0.5) !important;
     color: var(--purple-text-bright) !important;
 }
 
@@ -228,16 +228,16 @@ body:not(.light-theme) .badge-primary {
     color: white !important;
 }
 
-/* Code blocks with purple accents */
+/* Code blocks with improved contrast */
 body:not(.light-theme) code:not([class*="language-"]) {
-    color: #e9d5ff !important;
-    background-color: rgba(192, 132, 252, 0.15) !important;
-    border: 1px solid rgba(192, 132, 252, 0.3) !important;
+    color: var(--purple-text-bright) !important;
+    background-color: rgba(167, 139, 250, 0.15) !important;
+    border: 1px solid rgba(167, 139, 250, 0.3) !important;
 }
 
-/* Blockquotes with purple styling */
+/* Blockquotes with improved visibility */
 body:not(.light-theme) blockquote {
-    border-left: 4px solid #9d4edd !important;
+    border-left: 4px solid var(--purple-text-accent) !important;
     color: var(--purple-text-primary) !important;
 }
 

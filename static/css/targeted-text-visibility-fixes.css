@@ -1,0 +1,282 @@
+/**
+ * Targeted Text Visibility Fixes
+ * Provides highly specific fixes for text visibility issues in various components
+ */
+
+/* 
+ * 1. Navigation Dropdown Menus
+ * Ensure text in dropdown menus is always visible
+ */
+.dropdown-menu {
+    background-color: rgba(25, 25, 30, 0.95) !important;
+}
+
+.dropdown-item {
+    color: rgba(255, 255, 255, 0.9) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+.dropdown-item:hover, 
+.dropdown-item:focus {
+    background-color: rgba(93, 214, 255, 0.15) !important;
+    color: #ffffff !important;
+    text-shadow: 0 0 8px rgba(93, 214, 255, 0.4) !important;
+}
+
+body.light-theme .dropdown-menu {
+    background-color: rgba(250, 250, 255, 0.95) !important;
+}
+
+body.light-theme .dropdown-item {
+    color: rgba(0, 0, 0, 0.9) !important;
+    text-shadow: none !important;
+}
+
+body.light-theme .dropdown-item:hover, 
+body.light-theme .dropdown-item:focus {
+    background-color: rgba(0, 86, 179, 0.1) !important;
+    color: #0056b3 !important;
+    text-shadow: none !important;
+}
+
+/* 
+ * 2. Workshop Exercise Cards
+ * Ensure text in workshop exercise cards is always visible
+ */
+.exercise-card,
+.workshop-card,
+.tutorial-card {
+    background-color: rgba(25, 25, 30, 0.95) !important;
+    border: 2px solid rgba(93, 214, 255, 0.4) !important;
+}
+
+.exercise-card h1, .exercise-card h2, .exercise-card h3, 
+.exercise-card h4, .exercise-card h5, .exercise-card h6,
+.workshop-card h1, .workshop-card h2, .workshop-card h3, 
+.workshop-card h4, .workshop-card h5, .workshop-card h6,
+.tutorial-card h1, .tutorial-card h2, .tutorial-card h3, 
+.tutorial-card h4, .tutorial-card h5, .tutorial-card h6 {
+    color: #5dd6ff !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 10px rgba(93, 214, 255, 0.3) !important;
+    font-weight: 700 !important;
+}
+
+.exercise-card p, .exercise-card li, .exercise-card span,
+.workshop-card p, .workshop-card li, .workshop-card span,
+.tutorial-card p, .tutorial-card li, .tutorial-card span {
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+    font-weight: 400 !important;
+}
+
+body.light-theme .exercise-card,
+body.light-theme .workshop-card,
+body.light-theme .tutorial-card {
+    background-color: rgba(250, 250, 255, 0.95) !important;
+    border: 2px solid rgba(0, 86, 179, 0.4) !important;
+}
+
+body.light-theme .exercise-card h1, body.light-theme .exercise-card h2, body.light-theme .exercise-card h3, 
+body.light-theme .exercise-card h4, body.light-theme .exercise-card h5, body.light-theme .exercise-card h6,
+body.light-theme .workshop-card h1, body.light-theme .workshop-card h2, body.light-theme .workshop-card h3, 
+body.light-theme .workshop-card h4, body.light-theme .workshop-card h5, body.light-theme .workshop-card h6,
+body.light-theme .tutorial-card h1, body.light-theme .tutorial-card h2, body.light-theme .tutorial-card h3, 
+body.light-theme .tutorial-card h4, body.light-theme .tutorial-card h5, body.light-theme .tutorial-card h6 {
+    color: #0056b3 !important;
+    text-shadow: none !important;
+}
+
+body.light-theme .exercise-card p, body.light-theme .exercise-card li, body.light-theme .exercise-card span,
+body.light-theme .workshop-card p, body.light-theme .workshop-card li, body.light-theme .workshop-card span,
+body.light-theme .tutorial-card p, body.light-theme .tutorial-card li, body.light-theme .tutorial-card span {
+    color: #000000 !important;
+    text-shadow: none !important;
+}
+
+/* 
+ * 3. Guide Cards
+ * Ensure text in guide cards is always visible
+ */
+.guide-card,
+.instructional-guide,
+.guide-step {
+    background-color: rgba(25, 25, 30, 0.95) !important;
+    border-left: 5px solid #5dd6ff !important;
+}
+
+.guide-card h1, .guide-card h2, .guide-card h3, 
+.guide-card h4, .guide-card h5, .guide-card h6,
+.instructional-guide h1, .instructional-guide h2, .instructional-guide h3, 
+.instructional-guide h4, .instructional-guide h5, .instructional-guide h6,
+.guide-step h1, .guide-step h2, .guide-step h3, 
+.guide-step h4, .guide-step h5, .guide-step h6 {
+    color: #5dd6ff !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 10px rgba(93, 214, 255, 0.3) !important;
+    font-weight: 700 !important;
+}
+
+.guide-card p, .guide-card li, .guide-card span,
+.instructional-guide p, .instructional-guide li, .instructional-guide span,
+.guide-step p, .guide-step li, .guide-step span {
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+    font-weight: 400 !important;
+}
+
+body.light-theme .guide-card,
+body.light-theme .instructional-guide,
+body.light-theme .guide-step {
+    background-color: rgba(250, 250, 255, 0.95) !important;
+    border-left: 5px solid #0056b3 !important;
+}
+
+body.light-theme .guide-card h1, body.light-theme .guide-card h2, body.light-theme .guide-card h3, 
+body.light-theme .guide-card h4, body.light-theme .guide-card h5, body.light-theme .guide-card h6,
+body.light-theme .instructional-guide h1, body.light-theme .instructional-guide h2, body.light-theme .instructional-guide h3, 
+body.light-theme .instructional-guide h4, body.light-theme .instructional-guide h5, body.light-theme .instructional-guide h6,
+body.light-theme .guide-step h1, body.light-theme .guide-step h2, body.light-theme .guide-step h3, 
+body.light-theme .guide-step h4, body.light-theme .guide-step h5, body.light-theme .guide-step h6 {
+    color: #0056b3 !important;
+    text-shadow: none !important;
+}
+
+body.light-theme .guide-card p, body.light-theme .guide-card li, body.light-theme .guide-card span,
+body.light-theme .instructional-guide p, body.light-theme .instructional-guide li, body.light-theme .instructional-guide span,
+body.light-theme .guide-step p, body.light-theme .guide-step li, body.light-theme .guide-step span {
+    color: #000000 !important;
+    text-shadow: none !important;
+}
+
+/* 
+ * 4. Banners and Headers
+ * Ensure text in banners and headers is always visible
+ */
+.banner,
+.header-banner,
+.section-banner,
+.blue-banner,
+.purple-banner,
+div[style*="background-color: blue"],
+div[style*="background-color: rgb(0, 0, 255)"],
+div[style*="background-color: #0000ff"] {
+    background: linear-gradient(to right, #000066, #0033cc) !important;
+    border: 2px solid rgba(255, 255, 255, 0.5) !important;
+    padding: 20px !important;
+    border-radius: 10px !important;
+}
+
+.banner h1, .banner h2, .banner h3, .banner h4, .banner h5, .banner h6,
+.header-banner h1, .header-banner h2, .header-banner h3, .header-banner h4, .header-banner h5, .header-banner h6,
+.section-banner h1, .section-banner h2, .section-banner h3, .section-banner h4, .section-banner h5, .section-banner h6,
+.blue-banner h1, .blue-banner h2, .blue-banner h3, .blue-banner h4, .blue-banner h5, .blue-banner h6,
+.purple-banner h1, .purple-banner h2, .purple-banner h3, .purple-banner h4, .purple-banner h5, .purple-banner h6,
+div[style*="background-color: blue"] h1, div[style*="background-color: blue"] h2, div[style*="background-color: blue"] h3,
+div[style*="background-color: blue"] h4, div[style*="background-color: blue"] h5, div[style*="background-color: blue"] h6,
+div[style*="background-color: rgb(0, 0, 255)"] h1, div[style*="background-color: rgb(0, 0, 255)"] h2, div[style*="background-color: rgb(0, 0, 255)"] h3,
+div[style*="background-color: rgb(0, 0, 255)"] h4, div[style*="background-color: rgb(0, 0, 255)"] h5, div[style*="background-color: rgb(0, 0, 255)"] h6,
+div[style*="background-color: #0000ff"] h1, div[style*="background-color: #0000ff"] h2, div[style*="background-color: #0000ff"] h3,
+div[style*="background-color: #0000ff"] h4, div[style*="background-color: #0000ff"] h5, div[style*="background-color: #0000ff"] h6 {
+    color: #ffffff !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7) !important;
+    font-weight: 700 !important;
+}
+
+.banner p, .banner li, .banner span,
+.header-banner p, .header-banner li, .header-banner span,
+.section-banner p, .section-banner li, .section-banner span,
+.blue-banner p, .blue-banner li, .blue-banner span,
+.purple-banner p, .purple-banner li, .purple-banner span,
+div[style*="background-color: blue"] p, div[style*="background-color: blue"] li, div[style*="background-color: blue"] span,
+div[style*="background-color: rgb(0, 0, 255)"] p, div[style*="background-color: rgb(0, 0, 255)"] li, div[style*="background-color: rgb(0, 0, 255)"] span,
+div[style*="background-color: #0000ff"] p, div[style*="background-color: #0000ff"] li, div[style*="background-color: #0000ff"] span {
+    color: #ffffff !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7) !important;
+    font-weight: 500 !important;
+}
+
+/* 
+ * 5. Code Blocks
+ * Ensure text in code blocks is always visible
+ */
+pre, code {
+    background-color: #282a36 !important;
+    color: #f8f8f2 !important;
+    border-radius: 6px !important;
+    padding: 0.2em 0.4em !important;
+    font-family: 'Fira Code', 'JetBrains Mono', 'Courier New', monospace !important;
+    font-size: 0.9em !important;
+    border: 1px solid rgba(93, 214, 255, 0.2) !important;
+}
+
+pre {
+    padding: 1em !important;
+    overflow-x: auto !important;
+}
+
+pre code {
+    background-color: transparent !important;
+    padding: 0 !important;
+    border: none !important;
+}
+
+body.light-theme pre, 
+body.light-theme code {
+    background-color: #f8f8f2 !important;
+    color: #282a36 !important;
+    border: 1px solid rgba(0, 86, 179, 0.2) !important;
+}
+
+/* Syntax highlighting for dark mode */
+.hljs-keyword, .hljs-selector-tag, .hljs-literal, .hljs-section, .hljs-link {
+    color: #ff79c6 !important;
+}
+
+.hljs-function {
+    color: #50fa7b !important;
+}
+
+.hljs-string, .hljs-title, .hljs-name, .hljs-type, .hljs-attribute, .hljs-symbol, .hljs-bullet, .hljs-addition, .hljs-variable, .hljs-template-tag, .hljs-template-variable {
+    color: #f1fa8c !important;
+}
+
+.hljs-comment, .hljs-quote, .hljs-deletion, .hljs-meta {
+    color: #6272a4 !important;
+}
+
+.hljs-keyword, .hljs-selector-tag, .hljs-literal, .hljs-title, .hljs-section, .hljs-doctag, .hljs-type, .hljs-name, .hljs-strong {
+    font-weight: bold !important;
+}
+
+/* Syntax highlighting for light mode */
+body.light-theme .hljs-keyword, 
+body.light-theme .hljs-selector-tag, 
+body.light-theme .hljs-literal, 
+body.light-theme .hljs-section, 
+body.light-theme .hljs-link {
+    color: #d73a49 !important;
+}
+
+body.light-theme .hljs-function {
+    color: #6f42c1 !important;
+}
+
+body.light-theme .hljs-string, 
+body.light-theme .hljs-title, 
+body.light-theme .hljs-name, 
+body.light-theme .hljs-type, 
+body.light-theme .hljs-attribute, 
+body.light-theme .hljs-symbol, 
+body.light-theme .hljs-bullet, 
+body.light-theme .hljs-addition, 
+body.light-theme .hljs-variable, 
+body.light-theme .hljs-template-tag, 
+body.light-theme .hljs-template-variable {
+    color: #032f62 !important;
+}
+
+body.light-theme .hljs-comment, 
+body.light-theme .hljs-quote, 
+body.light-theme .hljs-deletion, 
+body.light-theme .hljs-meta {
+    color: #6a737d !important;
+}

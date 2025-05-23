@@ -6,112 +6,85 @@
             <p class="section-subtitle">Access comprehensive resources to master LLM fine-tuning concepts</p>
         </div>
 
-        <div class="features-grid">
+        <div class="modern-card-container">
             <!-- Interactive Concept Maps -->
-            <div class="feature-card concept-maps">
-                <div class="feature-header">
-                    <div class="feature-icon">
-                        <i class="bi bi-diagram-3"></i>
-                    </div>
-                    <h3 class="feature-title">Interactive Concept Maps</h3>
-                </div>
-                <div class="feature-body">
-                    <p class="feature-description">
+            <div class="modern-card">
+                <div class="modern-card-content">
+                    <h3 class="modern-card-title">
+                        <i class="bi bi-diagram-3"></i> Interactive Concept Maps
+                    </h3>
+                    <p class="modern-card-desc">
                         Explore visual representations of LLM fine-tuning concepts and their relationships.
                         Our interactive maps help you understand complex topics through intuitive visualizations.
                     </p>
-                    <div class="feature-links">
-                        <a href="{{ url_for('thesaurus') }}" class="feature-link">
-                            <i class="bi bi-diagram-3"></i>
-                            Visual Thesaurus Explorer
+                    <div class="d-flex flex-column gap-2 mb-3">
+                        <a href="{{ url_for('thesaurus') }}" class="modern-card-action">
+                            <i class="bi bi-diagram-3"></i> Visual Thesaurus Explorer
                         </a>
-                        <a href="{{ url_for('guide', guide_name='qlora-implementation') }}" class="feature-link">
-                            <i class="bi bi-map"></i>
-                            Fine-Tuning Concept Map
+                        <a href="{{ url_for('guide', guide_name='qlora-implementation') }}" class="modern-card-action">
+                            <i class="bi bi-map"></i> Fine-Tuning Concept Map
                         </a>
-                        <a href="{{ url_for('guide', guide_name='understanding-gpt') }}" class="feature-link">
-                            <i class="bi bi-layers"></i>
-                            Model Architecture Visualizer
+                        <a href="{{ url_for('guide', guide_name='understanding-gpt') }}" class="modern-card-action">
+                            <i class="bi bi-layers"></i> Model Architecture Visualizer
                         </a>
                     </div>
-                </div>
-                <div class="feature-footer">
-                    <a href="{{ url_for('thesaurus') }}" class="feature-cta">
-                        <i class="bi bi-diagram-3 me-2"></i>
-                        Explore Concept Maps
+                    <a href="{{ url_for('thesaurus') }}" class="modern-card-action">
+                        <i class="bi bi-diagram-3 me-2"></i> Explore Concept Maps
                     </a>
                 </div>
             </div>
 
             <!-- Hands-on Exercises -->
-            <div class="feature-card exercises">
-                <div class="feature-header">
-                    <div class="feature-icon">
-                        <i class="bi bi-code-square"></i>
-                    </div>
-                    <h3 class="feature-title">Hands-on Exercises</h3>
-                </div>
-                <div class="feature-body">
-                    <p class="feature-description">
+            <div class="modern-card">
+                <div class="modern-card-content">
+                    <h3 class="modern-card-title">
+                        <i class="bi bi-code-square"></i> Hands-on Exercises
+                    </h3>
+                    <p class="modern-card-desc">
                         Apply your knowledge with practical coding exercises.
                         From basic LoRA implementation to advanced QLoRA techniques,
                         our guided exercises help you build real-world skills.
                     </p>
-                    <div class="feature-links">
-                        <a href="{{ url_for('guide', guide_name='lora-implementation') }}" class="feature-link">
-                            <i class="bi bi-code-slash"></i>
-                            LoRA Implementation
+                    <div class="d-flex flex-column gap-2 mb-3">
+                        <a href="{{ url_for('guide', guide_name='lora-implementation') }}" class="modern-card-action">
+                            <i class="bi bi-code-slash"></i> LoRA Implementation
                         </a>
-                        <a href="{{ url_for('guide', guide_name='qlora-implementation') }}" class="feature-link">
-                            <i class="bi bi-cpu"></i>
-                            QLoRA Fine-Tuning
+                        <a href="{{ url_for('guide', guide_name='qlora-implementation') }}" class="modern-card-action">
+                            <i class="bi bi-cpu"></i> QLoRA Fine-Tuning
                         </a>
-                        <a href="{{ url_for('guide', guide_name='peft-guide') }}" class="feature-link">
-                            <i class="bi bi-gear"></i>
-                            Parameter-Efficient Techniques
+                        <a href="{{ url_for('guide', guide_name='peft-guide') }}" class="modern-card-action">
+                            <i class="bi bi-gear"></i> Parameter-Efficient Techniques
                         </a>
                     </div>
-                </div>
-                <div class="feature-footer">
-                    <a href="{{ url_for('exercises') }}" class="feature-cta">
-                        <i class="bi bi-code-square me-2"></i>
-                        Start Exercises
+                    <a href="{{ url_for('exercises') }}" class="modern-card-action">
+                        <i class="bi bi-code-square me-2"></i> Start Exercises
                     </a>
                 </div>
             </div>
 
             <!-- Knowledge Resources -->
-            <div class="feature-card knowledge">
-                <div class="feature-header">
-                    <div class="feature-icon">
-                        <i class="bi bi-journal-check"></i>
-                    </div>
-                    <h3 class="feature-title">Knowledge Resources</h3>
-                </div>
-                <div class="feature-body">
-                    <p class="feature-description">
+            <div class="modern-card">
+                <div class="modern-card-content">
+                    <h3 class="modern-card-title">
+                        <i class="bi bi-journal-check"></i> Knowledge Resources
+                    </h3>
+                    <p class="modern-card-desc">
                         Deepen your understanding with comprehensive learning materials and assessments.
                         Our structured content guides you from fundamentals to advanced topics in LLM fine-tuning.
                     </p>
-                    <div class="feature-links">
-                        <a href="{{ url_for('learn') }}" class="feature-link">
-                            <i class="bi bi-book"></i>
-                            Learning Modules
+                    <div class="d-flex flex-column gap-2 mb-3">
+                        <a href="{{ url_for('learn') }}" class="modern-card-action">
+                            <i class="bi bi-book"></i> Learning Modules
                         </a>
-                        <a href="{{ url_for('quiz.quiz_list') }}" class="feature-link">
-                            <i class="bi bi-check2-square"></i>
-                            Knowledge Quizzes
+                        <a href="{{ url_for('quiz.quiz_list') }}" class="modern-card-action">
+                            <i class="bi bi-check2-square"></i> Knowledge Quizzes
                         </a>
-                        <a href="{{ url_for('guide', guide_name='finetuning-comparison') }}" class="feature-link">
-                            <i class="bi bi-file-text"></i>
-                            Implementation Guides
+                        <a href="{{ url_for('guide', guide_name='finetuning-comparison') }}" class="modern-card-action">
+                            <i class="bi bi-file-text"></i> Implementation Guides
                         </a>
                     </div>
-                </div>
-                <div class="feature-footer">
-                    <a href="{{ url_for('learn') }}" class="feature-cta">
-                        <i class="bi bi-journal-check me-2"></i>
-                        Access Resources
+                    <a href="{{ url_for('learn') }}" class="modern-card-action">
+                        <i class="bi bi-journal-check me-2"></i> Access Resources
                     </a>
                 </div>
             </div>

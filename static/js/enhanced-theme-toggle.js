@@ -58,7 +58,7 @@ function initializeTheme() {
             document.body.classList.add('light-theme');
             updateThemeIcons(true);
         } else {
-            document.body.classList.remove('light-theme');
+            document.body.classList.add('dark-theme');
             updateThemeIcons(false);
         }
     } else {
@@ -70,7 +70,7 @@ function initializeTheme() {
             updateThemeIcons(true);
             localStorage.setItem('theme', 'light');
         } else {
-            document.body.classList.remove('light-theme');
+            document.body.classList.add('dark-theme');
             updateThemeIcons(false);
             localStorage.setItem('theme', 'dark');
         }
@@ -86,17 +86,25 @@ function initializeTheme() {
  * Toggles between light and dark themes
  */
 function toggleTheme() {
-    const isLightTheme = document.body.classList.toggle('light-theme');
+    const isLightTheme = document.body.classList.contains('light-theme');
     
-    // Update localStorage with the new theme preference
-    localStorage.setItem('theme', isLightTheme ? 'light' : 'dark');
+    // Remove both theme classes
+    document.body.classList.remove('light-theme', 'dark-theme');
     
-    // Update theme icons
-    updateThemeIcons(isLightTheme);
+    // Add the new theme class
+    if (isLightTheme) {
+        document.body.classList.add('dark-theme');
+        localStorage.setItem('theme', 'dark');
+        updateThemeIcons(false);
+    } else {
+        document.body.classList.add('light-theme');
+        localStorage.setItem('theme', 'light');
+        updateThemeIcons(true);
+    }
     
     // Dispatch custom event for other components to react to theme change
     document.dispatchEvent(new CustomEvent('themeChanged', { 
-        detail: { theme: isLightTheme ? 'light' : 'dark' } 
+        detail: { theme: isLightTheme ? 'dark' : 'light' } 
     }));
     
     // Add animation effect
@@ -128,7 +136,7 @@ function addThemeChangeAnimation() {
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(255, 255, 255, 0.1);
+        background-color: rgba(255, 255, 255, 0.05);
         z-index: 9999;
         pointer-events: none;
         opacity: 0;
@@ -139,7 +147,7 @@ function addThemeChangeAnimation() {
     
     // Trigger animation
     setTimeout(() => {
-        overlay.style.opacity = '0.2';
+        overlay.style.opacity = '0.1';
         
         setTimeout(() => {
             overlay.style.opacity = '0';
@@ -166,7 +174,7 @@ document.addEventListener('themeChanged', function(e) {
     // Update charts if Chart.js is being used
     if (window.Chart) {
         const theme = e.detail.theme;
-        const textColor = theme === 'light' ? '#212529' : '#ffffff';
+        const textColor = theme === 'light' ? '#1f2937' : '#f9fafb';
         const gridColor = theme === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.1)';
         
         Chart.defaults.global.defaultFontColor = textColor;

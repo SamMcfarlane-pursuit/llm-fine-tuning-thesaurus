@@ -11,60 +11,30 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Get Supabase credentials from environment variables
-SUPABASE_URL = os.environ.get('SUPABASE_URL')
-SUPABASE_KEY = os.environ.get('SUPABASE_KEY')
-
 # Initialize Supabase client
 supabase = None
-try:
-    if SUPABASE_URL and SUPABASE_KEY:
-        supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-    else:
-        print("Warning: Supabase credentials not found. Supabase functionality will be disabled.")
-        # Create a dummy client for development
-        class DummyClient:
-            def __getattr__(self, name):
-                return self
-            def __call__(self, *args, **kwargs):
-                return self
-            def table(self, *args, **kwargs):
-                return self
-            def select(self, *args, **kwargs):
-                return self
-            def insert(self, *args, **kwargs):
-                return self
-            def update(self, *args, **kwargs):
-                return self
-            def delete(self, *args, **kwargs):
-                return self
-            def eq(self, *args, **kwargs):
-                return self
-            def execute(self, *args, **kwargs):
-                return type('obj', (object,), {'data': []})
-        supabase = DummyClient()
-except Exception as e:
-    print(f"Error initializing Supabase client: {e}")
-    # Create a dummy client for development
-    class DummyClient:
-        def __getattr__(self, name):
-            return self
-        def __call__(self, *args, **kwargs):
-            return self
-        def table(self, *args, **kwargs):
-            return self
-        def select(self, *args, **kwargs):
-            return self
-        def insert(self, *args, **kwargs):
-            return self
-        def update(self, *args, **kwargs):
-            return self
-        def delete(self, *args, **kwargs):
-            return self
-        def eq(self, *args, **kwargs):
-            return self
-        def execute(self, *args, **kwargs):
-            return type('obj', (object,), {'data': []})
-    supabase = DummyClient()
+
+# Create a dummy client for development
+class DummyClient:
+    def __getattr__(self, name):
+        return self
+    def __call__(self, *args, **kwargs):
+        return self
+    def table(self, *args, **kwargs):
+        return self
+    def select(self, *args, **kwargs):
+        return self
+    def insert(self, *args, **kwargs):
+        return self
+    def update(self, *args, **kwargs):
+        return self
+    def delete(self, *args, **kwargs):
+        return self
+    def eq(self, *args, **kwargs):
+        return self
+    def execute(self, *args, **kwargs):
+        return type('obj', (object,), {'data': []})
+supabase = DummyClient()
 
 def get_user_by_email(email):
     """Get user by email from Supabase."""

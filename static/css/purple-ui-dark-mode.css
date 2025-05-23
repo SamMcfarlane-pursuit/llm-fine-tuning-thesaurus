@@ -6,26 +6,26 @@
 /* Only apply these styles in dark mode (when body doesn't have light-theme class) */
 body:not(.light-theme) {
     /* Define purple color variables for UI elements */
-    --purple-ui-primary: #9d4edd;      /* Medium purple for primary elements */
-    --purple-ui-secondary: #c084fc;    /* Light purple for secondary elements */
-    --purple-ui-accent: #7b2cbf;       /* Dark purple for accent elements */
-    --purple-ui-highlight: #e9d5ff;    /* Very light purple for highlights */
-    --purple-ui-muted: #8338ec;        /* Muted purple for background elements */
+    --purple-ui-primary: #7c3aed;      /* Darker purple for primary elements */
+    --purple-ui-secondary: #8b5cf6;    /* Medium purple for secondary elements */
+    --purple-ui-accent: #6d28d9;       /* Dark purple for accent elements */
+    --purple-ui-highlight: #a78bfa;    /* Reduced brightness for highlights */
+    --purple-ui-muted: #5b21b6;        /* Darker muted purple */
     
     /* Gradients */
-    --purple-ui-gradient-primary: linear-gradient(135deg, #9d4edd, #7b2cbf);
-    --purple-ui-gradient-secondary: linear-gradient(135deg, #c084fc, #9d4edd);
-    --purple-ui-gradient-accent: linear-gradient(90deg, #7b2cbf, #5a189a);
+    --purple-ui-gradient-primary: linear-gradient(135deg, #7c3aed, #6d28d9);
+    --purple-ui-gradient-secondary: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    --purple-ui-gradient-accent: linear-gradient(90deg, #6d28d9, #5b21b6);
     
     /* Effects */
-    --purple-ui-glow: 0 0 15px rgba(192, 132, 252, 0.5);
-    --purple-ui-shadow: 0 4px 15px rgba(157, 78, 221, 0.3);
+    --purple-ui-glow: 0 0 10px rgba(139, 92, 246, 0.3);
+    --purple-ui-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
 }
 
-/* Card styling */
+/* Card styling with reduced glow */
 body:not(.light-theme) .card {
-    border-color: rgba(157, 78, 221, 0.3) !important;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3), 0 0 10px rgba(157, 78, 221, 0.2) !important;
+    border-color: rgba(124, 58, 237, 0.2) !important;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2), 0 0 8px rgba(124, 58, 237, 0.15) !important;
 }
 
 body:not(.light-theme) .card::before {
@@ -34,10 +34,10 @@ body:not(.light-theme) .card::before {
 
 body:not(.light-theme) .card-header {
     background: linear-gradient(135deg, rgba(35, 0, 60, 0.95), rgba(50, 0, 85, 0.95)) !important;
-    border-bottom: 1px solid rgba(157, 78, 221, 0.3) !important;
+    border-bottom: 1px solid rgba(124, 58, 237, 0.2) !important;
 }
 
-/* Button styling */
+/* Button styling with reduced glow */
 body:not(.light-theme) .btn-primary {
     background: var(--purple-ui-gradient-primary) !important;
     border-color: var(--purple-ui-primary) !important;
@@ -46,8 +46,8 @@ body:not(.light-theme) .btn-primary {
 
 body:not(.light-theme) .btn-primary:hover,
 body:not(.light-theme) .btn-primary:focus {
-    background: linear-gradient(135deg, #a855f7, #8a2be2) !important;
-    box-shadow: 0 6px 20px rgba(157, 78, 221, 0.4) !important;
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed) !important;
+    box-shadow: 0 6px 15px rgba(124, 58, 237, 0.3) !important;
 }
 
 body:not(.light-theme) .btn-outline-primary {
@@ -57,14 +57,14 @@ body:not(.light-theme) .btn-outline-primary {
 
 body:not(.light-theme) .btn-outline-primary:hover,
 body:not(.light-theme) .btn-outline-primary:focus {
-    background-color: rgba(157, 78, 221, 0.2) !important;
+    background-color: rgba(124, 58, 237, 0.2) !important;
     color: var(--purple-ui-highlight) !important;
 }
 
-/* Navbar styling */
+/* Navbar styling with reduced opacity */
 body:not(.light-theme) .navbar {
-    background: linear-gradient(135deg, rgba(35, 0, 60, 0.95), rgba(50, 0, 85, 0.95)) !important;
-    border-bottom: 1px solid rgba(157, 78, 221, 0.3) !important;
+    background: linear-gradient(135deg, rgba(35, 0, 60, 0.9), rgba(50, 0, 85, 0.9)) !important;
+    border-bottom: 1px solid rgba(124, 58, 237, 0.2) !important;
 }
 
 body:not(.light-theme) .header-accent {
@@ -74,41 +74,41 @@ body:not(.light-theme) .header-accent {
         var(--purple-ui-accent),
         var(--purple-ui-secondary),
         var(--purple-ui-primary)) !important;
-    box-shadow: 0 0 20px rgba(157, 78, 221, 0.7) !important;
+    box-shadow: 0 0 15px rgba(124, 58, 237, 0.4) !important;
 }
 
-/* Dropdown menu styling */
+/* Dropdown menu styling with reduced opacity */
 body:not(.light-theme) .dropdown-menu {
-    background: linear-gradient(135deg, rgba(42, 0, 72, 0.95), rgba(61, 0, 102, 0.95)) !important;
-    border: 1px solid rgba(157, 78, 221, 0.3) !important;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 20px rgba(157, 78, 221, 0.2) !important;
+    background: linear-gradient(135deg, rgba(42, 0, 72, 0.9), rgba(61, 0, 102, 0.9)) !important;
+    border: 1px solid rgba(124, 58, 237, 0.2) !important;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(124, 58, 237, 0.15) !important;
 }
 
 body:not(.light-theme) .dropdown-item:hover,
 body:not(.light-theme) .dropdown-item:focus {
-    background-color: rgba(157, 78, 221, 0.3) !important;
+    background-color: rgba(124, 58, 237, 0.3) !important;
 }
 
 body:not(.light-theme) .dropdown-header {
     color: var(--purple-ui-secondary) !important;
-    border-bottom: 1px solid rgba(157, 78, 221, 0.2) !important;
+    border-bottom: 1px solid rgba(124, 58, 237, 0.2) !important;
 }
 
 /* Form control styling */
 body:not(.light-theme) .form-control {
-    border-color: rgba(157, 78, 221, 0.3) !important;
+    border-color: rgba(124, 58, 237, 0.2) !important;
     background-color: rgba(30, 30, 35, 0.8) !important;
 }
 
 body:not(.light-theme) .form-control:focus {
-    border-color: rgba(157, 78, 221, 0.7) !important;
-    box-shadow: 0 0 0 0.25rem rgba(157, 78, 221, 0.25) !important;
+    border-color: rgba(124, 58, 237, 0.7) !important;
+    box-shadow: 0 0 0 0.25rem rgba(124, 58, 237, 0.25) !important;
 }
 
 /* Alert styling */
 body:not(.light-theme) .alert-primary {
-    background-color: rgba(157, 78, 221, 0.2) !important;
-    border-color: rgba(157, 78, 221, 0.5) !important;
+    background-color: rgba(124, 58, 237, 0.2) !important;
+    border-color: rgba(124, 58, 237, 0.5) !important;
 }
 
 /* Badge styling */
@@ -121,11 +121,11 @@ body:not(.light-theme) .bg-primary {
 body:not(.light-theme) .progress-bar {
     background-color: var(--purple-ui-primary) !important;
     background-image: linear-gradient(45deg, 
-        rgba(157, 78, 221, 0.15) 25%, 
+        rgba(124, 58, 237, 0.15) 25%, 
         transparent 25%, 
         transparent 50%, 
-        rgba(157, 78, 221, 0.15) 50%, 
-        rgba(157, 78, 221, 0.15) 75%, 
+        rgba(124, 58, 237, 0.15) 50%, 
+        rgba(124, 58, 237, 0.15) 75%, 
         transparent 75%, 
         transparent) !important;
 }
@@ -133,7 +133,7 @@ body:not(.light-theme) .progress-bar {
 /* List group styling */
 body:not(.light-theme) .list-group-item {
     background-color: rgba(30, 30, 35, 0.8) !important;
-    border-color: rgba(157, 78, 221, 0.3) !important;
+    border-color: rgba(124, 58, 237, 0.2) !important;
 }
 
 body:not(.light-theme) .list-group-item.active {
@@ -143,46 +143,46 @@ body:not(.light-theme) .list-group-item.active {
 
 /* Table styling */
 body:not(.light-theme) .table {
-    border-color: rgba(157, 78, 221, 0.3) !important;
+    border-color: rgba(124, 58, 237, 0.2) !important;
 }
 
 body:not(.light-theme) .table thead th {
-    border-bottom-color: rgba(157, 78, 221, 0.5) !important;
+    border-bottom-color: rgba(124, 58, 237, 0.5) !important;
 }
 
 body:not(.light-theme) .table-striped tbody tr:nth-of-type(odd) {
-    background-color: rgba(157, 78, 221, 0.05) !important;
+    background-color: rgba(124, 58, 237, 0.05) !important;
 }
 
 body:not(.light-theme) .table-hover tbody tr:hover {
-    background-color: rgba(157, 78, 221, 0.1) !important;
+    background-color: rgba(124, 58, 237, 0.1) !important;
 }
 
 /* Modal styling */
 body:not(.light-theme) .modal-content {
     background: linear-gradient(135deg, rgba(42, 0, 72, 0.95), rgba(61, 0, 102, 0.95)) !important;
-    border: 1px solid rgba(157, 78, 221, 0.3) !important;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(157, 78, 221, 0.3) !important;
+    border: 1px solid rgba(124, 58, 237, 0.2) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 25px rgba(124, 58, 237, 0.3) !important;
 }
 
 body:not(.light-theme) .modal-header {
-    border-bottom: 1px solid rgba(157, 78, 221, 0.3) !important;
+    border-bottom: 1px solid rgba(124, 58, 237, 0.2) !important;
 }
 
 body:not(.light-theme) .modal-footer {
-    border-top: 1px solid rgba(157, 78, 221, 0.3) !important;
+    border-top: 1px solid rgba(124, 58, 237, 0.2) !important;
 }
 
 /* Pagination styling */
 body:not(.light-theme) .page-link {
     color: var(--purple-ui-secondary) !important;
     background-color: rgba(30, 30, 35, 0.8) !important;
-    border-color: rgba(157, 78, 221, 0.3) !important;
+    border-color: rgba(124, 58, 237, 0.2) !important;
 }
 
 body:not(.light-theme) .page-link:hover {
     color: var(--purple-ui-highlight) !important;
-    background-color: rgba(157, 78, 221, 0.2) !important;
+    background-color: rgba(124, 58, 237, 0.2) !important;
 }
 
 body:not(.light-theme) .page-item.active .page-link {
@@ -192,7 +192,7 @@ body:not(.light-theme) .page-item.active .page-link {
 
 /* Nav tabs styling */
 body:not(.light-theme) .nav-tabs {
-    border-bottom-color: rgba(157, 78, 221, 0.3) !important;
+    border-bottom-color: rgba(124, 58, 237, 0.2) !important;
 }
 
 body:not(.light-theme) .nav-tabs .nav-link {
@@ -201,13 +201,13 @@ body:not(.light-theme) .nav-tabs .nav-link {
 
 body:not(.light-theme) .nav-tabs .nav-link:hover,
 body:not(.light-theme) .nav-tabs .nav-link:focus {
-    border-color: rgba(157, 78, 221, 0.3) !important;
+    border-color: rgba(124, 58, 237, 0.2) !important;
 }
 
 body:not(.light-theme) .nav-tabs .nav-link.active {
     color: var(--purple-ui-highlight) !important;
-    background-color: rgba(157, 78, 221, 0.2) !important;
-    border-color: rgba(157, 78, 221, 0.3) !important;
+    background-color: rgba(124, 58, 237, 0.2) !important;
+    border-color: rgba(124, 58, 237, 0.2) !important;
     border-bottom-color: transparent !important;
 }
 
@@ -218,12 +218,12 @@ body:not(.light-theme) .accordion-button {
 }
 
 body:not(.light-theme) .accordion-button:not(.collapsed) {
-    background-color: rgba(157, 78, 221, 0.2) !important;
+    background-color: rgba(124, 58, 237, 0.2) !important;
     color: var(--purple-ui-highlight) !important;
 }
 
 body:not(.light-theme) .accordion-button::after {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%239d4edd'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e") !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%237c3aed'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e") !important;
 }
 
 /* Tooltip styling */
@@ -239,23 +239,23 @@ body:not(.light-theme) .tooltip .tooltip-arrow::before {
 /* Popover styling */
 body:not(.light-theme) .popover {
     background-color: rgba(30, 30, 35, 0.95) !important;
-    border-color: rgba(157, 78, 221, 0.3) !important;
+    border-color: rgba(124, 58, 237, 0.2) !important;
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
 }
 
 body:not(.light-theme) .popover-header {
-    background-color: rgba(157, 78, 221, 0.2) !important;
-    border-bottom-color: rgba(157, 78, 221, 0.3) !important;
+    background-color: rgba(124, 58, 237, 0.2) !important;
+    border-bottom-color: rgba(124, 58, 237, 0.2) !important;
 }
 
 /* Top auth bar styling */
 body:not(.light-theme) .top-auth-bar {
     background: linear-gradient(135deg, rgba(35, 0, 60, 0.95), rgba(50, 0, 85, 0.95)) !important;
-    border-bottom: 1px solid rgba(157, 78, 221, 0.3) !important;
+    border-bottom: 1px solid rgba(124, 58, 237, 0.2) !important;
 }
 
 /* Footer styling */
 body:not(.light-theme) footer {
     background: linear-gradient(135deg, rgba(35, 0, 60, 0.95), rgba(50, 0, 85, 0.95)) !important;
-    border-top: 1px solid rgba(157, 78, 221, 0.3) !important;
+    border-top: 1px solid rgba(124, 58, 237, 0.2) !important;
 }

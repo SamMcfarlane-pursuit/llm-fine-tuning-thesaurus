@@ -1,64 +1,69 @@
-{% extends 'base.html' %}
+{% extends base_template|default('base-simple.html') %}
 
 {% block title %}Register{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-6 mx-auto">
             <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h3 class="mb-0">Create an Account</h3>
-                </div>
                 <div class="card-body">
-                    {% if error %}
-                    <div class="alert alert-danger">{{ error }}</div>
-                    {% endif %}
+                    <h2 class="card-title text-center mb-4">Create an Account</h2>
                     
-                    <form method="POST" action="{{ url_for('register') }}">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                    
+                    <form method="POST" action="{{ url_for('auth.register') }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        
                         <div class="mb-3">
                             <label for="username" class="form-label">Username</label>
                             <input type="text" class="form-control" id="username" name="username" required>
                         </div>
+                        
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control" id="email" name="email" required>
                         </div>
+                        
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
                             <input type="password" class="form-control" id="password" name="password" required>
-                            <div class="form-text">Password must be at least 8 characters long and include a mix of letters, numbers, and special characters.</div>
                         </div>
+                        
                         <div class="mb-3">
-                            <label for="confirm_password" class="form-label">Confirm Password</label>
-                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                            <label for="password2" class="form-label">Confirm Password</label>
+                            <input type="password" class="form-control" id="password2" name="password2" required>
                         </div>
+                        
                         <div class="mb-3 form-check">
                             <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
-                            <label class="form-check-label" for="terms">I agree to the <a href="{{ url_for('terms') }}">Terms of Service</a> and <a href="{{ url_for('privacy') }}">Privacy Policy</a></label>
+                            <label class="form-check-label" for="terms">
+                                I agree to the <a href="{{ url_for('terms') }}">Terms of Service</a> and <a href="{{ url_for('privacy') }}">Privacy Policy</a>
+                            </label>
                         </div>
+                        
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary">Register</button>
                         </div>
                     </form>
                     
-                    <hr>
-                    
-                    <div class="text-center">
-                        <p>Already have an account? <a href="{{ url_for('login') }}">Sign In</a></p>
+                    <div class="text-center mt-4">
+                        <p>Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
                     </div>
                     
                     <div class="mt-4">
-                        <h5>Register with:</h5>
-                        <div class="d-flex justify-content-center gap-3 mt-3">
-                            <a href="{{ url_for('oauth_login', provider='github') }}" class="btn btn-dark">
-                                <i class="bi bi-github me-2"></i>GitHub
+                        <div class="d-grid gap-2">
+                            <a href="{{ url_for('oauth_login', provider='google') }}" class="btn btn-outline-danger">
+                                <i class="bi bi-google me-2"></i>Register with Google
                             </a>
-                            <a href="{{ url_for('oauth_login', provider='huggingface') }}" class="btn btn-primary">
-                                <i class="bi bi-hdd-network me-2"></i>Hugging Face
-                            </a>
-                            <a href="{{ url_for('oauth_login', provider='google') }}" class="btn btn-danger">
-                                <i class="bi bi-google me-2"></i>Google
+                            <a href="{{ url_for('oauth_login', provider='github') }}" class="btn btn-outline-dark">
+                                <i class="bi bi-github me-2"></i>Register with GitHub
                             </a>
                         </div>
                     </div>

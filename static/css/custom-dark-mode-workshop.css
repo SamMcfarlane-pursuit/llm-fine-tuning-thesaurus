@@ -1,0 +1,199 @@
+/**
+ * Custom Dark Mode Theme for Workshop Sections
+ * Implements a specific dark mode color scheme with purple accents for workshop pages
+ */
+
+/* Apply these styles in dark mode (when body doesn't have light-theme class) */
+body:not(.light-theme) {
+    /* Workshop containers */
+    .workshop-container, .exercise-container {
+        background-color: var(--secondary);
+        border-color: var(--primary);
+        color: var(--text);
+    }
+    
+    /* Workshop headers */
+    .workshop-header, .exercise-header {
+        background-color: var(--primary);
+        color: var(--text);
+    }
+    
+    /* Workshop content */
+    .workshop-content, .exercise-content {
+        background-color: var(--secondary);
+        color: var(--text);
+    }
+    
+    /* Workshop steps */
+    .workshop-step {
+        background-color: var(--secondary);
+        border-color: var(--primary);
+        color: var(--text);
+    }
+    
+    .workshop-step.active {
+        background-color: var(--primary);
+        color: var(--text);
+    }
+    
+    /* Workshop navigation */
+    .workshop-nav {
+        background-color: var(--secondary);
+        border-color: var(--primary);
+    }
+    
+    .workshop-nav-item {
+        color: var(--text);
+    }
+    
+    .workshop-nav-item.active {
+        background-color: var(--primary);
+        color: var(--text);
+    }
+    
+    /* Workshop progress */
+    .workshop-progress {
+        background-color: var(--secondary);
+    }
+    
+    .workshop-progress-bar {
+        background-color: var(--primary);
+    }
+    
+    /* Workshop code blocks */
+    .workshop-code {
+        background-color: var(--dark-code-bg);
+        border-color: var(--primary);
+        color: var(--text);
+    }
+    
+    /* Workshop exercises */
+    .exercise-card {
+        background-color: var(--secondary);
+        border-color: var(--primary);
+        color: var(--text);
+    }
+    
+    .exercise-title {
+        color: var(--text);
+    }
+    
+    .exercise-description {
+        color: var(--text);
+    }
+    
+    /* Workshop buttons */
+    .workshop-btn {
+        background-color: var(--primary);
+        border-color: var(--primary);
+        color: var(--text);
+    }
+    
+    .workshop-btn:hover {
+        background-color: var(--accent);
+        border-color: var(--accent);
+    }
+    
+    /* Workshop inputs */
+    .workshop-input {
+        background-color: var(--secondary);
+        border-color: var(--primary);
+        color: var(--text);
+    }
+    
+    /* Workshop alerts */
+    .workshop-alert {
+        background-color: var(--secondary);
+        border-color: var(--primary);
+        color: var(--text);
+    }
+    
+    /* Workshop notes */
+    .workshop-note {
+        background-color: var(--secondary);
+        border-left: 4px solid var(--primary);
+        color: var(--text);
+    }
+    
+    /* Workshop tips */
+    .workshop-tip {
+        background-color: var(--secondary);
+        border-left: 4px solid var(--accent);
+        color: var(--text);
+    }
+    
+    /* Workshop warnings */
+    .workshop-warning {
+        background-color: var(--secondary);
+        border-left: 4px solid #ff9800;
+        color: var(--text);
+    }
+    
+    /* Workshop success */
+    .workshop-success {
+        background-color: var(--secondary);
+        border-left: 4px solid #4caf50;
+        color: var(--text);
+    }
+    
+    /* Workshop tabs */
+    .workshop-tab {
+        background-color: var(--secondary);
+        border-color: var(--primary);
+        color: var(--text);
+    }
+    
+    .workshop-tab.active {
+        background-color: var(--primary);
+        color: var(--text);
+    }
+    
+    /* Workshop panels */
+    .workshop-panel {
+        background-color: var(--secondary);
+        border-color: var(--primary);
+        color: var(--text);
+    }
+    
+    .workshop-panel-header {
+        background-color: var(--primary);
+        color: var(--text);
+    }
+    
+    .workshop-panel-body {
+        background-color: var(--secondary);
+        color: var(--text);
+    }
+    
+    /* Workshop tables */
+    .workshop-table {
+        background-color: var(--secondary);
+        color: var(--text);
+    }
+    
+    .workshop-table th {
+        background-color: var(--primary);
+        color: var(--text);
+    }
+    
+    .workshop-table td {
+        border-color: rgba(58, 49, 216, 0.2);
+    }
+    
+    /* Workshop badges */
+    .workshop-badge {
+        background-color: var(--primary);
+        color: var(--text);
+    }
+    
+    /* Workshop icons */
+    .workshop-icon {
+        color: var(--primary);
+    }
+    
+    /* Workshop tooltips */
+    .workshop-tooltip {
+        background-color: var(--primary);
+        color: var(--text);
+    }
+}

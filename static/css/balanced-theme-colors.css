@@ -1,0 +1,201 @@
+/* Balanced Theme Colors
+ * Ensures consistent brightness and contrast ratios across themes
+ */
+
+:root {
+    /* Base colors with balanced contrast */
+    --primary-color: #3b82f6;  /* Balanced blue */
+    --secondary-color: #6366f1; /* Balanced indigo */
+    --accent-color: #8b5cf6;   /* Balanced purple */
+    
+    /* Light theme colors */
+    --light-bg-primary: #ffffff;
+    --light-bg-secondary: #f3f4f6;
+    --light-bg-tertiary: #e5e7eb;
+    --light-text-primary: #1f2937;
+    --light-text-secondary: #4b5563;
+    --light-text-tertiary: #6b7280;
+    --light-border: #e5e7eb;
+    --light-shadow: rgba(0, 0, 0, 0.1);
+    
+    /* Dark theme colors */
+    --dark-bg-primary: #111827;
+    --dark-bg-secondary: #1f2937;
+    --dark-bg-tertiary: #374151;
+    --dark-text-primary: #f9fafb;
+    --dark-text-secondary: #e5e7eb;
+    --dark-text-tertiary: #d1d5db;
+    --dark-border: #374151;
+    --dark-shadow: rgba(0, 0, 0, 0.3);
+    
+    /* Status colors with balanced contrast */
+    --success-color: #059669;  /* Balanced green */
+    --warning-color: #d97706;  /* Balanced orange */
+    --error-color: #dc2626;    /* Balanced red */
+    --info-color: #0284c7;     /* Balanced blue */
+    
+    /* Code block colors with balanced visibility */
+    --code-keyword: #e879f9;   /* Balanced pink */
+    --code-function: #34d399;  /* Balanced green */
+    --code-string: #fbbf24;    /* Balanced yellow */
+    --code-number: #a78bfa;    /* Balanced purple */
+    --code-comment: #94a3b8;   /* Balanced gray */
+    --code-operator: #e879f9;  /* Balanced pink */
+    --code-parameter: #fcd34d; /* Balanced yellow */
+    --code-class: #67e8f9;     /* Balanced cyan */
+    --code-builtin: #67e8f9;   /* Balanced cyan */
+}
+
+/* Light theme specific styles */
+.light-theme {
+    --bg-primary: var(--light-bg-primary);
+    --bg-secondary: var(--light-bg-secondary);
+    --bg-tertiary: var(--light-bg-tertiary);
+    --text-primary: var(--light-text-primary);
+    --text-secondary: var(--light-text-secondary);
+    --text-tertiary: var(--light-text-tertiary);
+    --border-color: var(--light-border);
+    --shadow-color: var(--light-shadow);
+}
+
+/* Dark theme specific styles */
+.dark-theme {
+    --bg-primary: var(--dark-bg-primary);
+    --bg-secondary: var(--dark-bg-secondary);
+    --bg-tertiary: var(--dark-bg-tertiary);
+    --text-primary: var(--dark-text-primary);
+    --text-secondary: var(--dark-text-secondary);
+    --text-tertiary: var(--dark-text-tertiary);
+    --border-color: var(--dark-border);
+    --shadow-color: var(--dark-shadow);
+}
+
+/* Common styles with balanced contrast */
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Card styles with balanced contrast */
+.card {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.card-header {
+    background-color: var(--bg-tertiary);
+    border-bottom-color: var(--border-color);
+}
+
+/* Text styles with balanced contrast */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary);
+}
+
+p, li, span {
+    color: var(--text-secondary);
+}
+
+/* Link styles with balanced contrast */
+a {
+    color: var(--primary-color);
+}
+
+a:hover {
+    color: var(--secondary-color);
+}
+
+/* Button styles with balanced contrast */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: white;
+}
+
+/* Code block styles with balanced contrast */
+.code-block {
+    background-color: var(--bg-tertiary);
+    border-color: var(--border-color);
+}
+
+.code-block .keyword { color: var(--code-keyword); }
+.code-block .function { color: var(--code-function); }
+.code-block .string { color: var(--code-string); }
+.code-block .number { color: var(--code-number); }
+.code-block .comment { color: var(--code-comment); }
+.code-block .operator { color: var(--code-operator); }
+.code-block .parameter { color: var(--code-parameter); }
+.code-block .class { color: var(--code-class); }
+.code-block .builtin { color: var(--code-builtin); }
+
+/* Status colors with balanced contrast */
+.text-success { color: var(--success-color); }
+.text-warning { color: var(--warning-color); }
+.text-error { color: var(--error-color); }
+.text-info { color: var(--info-color); }
+
+/* Form elements with balanced contrast */
+input, select, textarea {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+/* Table styles with balanced contrast */
+table {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+}
+
+th {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+td {
+    color: var(--text-secondary);
+}
+
+/* List styles with balanced contrast */
+.list-group-item {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+    color: var(--text-secondary);
+}
+
+/* Navigation styles with balanced contrast */
+.navbar {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+}
+
+.nav-link {
+    color: var(--text-secondary);
+}
+
+.nav-link:hover {
+    color: var(--text-primary);
+}
+
+/* Dropdown styles with balanced contrast */
+.dropdown-menu {
+    background-color: var(--bg-secondary);
+    border-color: var(--border-color);
+}
+
+.dropdown-item {
+    color: var(--text-secondary);
+}
+
+.dropdown-item:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+} 

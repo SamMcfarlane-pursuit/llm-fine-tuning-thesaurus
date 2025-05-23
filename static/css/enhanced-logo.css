@@ -19,11 +19,26 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+/* Light theme specific styling for the logo */
+body.light-theme .navbar-brand.enhanced-logo {
+    background: linear-gradient(135deg, #2f27ce, #443dff);
+    box-shadow: 0 4px 15px rgba(47, 39, 206, 0.2);
+    border: 1px solid rgba(47, 39, 206, 0.1);
+}
+
 .navbar-brand.enhanced-logo:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(66, 133, 244, 0.5);
     background: linear-gradient(135deg, rgba(74, 148, 255, 1), rgba(64, 185, 255, 1));
     border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Light theme hover state for the logo */
+body.light-theme .navbar-brand.enhanced-logo:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(47, 39, 206, 0.3), 0 0 15px rgba(47, 39, 206, 0.4);
+    background: linear-gradient(135deg, #3a31d8, #5149ff);
+    border-color: rgba(47, 39, 206, 0.2);
 }
 
 .navbar-brand.enhanced-logo::before {

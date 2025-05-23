@@ -3,17 +3,17 @@
         <h3><i class="bi bi-lightbulb-fill"></i> Getting Started Guide</h3>
         <p>Follow these steps to make the most of the Visual Thesaurus LLM platform</p>
     </div>
-    
+
     <div class="guide-steps">
         <div class="guide-step">
             <div class="step-number">1</div>
             <div class="step-content">
-                <h4>Explore the Concept Map</h4>
+                <h4 class="concept-map-heading">Explore the Concept Map</h4>
                 <p>Start by exploring the interactive concept map to understand how different LLM fine-tuning concepts relate to each other. Click on any node to learn more about that concept.</p>
                 <a href="#concepts-visualization" class="btn btn-sm btn-primary">Go to Concept Map</a>
             </div>
         </div>
-        
+
         <div class="guide-step">
             <div class="step-number">2</div>
             <div class="step-content">
@@ -22,7 +22,7 @@
                 <a href="/concepts-learning" class="btn btn-sm btn-primary">Start Learning</a>
             </div>
         </div>
-        
+
         <div class="guide-step">
             <div class="step-number">3</div>
             <div class="step-content">
@@ -31,7 +31,7 @@
                 <a href="/tutorials" class="btn btn-sm btn-primary">View Tutorials</a>
             </div>
         </div>
-        
+
         <div class="guide-step">
             <div class="step-number">4</div>
             <div class="step-content">
@@ -40,7 +40,7 @@
                 <a href="/quiz/quiz_list" class="btn btn-sm btn-primary">Take Quizzes</a>
             </div>
         </div>
-        
+
         <div class="guide-step">
             <div class="step-number">5</div>
             <div class="step-content">
@@ -50,7 +50,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="guide-footer">
         <div class="guide-tip">
             <i class="bi bi-info-circle-fill"></i>
@@ -68,29 +68,29 @@
         margin: 2rem 0;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     }
-    
+
     .guide-header {
         text-align: center;
         margin-bottom: 2rem;
     }
-    
+
     .guide-header h3 {
         color: var(--primary-color);
         margin-bottom: 0.5rem;
         font-weight: 700;
     }
-    
+
     .guide-header p {
         color: var(--text-secondary);
         font-size: 1.1rem;
     }
-    
+
     .guide-steps {
         display: flex;
         flex-direction: column;
         gap: 1.5rem;
     }
-    
+
     .guide-step {
         display: flex;
         gap: 1.5rem;
@@ -101,12 +101,12 @@
         transition: all 0.3s ease;
         border-left: 4px solid var(--primary-color);
     }
-    
+
     .guide-step:hover {
         transform: translateX(5px);
         background-color: rgba(35, 35, 40, 0.6);
     }
-    
+
     .step-number {
         background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
         color: white;
@@ -121,28 +121,28 @@
         flex-shrink: 0;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     }
-    
+
     .step-content {
         flex-grow: 1;
     }
-    
+
     .step-content h4 {
         color: var(--text-primary);
         margin-bottom: 0.5rem;
         font-weight: 600;
     }
-    
+
     .step-content p {
         color: var(--text-secondary);
         margin-bottom: 1rem;
     }
-    
+
     .guide-footer {
         margin-top: 2rem;
         padding-top: 1.5rem;
         border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
-    
+
     .guide-tip {
         display: flex;
         align-items: center;
@@ -152,18 +152,18 @@
         border-radius: 8px;
         color: var(--text-secondary);
     }
-    
+
     .guide-tip i {
         color: var(--primary-color);
         font-size: 1.5rem;
     }
-    
+
     @media (max-width: 768px) {
         .guide-step {
             flex-direction: column;
             gap: 1rem;
         }
-        
+
         .step-number {
             margin-bottom: 0.5rem;
         }

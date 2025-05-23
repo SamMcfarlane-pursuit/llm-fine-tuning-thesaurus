@@ -1,18 +1,22 @@
 """
 Script to create a quiz for LoRA fine-tuning concepts.
 """
-from app import app, db
+from flask import Flask
 from models import Quiz, QuizQuestion, QuizOption
+from extensions import db
 
 def create_lora_quiz():
     """Create a quiz for LoRA fine-tuning concepts."""
+    app = Flask(__name__)
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///thesaurus.db'
+    db.init_app(app)
     with app.app_context():
         # Check if the quiz already exists
         existing_quiz = Quiz.query.filter_by(module='lora', topic='concepts').first()
         if existing_quiz:
             print(f"Quiz '{existing_quiz.title}' already exists.")
             return
-        
+
         # Create the quiz
         quiz = Quiz(
             module='lora',
@@ -23,7 +27,7 @@ def create_lora_quiz():
         )
         db.session.add(quiz)
         db.session.flush()  # Get the quiz ID
-        
+
         # Create questions
         questions = [
             {
@@ -155,7 +159,7 @@ def create_lora_quiz():
                 ]
             }
         ]
-        
+
         # Add questions and options
         for q_data in questions:
             question = QuizQuestion(
@@ -168,7 +172,7 @@ def create_lora_quiz():
             )
             db.session.add(question)
             db.session.flush()  # Get the question ID
-            
+
             for o_data in q_data['options']:
                 option = QuizOption(
                     question_id=question.id,
@@ -177,7 +181,7 @@ def create_lora_quiz():
                     order=o_data['order']
                 )
                 db.session.add(option)
-        
+
         # Commit all changes
         db.session.commit()
         print(f"Created quiz: {quiz.title}")

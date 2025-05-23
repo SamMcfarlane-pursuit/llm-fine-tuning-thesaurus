@@ -5,11 +5,11 @@
 
 /* Only apply these styles in dark mode (when body doesn't have light-theme class) */
 body:not(.light-theme) {
-    /* Define purple color variables for backgrounds */
-    --purple-bg-primary: #1a0033;      /* Deep purple background */
-    --purple-bg-secondary: #2d0052;    /* Medium purple background */
-    --purple-bg-accent: #3a0066;       /* Lighter purple background */
-    --purple-bg-highlight: #4b0082;    /* Indigo purple highlight */
+    /* Define purple color variables for backgrounds with improved contrast */
+    --purple-bg-primary: #1e1b4b;      /* Deep purple background */
+    --purple-bg-secondary: #312e81;    /* Medium purple background */
+    --purple-bg-accent: #4338ca;       /* Bright purple accent */
+    --purple-bg-highlight: #3730a3;    /* Dark purple highlight */
     
     /* Background gradients */
     --purple-bg-gradient: linear-gradient(135deg, var(--purple-bg-primary), var(--purple-bg-secondary));
@@ -19,7 +19,7 @@ body:not(.light-theme) {
     background: var(--purple-bg-gradient) !important;
 }
 
-/* Add a subtle pattern overlay */
+/* Add a subtle pattern overlay with reduced opacity */
 body:not(.light-theme)::before {
     content: '';
     position: fixed;
@@ -28,12 +28,12 @@ body:not(.light-theme)::before {
     width: 100%;
     height: 100%;
     background-image:
-        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C27B0' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C27B0' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     z-index: -1;
     pointer-events: none;
 }
 
-/* Add a subtle animated gradient overlay */
+/* Add a subtle animated gradient overlay with reduced opacity */
 body:not(.light-theme)::after {
     content: '';
     position: fixed;
@@ -42,9 +42,9 @@ body:not(.light-theme)::after {
     width: 100%;
     height: 100%;
     background:
-        radial-gradient(circle at 20% 30%, rgba(156, 39, 176, 0.15) 0%, rgba(156, 39, 176, 0) 50%),
-        radial-gradient(circle at 80% 70%, rgba(123, 44, 191, 0.15) 0%, rgba(123, 44, 191, 0) 50%),
-        radial-gradient(circle at 50% 50%, rgba(75, 0, 130, 0.1) 0%, rgba(75, 0, 130, 0) 70%);
+        radial-gradient(circle at 20% 30%, rgba(156, 39, 176, 0.05) 0%, rgba(156, 39, 176, 0) 50%),
+        radial-gradient(circle at 80% 70%, rgba(123, 44, 191, 0.05) 0%, rgba(123, 44, 191, 0) 50%),
+        radial-gradient(circle at 50% 50%, rgba(75, 0, 130, 0.03) 0%, rgba(75, 0, 130, 0) 70%);
     z-index: -1;
     animation: pulse-purple-background 8s infinite alternate;
     pointer-events: none;
@@ -52,25 +52,25 @@ body:not(.light-theme)::after {
 
 @keyframes pulse-purple-background {
     0% {
-        opacity: 0.5;
+        opacity: 0.3;
         background-position: 0% 0%, 100% 100%, 50% 50%;
     }
     50% {
-        opacity: 0.7;
+        opacity: 0.4;
         background-position: 10% 20%, 90% 80%, 60% 40%;
     }
     100% {
-        opacity: 0.9;
+        opacity: 0.5;
         background-position: 20% 30%, 80% 70%, 40% 60%;
     }
 }
 
-/* Add subtle floating particles */
+/* Add subtle floating particles with reduced opacity */
 body:not(.light-theme) .digital-particles {
     background-image: 
-        radial-gradient(circle at 50% 50%, rgba(192, 132, 252, 0.3) 0%, rgba(192, 132, 252, 0) 25%),
-        radial-gradient(circle at 80% 20%, rgba(157, 78, 221, 0.3) 0%, rgba(157, 78, 221, 0) 25%),
-        radial-gradient(circle at 20% 80%, rgba(123, 44, 191, 0.3) 0%, rgba(123, 44, 191, 0) 25%);
+        radial-gradient(circle at 50% 50%, rgba(167, 139, 250, 0.1) 0%, rgba(167, 139, 250, 0) 25%),
+        radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, rgba(139, 92, 246, 0) 25%),
+        radial-gradient(circle at 20% 80%, rgba(124, 58, 237, 0.1) 0%, rgba(124, 58, 237, 0) 25%);
     background-size: 100px 100px, 120px 120px, 150px 150px;
     animation: float-particles 15s infinite linear;
 }
@@ -84,56 +84,56 @@ body:not(.light-theme) .digital-particles {
     }
 }
 
-/* Add a subtle glow to the header accent */
+/* Add a subtle glow to the header accent with reduced intensity */
 body:not(.light-theme) .header-accent {
-    box-shadow: 0 0 20px rgba(157, 78, 221, 0.7) !important;
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.3) !important;
 }
 
-/* Add a subtle purple tint to card backgrounds */
+/* Add a subtle purple tint to card backgrounds with reduced opacity */
 body:not(.light-theme) .card {
-    background: linear-gradient(135deg, rgba(42, 0, 72, 0.95), rgba(61, 0, 102, 0.95)) !important;
+    background: linear-gradient(135deg, rgba(30, 27, 75, 0.95), rgba(49, 46, 129, 0.95)) !important;
 }
 
-/* Add a subtle purple tint to dropdown menus */
+/* Add a subtle purple tint to dropdown menus with reduced opacity */
 body:not(.light-theme) .dropdown-menu {
-    background: linear-gradient(135deg, rgba(42, 0, 72, 0.95), rgba(61, 0, 102, 0.95)) !important;
+    background: linear-gradient(135deg, rgba(30, 27, 75, 0.95), rgba(49, 46, 129, 0.95)) !important;
 }
 
-/* Add a subtle purple tint to modals */
+/* Add a subtle purple tint to modals with reduced opacity */
 body:not(.light-theme) .modal-content {
-    background: linear-gradient(135deg, rgba(42, 0, 72, 0.95), rgba(61, 0, 102, 0.95)) !important;
+    background: linear-gradient(135deg, rgba(30, 27, 75, 0.95), rgba(49, 46, 129, 0.95)) !important;
 }
 
-/* Add a subtle purple tint to the navbar */
+/* Add a subtle purple tint to the navbar with reduced opacity */
 body:not(.light-theme) .navbar {
-    background: linear-gradient(135deg, rgba(35, 0, 60, 0.95), rgba(50, 0, 85, 0.95)) !important;
+    background: linear-gradient(135deg, rgba(30, 27, 75, 0.95), rgba(49, 46, 129, 0.95)) !important;
 }
 
 /* Add a subtle purple tint to the top auth bar */
 body:not(.light-theme) .top-auth-bar {
-    background: linear-gradient(135deg, rgba(35, 0, 60, 0.95), rgba(50, 0, 85, 0.95)) !important;
+    background: linear-gradient(135deg, rgba(30, 27, 75, 0.95), rgba(49, 46, 129, 0.95)) !important;
 }
 
 /* Add a subtle purple tint to the footer */
 body:not(.light-theme) footer {
-    background: linear-gradient(135deg, rgba(35, 0, 60, 0.95), rgba(50, 0, 85, 0.95)) !important;
+    background: linear-gradient(135deg, rgba(30, 27, 75, 0.95), rgba(49, 46, 129, 0.95)) !important;
 }
 
 /* Add a subtle purple tint to code blocks */
 body:not(.light-theme) .code-block,
 body:not(.light-theme) .code-container,
 body:not(.light-theme) pre[class*="language-"] {
-    background: linear-gradient(135deg, #1a1a2e, #16213e, #1f1135) !important;
+    background: linear-gradient(135deg, #1e1b4b, #312e81) !important;
 }
 
 /* Add a subtle purple tint to form controls */
 body:not(.light-theme) .form-control {
-    background-color: rgba(30, 20, 40, 0.8) !important;
+    background-color: rgba(30, 27, 75, 0.8) !important;
 }
 
 /* Add a subtle purple tint to list groups */
 body:not(.light-theme) .list-group-item {
-    background-color: rgba(30, 20, 40, 0.8) !important;
+    background-color: rgba(30, 27, 75, 0.8) !important;
 }
 
 /* Add a subtle purple tint to tables */
@@ -142,22 +142,22 @@ body:not(.light-theme) .table {
 }
 
 body:not(.light-theme) .table-striped tbody tr:nth-of-type(odd) {
-    background-color: rgba(157, 78, 221, 0.05) !important;
+    background-color: rgba(139, 92, 246, 0.05) !important;
 }
 
 /* Add a subtle purple tint to alerts */
 body:not(.light-theme) .alert {
-    background-color: rgba(30, 20, 40, 0.8) !important;
+    background-color: rgba(30, 27, 75, 0.8) !important;
 }
 
 /* Add a subtle purple tint to badges */
 body:not(.light-theme) .badge {
-    background-color: rgba(157, 78, 221, 0.8) !important;
+    background-color: rgba(139, 92, 246, 0.8) !important;
 }
 
 /* Add a subtle purple tint to buttons */
 body:not(.light-theme) .btn-primary {
-    background: linear-gradient(135deg, #9d4edd, #7b2cbf) !important;
+    background: linear-gradient(135deg, #6366f1, #4f46e5) !important;
 }
 
 body:not(.light-theme) .btn-secondary {
@@ -166,31 +166,31 @@ body:not(.light-theme) .btn-secondary {
 
 /* Add a subtle purple tint to pagination */
 body:not(.light-theme) .page-link {
-    background-color: rgba(30, 20, 40, 0.8) !important;
+    background-color: rgba(30, 27, 75, 0.8) !important;
 }
 
 /* Add a subtle purple tint to nav tabs */
 body:not(.light-theme) .nav-tabs .nav-link.active {
-    background-color: rgba(157, 78, 221, 0.2) !important;
+    background-color: rgba(139, 92, 246, 0.2) !important;
 }
 
 /* Add a subtle purple tint to accordions */
 body:not(.light-theme) .accordion-button {
-    background-color: rgba(30, 20, 40, 0.8) !important;
+    background-color: rgba(30, 27, 75, 0.8) !important;
 }
 
 body:not(.light-theme) .accordion-button:not(.collapsed) {
-    background-color: rgba(157, 78, 221, 0.2) !important;
+    background-color: rgba(139, 92, 246, 0.2) !important;
 }
 
 /* Add a subtle purple tint to tooltips */
 body:not(.light-theme) .tooltip .tooltip-inner {
-    background-color: rgba(157, 78, 221, 0.9) !important;
+    background-color: rgba(139, 92, 246, 0.9) !important;
 }
 
 /* Add a subtle purple tint to popovers */
 body:not(.light-theme) .popover {
-    background-color: rgba(30, 20, 40, 0.95) !important;
+    background-color: rgba(30, 27, 75, 0.95) !important;
 }
 
 /* Add a subtle purple tint to the brand icon */

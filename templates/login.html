@@ -1,55 +1,58 @@
-{% extends 'base.html' %}
+{% extends base_template|default('base-simple.html') %}
 
 {% block title %}Login{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-6 mx-auto">
             <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h3 class="mb-0">Sign In</h3>
-                </div>
                 <div class="card-body">
-                    {% if error %}
-                    <div class="alert alert-danger">{{ error }}</div>
-                    {% endif %}
+                    <h2 class="card-title text-center mb-4">Login</h2>
                     
-                    <form method="POST" action="{{ url_for('login') }}">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                    
+                    <form method="POST" action="{{ url_for('auth.login') }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        
                         <div class="mb-3">
-                            <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="username" name="username" required>
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
                         </div>
+                        
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
                             <input type="password" class="form-control" id="password" name="password" required>
                         </div>
+                        
                         <div class="mb-3 form-check">
                             <input type="checkbox" class="form-check-input" id="remember" name="remember">
                             <label class="form-check-label" for="remember">Remember me</label>
                         </div>
+                        
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary">Sign In</button>
+                            <button type="submit" class="btn btn-primary">Login</button>
                         </div>
                     </form>
                     
-                    <hr>
-                    
-                    <div class="text-center">
-                        <p>Don't have an account? <a href="{{ url_for('register') }}">Register</a></p>
+                    <div class="text-center mt-4">
+                        <p class="mb-2">Don't have an account? <a href="{{ url_for('register') }}">Register</a></p>
+                        <p><a href="{{ url_for('auth.reset_password_request') }}">Forgot your password?</a></p>
                     </div>
                     
                     <div class="mt-4">
-                        <h5>Sign in with:</h5>
-                        <div class="d-flex justify-content-center gap-3 mt-3">
-                            <a href="{{ url_for('oauth_login', provider='github') }}" class="btn btn-dark">
-                                <i class="bi bi-github me-2"></i>GitHub
+                        <div class="d-grid gap-2">
+                            <a href="{{ url_for('oauth_login', provider='google') }}" class="btn btn-outline-danger">
+                                <i class="bi bi-google me-2"></i>Login with Google
                             </a>
-                            <a href="{{ url_for('oauth_login', provider='huggingface') }}" class="btn btn-primary">
-                                <i class="bi bi-hdd-network me-2"></i>Hugging Face
-                            </a>
-                            <a href="{{ url_for('oauth_login', provider='google') }}" class="btn btn-danger">
-                                <i class="bi bi-google me-2"></i>Google
+                            <a href="{{ url_for('oauth_login', provider='github') }}" class="btn btn-outline-dark">
+                                <i class="bi bi-github me-2"></i>Login with GitHub
                             </a>
                         </div>
                     </div>

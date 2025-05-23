@@ -1,48 +1,32 @@
 import requests
 import json
 
-def test_synonyms_api():
-    url = "http://localhost:5002/api/synonyms/happy"
-    
-    try:
-        response = requests.get(url)
-        print(f"Synonyms API - Status code: {response.status_code}")
-        print(f"Response: {response.text}")
-    except Exception as e:
-        print(f"Error: {e}")
+BASE_URL = 'http://localhost:5035'
 
-def test_antonyms_api():
-    url = "http://localhost:5002/api/antonyms/happy"
-    
+def test_endpoint(endpoint, params=None):
     try:
-        response = requests.get(url)
-        print(f"Antonyms API - Status code: {response.status_code}")
-        print(f"Response: {response.text}")
+        response = requests.get(f"{BASE_URL}{endpoint}", params=params)
+        print(f"\nTesting {endpoint}:")
+        print(f"Status Code: {response.status_code}")
+        if response.status_code == 200:
+            print("Response:", json.dumps(response.json(), indent=2))
+        else:
+            print("Error:", response.text)
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"Error testing {endpoint}: {str(e)}")
 
-def test_related_api():
-    url = "http://localhost:5002/api/related/happy?type=hypernyms"
+def main():
+    # Test thesaurus endpoint
+    test_endpoint('/api/thesaurus/example')
     
-    try:
-        response = requests.get(url)
-        print(f"Related API - Status code: {response.status_code}")
-        print(f"Response: {response.text}")
-    except Exception as e:
-        print(f"Error: {e}")
-
-def test_thesaurus_api():
-    url = "http://localhost:5002/api/thesaurus/happy"
+    # Test synonyms endpoint
+    test_endpoint('/api/synonyms/example')
     
-    try:
-        response = requests.get(url)
-        print(f"Thesaurus API - Status code: {response.status_code}")
-        print(f"Response: {json.dumps(response.json(), indent=2)[:200]}...")
-    except Exception as e:
-        print(f"Error: {e}")
+    # Test related concepts endpoint
+    test_endpoint('/api/related-concepts/machine learning')
+    
+    # Test learning resources endpoint
+    test_endpoint('/api/learning-resources/neural networks')
 
-if __name__ == "__main__":
-    test_synonyms_api()
-    test_antonyms_api()
-    test_related_api()
-    test_thesaurus_api()
+if __name__ == '__main__':
+    main()

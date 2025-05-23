@@ -1,0 +1,218 @@
+/**
+ * Custom Light Mode Theme for Tutorial Sections
+ * Implements a specific light mode color scheme with purple accents for tutorial pages
+ */
+
+/* Apply these styles in light mode (when body has light-theme class) */
+body.light-theme {
+    /* Tutorial containers */
+    .tutorial-container {
+        background-color: var(--background);
+        border-color: var(--secondary);
+        color: var(--text);
+    }
+    
+    /* Tutorial headers */
+    .tutorial-header {
+        background-color: var(--secondary);
+        color: var(--text);
+    }
+    
+    /* Tutorial content */
+    .tutorial-content {
+        background-color: var(--background);
+        color: var(--text);
+    }
+    
+    /* Tutorial sections */
+    .tutorial-section {
+        background-color: var(--background);
+        border-color: var(--secondary);
+        color: var(--text);
+    }
+    
+    /* Tutorial cards */
+    .tutorial-card {
+        background-color: var(--background);
+        border-color: var(--secondary);
+        color: var(--text);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+    
+    .tutorial-card-header {
+        background-color: var(--secondary);
+        color: var(--text);
+    }
+    
+    .tutorial-card-body {
+        background-color: var(--background);
+        color: var(--text);
+    }
+    
+    /* Tutorial navigation */
+    .tutorial-nav {
+        background-color: var(--background);
+        border-color: var(--secondary);
+    }
+    
+    .tutorial-nav-item {
+        color: var(--text);
+    }
+    
+    .tutorial-nav-item.active {
+        background-color: var(--secondary);
+        color: var(--text);
+    }
+    
+    /* Tutorial steps */
+    .tutorial-step {
+        background-color: var(--background);
+        border-color: var(--secondary);
+        color: var(--text);
+    }
+    
+    .tutorial-step.active {
+        background-color: var(--secondary);
+        color: var(--text);
+    }
+    
+    /* Tutorial code blocks */
+    .tutorial-code {
+        background-color: var(--light-code-bg);
+        border-color: var(--secondary);
+        color: var(--text);
+    }
+    
+    /* Tutorial buttons */
+    .tutorial-btn {
+        background-color: var(--primary);
+        border-color: var(--primary);
+        color: #ffffff;
+    }
+    
+    .tutorial-btn:hover {
+        background-color: var(--accent);
+        border-color: var(--accent);
+    }
+    
+    /* Tutorial inputs */
+    .tutorial-input {
+        background-color: var(--background);
+        border-color: var(--secondary);
+        color: var(--text);
+    }
+    
+    /* Tutorial alerts */
+    .tutorial-alert {
+        background-color: var(--background);
+        border-color: var(--secondary);
+        color: var(--text);
+    }
+    
+    /* Tutorial notes */
+    .tutorial-note {
+        background-color: var(--background);
+        border-left: 4px solid var(--primary);
+        color: var(--text);
+    }
+    
+    /* Tutorial tips */
+    .tutorial-tip {
+        background-color: var(--background);
+        border-left: 4px solid var(--accent);
+        color: var(--text);
+    }
+    
+    /* Tutorial warnings */
+    .tutorial-warning {
+        background-color: var(--background);
+        border-left: 4px solid #ff9800;
+        color: var(--text);
+    }
+    
+    /* Tutorial success */
+    .tutorial-success {
+        background-color: var(--background);
+        border-left: 4px solid #4caf50;
+        color: var(--text);
+    }
+    
+    /* Tutorial tabs */
+    .tutorial-tab {
+        background-color: var(--background);
+        border-color: var(--secondary);
+        color: var(--text);
+    }
+    
+    .tutorial-tab.active {
+        background-color: var(--secondary);
+        color: var(--text);
+    }
+    
+    /* Tutorial panels */
+    .tutorial-panel {
+        background-color: var(--background);
+        border-color: var(--secondary);
+        color: var(--text);
+    }
+    
+    .tutorial-panel-header {
+        background-color: var(--secondary);
+        color: var(--text);
+    }
+    
+    .tutorial-panel-body {
+        background-color: var(--background);
+        color: var(--text);
+    }
+    
+    /* Tutorial tables */
+    .tutorial-table {
+        background-color: var(--background);
+        color: var(--text);
+    }
+    
+    .tutorial-table th {
+        background-color: var(--secondary);
+        color: var(--text);
+    }
+    
+    .tutorial-table td {
+        border-color: rgba(47, 39, 206, 0.1);
+    }
+    
+    /* Tutorial badges */
+    .tutorial-badge {
+        background-color: var(--primary);
+        color: #ffffff;
+    }
+    
+    /* Tutorial icons */
+    .tutorial-icon {
+        color: var(--primary);
+    }
+    
+    /* Tutorial tooltips */
+    .tutorial-tooltip {
+        background-color: var(--primary);
+        color: #ffffff;
+    }
+    
+    /* Colab integration */
+    .colab-button {
+        background-color: var(--primary);
+        border-color: var(--primary);
+        color: #ffffff;
+    }
+    
+    .colab-button:hover {
+        background-color: var(--accent);
+        border-color: var(--accent);
+    }
+    
+    .colab-container {
+        background-color: var(--background);
+        border-color: var(--secondary);
+        color: var(--text);
+    }
+}

@@ -1,0 +1,247 @@
+{% extends 'base.html' %}
+
+{% block title %}AI Assistant with Notifications Demo - Visual LLM{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Hero Section -->
+    <div class="hero-section bg-gradient-primary text-white py-5 mb-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 fw-bold mb-3">AI Assistant with Integrated Notifications</h1>
+                    <p class="lead mb-4">Experience our robust AI assistant with seamlessly integrated notification system. Get real-time updates, learning tips, and contextual guidance all in one place.</p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <button class="btn btn-light btn-lg" onclick="openAIAssistant()">
+                            <i class="bi bi-robot me-2"></i>Open AI Assistant
+                        </button>
+                        <button class="btn btn-outline-light btn-lg" onclick="createTestNotification()">
+                            <i class="bi bi-bell me-2"></i>Test Notification
+                        </button>
+                        <button class="btn btn-outline-light btn-lg" onclick="showNotificationFeatures()">
+                            <i class="bi bi-info-circle me-2"></i>Features
+                        </button>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <div class="demo-visual">
+                        <i class="bi bi-chat-dots-fill display-1 text-white mb-3"></i>
+                        <p class="lead">Interactive AI Assistant</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h2 class="display-5 fw-bold mb-3">Integrated Notification Features</h2>
+                <p class="lead text-muted">Seamless integration between AI assistance and notifications</p>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-5">
+            <!-- Chat Feature -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 shadow-sm hover-card">
+                    <div class="card-body text-center">
+                        <div class="feature-icon mb-3">
+                            <i class="bi bi-chat-dots display-4 text-primary"></i>
+                        </div>
+                        <h5 class="card-title">AI Chat</h5>
+                        <p class="card-text">Intelligent conversations about LLM fine-tuning with contextual responses and code examples.</p>
+                        <button class="btn btn-primary" onclick="openAIAssistant()">Start Chat</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications Feature -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 shadow-sm hover-card">
+                    <div class="card-body text-center">
+                        <div class="feature-icon mb-3">
+                            <i class="bi bi-bell display-4 text-success"></i>
+                        </div>
+                        <h5 class="card-title">Smart Notifications</h5>
+                        <p class="card-text">Contextual notifications based on your learning progress and interactions with the AI.</p>
+                        <button class="btn btn-success" onclick="openNotificationsTab()">View Notifications</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Integration Feature -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 shadow-sm hover-card">
+                    <div class="card-body text-center">
+                        <div class="feature-icon mb-3">
+                            <i class="bi bi-gear display-4 text-warning"></i>
+                        </div>
+                        <h5 class="card-title">Seamless Integration</h5>
+                        <p class="card-text">Unified interface combining chat and notifications for a streamlined user experience.</p>
+                        <button class="btn btn-warning" onclick="showIntegrationDemo()">See Demo</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo Instructions -->
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="card border-0 bg-light">
+                    <div class="card-body py-5">
+                        <h3 class="fw-bold mb-4">How to Test the Integration</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5><i class="bi bi-1-circle text-primary me-2"></i>Open AI Assistant</h5>
+                                <p class="text-muted mb-4">Click the floating AI button in the bottom-right corner or use the button above to open the assistant.</p>
+                                
+                                <h5><i class="bi bi-2-circle text-primary me-2"></i>Try Different Queries</h5>
+                                <p class="text-muted mb-4">Ask about LoRA, QLoRA, or quizzes to see contextual notifications appear automatically.</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h5><i class="bi bi-3-circle text-primary me-2"></i>Check Notifications</h5>
+                                <p class="text-muted mb-4">Switch to the notifications tab to see learning tips and progress updates.</p>
+                                
+                                <h5><i class="bi bi-4-circle text-primary me-2"></i>Interact with Actions</h5>
+                                <p class="text-muted mb-4">Click on notification actions to navigate to relevant sections of the platform.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sample Queries -->
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-12">
+                <h3 class="fw-bold mb-4 text-center">Try These Sample Queries</h3>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <button class="btn btn-outline-primary w-100" onclick="sendSampleQuery('How do I implement LoRA fine-tuning?')">
+                            <i class="bi bi-chat-quote me-2"></i>LoRA Implementation
+                        </button>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-outline-success w-100" onclick="sendSampleQuery('What is QLoRA and how does it work?')">
+                            <i class="bi bi-chat-quote me-2"></i>QLoRA Explanation
+                        </button>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-outline-warning w-100" onclick="sendSampleQuery('Can you give me a quiz on fine-tuning?')">
+                            <i class="bi bi-chat-quote me-2"></i>Quiz Request
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Demo functions
+function openAIAssistant() {
+    if (window.aiAssistant) {
+        window.aiAssistant.openAssistant();
+    } else {
+        alert('AI Assistant is loading... Please try again in a moment.');
+    }
+}
+
+function openNotificationsTab() {
+    if (window.aiAssistant) {
+        window.aiAssistant.openAssistant();
+        setTimeout(() => {
+            window.aiAssistant.switchTab('notifications');
+        }, 500);
+    } else {
+        alert('AI Assistant is loading... Please try again in a moment.');
+    }
+}
+
+function createTestNotification() {
+    if (window.aiAssistant) {
+        window.aiAssistant.addNotification({
+            id: 'demo-' + Date.now(),
+            title: 'Demo Notification',
+            body: 'This is a test notification to demonstrate the integrated system!',
+            icon: 'bi bi-star',
+            type: 'demo',
+            timestamp: Date.now(),
+            read: false,
+            important: true
+        });
+        
+        // Open notifications tab to show the new notification
+        setTimeout(() => {
+            openNotificationsTab();
+        }, 500);
+    } else {
+        alert('AI Assistant is loading... Please try again in a moment.');
+    }
+}
+
+function sendSampleQuery(query) {
+    if (window.aiAssistant) {
+        window.aiAssistant.openAssistant();
+        setTimeout(() => {
+            const input = document.getElementById('ai-input');
+            if (input) {
+                input.value = query;
+                window.aiAssistant.sendMessage();
+            }
+        }, 500);
+    } else {
+        alert('AI Assistant is loading... Please try again in a moment.');
+    }
+}
+
+function showNotificationFeatures() {
+    alert('Notification Features:\n\n• Contextual notifications based on your queries\n• Learning tips and progress updates\n• Action buttons for quick navigation\n• Filter by type (All, Unread, Important, System)\n• Sound and visual notifications\n• Settings to customize preferences');
+}
+
+function showIntegrationDemo() {
+    alert('Integration Demo:\n\n1. Open the AI Assistant\n2. Ask about LoRA or QLoRA\n3. Watch for automatic notifications\n4. Switch between Chat and Notifications tabs\n5. Click notification actions to navigate\n\nThe system seamlessly combines AI assistance with contextual notifications!');
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.hero-section {
+    background: linear-gradient(135deg, var(--primary-color, #3c6430) 0%, var(--secondary-color, #919fca) 100%);
+}
+
+.hover-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.demo-visual {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.feature-icon {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+</style>
+{% endblock %}

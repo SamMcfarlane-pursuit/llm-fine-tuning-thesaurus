@@ -4,32 +4,35 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize theme immediately
+    initializeTheme();
+
     const themeToggle = document.getElementById('theme-toggle');
-    const themeIcon = themeToggle.querySelector('i');
-    
-    // Check for saved theme preference
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    updateThemeIcon(savedTheme);
-    
-    // Toggle theme on button click
-    themeToggle.addEventListener('click', function() {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-        
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-        updateThemeIcon(newTheme);
-    });
-    
-    // Update theme icon
-    function updateThemeIcon(theme) {
-        if (theme === 'dark') {
-            themeIcon.classList.remove('bi-moon-fill');
-            themeIcon.classList.add('bi-sun-fill');
-        } else {
-            themeIcon.classList.remove('bi-sun-fill');
-            themeIcon.classList.add('bi-moon-fill');
+    if (themeToggle) {
+        const themeIcon = themeToggle.querySelector('i');
+
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+
+        // Toggle theme on button click
+        themeToggle.addEventListener('click', function() {
+            toggleTheme();
+            const currentTheme = document.body.classList.contains('light-theme') ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            updateThemeIcon(currentTheme);
+        });
+
+        // Update theme icon
+        function updateThemeIcon(theme) {
+            if (theme === 'dark') {
+                themeIcon.classList.remove('bi-moon-fill');
+                themeIcon.classList.add('bi-sun-fill');
+            } else {
+                themeIcon.classList.remove('bi-sun-fill');
+                themeIcon.classList.add('bi-moon-fill');
+            }
         }
     }
 });
@@ -70,9 +73,9 @@ function initializeTheme() {
         document.body.classList.toggle('light-theme', savedTheme === 'light');
         document.body.classList.add('theme-override');
     } else {
-        // Check system preference
-        const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        document.body.classList.toggle('light-theme', !prefersDarkMode);
+        // Default to light theme (new green color scheme)
+        document.body.classList.add('light-theme');
+        localStorage.setItem('theme', 'light');
     }
 
     // Update meta theme-color
@@ -140,9 +143,9 @@ function announceThemeChange(theme) {
  * Update meta theme-color for browser UI
  */
 function updateMetaThemeColor() {
-    // Get theme color based on current theme
+    // Get theme color based on current theme (new green color scheme)
     const isLightTheme = document.body.classList.contains('light-theme');
-    const themeColor = isLightTheme ? '#f8fcfb' : '#030706'; // Exact theme colors from the provided values
+    const themeColor = isLightTheme ? '#eef5eb' : '#0d140a'; // New green color scheme
 
     // Update or create meta tag
     let metaThemeColor = document.querySelector('meta[name="theme-color"]');

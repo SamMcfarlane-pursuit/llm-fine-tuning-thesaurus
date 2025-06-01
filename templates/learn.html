@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 
-{% block title %}Learn LLM Fine-Tuning - Visual Thesaurus LLM{% endblock %}
+{% block title %}Learn LLM Fine-Tuning - Visual LLM{% endblock %}
 
 {% block head %}
 <!-- Additional head content specific to this page -->
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vis-network@9.1.2/dist/vis-network.min.js"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/learn-page.css') }}">
 <style>
     /* Enhanced code block styling */
     pre {
@@ -357,33 +358,100 @@
         scroll-margin-top: 70px;
     }
 
-    /* Enhanced Learn Page Styling */
+    /* Enhanced Learn Page Styling - Khan Academy Style */
     .container {
         max-width: 1200px;
         margin: 0 auto;
     }
 
     .learn-header {
-        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
-        padding: 2rem 0;
+        background: linear-gradient(135deg, #5a8a4a, #6ba055);
+        padding: 3rem 0;
         margin-bottom: 2rem;
-        border-radius: 10px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(60, 100, 48, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .learn-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+        pointer-events: none;
     }
 
     .learn-header h1 {
-        font-size: 2.5rem;
-        margin-bottom: 0.5rem;
-        background: linear-gradient(90deg, #ffffff, #f0f0f0);
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: #ffffff !important;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        position: relative;
+        z-index: 2;
+        letter-spacing: -0.02em;
     }
 
     .learn-header p.lead {
-        font-size: 1.2rem;
-        color: rgba(255, 255, 255, 0.9);
+        font-size: 1.3rem;
+        font-weight: 400;
+        color: #ffffff !important;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        position: relative;
+        z-index: 2;
+        opacity: 0.95;
+    }
+
+    body:not(.light-theme) .learn-header {
+        background: linear-gradient(135deg, #7db36f, #8fc481);
+    }
+
+    body:not(.light-theme) .learn-header h1 {
+        color: #ffffff !important;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    body:not(.light-theme) .learn-header p.lead {
+        color: #ffffff !important;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .learn-header {
+            padding: 2rem 1rem;
+            margin: 0 1rem 2rem 1rem;
+            border-radius: 8px;
+        }
+
+        .learn-header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.2;
+        }
+
+        .learn-header p.lead {
+            font-size: 1.1rem;
+            line-height: 1.4;
+        }
+
+        .container {
+            padding: 0 15px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .learn-header h1 {
+            font-size: 1.8rem;
+        }
+
+        .learn-header p.lead {
+            font-size: 1rem;
+        }
     }
 
     .card {
@@ -468,227 +536,287 @@
 
 {% block content %}
 
-    <div class="container mt-4">
-        <div class="learn-header text-center">
-            <div class="row">
-                <div class="col-md-12">
-                    <h1>Learn LLM Fine-Tuning</h1>
-                    <p class="lead">Explore LLM fine-tuning concepts in a visual thesaurus format</p>
-                </div>
-            </div>
+    <div class="learn-container">
+        <!-- Header Section -->
+        <div class="learn-header">
+            <h1><i class="bi bi-mortarboard-fill me-3"></i>Learn LLM Fine-Tuning</h1>
+            <p class="lead">Master the art of fine-tuning large language models with hands-on exercises and interactive visualizations</p>
         </div>
 
+        <!-- Progress Section -->
         {% if not current_user.is_authenticated %}
-        <div class="row mt-3 mb-4">
-            <div class="col-md-8 offset-md-2">
-                <div class="card bg-primary text-white">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-md-8">
-                                <h4><i class="bi bi-person-badge me-2"></i> Sign In to Track Your Progress</h4>
-                                <p>Create an account or sign in to save your progress, take quizzes after each lesson, and access personalized learning paths.</p>
-                            </div>
-                            <div class="col-md-4 text-center">
-                                <a href="{{ url_for('auth.login') }}" class="btn btn-light me-2"><i class="bi bi-box-arrow-in-right"></i> Sign In</a>
-                                <a href="{{ url_for('auth.register') }}" class="btn btn-success"><i class="bi bi-person-plus"></i> Register</a>
-                            </div>
-                        </div>
-                    </div>
+        <div class="progress-section">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h4><i class="bi bi-person-badge me-2"></i> Sign In to Track Your Progress</h4>
+                    <p>Create an account or sign in to save your progress, take quizzes after each lesson, and access personalized learning paths with detailed analytics.</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-learn me-2">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+                    </a>
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-quiz">
+                        <i class="bi bi-person-plus me-2"></i>Register
+                    </a>
                 </div>
             </div>
         </div>
         {% else %}
-        <div class="row mt-3 mb-4">
-            <div class="col-md-8 offset-md-2">
-                <div class="card bg-success text-white">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-md-8">
-                                <h4><i class="bi bi-person-check me-2"></i> Welcome Back, {{ current_user.username }}!</h4>
-                                <p>Continue your learning journey. You've completed {{ completed_topics|default(0) }} of {{ total_topics|default(0) }} topics.</p>
-                            </div>
-                            <div class="col-md-4 text-center">
-                                <a href="{{ url_for('user_progress') }}" class="btn btn-light"><i class="bi bi-graph-up me-2"></i> View Progress</a>
-                            </div>
-                        </div>
-                    </div>
+        <div class="progress-section authenticated">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h4><i class="bi bi-person-check me-2"></i> Welcome Back, {{ current_user.username }}!</h4>
+                    <p>Continue your learning journey. You've completed {{ completed_topics|default(0) }} of {{ total_topics|default(0) }} topics. Keep up the great work!</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <a href="{{ url_for('user_progress') }}" class="btn btn-learn">
+                        <i class="bi bi-graph-up me-2"></i>View Progress
+                    </a>
                 </div>
             </div>
         </div>
         {% endif %}
 
-        <div class="row mt-4">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3>LLM Fine-Tuning Concept Map</h3>
+        <!-- Concept Visualization Section -->
+        <div class="learn-card">
+            <div class="learn-card-header">
+                <h3><i class="bi bi-diagram-3 card-icon"></i>Interactive Concept Map</h3>
+            </div>
+            <div class="learn-card-body">
+                <p>Explore the relationships between different concepts in LLM fine-tuning. This interactive visualization helps you understand how various techniques and approaches connect to each other.</p>
+
+                <div class="concept-visualization-container">
+                    <div id="concepts-visualization">
+                        <div class="visualization-loading">
+                            <div class="spinner"></div>
+                            <p>Loading concept map...</p>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <p>This interactive visualization shows the relationships between different concepts in LLM fine-tuning.
-                           Click on any concept to learn more about it.</p>
-                        <div id="concepts-visualization" style="position: relative;"></div>
-                        <div class="zoom-controls">
-                            <button id="concepts-zoom-in-btn" data-tooltip="Zoom In"><i class="bi bi-zoom-in"></i></button>
-                            <button id="concepts-zoom-out-btn" data-tooltip="Zoom Out"><i class="bi bi-zoom-out"></i></button>
-                            <button id="concepts-reset-zoom-btn" data-tooltip="Reset View"><i class="bi bi-arrows-fullscreen"></i></button>
+                    <div class="zoom-controls">
+                        <button id="concepts-zoom-in-btn" title="Zoom In" aria-label="Zoom In">
+                            <i class="bi bi-zoom-in"></i>
+                        </button>
+                        <button id="concepts-zoom-out-btn" title="Zoom Out" aria-label="Zoom Out">
+                            <i class="bi bi-zoom-out"></i>
+                        </button>
+                        <button id="concepts-reset-zoom-btn" title="Reset View" aria-label="Reset View">
+                            <i class="bi bi-arrows-fullscreen"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    <small class="text-muted">
+                        <i class="bi bi-info-circle me-1"></i>
+                        Use mouse wheel to zoom, click and drag to move around the visualization
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Concepts Section -->
+        <div class="learn-card">
+            <div class="learn-card-header">
+                <h3><i class="bi bi-lightbulb card-icon"></i>Key Concepts</h3>
+            </div>
+            <div class="learn-card-body">
+                <div id="concepts-list" class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="concept-card">
+                            <h5>Fine-Tuning</h5>
+                            <p>Adapting pre-trained models for specific tasks</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="concept-card">
+                            <h5>LoRA</h5>
+                            <p>Low-Rank Adaptation for efficient fine-tuning</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="concept-card">
+                            <h5>QLoRA</h5>
+                            <p>Quantized LoRA for memory-efficient training</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="row mt-4">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h3>Key Concepts</h3>
-                    </div>
-                    <div class="card-body">
-                        <div id="concepts-list" class="row"></div>
-                    </div>
+        <!-- Quiz Section -->
+        <div class="learn-card">
+            <div class="quiz-section">
+                <h3><i class="bi bi-mortarboard-fill me-2"></i>Test Your Knowledge</h3>
+                <p class="lead">Ready to test your understanding of LLM fine-tuning fundamentals?</p>
+
+                <div class="quiz-info">
+                    <p><i class="bi bi-info-circle-fill me-2"></i><strong>Our comprehensive quiz covers key concepts including:</strong></p>
+                    <ul>
+                        <li>Fine-tuning fundamentals and benefits</li>
+                        <li>Parameter-efficient fine-tuning methods (PEFT)</li>
+                        <li>LoRA implementation details</li>
+                        <li>Instruction fine-tuning</li>
+                        <li>Advanced techniques like RLHF</li>
+                        <li>Model evaluation and deployment strategies</li>
+                    </ul>
                 </div>
-            </div>
-        </div>
 
-        <div class="row mt-4">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        <h3><i class="bi bi-mortarboard-fill me-2"></i> Test Your Knowledge</h3>
-                    </div>
-                    <div class="card-body">
-                        <p class="lead">Ready to test your understanding of LLM fine-tuning fundamentals?</p>
-
-                        <div class="alert alert-info">
-                            <p><i class="bi bi-info-circle-fill me-2"></i> Our comprehensive quiz covers key concepts including:</p>
-                            <ul>
-                                <li>Fine-tuning fundamentals and benefits</li>
-                                <li>Parameter-efficient fine-tuning methods (PEFT)</li>
-                                <li>LoRA implementation details</li>
-                                <li>Instruction fine-tuning</li>
-                                <li>Advanced techniques like RLHF</li>
-                            </ul>
-                        </div>
-
-                        <div class="text-center mt-4">
-                            {% if current_user.is_authenticated %}
-                                <a href="{{ url_for('quiz.module_topic_quiz', module_id='fine-tuning', topic_id='fundamentals') }}" class="btn btn-primary btn-lg">
-                                    <i class="bi bi-pencil-square me-2"></i> Take the Quiz
+                <div class="mt-4">
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('quiz.module_topic_quiz', module_id='fine-tuning', topic_id='fundamentals') }}" class="btn btn-quiz btn-lg">
+                            <i class="bi bi-pencil-square me-2"></i>Take the Quiz
+                        </a>
+                        <p class="mt-3 text-muted">
+                            <i class="bi bi-clock me-1"></i>Estimated time: 15-20 minutes
+                        </p>
+                    {% else %}
+                        <div class="alert alert-warning">
+                            <p><i class="bi bi-exclamation-triangle-fill me-2"></i>You need to be logged in to take quizzes and track your progress.</p>
+                            <div class="d-flex justify-content-center gap-3 mt-3">
+                                <a href="{{ url_for('auth.login') }}" class="btn btn-learn">
+                                    <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
                                 </a>
-                            {% else %}
-                                <div class="alert alert-warning">
-                                    <p><i class="bi bi-exclamation-triangle-fill me-2"></i> You need to be logged in to use this feature.</p>
-                                    <div class="d-flex justify-content-center">
-                                        <a href="{{ url_for('auth.login') }}" class="btn btn-primary me-3">
-                                            <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
-                                        </a>
-                                        <a href="{{ url_for('auth.register') }}" class="btn btn-dark">
-                                            <i class="bi bi-person-plus me-1"></i> Register
-                                        </a>
-                                    </div>
-                                </div>
-                            {% endif %}
+                                <a href="{{ url_for('auth.register') }}" class="btn btn-quiz">
+                                    <i class="bi bi-person-plus me-2"></i>Register
+                                </a>
+                            </div>
                         </div>
-                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
 
-        <div class="row mt-4 mb-5">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header bg-info text-white">
-                        <h3>Hands-on Exercises</h3>
-                    </div>
-                    <div class="card-body">
-                        <p>Follow these hands-on exercises to learn about LLM fine-tuning:</p>
+        <!-- Hands-on Exercises Section -->
+        <div class="learn-card">
+            <div class="learn-card-header">
+                <h3><i class="bi bi-code-square card-icon"></i>Hands-on Exercises</h3>
+            </div>
+            <div class="learn-card-body">
+                <p>Follow these comprehensive hands-on exercises to master LLM fine-tuning from basics to advanced techniques:</p>
 
-                        <div class="list-group">
-                            <a href="/learn#exercise1" class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">Exercise 1: Understanding Pre-trained Models</h5>
-                                    <small>15 minutes</small>
-                                </div>
-                                <p class="mb-1">Learn about different pre-trained models and their architectures. <a href="/guide/understanding-gpt" class="badge bg-primary">GPT Deep Dive</a></p>
-                            </a>
-                            <a href="/learn#exercise2" class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">Exercise 2: Data Preparation for Fine-Tuning</h5>
-                                    <small>20 minutes</small>
-                                </div>
-                                <p class="mb-1">Prepare a dataset for fine-tuning a thesaurus model.</p>
-                            </a>
-                            <a href="/learn#exercise3" class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">Exercise 3: Fine-Tuning with LoRA</h5>
-                                    <small>30 minutes</small>
-                                </div>
-                                <p class="mb-1">Apply LoRA for parameter-efficient fine-tuning. <a href="/guide/lora-implementation" class="badge bg-primary">Comprehensive Guide</a></p>
-                            </a>
-                            <a href="/learn#exercise4" class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">Exercise 4: Evaluating Your Fine-Tuned Model</h5>
-                                    <small>20 minutes</small>
-                                </div>
-                                <p class="mb-1">Learn how to evaluate the performance of your fine-tuned model.</p>
-                            </a>
-                            <a href="/learn#exercise5" class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">Exercise 5: Building a Thesaurus Application</h5>
-                                    <small>25 minutes</small>
-                                </div>
-                                <p class="mb-1">Use your fine-tuned model to build a thesaurus application.</p>
-                            </a>
-                            <a href="/learn#exercise6" class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">Exercise 6: Deploying Your Fine-Tuned Model</h5>
-                                    <small>20 minutes</small>
-                                </div>
-                                <p class="mb-1">Learn different options for deploying your fine-tuned model. <a href="/docker-guide" class="badge bg-info">Docker Guide</a> <a href="/huggingface-guide" class="badge bg-primary">Hugging Face Integration</a></p>
-                            </a>
-                            <a href="/learn#exercise7" class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">Exercise 7: Advanced Fine-Tuning with QLoRA</h5>
-                                    <small>25 minutes</small>
-                                </div>
-                                <p class="mb-1">Learn how to fine-tune larger models with limited resources using QLoRA. <a href="/workshop/qlora-deep-dive" class="badge bg-warning text-dark">Deep Dive Workshop</a> <a href="/qlora-guide" class="badge bg-success">Comprehensive Guide</a></p>
-                            </a>
-                            <a href="/learn#exercise8" class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">Exercise 8: Other Advanced Fine-Tuning Techniques</h5>
-                                    <small>30 minutes</small>
-                                </div>
-                                <p class="mb-1">Explore other parameter-efficient fine-tuning methods like Prefix Tuning, Prompt Tuning, and more. <a href="/guide/instruction-tuning" class="badge bg-success">Instruction Tuning Guide</a> <a href="/guide/finetuning-comparison" class="badge bg-info">Methods Comparison</a></p>
-                            </a>
-                            <a href="/learn#exercise9" class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">Exercise 9: Using pipeline() for Quick Inference</h5>
-                                    <small>15 minutes</small>
-                                </div>
-                                <p class="mb-1">Learn how to use the powerful pipeline() function for fast and easy inference with pre-trained and fine-tuned models. <a href="/guide/pipeline-inference" class="badge bg-primary">Pipeline Guide</a></p>
-                            </a>
-                            <a href="/learn#llm-efficiency" class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">Exercise 10: LLM Integration Efficiency Techniques</h5>
-                                    <small>30 minutes</small>
-                                </div>
-                                <p class="mb-1">Learn how to optimize LLM integration with techniques like response streaming, prompt optimization, and batch processing. <a href="#llm-efficiency" class="badge bg-success">Interactive Demo</a></p>
-                            </a>
-
-                            <a href="/learn#deep-learning" class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">Exercise 11: Deep Learning Fundamentals</h5>
-                                    <small>45 minutes</small>
-                                </div>
-                                <p class="mb-1">Explore the fundamentals of deep learning and learn about popular frameworks like TensorFlow and PyTorch. <a href="/frameworks/comparison" class="badge bg-success">Framework Comparison</a> <a href="/frameworks" class="badge bg-info">Hands-on Exercises</a></p>
-                            </a>
+                <div class="exercise-list">
+                    <a href="/learn#exercise1" class="exercise-item">
+                        <div class="exercise-header">
+                            <h5 class="exercise-title">Exercise 1: Understanding Pre-trained Models</h5>
+                            <span class="exercise-duration">15 minutes</span>
                         </div>
-                    </div>
+                        <p class="exercise-description">Learn about different pre-trained models and their architectures, including GPT, BERT, and T5.</p>
+                        <div class="exercise-badges">
+                            <a href="/guide/understanding-gpt" class="exercise-badge badge-primary">GPT Deep Dive</a>
+                        </div>
+                    </a>
+
+                    <a href="/learn#exercise2" class="exercise-item">
+                        <div class="exercise-header">
+                            <h5 class="exercise-title">Exercise 2: Data Preparation for Fine-Tuning</h5>
+                            <span class="exercise-duration">20 minutes</span>
+                        </div>
+                        <p class="exercise-description">Prepare and format datasets for fine-tuning a thesaurus model using WordNet and custom data sources.</p>
+                    </a>
+
+                    <a href="/learn#exercise3" class="exercise-item">
+                        <div class="exercise-header">
+                            <h5 class="exercise-title">Exercise 3: Fine-Tuning with LoRA</h5>
+                            <span class="exercise-duration">30 minutes</span>
+                        </div>
+                        <p class="exercise-description">Apply LoRA (Low-Rank Adaptation) for parameter-efficient fine-tuning with practical implementation.</p>
+                        <div class="exercise-badges">
+                            <a href="/guide/lora-implementation" class="exercise-badge badge-primary">Comprehensive Guide</a>
+                        </div>
+                    </a>
+
+                    <a href="/learn#exercise4" class="exercise-item">
+                        <div class="exercise-header">
+                            <h5 class="exercise-title">Exercise 4: Evaluating Your Fine-Tuned Model</h5>
+                            <span class="exercise-duration">20 minutes</span>
+                        </div>
+                        <p class="exercise-description">Learn comprehensive evaluation techniques including accuracy, recall, and semantic relevance metrics.</p>
+                    </a>
+
+                    <a href="/learn#exercise5" class="exercise-item">
+                        <div class="exercise-header">
+                            <h5 class="exercise-title">Exercise 5: Building a Thesaurus Application</h5>
+                            <span class="exercise-duration">25 minutes</span>
+                        </div>
+                        <p class="exercise-description">Create a complete thesaurus application using your fine-tuned model with Gradio interface.</p>
+                    </a>
+
+                    <a href="/learn#exercise6" class="exercise-item">
+                        <div class="exercise-header">
+                            <h5 class="exercise-title">Exercise 6: Deploying Your Fine-Tuned Model</h5>
+                            <span class="exercise-duration">20 minutes</span>
+                        </div>
+                        <p class="exercise-description">Explore deployment options including Docker containers, cloud services, and edge deployment.</p>
+                        <div class="exercise-badges">
+                            <a href="/docker-guide" class="exercise-badge badge-info">Docker Guide</a>
+                            <a href="/huggingface-guide" class="exercise-badge badge-primary">Hugging Face Integration</a>
+                        </div>
+                    </a>
+
+                    <a href="/learn#exercise7" class="exercise-item">
+                        <div class="exercise-header">
+                            <h5 class="exercise-title">Exercise 7: Advanced Fine-Tuning with QLoRA</h5>
+                            <span class="exercise-duration">25 minutes</span>
+                        </div>
+                        <p class="exercise-description">Master QLoRA for fine-tuning larger models with limited GPU memory using quantization techniques.</p>
+                        <div class="exercise-badges">
+                            <a href="/workshop/qlora-deep-dive" class="exercise-badge badge-warning">Deep Dive Workshop</a>
+                            <a href="/qlora-guide" class="exercise-badge badge-success">Comprehensive Guide</a>
+                        </div>
+                    </a>
+
+                    <a href="/learn#exercise8" class="exercise-item">
+                        <div class="exercise-header">
+                            <h5 class="exercise-title">Exercise 8: Other Advanced Fine-Tuning Techniques</h5>
+                            <span class="exercise-duration">30 minutes</span>
+                        </div>
+                        <p class="exercise-description">Explore Prefix Tuning, Prompt Tuning, and other parameter-efficient fine-tuning methods.</p>
+                        <div class="exercise-badges">
+                            <a href="/guide/instruction-tuning" class="exercise-badge badge-success">Instruction Tuning Guide</a>
+                            <a href="/guide/finetuning-comparison" class="exercise-badge badge-info">Methods Comparison</a>
+                        </div>
+                    </a>
+
+                    <a href="/learn#exercise9" class="exercise-item">
+                        <div class="exercise-header">
+                            <h5 class="exercise-title">Exercise 9: Using pipeline() for Quick Inference</h5>
+                            <span class="exercise-duration">15 minutes</span>
+                        </div>
+                        <p class="exercise-description">Master the Hugging Face pipeline() function for fast and easy inference with pre-trained and fine-tuned models.</p>
+                        <div class="exercise-badges">
+                            <a href="/guide/pipeline-inference" class="exercise-badge badge-primary">Pipeline Guide</a>
+                        </div>
+                    </a>
+
+                    <a href="/learn#llm-efficiency" class="exercise-item">
+                        <div class="exercise-header">
+                            <h5 class="exercise-title">Exercise 10: LLM Integration Efficiency Techniques</h5>
+                            <span class="exercise-duration">30 minutes</span>
+                        </div>
+                        <p class="exercise-description">Optimize LLM integration with response streaming, prompt optimization, and batch processing techniques.</p>
+                        <div class="exercise-badges">
+                            <a href="#llm-efficiency" class="exercise-badge badge-success">Interactive Demo</a>
+                        </div>
+                    </a>
+
+                    <a href="/learn#deep-learning" class="exercise-item">
+                        <div class="exercise-header">
+                            <h5 class="exercise-title">Exercise 11: Deep Learning Fundamentals</h5>
+                            <span class="exercise-duration">45 minutes</span>
+                        </div>
+                        <p class="exercise-description">Explore deep learning fundamentals and compare popular frameworks like TensorFlow and PyTorch.</p>
+                        <div class="exercise-badges">
+                            <a href="/frameworks/comparison" class="exercise-badge badge-success">Framework Comparison</a>
+                            <a href="/frameworks" class="exercise-badge badge-info">Hands-on Exercises</a>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
 
-        <!-- Exercise sections -->
+    </div> <!-- End learn-container -->
+
+    <!-- Exercise sections -->
         <div id="exercise1" class="row mt-4 mb-5">
             <div class="col-md-12">
                 <div class="card">
@@ -2411,5 +2539,119 @@ trainable_params = <span class="python-builtin">sum</span>(p.numel() <span class
                     '<div class="alert alert-danger">Error loading concepts</div>';
             });
     });
+</script>
+
+<!-- Enhanced Learn Page Scripts -->
+<script src="{{ url_for('static', filename='js/learn-page.js') }}"></script>
+<script src="{{ url_for('static', filename='js/concepts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/code-blocks.js') }}"></script>
+
+<script>
+// Initialize learn page specific features
+document.addEventListener('DOMContentLoaded', function() {
+    // Add smooth hover effects to concept cards
+    document.querySelectorAll('.concept-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const concept = this.querySelector('h5').textContent.toLowerCase();
+            console.log(`Concept card clicked: ${concept}`);
+
+            // Add visual feedback
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 150);
+        });
+    });
+
+    // Add progress indicators for exercises
+    const exerciseItems = document.querySelectorAll('.exercise-item');
+    exerciseItems.forEach((item, index) => {
+        const progressIndicator = document.createElement('div');
+        progressIndicator.className = 'exercise-progress';
+        progressIndicator.style.cssText = `
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(60, 100, 48, 0.1);
+            border: 2px solid rgba(60, 100, 48, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #3c6430;
+            z-index: 10;
+        `;
+        progressIndicator.textContent = index + 1;
+        progressIndicator.setAttribute('aria-label', `Exercise ${index + 1}`);
+
+        item.style.position = 'relative';
+        item.appendChild(progressIndicator);
+    });
+
+    // Add keyboard shortcuts info
+    const shortcutsInfo = document.createElement('div');
+    shortcutsInfo.className = 'keyboard-shortcuts-info';
+    shortcutsInfo.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        background: rgba(60, 100, 48, 0.95);
+        color: white;
+        padding: 12px 16px;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    `;
+    shortcutsInfo.innerHTML = `
+        <div style="font-weight: 600; margin-bottom: 4px;">⌨️ Keyboard Shortcuts:</div>
+        <div style="font-size: 0.8rem;">Tab: Navigate • Enter: Select • Esc: Close</div>
+    `;
+    document.body.appendChild(shortcutsInfo);
+
+    // Show shortcuts on first tab press
+    let shortcutsShown = false;
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Tab' && !shortcutsShown) {
+            shortcutsShown = true;
+            shortcutsInfo.style.opacity = '1';
+            setTimeout(() => {
+                shortcutsInfo.style.opacity = '0';
+            }, 4000);
+        }
+
+        if (e.key === 'Escape') {
+            shortcutsInfo.style.opacity = '0';
+        }
+    });
+
+    // Add scroll progress indicator
+    const progressBar = document.createElement('div');
+    progressBar.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 0%;
+        height: 3px;
+        background: linear-gradient(90deg, #3c6430, #4d7a3e);
+        z-index: 9999;
+        transition: width 0.1s ease;
+    `;
+    document.body.appendChild(progressBar);
+
+    window.addEventListener('scroll', function() {
+        const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+        progressBar.style.width = Math.min(scrollPercent, 100) + '%';
+    });
+
+    console.log('Learn page enhanced features initialized');
+});
 </script>
 {% endblock %}

@@ -1,0 +1,276 @@
+/**
+ * Balanced Brightness Theme CSS
+ * Ensures optimal brightness and contrast for both light and dark modes
+ * Provides coherent visual experience across all components
+ */
+
+/* Enhanced Dark Mode Styles */
+body:not(.light-theme) {
+    /* Improved text contrast for dark mode */
+    --text-primary: #f8fffe;
+    --text-secondary: #e0f2f0;
+    --text-muted: #b8d4d1;
+}
+
+/* Dark mode component enhancements */
+body:not(.light-theme) .card {
+    background-color: var(--dark-medium-bg);
+    border: 1px solid var(--dark-border-color);
+    box-shadow: var(--dark-card-shadow);
+}
+
+body:not(.light-theme) .card-header {
+    background-color: rgba(36, 53, 48, 0.8);
+    border-bottom: 1px solid var(--dark-border-color);
+    color: var(--dark-text-primary);
+    font-weight: 600;
+}
+
+body:not(.light-theme) .navbar-dark .navbar-nav .nav-link {
+    color: var(--dark-text-secondary);
+    font-weight: 500;
+}
+
+body:not(.light-theme) .navbar-dark .navbar-nav .nav-link:hover,
+body:not(.light-theme) .navbar-dark .navbar-nav .nav-link.active {
+    color: var(--dark-text-primary);
+    font-weight: 600;
+}
+
+body:not(.light-theme) .dropdown-menu {
+    background-color: var(--dark-medium-bg);
+    border: 1px solid var(--dark-border-color);
+    box-shadow: var(--dark-card-shadow);
+}
+
+body:not(.light-theme) .dropdown-item {
+    color: var(--dark-text-secondary);
+    font-weight: 500;
+}
+
+body:not(.light-theme) .dropdown-item:hover {
+    background-color: rgba(91, 197, 167, 0.1);
+    color: var(--dark-text-primary);
+    font-weight: 600;
+}
+
+body:not(.light-theme) pre,
+body:not(.light-theme) code {
+    background-color: rgba(36, 53, 48, 0.9);
+    color: var(--dark-text-primary);
+    border: 1px solid var(--dark-border-color);
+}
+
+/* Enhanced Light Mode Styles */
+body.light-theme {
+    /* Ensure proper text contrast */
+    color: var(--light-text-primary);
+}
+
+/* Light mode text enhancements */
+body.light-theme h1,
+body.light-theme h2,
+body.light-theme h3,
+body.light-theme h4,
+body.light-theme h5,
+body.light-theme h6 {
+    color: var(--light-text-primary);
+    font-weight: 700;
+}
+
+body.light-theme p,
+body.light-theme .text-secondary {
+    color: var(--light-text-secondary);
+}
+
+body.light-theme .text-muted {
+    color: #64748b;
+}
+
+/* Button contrast improvements */
+body.light-theme .btn-primary {
+    background-color: var(--light-primary-color);
+    border-color: var(--light-primary-color);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+body.light-theme .btn-primary:hover {
+    background-color: #236b56;
+    border-color: #236b56;
+}
+
+body:not(.light-theme) .btn-primary {
+    background-color: var(--dark-primary-color);
+    border-color: var(--dark-primary-color);
+    color: #0a0f0d;
+    font-weight: 600;
+}
+
+body:not(.light-theme) .btn-primary:hover {
+    background-color: #6dd1b8;
+    border-color: #6dd1b8;
+}
+
+/* Form control enhancements */
+body.light-theme .form-control,
+body.light-theme .form-select {
+    background-color: var(--light-medium-bg);
+    border: 2px solid var(--light-border-color);
+    color: var(--light-text-primary);
+}
+
+body.light-theme .form-control:focus,
+body.light-theme .form-select:focus {
+    border-color: var(--light-primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(45, 149, 116, 0.15);
+}
+
+body:not(.light-theme) .form-control,
+body:not(.light-theme) .form-select {
+    background-color: var(--dark-medium-bg);
+    border: 2px solid var(--dark-border-color);
+    color: var(--dark-text-primary);
+}
+
+body:not(.light-theme) .form-control:focus,
+body:not(.light-theme) .form-select:focus {
+    border-color: var(--dark-primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(91, 197, 167, 0.15);
+}
+
+/* Table enhancements */
+body.light-theme .table {
+    color: var(--light-text-primary);
+}
+
+body.light-theme .table th {
+    background-color: rgba(240, 250, 248, 0.8);
+    color: var(--light-text-primary);
+    font-weight: 700;
+    border-bottom: 2px solid var(--light-border-color);
+}
+
+body:not(.light-theme) .table {
+    color: var(--dark-text-primary);
+}
+
+body:not(.light-theme) .table th {
+    background-color: rgba(36, 53, 48, 0.8);
+    color: var(--dark-text-primary);
+    font-weight: 700;
+    border-bottom: 2px solid var(--dark-border-color);
+}
+
+/* Alert enhancements */
+body.light-theme .alert {
+    border-width: 2px;
+    font-weight: 500;
+}
+
+body:not(.light-theme) .alert {
+    border-width: 2px;
+    font-weight: 500;
+}
+
+/* Badge improvements */
+body.light-theme .badge {
+    font-weight: 600;
+}
+
+body:not(.light-theme) .badge {
+    font-weight: 600;
+}
+
+/* Link enhancements */
+body.light-theme a {
+    color: var(--light-primary-color);
+    font-weight: 500;
+}
+
+body.light-theme a:hover {
+    color: #236b56;
+    text-decoration: underline;
+}
+
+body:not(.light-theme) a {
+    color: var(--dark-primary-color);
+    font-weight: 500;
+}
+
+body:not(.light-theme) a:hover {
+    color: #6dd1b8;
+    text-decoration: underline;
+}
+
+/* Breadcrumb enhancements */
+body.light-theme .breadcrumb {
+    background-color: rgba(240, 250, 248, 0.6);
+}
+
+body:not(.light-theme) .breadcrumb {
+    background-color: rgba(36, 53, 48, 0.6);
+}
+
+/* Pagination enhancements */
+body.light-theme .page-link {
+    color: var(--light-primary-color);
+    background-color: var(--light-medium-bg);
+    border-color: var(--light-border-color);
+}
+
+body:not(.light-theme) .page-link {
+    color: var(--dark-primary-color);
+    background-color: var(--dark-medium-bg);
+    border-color: var(--dark-border-color);
+}
+
+/* Progress bar enhancements */
+body.light-theme .progress {
+    background-color: rgba(240, 250, 248, 0.8);
+}
+
+body:not(.light-theme) .progress {
+    background-color: rgba(36, 53, 48, 0.8);
+}
+
+/* Tooltip enhancements */
+body.light-theme .tooltip .tooltip-inner {
+    background-color: var(--light-text-primary);
+    color: var(--light-medium-bg);
+    font-weight: 500;
+}
+
+body:not(.light-theme) .tooltip .tooltip-inner {
+    background-color: var(--dark-text-primary);
+    color: var(--dark-bg);
+    font-weight: 500;
+}
+
+/* Ensure smooth transitions */
+* {
+    transition: background-color 0.3s ease, 
+                color 0.3s ease, 
+                border-color 0.3s ease, 
+                box-shadow 0.3s ease;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    body.light-theme {
+        --light-text-primary: #000000;
+        --light-border-color: rgba(0, 0, 0, 0.3);
+    }
+    
+    body:not(.light-theme) {
+        --dark-text-primary: #ffffff;
+        --dark-border-color: rgba(255, 255, 255, 0.3);
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+    }
+}

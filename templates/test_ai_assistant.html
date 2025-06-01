@@ -1,0 +1,303 @@
+{% extends base_template %}
+
+{% block title %}AI Assistant Test{% endblock %}
+
+{% block extra_css %}
+<style>
+    .test-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .test-section {
+        background: var(--bg-secondary);
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        border: 1px solid var(--border-color);
+    }
+    .test-button {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 5px;
+        transition: background 0.3s ease;
+    }
+    .test-button:hover {
+        background: var(--primary-hover);
+    }
+    .result {
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        padding: 10px;
+        margin: 10px 0;
+        white-space: pre-wrap;
+        font-family: monospace;
+        font-size: 12px;
+        color: var(--text-primary);
+    }
+    .success {
+        border-color: #28a745;
+        background: rgba(40, 167, 69, 0.1);
+    }
+    .error {
+        border-color: #dc3545;
+        background: rgba(220, 53, 69, 0.1);
+    }
+    #ai-button-status {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: var(--primary-color);
+        color: white;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 12px;
+        z-index: 1000;
+    }
+    .test-input {
+        width: 300px;
+        padding: 8px;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <div id="ai-button-status">Checking AI Button...</div>
+
+    <h1>🤖 AI Assistant Functionality Test</h1>
+
+    <div class="test-section">
+        <h2>1. AI Button Visibility Test</h2>
+        <p>Check if the AI assistant button is visible on the page.</p>
+        <button class="test-button" onclick="testButtonVisibility()">Test Button Visibility</button>
+        <div id="button-test-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. API Connection Test</h2>
+        <p>Test connection to AI assistant API endpoints.</p>
+        <button class="test-button" onclick="testAPIStatus()">Test API Status</button>
+        <button class="test-button" onclick="testAPISuggestions()">Test Suggestions</button>
+        <button class="test-button" onclick="testAPIChat()">Test Chat</button>
+        <div id="api-test-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. AI Assistant Instance Test</h2>
+        <p>Check if the AI assistant JavaScript instance is properly loaded.</p>
+        <button class="test-button" onclick="testAIInstance()">Test AI Instance</button>
+        <div id="instance-test-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Interactive Chat Test</h2>
+        <p>Test the AI assistant chat functionality with sample messages.</p>
+        <input type="text" id="test-message" placeholder="Enter test message..." class="test-input">
+        <button class="test-button" onclick="testChatMessage()">Send Test Message</button>
+        <div id="chat-test-result" class="result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>5. Full Integration Test</h2>
+        <p>Test complete AI assistant workflow from button click to response.</p>
+        <button class="test-button" onclick="testFullWorkflow()">Test Full Workflow</button>
+        <div id="workflow-test-result" class="result"></div>
+    </div>
+
+    <script>
+        // Test functions
+        function testButtonVisibility() {
+            const result = document.getElementById('button-test-result');
+
+            // Check for AI buttons
+            const buttons = [
+                document.getElementById('simple-ai-button'),
+                document.getElementById('ai-assistant-button'),
+                document.getElementById('homepage-ai-button')
+            ];
+
+            let found = false;
+            let details = 'Button search results:\n';
+
+            buttons.forEach((btn, index) => {
+                const names = ['simple-ai-button', 'ai-assistant-button', 'homepage-ai-button'];
+                if (btn) {
+                    found = true;
+                    const rect = btn.getBoundingClientRect();
+                    details += `✅ ${names[index]}: Found (${rect.width}x${rect.height} at ${rect.right}, ${rect.bottom})\n`;
+                } else {
+                    details += `❌ ${names[index]}: Not found\n`;
+                }
+            });
+
+            result.textContent = details;
+            result.className = found ? 'result success' : 'result error';
+
+            updateStatus(found ? 'AI Button: ✅ Visible' : 'AI Button: ❌ Missing');
+        }
+
+        async function testAPIStatus() {
+            const result = document.getElementById('api-test-result');
+            try {
+                const response = await fetch('/api/ai/status');
+                const data = await response.json();
+                result.textContent = `✅ API Status: ${JSON.stringify(data, null, 2)}`;
+                result.className = 'result success';
+            } catch (error) {
+                result.textContent = `❌ API Status Error: ${error.message}`;
+                result.className = 'result error';
+            }
+        }
+
+        async function testAPISuggestions() {
+            const result = document.getElementById('api-test-result');
+            try {
+                const response = await fetch('/api/ai/suggestions?page=home');
+                const data = await response.json();
+                result.textContent = `✅ Suggestions: ${JSON.stringify(data, null, 2)}`;
+                result.className = 'result success';
+            } catch (error) {
+                result.textContent = `❌ Suggestions Error: ${error.message}`;
+                result.className = 'result error';
+            }
+        }
+
+        async function testAPIChat() {
+            const result = document.getElementById('api-test-result');
+            try {
+                const response = await fetch('/api/ai/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: 'Test message' })
+                });
+                const data = await response.json();
+                result.textContent = `✅ Chat Response: ${JSON.stringify(data, null, 2)}`;
+                result.className = 'result success';
+            } catch (error) {
+                result.textContent = `❌ Chat Error: ${error.message}`;
+                result.className = 'result error';
+            }
+        }
+
+        function testAIInstance() {
+            const result = document.getElementById('instance-test-result');
+
+            let details = 'AI Instance Check:\n';
+            details += `window.aiAssistant exists: ${!!window.aiAssistant}\n`;
+
+            if (window.aiAssistant) {
+                details += `Type: ${typeof window.aiAssistant}\n`;
+                details += `Constructor: ${window.aiAssistant.constructor.name}\n`;
+                details += `Methods available:\n`;
+
+                const methods = ['toggleAssistant', 'sendMessage', 'addMessage'];
+                methods.forEach(method => {
+                    details += `  - ${method}: ${typeof window.aiAssistant[method]}\n`;
+                });
+            }
+
+            result.textContent = details;
+            result.className = window.aiAssistant ? 'result success' : 'result error';
+        }
+
+        async function testChatMessage() {
+            const message = document.getElementById('test-message').value || 'What is LoRA?';
+            const result = document.getElementById('chat-test-result');
+
+            try {
+                if (window.aiAssistant && window.aiAssistant.sendToAIAPI) {
+                    result.textContent = 'Sending message via AI Assistant instance...\n';
+                    await window.aiAssistant.sendToAIAPI(message);
+                    result.textContent += '✅ Message sent successfully!';
+                    result.className = 'result success';
+                } else {
+                    // Fallback to direct API call
+                    const response = await fetch('/api/ai/chat', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ message: message })
+                    });
+                    const data = await response.json();
+                    result.textContent = `✅ Direct API Response:\n${JSON.stringify(data, null, 2)}`;
+                    result.className = 'result success';
+                }
+            } catch (error) {
+                result.textContent = `❌ Chat Test Error: ${error.message}`;
+                result.className = 'result error';
+            }
+        }
+
+        async function testFullWorkflow() {
+            const result = document.getElementById('workflow-test-result');
+            let log = 'Full Workflow Test:\n\n';
+
+            try {
+                // Step 1: Check button
+                const button = document.getElementById('simple-ai-button') ||
+                              document.getElementById('ai-assistant-button') ||
+                              document.getElementById('homepage-ai-button');
+
+                if (!button) {
+                    throw new Error('No AI button found');
+                }
+                log += '✅ Step 1: AI button found\n';
+
+                // Step 2: Check AI instance
+                if (!window.aiAssistant) {
+                    throw new Error('AI assistant instance not loaded');
+                }
+                log += '✅ Step 2: AI instance loaded\n';
+
+                // Step 3: Test API
+                const apiResponse = await fetch('/api/ai/status');
+                if (!apiResponse.ok) {
+                    throw new Error('API not responding');
+                }
+                log += '✅ Step 3: API responding\n';
+
+                // Step 4: Test chat
+                const chatResponse = await fetch('/api/ai/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: 'Hello AI!' })
+                });
+
+                if (!chatResponse.ok) {
+                    throw new Error('Chat API not working');
+                }
+
+                const chatData = await chatResponse.json();
+                log += '✅ Step 4: Chat working\n';
+                log += `Response: ${chatData.response.substring(0, 100)}...\n`;
+
+                log += '\n🎉 All tests passed! AI Assistant is fully functional!';
+                result.className = 'result success';
+
+            } catch (error) {
+                log += `\n❌ Test failed: ${error.message}`;
+                result.className = 'result error';
+            }
+
+            result.textContent = log;
+        }
+
+        function updateStatus(message) {
+            document.getElementById('ai-button-status').textContent = message;
+        }
+
+        // Auto-run button visibility test on load
+        window.addEventListener('load', () => {
+            setTimeout(testButtonVisibility, 1000);
+        });
+    </script>
+{% endblock %}

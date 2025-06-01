@@ -17,6 +17,14 @@ class AIAssistant {
         this.isListening = false;
         this.lastInteraction = Date.now();
         this.inactivityTimeout = 300000; // 5 minutes
+
+        // Collaboration features
+        this.collaborationEnabled = false;
+        this.collaborators = new Map();
+        this.sharedDocuments = new Map();
+        this.roomId = null;
+        this.socket = null;
+        this.isConnected = false;
         this.suggestedQuestions = [
             "What is this website about?",
             "How do I use the Visual Thesaurus?",
@@ -26,6 +34,10 @@ class AIAssistant {
             "How do I use the voice features?",
             "What is the difference between LoRA and QLoRA?",
             "Show me a complete LoRA implementation example",
+            "Start a collaboration session",
+            "Share my current workspace",
+            "Create a new document",
+            "Connect with other users",
             "How do I optimize memory usage for fine-tuning?"
         ];
         this.contextualSuggestions = {
@@ -236,10 +248,93 @@ class AIAssistant {
             chatHeader.appendChild(headerTitle);
             chatHeader.appendChild(closeButton);
 
+            // Create tabs for different features
+            const tabsContainer = document.createElement('div');
+            tabsContainer.className = 'ai-assistant-tabs';
+            tabsContainer.style.display = 'flex';
+            tabsContainer.style.borderBottom = '1px solid rgba(255, 255, 255, 0.1)';
+            tabsContainer.style.background = 'rgba(20, 20, 20, 0.8)';
+
+            const tabs = [
+                { id: 'chat', label: 'Chat', icon: 'bi-chat-dots' },
+                { id: 'workspace', label: 'Workspace', icon: 'bi-folder' },
+                { id: 'users', label: 'Users', icon: 'bi-people' },
+                { id: 'share', label: 'Share', icon: 'bi-share' }
+            ];
+
+            tabs.forEach((tab, index) => {
+                const tabButton = document.createElement('button');
+                tabButton.className = `ai-tab-btn ${index === 0 ? 'active' : ''}`;
+                tabButton.dataset.tab = tab.id;
+                tabButton.innerHTML = `<i class="${tab.icon}"></i> ${tab.label}`;
+                tabButton.style.flex = '1';
+                tabButton.style.padding = '10px 5px';
+                tabButton.style.background = 'none';
+                tabButton.style.border = 'none';
+                tabButton.style.color = index === 0 ? '#4287f5' : '#b8e0ff';
+                tabButton.style.fontSize = '0.85rem';
+                tabButton.style.cursor = 'pointer';
+                tabButton.style.transition = 'all 0.2s ease';
+                tabButton.style.borderBottom = index === 0 ? '2px solid #4287f5' : '2px solid transparent';
+
+                tabButton.addEventListener('click', () => this.switchTab(tab.id));
+                tabsContainer.appendChild(tabButton);
+            });
+
+            // Create tab content container
+            const tabContentContainer = document.createElement('div');
+            tabContentContainer.className = 'ai-tab-content';
+            tabContentContainer.style.flex = '1';
+            tabContentContainer.style.overflow = 'hidden';
+            tabContentContainer.style.position = 'relative';
+
+            // Create chat tab content
+            const chatTabContent = document.createElement('div');
+            chatTabContent.className = 'ai-tab-pane active';
+            chatTabContent.dataset.tab = 'chat';
+            chatTabContent.style.height = '100%';
+            chatTabContent.style.display = 'flex';
+            chatTabContent.style.flexDirection = 'column';
+
             // Create chat messages container
             const messagesContainer = document.createElement('div');
             messagesContainer.className = 'ai-assistant-messages';
             // Styles are now in CSS file
+
+            // Create suggestions area for chat
+            const suggestionsArea = document.createElement('div');
+            suggestionsArea.className = 'ai-assistant-suggestions';
+            // Styles are now in CSS file
+
+            // Add suggested questions
+            this.suggestedQuestions.forEach(question => {
+                const suggestionButton = document.createElement('button');
+                suggestionButton.className = 'ai-assistant-suggestion';
+                suggestionButton.textContent = question;
+                suggestionButton.style.background = 'rgba(66, 135, 245, 0.1)';
+                suggestionButton.style.border = '1px solid rgba(66, 135, 245, 0.3)';
+                suggestionButton.style.borderRadius = '15px';
+                suggestionButton.style.padding = '5px 10px';
+                suggestionButton.style.fontSize = '0.85rem';
+                suggestionButton.style.color = '#b8e0ff';
+                suggestionButton.style.cursor = 'pointer';
+                suggestionButton.style.transition = 'all 0.2s ease';
+
+                suggestionButton.addEventListener('mouseover', () => {
+                    suggestionButton.style.background = 'rgba(66, 135, 245, 0.2)';
+                });
+
+                suggestionButton.addEventListener('mouseout', () => {
+                    suggestionButton.style.background = 'rgba(66, 135, 245, 0.1)';
+                });
+
+                suggestionButton.addEventListener('click', () => {
+                    this.textInput.value = question;
+                    this.sendMessage(question);
+                });
+
+                suggestionsArea.appendChild(suggestionButton);
+            });
 
             // Create input area
             const inputArea = document.createElement('div');
@@ -297,46 +392,30 @@ class AIAssistant {
             // Store reference to voice button
             this.voiceButton = voiceButton;
 
-            // Create suggestions area
-            const suggestionsArea = document.createElement('div');
-            suggestionsArea.className = 'ai-assistant-suggestions';
-            // Styles are now in CSS file
+            // Assemble chat tab
+            chatTabContent.appendChild(messagesContainer);
+            chatTabContent.appendChild(suggestionsArea);
+            chatTabContent.appendChild(inputArea);
 
-            // Add suggested questions
-            this.suggestedQuestions.forEach(question => {
-                const suggestionButton = document.createElement('button');
-                suggestionButton.className = 'ai-assistant-suggestion';
-                suggestionButton.textContent = question;
-                suggestionButton.style.background = 'rgba(66, 135, 245, 0.1)';
-                suggestionButton.style.border = '1px solid rgba(66, 135, 245, 0.3)';
-                suggestionButton.style.borderRadius = '15px';
-                suggestionButton.style.padding = '5px 10px';
-                suggestionButton.style.fontSize = '0.85rem';
-                suggestionButton.style.color = '#b8e0ff';
-                suggestionButton.style.cursor = 'pointer';
-                suggestionButton.style.transition = 'all 0.2s ease';
+            // Create workspace tab content
+            const workspaceTabContent = this.createWorkspaceTab();
 
-                suggestionButton.addEventListener('mouseover', () => {
-                    suggestionButton.style.background = 'rgba(66, 135, 245, 0.2)';
-                });
+            // Create users tab content
+            const usersTabContent = this.createUsersTab();
 
-                suggestionButton.addEventListener('mouseout', () => {
-                    suggestionButton.style.background = 'rgba(66, 135, 245, 0.1)';
-                });
+            // Create share tab content
+            const shareTabContent = this.createShareTab();
 
-                suggestionButton.addEventListener('click', () => {
-                    textInput.value = question;
-                    this.sendMessage(question);
-                });
-
-                suggestionsArea.appendChild(suggestionButton);
-            });
+            // Add all tab contents to container
+            tabContentContainer.appendChild(chatTabContent);
+            tabContentContainer.appendChild(workspaceTabContent);
+            tabContentContainer.appendChild(usersTabContent);
+            tabContentContainer.appendChild(shareTabContent);
 
             // Assemble chat window
             chatWindow.appendChild(chatHeader);
-            chatWindow.appendChild(messagesContainer);
-            chatWindow.appendChild(suggestionsArea);
-            chatWindow.appendChild(inputArea);
+            chatWindow.appendChild(tabsContainer);
+            chatWindow.appendChild(tabContentContainer);
 
             // Add to container
             this.container.appendChild(chatWindow);
@@ -352,10 +431,158 @@ class AIAssistant {
             this.textInput = textInput;
             this.inputForm = inputForm;
             this.suggestionsArea = suggestionsArea;
+            this.tabsContainer = tabsContainer;
+            this.tabContentContainer = tabContentContainer;
 
             // Add welcome message
             this.addMessage('assistant', 'Hello! I\'m your AI assistant for LLM fine-tuning. How can I help you today?');
         }
+    }
+
+    /**
+     * Create workspace tab content
+     */
+    createWorkspaceTab() {
+        const workspaceTab = document.createElement('div');
+        workspaceTab.className = 'ai-tab-pane';
+        workspaceTab.dataset.tab = 'workspace';
+        workspaceTab.style.height = '100%';
+        workspaceTab.style.padding = '15px';
+        workspaceTab.style.display = 'none';
+        workspaceTab.style.flexDirection = 'column';
+        workspaceTab.style.gap = '10px';
+
+        workspaceTab.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                <div class="status-indicator ${this.isConnected ? 'online' : 'offline'}" style="width: 8px; height: 8px; border-radius: 50%; background: ${this.isConnected ? '#28a745' : '#dc3545'};"></div>
+                <span style="color: #b8e0ff; font-size: 0.9rem;">${this.isConnected ? 'Connected' : 'Disconnected'}</span>
+            </div>
+            <div style="background: rgba(40, 40, 40, 0.8); border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                <h6 style="color: #4287f5; margin-bottom: 10px;"><i class="bi bi-folder"></i> Shared Documents</h6>
+                <div id="shared-documents-list" style="max-height: 150px; overflow-y: auto;">
+                    <div style="color: #888; text-align: center; padding: 20px;">No shared documents yet</div>
+                </div>
+                <button class="btn btn-sm btn-primary mt-2" onclick="aiAssistant.createNewDocument()" style="width: 100%;">
+                    <i class="bi bi-plus"></i> New Document
+                </button>
+            </div>
+            <div style="background: rgba(40, 40, 40, 0.8); border-radius: 8px; padding: 15px;">
+                <h6 style="color: #4287f5; margin-bottom: 10px;"><i class="bi bi-clock-history"></i> Recent Activity</h6>
+                <div id="recent-activity-list" style="max-height: 120px; overflow-y: auto;">
+                    <div style="color: #888; text-align: center; padding: 20px;">No recent activity</div>
+                </div>
+            </div>
+        `;
+
+        return workspaceTab;
+    }
+
+    /**
+     * Create users tab content
+     */
+    createUsersTab() {
+        const usersTab = document.createElement('div');
+        usersTab.className = 'ai-tab-pane';
+        usersTab.dataset.tab = 'users';
+        usersTab.style.height = '100%';
+        usersTab.style.padding = '15px';
+        usersTab.style.display = 'none';
+        usersTab.style.flexDirection = 'column';
+        usersTab.style.gap = '10px';
+
+        usersTab.innerHTML = `
+            <div style="background: rgba(40, 40, 40, 0.8); border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                <h6 style="color: #4287f5; margin-bottom: 10px;"><i class="bi bi-people"></i> Active Users</h6>
+                <div id="active-users-list" style="max-height: 200px; overflow-y: auto;">
+                    <div style="color: #888; text-align: center; padding: 20px;">No other users online</div>
+                </div>
+            </div>
+            <div style="background: rgba(40, 40, 40, 0.8); border-radius: 8px; padding: 15px;">
+                <h6 style="color: #4287f5; margin-bottom: 10px;"><i class="bi bi-chat"></i> Group Chat</h6>
+                <div id="group-chat-messages" style="height: 150px; overflow-y: auto; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 5px; padding: 10px; margin-bottom: 10px; background: rgba(20, 20, 20, 0.5);">
+                    <div style="color: #888; text-align: center; padding: 20px;">Start a conversation...</div>
+                </div>
+                <div style="display: flex; gap: 5px;">
+                    <input type="text" id="group-chat-input" placeholder="Type a message..." style="flex: 1; padding: 8px; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 5px; background: rgba(40, 40, 40, 0.8); color: #fff;">
+                    <button onclick="aiAssistant.sendGroupMessage()" style="padding: 8px 12px; background: #4287f5; border: none; border-radius: 5px; color: white; cursor: pointer;">
+                        <i class="bi bi-send"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        return usersTab;
+    }
+
+    /**
+     * Create share tab content
+     */
+    createShareTab() {
+        const shareTab = document.createElement('div');
+        shareTab.className = 'ai-tab-pane';
+        shareTab.dataset.tab = 'share';
+        shareTab.style.height = '100%';
+        shareTab.style.padding = '15px';
+        shareTab.style.display = 'none';
+        shareTab.style.flexDirection = 'column';
+        shareTab.style.gap = '10px';
+
+        shareTab.innerHTML = `
+            <div style="background: rgba(40, 40, 40, 0.8); border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                <h6 style="color: #4287f5; margin-bottom: 10px;"><i class="bi bi-share"></i> Share Current Page</h6>
+                <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                    <input type="text" id="share-room-link" readonly value="${window.location.href}" style="flex: 1; padding: 8px; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 5px; background: rgba(20, 20, 20, 0.5); color: #b8e0ff; font-size: 0.85rem;">
+                    <button onclick="aiAssistant.copyShareLink()" style="padding: 8px 12px; background: #28a745; border: none; border-radius: 5px; color: white; cursor: pointer;">
+                        <i class="bi bi-copy"></i>
+                    </button>
+                </div>
+                <button onclick="aiAssistant.generateShareLink()" style="width: 100%; padding: 10px; background: #4287f5; border: none; border-radius: 5px; color: white; cursor: pointer;">
+                    <i class="bi bi-link-45deg"></i> Generate New Share Link
+                </button>
+            </div>
+            <div style="background: rgba(40, 40, 40, 0.8); border-radius: 8px; padding: 15px; margin-bottom: 15px;">
+                <h6 style="color: #4287f5; margin-bottom: 10px;"><i class="bi bi-download"></i> Export Options</h6>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <button onclick="aiAssistant.exportChat()" style="padding: 8px; background: #6f42c1; border: none; border-radius: 5px; color: white; cursor: pointer; font-size: 0.85rem;">
+                        <i class="bi bi-chat-square-text"></i> Export Chat
+                    </button>
+                    <button onclick="aiAssistant.exportProgress()" style="padding: 8px; background: #fd7e14; border: none; border-radius: 5px; color: white; cursor: pointer; font-size: 0.85rem;">
+                        <i class="bi bi-graph-up"></i> Export Progress
+                    </button>
+                </div>
+            </div>
+            <div style="background: rgba(40, 40, 40, 0.8); border-radius: 8px; padding: 15px;">
+                <h6 style="color: #4287f5; margin-bottom: 10px;"><i class="bi bi-people-fill"></i> Collaboration</h6>
+                <button onclick="aiAssistant.startCollaboration()" style="width: 100%; padding: 10px; background: #20c997; border: none; border-radius: 5px; color: white; cursor: pointer; margin-bottom: 10px;">
+                    <i class="bi bi-play-circle"></i> Start Collaboration Session
+                </button>
+                <button onclick="aiAssistant.inviteUsers()" style="width: 100%; padding: 10px; background: #17a2b8; border: none; border-radius: 5px; color: white; cursor: pointer;">
+                    <i class="bi bi-person-plus"></i> Invite Users
+                </button>
+            </div>
+        `;
+
+        return shareTab;
+    }
+
+    /**
+     * Switch between tabs
+     */
+    switchTab(tabId) {
+        // Update tab buttons
+        this.tabsContainer.querySelectorAll('.ai-tab-btn').forEach(btn => {
+            const isActive = btn.dataset.tab === tabId;
+            btn.classList.toggle('active', isActive);
+            btn.style.color = isActive ? '#4287f5' : '#b8e0ff';
+            btn.style.borderBottom = isActive ? '2px solid #4287f5' : '2px solid transparent';
+        });
+
+        // Update tab content
+        this.tabContentContainer.querySelectorAll('.ai-tab-pane').forEach(pane => {
+            const isActive = pane.dataset.tab === tabId;
+            pane.style.display = isActive ? 'flex' : 'none';
+            pane.classList.toggle('active', isActive);
+        });
     }
 
     /**
@@ -1203,6 +1430,143 @@ class AIAssistant {
                 this.suggestionsArea.appendChild(suggestionButton);
             });
         }
+    }
+
+    /**
+     * Collaboration methods
+     */
+    createNewDocument() {
+        const docName = prompt('Enter document name:');
+        if (docName) {
+            const docId = 'doc_' + Date.now();
+            this.sharedDocuments.set(docId, {
+                name: docName,
+                content: '',
+                created: new Date(),
+                collaborators: [this.getCurrentUserId()]
+            });
+            this.updateSharedDocumentsList();
+            this.addMessage('assistant', `Created new document: "${docName}". You can now share this with other users.`);
+        }
+    }
+
+    sendGroupMessage() {
+        const input = document.getElementById('group-chat-input');
+        const message = input.value.trim();
+        if (message) {
+            this.addGroupChatMessage('You', message);
+            input.value = '';
+            // In a real implementation, this would send to other users
+        }
+    }
+
+    addGroupChatMessage(sender, message) {
+        const chatContainer = document.getElementById('group-chat-messages');
+        const messageElement = document.createElement('div');
+        messageElement.style.marginBottom = '8px';
+        messageElement.style.padding = '5px 8px';
+        messageElement.style.borderRadius = '5px';
+        messageElement.style.background = sender === 'You' ? 'rgba(66, 135, 245, 0.2)' : 'rgba(40, 40, 40, 0.8)';
+        messageElement.innerHTML = `<strong style="color: #4287f5;">${sender}:</strong> <span style="color: #e0e0e0;">${message}</span>`;
+        chatContainer.appendChild(messageElement);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    copyShareLink() {
+        const linkInput = document.getElementById('share-room-link');
+        linkInput.select();
+        document.execCommand('copy');
+        this.addMessage('assistant', 'Share link copied to clipboard!');
+    }
+
+    generateShareLink() {
+        const roomId = 'room_' + Math.random().toString(36).substr(2, 9);
+        const shareLink = `${window.location.origin}${window.location.pathname}?room=${roomId}`;
+        document.getElementById('share-room-link').value = shareLink;
+        this.addMessage('assistant', `Generated new share link: ${shareLink}`);
+    }
+
+    exportChat() {
+        const chatData = this.messages.map(msg => `${msg.role}: ${msg.content}`).join('\n\n');
+        const blob = new Blob([chatData], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'ai_chat_export.txt';
+        a.click();
+        URL.revokeObjectURL(url);
+        this.addMessage('assistant', 'Chat exported successfully!');
+    }
+
+    exportProgress() {
+        const progressData = {
+            messages: this.messages.length,
+            lastActivity: new Date(),
+            currentPage: window.location.pathname,
+            collaborators: Array.from(this.collaborators.keys())
+        };
+        const blob = new Blob([JSON.stringify(progressData, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'learning_progress.json';
+        a.click();
+        URL.revokeObjectURL(url);
+        this.addMessage('assistant', 'Progress exported successfully!');
+    }
+
+    startCollaboration() {
+        this.collaborationEnabled = true;
+        this.isConnected = true;
+        this.updateConnectionStatus();
+        this.addMessage('assistant', 'Collaboration session started! You can now invite users and share documents.');
+    }
+
+    inviteUsers() {
+        const email = prompt('Enter email address to invite:');
+        if (email) {
+            // In a real implementation, this would send an invitation
+            this.addMessage('assistant', `Invitation sent to ${email}. They will receive a link to join your collaboration session.`);
+        }
+    }
+
+    updateConnectionStatus() {
+        const statusIndicators = document.querySelectorAll('.status-indicator');
+        statusIndicators.forEach(indicator => {
+            indicator.style.background = this.isConnected ? '#28a745' : '#dc3545';
+        });
+
+        const statusTexts = document.querySelectorAll('.status-text');
+        statusTexts.forEach(text => {
+            text.textContent = this.isConnected ? 'Connected' : 'Disconnected';
+        });
+    }
+
+    updateSharedDocumentsList() {
+        const docsList = document.getElementById('shared-documents-list');
+        if (docsList && this.sharedDocuments.size > 0) {
+            docsList.innerHTML = '';
+            this.sharedDocuments.forEach((doc, id) => {
+                const docElement = document.createElement('div');
+                docElement.style.padding = '8px';
+                docElement.style.marginBottom = '5px';
+                docElement.style.background = 'rgba(66, 135, 245, 0.1)';
+                docElement.style.borderRadius = '5px';
+                docElement.style.cursor = 'pointer';
+                docElement.innerHTML = `
+                    <div style="color: #4287f5; font-weight: bold;">${doc.name}</div>
+                    <div style="color: #888; font-size: 0.8rem;">Created: ${doc.created.toLocaleDateString()}</div>
+                `;
+                docElement.addEventListener('click', () => {
+                    this.addMessage('assistant', `Opening document: ${doc.name}`);
+                });
+                docsList.appendChild(docElement);
+            });
+        }
+    }
+
+    getCurrentUserId() {
+        return 'user_' + Date.now();
     }
 }
 

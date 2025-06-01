@@ -4,34 +4,20 @@
 
 {% block content %}
 <div class="container mt-4">
-    <!-- Enhanced Current Section Bar -->
-    <div class="current-section-container">
-        <div class="current-section-header">
-            <h3 class="current-section-title"><i class="bi bi-bookmark-star"></i> Current Section</h3>
-            <button class="current-section-cancel" aria-label="Close"><i class="bi bi-x"></i></button>
-        </div>
-        <a href="{{ url_for('workshops') }}" class="current-concept-badge">
-            <i class="bi bi-tools"></i> Workshops
-        </a>
-        <div class="related-concepts-container">
-            <a href="{{ url_for('workshop_progress') }}" class="related-concept-button">
-                <i class="bi bi-bar-chart-line"></i> Track Progress
-            </a>
-            <a href="{{ url_for('workshop_exercises') }}" class="related-concept-button">
-                <i class="bi bi-code-square"></i> Exercises
-            </a>
-            <a href="{{ url_for('workshops') }}#lora-basics" class="related-concept-button">
-                <i class="bi bi-arrow-right-circle"></i> LoRA Basics
-            </a>
-            <a href="{{ url_for('workshops') }}#qlora-deep-dive" class="related-concept-button">
-                <i class="bi bi-arrow-right-circle"></i> QLoRA Deep Dive
-            </a>
-            <a href="{{ url_for('workshops') }}#advanced-peft" class="related-concept-button">
-                <i class="bi bi-arrow-right-circle"></i> Advanced PEFT
-            </a>
-            <a href="{{ url_for('workshops') }}#memory-efficiency" class="related-concept-button">
-                <i class="bi bi-arrow-right-circle"></i> Memory Efficiency
-            </a>
+    <!-- Simple Workshop Navigation -->
+    <div class="simple-workshop-nav">
+        <div class="nav-content">
+            <h2 class="nav-title">
+                <i class="bi bi-tools"></i> Workshop Navigation
+            </h2>
+            <div class="nav-actions">
+                <a href="{{ url_for('workshop_progress') }}" class="nav-btn">
+                    <i class="bi bi-bar-chart-line"></i> Progress
+                </a>
+                <a href="{{ url_for('workshop_exercises') }}" class="nav-btn">
+                    <i class="bi bi-code-square"></i> Exercises
+                </a>
+            </div>
         </div>
     </div>
 
@@ -100,7 +86,7 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-6 mb-4">
+                        <div class="col-md-6 mb-4" id="workshop-1">
                             <div class="card h-100 workshop-card">
                                 <div class="card-header bg-primary text-white">
                                     <h4>Workshop 1: Full Fine-Tuning</h4>
@@ -122,7 +108,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6 mb-4">
+                        <div class="col-md-6 mb-4" id="workshop-2">
                             <div class="card h-100 workshop-card">
                                 <div class="card-header bg-info text-white">
                                     <h4>Workshop 2: LoRA Fine-Tuning</h4>
@@ -144,7 +130,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6 mb-4">
+                        <div class="col-md-6 mb-4" id="workshop-3">
                             <div class="card h-100 workshop-card">
                                 <div class="card-header bg-warning text-dark">
                                     <h4>Workshop 3: QLoRA Deep Dive</h4>
@@ -322,20 +308,86 @@
 </div>
 
 <style>
+    /* Simple Workshop Navigation */
+    .simple-workshop-nav {
+        background: #f8fbf6;
+        border: 1px solid rgba(60, 100, 48, 0.2);
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 30px;
+        box-shadow: 0 2px 8px rgba(22, 34, 17, 0.1);
+    }
+
+    .nav-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .nav-title {
+        color: #3c6430;
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .nav-title i {
+        font-size: 1.4rem;
+    }
+
+    .nav-actions {
+        display: flex;
+        gap: 12px;
+    }
+
+    .nav-btn {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 16px;
+        background: #ffffff;
+        color: #3c6430;
+        text-decoration: none;
+        border-radius: 8px;
+        border: 1px solid rgba(60, 100, 48, 0.3);
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+    }
+
+    .nav-btn:hover {
+        background: #3c6430;
+        color: #ffffff;
+        text-decoration: none;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(60, 100, 48, 0.3);
+    }
+
+    .nav-btn i {
+        font-size: 0.9rem;
+    }
+
+    /* Workshop Cards */
     .workshop-card {
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .workshop-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(22, 34, 17, 0.15);
     }
 
+    /* Feature Icons */
     .feature-icon {
         height: 80px;
         width: 80px;
         border-radius: 50%;
-        background-color: rgba(0, 102, 255, 0.1);
+        background-color: rgba(60, 100, 48, 0.1);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -344,8 +396,79 @@
     }
 
     .feature-icon:hover {
-        background-color: rgba(0, 102, 255, 0.2);
-        transform: scale(1.1);
+        background-color: rgba(60, 100, 48, 0.2);
+        transform: scale(1.05);
+    }
+
+    /* Dark Mode Styles */
+    body:not(.light-theme) .simple-workshop-nav {
+        background: rgba(13, 20, 10, 0.9);
+        border-color: rgba(167, 207, 155, 0.3);
+    }
+
+    body:not(.light-theme) .nav-title {
+        color: #a7cf9b;
+    }
+
+    body:not(.light-theme) .nav-btn {
+        background: rgba(13, 20, 10, 0.8);
+        color: #a7cf9b;
+        border-color: rgba(167, 207, 155, 0.3);
+    }
+
+    body:not(.light-theme) .nav-btn:hover {
+        background: #a7cf9b;
+        color: #0d140a;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .nav-content {
+            flex-direction: column;
+            text-align: center;
+            gap: 15px;
+        }
+
+        .nav-actions {
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .simple-workshop-nav {
+            padding: 15px;
+        }
+
+        .nav-actions {
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-btn {
+            justify-content: center;
+        }
     }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Simple smooth scrolling for any anchor links
+    const anchorLinks = document.querySelectorAll('a[href^="#"]');
+
+    anchorLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            const targetId = this.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+
+            if (targetElement) {
+                e.preventDefault();
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+});
+</script>
 {% endblock %}

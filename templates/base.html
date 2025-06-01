@@ -4,6 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Visual LLM">
+    <meta name="theme-color" content="#4db394">
+    <meta name="msapplication-TileColor" content="#4db394">
+    <meta name="msapplication-config" content="/static/browserconfig.xml">
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    <!-- PWA Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='images/icon-192x192.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='images/icon-192x192.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/icon-192x192.png') }}">
     {% if csrf_token %}
     <meta name="csrf-token" content="{{ csrf_token() }}">
     {% endif %}
@@ -31,14 +42,12 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-quiz.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-exercises.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/hands-on-exercises.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/help-button.css') }}">
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/help-button.css') }}"> --> <!-- DISABLED to prevent AI button conflicts -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-navigation.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/improved-section-indicator.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/ai-assistant.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/voice-assistant.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/clean-sidebar.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/lora-guide.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/improved-sidebar.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/image-styles.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/razor-sharp-images.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/razor-sharp-images-enhanced.css') }}">
@@ -49,6 +58,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/page-transitions.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/print-styles.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/theme-toggle.css') }}">
+    <!-- New Color System - Purple/Pink Light Mode & Green/Purple Dark Mode -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/new-color-system.css') }}">
+    <!-- Balanced Brightness Theme - Ensures optimal brightness and contrast for both modes -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/balanced-brightness-theme.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/accessibility-enhancements.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/condensed-map-visualization.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/home-features.css') }}">
@@ -93,16 +106,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/purple-ui-dark-mode.css') }}">
     <!-- Purple Background Dark Mode - Adds vibrant purple background effects in dark mode -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/purple-background-dark-mode.css') }}">
-    <!-- Vibrant Light Mode Background - Adds vibrant background effects to light mode -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/vibrant-light-mode-background.css') }}">
+
     <!-- Enhanced Section Headers - Improves visibility of section headers with optimal contrast -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-section-headers.css') }}">
     <!-- Learn & Explore Header Fix - Specific fix for the "Learn & Explore LLM Fine-Tuning" header -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/learn-explore-header-fix.css') }}">
-    <!-- Ultra Vibrant Text - Makes text brighter and more vibrant in both modes -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/ultra-vibrant-text.css') }}">
-    <!-- Maximum Brightness Learn & Explore Header - Makes the header extremely bright -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/max-brightness-learn-explore-header.css') }}">
+
+
     <!-- Auth-Only Progress Bar - Hides progress bars for non-authenticated users -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/auth-only-progress-bar.css') }}">
     <!-- High-Contrast Purple Text - Makes text in guide cards high-contrast purple for maximum readability -->
@@ -129,6 +139,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/visual-llm-logo-fix.css') }}">
     <!-- Enhanced AI Assistant -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-ai-assistant.css') }}">
+    <!-- AI Learning Assistant - DISABLED to prevent AI button conflicts -->
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/ai-learning-assistant.css') }}"> -->
+    <!-- Robust Features - Advanced AI assistant, notifications, and collaboration features -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/robust-features.css') }}">
     <!-- Accessibility Fixes -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/accessibility-fixes.css') }}">
     <!-- Critical Blue Banner Fix - Must be last to override all other styles -->
@@ -155,6 +169,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/concept-map-heading-fix.css') }}">
     <!-- TensorFlow Text Visibility Fix - Specifically targets and fixes text visibility issues in the TensorFlow section -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/tensorflow-text-visibility-fix.css') }}">
+
+    <!-- REMOVE NEON BRIGHTNESS - MUST BE LAST CSS FILE TO OVERRIDE ALL NEON EFFECTS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/remove-neon-brightness.css') }}">
+
     <!-- Auth-Only Progress Bar JavaScript - Execute as early as possible -->
     <script src="{{ url_for('static', filename='js/auth-only-progress-bar.js') }}"></script>
     <!-- Emergency Blue Banner Fix JavaScript - Execute as early as possible -->
@@ -214,7 +232,7 @@
     <script src="{{ url_for('static', filename='js/robust-diagram-utils.js') }}"></script>
     <script src="{{ url_for('static', filename='js/svg-diagram-fixer.js') }}"></script>
     <script src="{{ url_for('static', filename='js/blue-banner-text-fixer.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <!-- <script src="{{ url_for('static', filename='js/main.js') }}"></script> --> <!-- DISABLED to prevent AI button conflicts -->
     <script src="{{ url_for('static', filename='js/tech-ui.js') }}"></script>
     <script src="{{ url_for('static', filename='js/image-handler.js') }}"></script>
     <script src="{{ url_for('static', filename='js/image-error-handler.js') }}"></script>
@@ -227,6 +245,16 @@
     <script src="{{ url_for('static', filename='js/enhanced-theme-toggle.js') }}"></script>
     <script src="{{ url_for('static', filename='js/improved-theme-toggle.js') }}"></script>
     <script src="{{ url_for('static', filename='js/enhanced-theme-toggle-v2.js') }}"></script>
+
+    <!-- Robust Features - Advanced functionality -->
+    <script src="{{ url_for('static', filename='js/advanced-progress-tracking.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/ai-code-assistant.js') }}"></script>
+    <!-- AI Learning Assistant - DISABLED to prevent conflicts with Final AI Assistant -->
+    <!-- <script src="{{ url_for('static', filename='js/ai-learning-assistant.js') }}"></script> -->
+    <!-- Final AI Assistant - Definitive working version -->
+    <script src="{{ url_for('static', filename='js/final-ai-assistant.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/advanced-notification-system.js') }}"></script>
     <script src="{{ url_for('static', filename='js/enhanced-concept-map.js') }}"></script>
     <script src="{{ url_for('static', filename='js/condensed-map-visualization.js') }}"></script>
     <script src="{{ url_for('static', filename='js/code-blocks.js') }}"></script>
@@ -236,12 +264,9 @@
     <script src="{{ url_for('static', filename='js/ux-enhancements.js') }}"></script>
     <script src="{{ url_for('static', filename='js/enhanced-exercises.js') }}"></script>
     <script src="{{ url_for('static', filename='js/hands-on-exercises.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/help-button.js') }}"></script>
+    <!-- <script src="{{ url_for('static', filename='js/help-button.js') }}"></script> --> <!-- DISABLED to prevent AI button conflicts -->
     <script src="{{ url_for('static', filename='js/enhanced-navigation.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/ai-assistant.js') }}"></script>
     <script src="{{ url_for('static', filename='js/voice-assistant.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/clean-sidebar.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/improved-sidebar.js') }}"></script>
     <script src="{{ url_for('static', filename='js/image-handler-fixed.js') }}"></script>
     <script src="{{ url_for('static', filename='js/integrated-learning.js') }}"></script>
     <script src="{{ url_for('static', filename='js/smooth-ux.js') }}"></script>
@@ -273,12 +298,10 @@
     <script src="{{ url_for('static', filename='js/concept-map-heading-fix.js') }}"></script>
     <!-- Learn & Explore Header Fix - Direct DOM manipulation for the specific header -->
     <script src="{{ url_for('static', filename='js/learn-explore-header-fix.js') }}"></script>
-    <!-- Ultra Vibrant Text Enhancer - Makes text brighter and more vibrant in both modes -->
-    <script src="{{ url_for('static', filename='js/ultra-vibrant-text-enhancer.js') }}"></script>
+</script>
     <!-- TensorFlow Text Visibility Fix - Specifically targets and enhances text visibility in the TensorFlow section -->
     <script src="{{ url_for('static', filename='js/tensorflow-text-visibility-fix.js') }}"></script>
-    <!-- Maximum Brightness Enhancer - Applies maximum brightness effects to specific elements -->
-    <script src="{{ url_for('static', filename='js/max-brightness-enhancer.js') }}"></script>
+
     <!-- High-Contrast Purple Text - Makes text in guide cards high-contrast purple for maximum readability -->
     <script src="{{ url_for('static', filename='js/high-contrast-purple-text.js') }}"></script>
     <!-- Direct Guide Card Fix - Directly targets the exact guide cards shown in the image with inline styles -->
@@ -346,7 +369,7 @@
                 }));
             };
 
-            // Reinitialize tooltips after sidebar and progress indicator are added
+            // Reinitialize tooltips after dynamic content is added
             setTimeout(reinitializeTooltips, 1000);
 
             // Listen for DOM changes to reinitialize tooltips

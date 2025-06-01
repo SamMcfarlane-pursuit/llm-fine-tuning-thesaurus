@@ -1,0 +1,1046 @@
+/**
+ * Remove Neon Colors & Apply Homepage Normal Color Scheme
+ * Removes all neon, overly bright, and vibrant effects
+ * Applies the clean, normal color scheme from the homepage across all pages
+ * Ensures consistent, professional appearance without interfering with functionality
+ */
+
+/* ===== FORCE HOMEPAGE COLOR SCHEME ACROSS ALL PAGES ===== */
+
+/* Remove all excessive brightness filters and animations */
+* {
+    filter: none !important;
+    animation: none !important;
+    -webkit-text-stroke: none !important;
+}
+
+/* Remove excessive text shadows and glows */
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6,
+p, span, div, li, td, th, label, small, a, button, .btn,
+.card, .alert, .badge, .navbar, .dropdown-menu {
+    text-shadow: none !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ===== HOMEPAGE COLOR VARIABLES (OVERRIDE ALL) ===== */
+:root {
+    /* Light Mode - Homepage Colors (Clean Green Theme) */
+    --text: #162211 !important;
+    --background: #eef5eb !important;
+    --primary: #3c6430 !important;
+    --secondary: #919fca !important;
+    --accent: #7350a5 !important;
+
+    /* Extended Light Mode Colors */
+    --text-primary: #162211 !important;
+    --text-secondary: #2a3527 !important;
+    --text-muted: #4a5547 !important;
+    --text-inverse: #e3efde !important;
+
+    --background-primary: #eef5eb !important;
+    --background-secondary: #e4f0e0 !important;
+    --background-tertiary: #daebd5 !important;
+    --background-elevated: #f8fbf6 !important;
+
+    --primary-color: #3c6430 !important;
+    --primary-hover: #2d4b24 !important;
+    --primary-light: #4f7a41 !important;
+    --primary-dark: #1f3318 !important;
+
+    --secondary-color: #919fca !important;
+    --secondary-hover: #7a8bb8 !important;
+    --secondary-light: #a8b5dc !important;
+    --secondary-dark: #6b7ba6 !important;
+
+    --accent-color: #7350a5 !important;
+    --accent-hover: #5d4087 !important;
+    --accent-light: #8966b7 !important;
+    --accent-dark: #4a3570 !important;
+
+    /* Clean borders and shadows */
+    --border-color: rgba(22, 34, 17, 0.15) !important;
+    --border-light: rgba(22, 34, 17, 0.08) !important;
+    --border-strong: rgba(22, 34, 17, 0.25) !important;
+
+    --shadow-color: rgba(22, 34, 17, 0.1) !important;
+    --shadow-strong: rgba(22, 34, 17, 0.2) !important;
+
+    /* Status colors - clean, not neon */
+    --success-color: #3c6430 !important;
+    --warning-color: #b8a06b !important;
+    --error-color: #b87a7a !important;
+    --info-color: #919fca !important;
+
+    /* Remove all neon/vibrant variables */
+    --vibrant-bg-gradient: none !important;
+    --vibrant-glow-primary: none !important;
+    --vibrant-glow-secondary: none !important;
+    --ultra-vibrant: none !important;
+    --max-brightness: none !important;
+    --neon-glow: none !important;
+}
+
+/* ===== FORCE HOMEPAGE LIGHT MODE STYLES EVERYWHERE ===== */
+body.light-theme {
+    background-color: #eef5eb !important;
+    color: #162211 !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+/* Text Elements - Homepage Style */
+body.light-theme h1, body.light-theme h2, body.light-theme h3,
+body.light-theme h4, body.light-theme h5, body.light-theme h6 {
+    color: #162211 !important;
+    font-weight: 600 !important;
+    text-shadow: none !important;
+    filter: none !important;
+}
+
+body.light-theme p, body.light-theme span, body.light-theme div,
+body.light-theme li, body.light-theme td, body.light-theme th,
+body.light-theme .card-text, body.light-theme .card-title {
+    color: #162211 !important;
+    text-shadow: none !important;
+}
+
+body.light-theme .text-muted {
+    color: #4a5547 !important;
+}
+
+body.light-theme .text-secondary {
+    color: #2a3527 !important;
+}
+
+/* Navigation - Homepage Style */
+body.light-theme .navbar {
+    background-color: #e4f0e0 !important;
+    border-bottom: 1px solid rgba(22, 34, 17, 0.15) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+body.light-theme .navbar-brand {
+    color: #3c6430 !important;
+    font-weight: 700 !important;
+}
+
+body.light-theme .navbar-nav .nav-link {
+    color: #2a3527 !important;
+    font-weight: 500 !important;
+    transition: color 0.3s ease !important;
+}
+
+body.light-theme .navbar-nav .nav-link:hover,
+body.light-theme .navbar-nav .nav-link:focus {
+    color: #3c6430 !important;
+}
+
+/* Buttons - Homepage Style */
+body.light-theme .btn-primary {
+    background-color: #3c6430 !important;
+    border-color: #3c6430 !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 8px rgba(22, 34, 17, 0.1) !important;
+}
+
+body.light-theme .btn-primary:hover,
+body.light-theme .btn-primary:focus {
+    background-color: #2d4b24 !important;
+    border-color: #2d4b24 !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(22, 34, 17, 0.2) !important;
+}
+
+body.light-theme .btn-secondary {
+    background-color: #919fca !important;
+    border-color: #919fca !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+body.light-theme .btn-secondary:hover,
+body.light-theme .btn-secondary:focus {
+    background-color: #7a8bb8 !important;
+    border-color: #7a8bb8 !important;
+}
+
+/* Cards - Homepage Style */
+body.light-theme .card {
+    background-color: #f8fbf6 !important;
+    border: 1px solid rgba(22, 34, 17, 0.15) !important;
+    box-shadow: 0 4px 16px rgba(22, 34, 17, 0.1) !important;
+    transition: all 0.3s ease !important;
+}
+
+body.light-theme .card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 8px 32px rgba(22, 34, 17, 0.2) !important;
+}
+
+body.light-theme .card-header {
+    background-color: #daebd5 !important;
+    border-bottom: 1px solid rgba(22, 34, 17, 0.15) !important;
+    color: #162211 !important;
+    font-weight: 600 !important;
+}
+
+body.light-theme .card-title {
+    color: #162211 !important;
+    font-weight: 600 !important;
+}
+
+body.light-theme .card-text {
+    color: #2a3527 !important;
+}
+
+/* ===== FORCE HOMEPAGE DARK MODE STYLES EVERYWHERE ===== */
+body:not(.light-theme) {
+    background-color: #0d140a !important;
+    color: #e3efde !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+/* Text Elements - Homepage Dark Style */
+body:not(.light-theme) h1, body:not(.light-theme) h2, body:not(.light-theme) h3,
+body:not(.light-theme) h4, body:not(.light-theme) h5, body:not(.light-theme) h6 {
+    color: #e3efde !important;
+    font-weight: 600 !important;
+    text-shadow: none !important;
+    filter: none !important;
+}
+
+body:not(.light-theme) p, body:not(.light-theme) span, body:not(.light-theme) div,
+body:not(.light-theme) li, body:not(.light-theme) td, body:not(.light-theme) th,
+body:not(.light-theme) .card-text, body:not(.light-theme) .card-title {
+    color: #e3efde !important;
+    text-shadow: none !important;
+}
+
+body:not(.light-theme) .text-muted {
+    color: #b8d4ae !important;
+}
+
+body:not(.light-theme) .text-secondary {
+    color: #d4e6ce !important;
+}
+
+/* Navigation - Homepage Dark Style */
+body:not(.light-theme) .navbar {
+    background-color: #1a2517 !important;
+    border-bottom: 1px solid rgba(227, 239, 222, 0.2) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+body:not(.light-theme) .navbar-brand {
+    color: #a6ce9a !important;
+    font-weight: 700 !important;
+}
+
+body:not(.light-theme) .navbar-nav .nav-link {
+    color: #d4e6ce !important;
+    font-weight: 500 !important;
+    transition: color 0.3s ease !important;
+}
+
+body:not(.light-theme) .navbar-nav .nav-link:hover,
+body:not(.light-theme) .navbar-nav .nav-link:focus {
+    color: #a6ce9a !important;
+}
+
+/* Buttons - Homepage Dark Style */
+body:not(.light-theme) .btn-primary {
+    background-color: #a6ce9a !important;
+    border-color: #a6ce9a !important;
+    color: #0d140a !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+body:not(.light-theme) .btn-primary:hover,
+body:not(.light-theme) .btn-primary:focus {
+    background-color: #b8d6ac !important;
+    border-color: #b8d6ac !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+}
+
+body:not(.light-theme) .btn-secondary {
+    background-color: #36446f !important;
+    border-color: #36446f !important;
+    color: #e3efde !important;
+    font-weight: 600 !important;
+}
+
+body:not(.light-theme) .btn-secondary:hover,
+body:not(.light-theme) .btn-secondary:focus {
+    background-color: #4a5a8a !important;
+    border-color: #4a5a8a !important;
+}
+
+/* Cards - Homepage Dark Style */
+body:not(.light-theme) .card {
+    background-color: #1a2517 !important;
+    border: 1px solid rgba(227, 239, 222, 0.2) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+    transition: all 0.3s ease !important;
+}
+
+body:not(.light-theme) .card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6) !important;
+}
+
+body:not(.light-theme) .card-header {
+    background-color: #273624 !important;
+    border-bottom: 1px solid rgba(227, 239, 222, 0.2) !important;
+    color: #e3efde !important;
+    font-weight: 600 !important;
+}
+
+body:not(.light-theme) .card-title {
+    color: #e3efde !important;
+    font-weight: 600 !important;
+}
+
+body:not(.light-theme) .card-text {
+    color: #d4e6ce !important;
+}
+
+/* ===== FORMS - HOMEPAGE STYLE ===== */
+.form-control {
+    background-color: var(--background-elevated) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-primary) !important;
+    transition: all 0.3s ease !important;
+    box-shadow: none !important;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 0.2rem rgba(60, 100, 48, 0.25) !important;
+    background-color: var(--background-primary) !important;
+}
+
+body.light-theme .form-control {
+    background-color: #f8fbf6 !important;
+    border: 1px solid rgba(22, 34, 17, 0.15) !important;
+    color: #162211 !important;
+}
+
+body:not(.light-theme) .form-control {
+    background-color: #1a2517 !important;
+    border: 1px solid rgba(227, 239, 222, 0.2) !important;
+    color: #e3efde !important;
+}
+
+/* ===== ALERTS - HOMEPAGE STYLE ===== */
+.alert {
+    background-color: var(--background-elevated) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-primary) !important;
+    text-shadow: none !important;
+    filter: none !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+body.light-theme .alert {
+    background-color: rgba(60, 100, 48, 0.1) !important;
+    border: 1px solid rgba(60, 100, 48, 0.3) !important;
+    color: #162211 !important;
+}
+
+body:not(.light-theme) .alert {
+    background-color: rgba(166, 206, 154, 0.1) !important;
+    border: 1px solid rgba(166, 206, 154, 0.3) !important;
+    color: #e3efde !important;
+}
+
+/* ===== LINKS - HOMEPAGE STYLE ===== */
+a {
+    color: var(--primary-color) !important;
+    text-decoration: none !important;
+    text-shadow: none !important;
+    transition: color 0.3s ease !important;
+}
+
+a:hover {
+    color: var(--primary-hover) !important;
+    text-decoration: underline !important;
+}
+
+body.light-theme a {
+    color: #3c6430 !important;
+}
+
+body.light-theme a:hover {
+    color: #2d4b24 !important;
+}
+
+body:not(.light-theme) a {
+    color: #a6ce9a !important;
+}
+
+body:not(.light-theme) a:hover {
+    color: #b8d6ac !important;
+}
+
+/* ===== FORCE EXACT HOMEPAGE COLORS ===== */
+
+/* Override ALL color variables with exact homepage colors */
+* {
+    --text: #162211 !important;
+    --background: #eef5eb !important;
+    --primary: #3c6430 !important;
+    --secondary: #919fca !important;
+    --accent: #7350a5 !important;
+
+    /* Override bright cyan/blue colors */
+    --primary-blue: #3c6430 !important;
+    --primary-blue-light: #4f7a41 !important;
+    --primary-blue-dark: #2d4b24 !important;
+    --accent-blue: #919fca !important;
+    --primary-color: #3c6430 !important;
+    --secondary-color: #919fca !important;
+    --accent-color: #7350a5 !important;
+
+    /* Remove bright cyan colors */
+    --vibrant-accent-secondary: #919fca !important;
+    --vibrant-accent-primary: #7350a5 !important;
+}
+
+/* ===== WORKSHOPS PAGE SIDEBAR FIXES ===== */
+
+/* Current Section Container */
+.current-section-container,
+.current-section {
+    background: #f8fbf6 !important;
+    border: 1px solid rgba(60, 100, 48, 0.3) !important;
+    border-radius: 8px !important;
+    padding: 15px !important;
+    margin-bottom: 20px !important;
+    box-shadow: 0 2px 8px rgba(22, 34, 17, 0.1) !important;
+}
+
+.current-section h2 {
+    color: #3c6430 !important;
+    text-shadow: none !important;
+    font-weight: 600 !important;
+    font-size: 1.5rem !important;
+}
+
+/* Workshop Navigation Items */
+.workshop-nav-item,
+.sidebar-item,
+.current-section a {
+    color: #162211 !important;
+    background-color: transparent !important;
+    border: none !important;
+    text-shadow: none !important;
+    transition: all 0.3s ease !important;
+}
+
+.workshop-nav-item:hover,
+.sidebar-item:hover,
+.current-section a:hover {
+    color: #3c6430 !important;
+    background-color: rgba(60, 100, 48, 0.1) !important;
+    text-shadow: none !important;
+}
+
+.workshop-nav-item.active,
+.sidebar-item.active {
+    background-color: #3c6430 !important;
+    color: #ffffff !important;
+    border-radius: 6px !important;
+}
+
+/* Workshop Steps */
+.workshop-step {
+    background-color: #f8fbf6 !important;
+    border: 1px solid rgba(60, 100, 48, 0.2) !important;
+    color: #162211 !important;
+    border-radius: 6px !important;
+    padding: 12px !important;
+    margin-bottom: 8px !important;
+}
+
+.workshop-step.active {
+    background-color: #3c6430 !important;
+    color: #ffffff !important;
+    border-color: #3c6430 !important;
+}
+
+/* Progress Tracking */
+.workshop-progress,
+.track-progress {
+    background-color: rgba(60, 100, 48, 0.1) !important;
+    border-radius: 4px !important;
+}
+
+.workshop-progress-bar,
+.progress-bar {
+    background-color: #3c6430 !important;
+}
+
+/* ===== SIDEBAR SPECIFIC FIXES ===== */
+
+/* Sidebar containers */
+.sidebar-container,
+.robust-sidebar,
+.improved-sidebar,
+.professional-sidebar {
+    background: #f8fbf6 !important;
+    border: 1px solid rgba(60, 100, 48, 0.2) !important;
+    box-shadow: 0 2px 8px rgba(22, 34, 17, 0.1) !important;
+}
+
+/* Sidebar sections */
+.sidebar-section,
+.workshop-section {
+    background: transparent !important;
+    border: none !important;
+}
+
+/* Sidebar links and items */
+.sidebar-section a,
+.workshop-section a,
+.sidebar-item,
+.nav-item {
+    color: #162211 !important;
+    background: transparent !important;
+    border: none !important;
+    text-shadow: none !important;
+    text-decoration: none !important;
+}
+
+.sidebar-section a:hover,
+.workshop-section a:hover,
+.sidebar-item:hover,
+.nav-item:hover {
+    color: #3c6430 !important;
+    background: rgba(60, 100, 48, 0.1) !important;
+    text-shadow: none !important;
+}
+
+/* Workshop icons */
+.workshop-icon,
+.sidebar-icon {
+    color: #3c6430 !important;
+    filter: none !important;
+}
+
+/* Remove all gradient backgrounds */
+[style*="linear-gradient"],
+[style*="radial-gradient"] {
+    background: #f8fbf6 !important;
+}
+
+/* ===== WORKSHOP CARDS AND BUTTONS FIXES ===== */
+
+/* Workshop card containers */
+.workshop-card,
+.exercise-card,
+.card.workshop-card,
+.card.h-100.workshop-card {
+    background-color: #f8fbf6 !important;
+    border: 1px solid rgba(60, 100, 48, 0.3) !important;
+    box-shadow: 0 2px 8px rgba(22, 34, 17, 0.1) !important;
+    border-radius: 8px !important;
+}
+
+/* Workshop card headers */
+.workshop-card .card-header,
+.exercise-card .card-header,
+.card-header.bg-primary,
+.card-header.bg-success {
+    background-color: #3c6430 !important;
+    color: #ffffff !important;
+    border-bottom: 1px solid rgba(60, 100, 48, 0.3) !important;
+}
+
+/* Workshop card titles */
+.workshop-card h4,
+.exercise-card h4,
+.workshop-card .card-title,
+.exercise-card .card-title {
+    color: #ffffff !important;
+    text-shadow: none !important;
+    font-weight: 600 !important;
+}
+
+/* Workshop card text */
+.workshop-card p,
+.exercise-card p,
+.workshop-card .card-text,
+.exercise-card .card-text,
+.workshop-card li,
+.exercise-card li {
+    color: #162211 !important;
+    text-shadow: none !important;
+}
+
+/* Workshop badges */
+.workshop-card .badge,
+.exercise-card .badge,
+.badge.bg-light {
+    background-color: #919fca !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+
+/* Workshop buttons */
+.workshop-button,
+.workshop-btn,
+.btn-primary,
+.btn-success,
+.workshop-card .btn,
+.exercise-card .btn,
+button[class*="btn-"] {
+    background-color: #3c6430 !important;
+    background: #3c6430 !important;
+    border-color: #3c6430 !important;
+    color: #ffffff !important;
+    text-shadow: none !important;
+    box-shadow: 0 2px 4px rgba(22, 34, 17, 0.2) !important;
+    border-radius: 6px !important;
+    transition: all 0.3s ease !important;
+}
+
+.workshop-button:hover,
+.workshop-btn:hover,
+.btn-primary:hover,
+.btn-success:hover,
+.workshop-card .btn:hover,
+.exercise-card .btn:hover,
+button[class*="btn-"]:hover {
+    background-color: #2d4b24 !important;
+    background: #2d4b24 !important;
+    border-color: #2d4b24 !important;
+    color: #ffffff !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 8px rgba(22, 34, 17, 0.3) !important;
+}
+
+/* Workshop headings */
+h1, h2, h3, h4, h5, h6 {
+    color: #162211 !important;
+    text-shadow: none !important;
+}
+
+/* Workshop main title */
+.workshop-card h4,
+.exercise-card h4 {
+    color: #ffffff !important;
+}
+
+/* Workshop descriptions */
+.workshop-card .card-body p,
+.exercise-card .card-body p {
+    color: #162211 !important;
+    line-height: 1.6 !important;
+}
+
+/* Workshop lists */
+.workshop-card ul li,
+.exercise-card ul li {
+    color: #162211 !important;
+    margin-bottom: 4px !important;
+}
+
+/* ===== MODERN CARD OVERRIDES ===== */
+
+/* Modern card containers */
+.modern-card {
+    background: #f8fbf6 !important;
+    border: 1px solid rgba(60, 100, 48, 0.3) !important;
+    box-shadow: 0 2px 8px rgba(22, 34, 17, 0.1) !important;
+}
+
+.modern-card:hover {
+    box-shadow: 0 4px 12px rgba(22, 34, 17, 0.15) !important;
+}
+
+/* Modern card titles */
+.modern-card-title {
+    color: #162211 !important;
+}
+
+/* Modern card descriptions */
+.modern-card-desc {
+    color: #2a3527 !important;
+}
+
+/* Modern card actions */
+.modern-card-action {
+    background: #3c6430 !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+
+.modern-card-action:hover {
+    background: #2d4b24 !important;
+    color: #ffffff !important;
+}
+
+/* ===== WORKSHOP EXERCISE CARD OVERRIDES ===== */
+
+/* Exercise card containers - remove cyan borders and backgrounds */
+.exercise-card {
+    background-color: #f8fbf6 !important;
+    border: 1px solid rgba(60, 100, 48, 0.3) !important;
+    box-shadow: 0 2px 8px rgba(22, 34, 17, 0.1) !important;
+}
+
+.exercise-card:hover {
+    box-shadow: 0 4px 12px rgba(22, 34, 17, 0.15) !important;
+    border-color: rgba(60, 100, 48, 0.5) !important;
+}
+
+/* Exercise card titles and text */
+.exercise-title,
+.difficulty-label,
+.time-estimate {
+    color: #162211 !important;
+    text-shadow: none !important;
+}
+
+.exercise-description,
+.status-indicator {
+    color: #2a3527 !important;
+    text-shadow: none !important;
+}
+
+/* Exercise card info icons */
+.info-icon {
+    color: #3c6430 !important;
+    text-shadow: none !important;
+}
+
+/* Difficulty indicators */
+.difficulty-indicator {
+    background-color: #919fca !important;
+    box-shadow: none !important;
+}
+
+/* ===== ENHANCED WORKSHOP VISIBILITY OVERRIDES ===== */
+
+/* Override bright blue workshop buttons */
+.workshop-button,
+.workshop-container .btn,
+.workshop-section .btn {
+    background: #3c6430 !important;
+    color: #ffffff !important;
+    text-shadow: none !important;
+    border: none !important;
+    border-radius: 6px !important;
+    box-shadow: 0 2px 4px rgba(22, 34, 17, 0.2) !important;
+}
+
+.workshop-button:hover,
+.workshop-container .btn:hover,
+.workshop-section .btn:hover {
+    background: #2d4b24 !important;
+    box-shadow: 0 4px 8px rgba(22, 34, 17, 0.3) !important;
+}
+
+/* ===== SPECIFIC WORKSHOP PAGE BUTTON OVERRIDES ===== */
+
+/* Start Workshop buttons */
+#start-workshop-btn,
+.pulse-animation,
+button[id*="start"],
+button[class*="pulse"] {
+    background: #3c6430 !important;
+    background-color: #3c6430 !important;
+    border-color: #3c6430 !important;
+    color: #ffffff !important;
+    animation: none !important;
+    box-shadow: 0 2px 4px rgba(22, 34, 17, 0.2) !important;
+}
+
+#start-workshop-btn:hover,
+.pulse-animation:hover,
+button[id*="start"]:hover,
+button[class*="pulse"]:hover {
+    background: #2d4b24 !important;
+    background-color: #2d4b24 !important;
+    border-color: #2d4b24 !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 8px rgba(22, 34, 17, 0.3) !important;
+}
+
+/* Workshop page main buttons */
+.btn.btn-primary.mt-2,
+.btn.btn-success.mt-2 {
+    background: #3c6430 !important;
+    border-color: #3c6430 !important;
+    color: #ffffff !important;
+}
+
+.btn.btn-primary.mt-2:hover,
+.btn.btn-success.mt-2:hover {
+    background: #2d4b24 !important;
+    border-color: #2d4b24 !important;
+    color: #ffffff !important;
+}
+
+/* Remove any remaining purple/cyan gradients */
+* {
+    background-image: none !important;
+}
+
+/* Force all buttons to use homepage colors */
+button,
+.btn,
+[class*="btn-"],
+input[type="button"],
+input[type="submit"] {
+    background: #3c6430 !important;
+    background-color: #3c6430 !important;
+    border-color: #3c6430 !important;
+    color: #ffffff !important;
+    text-shadow: none !important;
+    box-shadow: 0 2px 4px rgba(22, 34, 17, 0.2) !important;
+}
+
+button:hover,
+.btn:hover,
+[class*="btn-"]:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover {
+    background: #2d4b24 !important;
+    background-color: #2d4b24 !important;
+    border-color: #2d4b24 !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 8px rgba(22, 34, 17, 0.3) !important;
+}
+
+/* ===== FORCE REMOVE BRIGHT CYAN COLORS ===== */
+
+/* Override all bright cyan/blue backgrounds */
+[style*="background-color: rgb(93, 214, 255)"],
+[style*="background-color: #5dd6ff"],
+[style*="background: rgb(93, 214, 255)"],
+[style*="background: #5dd6ff"],
+[style*="background-color: rgb(74, 148, 255)"],
+[style*="background-color: #4a94ff"],
+[style*="background: rgb(74, 148, 255)"],
+[style*="background: #4a94ff"] {
+    background-color: #f8fbf6 !important;
+    background: #f8fbf6 !important;
+}
+
+/* Override all bright cyan/blue text colors */
+[style*="color: rgb(93, 214, 255)"],
+[style*="color: #5dd6ff"],
+[style*="color: rgb(74, 148, 255)"],
+[style*="color: #4a94ff"] {
+    color: #3c6430 !important;
+}
+
+/* Override all bright cyan/blue borders */
+[style*="border-color: rgb(93, 214, 255)"],
+[style*="border-color: #5dd6ff"],
+[style*="border: 1px solid rgb(93, 214, 255)"],
+[style*="border: 1px solid #5dd6ff"],
+[style*="border: 2px solid rgb(93, 214, 255)"],
+[style*="border: 2px solid #5dd6ff"] {
+    border-color: rgba(60, 100, 48, 0.3) !important;
+}
+
+/* Remove ALL bright cyan/blue colors */
+.ultra-vibrant, .max-brightness, .neon-glow,
+[class*="ultra-"], [class*="vibrant-"], [class*="neon-"],
+[class*="bright-"], [class*="glow-"] {
+    filter: none !important;
+    text-shadow: none !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    animation: none !important;
+    -webkit-text-stroke: none !important;
+    background-color: #f8fbf6 !important;
+    color: #162211 !important;
+    border-color: rgba(60, 100, 48, 0.3) !important;
+}
+
+/* Remove excessive brightness from specific elements */
+.alert, .badge, .btn, .card, .navbar, .dropdown-menu {
+    filter: none !important;
+    text-shadow: none !important;
+    animation: none !important;
+}
+
+/* Remove vibrant backgrounds */
+body::before, body::after,
+.container::before, .container::after {
+    display: none !important;
+}
+
+/* Remove excessive gradients */
+.bg-primary, .bg-secondary, .bg-success, .bg-info, .bg-warning, .bg-danger {
+    background: var(--primary-color) !important;
+    background-image: none !important;
+}
+
+/* ===== CLEAN NAVIGATION ===== */
+.navbar {
+    background: rgba(238, 245, 235, 0.95) !important;
+    backdrop-filter: blur(10px) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+body:not(.light-theme) .navbar {
+    background: rgba(13, 20, 10, 0.95) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+}
+
+.navbar-brand, .nav-link {
+    color: #162211 !important;
+    text-shadow: none !important;
+}
+
+body:not(.light-theme) .navbar-brand,
+body:not(.light-theme) .nav-link {
+    color: #e2eedd !important;
+}
+
+/* ===== CLEAN BUTTONS ===== */
+.btn {
+    text-shadow: none !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    filter: none !important;
+    transition: all 0.2s ease !important;
+}
+
+.btn:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* ===== CLEAN FORMS ===== */
+.form-control, .form-select {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid rgba(60, 100, 48, 0.3) !important;
+    color: #162211 !important;
+    box-shadow: none !important;
+}
+
+body:not(.light-theme) .form-control,
+body:not(.light-theme) .form-select {
+    background: rgba(13, 20, 10, 0.9) !important;
+    border: 1px solid rgba(167, 207, 155, 0.3) !important;
+    color: #e2eedd !important;
+}
+
+/* ===== REMOVE ANIMATIONS ===== */
+@keyframes pulse, @keyframes glow, @keyframes brightness-pulse,
+@keyframes max-brightness-pulse, @keyframes vibrant-pulse {
+    from, to {
+        filter: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+    }
+}
+
+/* ===== CLEAN LINKS ===== */
+a {
+    color: #3c6430 !important;
+    text-decoration: none !important;
+    text-shadow: none !important;
+    transition: color 0.2s ease !important;
+}
+
+a:hover {
+    color: #4d7a3e !important;
+    text-decoration: underline !important;
+}
+
+body:not(.light-theme) a {
+    color: #a7cf9b !important;
+}
+
+body:not(.light-theme) a:hover {
+    color: #b8e0b3 !important;
+}
+
+/* ===== CLEAN TABLES ===== */
+.table {
+    color: inherit !important;
+    background: transparent !important;
+}
+
+.table th, .table td {
+    border-color: rgba(60, 100, 48, 0.2) !important;
+    color: inherit !important;
+}
+
+body:not(.light-theme) .table th,
+body:not(.light-theme) .table td {
+    border-color: rgba(167, 207, 155, 0.2) !important;
+}
+
+/* ===== CLEAN ALERTS ===== */
+.alert {
+    background: rgba(60, 100, 48, 0.1) !important;
+    border: 1px solid rgba(60, 100, 48, 0.3) !important;
+    color: #162211 !important;
+    text-shadow: none !important;
+    filter: none !important;
+}
+
+body:not(.light-theme) .alert {
+    background: rgba(167, 207, 155, 0.1) !important;
+    border: 1px solid rgba(167, 207, 155, 0.3) !important;
+    color: #e2eedd !important;
+}
+
+/* ===== ENSURE CLEAN APPEARANCE ===== */
+.container, .container-fluid, .row, .col, [class*="col-"] {
+    background: transparent !important;
+    box-shadow: none !important;
+    filter: none !important;
+}
+
+/* Remove any remaining vibrant effects */
+[style*="filter"], [style*="text-shadow"], [style*="box-shadow"] {
+    filter: none !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+}
+
+/* Ensure consistent appearance across all pages */
+main, section, article, aside, header, footer {
+    background: transparent !important;
+    filter: none !important;
+    text-shadow: none !important;
+}
+
+/* Clean, professional appearance for all interactive elements */
+button, input, select, textarea, .btn, .form-control, .card, .alert, .badge {
+    filter: none !important;
+    animation: none !important;
+    text-shadow: none !important;
+}
+
+/* Override any inline styles that might add brightness */
+[style*="brightness"], [style*="contrast"], [style*="saturate"] {
+    filter: none !important;
+}
+
+/* Ensure text remains readable but not neon */
+.text-primary { color: #3c6430 !important; }
+.text-secondary { color: #919fca !important; }
+.text-success { color: #28a745 !important; }
+.text-info { color: #17a2b8 !important; }
+.text-warning { color: #ffc107 !important; }
+.text-danger { color: #dc3545 !important; }
+
+body:not(.light-theme) .text-primary { color: #a7cf9b !important; }
+body:not(.light-theme) .text-secondary { color: #35436e !important; }
+body:not(.light-theme) .text-success { color: #40d47e !important; }
+body:not(.light-theme) .text-info { color: #5bc0de !important; }
+body:not(.light-theme) .text-warning { color: #f39c12 !important; }
+body:not(.light-theme) .text-danger { color: #e74c3c !important; }

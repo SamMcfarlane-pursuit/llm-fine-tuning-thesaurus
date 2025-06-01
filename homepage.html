@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" href="/static/css/quiz.css">
     <link rel="stylesheet" href="/static/css/enhanced-quiz.css">
+    <link rel="stylesheet" href="/static/css/clean-navigation.css">
     <!-- Libraries -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vis-network@9.1.2/dist/vis-network.min.js"></script>
@@ -29,22 +30,6 @@
 
 </head>
 <body data-topic-id="" data-module-id="" data-user-logged-in="false">
-    <!-- Top Auth Bar -->
-    <div class="top-auth-bar">
-        <div class="container">
-            <div class="d-flex justify-content-end align-items-center">
-
-                <a href="/auth/login" class="top-auth-link me-3">
-                    <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
-                </a>
-                <a href="/auth/register" class="top-auth-link register-link">
-                    <i class="bi bi-person-plus me-1"></i> Register
-                </a>
-
-            </div>
-        </div>
-    </div>
-
     <header class="main-header">
         <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container">
@@ -76,10 +61,13 @@
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="guidesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-book-half nav-icon"></i> Guides
+                            <a class="nav-link dropdown-toggle" href="#" id="resourcesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-collection nav-icon"></i> Resources
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="guidesDropdown">
+                            <ul class="dropdown-menu" aria-labelledby="resourcesDropdown">
+                                <li><a class="dropdown-item" href="/tutorials"><i class="bi bi-journal-code me-2"></i>Tutorials</a></li>
+                                <li><a class="dropdown-item" href="/quiz/quizzes"><i class="bi bi-journal-check me-2"></i>Quizzes</a></li>
+                                <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="/qlora-guide"><i class="bi bi-cpu me-2"></i>QLoRA Fine-Tuning</a></li>
                                 <li><a class="dropdown-item" href="/docker-guide"><i class="bi bi-box-seam me-2"></i>Docker for LLM Fine-Tuning</a></li>
                                 <li><a class="dropdown-item" href="/huggingface-guide"><i class="bi bi-hdd-network me-2"></i>Hugging Face Integration</a></li>
@@ -92,9 +80,6 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="/llm-thesaurus"><i class="bi bi-search nav-icon"></i> Thesaurus</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/tutorials"><i class="bi bi-journal-code nav-icon"></i> Tutorials</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="frameworksDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -112,16 +97,20 @@
                                 <li><a class="dropdown-item" href="/frameworks/pytorch/exercises"><i class="bi bi-code-square me-2"></i>PyTorch Exercises</a></li>
                             </ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/quiz/quizzes">
-                                <i class="bi bi-journal-check nav-icon"></i> Quizzes
-
-                            </a>
-                        </li>
                     </ul>
                     <ul class="navbar-nav">
                         <li class="nav-item">
                             <a class="nav-link" href="/contact"><i class="bi bi-question-circle nav-icon"></i> Help</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/auth/login" class="nav-link me-2">
+                                <i class="bi bi-box-arrow-in-right me-1"></i> Sign In
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/auth/register" class="nav-link register-link">
+                                <i class="bi bi-person-plus me-1"></i> Register
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -200,11 +189,6 @@
                     <div class="card-body">
                         <p class="lead">Explore the relationships between LLM fine-tuning concepts in this interactive visualization. Click on any concept to learn more.</p>
                         <div id="concepts-visualization"></div>
-                        <div class="mt-3">
-                            <button type="button" id="concepts-zoom-in-btn" class="btn btn-sm btn-outline-primary"><i class="bi bi-zoom-in"></i> Zoom In</button>
-                            <button type="button" id="concepts-zoom-out-btn" class="btn btn-sm btn-outline-primary"><i class="bi bi-zoom-out"></i> Zoom Out</button>
-                            <button type="button" id="concepts-reset-zoom-btn" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrows-fullscreen"></i> Reset View</button>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -274,11 +258,7 @@
                                         <p>The visualization will show synonyms, antonyms, and related terms</p>
                                     </div>
                                 </div>
-                                <div class="mt-3" id="zoom-controls">
-                                    <button type="button" id="zoom-in-btn" class="btn btn-sm btn-outline-primary"><i class="bi bi-zoom-in"></i> Zoom In</button>
-                                    <button type="button" id="zoom-out-btn" class="btn btn-sm btn-outline-primary"><i class="bi bi-zoom-out"></i> Zoom Out</button>
-                                    <button type="button" id="reset-zoom-btn" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrows-fullscreen"></i> Reset View</button>
-                                </div>
+
                             </div>
                             <div class="tab-pane fade" id="synonyms" role="tabpanel" aria-labelledby="synonyms-tab">
                                 <div id="synonyms-container" class="p-3">

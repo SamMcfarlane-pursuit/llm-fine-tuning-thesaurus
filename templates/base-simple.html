@@ -4,17 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Visual LLM{% endblock %}</title>
-    
+
     <!-- Essential CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom-dark-mode.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/theme-toggle.css') }}">
-    
+    <!-- New Color System - Purple/Pink Light Mode & Green/Purple Dark Mode -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/new-color-system.css') }}">
+    <!-- Balanced Brightness Theme - Ensures optimal brightness and contrast for both modes -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/balanced-brightness-theme.css') }}">
+    <!-- Robust Features - Advanced functionality styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/robust-features.css') }}">
+    <!-- AI Learning Assistant - DISABLED to prevent AI button conflicts -->
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/ai-learning-assistant.css') }}"> -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile-responsive.css') }}">
+
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    
+
     {% block head %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}">
@@ -33,11 +42,33 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('workshops') }}">Workshops</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('tutorials') }}">Tutorials</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="resourcesDropdown" role="button" data-bs-toggle="dropdown">
+                            Resources
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('tutorials') }}">Tutorials</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('quiz.quiz_list') }}">Quizzes</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('learning_paths') }}">Learning Paths</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ url_for('user_dashboard') }}">My Dashboard</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('analytics.dashboard') }}">Analytics</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ url_for('google_ml_crash_course') }}">Google ML Course</a></li>
+                        </ul>
                     </li>
                 </ul>
-                <div class="d-flex">
+                <div class="d-flex align-items-center">
+                    <!-- Search Box -->
+                    <form class="d-flex me-3" method="GET" action="{{ url_for('search_results') }}">
+                        <div class="input-group">
+                            <input class="form-control" type="search" name="q" placeholder="Search..." style="width: 200px;">
+                            <button class="btn btn-outline-light" type="submit">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </form>
+
                     <button id="theme-toggle" class="btn btn-outline-light me-2">
                         <i class="bi bi-moon-fill"></i>
                     </button>
@@ -60,21 +91,78 @@
                 {% endfor %}
             {% endif %}
         {% endwith %}
-        
+
         {% block content %}{% endblock %}
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-dark text-white py-4 mt-auto">
+    <!-- Enhanced Footer -->
+    <footer class="bg-dark text-white py-5 mt-auto">
         <div class="container">
             <div class="row">
-                <div class="col-md-6">
-                    <h5>Visual LLM</h5>
-                    <p>A project demonstrating LLM fine-tuning with interactive visualizations</p>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h5 class="text-primary">Visual LLM</h5>
+                    <p class="mb-3">The most comprehensive platform for learning LLM fine-tuning techniques. From beginner to expert, master LoRA, QLoRA, and advanced methods.</p>
+                    <div class="social-links">
+                        <a href="#" class="text-white me-3"><i class="bi bi-github"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bi bi-youtube"></i></a>
+                    </div>
                 </div>
-                <div class="col-md-6 text-end">
-                    <a href="{{ url_for('terms') }}" class="text-white me-3">Terms</a>
-                    <a href="{{ url_for('privacy') }}" class="text-white">Privacy</a>
+
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="text-uppercase fw-bold">Learning</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="{{ url_for('learning_paths') }}" class="text-white text-decoration-none">Learning Paths</a></li>
+                        <li class="mb-2"><a href="{{ url_for('workshops') }}" class="text-white text-decoration-none">Workshops</a></li>
+                        <li class="mb-2"><a href="{{ url_for('tutorials') }}" class="text-white text-decoration-none">Tutorials</a></li>
+                        <li class="mb-2"><a href="{{ url_for('quiz.quiz_list') }}" class="text-white text-decoration-none">Quizzes</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="text-uppercase fw-bold">Guides</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="{{ url_for('lora_guide') }}" class="text-white text-decoration-none">LoRA Guide</a></li>
+                        <li class="mb-2"><a href="{{ url_for('qlora_guide') }}" class="text-white text-decoration-none">QLoRA Guide</a></li>
+                        <li class="mb-2"><a href="{{ url_for('docker_guide') }}" class="text-white text-decoration-none">Docker Guide</a></li>
+                        <li class="mb-2"><a href="{{ url_for('huggingface_guide') }}" class="text-white text-decoration-none">Hugging Face</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="text-uppercase fw-bold">Tools</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="{{ url_for('ai_assistant') }}" class="text-white text-decoration-none">AI Assistant</a></li>
+                        <li class="mb-2"><a href="{{ url_for('search_results') }}" class="text-white text-decoration-none">Search</a></li>
+                        <li class="mb-2"><a href="{{ url_for('user_dashboard') }}" class="text-white text-decoration-none">Dashboard</a></li>
+                        <li class="mb-2"><a href="{{ url_for('analytics.dashboard') }}" class="text-white text-decoration-none">Analytics</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="text-uppercase fw-bold">Support</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="{{ url_for('getting_started') }}" class="text-white text-decoration-none">Getting Started</a></li>
+                        <li class="mb-2"><a href="{{ url_for('contact') }}" class="text-white text-decoration-none">Contact</a></li>
+                        <li class="mb-2"><a href="{{ url_for('terms') }}" class="text-white text-decoration-none">Terms</a></li>
+                        <li class="mb-2"><a href="{{ url_for('privacy') }}" class="text-white text-decoration-none">Privacy</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2024 Visual LLM. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="footer-stats">
+                        <span class="badge bg-primary me-2">18+ Modules</span>
+                        <span class="badge bg-success me-2">15+ Workshops</span>
+                        <span class="badge bg-warning text-dark">50+ Exercises</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -83,6 +171,18 @@
     <!-- Essential JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ url_for('static', filename='js/theme-toggle.js') }}"></script>
+
+    <!-- Main JavaScript - DISABLED to prevent AI button conflicts -->
+    <!-- <script src="{{ url_for('static', filename='js/main.js') }}"></script> -->
+
+    <!-- Robust Features - Advanced functionality -->
+    <script src="{{ url_for('static', filename='js/advanced-progress-tracking.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/ai-code-assistant.js') }}"></script>
+    <!-- Final AI Assistant - Definitive working version -->
+    <script src="{{ url_for('static', filename='js/final-ai-assistant.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/pwa-support.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/advanced-notification-system.js') }}"></script>
     {% block scripts %}{% endblock %}
 </body>
-</html> 
+</html>

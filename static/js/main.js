@@ -25,6 +25,9 @@ let network = null;
 
 // Initialize the page
 function init() {
+    // Create AI Assistant button immediately
+    createAIAssistantButton();
+
     // Add event listeners
     searchBtn.addEventListener('click', searchWord);
     wordInput.addEventListener('keypress', (e) => {
@@ -772,5 +775,128 @@ function resetZoomConcepts() {
     }
 }
 
+// Create AI Assistant Button - DISABLED (Final AI Assistant handles this)
+function createAIAssistantButton() {
+    console.log('AI Assistant button creation disabled - Final AI Assistant handles this...');
+    return; // Exit early to prevent duplicate buttons
+
+    // Remove any existing button
+    const existing = document.getElementById('ai-assistant-button');
+    if (existing) existing.remove();
+
+    // Create button container
+    const button = document.createElement('div');
+    button.id = 'ai-assistant-button';
+    button.innerHTML = '🤖';
+
+    // Apply styles directly
+    button.style.cssText = `
+        position: fixed !important;
+        right: 24px !important;
+        bottom: 24px !important;
+        width: 64px !important;
+        height: 64px !important;
+        background: linear-gradient(135deg, #3c6430, #7350a5) !important;
+        border-radius: 50% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        z-index: 999999 !important;
+        font-size: 28px !important;
+        color: white !important;
+        box-shadow: 0 8px 32px rgba(60, 100, 48, 0.3) !important;
+        border: 2px solid rgba(255, 255, 255, 0.1) !important;
+        transition: all 0.3s ease !important;
+        user-select: none !important;
+        pointer-events: auto !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    `;
+
+    // Add hover effects
+    button.addEventListener('mouseenter', () => {
+        button.style.transform = 'scale(1.1)';
+        button.style.boxShadow = '0 12px 40px rgba(60, 100, 48, 0.4)';
+    });
+
+    button.addEventListener('mouseleave', () => {
+        button.style.transform = 'scale(1)';
+        button.style.boxShadow = '0 8px 32px rgba(60, 100, 48, 0.3)';
+    });
+
+    // Add click handler
+    button.addEventListener('click', () => {
+        console.log('AI Assistant button clicked!');
+
+        // Try to open AI assistant if available
+        if (window.aiAssistant && window.aiAssistant.toggleAssistant) {
+            window.aiAssistant.toggleAssistant();
+        } else {
+            // Show simple alert for now
+            alert('🤖 AI Assistant\n\nLoading AI capabilities...\nPlease try again in a moment!');
+        }
+    });
+
+    // Add to page
+    document.body.appendChild(button);
+    console.log('AI Assistant button added successfully!');
+
+    // Verify it's visible
+    setTimeout(() => {
+        const rect = button.getBoundingClientRect();
+        console.log('Button position:', rect);
+        console.log('Button visible:', rect.width > 0 && rect.height > 0);
+    }, 100);
+}
+
 // Initialize the page when DOM is loaded
 document.addEventListener('DOMContentLoaded', init);
+
+// AI button creation DISABLED - Final AI Assistant handles this
+if (document.readyState !== 'loading') {
+    console.log('AI button creation disabled - Final AI Assistant handles this...');
+    // createAIAssistantButton(); // DISABLED
+}
+
+// Backup: DISABLED - Final AI Assistant handles this
+setTimeout(() => {
+    console.log('Backup AI button creation disabled - Final AI Assistant handles this...');
+    // if (!document.getElementById('ai-assistant-button')) {
+    //     console.log('Backup: Creating AI button after delay...');
+    //     createAIAssistantButton();
+    // }
+}, 1000);
+
+// Emergency backup: DISABLED (Final AI Assistant handles this)
+setTimeout(() => {
+    console.log('Emergency backup disabled - Final AI Assistant handles button creation...');
+    return; // Exit early to prevent duplicate buttons
+
+    if (!document.getElementById('ai-assistant-button')) {
+        console.log('Emergency backup: Creating AI button...');
+        const emergencyBtn = document.createElement('div');
+        emergencyBtn.id = 'ai-assistant-button';
+        emergencyBtn.innerHTML = '🤖';
+        emergencyBtn.style.cssText = `
+            position: fixed !important;
+            right: 24px !important;
+            bottom: 24px !important;
+            width: 64px !important;
+            height: 64px !important;
+            background: #3c6430 !important;
+            border-radius: 50% !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            cursor: pointer !important;
+            z-index: 999999 !important;
+            font-size: 28px !important;
+            color: white !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+        `;
+        emergencyBtn.onclick = () => alert('🤖 AI Assistant is loading...');
+        document.body.appendChild(emergencyBtn);
+        console.log('Emergency AI button created!');
+    }
+}, 3000);

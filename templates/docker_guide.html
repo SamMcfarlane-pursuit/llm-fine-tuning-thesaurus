@@ -1,6 +1,6 @@
-{% extends 'base.html' %}
+{% extends base_template %}
 
-{% block title %}Docker Guide for LLM Fine-Tuning{% endblock %}
+{% block title %}Docker Guide for LLM Fine-Tuning - Visual LLM{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
@@ -20,7 +20,7 @@
                 </div>
                 <div class="card-body">
                     <p>Docker is a powerful tool for creating, deploying, and running applications in containers. For machine learning and specifically LLM fine-tuning, Docker provides several key benefits:</p>
-                    
+
                     <div class="row mt-3">
                         <div class="col-md-6">
                             <div class="card h-100">
@@ -39,7 +39,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="row mt-3">
                         <div class="col-md-6">
                             <div class="card h-100">
@@ -143,7 +143,7 @@ docker exec -it container_id bash</code></pre>
                 <div class="card-body">
                     <h4>Creating a Dockerfile for Fine-Tuning</h4>
                     <p>Here's a sample Dockerfile for LLM fine-tuning with PyTorch and Hugging Face Transformers:</p>
-                    
+
                     <div class="bg-light p-3 rounded">
                         <pre><code># Use NVIDIA's PyTorch container as base image
 FROM nvcr.io/nvidia/pytorch:23.04-py3
@@ -187,7 +187,7 @@ ENTRYPOINT ["/app/run_finetuning.sh"]</code></pre>
 
                     <h4 class="mt-4">Using Docker Compose for Fine-Tuning</h4>
                     <p>Docker Compose allows you to define and run multi-container applications. Here's an example for LLM fine-tuning:</p>
-                    
+
                     <div class="bg-light p-3 rounded">
                         <pre><code>version: '3.8'
 
@@ -208,7 +208,7 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
-  
+
   tensorboard:
     image: tensorflow/tensorflow:latest
     command: tensorboard --logdir=/logs --bind_all
@@ -232,7 +232,7 @@ services:
                 <div class="card-body">
                     <h4>Example 1: Fine-Tuning with QLoRA in Docker</h4>
                     <p>This example demonstrates how to set up a Docker container for fine-tuning a language model using QLoRA:</p>
-                    
+
                     <div class="accordion" id="exampleAccordion">
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingOne">
@@ -324,7 +324,7 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
-  
+
   tensorboard:
     image: tensorflow/tensorflow:latest
     command: tensorboard --logdir=/logs --bind_all
@@ -365,7 +365,7 @@ docker-compose down</code></pre>
 
                     <h4 class="mt-4">Example 2: Deploying a Fine-Tuned Model with Docker</h4>
                     <p>This example shows how to deploy a fine-tuned model as a REST API using FastAPI and Docker:</p>
-                    
+
                     <div class="accordion" id="deploymentAccordion">
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="headingDeploy1">
@@ -393,18 +393,18 @@ ADAPTER_PATH = os.environ.get("ADAPTER_PATH", "./models/thesaurus-model-lora")
 @app.on_event("startup")
 async def startup_event():
     global model, tokenizer
-    
+
     print(f"Loading base model: {BASE_MODEL_PATH}")
     base_model = AutoModelForCausalLM.from_pretrained(
         BASE_MODEL_PATH,
         device_map="auto",
         torch_dtype=torch.float16
     )
-    
+
     print(f"Loading adapter: {ADAPTER_PATH}")
     model = PeftModel.from_pretrained(base_model, ADAPTER_PATH)
     tokenizer = AutoTokenizer.from_pretrained(ADAPTER_PATH)
-    
+
     print("Model loaded successfully!")
 
 class GenerationRequest(BaseModel):
@@ -421,7 +421,7 @@ class GenerationResponse(BaseModel):
 async def generate_text(request: GenerationRequest):
     try:
         inputs = tokenizer(request.prompt, return_tensors="pt").to(model.device)
-        
+
         with torch.no_grad():
             outputs = model.generate(
                 inputs.input_ids,
@@ -431,10 +431,10 @@ async def generate_text(request: GenerationRequest):
                 num_return_sequences=request.num_return_sequences,
                 pad_token_id=tokenizer.eos_token_id
             )
-        
+
         generated_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
         return {"generated_text": generated_text}
-    
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -589,7 +589,7 @@ docker-compose down</code></pre>
 
                     <h4>Integration with Hugging Face Hub</h4>
                     <p>You can easily integrate your Docker-based fine-tuning with the Hugging Face Hub:</p>
-                    
+
                     <div class="bg-light p-3 rounded">
                         <pre><code># Inside your Docker container
 from huggingface_hub import login, push_to_hub
@@ -621,7 +621,7 @@ tokenizer.push_to_hub("your-username/your-model-name")</code></pre>
                 </div>
                 <div class="card-body">
                     <p>In this exercise, you'll create a complete Docker setup for fine-tuning a language model with QLoRA and deploying it as an API.</p>
-                    
+
                     <div class="alert alert-info">
                         <h5><i class="bi bi-info-circle me-2"></i>Learning Objectives</h5>
                         <ul>
@@ -631,7 +631,7 @@ tokenizer.push_to_hub("your-username/your-model-name")</code></pre>
                             <li>Implement best practices for ML Docker containers</li>
                         </ul>
                     </div>
-                    
+
                     <h4 class="mt-4">Exercise Steps</h4>
                     <ol class="list-group list-group-numbered mb-4">
                         <li class="list-group-item d-flex justify-content-between align-items-start">
@@ -677,7 +677,7 @@ tokenizer.push_to_hub("your-username/your-model-name")</code></pre>
                             <span class="badge bg-primary rounded-pill">10 min</span>
                         </li>
                     </ol>
-                    
+
                     <div class="text-center">
                         <a href="/exercises/docker-fine-tuning" class="btn btn-primary btn-lg">
                             <i class="bi bi-play-fill me-2"></i> Start Exercise

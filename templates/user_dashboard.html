@@ -1,0 +1,483 @@
+{% extends base_template %}
+
+{% block title %}My Dashboard - Visual LLM{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <!-- Header Section -->
+            <div class="hero-section bg-gradient-primary text-white py-4 mb-4">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-8">
+                            <h1 class="display-5 fw-bold mb-2">My Learning Dashboard</h1>
+                            <p class="lead mb-3">Track your progress across all LLM fine-tuning modules and exercises</p>
+                        </div>
+                        <div class="col-lg-4 text-center">
+                            <div class="feature-icon-large">
+                                <i class="bi bi-person-circle display-1"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="container">
+                <div class="row g-4 mb-4">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <i class="bi bi-book display-4 text-primary mb-2"></i>
+                                <h5 class="card-title">Modules Completed</h5>
+                                <h2 class="text-primary" id="modules-completed">12</h2>
+                                <small class="text-muted">out of 18 total</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <i class="bi bi-trophy display-4 text-warning mb-2"></i>
+                                <h5 class="card-title">Quiz Score</h5>
+                                <h2 class="text-warning" id="average-score">87%</h2>
+                                <small class="text-muted">average across all quizzes</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <i class="bi bi-tools display-4 text-success mb-2"></i>
+                                <h5 class="card-title">Workshops Done</h5>
+                                <h2 class="text-success" id="workshops-completed">8</h2>
+                                <small class="text-muted">hands-on exercises</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-6">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <i class="bi bi-calendar-check display-4 text-info mb-2"></i>
+                                <h5 class="card-title">Study Streak</h5>
+                                <h2 class="text-info" id="study-streak">15</h2>
+                                <small class="text-muted">days in a row</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Learning Path Progress -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4><i class="bi bi-map me-2"></i>Learning Path Progress</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h6>Beginner Path</h6>
+                                        <div class="progress mb-2">
+                                            <div class="progress-bar bg-success" style="width: 100%">100%</div>
+                                        </div>
+                                        <small class="text-success"><i class="bi bi-check-circle me-1"></i>Completed</small>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h6>Intermediate Path</h6>
+                                        <div class="progress mb-2">
+                                            <div class="progress-bar bg-warning" style="width: 75%">75%</div>
+                                        </div>
+                                        <small class="text-warning"><i class="bi bi-clock me-1"></i>In Progress</small>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <h6>Advanced Path</h6>
+                                        <div class="progress mb-2">
+                                            <div class="progress-bar bg-secondary" style="width: 0%">0%</div>
+                                        </div>
+                                        <small class="text-muted"><i class="bi bi-lock me-1"></i>Locked</small>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <a href="{{ url_for('learning_paths') }}" class="btn btn-primary">Continue Learning Path</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="row mb-4">
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4><i class="bi bi-activity me-2"></i>Recent Activity</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="activity-timeline">
+                                    <div class="activity-item">
+                                        <div class="activity-icon bg-success">
+                                            <i class="bi bi-check-circle"></i>
+                                        </div>
+                                        <div class="activity-content">
+                                            <h6>Completed LoRA Concepts Quiz</h6>
+                                            <p class="text-muted mb-1">Scored 92% on the LoRA fundamentals assessment</p>
+                                            <small class="text-muted">2 hours ago</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="activity-item">
+                                        <div class="activity-icon bg-primary">
+                                            <i class="bi bi-book"></i>
+                                        </div>
+                                        <div class="activity-content">
+                                            <h6>Started QLoRA Deep Dive Workshop</h6>
+                                            <p class="text-muted mb-1">Beginning advanced parameter-efficient fine-tuning</p>
+                                            <small class="text-muted">1 day ago</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="activity-item">
+                                        <div class="activity-icon bg-warning">
+                                            <i class="bi bi-tools"></i>
+                                        </div>
+                                        <div class="activity-content">
+                                            <h6>Completed Full Fine-Tuning Workshop</h6>
+                                            <p class="text-muted mb-1">Successfully fine-tuned BERT on sentiment analysis</p>
+                                            <small class="text-muted">3 days ago</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="activity-item">
+                                        <div class="activity-icon bg-info">
+                                            <i class="bi bi-play-circle"></i>
+                                        </div>
+                                        <div class="activity-content">
+                                            <h6>Opened Google Colab Notebook</h6>
+                                            <p class="text-muted mb-1">Started working on Hugging Face pipeline exercise</p>
+                                            <small class="text-muted">5 days ago</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="text-center mt-3">
+                                    <a href="{{ url_for('analytics.dashboard') }}" class="btn btn-outline-primary">View Full Activity</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <!-- Achievements -->
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h5><i class="bi bi-award me-2"></i>Achievements</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="achievement-badge earned">
+                                    <i class="bi bi-trophy text-warning"></i>
+                                    <span>First Quiz Completed</span>
+                                </div>
+                                <div class="achievement-badge earned">
+                                    <i class="bi bi-gear text-success"></i>
+                                    <span>LoRA Master</span>
+                                </div>
+                                <div class="achievement-badge earned">
+                                    <i class="bi bi-calendar-check text-info"></i>
+                                    <span>Week Streak</span>
+                                </div>
+                                <div class="achievement-badge">
+                                    <i class="bi bi-rocket text-muted"></i>
+                                    <span>Advanced Practitioner</span>
+                                </div>
+                                <div class="achievement-badge">
+                                    <i class="bi bi-star text-muted"></i>
+                                    <span>Expert Level</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h5><i class="bi bi-lightning me-2"></i>Quick Actions</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-grid gap-2">
+                                    <a href="{{ url_for('quiz.quiz_list') }}" class="btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-question-circle me-2"></i>Take a Quiz
+                                    </a>
+                                    <a href="{{ url_for('workshops') }}" class="btn btn-outline-success btn-sm">
+                                        <i class="bi bi-tools me-2"></i>Start Workshop
+                                    </a>
+                                    <a href="{{ url_for('google_ml_crash_course') }}" class="btn btn-outline-warning btn-sm">
+                                        <i class="bi bi-play-circle me-2"></i>Open Colab
+                                    </a>
+                                    <a href="{{ url_for('search_results') }}" class="btn btn-outline-info btn-sm">
+                                        <i class="bi bi-search me-2"></i>Explore Thesaurus
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detailed Progress -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4><i class="bi bi-graph-up me-2"></i>Detailed Progress</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5>Module Completion</h5>
+                                        <div class="module-progress">
+                                            <div class="module-item completed">
+                                                <i class="bi bi-check-circle text-success"></i>
+                                                <span>LLM Fundamentals</span>
+                                                <small class="text-success">100%</small>
+                                            </div>
+                                            <div class="module-item completed">
+                                                <i class="bi bi-check-circle text-success"></i>
+                                                <span>Hugging Face Basics</span>
+                                                <small class="text-success">100%</small>
+                                            </div>
+                                            <div class="module-item completed">
+                                                <i class="bi bi-check-circle text-success"></i>
+                                                <span>LoRA Introduction</span>
+                                                <small class="text-success">100%</small>
+                                            </div>
+                                            <div class="module-item in-progress">
+                                                <i class="bi bi-clock text-warning"></i>
+                                                <span>QLoRA Deep Dive</span>
+                                                <small class="text-warning">75%</small>
+                                            </div>
+                                            <div class="module-item">
+                                                <i class="bi bi-circle text-muted"></i>
+                                                <span>Advanced PEFT Methods</span>
+                                                <small class="text-muted">0%</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5>Quiz Performance</h5>
+                                        <canvas id="quizChart" width="400" height="200"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recommendations -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4><i class="bi bi-lightbulb me-2"></i>Recommended Next Steps</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="recommendation-card">
+                                            <h6><i class="bi bi-target text-primary"></i> Continue Current Path</h6>
+                                            <p>Complete the QLoRA Deep Dive workshop to advance in your intermediate learning path.</p>
+                                            <a href="{{ url_for('workshop_qlora_deep_dive') }}" class="btn btn-primary btn-sm">Continue Workshop</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="recommendation-card">
+                                            <h6><i class="bi bi-brain text-success"></i> Practice Knowledge</h6>
+                                            <p>Test your understanding with the Advanced LoRA Concepts quiz.</p>
+                                            <a href="{{ url_for('quiz.quiz_list') }}" class="btn btn-success btn-sm">Take Quiz</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="recommendation-card">
+                                            <h6><i class="bi bi-code-square text-warning"></i> Hands-On Practice</h6>
+                                            <p>Try the Memory Efficiency workshop to optimize your models.</p>
+                                            <a href="{{ url_for('workshop_memory_efficiency') }}" class="btn btn-warning btn-sm">Start Workshop</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.activity-timeline {
+    position: relative;
+}
+
+.activity-item {
+    display: flex;
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.activity-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+.activity-content {
+    flex: 1;
+}
+
+.activity-content h6 {
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+}
+
+.achievement-badge {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 0.375rem;
+    background-color: #f8f9fa;
+}
+
+.achievement-badge.earned {
+    background-color: #e7f3ff;
+    border-left: 3px solid #0d6efd;
+}
+
+.achievement-badge i {
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.module-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+    border-radius: 0.375rem;
+    background-color: #f8f9fa;
+}
+
+.module-item.completed {
+    background-color: #d1e7dd;
+}
+
+.module-item.in-progress {
+    background-color: #fff3cd;
+}
+
+.module-item i {
+    margin-right: 0.75rem;
+    font-size: 1.1rem;
+}
+
+.module-item span {
+    flex: 1;
+    font-weight: 500;
+}
+
+.module-item small {
+    font-weight: 600;
+}
+
+.recommendation-card {
+    padding: 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    height: 100%;
+}
+
+.recommendation-card h6 {
+    margin-bottom: 0.75rem;
+}
+
+.recommendation-card p {
+    margin-bottom: 1rem;
+    color: #6c757d;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Quiz performance chart
+    const ctx = document.getElementById('quizChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Quiz 1', 'Quiz 2', 'Quiz 3', 'Quiz 4', 'Quiz 5'],
+            datasets: [{
+                label: 'Quiz Scores',
+                data: [78, 85, 92, 88, 95],
+                borderColor: '#0d6efd',
+                backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: {
+                        callback: function(value) {
+                            return value + '%';
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+
+    // Animate counters
+    function animateCounter(element, target) {
+        let current = 0;
+        const increment = target / 50;
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                current = target;
+                clearInterval(timer);
+            }
+            element.textContent = Math.floor(current);
+        }, 20);
+    }
+
+    // Animate stats on page load
+    setTimeout(() => {
+        animateCounter(document.getElementById('modules-completed'), 12);
+        animateCounter(document.getElementById('workshops-completed'), 8);
+        animateCounter(document.getElementById('study-streak'), 15);
+    }, 500);
+});
+</script>
+{% endblock %}

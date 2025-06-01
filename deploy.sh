@@ -28,4 +28,8 @@ kill -9 $(lsof -t -i:5036) 2>/dev/null
 
 # Start the Flask application on port 5036
 echo "Starting Flask application with fine-tuned model..."
+# python3 app.py --port 5036
+
+# Start the Flask application on port 5036
+echo "Starting Flask application with fine-tuned model..."
 python3 app.py --port 5036

@@ -1,6 +1,6 @@
-{% extends 'base.html' %}
+{% extends base_template %}
 
-{% block title %}LangGraph for LLM Fine-Tuning{% endblock %}
+{% block title %}LangGraph for LLM Fine-Tuning - Visual LLM{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
@@ -41,7 +41,7 @@
                     <div class="row">
                         <div class="col-md-8">
                             <p>LangGraph is a library for building stateful, multi-actor applications with LLMs. It extends LangChain with a graph-based orchestration layer that allows you to build complex, multi-step workflows with fine-tuned language models.</p>
-                            
+
                             <p>Key features of LangGraph include:</p>
                             <ul>
                                 <li><strong>Stateful Workflows</strong>: Build applications that maintain state across multiple interactions</li>
@@ -76,7 +76,7 @@
                 </div>
                 <div class="card-body">
                     <p>To get started with LangGraph, you'll need to install the library and its dependencies:</p>
-                    
+
                     <div class="bg-light p-3 rounded">
                         <pre><code># Install LangGraph and LangChain
 pip install langgraph langchain
@@ -85,7 +85,7 @@ pip install langchain-huggingface  # For Hugging Face models</code></pre>
                     </div>
 
                     <p class="mt-3">For working with fine-tuned models, you'll also need to install the appropriate libraries:</p>
-                    
+
                     <div class="bg-light p-3 rounded">
                         <pre><code># For Hugging Face models
 pip install transformers accelerate
@@ -116,16 +116,16 @@ pip install langgraph langchain</code></pre>
                 <div class="card-body">
                     <h4>Nodes and Edges</h4>
                     <p>LangGraph uses a graph structure to define workflows. The key components are:</p>
-                    
+
                     <ul>
                         <li><strong>Nodes</strong>: Functions or components that perform specific tasks (e.g., generating text, making decisions)</li>
                         <li><strong>Edges</strong>: Connections between nodes that define the flow of data and control</li>
                         <li><strong>State</strong>: Information that persists across multiple steps in the workflow</li>
                     </ul>
-                    
+
                     <h4 class="mt-4">Building a Simple Graph</h4>
                     <p>Here's a basic example of creating a simple LangGraph workflow:</p>
-                    
+
                     <div class="bg-light p-3 rounded">
                         <pre><code>from langgraph.graph import StateGraph
 from langchain_openai import ChatOpenAI
@@ -191,7 +191,7 @@ app = graph.compile()</code></pre>
                 </div>
                 <div class="card-body">
                     <p>LangGraph works seamlessly with fine-tuned models. Here's how to integrate your fine-tuned models into LangGraph workflows:</p>
-                    
+
                     <h4>Integrating Hugging Face Fine-Tuned Models</h4>
                     <div class="bg-light p-3 rounded">
                         <pre><code>from langchain_huggingface import HuggingFaceEndpoint
@@ -216,7 +216,7 @@ graph = StateGraph()
 graph.add_node("generate_synonyms", generate_thesaurus_entry)
 # ... add more nodes and edges as needed</code></pre>
                     </div>
-                    
+
                     <h4 class="mt-4">Using Local Fine-Tuned Models with PEFT</h4>
                     <div class="bg-light p-3 rounded">
                         <pre><code>from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -277,7 +277,7 @@ graph.add_node("generate_synonyms", generate_synonyms)
                 <div class="card-body">
                     <h4>Multi-Model Workflows</h4>
                     <p>You can create workflows that use multiple fine-tuned models for different tasks:</p>
-                    
+
                     <div class="bg-light p-3 rounded">
                         <pre><code>from langgraph.graph import StateGraph
 from langchain_huggingface import HuggingFaceEndpoint
@@ -333,10 +333,10 @@ graph.add_edge("synonyms", "definition")
 graph.add_edge("definition", "examples")
 graph.add_edge("examples", "combine")</code></pre>
                     </div>
-                    
+
                     <h4 class="mt-4">Feedback Loops and Refinement</h4>
                     <p>You can create workflows that refine outputs through feedback loops:</p>
-                    
+
                     <div class="bg-light p-3 rounded">
                         <pre><code>from langgraph.graph import StateGraph
 from langchain_openai import ChatOpenAI
@@ -363,7 +363,7 @@ def evaluate_content(state):
         quality_score = 10
     else:
         quality_score = 5
-    
+
     return {
         "evaluation": evaluation.content,
         "quality_score": quality_score
@@ -372,11 +372,11 @@ def evaluate_content(state):
 def refine_content(state):
     draft = state["draft"]
     evaluation = state["evaluation"]
-    
+
     response = generator.invoke(
         f"Refine this paragraph based on the feedback:\n\nParagraph: {draft}\n\nFeedback: {evaluation}"
     )
-    
+
     return {"draft": response.content}
 
 def decide_next_step(state):
@@ -421,7 +421,7 @@ graph.add_edge("refine", "evaluate")</code></pre>
                 <div class="card-body">
                     <h4>Thesaurus Application with Fine-Tuned Models</h4>
                     <p>Here's a complete example of building a thesaurus application using LangGraph and fine-tuned models:</p>
-                    
+
                     <div class="bg-light p-3 rounded">
                         <pre><code>from langgraph.graph import StateGraph
 from langchain_huggingface import HuggingFacePipeline
@@ -466,54 +466,54 @@ def generate_synonyms(state: ThesaurusState) -> Dict:
     word = state["word"]
     prompt = f"Generate synonyms for the word '{word}':"
     response = pipeline.invoke(prompt)
-    
+
     # Extract synonyms from response
     synonyms_text = response.split("Synonyms:")[1].split("\n")[0] if "Synonyms:" in response else response
     synonyms = [s.strip() for s in synonyms_text.split(",")]
-    
+
     return {"synonyms": synonyms}
 
 def generate_antonyms(state: ThesaurusState) -> Dict:
     word = state["word"]
     prompt = f"Generate antonyms for the word '{word}':"
     response = pipeline.invoke(prompt)
-    
+
     # Extract antonyms from response
     antonyms_text = response.split("Antonyms:")[1].split("\n")[0] if "Antonyms:" in response else response
     antonyms = [a.strip() for a in antonyms_text.split(",")]
-    
+
     return {"antonyms": antonyms}
 
 def generate_related(state: ThesaurusState) -> Dict:
     word = state["word"]
     prompt = f"Generate related terms for the word '{word}':"
     response = pipeline.invoke(prompt)
-    
+
     # Extract related terms from response
     related_text = response.split("Related Terms:")[1].split("\n")[0] if "Related Terms:" in response else response
     related_terms = [r.strip() for r in related_text.split(",")]
-    
+
     return {"related_terms": related_terms}
 
 def generate_definition(state: ThesaurusState) -> Dict:
     word = state["word"]
     prompt = f"Define the word '{word}':"
     response = pipeline.invoke(prompt)
-    
+
     # Extract definition from response
     definition = response.split("Definition:")[1].split("\n")[0] if "Definition:" in response else response
-    
+
     return {"definition": definition.strip()}
 
 def generate_examples(state: ThesaurusState) -> Dict:
     word = state["word"]
     prompt = f"Provide usage examples for the word '{word}':"
     response = pipeline.invoke(prompt)
-    
+
     # Extract examples from response
     examples_text = response.split("Examples:")[1] if "Examples:" in response else response
     examples = [e.strip() for e in examples_text.split("\n") if e.strip()]
-    
+
     return {"examples": examples}
 
 def finalize_entry(state: ThesaurusState) -> Dict:
@@ -553,10 +553,10 @@ class WordRequest(BaseModel):
 async def get_thesaurus_entry(request: WordRequest):
     # Initialize state
     initial_state = {"word": request.word, "complete": False}
-    
+
     # Run the graph
     result = thesaurus_app.invoke(initial_state)
-    
+
     # Return the result
     return {
         "word": request.word,
@@ -600,7 +600,7 @@ async def get_thesaurus_entry(request: WordRequest):
                             </ul>
                         </div>
                     </div>
-                    
+
                     <div class="alert alert-warning mt-3">
                         <h5><i class="bi bi-exclamation-triangle me-2"></i>Common Pitfalls</h5>
                         <ul>

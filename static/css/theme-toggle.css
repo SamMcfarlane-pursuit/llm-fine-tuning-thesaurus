@@ -3,45 +3,45 @@
  * Provides styles for both dark and light themes with smooth transitions
  */
 
-/* Theme variables */
+/* Theme variables - Balanced Brightness & Contrast */
 :root {
-    /* Dark theme (default) */
-    --dark-primary-color: #4db394;
-    --dark-secondary-color: #2c2b64;
-    --dark-accent-color: #53367d;
-    --dark-bg: #030706;
-    --dark-medium-bg: #081210;
-    --dark-light-bg: #0c1816;
-    --dark-text-primary: #f1f9f7;
-    --dark-text-secondary: #d1e9e7;
-    --dark-success-color: #38b000;
-    --dark-warning-color: #fb8500;
-    --dark-danger-color: #d00000;
-    --dark-info-color: #4cc9f0;
-    --dark-border-color: rgba(241, 249, 247, 0.1);
-    --dark-card-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
-    --dark-linearPrimarySecondary: linear-gradient(#4db394, #2c2b64);
-    --dark-linearPrimaryAccent: linear-gradient(#4db394, #53367d);
-    --dark-linearSecondaryAccent: linear-gradient(#2c2b64, #53367d);
+    /* Dark theme (default) - Enhanced for better visibility */
+    --dark-primary-color: #5bc5a7;
+    --dark-secondary-color: #4a4db3;
+    --dark-accent-color: #7b5ba8;
+    --dark-bg: #0a0f0d;
+    --dark-medium-bg: #1a2420;
+    --dark-light-bg: #243530;
+    --dark-text-primary: #f8fffe;
+    --dark-text-secondary: #e0f2f0;
+    --dark-success-color: #4ade80;
+    --dark-warning-color: #fbbf24;
+    --dark-danger-color: #ef4444;
+    --dark-info-color: #60a5fa;
+    --dark-border-color: rgba(248, 255, 254, 0.15);
+    --dark-card-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    --dark-linearPrimarySecondary: linear-gradient(135deg, #5bc5a7, #4a4db3);
+    --dark-linearPrimaryAccent: linear-gradient(135deg, #5bc5a7, #7b5ba8);
+    --dark-linearSecondaryAccent: linear-gradient(135deg, #4a4db3, #7b5ba8);
 
-    /* Light theme */
-    --light-primary-color: #4db394;
-    --light-secondary-color: #9c9bd4;
-    --light-accent-color: #a082c9;
-    --light-bg: #f8fcfb;
-    --light-medium-bg: #ffffff;
-    --light-light-bg: #f0f8f6;
-    --light-text-primary: #060e0c;
-    --light-text-secondary: #1a2220;
-    --light-success-color: #198754;
-    --light-warning-color: #fd7e14;
-    --light-danger-color: #dc3545;
-    --light-info-color: #0dcaf0;
-    --light-border-color: rgba(6, 14, 12, 0.1);
-    --light-card-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    --light-linearPrimarySecondary: linear-gradient(#4db394, #9c9bd4);
-    --light-linearPrimaryAccent: linear-gradient(#4db394, #a082c9);
-    --light-linearSecondaryAccent: linear-gradient(#9c9bd4, #a082c9);
+    /* Light theme - Enhanced for better readability */
+    --light-primary-color: #2d9574;
+    --light-secondary-color: #6366f1;
+    --light-accent-color: #8b5cf6;
+    --light-bg: #fefffe;
+    --light-medium-bg: #f8fffe;
+    --light-light-bg: #f0faf8;
+    --light-text-primary: #0f172a;
+    --light-text-secondary: #334155;
+    --light-success-color: #059669;
+    --light-warning-color: #d97706;
+    --light-danger-color: #dc2626;
+    --light-info-color: #0284c7;
+    --light-border-color: rgba(15, 23, 42, 0.12);
+    --light-card-shadow: 0 4px 24px rgba(15, 23, 42, 0.08);
+    --light-linearPrimarySecondary: linear-gradient(135deg, #2d9574, #6366f1);
+    --light-linearPrimaryAccent: linear-gradient(135deg, #2d9574, #8b5cf6);
+    --light-linearSecondaryAccent: linear-gradient(135deg, #6366f1, #8b5cf6);
 
     /* Active theme variables (default to dark) */
     --primary-color: var(--dark-primary-color);
@@ -113,41 +113,54 @@ body.light-theme {
     color: var(--text-primary);
 }
 
-/* Light theme overrides */
+/* Light theme overrides - Enhanced brightness and contrast */
 body.light-theme .navbar {
-    background: linear-gradient(90deg, rgba(248, 252, 251, 0.95), rgba(240, 248, 246, 0.95)) !important;
-    box-shadow: 0 4px 20px rgba(77, 179, 148, 0.1);
+    background: linear-gradient(90deg, rgba(254, 255, 254, 0.98), rgba(248, 255, 254, 0.98)) !important;
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 24px rgba(45, 149, 116, 0.12);
+    border-bottom: 1px solid var(--light-border-color);
 }
 
-/* Dark theme overrides */
+/* Dark theme overrides - Enhanced visibility */
 body:not(.light-theme) .navbar {
-    background: linear-gradient(90deg, rgba(3, 7, 6, 0.95), rgba(44, 43, 100, 0.95)) !important;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(90deg, rgba(10, 15, 13, 0.98), rgba(26, 36, 32, 0.98)) !important;
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid var(--dark-border-color);
 }
 
+/* Enhanced navigation text contrast */
 body.light-theme .navbar-dark .navbar-nav .nav-link {
     color: var(--text-secondary);
+    font-weight: 500;
 }
 
 body.light-theme .navbar-dark .navbar-nav .nav-link:hover,
 body.light-theme .navbar-dark .navbar-nav .nav-link.active {
     color: var(--text-primary);
+    font-weight: 600;
 }
 
 body.light-theme .dropdown-menu {
     background-color: var(--medium-bg);
     border: 1px solid var(--border-color);
+    box-shadow: var(--light-card-shadow);
 }
 
 body.light-theme .dropdown-item {
     color: var(--text-secondary);
+    font-weight: 500;
 }
 
 body.light-theme .dropdown-item:hover {
-    background-color: rgba(77, 179, 148, 0.1);
+    background-color: rgba(45, 149, 116, 0.08);
     color: var(--text-primary);
+    font-weight: 600;
 }
 
+/* Enhanced card and content styles */
 body.light-theme .card {
     background-color: var(--medium-bg);
     border: 1px solid var(--border-color);
@@ -155,8 +168,10 @@ body.light-theme .card {
 }
 
 body.light-theme .card-header {
-    background-color: rgba(240, 248, 246, 0.5);
+    background-color: rgba(240, 250, 248, 0.6);
     border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-weight: 600;
 }
 
 body.light-theme .list-group-item {
@@ -168,6 +183,7 @@ body.light-theme .list-group-item {
 body.light-theme .modal-content {
     background-color: var(--medium-bg);
     border: 1px solid var(--border-color);
+    box-shadow: var(--card-shadow);
 }
 
 body.light-theme .modal-header,
@@ -176,15 +192,17 @@ body.light-theme .modal-footer {
 }
 
 body.light-theme .alert-info {
-    background-color: rgba(77, 179, 148, 0.1);
-    border-color: rgba(77, 179, 148, 0.3);
+    background-color: rgba(45, 149, 116, 0.08);
+    border-color: rgba(45, 149, 116, 0.2);
     color: var(--text-primary);
 }
 
+/* Enhanced code block contrast */
 body.light-theme pre,
 body.light-theme code {
-    background-color: rgba(240, 248, 246, 0.8);
-    color: #060e0c;
+    background-color: rgba(240, 250, 248, 0.9);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
 }
 
 body.light-theme .badge {

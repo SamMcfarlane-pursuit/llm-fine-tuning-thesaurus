@@ -1,0 +1,594 @@
+{% extends base_template %}
+
+{% block title %}AI Assistant - Visual LLM{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <!-- AI Assistant Header -->
+            <div class="ai-header bg-gradient-primary text-white py-4 mb-4">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-8">
+                            <h1 class="display-5 fw-bold mb-2">AI Learning Assistant</h1>
+                            <p class="lead mb-3">Get instant help with LLM fine-tuning concepts, code examples, and personalized guidance</p>
+                        </div>
+                        <div class="col-lg-4 text-center">
+                            <div class="ai-avatar">
+                                <i class="bi bi-robot display-1"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Chat Interface -->
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card chat-container">
+                            <div class="card-header bg-primary text-white">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-robot me-2"></i>
+                                    <h5 class="mb-0">Visual LLM Assistant</h5>
+                                    <span class="badge bg-success ms-auto">Online</span>
+                                </div>
+                            </div>
+                            <div class="card-body p-0">
+                                <!-- Chat Messages -->
+                                <div id="chat-messages" class="chat-messages">
+                                    <div class="message assistant-message">
+                                        <div class="message-avatar">
+                                            <i class="bi bi-robot"></i>
+                                        </div>
+                                        <div class="message-content">
+                                            <div class="message-bubble">
+                                                <p>Hello! I'm your AI assistant for LLM fine-tuning. I can help you with:</p>
+                                                <ul>
+                                                    <li>LoRA and QLoRA concepts</li>
+                                                    <li>Code examples and debugging</li>
+                                                    <li>Best practices and optimization</li>
+                                                    <li>Choosing the right fine-tuning method</li>
+                                                    <li>Troubleshooting common issues</li>
+                                                </ul>
+                                                <p>What would you like to learn about today?</p>
+                                            </div>
+                                            <div class="message-time">Just now</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Chat Input -->
+                                <div class="chat-input">
+                                    <form id="chat-form" class="d-flex">
+                                        <input type="text" id="message-input" class="form-control" 
+                                               placeholder="Ask me anything about LLM fine-tuning..." 
+                                               autocomplete="off">
+                                        <button type="submit" class="btn btn-primary ms-2">
+                                            <i class="bi bi-send"></i>
+                                        </button>
+                                        <button type="button" id="voice-btn" class="btn btn-outline-primary ms-2">
+                                            <i class="bi bi-mic"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <!-- Quick Questions -->
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h6 class="mb-0"><i class="bi bi-lightning me-2"></i>Quick Questions</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="quick-questions">
+                                    <button class="btn btn-outline-primary btn-sm mb-2 w-100 quick-question" 
+                                            data-question="What is LoRA and how does it work?">
+                                        What is LoRA and how does it work?
+                                    </button>
+                                    <button class="btn btn-outline-primary btn-sm mb-2 w-100 quick-question" 
+                                            data-question="How do I choose between LoRA and QLoRA?">
+                                        How do I choose between LoRA and QLoRA?
+                                    </button>
+                                    <button class="btn btn-outline-primary btn-sm mb-2 w-100 quick-question" 
+                                            data-question="Show me a basic LoRA implementation">
+                                        Show me a basic LoRA implementation
+                                    </button>
+                                    <button class="btn btn-outline-primary btn-sm mb-2 w-100 quick-question" 
+                                            data-question="What are the best practices for fine-tuning?">
+                                        What are the best practices for fine-tuning?
+                                    </button>
+                                    <button class="btn btn-outline-primary btn-sm mb-2 w-100 quick-question" 
+                                            data-question="How to optimize memory usage during training?">
+                                        How to optimize memory usage during training?
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AI Features -->
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h6 class="mb-0"><i class="bi bi-stars me-2"></i>AI Features</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="feature-list">
+                                    <div class="feature-item">
+                                        <i class="bi bi-code-square text-primary me-2"></i>
+                                        <span>Code Generation</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <i class="bi bi-bug text-success me-2"></i>
+                                        <span>Debug Assistance</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <i class="bi bi-lightbulb text-warning me-2"></i>
+                                        <span>Best Practices</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <i class="bi bi-graph-up text-info me-2"></i>
+                                        <span>Performance Tips</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <i class="bi bi-mic text-danger me-2"></i>
+                                        <span>Voice Input</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Topics -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0"><i class="bi bi-clock-history me-2"></i>Recent Topics</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="recent-topics">
+                                    <div class="topic-item">
+                                        <a href="#" class="text-decoration-none">
+                                            <small class="text-muted">Yesterday</small>
+                                            <p class="mb-1">LoRA rank selection strategies</p>
+                                        </a>
+                                    </div>
+                                    <div class="topic-item">
+                                        <a href="#" class="text-decoration-none">
+                                            <small class="text-muted">2 days ago</small>
+                                            <p class="mb-1">QLoRA memory optimization</p>
+                                        </a>
+                                    </div>
+                                    <div class="topic-item">
+                                        <a href="#" class="text-decoration-none">
+                                            <small class="text-muted">1 week ago</small>
+                                            <p class="mb-1">Hugging Face integration</p>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Floating AI Button (for other pages) -->
+<div id="floating-ai-btn" class="floating-ai-button d-none">
+    <button class="btn btn-primary rounded-circle" data-bs-toggle="modal" data-bs-target="#aiModal">
+        <i class="bi bi-robot"></i>
+    </button>
+</div>
+
+<!-- AI Modal (for quick access from other pages) -->
+<div class="modal fade" id="aiModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title"><i class="bi bi-robot me-2"></i>AI Assistant</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="modal-chat-messages" class="chat-messages" style="height: 300px;">
+                    <div class="message assistant-message">
+                        <div class="message-avatar">
+                            <i class="bi bi-robot"></i>
+                        </div>
+                        <div class="message-content">
+                            <div class="message-bubble">
+                                <p>Hi! I'm here to help with your LLM fine-tuning questions. What can I assist you with?</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-input mt-3">
+                    <form id="modal-chat-form" class="d-flex">
+                        <input type="text" id="modal-message-input" class="form-control" 
+                               placeholder="Ask me anything...">
+                        <button type="submit" class="btn btn-primary ms-2">
+                            <i class="bi bi-send"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="{{ url_for('ai_assistant') }}" class="btn btn-outline-primary">Open Full Assistant</a>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.ai-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.ai-avatar {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.chat-container {
+    height: 600px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    background-color: #f8f9fa;
+}
+
+.message {
+    display: flex;
+    margin-bottom: 1rem;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.message-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+}
+
+.assistant-message .message-avatar {
+    background-color: #0d6efd;
+    color: white;
+}
+
+.user-message {
+    flex-direction: row-reverse;
+}
+
+.user-message .message-avatar {
+    background-color: #6c757d;
+    color: white;
+    margin-right: 0;
+    margin-left: 0.75rem;
+}
+
+.message-content {
+    flex: 1;
+    max-width: 70%;
+}
+
+.user-message .message-content {
+    text-align: right;
+}
+
+.message-bubble {
+    background-color: white;
+    border-radius: 18px;
+    padding: 0.75rem 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 0.25rem;
+}
+
+.user-message .message-bubble {
+    background-color: #0d6efd;
+    color: white;
+}
+
+.message-time {
+    font-size: 0.75rem;
+    color: #6c757d;
+    padding: 0 1rem;
+}
+
+.chat-input {
+    padding: 1rem;
+    border-top: 1px solid #dee2e6;
+    background-color: white;
+}
+
+.quick-question {
+    text-align: left;
+    transition: all 0.3s ease;
+}
+
+.quick-question:hover {
+    transform: translateX(5px);
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.feature-item:last-child {
+    border-bottom: none;
+}
+
+.topic-item {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.topic-item:last-child {
+    border-bottom: none;
+}
+
+.floating-ai-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.floating-ai-button .btn {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+}
+
+.typing-dots {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.typing-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #6c757d;
+    animation: typing 1.4s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(1) { animation-delay: -0.32s; }
+.typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes typing {
+    0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+    40% { transform: scale(1); opacity: 1; }
+}
+
+/* Voice recording styles */
+.recording {
+    background-color: #dc3545 !important;
+    animation: recordingPulse 1s infinite;
+}
+
+@keyframes recordingPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .chat-container {
+        height: 500px;
+    }
+    
+    .message-content {
+        max-width: 85%;
+    }
+    
+    .floating-ai-button {
+        bottom: 80px;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const chatMessages = document.getElementById('chat-messages');
+    const chatForm = document.getElementById('chat-form');
+    const messageInput = document.getElementById('message-input');
+    const voiceBtn = document.getElementById('voice-btn');
+    
+    // Sample AI responses (in a real app, this would connect to an AI service)
+    const aiResponses = {
+        'lora': 'LoRA (Low-Rank Adaptation) is a parameter-efficient fine-tuning technique that adds trainable low-rank matrices to the attention layers of a pre-trained model. Instead of updating all parameters, LoRA only trains a small number of additional parameters, making it much more memory and compute efficient.',
+        'qlora': 'QLoRA (Quantized LoRA) combines LoRA with quantization techniques. It uses 4-bit quantization to reduce memory usage even further while maintaining performance. QLoRA is particularly useful for fine-tuning large models on consumer hardware.',
+        'implementation': 'Here\'s a basic LoRA implementation:\n\n```python\nfrom peft import LoraConfig, get_peft_model\nfrom transformers import AutoModelForCausalLM\n\n# Load base model\nmodel = AutoModelForCausalLM.from_pretrained("model_name")\n\n# Configure LoRA\nlora_config = LoraConfig(\n    r=16,  # rank\n    lora_alpha=32,\n    target_modules=["q_proj", "v_proj"],\n    lora_dropout=0.1\n)\n\n# Apply LoRA\nmodel = get_peft_model(model, lora_config)\n```',
+        'best practices': 'Here are key best practices for LLM fine-tuning:\n\n1. **Start with a good base model** - Choose a model pre-trained on similar data\n2. **Use parameter-efficient methods** - LoRA/QLoRA for most cases\n3. **Proper data preparation** - Clean, relevant, and well-formatted data\n4. **Monitor training** - Use wandb or tensorboard for tracking\n5. **Gradual learning rates** - Start with 2e-5 to 5e-5\n6. **Validation strategy** - Always keep a held-out validation set',
+        'memory optimization': 'To optimize memory usage during training:\n\n1. **Use gradient checkpointing** - Trades compute for memory\n2. **Reduce batch size** - Use gradient accumulation to maintain effective batch size\n3. **Use QLoRA** - 4-bit quantization significantly reduces memory\n4. **Enable mixed precision** - Use fp16 or bf16\n5. **Optimize sequence length** - Truncate or pad to reasonable lengths\n6. **Use DeepSpeed ZeRO** - For distributed training scenarios'
+    };
+    
+    function getAIResponse(message) {
+        const lowerMessage = message.toLowerCase();
+        
+        for (const [key, response] of Object.entries(aiResponses)) {
+            if (lowerMessage.includes(key)) {
+                return response;
+            }
+        }
+        
+        return "I understand you're asking about LLM fine-tuning. While I don't have a specific answer for that question, I recommend checking our comprehensive guides and workshops. You can also try rephrasing your question or asking about specific topics like LoRA, QLoRA, or implementation details.";
+    }
+    
+    function addMessage(content, isUser = false) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${isUser ? 'user-message' : 'assistant-message'}`;
+        
+        const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        
+        messageDiv.innerHTML = `
+            <div class="message-avatar">
+                <i class="bi bi-${isUser ? 'person' : 'robot'}"></i>
+            </div>
+            <div class="message-content">
+                <div class="message-bubble">
+                    ${content.replace(/\n/g, '<br>').replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code>$2</code></pre>')}
+                </div>
+                <div class="message-time">${time}</div>
+            </div>
+        `;
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    function showTypingIndicator() {
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'message assistant-message typing-indicator';
+        typingDiv.id = 'typing-indicator';
+        typingDiv.innerHTML = `
+            <div class="message-avatar">
+                <i class="bi bi-robot"></i>
+            </div>
+            <div class="message-content">
+                <div class="message-bubble">
+                    <div class="typing-dots">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        chatMessages.appendChild(typingDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    function hideTypingIndicator() {
+        const typingIndicator = document.getElementById('typing-indicator');
+        if (typingIndicator) {
+            typingIndicator.remove();
+        }
+    }
+    
+    // Handle chat form submission
+    chatForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const message = messageInput.value.trim();
+        
+        if (message) {
+            // Add user message
+            addMessage(message, true);
+            messageInput.value = '';
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            // Simulate AI response delay
+            setTimeout(() => {
+                hideTypingIndicator();
+                const response = getAIResponse(message);
+                addMessage(response);
+            }, 1000 + Math.random() * 2000);
+        }
+    });
+    
+    // Handle quick questions
+    document.querySelectorAll('.quick-question').forEach(button => {
+        button.addEventListener('click', function() {
+            const question = this.dataset.question;
+            messageInput.value = question;
+            chatForm.dispatchEvent(new Event('submit'));
+        });
+    });
+    
+    // Voice input functionality
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'en-US';
+        
+        let isRecording = false;
+        
+        voiceBtn.addEventListener('click', function() {
+            if (!isRecording) {
+                recognition.start();
+                isRecording = true;
+                this.classList.add('recording');
+                this.innerHTML = '<i class="bi bi-mic-fill"></i>';
+            } else {
+                recognition.stop();
+                isRecording = false;
+                this.classList.remove('recording');
+                this.innerHTML = '<i class="bi bi-mic"></i>';
+            }
+        });
+        
+        recognition.onresult = function(event) {
+            const transcript = event.results[0][0].transcript;
+            messageInput.value = transcript;
+            isRecording = false;
+            voiceBtn.classList.remove('recording');
+            voiceBtn.innerHTML = '<i class="bi bi-mic"></i>';
+        };
+        
+        recognition.onerror = function(event) {
+            console.error('Speech recognition error:', event.error);
+            isRecording = false;
+            voiceBtn.classList.remove('recording');
+            voiceBtn.innerHTML = '<i class="bi bi-mic"></i>';
+        };
+    } else {
+        voiceBtn.style.display = 'none';
+    }
+    
+    // Show floating AI button on other pages
+    if (!window.location.pathname.includes('ai-assistant')) {
+        document.getElementById('floating-ai-btn').classList.remove('d-none');
+    }
+    
+    // Auto-focus message input
+    messageInput.focus();
+});
+</script>
+{% endblock %}

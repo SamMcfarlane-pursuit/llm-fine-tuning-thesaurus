@@ -263,7 +263,6 @@
     <script src="{{ url_for('static', filename='js/help-button.js') }}"></script>
     <script src="{{ url_for('static', filename='js/enhanced-navigation.js') }}"></script>
     <script src="{{ url_for('static', filename='js/ai-assistant.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/clean-sidebar.js') }}"></script>
     <script src="{{ url_for('static', filename='js/image-handler-fixed.js') }}"></script>
     <script src="{{ url_for('static', filename='js/integrated-learning.js') }}"></script>
     <script src="{{ url_for('static', filename='js/smooth-ux.js') }}"></script>
@@ -331,7 +330,7 @@
                 }));
             };
 
-            // Reinitialize tooltips after sidebar and progress indicator are added
+            // Reinitialize tooltips after dynamic content is added
             setTimeout(reinitializeTooltips, 1000);
 
             // Listen for DOM changes to reinitialize tooltips

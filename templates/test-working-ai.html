@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Working AI Assistant Test - Visual LLM</title>
+    
+    <style>
+        body {
+            background: #0d140a;
+            color: #e2eedd;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+            margin: 0;
+        }
+        
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .test-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .test-header h1 {
+            color: #a7cf9b;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+        }
+        
+        .test-status {
+            background: #162211;
+            border: 2px solid #3c6430;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .status-success {
+            border-color: #a7cf9b;
+            background: rgba(167, 207, 155, 0.1);
+        }
+        
+        .status-error {
+            border-color: #dc3545;
+            background: rgba(220, 53, 69, 0.1);
+        }
+        
+        .test-instructions {
+            background: #162211;
+            border: 1px solid #3c6430;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .test-instructions h3 {
+            color: #a7cf9b;
+            margin-bottom: 20px;
+        }
+        
+        .test-instructions ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .test-instructions li {
+            padding: 8px 0;
+            border-bottom: 1px solid #3c6430;
+        }
+        
+        .test-instructions li:last-child {
+            border-bottom: none;
+        }
+        
+        .test-instructions li::before {
+            content: "✓ ";
+            color: #a7cf9b;
+            font-weight: bold;
+        }
+        
+        .manual-test-button {
+            background: linear-gradient(135deg, #3c6430, #4f7a41);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .manual-test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(60, 100, 48, 0.3);
+        }
+        
+        .debug-info {
+            background: #162211;
+            border: 1px solid #3c6430;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>🤖 Working AI Assistant Test</h1>
+            <p>Testing the guaranteed working AI assistant implementation</p>
+        </div>
+        
+        <div class="test-status" id="ai-status">
+            <h3>🔍 AI Assistant Status</h3>
+            <p id="status-text">Checking AI assistant availability...</p>
+        </div>
+        
+        <div class="test-instructions">
+            <h3>🧪 Test Instructions</h3>
+            <ul>
+                <li>Look for the green AI button in the bottom-right corner</li>
+                <li>Click the AI button to open the assistant interface</li>
+                <li>Verify the interface has a dark theme (#1a1a1a background)</li>
+                <li>Check that the header shows "AI Assistant" with robot icon</li>
+                <li>Test the Auto-speak toggle switch (blue)</li>
+                <li>Try clicking the four suggestion buttons</li>
+                <li>Type a message and press Enter or click send</li>
+                <li>Test the copy and close buttons</li>
+            </ul>
+        </div>
+        
+        <div class="test-instructions">
+            <h3>🎯 Manual Tests</h3>
+            <p>Click these buttons to test specific functionality:</p>
+            <button class="manual-test-button" onclick="testAIButton()">Test AI Button Visibility</button>
+            <button class="manual-test-button" onclick="testOpenInterface()">Test Open Interface</button>
+            <button class="manual-test-button" onclick="testSendMessage()">Test Send Message</button>
+            <button class="manual-test-button" onclick="testAPIConnection()">Test API Connection</button>
+        </div>
+        
+        <div class="debug-info" id="debug-info">
+            <h4>Debug Information:</h4>
+            <div id="debug-content">Loading...</div>
+        </div>
+    </div>
+    
+    <!-- Working AI Assistant - ONLY THIS ONE -->
+    <script src="{{ url_for('static', filename='js/working-ai-assistant.js') }}"></script>
+    
+    <script>
+        // Test functions
+        function testAIButton() {
+            const button = document.querySelector('.working-ai-button');
+            if (button) {
+                updateDebug('✅ AI Button found and visible');
+                button.style.border = '3px solid #a7cf9b';
+                setTimeout(() => {
+                    button.style.border = 'none';
+                }, 2000);
+            } else {
+                updateDebug('❌ AI Button not found');
+            }
+        }
+        
+        function testOpenInterface() {
+            if (typeof toggleAIInterface === 'function') {
+                toggleAIInterface();
+                updateDebug('✅ Interface toggle function called');
+            } else {
+                updateDebug('❌ Interface toggle function not available');
+            }
+        }
+        
+        function testSendMessage() {
+            const input = document.getElementById('working-ai-input');
+            if (input) {
+                input.value = 'Test message from manual test';
+                if (typeof sendMessage === 'function') {
+                    sendMessage();
+                    updateDebug('✅ Test message sent');
+                } else {
+                    updateDebug('❌ Send message function not available');
+                }
+            } else {
+                updateDebug('❌ Input field not found');
+            }
+        }
+        
+        async function testAPIConnection() {
+            try {
+                const response = await fetch('/api/ai/status');
+                if (response.ok) {
+                    updateDebug('✅ API connection successful');
+                } else {
+                    updateDebug('❌ API connection failed: ' + response.status);
+                }
+            } catch (error) {
+                updateDebug('❌ API connection error: ' + error.message);
+            }
+        }
+        
+        function updateDebug(message) {
+            const debugContent = document.getElementById('debug-content');
+            const timestamp = new Date().toLocaleTimeString();
+            debugContent.innerHTML += `<br>[${timestamp}] ${message}`;
+            debugContent.scrollTop = debugContent.scrollHeight;
+        }
+        
+        // Main test script
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusText = document.getElementById('status-text');
+            const statusContainer = document.getElementById('ai-status');
+            
+            updateDebug('🚀 Test page loaded');
+            
+            // Check if working AI assistant is loaded
+            setTimeout(() => {
+                const button = document.querySelector('.working-ai-button');
+                const interface = document.querySelector('.working-ai-interface');
+                
+                if (button && interface) {
+                    statusText.textContent = '✅ Working AI Assistant loaded successfully! All components found.';
+                    statusContainer.classList.add('status-success');
+                    updateDebug('✅ All AI components found');
+                    updateDebug('✅ Button: ' + (button ? 'Found' : 'Not found'));
+                    updateDebug('✅ Interface: ' + (interface ? 'Found' : 'Not found'));
+                } else {
+                    statusText.textContent = '❌ Working AI Assistant failed to load completely.';
+                    statusContainer.classList.add('status-error');
+                    updateDebug('❌ Missing components:');
+                    updateDebug('Button: ' + (button ? 'Found' : 'Not found'));
+                    updateDebug('Interface: ' + (interface ? 'Found' : 'Not found'));
+                }
+                
+                // Check global functions
+                const functions = ['toggleAIInterface', 'sendMessage', 'sendSuggestion'];
+                functions.forEach(func => {
+                    if (typeof window[func] === 'function') {
+                        updateDebug('✅ Function available: ' + func);
+                    } else {
+                        updateDebug('❌ Function missing: ' + func);
+                    }
+                });
+                
+            }, 2000);
+            
+            // Test API connection
+            setTimeout(testAPIConnection, 3000);
+        });
+    </script>
+</body>
+</html>

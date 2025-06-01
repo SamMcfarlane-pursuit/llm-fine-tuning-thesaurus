@@ -1,0 +1,464 @@
+{% extends base_template %}
+
+{% block title %}Learning Paths - Visual LLM{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <!-- Header Section -->
+            <div class="hero-section bg-gradient-primary text-white py-5 mb-4">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-8">
+                            <h1 class="display-4 fw-bold mb-3">LLM Fine-Tuning Learning Paths</h1>
+                            <p class="lead mb-4">Structured learning journeys from beginner to expert in LLM fine-tuning techniques</p>
+                            <div class="d-flex gap-3">
+                                <a href="#beginner-path" class="btn btn-light btn-lg">Start Learning</a>
+                                <a href="#assessment" class="btn btn-outline-light btn-lg">Take Assessment</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 text-center">
+                            <div class="feature-icon-large">
+                                <i class="bi bi-map display-1"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learning Path Selection -->
+            <div class="container">
+                <div class="row mb-5">
+                    <div class="col-12 text-center">
+                        <h2 class="display-5 fw-bold mb-3">Choose Your Learning Path</h2>
+                        <p class="lead text-muted">Select the path that matches your current knowledge level</p>
+                    </div>
+                </div>
+
+                <!-- Learning Paths -->
+                <div class="row g-4 mb-5">
+                    <!-- Beginner Path -->
+                    <div class="col-lg-4">
+                        <div class="card h-100 learning-path-card" data-path="beginner">
+                            <div class="card-header bg-success text-white">
+                                <h4><i class="bi bi-seedling me-2"></i>Beginner Path</h4>
+                                <p class="mb-0">New to LLM fine-tuning</p>
+                            </div>
+                            <div class="card-body">
+                                <div class="path-stats mb-3">
+                                    <span class="badge bg-success">4-6 weeks</span>
+                                    <span class="badge bg-outline-success">8 modules</span>
+                                    <span class="badge bg-outline-success">12 exercises</span>
+                                </div>
+                                
+                                <h5>What You'll Learn:</h5>
+                                <ul class="list-unstyled">
+                                    <li><i class="bi bi-check-circle text-success me-2"></i>LLM fundamentals</li>
+                                    <li><i class="bi bi-check-circle text-success me-2"></i>Basic fine-tuning concepts</li>
+                                    <li><i class="bi bi-check-circle text-success me-2"></i>Hands-on with simple models</li>
+                                    <li><i class="bi bi-check-circle text-success me-2"></i>Using Hugging Face</li>
+                                    <li><i class="bi bi-check-circle text-success me-2"></i>Google Colab basics</li>
+                                </ul>
+
+                                <h5>Prerequisites:</h5>
+                                <ul class="list-unstyled text-muted">
+                                    <li><i class="bi bi-dot"></i>Basic Python knowledge</li>
+                                    <li><i class="bi bi-dot"></i>High school math</li>
+                                    <li><i class="bi bi-dot"></i>Curiosity about AI</li>
+                                </ul>
+
+                                <div class="d-grid">
+                                    <a href="#beginner-curriculum" class="btn btn-success">Start Beginner Path</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Intermediate Path -->
+                    <div class="col-lg-4">
+                        <div class="card h-100 learning-path-card" data-path="intermediate">
+                            <div class="card-header bg-warning text-dark">
+                                <h4><i class="bi bi-gear me-2"></i>Intermediate Path</h4>
+                                <p class="mb-0">Some ML/DL experience</p>
+                            </div>
+                            <div class="card-body">
+                                <div class="path-stats mb-3">
+                                    <span class="badge bg-warning text-dark">3-4 weeks</span>
+                                    <span class="badge bg-outline-warning">6 modules</span>
+                                    <span class="badge bg-outline-warning">10 exercises</span>
+                                </div>
+                                
+                                <h5>What You'll Learn:</h5>
+                                <ul class="list-unstyled">
+                                    <li><i class="bi bi-check-circle text-warning me-2"></i>LoRA and QLoRA techniques</li>
+                                    <li><i class="bi bi-check-circle text-warning me-2"></i>Parameter-efficient methods</li>
+                                    <li><i class="bi bi-check-circle text-warning me-2"></i>Advanced optimization</li>
+                                    <li><i class="bi bi-check-circle text-warning me-2"></i>Multi-GPU training</li>
+                                    <li><i class="bi bi-check-circle text-warning me-2"></i>Model evaluation</li>
+                                </ul>
+
+                                <h5>Prerequisites:</h5>
+                                <ul class="list-unstyled text-muted">
+                                    <li><i class="bi bi-dot"></i>Python & PyTorch basics</li>
+                                    <li><i class="bi bi-dot"></i>ML fundamentals</li>
+                                    <li><i class="bi bi-dot"></i>Neural network concepts</li>
+                                </ul>
+
+                                <div class="d-grid">
+                                    <a href="#intermediate-curriculum" class="btn btn-warning text-dark">Start Intermediate Path</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Advanced Path -->
+                    <div class="col-lg-4">
+                        <div class="card h-100 learning-path-card" data-path="advanced">
+                            <div class="card-header bg-danger text-white">
+                                <h4><i class="bi bi-rocket me-2"></i>Advanced Path</h4>
+                                <p class="mb-0">Experienced practitioners</p>
+                            </div>
+                            <div class="card-body">
+                                <div class="path-stats mb-3">
+                                    <span class="badge bg-danger">2-3 weeks</span>
+                                    <span class="badge bg-outline-danger">4 modules</span>
+                                    <span class="badge bg-outline-danger">8 exercises</span>
+                                </div>
+                                
+                                <h5>What You'll Learn:</h5>
+                                <ul class="list-unstyled">
+                                    <li><i class="bi bi-check-circle text-danger me-2"></i>Custom architectures</li>
+                                    <li><i class="bi bi-check-circle text-danger me-2"></i>Distributed training</li>
+                                    <li><i class="bi bi-check-circle text-danger me-2"></i>Production deployment</li>
+                                    <li><i class="bi bi-check-circle text-danger me-2"></i>Research techniques</li>
+                                    <li><i class="bi bi-check-circle text-danger me-2"></i>Cutting-edge methods</li>
+                                </ul>
+
+                                <h5>Prerequisites:</h5>
+                                <ul class="list-unstyled text-muted">
+                                    <li><i class="bi bi-dot"></i>Deep learning expertise</li>
+                                    <li><i class="bi bi-dot"></i>Transformer architecture</li>
+                                    <li><i class="bi bi-dot"></i>Research experience</li>
+                                </ul>
+
+                                <div class="d-grid">
+                                    <a href="#advanced-curriculum" class="btn btn-danger">Start Advanced Path</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detailed Curriculum Sections -->
+                <div class="row">
+                    <div class="col-12">
+                        <!-- Beginner Curriculum -->
+                        <div id="beginner-curriculum" class="curriculum-section" style="display: none;">
+                            <div class="card">
+                                <div class="card-header bg-success text-white">
+                                    <h3><i class="bi bi-seedling me-2"></i>Beginner Learning Path</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="curriculum-timeline">
+                                                <!-- Week 1 -->
+                                                <div class="timeline-item">
+                                                    <div class="timeline-marker bg-success"></div>
+                                                    <div class="timeline-content">
+                                                        <h5>Week 1: Foundations</h5>
+                                                        <ul>
+                                                            <li><a href="{{ url_for('learn') }}">Introduction to LLMs</a></li>
+                                                            <li><a href="{{ url_for('getting_started') }}">Setting up your environment</a></li>
+                                                            <li><a href="{{ url_for('google_ml_crash_course') }}">Google ML Crash Course</a></li>
+                                                            <li><strong>Quiz:</strong> <a href="{{ url_for('quiz.quiz_list') }}">LLM Basics</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Week 2 -->
+                                                <div class="timeline-item">
+                                                    <div class="timeline-marker bg-success"></div>
+                                                    <div class="timeline-content">
+                                                        <h5>Week 2: Hugging Face Ecosystem</h5>
+                                                        <ul>
+                                                            <li><a href="{{ url_for('huggingface_guide') }}">Hugging Face Guide</a></li>
+                                                            <li><a href="{{ url_for('tutorials') }}">Basic model usage</a></li>
+                                                            <li><strong>Workshop:</strong> <a href="{{ url_for('workshops') }}">First fine-tuning</a></li>
+                                                            <li><strong>Quiz:</strong> Hugging Face Basics</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Week 3 -->
+                                                <div class="timeline-item">
+                                                    <div class="timeline-marker bg-success"></div>
+                                                    <div class="timeline-content">
+                                                        <h5>Week 3: Parameter-Efficient Methods</h5>
+                                                        <ul>
+                                                            <li><a href="{{ url_for('lora_guide') }}">LoRA Introduction</a></li>
+                                                            <li><a href="{{ url_for('workshop_lora_fine_tuning') }}">LoRA Workshop</a></li>
+                                                            <li><strong>Exercise:</strong> Simple LoRA implementation</li>
+                                                            <li><strong>Quiz:</strong> LoRA Concepts</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Week 4 -->
+                                                <div class="timeline-item">
+                                                    <div class="timeline-marker bg-success"></div>
+                                                    <div class="timeline-content">
+                                                        <h5>Week 4: Practical Applications</h5>
+                                                        <ul>
+                                                            <li><a href="{{ url_for('workshop_exercises') }}">Hands-on exercises</a></li>
+                                                            <li>Model evaluation techniques</li>
+                                                            <li><strong>Project:</strong> Build your first fine-tuned model</li>
+                                                            <li><strong>Assessment:</strong> Beginner certification</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h6>Progress Tracking</h6>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="progress mb-3">
+                                                        <div class="progress-bar bg-success" style="width: 0%" id="beginner-progress">0%</div>
+                                                    </div>
+                                                    <p class="small text-muted">Complete modules to track your progress</p>
+                                                    <div class="d-grid">
+                                                        <a href="{{ url_for('analytics.dashboard') }}" class="btn btn-outline-success btn-sm">View Detailed Progress</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Intermediate Curriculum -->
+                        <div id="intermediate-curriculum" class="curriculum-section" style="display: none;">
+                            <div class="card">
+                                <div class="card-header bg-warning text-dark">
+                                    <h3><i class="bi bi-gear me-2"></i>Intermediate Learning Path</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="curriculum-timeline">
+                                        <!-- Week 1 -->
+                                        <div class="timeline-item">
+                                            <div class="timeline-marker bg-warning"></div>
+                                            <div class="timeline-content">
+                                                <h5>Week 1: Advanced Fine-Tuning</h5>
+                                                <ul>
+                                                    <li><a href="{{ url_for('workshop_full_fine_tuning') }}">Full fine-tuning workshop</a></li>
+                                                    <li><a href="{{ url_for('qlora_guide') }}">QLoRA deep dive</a></li>
+                                                    <li><strong>Workshop:</strong> <a href="{{ url_for('workshop_qlora_deep_dive') }}">QLoRA implementation</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <!-- Week 2 -->
+                                        <div class="timeline-item">
+                                            <div class="timeline-marker bg-warning"></div>
+                                            <div class="timeline-content">
+                                                <h5>Week 2: Optimization & Efficiency</h5>
+                                                <ul>
+                                                    <li><a href="{{ url_for('workshop_memory_efficiency') }}">Memory optimization</a></li>
+                                                    <li><a href="{{ url_for('workshop_advanced_peft') }}">Advanced PEFT methods</a></li>
+                                                    <li><strong>Exercise:</strong> Multi-GPU training</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <!-- Week 3 -->
+                                        <div class="timeline-item">
+                                            <div class="timeline-marker bg-warning"></div>
+                                            <div class="timeline-content">
+                                                <h5>Week 3: Production & Deployment</h5>
+                                                <ul>
+                                                    <li><a href="{{ url_for('docker_guide') }}">Docker for ML</a></li>
+                                                    <li>Model serving and APIs</li>
+                                                    <li><strong>Project:</strong> Deploy a fine-tuned model</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Advanced Curriculum -->
+                        <div id="advanced-curriculum" class="curriculum-section" style="display: none;">
+                            <div class="card">
+                                <div class="card-header bg-danger text-white">
+                                    <h3><i class="bi bi-rocket me-2"></i>Advanced Learning Path</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="curriculum-timeline">
+                                        <!-- Week 1 -->
+                                        <div class="timeline-item">
+                                            <div class="timeline-marker bg-danger"></div>
+                                            <div class="timeline-content">
+                                                <h5>Week 1: Research Techniques</h5>
+                                                <ul>
+                                                    <li><a href="{{ url_for('langchain_guide') }}">LangChain workflows</a></li>
+                                                    <li><a href="{{ url_for('langgraph_guide') }}">LangGraph multi-agent systems</a></li>
+                                                    <li><strong>Research:</strong> Latest PEFT methods</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <!-- Week 2 -->
+                                        <div class="timeline-item">
+                                            <div class="timeline-marker bg-danger"></div>
+                                            <div class="timeline-content">
+                                                <h5>Week 2: Custom Implementations</h5>
+                                                <ul>
+                                                    <li>Custom adapter architectures</li>
+                                                    <li>Distributed training strategies</li>
+                                                    <li><strong>Project:</strong> Novel fine-tuning method</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Assessment Section -->
+                <div class="row mt-5" id="assessment">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header bg-info text-white">
+                                <h3><i class="bi bi-clipboard-check me-2"></i>Skill Assessment</h3>
+                            </div>
+                            <div class="card-body">
+                                <p>Not sure which path to choose? Take our skill assessment to find the right starting point.</p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5>Assessment includes:</h5>
+                                        <ul>
+                                            <li>Python programming skills</li>
+                                            <li>Machine learning knowledge</li>
+                                            <li>Deep learning experience</li>
+                                            <li>LLM familiarity</li>
+                                            <li>Technical tool usage</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="text-center">
+                                            <i class="bi bi-clock display-4 text-info mb-3"></i>
+                                            <p><strong>Duration:</strong> 10-15 minutes</p>
+                                            <p><strong>Questions:</strong> 20 multiple choice</p>
+                                            <a href="{{ url_for('quiz.quiz_list') }}" class="btn btn-info btn-lg">Take Assessment</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/enhanced-guide-section.css') }}">
+<style>
+.learning-path-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.learning-path-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.path-stats .badge {
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.curriculum-timeline {
+    position: relative;
+    padding-left: 2rem;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -2rem;
+    top: 0.5rem;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+}
+
+.timeline-content {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border-left: 3px solid #dee2e6;
+}
+
+.curriculum-section {
+    margin-top: 2rem;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Learning path selection
+    const pathCards = document.querySelectorAll('.learning-path-card');
+    const curriculumSections = document.querySelectorAll('.curriculum-section');
+    
+    pathCards.forEach(card => {
+        card.addEventListener('click', function() {
+            const path = this.dataset.path;
+            
+            // Hide all curriculum sections
+            curriculumSections.forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Show selected curriculum
+            const targetSection = document.getElementById(path + '-curriculum');
+            if (targetSection) {
+                targetSection.style.display = 'block';
+                targetSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    });
+    
+    // Progress tracking simulation
+    function updateProgress(pathType, percentage) {
+        const progressBar = document.getElementById(pathType + '-progress');
+        if (progressBar) {
+            progressBar.style.width = percentage + '%';
+            progressBar.textContent = percentage + '%';
+        }
+    }
+    
+    // Simulate some progress for demo
+    setTimeout(() => {
+        updateProgress('beginner', 25);
+    }, 1000);
+});
+</script>
+{% endblock %}

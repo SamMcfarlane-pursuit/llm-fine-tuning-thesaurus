@@ -1,6 +1,6 @@
-{% extends 'base.html' %}
+{% extends base_template %}
 
-{% block title %}Google ML Crash Course - Thesaurus LLM Fine-Tuning{% endblock %}
+{% block title %}Google ML Crash Course Integration - Visual LLM{% endblock %}
 
 {% block head %}
 {{ super() }}
@@ -14,7 +14,7 @@
         position: relative;
         overflow: hidden;
     }
-    
+
     .ml-crash-course-header::before {
         content: '';
         position: absolute;
@@ -25,14 +25,14 @@
         background: url('/static/images/pattern-grid.svg');
         opacity: 0.1;
     }
-    
+
     .ml-crash-course-title {
         font-size: 2.5rem;
         font-weight: 700;
         margin-bottom: 10px;
         position: relative;
     }
-    
+
     .ml-crash-course-subtitle {
         font-size: 1.2rem;
         opacity: 0.9;
@@ -40,13 +40,13 @@
         margin: 0 auto;
         position: relative;
     }
-    
+
     .google-logo {
         height: 40px;
         margin-right: 15px;
         vertical-align: middle;
     }
-    
+
     .course-card {
         border-radius: 15px;
         overflow: hidden;
@@ -55,61 +55,61 @@
         border: none;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     }
-    
+
     .course-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
     }
-    
+
     .course-card-header {
         background: linear-gradient(135deg, #4285F4, #0F9D58);
         color: white;
         padding: 20px;
         position: relative;
     }
-    
+
     .course-card-header.tensorflow {
         background: linear-gradient(135deg, #FF6F00, #F57C00);
     }
-    
+
     .course-card-header.pandas {
         background: linear-gradient(135deg, #130654, #9B59B6);
     }
-    
+
     .course-card-header.rapids {
         background: linear-gradient(135deg, #76B900, #1A5D1A);
     }
-    
+
     .course-card-header.tpu {
         background: linear-gradient(135deg, #4285F4, #34A853);
     }
-    
+
     .course-card-title {
         font-size: 1.5rem;
         font-weight: 700;
         margin-bottom: 5px;
     }
-    
+
     .course-card-subtitle {
         font-size: 1rem;
         opacity: 0.9;
     }
-    
+
     .course-card-body {
         padding: 20px;
     }
-    
+
     .course-card-text {
         color: #555;
         margin-bottom: 20px;
     }
-    
+
     .course-card-footer {
         background-color: rgba(0, 0, 0, 0.03);
         padding: 15px 20px;
         border-top: 1px solid rgba(0, 0, 0, 0.125);
     }
-    
+
     .course-tag {
         display: inline-block;
         padding: 5px 10px;
@@ -119,67 +119,67 @@
         margin-right: 5px;
         margin-bottom: 5px;
     }
-    
+
     .course-tag.beginner {
         background-color: rgba(66, 133, 244, 0.1);
         color: #4285F4;
     }
-    
+
     .course-tag.intermediate {
         background-color: rgba(15, 157, 88, 0.1);
         color: #0F9D58;
     }
-    
+
     .course-tag.advanced {
         background-color: rgba(219, 68, 55, 0.1);
         color: #DB4437;
     }
-    
+
     .course-tag.gpu {
         background-color: rgba(244, 180, 0, 0.1);
         color: #F4B400;
     }
-    
+
     .course-tag.tpu {
         background-color: rgba(66, 133, 244, 0.1);
         color: #4285F4;
     }
-    
+
     .course-btn {
         padding: 8px 20px;
         border-radius: 30px;
         font-weight: 600;
         transition: all 0.3s ease;
     }
-    
+
     .course-btn-primary {
         background-color: #4285F4;
         border-color: #4285F4;
     }
-    
+
     .course-btn-primary:hover {
         background-color: #3367D6;
         border-color: #3367D6;
         transform: translateY(-2px);
     }
-    
+
     .course-btn-outline {
         color: #4285F4;
         border-color: #4285F4;
     }
-    
+
     .course-btn-outline:hover {
         background-color: #4285F4;
         color: white;
         transform: translateY(-2px);
     }
-    
+
     .course-icon {
         font-size: 2.5rem;
         margin-bottom: 15px;
         color: white;
     }
-    
+
     .info-section {
         background-color: rgba(66, 133, 244, 0.05);
         border-radius: 15px;
@@ -187,41 +187,41 @@
         margin-top: 50px;
         margin-bottom: 30px;
     }
-    
+
     .info-title {
         font-size: 1.8rem;
         font-weight: 700;
         margin-bottom: 20px;
         color: #4285F4;
     }
-    
+
     .info-text {
         color: #555;
         margin-bottom: 20px;
     }
-    
+
     .info-list {
         padding-left: 20px;
     }
-    
+
     .info-list li {
         margin-bottom: 10px;
         color: #555;
     }
-    
+
     @media (max-width: 768px) {
         .ml-crash-course-header {
             padding: 30px 0;
         }
-        
+
         .ml-crash-course-title {
             font-size: 2rem;
         }
-        
+
         .ml-crash-course-subtitle {
             font-size: 1rem;
         }
-        
+
         .course-card-title {
             font-size: 1.3rem;
         }
@@ -240,7 +240,7 @@
                     <li class="breadcrumb-item active" aria-current="page">Google ML Crash Course</li>
                 </ol>
             </nav>
-            
+
             <div class="ml-crash-course-header text-center">
                 <div class="container">
                     <h1 class="ml-crash-course-title">
@@ -252,7 +252,7 @@
                     </p>
                 </div>
             </div>
-            
+
             <div class="row mb-4">
                 <div class="col-md-6 col-lg-3 mb-4">
                     <div class="course-card">
@@ -274,13 +274,13 @@
                             </div>
                         </div>
                         <div class="course-card-footer">
-                            <a href="{{ url_for('view_google_ml_notebook', notebook_name='Intro_to_Pandas_DataFrame') }}" class="btn course-btn course-btn-primary w-100">
+                            <a href="https://colab.research.google.com/github/google/eng-edu/blob/main/ml/cc/exercises/pandas_dataframe_ultraquick_tutorial.ipynb" target="_blank" class="btn course-btn course-btn-primary w-100">
                                 <i class="bi bi-journal-code me-2"></i>Open Notebook
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-md-6 col-lg-3 mb-4">
                     <div class="course-card">
                         <div class="course-card-header rapids text-center">
@@ -301,13 +301,13 @@
                             </div>
                         </div>
                         <div class="course-card-footer">
-                            <a href="{{ url_for('view_google_ml_notebook', notebook_name='Intro_to_RAPIDS_cuDF') }}" class="btn course-btn course-btn-primary w-100">
+                            <a href="https://colab.research.google.com/github/rapidsai/notebooks/blob/branch-24.02/cudf/10_minutes_to_cudf_and_dask_cudf.ipynb" target="_blank" class="btn course-btn course-btn-primary w-100">
                                 <i class="bi bi-journal-code me-2"></i>Open Notebook
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-md-6 col-lg-3 mb-4">
                     <div class="course-card">
                         <div class="course-card-header tensorflow text-center">
@@ -328,13 +328,13 @@
                             </div>
                         </div>
                         <div class="course-card-footer">
-                            <a href="{{ url_for('view_google_ml_notebook', notebook_name='TensorFlow_with_GPUs_for_LLM_Finetuning') }}" class="btn course-btn course-btn-primary w-100">
+                            <a href="https://colab.research.google.com/github/tensorflow/docs/blob/master/site/en/guide/gpu.ipynb" target="_blank" class="btn course-btn course-btn-primary w-100">
                                 <i class="bi bi-journal-code me-2"></i>Open Notebook
                             </a>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-md-6 col-lg-3 mb-4">
                     <div class="course-card">
                         <div class="course-card-header tpu text-center">
@@ -355,14 +355,14 @@
                             </div>
                         </div>
                         <div class="course-card-footer">
-                            <a href="{{ url_for('view_google_ml_notebook', notebook_name='TPUs_for_LLM_Finetuning') }}" class="btn course-btn course-btn-primary w-100">
+                            <a href="https://colab.research.google.com/github/tensorflow/docs/blob/master/site/en/guide/tpu.ipynb" target="_blank" class="btn course-btn course-btn-primary w-100">
                                 <i class="bi bi-journal-code me-2"></i>Open Notebook
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
-            
+
             <div class="info-section">
                 <div class="row">
                     <div class="col-lg-8">
@@ -387,7 +387,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="text-center mt-5">
                 <a href="https://developers.google.com/machine-learning/crash-course" target="_blank" class="btn course-btn course-btn-outline me-3">
                     <i class="bi bi-box-arrow-up-right me-2"></i>Visit Official ML Crash Course
@@ -407,13 +407,13 @@
     document.addEventListener('DOMContentLoaded', function() {
         // Add hover effects to course cards
         const courseCards = document.querySelectorAll('.course-card');
-        
+
         courseCards.forEach(card => {
             card.addEventListener('mouseenter', function() {
                 this.style.transform = 'translateY(-10px)';
                 this.style.boxShadow = '0 15px 30px rgba(0, 0, 0, 0.2)';
             });
-            
+
             card.addEventListener('mouseleave', function() {
                 this.style.transform = 'translateY(0)';
                 this.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.1)';

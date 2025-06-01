@@ -4,7 +4,7 @@
  * Positioned at the bottom of the screen
  */
 
-/* Position the AI assistant container at the bottom right */
+/* Position the AI assistant container at the bottom right - EXACT MATCH TO IMAGE */
 .ai-assistant-container {
     position: fixed !important;
     bottom: 20px !important;
@@ -13,6 +13,21 @@
     display: flex !important;
     flex-direction: column !important;
     align-items: flex-end !important;
+    width: 400px;
+    height: 600px;
+    background: #1a1a1a;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    border: 1px solid #333;
+    transform: translateY(100%);
+    opacity: 0;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.ai-assistant-container.ai-assistant-open {
+    transform: translateY(0);
+    opacity: 1;
 }
 
 @keyframes typing-animation {
@@ -69,30 +84,263 @@
     border: 2px solid rgba(66, 135, 245, 0.5) !important;
 }
 
+/* AI Assistant Header - EXACT MATCH TO IMAGE */
 .ai-assistant-header {
-    padding: 15px !important;
-    background: linear-gradient(135deg, rgba(66, 135, 245, 0.3), rgba(0, 255, 221, 0.3)) !important;
-    border-bottom: 2px solid rgba(66, 135, 245, 0.3) !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
+    background: #2a2a2a;
+    color: #ffffff;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 16px 16px 0 0;
+    border-bottom: 1px solid #444;
 }
 
 .ai-assistant-title {
-    font-weight: 700 !important;
-    color: #ffffff !important;
-    font-size: 1.3rem !important;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
 }
 
-.ai-assistant-messages {
-    flex: 1 !important;
-    overflow-y: auto !important;
-    padding: 15px !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 10px !important;
-    background-color: rgba(20, 20, 20, 0.95) !important;
+.ai-avatar {
+    width: 32px;
+    height: 32px;
+    background: #4a9eff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: white;
+}
+
+.ai-title-text {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+}
+
+.ai-title-text h4 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 18px;
+    color: #ffffff;
+}
+
+.ai-controls-inline {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ai-toggle-switch {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #ffffff;
+}
+
+.ai-toggle-label {
+    font-size: 14px;
+    color: #ffffff;
+}
+
+.ai-toggle-switch input[type="checkbox"] {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    appearance: none;
+    background: #444;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0;
+}
+
+.ai-toggle-switch input[type="checkbox"]:checked {
+    background: #4a9eff;
+}
+
+.ai-toggle-switch input[type="checkbox"]::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background: #ffffff;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.ai-toggle-switch input[type="checkbox"]:checked::before {
+    transform: translateX(20px);
+}
+
+.ai-assistant-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.ai-copy-btn, .ai-close-btn {
+    background: none;
+    border: none;
+    color: #4a9eff;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 16px;
+}
+
+.ai-copy-btn:hover, .ai-close-btn:hover {
+    background: rgba(74, 158, 255, 0.1);
+    color: #6bb6ff;
+}
+
+/* AI Assistant Body - EXACT MATCH TO IMAGE */
+.ai-assistant-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #1a1a1a;
+}
+
+.ai-tab-content {
+    flex: 1;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.ai-tab-content.active {
+    display: flex;
+}
+
+.ai-conversation-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background: #1a1a1a;
+}
+
+.ai-message {
+    margin-bottom: 16px;
+}
+
+.ai-message-assistant .ai-message-content {
+    background: transparent;
+    color: #ffffff;
+    padding: 0;
+    border-radius: 0;
+    border: none;
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+.ai-welcome-message {
+    margin-bottom: 20px;
+}
+
+.ai-quick-suggestions {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-top: 1px solid #333;
+    background: #1a1a1a;
+}
+
+.ai-suggestion-btn {
+    background: #4a9eff;
+    color: #ffffff;
+    border: none;
+    padding: 12px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.ai-suggestion-btn:hover {
+    background: #6bb6ff;
+    transform: translateY(-1px);
+}
+
+.ai-input-area {
+    padding: 20px;
+    border-top: 1px solid #333;
+    background: #1a1a1a;
+}
+
+.ai-input-container {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+}
+
+.ai-input-container textarea {
+    flex: 1;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 12px;
+    padding: 12px 16px;
+    color: #ffffff;
+    resize: none;
+    min-height: 44px;
+    max-height: 120px;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+.ai-input-container textarea::placeholder {
+    color: #888;
+}
+
+.ai-input-container textarea:focus {
+    outline: none;
+    border-color: #4a9eff;
+    box-shadow: 0 0 0 2px rgba(74, 158, 255, 0.1);
+}
+
+.ai-action-button {
+    background: #4a9eff;
+    color: white;
+    border: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    font-size: 16px;
+}
+
+.ai-action-button:hover {
+    background: #6bb6ff;
+    transform: translateY(-1px);
+}
+
+.ai-action-button.listening {
+    background: #dc3545;
+    animation: pulse 1s infinite;
+}
+
+.ai-action-button.speaking {
+    background: #28a745;
+    animation: pulse 1s infinite;
 }
 
 .ai-assistant-messages::-webkit-scrollbar {
@@ -313,13 +561,347 @@
     }
 }
 
+/* AI Assistant Tabs */
+.ai-assistant-tabs {
+    display: flex !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+    background: rgba(20, 20, 20, 0.8) !important;
+}
+
+.ai-tab-btn {
+    flex: 1 !important;
+    padding: 10px 5px !important;
+    background: none !important;
+    border: none !important;
+    color: #b8e0ff !important;
+    font-size: 0.85rem !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    border-bottom: 2px solid transparent !important;
+}
+
+.ai-tab-btn.active {
+    color: #4287f5 !important;
+    border-bottom: 2px solid #4287f5 !important;
+}
+
+.ai-tab-btn:hover {
+    color: #4287f5 !important;
+    background: rgba(66, 135, 245, 0.1) !important;
+}
+
+.ai-tab-content {
+    flex: 1 !important;
+    overflow: hidden !important;
+    position: relative !important;
+}
+
+.ai-tab-pane {
+    height: 100% !important;
+    padding: 15px !important;
+    display: none !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    overflow-y: auto !important;
+}
+
+.ai-tab-pane.active {
+    display: flex !important;
+}
+
+.ai-tab-pane::-webkit-scrollbar {
+    width: 8px !important;
+}
+
+.ai-tab-pane::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2) !important;
+    border-radius: 4px !important;
+}
+
+.ai-tab-pane::-webkit-scrollbar-thumb {
+    background: rgba(66, 135, 245, 0.6) !important;
+    border-radius: 4px !important;
+}
+
+.ai-tab-pane::-webkit-scrollbar-thumb:hover {
+    background: rgba(66, 135, 245, 0.8) !important;
+}
+
+/* Status indicator */
+.status-indicator {
+    width: 8px !important;
+    height: 8px !important;
+    border-radius: 50% !important;
+    background: #dc3545 !important;
+    display: inline-block !important;
+}
+
+.status-indicator.online {
+    background: #28a745 !important;
+}
+
+.status-indicator.offline {
+    background: #dc3545 !important;
+}
+
+/* Collaboration specific styles */
+.collaboration-section {
+    background: rgba(40, 40, 40, 0.8) !important;
+    border-radius: 8px !important;
+    padding: 15px !important;
+    margin-bottom: 15px !important;
+}
+
+.collaboration-section h6 {
+    color: #4287f5 !important;
+    margin-bottom: 10px !important;
+    font-weight: 600 !important;
+}
+
+.collaboration-button {
+    width: 100% !important;
+    padding: 10px !important;
+    border: none !important;
+    border-radius: 5px !important;
+    color: white !important;
+    cursor: pointer !important;
+    font-size: 0.9rem !important;
+    transition: all 0.2s ease !important;
+    margin-bottom: 10px !important;
+}
+
+.collaboration-button:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+}
+
+.collaboration-button.primary {
+    background: #4287f5 !important;
+}
+
+.collaboration-button.success {
+    background: #28a745 !important;
+}
+
+.collaboration-button.info {
+    background: #17a2b8 !important;
+}
+
+.collaboration-button.warning {
+    background: #fd7e14 !important;
+}
+
+.collaboration-button.secondary {
+    background: #6f42c1 !important;
+}
+
+/* Group chat styles */
+#group-chat-messages {
+    height: 150px !important;
+    overflow-y: auto !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 5px !important;
+    padding: 10px !important;
+    margin-bottom: 10px !important;
+    background: rgba(20, 20, 20, 0.5) !important;
+}
+
+#group-chat-input {
+    flex: 1 !important;
+    padding: 8px !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 5px !important;
+    background: rgba(40, 40, 40, 0.8) !important;
+    color: #fff !important;
+    outline: none !important;
+}
+
+#group-chat-input:focus {
+    border-color: rgba(66, 135, 245, 0.5) !important;
+    box-shadow: 0 0 0 2px rgba(66, 135, 245, 0.2) !important;
+}
+
+/* Share link input */
+#share-room-link {
+    flex: 1 !important;
+    padding: 8px !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 5px !important;
+    background: rgba(20, 20, 20, 0.5) !important;
+    color: #b8e0ff !important;
+    font-size: 0.85rem !important;
+    outline: none !important;
+}
+
+/* Toast Notifications */
+.ai-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateX(100%);
+    opacity: 0;
+    transition: all 0.3s ease;
+    max-width: 300px;
+}
+
+.ai-toast.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.ai-toast-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-primary);
+}
+
+.ai-toast-success {
+    border-left: 4px solid #28a745;
+}
+
+.ai-toast-error {
+    border-left: 4px solid #dc3545;
+}
+
+.ai-toast-info {
+    border-left: 4px solid var(--primary-color);
+}
+
+/* Typing Indicator */
+.ai-typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.ai-typing-dots {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.ai-typing-dots span {
+    width: 6px;
+    height: 6px;
+    background: var(--text-secondary);
+    border-radius: 50%;
+    animation: typing-animation 1.4s infinite ease-in-out;
+}
+
+.ai-typing-dots span:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.ai-typing-dots span:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+/* Tabs */
+.ai-tabs {
+    display: none; /* Hide tabs for now to match image */
+}
+
+/* Animations */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes typing-animation {
+    0%, 80%, 100% {
+        transform: scale(0);
+        opacity: 0.5;
+    }
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Simple AI Button */
+#simple-ai-button {
+    position: fixed !important;
+    right: 24px !important;
+    bottom: 24px !important;
+    z-index: 999999 !important;
+    pointer-events: auto !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+    width: 64px !important;
+    height: 64px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+}
+
+#simple-ai-button:hover {
+    transform: scale(1.1) !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .ai-assistant-container {
+        width: 350px;
+        height: 500px;
+        bottom: 10px;
+        right: 10px;
+    }
+
+    .ai-suggestion-btn {
+        font-size: 0.8rem;
+        padding: 0.6rem 0.8rem;
+    }
+
+    #simple-ai-button {
+        width: 56px !important;
+        height: 56px !important;
+        right: 16px !important;
+        bottom: 16px !important;
+    }
+}
+
+.document-name {
+    color: #4287f5 !important;
+    font-weight: bold !important;
+    margin-bottom: 2px !important;
+}
+
+.document-meta {
+    color: #888 !important;
+    font-size: 0.8rem !important;
+}
+
 /* Reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
     .ai-assistant-toggle,
     .ai-assistant-window,
     .user-message,
     .assistant-message,
-    .ai-assistant-suggestion:hover {
+    .ai-assistant-suggestion:hover,
+    .ai-tab-btn,
+    .collaboration-button,
+    .document-item {
         animation: none !important;
         transition: none !important;
         transform: none !important;

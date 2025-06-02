@@ -7,6 +7,16 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/ai-assistant.css') }}" rel="stylesheet">
+
+    <!-- EXACT NAVIGATION MATCH - ENSURES ALL PAGES HAVE IDENTICAL NAVIGATION STYLING -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/exact-navigation-match.css') }}">
+
+    <!-- FINAL NAVIGATION OVERRIDE - MUST BE ABSOLUTELY LAST CSS FILE -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/final-navigation-override.css') }}">
+
+    <!-- ABSOLUTE FINAL NAVIGATION - NUCLEAR OPTION CSS FILE -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/absolute-final-navigation.css') }}">
+
     <style>
         :root {
             --bg-primary: #eef5eb;
@@ -18,14 +28,14 @@
             --primary-hover: #2d4a24;
             --border-color: #dee2e6;
         }
-        
+
         body {
             background: var(--bg-primary);
             color: var(--text-primary);
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             padding: 2rem;
         }
-        
+
         .test-container {
             max-width: 800px;
             margin: 0 auto;
@@ -34,7 +44,7 @@
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-        
+
         .test-button {
             background: var(--primary-color);
             color: white;
@@ -45,12 +55,12 @@
             margin: 0.5rem;
             transition: all 0.3s ease;
         }
-        
+
         .test-button:hover {
             background: var(--primary-hover);
             transform: translateY(-1px);
         }
-        
+
         .console-output {
             background: #1a1a1a;
             color: #00ff00;
@@ -62,7 +72,7 @@
             overflow-y: auto;
             margin-top: 1rem;
         }
-        
+
         .status-indicator {
             display: inline-block;
             width: 12px;
@@ -70,17 +80,108 @@
             border-radius: 50%;
             margin-right: 0.5rem;
         }
-        
+
         .status-online { background: #28a745; }
         .status-offline { background: #dc3545; }
         .status-loading { background: #ffc107; animation: pulse 1s infinite; }
     </style>
 </head>
 <body>
+    <!-- Navigation Bar - Exact match to image -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+        <div class="container">
+            <!-- Brand -->
+            <a class="navbar-brand fw-bold text-success" href="/">
+                Visual LLM
+            </a>
+
+            <!-- Mobile toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navigation items -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <!-- Learning -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="learningDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-book me-1"></i>Learning
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/learn">Start Learning</a></li>
+                            <li><a class="dropdown-item" href="/learning_paths">Learning Paths</a></li>
+                            <li><a class="dropdown-item" href="/getting_started">Getting Started</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/lora_guide">LoRA Fine-tuning</a></li>
+                            <li><a class="dropdown-item" href="/qlora_guide">QLoRA Techniques</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Workshops -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="workshopsDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-hammer me-1"></i>Workshops
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/workshops">All Workshops</a></li>
+                            <li><a class="dropdown-item" href="/workshop_exercises">Exercises</a></li>
+                            <li><a class="dropdown-item" href="/workshop_progress">Progress Tracking</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/workshop_lora_fine_tuning">LoRA Workshop</a></li>
+                            <li><a class="dropdown-item" href="/workshop_qlora_deep_dive">QLoRA Deep Dive</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Resources -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="resourcesDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-collection me-1"></i>Resources
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/tutorials">Video Tutorials</a></li>
+                            <li><a class="dropdown-item" href="/frameworks">Frameworks</a></li>
+                            <li><a class="dropdown-item" href="/google_ml_crash_course">Google ML Course</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/docker_guide">Docker Setup</a></li>
+                            <li><a class="dropdown-item" href="/huggingface_guide">Hugging Face</a></li>
+                            <li><a class="dropdown-item" href="/quiz/quiz_list">Quizzes</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Tools -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="toolsDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-gear me-1"></i>Tools
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/ai_assistant">AI Assistant</a></li>
+                            <li><a class="dropdown-item" href="/user_dashboard">Dashboard</a></li>
+                            <li><a class="dropdown-item" href="/analytics_dashboard">Analytics</a></li>
+                            <li><a class="dropdown-item" href="/search_results">Advanced Search</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <!-- Right side -->
+                <div class="d-flex align-items-center">
+                    <!-- Search -->
+                    <form class="d-flex me-3" method="GET" action="/search_results">
+                        <input class="form-control" type="search" name="q" placeholder="Search concepts..." style="width: 200px;">
+                    </form>
+
+                    <!-- Authentication -->
+                    <a href="/login" class="btn btn-outline-primary me-2">Sign In</a>
+                    <a href="/register" class="btn btn-success">Register</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
     <div class="test-container">
         <h1><i class="bi bi-robot"></i> AI Assistant Test Page</h1>
         <p>This page tests the AI assistant functionality with detailed debugging.</p>
-        
+
         <div class="row">
             <div class="col-md-6">
                 <h3>Status</h3>
@@ -88,7 +189,7 @@
                     <span class="status-indicator status-loading" id="status-indicator"></span>
                     <span id="status-text">Initializing...</span>
                 </p>
-                
+
                 <h3>Test Actions</h3>
                 <button class="test-button" onclick="testButtonExists()">
                     <i class="bi bi-search"></i> Check Button Exists
@@ -106,7 +207,7 @@
                     <i class="bi bi-trash"></i> Clear Console
                 </button>
             </div>
-            
+
             <div class="col-md-6">
                 <h3>AI Assistant Info</h3>
                 <div id="ai-info">
@@ -117,7 +218,7 @@
                 </div>
             </div>
         </div>
-        
+
         <h3>Console Output</h3>
         <div class="console-output" id="console-output">
             <div>AI Assistant Test Console - Ready</div>
@@ -130,7 +231,7 @@
         const originalLog = console.log;
         const originalError = console.error;
         const consoleOutput = document.getElementById('console-output');
-        
+
         function addToConsole(message, type = 'log') {
             const div = document.createElement('div');
             div.style.color = type === 'error' ? '#ff6b6b' : '#00ff00';
@@ -138,17 +239,17 @@
             consoleOutput.appendChild(div);
             consoleOutput.scrollTop = consoleOutput.scrollHeight;
         }
-        
+
         console.log = function(...args) {
             originalLog.apply(console, args);
             addToConsole(args.join(' '), 'log');
         };
-        
+
         console.error = function(...args) {
             originalError.apply(console, args);
             addToConsole(args.join(' '), 'error');
         };
-        
+
         // Test functions
         function testButtonExists() {
             const button = document.getElementById('simple-ai-button');
@@ -160,7 +261,7 @@
             }
             updateButtonStatus();
         }
-        
+
         function testOpenAssistant() {
             if (window.aiAssistant) {
                 console.log('Attempting to open AI assistant...');
@@ -175,7 +276,7 @@
                 console.error('AI assistant not loaded');
             }
         }
-        
+
         function testSendMessage() {
             if (window.aiAssistant && window.aiAssistant.openAssistantWithQuery) {
                 console.log('Sending test message...');
@@ -184,7 +285,7 @@
                 console.error('AI assistant not ready for messages');
             }
         }
-        
+
         async function testAPIConnection() {
             try {
                 console.log('Testing API connection...');
@@ -197,22 +298,22 @@
                 document.getElementById('api-status').textContent = 'Error';
             }
         }
-        
+
         function clearConsole() {
             consoleOutput.innerHTML = '<div>Console cleared</div>';
         }
-        
+
         function updateStatus() {
             const statusIndicator = document.getElementById('status-indicator');
             const statusText = document.getElementById('status-text');
             const aiInstance = document.getElementById('ai-instance');
             const aiMethods = document.getElementById('ai-methods');
-            
+
             if (window.aiAssistant) {
                 statusIndicator.className = 'status-indicator status-online';
                 statusText.textContent = 'AI Assistant Loaded';
                 aiInstance.textContent = 'Loaded';
-                
+
                 const methods = Object.getOwnPropertyNames(Object.getPrototypeOf(window.aiAssistant));
                 aiMethods.textContent = methods.slice(0, 5).join(', ') + '...';
             } else {
@@ -221,14 +322,14 @@
                 aiInstance.textContent = 'Not loaded';
                 aiMethods.textContent = 'None';
             }
-            
+
             updateButtonStatus();
         }
-        
+
         function updateButtonStatus() {
             const button = document.getElementById('simple-ai-button');
             const buttonStatus = document.getElementById('button-status');
-            
+
             if (button) {
                 const visible = button.offsetWidth > 0 && button.offsetHeight > 0;
                 buttonStatus.textContent = visible ? 'Visible' : 'Hidden';
@@ -238,14 +339,17 @@
                 buttonStatus.style.color = '#dc3545';
             }
         }
-        
+
         // Update status every 2 seconds
         setInterval(updateStatus, 2000);
-        
+
         // Initial status update
         setTimeout(updateStatus, 1000);
-        
+
         console.log('Test page loaded - monitoring AI assistant...');
     </script>
+
+    <!-- FORCE NAVIGATION STYLING - MUST BE ABSOLUTELY LAST SCRIPT -->
+    <script src="{{ url_for('static', filename='js/force-navigation-styling.js') }}"></script>
 </body>
 </html>

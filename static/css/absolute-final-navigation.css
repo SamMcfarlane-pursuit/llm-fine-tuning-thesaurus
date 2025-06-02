@@ -1,0 +1,281 @@
+/**
+ * ABSOLUTE FINAL NAVIGATION CSS
+ * This is the nuclear option - uses the highest possible CSS specificity
+ * and JavaScript to force exact navigation styling to match reference image
+ * MUST BE LOADED ABSOLUTELY LAST
+ */
+
+/* ===== NUCLEAR OPTION - MAXIMUM SPECIFICITY ===== */
+
+/* Force navigation background with maximum specificity */
+html body div nav.navbar.navbar-expand-lg.navbar-light.bg-light,
+html body div .navbar.navbar-expand-lg.navbar-light.bg-light,
+html body nav.navbar.navbar-expand-lg.navbar-light.bg-light,
+html body .navbar.navbar-expand-lg.navbar-light.bg-light,
+html body div nav.navbar.navbar-light.bg-light,
+html body div .navbar.navbar-light.bg-light,
+html body nav.navbar.navbar-light.bg-light,
+html body .navbar.navbar-light.bg-light,
+html body div nav.navbar.bg-light,
+html body div .navbar.bg-light,
+html body nav.navbar.bg-light,
+html body .navbar.bg-light,
+html body div nav.bg-light,
+html body div .bg-light,
+html body nav.bg-light,
+html body .bg-light,
+html body div nav.navbar-light,
+html body div .navbar-light,
+html body nav.navbar-light,
+html body .navbar-light,
+html body div nav.navbar,
+html body div .navbar,
+html body nav.navbar,
+html body .navbar,
+html body div nav,
+html body nav,
+body div nav.navbar.navbar-expand-lg.navbar-light.bg-light,
+body div .navbar.navbar-expand-lg.navbar-light.bg-light,
+body nav.navbar.navbar-expand-lg.navbar-light.bg-light,
+body .navbar.navbar-expand-lg.navbar-light.bg-light,
+body div nav.navbar.navbar-light.bg-light,
+body div .navbar.navbar-light.bg-light,
+body nav.navbar.navbar-light.bg-light,
+body .navbar.navbar-light.bg-light,
+body div nav.navbar.bg-light,
+body div .navbar.bg-light,
+body nav.navbar.bg-light,
+body .navbar.bg-light,
+body div nav.bg-light,
+body div .bg-light,
+body nav.bg-light,
+body .bg-light,
+body div nav.navbar-light,
+body div .navbar-light,
+body nav.navbar-light,
+body .navbar-light,
+body div nav.navbar,
+body div .navbar,
+body nav.navbar,
+body .navbar,
+body div nav,
+body nav {
+    background-color: #eef5eb !important;
+    background: #eef5eb !important;
+    background-image: none !important;
+    border-bottom: 1px solid #d1e7ce !important;
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    box-shadow: none !important;
+    padding: 0.5rem 0 !important;
+    min-height: 60px !important;
+}
+
+/* Force brand color with maximum specificity */
+html body div nav .navbar-brand.fw-bold.text-success,
+html body div .navbar .navbar-brand.fw-bold.text-success,
+html body nav .navbar-brand.fw-bold.text-success,
+html body .navbar .navbar-brand.fw-bold.text-success,
+html body div nav .navbar-brand.text-success,
+html body div .navbar .navbar-brand.text-success,
+html body nav .navbar-brand.text-success,
+html body .navbar .navbar-brand.text-success,
+html body div nav .navbar-brand,
+html body div .navbar .navbar-brand,
+html body nav .navbar-brand,
+html body .navbar .navbar-brand,
+html body div nav a.navbar-brand,
+html body div .navbar a.navbar-brand,
+html body nav a.navbar-brand,
+html body .navbar a.navbar-brand,
+body div nav .navbar-brand.fw-bold.text-success,
+body div .navbar .navbar-brand.fw-bold.text-success,
+body nav .navbar-brand.fw-bold.text-success,
+body .navbar .navbar-brand.fw-bold.text-success,
+body div nav .navbar-brand.text-success,
+body div .navbar .navbar-brand.text-success,
+body nav .navbar-brand.text-success,
+body .navbar .navbar-brand.text-success,
+body div nav .navbar-brand,
+body div .navbar .navbar-brand,
+body nav .navbar-brand,
+body .navbar .navbar-brand,
+body div nav a.navbar-brand,
+body div .navbar a.navbar-brand,
+body nav a.navbar-brand,
+body .navbar a.navbar-brand {
+    color: #3c6430 !important;
+    font-weight: 700 !important;
+    font-size: 1.25rem !important;
+    text-decoration: none !important;
+    padding: 0.3125rem 0 !important;
+    margin-right: 1rem !important;
+}
+
+/* Force navigation links with maximum specificity */
+html body div nav .navbar-nav .nav-link,
+html body div .navbar .navbar-nav .nav-link,
+html body nav .navbar-nav .nav-link,
+html body .navbar .navbar-nav .nav-link,
+html body div nav .nav-link,
+html body div .navbar .nav-link,
+html body nav .nav-link,
+html body .navbar .nav-link,
+body div nav .navbar-nav .nav-link,
+body div .navbar .navbar-nav .nav-link,
+body nav .navbar-nav .nav-link,
+body .navbar .navbar-nav .nav-link,
+body div nav .nav-link,
+body div .navbar .nav-link,
+body nav .nav-link,
+body .navbar .nav-link {
+    color: #162211 !important;
+    font-weight: 400 !important;
+    font-size: 1rem !important;
+    padding: 0.5rem 1rem !important;
+    border-radius: 0 !important;
+    transition: color 0.15s ease-in-out !important;
+    display: flex !important;
+    align-items: center !important;
+    white-space: nowrap !important;
+}
+
+/* Force button colors with maximum specificity */
+html body div nav .btn-outline-primary,
+html body div .navbar .btn-outline-primary,
+html body nav .btn-outline-primary,
+html body .navbar .btn-outline-primary,
+body div nav .btn-outline-primary,
+body div .navbar .btn-outline-primary,
+body nav .btn-outline-primary,
+body .navbar .btn-outline-primary {
+    color: #7350a5 !important;
+    border-color: #7350a5 !important;
+    background-color: transparent !important;
+    background: transparent !important;
+}
+
+html body div nav .btn-success,
+html body div .navbar .btn-success,
+html body nav .btn-success,
+html body .navbar .btn-success,
+body div nav .btn-success,
+body div .navbar .btn-success,
+body nav .btn-success,
+body .navbar .btn-success {
+    background-color: #3c6430 !important;
+    background: #3c6430 !important;
+    border-color: #3c6430 !important;
+    color: #fff !important;
+}
+
+/* Force search input with maximum specificity */
+html body div nav .form-control,
+html body div .navbar .form-control,
+html body nav .form-control,
+html body .navbar .form-control,
+body div nav .form-control,
+body div .navbar .form-control,
+body nav .form-control,
+body .navbar .form-control {
+    background-color: #fff !important;
+    background: #fff !important;
+    border: 1px solid #d1e7ce !important;
+    border-radius: 20px !important;
+    color: #162211 !important;
+}
+
+/* Force placeholder color */
+html body div nav .form-control::placeholder,
+html body div .navbar .form-control::placeholder,
+html body nav .form-control::placeholder,
+html body .navbar .form-control::placeholder,
+body div nav .form-control::placeholder,
+body div .navbar .form-control::placeholder,
+body nav .form-control::placeholder,
+body .navbar .form-control::placeholder {
+    color: #919fca !important;
+    opacity: 1 !important;
+}
+
+/* Force hover states */
+html body div nav .navbar-nav .nav-link:hover,
+html body div .navbar .navbar-nav .nav-link:hover,
+html body nav .navbar-nav .nav-link:hover,
+html body .navbar .navbar-nav .nav-link:hover,
+html body div nav .nav-link:hover,
+html body div .navbar .nav-link:hover,
+html body nav .nav-link:hover,
+html body .navbar .nav-link:hover {
+    color: #3c6430 !important;
+    background-color: transparent !important;
+    text-decoration: none !important;
+}
+
+html body div nav .navbar-brand:hover,
+html body div .navbar .navbar-brand:hover,
+html body nav .navbar-brand:hover,
+html body .navbar .navbar-brand:hover {
+    color: #2d4a24 !important;
+    text-decoration: none !important;
+}
+
+/* Force focus states */
+html body div nav .form-control:focus,
+html body div .navbar .form-control:focus,
+html body nav .form-control:focus,
+html body .navbar .form-control:focus {
+    border-color: #3c6430 !important;
+    box-shadow: 0 0 0 0.25rem rgba(60, 100, 48, 0.25) !important;
+    outline: 0 !important;
+}
+
+/* Force button hover states */
+html body div nav .btn-outline-primary:hover,
+html body div .navbar .btn-outline-primary:hover,
+html body nav .btn-outline-primary:hover,
+html body .navbar .btn-outline-primary:hover {
+    background-color: #7350a5 !important;
+    background: #7350a5 !important;
+    border-color: #7350a5 !important;
+    color: #fff !important;
+}
+
+html body div nav .btn-success:hover,
+html body div .navbar .btn-success:hover,
+html body nav .btn-success:hover,
+html body .navbar .btn-success:hover {
+    background-color: #2d4a24 !important;
+    background: #2d4a24 !important;
+    border-color: #2d4a24 !important;
+    color: #fff !important;
+}
+
+/* Force dropdown menu styling */
+html body div nav .dropdown-menu,
+html body div .navbar .dropdown-menu,
+html body nav .dropdown-menu,
+html body .navbar .dropdown-menu {
+    background-color: #fff !important;
+    background: #fff !important;
+    border: 1px solid #d1e7ce !important;
+    border-radius: 0.375rem !important;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+html body div nav .dropdown-item,
+html body div .navbar .dropdown-item,
+html body nav .dropdown-item,
+html body .navbar .dropdown-item {
+    color: #162211 !important;
+    background-color: transparent !important;
+}
+
+html body div nav .dropdown-item:hover,
+html body div .navbar .dropdown-item:hover,
+html body nav .dropdown-item:hover,
+html body .navbar .dropdown-item:hover {
+    background-color: rgba(60, 100, 48, 0.1) !important;
+    color: #3c6430 !important;
+}

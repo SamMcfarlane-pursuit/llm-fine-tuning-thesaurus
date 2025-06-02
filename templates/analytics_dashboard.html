@@ -1,0 +1,415 @@
+{% extends 'base.html' %}
+
+{% block title %}Analytics Dashboard - Visual LLM{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Analytics Dashboard</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1>📊 Analytics Dashboard</h1>
+            <p class="lead">Track your learning progress and engagement metrics</p>
+        </div>
+    </div>
+
+    <!-- Key Metrics Cards -->
+    <div class="row mt-4">
+        <div class="col-md-3 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">🎯 Quizzes Completed</h5>
+                    <h2 class="text-primary" id="quizzes-completed">0</h2>
+                    <p class="card-text">Total quizzes taken</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">🏆 Average Score</h5>
+                    <h2 class="text-success" id="average-score">0%</h2>
+                    <p class="card-text">Across all quizzes</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">📚 Lessons Viewed</h5>
+                    <h2 class="text-info" id="lessons-viewed">0</h2>
+                    <p class="card-text">Learning modules accessed</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h5 class="card-title">⏱️ Time Spent</h5>
+                    <h2 class="text-warning" id="time-spent">0h</h2>
+                    <p class="card-text">Total learning time</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Progress Charts -->
+    <div class="row mt-4">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>📈 Learning Progress</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="progressChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>🎯 Quiz Performance</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="quizChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>📋 Recent Activity</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Activity</th>
+                                    <th>Section</th>
+                                    <th>Score/Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-activity">
+                                <tr>
+                                    <td>Today</td>
+                                    <td>Visited Analytics Dashboard</td>
+                                    <td>Analytics</td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Today</td>
+                                    <td>Accessed Workshop Exercises</td>
+                                    <td>Workshops</td>
+                                    <td><span class="badge bg-info">Viewed</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Today</td>
+                                    <td>Browsed Learning Materials</td>
+                                    <td>Learn</td>
+                                    <td><span class="badge bg-primary">Explored</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Learning Recommendations -->
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5>💡 Recommended Next Steps</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-primary">
+                                <div class="card-body">
+                                    <h6 class="card-title">🔧 Try LoRA Workshop</h6>
+                                    <p class="card-text">Hands-on experience with LoRA fine-tuning</p>
+                                    <a href="{{ url_for('lora_guide') }}" class="btn btn-primary btn-sm">Start Workshop</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-success">
+                                <div class="card-body">
+                                    <h6 class="card-title">📝 Take a Quiz</h6>
+                                    <p class="card-text">Test your knowledge with interactive quizzes</p>
+                                    <a href="{{ url_for('quiz.quiz_list') }}" class="btn btn-success btn-sm">View Quizzes</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                    <h6 class="card-title">🚀 Explore Frameworks</h6>
+                                    <p class="card-text">Learn about Docker, Hugging Face, and more</p>
+                                    <a href="{{ url_for('frameworks') }}" class="btn btn-info btn-sm">Explore</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Initialize analytics dashboard with real data
+document.addEventListener('DOMContentLoaded', function() {
+    // Load real analytics data
+    loadRealAnalyticsData();
+
+    // Set up real-time updates
+    setInterval(loadRealAnalyticsData, 30000); // Update every 30 seconds
+
+    // Track analytics page visit
+    if (typeof trackEvent === 'function') {
+        trackEvent('page_view', {
+            page: 'analytics_dashboard',
+            timestamp: new Date().toISOString()
+        });
+    }
+});
+
+/**
+ * Load real analytics data from the server
+ */
+function loadRealAnalyticsData() {
+    // Show loading state
+    showLoadingState();
+
+    // Fetch real data from server
+    fetch('/api/analytics/user-stats')
+        .then(response => response.json())
+        .then(data => {
+            updateDashboardMetrics(data);
+            updateRecentActivity(data.recent_activity || []);
+            updateProgressCharts(data.charts || {});
+            hideLoadingState();
+        })
+        .catch(error => {
+            console.error('Error loading analytics data:', error);
+            // Fall back to demo data if API fails
+            loadDemoData();
+            hideLoadingState();
+        });
+}
+
+/**
+ * Update dashboard metrics with real data
+ */
+function updateDashboardMetrics(data) {
+    // Update key metrics with animation
+    animateCounter('quizzes-completed', data.quizzes_completed || 0);
+    animateCounter('average-score', data.average_score || 0, '%');
+    animateCounter('lessons-viewed', data.lessons_viewed || 0);
+    animateCounter('time-spent', formatTime(data.time_spent || 0));
+}
+
+/**
+ * Update recent activity table with real data
+ */
+function updateRecentActivity(activities) {
+    const tbody = document.getElementById('recent-activity');
+    if (!tbody) return;
+
+    tbody.innerHTML = '';
+
+    activities.forEach(activity => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${formatDate(activity.timestamp)}</td>
+            <td>${activity.activity}</td>
+            <td>${activity.section}</td>
+            <td><span class="badge bg-${getBadgeColor(activity.status)}">${activity.status}</span></td>
+        `;
+        tbody.appendChild(row);
+    });
+
+    // If no activities, show default message
+    if (activities.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="4" class="text-center text-muted">
+                    <i class="bi bi-info-circle me-2"></i>
+                    Start exploring the platform to see your activity here!
+                </td>
+            </tr>
+        `;
+    }
+}
+
+/**
+ * Update progress charts with real data
+ */
+function updateProgressCharts(chartData) {
+    // Update progress chart
+    if (chartData.progress && window.Chart) {
+        updateProgressChart(chartData.progress);
+    }
+
+    // Update quiz performance chart
+    if (chartData.quiz_performance && window.Chart) {
+        updateQuizChart(chartData.quiz_performance);
+    }
+}
+
+/**
+ * Animate counter with smooth transition
+ */
+function animateCounter(elementId, targetValue, suffix = '') {
+    const element = document.getElementById(elementId);
+    if (!element) return;
+
+    const startValue = parseInt(element.textContent) || 0;
+    const duration = 1000; // 1 second
+    const startTime = Date.now();
+
+    function updateCounter() {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        // Easing function for smooth animation
+        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+        const currentValue = Math.round(startValue + (targetValue - startValue) * easeOutQuart);
+
+        element.textContent = currentValue + suffix;
+
+        if (progress < 1) {
+            requestAnimationFrame(updateCounter);
+        }
+    }
+
+    updateCounter();
+}
+
+/**
+ * Format time in hours and minutes
+ */
+function formatTime(seconds) {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+
+    if (hours > 0) {
+        return `${hours}h ${minutes}m`;
+    } else {
+        return `${minutes}m`;
+    }
+}
+
+/**
+ * Format date for display
+ */
+function formatDate(timestamp) {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return 'Just now';
+    if (diffMins < 60) return `${diffMins}m ago`;
+    if (diffHours < 24) return `${diffHours}h ago`;
+    if (diffDays < 7) return `${diffDays}d ago`;
+
+    return date.toLocaleDateString();
+}
+
+/**
+ * Get badge color based on status
+ */
+function getBadgeColor(status) {
+    const colors = {
+        'completed': 'success',
+        'in_progress': 'warning',
+        'started': 'info',
+        'viewed': 'primary',
+        'active': 'success',
+        'pending': 'secondary'
+    };
+    return colors[status] || 'secondary';
+}
+
+/**
+ * Show loading state
+ */
+function showLoadingState() {
+    const metrics = ['quizzes-completed', 'average-score', 'lessons-viewed', 'time-spent'];
+    metrics.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.innerHTML = '<i class="bi bi-three-dots"></i>';
+        }
+    });
+}
+
+/**
+ * Hide loading state
+ */
+function hideLoadingState() {
+    // Loading state is automatically hidden when real data is loaded
+}
+
+/**
+ * Load demo data as fallback
+ */
+function loadDemoData() {
+    const demoData = {
+        quizzes_completed: 3,
+        average_score: 85,
+        lessons_viewed: 12,
+        time_spent: 9000, // 2.5 hours in seconds
+        recent_activity: [
+            {
+                timestamp: new Date().toISOString(),
+                activity: 'Visited Analytics Dashboard',
+                section: 'Analytics',
+                status: 'active'
+            },
+            {
+                timestamp: new Date(Date.now() - 300000).toISOString(),
+                activity: 'Completed LoRA Quiz',
+                section: 'Quizzes',
+                status: 'completed'
+            },
+            {
+                timestamp: new Date(Date.now() - 600000).toISOString(),
+                activity: 'Started Workshop Exercise',
+                section: 'Workshops',
+                status: 'in_progress'
+            }
+        ]
+    };
+
+    updateDashboardMetrics(demoData);
+    updateRecentActivity(demoData.recent_activity);
+}
+</script>
+{% endblock %}

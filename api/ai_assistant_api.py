@@ -95,10 +95,19 @@ def get_ai_model(model_name="microsoft/DialoGPT-medium"):
 
     return model_cache.get(model_name)
 
-def generate_contextual_response(message, context=None):
-    """Generate contextual AI response based on message and website knowledge"""
+def generate_contextual_response(message, context=None, mode=None):
+    """Generate contextual AI response based on message, mode, and website knowledge"""
     message_lower = message.lower()
 
+    # Handle mode-specific responses first
+    if mode == 'learning':
+        return generate_learning_mode_response(message, context)
+    elif mode == 'code':
+        return generate_code_mode_response(message, context)
+    elif mode == 'general':
+        return generate_general_mode_response(message, context)
+
+    # Fallback to original logic for backward compatibility
     # Website navigation queries
     if any(word in message_lower for word in ['navigate', 'go to', 'find', 'where is', 'how to access']):
         return generate_navigation_response(message)
@@ -121,6 +130,371 @@ def generate_contextual_response(message, context=None):
 
     # General AI response using LLM
     return generate_ai_response(message)
+
+def generate_learning_mode_response(message, context=None):
+    """Generate learning-focused response with enhanced context"""
+    message_lower = message.lower()
+
+    # QLoRA vs LoRA comparison queries (check first for specific comparisons)
+    if any(term in message_lower for term in ['qlora vs lora', 'lora vs qlora', 'difference between', 'compare']):
+        return """🎓 **LoRA vs QLoRA Comparison**
+
+**LoRA (Low-Rank Adaptation):**
+• **Memory**: Reduces parameters by ~90%
+• **Speed**: 3x faster training than full fine-tuning
+• **Quality**: Near full fine-tuning performance
+• **Hardware**: Works on most GPUs
+
+**QLoRA (Quantized LoRA):**
+• **Memory**: Reduces memory by ~75% (4-bit quantization)
+• **Speed**: Similar to LoRA but with lower memory
+• **Quality**: Maintains LoRA performance
+• **Hardware**: Enables large models on consumer GPUs
+
+**Key Differences:**
+• **Quantization**: QLoRA adds 4-bit quantization to LoRA
+• **Memory Usage**: QLoRA uses significantly less VRAM
+• **Model Size**: QLoRA enables training of larger models
+• **Complexity**: QLoRA requires additional quantization setup
+
+**When to Use:**
+• **LoRA**: Standard fine-tuning with good GPU memory
+• **QLoRA**: Limited VRAM or very large models (7B+)
+
+**Memory Comparison (7B model):**
+• Full Fine-tuning: ~28GB VRAM
+• LoRA: ~14GB VRAM
+• QLoRA: ~6GB VRAM
+
+🚀 **Ready to implement?** Ask "Show me LoRA code" or "Show me QLoRA setup"!"""
+
+    # QLoRA specific queries (check after comparison)
+    elif any(term in message_lower for term in ['qlora', 'quantized lora']):
+        return """🎓 **QLoRA (Quantized LoRA)**
+
+**What is QLoRA?**
+QLoRA combines LoRA with 4-bit quantization to enable fine-tuning of large models on consumer hardware.
+
+**Key Innovations:**
+• **4-bit Quantization**: Reduces memory by 75%
+• **Double Quantization**: Further compression with minimal quality loss
+• **Paged Optimizers**: Handles memory spikes during training
+
+**Memory Savings:**
+• 65B model: ~48GB → ~12GB VRAM
+• 13B model: ~26GB → ~6GB VRAM
+• 7B model: ~14GB → ~4GB VRAM
+
+**Perfect For:**
+• Consumer GPUs (RTX 3090, 4090)
+• Limited VRAM scenarios
+• Experimentation and research
+
+**Learn More:**
+• `/workshops` - QLoRA implementation workshop
+• `/learn` - Detailed QLoRA concepts
+• `/tutorials` - Step-by-step guides
+
+🚀 **Ready to implement?** Ask "Show me QLoRA code example"!"""
+
+    # LoRA specific queries (check after QLoRA)
+    elif any(term in message_lower for term in ['lora', 'low-rank adaptation']):
+        return """🎓 **LoRA (Low-Rank Adaptation)**
+
+**What is LoRA?**
+LoRA is a parameter-efficient fine-tuning technique that reduces the number of trainable parameters by learning rank decomposition matrices.
+
+**Key Benefits:**
+• **Memory Efficient**: Reduces GPU memory requirements by 3x
+• **Fast Training**: Significantly faster than full fine-tuning
+• **Modular**: Easy to swap different LoRA adapters
+• **Quality**: Maintains performance comparable to full fine-tuning
+
+**How it Works:**
+Instead of updating all parameters, LoRA adds small trainable matrices (A and B) to existing layers:
+```
+W_new = W_original + A × B
+```
+
+**Next Steps:**
+• Visit `/learn` for detailed LoRA tutorials
+• Try `/workshops` for hands-on LoRA implementation
+• Check `/lora-guide` for step-by-step instructions
+
+💡 **Want to see code examples?** Switch to Code mode or ask "Show me LoRA implementation"!"""
+
+    # General learning queries
+    elif any(term in message_lower for term in ['learn', 'tutorial', 'guide', 'course']):
+        return generate_learning_response(message)
+
+    # Technical concepts
+    elif any(term in message_lower for term in ['peft', 'parameter efficient']):
+        return generate_technical_response(message)
+
+    # Default learning mode response
+    else:
+        return f"""🎓 **Learning Mode Active**
+
+I'm here to help you learn about LLM fine-tuning! Here's what I can teach you:
+
+**📚 Core Concepts:**
+• LoRA & QLoRA techniques
+• Parameter-efficient fine-tuning (PEFT)
+• Transformer architectures
+• Training strategies
+
+**🔍 Your Question:** "{message}"
+
+**💡 Suggestions:**
+• "What is LoRA fine-tuning?"
+• "How does QLoRA work?"
+• "Explain parameter-efficient methods"
+• "Show me the learning path"
+
+**📖 Resources:**
+• Visit `/learn` for structured tutorials
+• Try `/workshops` for hands-on practice
+• Check `/quiz` to test your knowledge
+
+🎯 **Tip:** Switch to Code mode for implementation examples!"""
+
+def generate_code_mode_response(message, context=None):
+    """Generate code-focused response with examples"""
+    message_lower = message.lower()
+
+    # QLoRA implementation (check first since it contains 'lora')
+    if any(term in message_lower for term in ['qlora', 'quantized']):
+        return """💻 **QLoRA Implementation Example**
+
+**QLoRA Setup with BitsAndBytes:**
+```python
+import torch
+from transformers import (
+    AutoModelForCausalLM,
+    AutoTokenizer,
+    BitsAndBytesConfig
+)
+from peft import LoraConfig, get_peft_model
+
+# 4-bit quantization config
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_use_double_quant=True,
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_compute_dtype=torch.bfloat16
+)
+
+# Load quantized model
+model = AutoModelForCausalLM.from_pretrained(
+    "microsoft/DialoGPT-medium",
+    quantization_config=bnb_config,
+    device_map="auto"
+)
+
+# LoRA configuration for QLoRA
+lora_config = LoraConfig(
+    r=64,
+    lora_alpha=16,
+    target_modules=["c_attn", "c_proj"],
+    lora_dropout=0.1,
+    bias="none",
+    task_type="CAUSAL_LM"
+)
+
+model = get_peft_model(model, lora_config)
+```
+
+**Memory Monitoring:**
+```python
+def print_gpu_utilization():
+    if torch.cuda.is_available():
+        print(f"GPU memory: {torch.cuda.memory_allocated() / 1024**3:.2f} GB")
+
+print_gpu_utilization()  # Check memory usage
+```
+
+**🔧 Complete Examples:**
+• `/workshops` - Full QLoRA workshop
+• Google Colab integration
+• Memory optimization techniques
+
+⚡ **Performance tip:** Use gradient checkpointing for even lower memory!"""
+
+    # LoRA implementation (check after QLoRA)
+    elif any(term in message_lower for term in ['lora', 'implementation', 'example']):
+        return """💻 **LoRA Implementation Example**
+
+**Basic LoRA Setup:**
+```python
+from peft import LoraConfig, get_peft_model
+from transformers import AutoModelForCausalLM
+
+# Load base model
+model = AutoModelForCausalLM.from_pretrained("microsoft/DialoGPT-medium")
+
+# Configure LoRA
+lora_config = LoraConfig(
+    r=16,                    # rank
+    lora_alpha=32,          # scaling parameter
+    target_modules=["c_attn"], # target layers
+    lora_dropout=0.1,       # dropout
+    bias="none",            # bias type
+    task_type="CAUSAL_LM"   # task type
+)
+
+# Apply LoRA
+model = get_peft_model(model, lora_config)
+model.print_trainable_parameters()
+```
+
+**Training Loop:**
+```python
+from transformers import Trainer, TrainingArguments
+
+training_args = TrainingArguments(
+    output_dir="./lora-model",
+    per_device_train_batch_size=4,
+    gradient_accumulation_steps=4,
+    learning_rate=2e-4,
+    num_train_epochs=3,
+    save_steps=500,
+    logging_steps=100,
+)
+
+trainer = Trainer(
+    model=model,
+    args=training_args,
+    train_dataset=train_dataset,
+    tokenizer=tokenizer,
+)
+
+trainer.train()
+```
+
+**🚀 Next Steps:**
+• Visit `/workshops` for complete implementation
+• Try Google Colab notebooks
+• Check `/lora-guide` for detailed walkthrough
+
+💡 **Need help with specific errors?** Ask "Debug my LoRA training"!"""
+
+    # General code queries
+    elif any(term in message_lower for term in ['code', 'example', 'implementation']):
+        return generate_code_response(message)
+
+    # Default code mode response
+    else:
+        return f"""💻 **Code Assistant Mode Active**
+
+I'm here to help with implementation and code examples!
+
+**🔧 Your Question:** "{message}"
+
+**💡 What I can help with:**
+• LoRA/QLoRA implementation examples
+• Training scripts and configurations
+• Debugging and troubleshooting
+• Best practices and optimizations
+• Google Colab setup
+
+**🚀 Quick Examples:**
+• "Show me LoRA implementation"
+• "QLoRA training script"
+• "How to debug CUDA errors"
+• "Memory optimization tips"
+
+**📁 Resources:**
+• `/workshops` - Hands-on coding exercises
+• Google Colab notebooks
+• Complete implementation guides
+
+🎯 **Tip:** Be specific about your implementation needs for better help!"""
+
+def generate_general_mode_response(message, context=None):
+    """Generate general-purpose response"""
+    message_lower = message.lower()
+
+    # Platform information
+    if any(term in message_lower for term in ['platform', 'website', 'about', 'what is']):
+        return generate_platform_response(message)
+
+    # Navigation help
+    elif any(term in message_lower for term in ['navigate', 'find', 'where', 'go to']):
+        return generate_navigation_response(message)
+
+    # Features inquiry
+    elif any(term in message_lower for term in ['features', 'capabilities', 'what can']):
+        return """🌟 **Visual LLM Platform Features**
+
+**🎓 Learning & Education:**
+• Comprehensive LLM fine-tuning tutorials
+• Interactive workshops with Google Colab
+• Progressive learning paths
+• Knowledge assessment quizzes
+
+**🤖 AI Assistant:**
+• Context-aware responses
+• Multiple modes (Learning, Code, General)
+• Technical concept explanations
+• Implementation guidance
+
+**💻 Hands-on Practice:**
+• LoRA & QLoRA implementations
+• Real-world code examples
+• Debugging assistance
+• Best practices guides
+
+**📊 Progress Tracking:**
+• Learning analytics dashboard
+• Progress visualization
+• Achievement tracking
+• Performance metrics
+
+**🔧 Technical Tools:**
+• Google Colab integration
+• Code highlighting and examples
+• Interactive diagrams
+• Resource management
+
+**🎯 Getting Started:**
+• Visit `/learn` for tutorials
+• Try `/workshops` for practice
+• Use AI Assistant for help
+• Check `/analytics` for progress
+
+💡 **Switch modes above for specialized assistance!**"""
+
+    # Default general response
+    else:
+        return f"""💬 **General Assistant Mode**
+
+**Your Question:** "{message}"
+
+I'm here to help with anything about the Visual LLM platform!
+
+**🎯 I can assist with:**
+• Platform navigation and features
+• General questions about LLM fine-tuning
+• Learning path recommendations
+• Technical concept overviews
+
+**🔄 Specialized Modes:**
+• **Learning Mode** - Deep technical explanations
+• **Code Mode** - Implementation examples and debugging
+• **General Mode** - Platform help and navigation
+
+**💡 Popular Questions:**
+• "What is this platform about?"
+• "How do I get started with LLM fine-tuning?"
+• "What learning resources are available?"
+• "How do I navigate this website?"
+
+**📚 Quick Links:**
+• `/learn` - Start learning
+• `/workshops` - Hands-on practice
+• `/analytics` - Track progress
+
+🚀 **Tip:** Switch to Learning or Code mode for more specialized help!"""
 
 def generate_navigation_response(message):
     """Generate navigation help response"""
@@ -333,15 +707,16 @@ def chat():
 
         message = data['message'].strip()
         context = data.get('context', {})
+        mode = data.get('mode', 'general')  # Get mode from unified AI assistant
 
         if not message:
             return jsonify({'error': 'Empty message'}), 400
 
         # Log the interaction
-        logger.info(f"AI Assistant query: {message[:100]}...")
+        logger.info(f"AI Assistant query ({mode} mode): {message[:100]}...")
 
-        # Generate response
-        response = generate_contextual_response(message, context)
+        # Generate response with mode and context
+        response = generate_contextual_response(message, context, mode)
 
         # Add metadata
         response_data = {

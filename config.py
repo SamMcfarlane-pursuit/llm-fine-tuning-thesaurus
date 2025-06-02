@@ -108,6 +108,11 @@ class DevelopmentConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL', 'sqlite:///dev-app.db')
 
+    # Use filesystem sessions for development (no Redis required)
+    SESSION_TYPE = 'filesystem'
+    SESSION_PERMANENT = True
+    SESSION_USE_SIGNER = True
+
 
 class TestingConfig(Config):
     """Testing configuration."""

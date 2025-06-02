@@ -5,8 +5,23 @@
 
 // Initialize tracking when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
+    // Track page view immediately
+    trackEvent('page_view', {
+        entry_point: true,
+        load_time: Date.now()
+    });
+
     // Initialize tracking
     initTracking();
+
+    // Track session start if new session
+    const sessionId = sessionStorage.getItem('analytics_session_id');
+    if (!sessionId) {
+        trackEvent('session_start', {
+            entry_page: window.location.pathname,
+            entry_time: new Date().toISOString()
+        });
+    }
 });
 
 /**
@@ -429,43 +444,155 @@ function trackExerciseInteractions() {
 }
 
 /**
- * Track an event
+ * Track an event with enhanced precision and session tracking
  * @param {string} eventType - Type of event
  * @param {Object} eventData - Data for the event
  */
-function trackEvent(eventType, eventData) {
-    // Add timestamp
-    eventData.timestamp = new Date().toISOString();
-
-    // Add page info
-    eventData.page_url = window.location.href;
-    eventData.page_title = document.title;
-
-    // Check if the API endpoint exists
-    if (typeof window.apiEndpoints !== 'undefined' && window.apiEndpoints.analyticsTrack) {
-        const trackUrl = window.apiEndpoints.analyticsTrack;
-
-        // Send event to server
-        fetch(trackUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: JSON.stringify({
-                event_type: eventType,
-                event_data: eventData
-            })
-        }).catch(error => {
-            console.error('Error tracking event:', error);
-        });
-    } else {
-        // Log that we're skipping analytics tracking
-        console.log('Analytics tracking skipped: API endpoint not available');
-
-        // Don't attempt to fetch from a hardcoded URL to avoid 404 errors
-        // This prevents the "/undefined" 404 error
+function trackEvent(eventType, eventData = {}) {
+    // Get or create session ID
+    let sessionId = sessionStorage.getItem('analytics_session_id');
+    if (!sessionId) {
+        sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        sessionStorage.setItem('analytics_session_id', sessionId);
     }
+
+    // Enhanced event data with precise page information
+    const enhancedEventData = {
+        ...eventData,
+        timestamp: new Date().toISOString(),
+        session_id: sessionId,
+        page_url: window.location.href,
+        page_path: window.location.pathname,
+        page_title: document.title,
+        page_search: window.location.search,
+        page_hash: window.location.hash,
+        page_type: getPageType(window.location.pathname),
+        page_section: getPageSection(window.location.pathname),
+        page_category: getPageCategory(window.location.pathname),
+        user_agent: navigator.userAgent,
+        language: navigator.language,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        screen_resolution: `${screen.width}x${screen.height}`,
+        viewport_size: `${window.innerWidth}x${window.innerHeight}`,
+        device_type: getDeviceType(),
+        browser: getBrowserInfo(),
+        referrer: document.referrer
+    };
+
+    // Store event locally as backup
+    storeEventLocally({
+        event_type: eventType,
+        event_data: enhancedEventData
+    });
+
+    // Send to server
+    const trackUrl = '/api/analytics/track';
+    fetch(trackUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({
+            event_type: eventType,
+            event_data: enhancedEventData
+        })
+    }).catch(error => {
+        console.error('Error tracking event:', error);
+    });
+}
+
+/**
+ * Store event locally as backup
+ * @param {Object} event - Event to store
+ */
+function storeEventLocally(event) {
+    try {
+        const storedEvents = JSON.parse(localStorage.getItem('analytics_events') || '[]');
+        storedEvents.push(event);
+
+        // Keep only last 100 events to prevent storage overflow
+        if (storedEvents.length > 100) {
+            storedEvents.splice(0, storedEvents.length - 100);
+        }
+
+        localStorage.setItem('analytics_events', JSON.stringify(storedEvents));
+    } catch (error) {
+        console.error('Error storing event locally:', error);
+    }
+}
+
+/**
+ * Get page type from path
+ * @param {string} path - URL path
+ * @returns {string} Page type
+ */
+function getPageType(path) {
+    if (path === '/') return 'homepage';
+    if (path.includes('/learn')) return 'learning';
+    if (path.includes('/workshop')) return 'workshop';
+    if (path.includes('/tutorial')) return 'tutorial';
+    if (path.includes('/guide')) return 'guide';
+    if (path.includes('/quiz')) return 'quiz';
+    if (path.includes('/analytics')) return 'analytics';
+    if (path.includes('/exercise')) return 'exercise';
+    if (path.includes('/hands_on')) return 'hands-on';
+    return 'other';
+}
+
+/**
+ * Get page section from path
+ * @param {string} path - URL path
+ * @returns {string} Page section
+ */
+function getPageSection(path) {
+    if (path.includes('/lora')) return 'LoRA';
+    if (path.includes('/qlora')) return 'QLoRA';
+    if (path.includes('/docker')) return 'Docker';
+    if (path.includes('/huggingface')) return 'Hugging Face';
+    if (path.includes('/langgraph')) return 'LangGraph';
+    if (path.includes('/langchain')) return 'LangChain';
+    if (path.includes('/memory-efficiency')) return 'Memory Efficiency';
+    if (path.includes('/analytics')) return 'Analytics';
+    return 'General';
+}
+
+/**
+ * Get page category from path
+ * @param {string} path - URL path
+ * @returns {string} Page category
+ */
+function getPageCategory(path) {
+    if (path.includes('/hands_on') || path.includes('/exercise')) return 'hands-on';
+    if (path.includes('/guide')) return 'guide';
+    if (path.includes('/workshop')) return 'workshop';
+    if (path.includes('/tutorial')) return 'tutorial';
+    if (path.includes('/quiz')) return 'quiz';
+    return 'informational';
+}
+
+/**
+ * Get device type based on viewport
+ * @returns {string} Device type
+ */
+function getDeviceType() {
+    const width = window.innerWidth;
+    if (width < 768) return 'mobile';
+    if (width < 1024) return 'tablet';
+    return 'desktop';
+}
+
+/**
+ * Get browser information
+ * @returns {string} Browser name
+ */
+function getBrowserInfo() {
+    const ua = navigator.userAgent;
+    if (ua.includes('Chrome')) return 'Chrome';
+    if (ua.includes('Firefox')) return 'Firefox';
+    if (ua.includes('Safari')) return 'Safari';
+    if (ua.includes('Edge')) return 'Edge';
+    return 'Other';
 }
 
 /**

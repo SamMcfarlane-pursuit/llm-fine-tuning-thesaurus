@@ -115,7 +115,7 @@
                                 </div>
                                 <div class="auth-recovery-text">We can help you recover access to your account.</div>
                                 <div class="d-grid">
-                                    <a href="{{ url_for('auth.supabase_password_reset') }}?email={{ user_email|urlencode }}" class="btn btn-warning">
+                                    <a href="{{ url_for('auth.password_reset_request') }}?email={{ user_email|urlencode }}" class="btn btn-warning">
                                         <i class="bi bi-key-fill me-2"></i> Reset Your Password
                                     </a>
                                 </div>
@@ -169,7 +169,7 @@
 
                     <!-- Card footer -->
                     <div class="auth-footer">
-                        <a href="{{ url_for('auth.supabase_password_reset') }}" class="auth-footer-link">Forgot Password?</a>
+                        <a href="{{ url_for('auth.password_reset_request') }}" class="auth-footer-link">Forgot Password?</a>
                         <a href="{{ url_for('auth.register') }}" class="auth-footer-link">Need an account? Register</a>
                     </div>
                 </div>

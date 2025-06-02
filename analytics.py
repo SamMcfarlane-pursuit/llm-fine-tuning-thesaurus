@@ -23,22 +23,24 @@ EVENT_SIGNUP = 'signup'
 EVENT_LOGIN = 'login'
 EVENT_SUBSCRIPTION = 'subscription'
 
-def track_event(event_type, event_data=None):
+def track_event(event_data):
     """
-    Track an event with the given type and data.
+    Track an event with the given data.
 
     Args:
-        event_type: Type of event (page_view, tutorial_complete, etc.)
-        event_data: Additional data for the event
+        event_data: Dictionary containing event information
 
     Returns:
         bool: True if event was tracked successfully
     """
     try:
+        # Extract event type from data
+        event_type = event_data.get('event_type', 'unknown')
+
         # Create event object
         event = {
             'event_type': event_type,
-            'event_data': event_data or {},
+            'event_data': event_data.get('event_data', {}),
             'timestamp': datetime.now(timezone.utc).isoformat(),
             'user_id': current_user.id if current_user.is_authenticated else None,
             'session_id': session.get('session_id'),

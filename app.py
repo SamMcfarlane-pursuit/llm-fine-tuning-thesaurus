@@ -5,11 +5,10 @@ This provides a web interface for interacting with the thesaurus.
 import os
 import ssl
 import nltk
-from flask import Flask, render_template, request, jsonify, send_from_directory, redirect, url_for, flash, Response
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 import json
-import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
-from peft import PeftModel
+import uuid
+
 from flask_login import current_user, login_required
 from visual_thesaurus import VisualThesaurus
 from thesaurus_utils import ThesaurusLLM
@@ -63,6 +62,12 @@ login_manager.init_app(app)
 migrate.init_app(app, db)
 oauth.init_app(app)
 csrf.init_app(app)
+
+# Configure session for proper login persistence
+app.config['SESSION_COOKIE_SECURE'] = False  # Set to True in production with HTTPS
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+app.config['PERMANENT_SESSION_LIFETIME'] = 86400  # 24 hours
 
 # Initialize mail with proper configuration
 app.config['MAIL_SERVER'] = os.environ.get('MAIL_SERVER', 'smtp.gmail.com')
@@ -146,7 +151,33 @@ def workshop_exercises():
 
 @app.route('/workshop-progress')
 def workshop_progress():
-    return render_template('workshop_progress.html', base_template='base-simple.html')
+    # Calculate overall progress based on completed workshops
+    overall_progress = 0
+    workshops_completed = 0
+    completed_workshops = 0  # For achievements
+    total_workshops = 5  # Adjust based on actual number of workshops
+
+    # Learning streak data
+    current_streak = 0
+    streak_progress = 0
+    streak_message = "Start your learning journey today!"
+    longest_streak = 0
+    total_learning_days = 0
+
+    # You can add logic here to calculate actual progress from user data
+    # For now, providing default values to prevent template errors
+
+    return render_template('workshop_progress.html',
+                         base_template='base-simple.html',
+                         overall_progress=overall_progress,
+                         workshops_completed=workshops_completed,
+                         completed_workshops=completed_workshops,
+                         total_workshops=total_workshops,
+                         current_streak=current_streak,
+                         streak_progress=streak_progress,
+                         streak_message=streak_message,
+                         longest_streak=longest_streak,
+                         total_learning_days=total_learning_days)
 
 @app.route('/docker-guide')
 def docker_guide():
@@ -217,6 +248,14 @@ def lora_guide():
 def qlora_guide():
     return render_template('qlora_guide.html', base_template='base-simple.html')
 
+@app.route('/lora_hands_on')
+def lora_hands_on():
+    return render_template('lora_hands_on.html', base_template='base-simple.html')
+
+@app.route('/qlora_hands_on')
+def qlora_hands_on():
+    return render_template('qlora_hands_on.html', base_template='base-simple.html')
+
 @app.route('/terms')
 def terms():
     return render_template('terms.html', base_template='base-simple.html')
@@ -240,11 +279,13 @@ def profile():
 
 @app.route('/login')
 def login():
-    return render_template('login.html', base_template='base-simple.html')
+    # Redirect to the auth blueprint login route
+    return redirect(url_for('auth.login'))
 
 @app.route('/register')
 def register():
-    return render_template('register.html', base_template='base-simple.html')
+    # Redirect to the auth blueprint register route
+    return redirect(url_for('auth.register'))
 
 @app.route('/contact')
 def contact():
@@ -269,6 +310,14 @@ def test_ai_simple():
 @app.route('/test-working-ai')
 def test_working_ai():
     return render_template('test-working-ai.html')
+
+@app.route('/test-clean-navigation')
+def test_clean_navigation():
+    return render_template('test-clean-navigation.html')
+
+@app.route('/analytics')
+def analytics_dashboard():
+    return render_template('analytics_dashboard.html', base_template='base-simple.html')
 
 # API routes
 @app.route('/api/thesaurus/<word>')
@@ -339,6 +388,196 @@ def track_analytics():
     except Exception as e:
         app.logger.error(f"Error tracking analytics: {str(e)}")
         return jsonify({'error': str(e)}), 500
+
+@app.route('/api/analytics/user-stats')
+@csrf.exempt
+def get_user_analytics_stats():
+    """Get precise analytics data for the current user/session"""
+    try:
+        # Get session ID for tracking anonymous users
+        session_id = session.get('session_id')
+        if not session_id:
+            session_id = str(uuid.uuid4())
+            session['session_id'] = session_id
+
+        # Calculate real metrics from stored events
+        user_stats = calculate_user_analytics_stats(session_id)
+
+        return jsonify(user_stats)
+    except Exception as e:
+        app.logger.error(f"Error getting user analytics stats: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+def calculate_user_analytics_stats(session_id):
+    """Calculate precise analytics stats for a user session"""
+    try:
+        # Get all events for this session from local storage
+        events = get_session_events(session_id)
+
+        # Initialize stats
+        stats = {
+            'quizzes_completed': 0,
+            'quizzes_started': 0,
+            'average_score': 0,
+            'lessons_viewed': 0,
+            'workshops_started': 0,
+            'workshops_completed': 0,
+            'time_spent': 0,
+            'pages_visited': set(),
+            'recent_activity': []
+        }
+
+        # Process events to calculate metrics
+        quiz_scores = []
+        page_times = {}
+        current_page_start = None
+
+        for event in events:
+            event_type = event.get('event_type', '')
+            event_data = event.get('event_data', {})
+            timestamp = event.get('timestamp', '')
+            path = event.get('path', '')
+
+            # Track page views
+            if event_type == 'page_view':
+                stats['pages_visited'].add(path)
+                if 'learn' in path or 'tutorial' in path or 'guide' in path:
+                    stats['lessons_viewed'] += 1
+
+                # Add to recent activity
+                stats['recent_activity'].append({
+                    'timestamp': timestamp,
+                    'activity': f"Visited {get_page_title(path)}",
+                    'section': get_page_section(path),
+                    'status': 'viewed'
+                })
+
+            # Track quiz events
+            elif event_type == 'quiz_start':
+                stats['quizzes_started'] += 1
+                stats['recent_activity'].append({
+                    'timestamp': timestamp,
+                    'activity': f"Started {event_data.get('quiz_name', 'Quiz')}",
+                    'section': 'Quizzes',
+                    'status': 'started'
+                })
+
+            elif event_type == 'quiz_complete':
+                stats['quizzes_completed'] += 1
+                score = event_data.get('score', 0)
+                quiz_scores.append(score)
+                stats['recent_activity'].append({
+                    'timestamp': timestamp,
+                    'activity': f"Completed {event_data.get('quiz_name', 'Quiz')} ({score}%)",
+                    'section': 'Quizzes',
+                    'status': 'completed'
+                })
+
+            # Track workshop events
+            elif event_type == 'exercise_start':
+                stats['workshops_started'] += 1
+                stats['recent_activity'].append({
+                    'timestamp': timestamp,
+                    'activity': f"Started {event_data.get('exercise_title', 'Workshop Exercise')}",
+                    'section': 'Workshops',
+                    'status': 'started'
+                })
+
+            elif event_type == 'exercise_complete':
+                stats['workshops_completed'] += 1
+                stats['recent_activity'].append({
+                    'timestamp': timestamp,
+                    'activity': f"Completed {event_data.get('exercise_title', 'Workshop Exercise')}",
+                    'section': 'Workshops',
+                    'status': 'completed'
+                })
+
+            # Track content engagement for time calculation
+            elif event_type == 'content_engagement':
+                time_spent = event_data.get('time_spent', 0)
+                stats['time_spent'] += time_spent
+
+        # Calculate average quiz score
+        if quiz_scores:
+            stats['average_score'] = round(sum(quiz_scores) / len(quiz_scores))
+
+        # Convert pages_visited set to count
+        stats['pages_visited'] = len(stats['pages_visited'])
+
+        # Sort recent activity by timestamp (most recent first)
+        stats['recent_activity'].sort(key=lambda x: x['timestamp'], reverse=True)
+
+        # Limit recent activity to last 10 items
+        stats['recent_activity'] = stats['recent_activity'][:10]
+
+        return stats
+
+    except Exception as e:
+        app.logger.error(f"Error calculating user analytics stats: {str(e)}")
+        # Return default stats if calculation fails
+        return {
+            'quizzes_completed': 0,
+            'average_score': 0,
+            'lessons_viewed': 0,
+            'time_spent': 0,
+            'recent_activity': []
+        }
+
+def get_session_events(session_id):
+    """Get all events for a session from local storage"""
+    try:
+        # Try to read from local analytics file
+        analytics_file = 'analytics_events.json'
+        if os.path.exists(analytics_file):
+            with open(analytics_file, 'r') as f:
+                all_events = json.load(f)
+
+            # Filter events for this session
+            session_events = [event for event in all_events if event.get('session_id') == session_id]
+            return session_events
+
+        return []
+    except Exception as e:
+        app.logger.error(f"Error reading session events: {str(e)}")
+        return []
+
+def get_page_title(path):
+    """Get human-readable page title from path"""
+    page_titles = {
+        '/': 'Homepage',
+        '/learn': 'Learn Section',
+        '/workshops': 'Workshops',
+        '/tutorials': 'Tutorials',
+        '/frameworks': 'Frameworks',
+        '/lora-guide': 'LoRA Guide',
+        '/qlora-guide': 'QLoRA Guide',
+        '/docker-guide': 'Docker Guide',
+        '/huggingface-guide': 'Hugging Face Guide',
+        '/langgraph-guide': 'LangGraph Guide',
+        '/workshop-exercises': 'Workshop Exercises',
+        '/analytics': 'Analytics Dashboard',
+        '/lora_hands_on': 'LoRA Hands-On Exercise',
+        '/qlora_hands_on': 'QLoRA Hands-On Exercise',
+        '/workshop-memory-efficiency': 'Memory Efficiency Workshop'
+    }
+    return page_titles.get(path, path.replace('/', '').replace('-', ' ').title())
+
+def get_page_section(path):
+    """Get section name from path"""
+    if '/learn' in path or '/guide' in path:
+        return 'Learning'
+    elif '/workshop' in path or '/exercise' in path:
+        return 'Workshops'
+    elif '/tutorial' in path:
+        return 'Tutorials'
+    elif '/framework' in path:
+        return 'Frameworks'
+    elif '/quiz' in path:
+        return 'Quizzes'
+    elif '/analytics' in path:
+        return 'Analytics'
+    else:
+        return 'General'
 
 @app.route('/api/quiz/submit', methods=['POST'])
 @csrf.exempt

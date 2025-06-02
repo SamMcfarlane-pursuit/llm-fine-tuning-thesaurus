@@ -4,7 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Working AI Assistant Test - Visual LLM</title>
-    
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- EXACT NAVIGATION MATCH - ENSURES ALL PAGES HAVE IDENTICAL NAVIGATION STYLING -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/exact-navigation-match.css') }}">
+
+    <!-- FINAL NAVIGATION OVERRIDE - MUST BE ABSOLUTELY LAST CSS FILE -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/final-navigation-override.css') }}">
+
+    <!-- ABSOLUTE FINAL NAVIGATION - NUCLEAR OPTION CSS FILE -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/absolute-final-navigation.css') }}">
+
     <style>
         body {
             background: #0d140a;
@@ -14,24 +27,24 @@
             padding: 20px;
             margin: 0;
         }
-        
+
         .test-container {
             max-width: 800px;
             margin: 0 auto;
             padding: 40px 20px;
         }
-        
+
         .test-header {
             text-align: center;
             margin-bottom: 40px;
         }
-        
+
         .test-header h1 {
             color: #a7cf9b;
             margin-bottom: 20px;
             font-size: 2.5rem;
         }
-        
+
         .test-status {
             background: #162211;
             border: 2px solid #3c6430;
@@ -40,17 +53,17 @@
             margin-bottom: 30px;
             text-align: center;
         }
-        
+
         .status-success {
             border-color: #a7cf9b;
             background: rgba(167, 207, 155, 0.1);
         }
-        
+
         .status-error {
             border-color: #dc3545;
             background: rgba(220, 53, 69, 0.1);
         }
-        
+
         .test-instructions {
             background: #162211;
             border: 1px solid #3c6430;
@@ -58,32 +71,32 @@
             padding: 30px;
             margin-bottom: 30px;
         }
-        
+
         .test-instructions h3 {
             color: #a7cf9b;
             margin-bottom: 20px;
         }
-        
+
         .test-instructions ul {
             list-style: none;
             padding: 0;
         }
-        
+
         .test-instructions li {
             padding: 8px 0;
             border-bottom: 1px solid #3c6430;
         }
-        
+
         .test-instructions li:last-child {
             border-bottom: none;
         }
-        
+
         .test-instructions li::before {
             content: "✓ ";
             color: #a7cf9b;
             font-weight: bold;
         }
-        
+
         .manual-test-button {
             background: linear-gradient(135deg, #3c6430, #4f7a41);
             color: white;
@@ -95,12 +108,12 @@
             margin: 10px;
             transition: all 0.3s ease;
         }
-        
+
         .manual-test-button:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(60, 100, 48, 0.3);
         }
-        
+
         .debug-info {
             background: #162211;
             border: 1px solid #3c6430;
@@ -113,17 +126,108 @@
     </style>
 </head>
 <body>
+    <!-- Navigation Bar - Exact match to image -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+        <div class="container">
+            <!-- Brand -->
+            <a class="navbar-brand fw-bold text-success" href="/">
+                Visual LLM
+            </a>
+
+            <!-- Mobile toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navigation items -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <!-- Learning -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="learningDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-book me-1"></i>Learning
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/learn">Start Learning</a></li>
+                            <li><a class="dropdown-item" href="/learning_paths">Learning Paths</a></li>
+                            <li><a class="dropdown-item" href="/getting_started">Getting Started</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/lora_guide">LoRA Fine-tuning</a></li>
+                            <li><a class="dropdown-item" href="/qlora_guide">QLoRA Techniques</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Workshops -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="workshopsDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-hammer me-1"></i>Workshops
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/workshops">All Workshops</a></li>
+                            <li><a class="dropdown-item" href="/workshop_exercises">Exercises</a></li>
+                            <li><a class="dropdown-item" href="/workshop_progress">Progress Tracking</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/workshop_lora_fine_tuning">LoRA Workshop</a></li>
+                            <li><a class="dropdown-item" href="/workshop_qlora_deep_dive">QLoRA Deep Dive</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Resources -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="resourcesDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-collection me-1"></i>Resources
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/tutorials">Video Tutorials</a></li>
+                            <li><a class="dropdown-item" href="/frameworks">Frameworks</a></li>
+                            <li><a class="dropdown-item" href="/google_ml_crash_course">Google ML Course</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/docker_guide">Docker Setup</a></li>
+                            <li><a class="dropdown-item" href="/huggingface_guide">Hugging Face</a></li>
+                            <li><a class="dropdown-item" href="/quiz/quiz_list">Quizzes</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Tools -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="toolsDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-gear me-1"></i>Tools
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/ai_assistant">AI Assistant</a></li>
+                            <li><a class="dropdown-item" href="/user_dashboard">Dashboard</a></li>
+                            <li><a class="dropdown-item" href="/analytics_dashboard">Analytics</a></li>
+                            <li><a class="dropdown-item" href="/search_results">Advanced Search</a></li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <!-- Right side -->
+                <div class="d-flex align-items-center">
+                    <!-- Search -->
+                    <form class="d-flex me-3" method="GET" action="/search_results">
+                        <input class="form-control" type="search" name="q" placeholder="Search concepts..." style="width: 200px;">
+                    </form>
+
+                    <!-- Authentication -->
+                    <a href="/login" class="btn btn-outline-primary me-2">Sign In</a>
+                    <a href="/register" class="btn btn-success">Register</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
     <div class="test-container">
         <div class="test-header">
             <h1>🤖 Working AI Assistant Test</h1>
             <p>Testing the guaranteed working AI assistant implementation</p>
         </div>
-        
+
         <div class="test-status" id="ai-status">
             <h3>🔍 AI Assistant Status</h3>
             <p id="status-text">Checking AI assistant availability...</p>
         </div>
-        
+
         <div class="test-instructions">
             <h3>🧪 Test Instructions</h3>
             <ul>
@@ -137,7 +241,7 @@
                 <li>Test the copy and close buttons</li>
             </ul>
         </div>
-        
+
         <div class="test-instructions">
             <h3>🎯 Manual Tests</h3>
             <p>Click these buttons to test specific functionality:</p>
@@ -146,16 +250,16 @@
             <button class="manual-test-button" onclick="testSendMessage()">Test Send Message</button>
             <button class="manual-test-button" onclick="testAPIConnection()">Test API Connection</button>
         </div>
-        
+
         <div class="debug-info" id="debug-info">
             <h4>Debug Information:</h4>
             <div id="debug-content">Loading...</div>
         </div>
     </div>
-    
+
     <!-- Working AI Assistant - ONLY THIS ONE -->
     <script src="{{ url_for('static', filename='js/working-ai-assistant.js') }}"></script>
-    
+
     <script>
         // Test functions
         function testAIButton() {
@@ -170,7 +274,7 @@
                 updateDebug('❌ AI Button not found');
             }
         }
-        
+
         function testOpenInterface() {
             if (typeof toggleAIInterface === 'function') {
                 toggleAIInterface();
@@ -179,7 +283,7 @@
                 updateDebug('❌ Interface toggle function not available');
             }
         }
-        
+
         function testSendMessage() {
             const input = document.getElementById('working-ai-input');
             if (input) {
@@ -194,7 +298,7 @@
                 updateDebug('❌ Input field not found');
             }
         }
-        
+
         async function testAPIConnection() {
             try {
                 const response = await fetch('/api/ai/status');
@@ -207,26 +311,26 @@
                 updateDebug('❌ API connection error: ' + error.message);
             }
         }
-        
+
         function updateDebug(message) {
             const debugContent = document.getElementById('debug-content');
             const timestamp = new Date().toLocaleTimeString();
             debugContent.innerHTML += `<br>[${timestamp}] ${message}`;
             debugContent.scrollTop = debugContent.scrollHeight;
         }
-        
+
         // Main test script
         document.addEventListener('DOMContentLoaded', function() {
             const statusText = document.getElementById('status-text');
             const statusContainer = document.getElementById('ai-status');
-            
+
             updateDebug('🚀 Test page loaded');
-            
+
             // Check if working AI assistant is loaded
             setTimeout(() => {
                 const button = document.querySelector('.working-ai-button');
                 const interface = document.querySelector('.working-ai-interface');
-                
+
                 if (button && interface) {
                     statusText.textContent = '✅ Working AI Assistant loaded successfully! All components found.';
                     statusContainer.classList.add('status-success');
@@ -240,7 +344,7 @@
                     updateDebug('Button: ' + (button ? 'Found' : 'Not found'));
                     updateDebug('Interface: ' + (interface ? 'Found' : 'Not found'));
                 }
-                
+
                 // Check global functions
                 const functions = ['toggleAIInterface', 'sendMessage', 'sendSuggestion'];
                 functions.forEach(func => {
@@ -250,12 +354,15 @@
                         updateDebug('❌ Function missing: ' + func);
                     }
                 });
-                
+
             }, 2000);
-            
+
             // Test API connection
             setTimeout(testAPIConnection, 3000);
         });
     </script>
+
+    <!-- FORCE NAVIGATION STYLING - MUST BE ABSOLUTELY LAST SCRIPT -->
+    <script src="{{ url_for('static', filename='js/force-navigation-styling.js') }}"></script>
 </body>
 </html>

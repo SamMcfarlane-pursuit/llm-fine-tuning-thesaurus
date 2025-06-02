@@ -444,16 +444,16 @@ function addSectionNavigation() {
         const headingLevel = heading.tagName.toLowerCase().replace('h', '') || '3';
         dot.classList.add(`level-${headingLevel}`);
 
-        // Add click event
+        // Add click event with improved scrolling
         dotContainer.addEventListener('click', () => {
-            heading.scrollIntoView({ behavior: 'smooth' });
+            scrollToSectionPrecisely(heading, index);
         });
 
         // Add keyboard support
         dotContainer.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                heading.scrollIntoView({ behavior: 'smooth' });
+                scrollToSectionPrecisely(heading, index);
             }
         });
 
@@ -531,6 +531,100 @@ function addSectionNavigation() {
 
     // Initial update
     updateActiveDot();
+}
+
+/**
+ * Scroll to section with precise positioning and visual feedback
+ */
+function scrollToSectionPrecisely(heading, index) {
+    try {
+        // Get header height for offset calculation
+        const header = document.querySelector('header, .navbar, .fixed-top');
+        const headerHeight = header ? header.offsetHeight : 0;
+
+        // Calculate precise scroll position
+        const targetPosition = heading.offsetTop - headerHeight - 20; // 20px extra padding
+
+        // Add visual feedback to the clicked dot
+        const dots = document.querySelectorAll('.section-nav-dot');
+        const clickedDot = dots[index];
+        if (clickedDot) {
+            // Add click animation
+            clickedDot.style.transform = 'scale(1.2)';
+            clickedDot.style.boxShadow = '0 0 20px rgba(66, 135, 245, 0.8)';
+
+            // Reset animation after scroll
+            setTimeout(() => {
+                clickedDot.style.transform = '';
+                clickedDot.style.boxShadow = '';
+            }, 600);
+        }
+
+        // Perform smooth scroll with precise positioning
+        window.scrollTo({
+            top: Math.max(0, targetPosition),
+            behavior: 'smooth'
+        });
+
+        // Update URL hash for better navigation
+        const headingId = heading.id || `section-${index}`;
+        if (!heading.id) {
+            heading.id = headingId;
+        }
+
+        // Update URL without triggering scroll
+        if (history.replaceState) {
+            history.replaceState(null, null, `#${headingId}`);
+        }
+
+        // Highlight the target section temporarily
+        highlightTargetSection(heading);
+
+        // Update active dot immediately
+        updateActiveDot();
+
+        // Log for debugging
+        console.log(`Scrolled to section ${index}: "${heading.textContent.trim()}"`);
+
+    } catch (error) {
+        console.error('Error scrolling to section:', error);
+        // Fallback to basic scrollIntoView
+        heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+/**
+ * Highlight target section with visual feedback
+ */
+function highlightTargetSection(heading) {
+    try {
+        // Remove any existing target highlights
+        document.querySelectorAll('.section-target-highlight').forEach(el => {
+            el.classList.remove('section-target-highlight');
+        });
+
+        // Find the section container
+        let sectionElement = heading;
+        while (sectionElement &&
+               !sectionElement.classList.contains('card') &&
+               !sectionElement.classList.contains('section') &&
+               !sectionElement.classList.contains('container') &&
+               sectionElement !== document.body) {
+            sectionElement = sectionElement.parentElement;
+        }
+
+        // Add highlight to the section or heading
+        const targetElement = sectionElement !== document.body ? sectionElement : heading;
+        targetElement.classList.add('section-target-highlight');
+
+        // Remove highlight after animation
+        setTimeout(() => {
+            targetElement.classList.remove('section-target-highlight');
+        }, 2000);
+
+    } catch (error) {
+        console.error('Error highlighting target section:', error);
+    }
 }
 
 /**
@@ -623,7 +717,7 @@ function addKeyboardShortcuts() {
         if (e.altKey && e.key === 'ArrowUp') {
             e.preventDefault();
             if (currentIndex > 0) {
-                headings[currentIndex - 1].scrollIntoView({ behavior: 'smooth' });
+                scrollToSectionPrecisely(headings[currentIndex - 1], currentIndex - 1);
             } else {
                 // Go to top of page
                 window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -634,7 +728,7 @@ function addKeyboardShortcuts() {
         if (e.altKey && e.key === 'ArrowDown') {
             e.preventDefault();
             if (currentIndex < headings.length - 1) {
-                headings[currentIndex + 1].scrollIntoView({ behavior: 'smooth' });
+                scrollToSectionPrecisely(headings[currentIndex + 1], currentIndex + 1);
             } else {
                 // Go to bottom of page
                 window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });

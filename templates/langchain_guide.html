@@ -17,7 +17,7 @@
             <a href="{{ url_for('langgraph_guide') }}" class="related-concept-button">
                 <i class="bi bi-diagram-3"></i> LangGraph Guide
             </a>
-            <a href="{{ url_for('learn_and_explore') }}?concept=fine-tuning" class="related-concept-button">
+            <a href="{{ url_for('learn') }}#fine-tuning-concepts" class="related-concept-button">
                 <i class="bi bi-gear"></i> Fine-Tuning Concept
             </a>
         </div>
@@ -41,7 +41,7 @@
                     <div class="row">
                         <div class="col-md-8">
                             <p>LangChain is a framework for developing applications powered by language models. It enables the creation of applications that are context-aware, reason, and connect to other sources of data and computation.</p>
-                            
+
                             <p>Key features of LangChain include:</p>
                             <ul>
                                 <li><strong>Components</strong>: Abstractions for working with language models</li>
@@ -78,7 +78,7 @@
                 </div>
                 <div class="card-body">
                     <p>To get started with LangChain, you'll need to install the library and its dependencies:</p>
-                    
+
                     <div class="bg-light p-3 rounded">
                         <pre><code># Install LangChain
 pip install langchain
@@ -90,7 +90,7 @@ pip install langchain-community  # For community integrations</code></pre>
                     </div>
 
                     <p class="mt-3">For working with fine-tuned models, you'll also need to install the appropriate libraries:</p>
-                    
+
                     <div class="bg-light p-3 rounded">
                         <pre><code># For Hugging Face models
 pip install transformers accelerate
@@ -121,7 +121,7 @@ pip install langchain</code></pre>
                 <div class="card-body">
                     <h4>Components</h4>
                     <p>LangChain provides several key components for building LLM applications:</p>
-                    
+
                     <ul>
                         <li><strong>Models</strong>: Interfaces to language models (LLMs, Chat Models, Text Embedding Models)</li>
                         <li><strong>Prompts</strong>: Templates and strategies for prompting language models</li>
@@ -130,10 +130,10 @@ pip install langchain</code></pre>
                         <li><strong>Chains</strong>: Sequences of calls to components</li>
                         <li><strong>Agents</strong>: LLMs that can use tools and make decisions</li>
                     </ul>
-                    
+
                     <h4 class="mt-4">Working with Models</h4>
                     <p>Here's a basic example of using LangChain with a language model:</p>
-                    
+
                     <div class="bg-light p-3 rounded">
                         <pre><code>from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
@@ -167,7 +167,7 @@ print(response.content)</code></pre>
                 </div>
                 <div class="card-body">
                     <p>LangChain works seamlessly with fine-tuned models. Here's how to integrate your fine-tuned models into LangChain applications:</p>
-                    
+
                     <h4>Integrating Hugging Face Fine-Tuned Models</h4>
                     <div class="bg-light p-3 rounded">
                         <pre><code>from langchain_huggingface import HuggingFaceEndpoint
@@ -193,7 +193,7 @@ chain = LLMChain(llm=model, prompt=prompt)
 result = chain.run(word="happy")
 print(result)</code></pre>
                     </div>
-                    
+
                     <h4 class="mt-4">Using Local Fine-Tuned Models with PEFT</h4>
                     <div class="bg-light p-3 rounded">
                         <pre><code>from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -249,7 +249,7 @@ print(result)</code></pre>
                 <div class="card-body">
                     <h4>Retrieval-Augmented Generation (RAG)</h4>
                     <p>Combine your fine-tuned model with a retrieval system to provide relevant context:</p>
-                    
+
                     <div class="bg-light p-3 rounded">
                         <pre><code>from langchain_community.vectorstores import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings, HuggingFaceEndpoint
@@ -279,11 +279,11 @@ model = HuggingFaceEndpoint(
 retriever = db.as_retriever()
 qa_prompt = PromptTemplate.from_template(
     """You are a thesaurus assistant. Use the following context to answer the question.
-    
+
     Context: {context}
-    
+
     Question: {question}
-    
+
     Answer:"""
 )
 
@@ -298,10 +298,10 @@ qa_chain = RetrievalQA.from_chain_type(
 result = qa_chain.run("What are synonyms for 'happy'?")
 print(result)</code></pre>
                     </div>
-                    
+
                     <h4 class="mt-4">Conversational Chains with Memory</h4>
                     <p>Create a conversational interface with your fine-tuned model that remembers previous interactions:</p>
-                    
+
                     <div class="bg-light p-3 rounded">
                         <pre><code>from langchain_huggingface import HuggingFaceEndpoint
 from langchain.chains import ConversationChain
@@ -358,7 +358,7 @@ print(response2)</code></pre>
                 <div class="card-body">
                     <h4>Thesaurus Application with Fine-Tuned Models</h4>
                     <p>Here's a complete example of building a thesaurus application using LangChain and fine-tuned models:</p>
-                    
+
                     <div class="bg-light p-3 rounded">
                         <pre><code>from langchain_huggingface import HuggingFacePipeline
 from langchain_core.prompts import PromptTemplate
@@ -449,12 +449,12 @@ class WordRequest(BaseModel):
 async def get_thesaurus_entry(request: WordRequest):
     # Run the chain
     result = thesaurus_chain({"word": request.word})
-    
+
     # Process the results
     synonyms = [s.strip() for s in result["synonyms"].split(",") if s.strip()]
     antonyms = [a.strip() for a in result["antonyms"].split(",") if a.strip()]
     related_terms = [r.strip() for r in result["related_terms"].split(",") if r.strip()]
-    
+
     # Return the result
     return {
         "word": request.word,
@@ -497,7 +497,7 @@ async def get_thesaurus_entry(request: WordRequest):
                             </ul>
                         </div>
                     </div>
-                    
+
                     <div class="alert alert-warning mt-3">
                         <h5><i class="bi bi-exclamation-triangle me-2"></i>Common Pitfalls</h5>
                         <ul>

@@ -19,49 +19,30 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     {% endif %}
     <title>{% block title %}Visual LLM{% endblock %}</title>
+    
     <!-- ESSENTIAL CSS ONLY - MINIMAL LOADING -->
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-
+    
     <!-- Google Fonts - Roboto -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-
+    
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
+    
     <!-- ONLY ESSENTIAL CUSTOM CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom-dark-mode.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/ai-assistant.css') }}">
-
+    
+    <!-- NAVIGATION OVERRIDE - MUST BE ABSOLUTELY LAST CSS FILES -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/exact-navigation-match.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/final-navigation-override.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/absolute-final-navigation.css') }}">
-
+    
     {% block head %}{% endblock %}
-
-    <!-- Auth-Only Progress Bar JavaScript - Execute as early as possible -->
-    <script src="{{ url_for('static', filename='js/auth-only-progress-bar.js') }}"></script>
-    <!-- Emergency Blue Banner Fix JavaScript - Execute as early as possible -->
-    <script src="{{ url_for('static', filename='js/emergency-blue-banner-fix.js') }}"></script>
-    <!-- Absolute Banner Visibility Fix JavaScript - Final solution -->
-    <script src="{{ url_for('static', filename='js/absolute-banner-visibility-fix.js') }}"></script>
-    <!-- Replace Blue Banners JavaScript - Complete replacement solution -->
-    <script src="{{ url_for('static', filename='js/replace-blue-banners.js') }}"></script>
-    <!-- Direct Banner Replacement JavaScript - Targeted replacement solution -->
-    <script src="{{ url_for('static', filename='js/direct-banner-replacement.js') }}"></script>
-    <!-- Back Button Visibility Fix JavaScript - Specifically targets back buttons with blue background -->
-    <script src="{{ url_for('static', filename='js/back-button-visibility-fix.js') }}"></script>
-    <!-- Specific Back Button Fix JavaScript - Directly targets the specific back button in the image -->
-    <script src="{{ url_for('static', filename='js/specific-back-button-fix.js') }}"></script>
-    <!-- Libraries -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vis-network@9.1.2/dist/vis-network.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
-    <!-- jQuery for tooltips -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body class="{% block body_class %}{% endblock %}" data-topic-id="{{ topic_id|default('') }}" data-module-id="{{ module_id|default('') }}" data-user-logged-in="{{ current_user.is_authenticated|string|lower }}">
     <!-- Skip to content link for accessibility -->
@@ -172,51 +153,6 @@
         </div>
     </nav>
 
-    <!-- Category Filter Bar (appears on relevant pages) -->
-    <div class="category-filter-bar bg-light border-bottom" id="categoryFilterBar" style="display: none;">
-        <div class="container">
-            <div class="row align-items-center py-2">
-                <div class="col-md-8">
-                    <div class="d-flex flex-wrap gap-2">
-                        <span class="fw-bold text-muted me-3">Filter by:</span>
-                        <button class="btn btn-sm btn-outline-primary category-filter active" data-category="all">
-                            <i class="bi bi-grid me-1"></i>All
-                        </button>
-                        <button class="btn btn-sm btn-outline-primary category-filter" data-category="beginner">
-                            <i class="bi bi-star me-1"></i>Beginner
-                        </button>
-                        <button class="btn btn-sm btn-outline-primary category-filter" data-category="intermediate">
-                            <i class="bi bi-star-half me-1"></i>Intermediate
-                        </button>
-                        <button class="btn btn-sm btn-outline-primary category-filter" data-category="advanced">
-                            <i class="bi bi-stars me-1"></i>Advanced
-                        </button>
-                        <button class="btn btn-sm btn-outline-success category-filter" data-category="lora">
-                            <i class="bi bi-cpu me-1"></i>LoRA
-                        </button>
-                        <button class="btn btn-sm btn-outline-success category-filter" data-category="qlora">
-                            <i class="bi bi-memory me-1"></i>QLoRA
-                        </button>
-                        <button class="btn btn-sm btn-outline-info category-filter" data-category="hands-on">
-                            <i class="bi bi-hand-index me-1"></i>Hands-on
-                        </button>
-                        <button class="btn btn-sm btn-outline-warning category-filter" data-category="theory">
-                            <i class="bi bi-book me-1"></i>Theory
-                        </button>
-                    </div>
-                </div>
-                <div class="col-md-4 text-end">
-                    <button class="btn btn-sm btn-outline-secondary" id="clearFilters">
-                        <i class="bi bi-x-circle me-1"></i>Clear Filters
-                    </button>
-                    <button class="btn btn-sm btn-outline-secondary ms-2" id="hideFilterBar">
-                        <i class="bi bi-eye-slash me-1"></i>Hide
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Main Content -->
     <main class="container py-4">
         {% with messages = get_flashed_messages(with_categories=true) %}
@@ -229,9 +165,6 @@
 
         {% block content %}{% endblock %}
     </main>
-
-    <!-- Include the How to Use This Site modal -->
-    {% include 'components/how_to_use_modal.html' %}
 
     <!-- Enhanced Footer -->
     <footer class="bg-dark text-white py-5 mt-auto">
@@ -306,174 +239,15 @@
         </div>
     </footer>
 
+    <!-- ESSENTIAL JAVASCRIPT ONLY -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ url_for('static', filename='js/robust-diagram-utils.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/svg-diagram-fixer.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/blue-banner-text-fixer.js') }}"></script>
-    <!-- <script src="{{ url_for('static', filename='js/main.js') }}"></script> --> <!-- DISABLED to prevent AI button conflicts -->
-    <script src="{{ url_for('static', filename='js/tech-ui.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/image-handler.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/image-error-handler.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/razor-sharp-images.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/razor-sharp-images-enhanced.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/enhanced-image-quality.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/font-loader.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/page-transitions.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/theme-toggle.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/enhanced-theme-toggle.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/improved-theme-toggle.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/enhanced-theme-toggle-v2.js') }}"></script>
-
-    <!-- Robust Features - Advanced functionality -->
-    <script src="{{ url_for('static', filename='js/advanced-progress-tracking.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/ai-code-assistant.js') }}"></script>
-    <!-- AI Learning Assistant - DISABLED to prevent conflicts with Final AI Assistant -->
-    <!-- <script src="{{ url_for('static', filename='js/ai-learning-assistant.js') }}"></script> -->
-    <!-- Unified AI Assistant - Connected learning assistant and AI bot -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Essential AI Assistant -->
     <script src="{{ url_for('static', filename='js/unified-ai-assistant.js') }}"></script>
-
-    <!-- Enhanced Navigation with Category Filtering -->
-    <script src="{{ url_for('static', filename='js/enhanced-navigation-filtering.js') }}"></script>
-    <!-- Simple Category Filter - Guaranteed to work -->
-    <script src="{{ url_for('static', filename='js/simple-category-filter.js') }}"></script>
-
-    <script src="{{ url_for('static', filename='js/advanced-notification-system.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/enhanced-concept-map.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/condensed-map-visualization.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/code-blocks.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/analytics-tracking.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/interactive-feature-buttons.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/ux-enhancements.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/enhanced-exercises.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/hands-on-exercises.js') }}"></script>
-    <!-- <script src="{{ url_for('static', filename='js/help-button.js') }}"></script> --> <!-- DISABLED to prevent AI button conflicts -->
-    <script src="{{ url_for('static', filename='js/enhanced-navigation.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/voice-assistant.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/image-handler-fixed.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/integrated-learning.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/smooth-ux.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/workshop-enhancements.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/workshop-steps-enhanced.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/enhanced-current-section.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/how-to-use-guide.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/image-enhancer.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/fine-tuning-comparison-enhancer.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/table-visibility-enhancer.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/contrast-toggle.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/pros-cons-text-fix.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/enhanced-ux-animations.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/improved-accessibility-controls.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/visual-thesaurus-diagram.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/enhanced-llm-diagram.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/coherent-ux-enhancement.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/futuristic-header-effects.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/dropdown-fix.js') }}"></script>
-    <!-- Purple Text Enhancer - Adds subtle animations to purple text in dark mode -->
-    <script src="{{ url_for('static', filename='js/purple-text-enhancer.js') }}"></script>
-    <!-- Section Header Enhancer - Improves visibility of section headers with optimal contrast -->
-    <script src="{{ url_for('static', filename='js/section-header-enhancer.js') }}"></script>
-    <!-- Text Visibility Enhancer - Dynamically fixes text visibility issues -->
-    <script src="{{ url_for('static', filename='js/text-visibility-enhancer.js') }}"></script>
-    <!-- Advanced Text Visibility - Provides advanced techniques for text visibility -->
-    <script src="{{ url_for('static', filename='js/advanced-text-visibility.js') }}"></script>
-    <!-- Concept Map Heading Fix - Specifically targets and enhances the "Explore the Concept Map" heading -->
-    <script src="{{ url_for('static', filename='js/concept-map-heading-fix.js') }}"></script>
-    <!-- Learn & Explore Header Fix - Direct DOM manipulation for the specific header -->
-    <script src="{{ url_for('static', filename='js/learn-explore-header-fix.js') }}"></script>
-    <!-- TensorFlow Text Visibility Fix - Specifically targets and enhances text visibility in the TensorFlow section -->
-    <script src="{{ url_for('static', filename='js/tensorflow-text-visibility-fix.js') }}"></script>
-
-    <!-- High-Contrast Purple Text - Makes text in guide cards high-contrast purple for maximum readability -->
-    <script src="{{ url_for('static', filename='js/high-contrast-purple-text.js') }}"></script>
-    <!-- Direct Guide Card Fix - Directly targets the exact guide cards shown in the image with inline styles -->
-    <script src="{{ url_for('static', filename='js/direct-guide-card-fix.js') }}"></script>
-    {% if current_user.is_authenticated %}
-    <script src="{{ url_for('static', filename='js/pop_quiz.js') }}"></script>
-    {% endif %}
-
-    <!-- API Endpoints -->
-    <script>
-        // Define API endpoints for use throughout the application
-        const apiEndpoints = {
-            thesaurus: '/api/thesaurus',
-            synonyms: '/api/synonyms',
-            related: '/api/related',
-            llmConcepts: '/api/llm-concepts',
-            llmConceptsVisualization: '/api/llm-concepts-visualization',
-            analyticsTrack: '/api/analytics/track',
-            quizSubmit: '/api/quiz/submit',
-            quizResults: '/api/quiz/results',
-            userProgress: '/api/user/progress',
-            search: '/api/search',
-            relatedConcepts: '/api/related-concepts',
-            learningResources: '/api/learning-resources',
-            conceptDefinition: '/api/concept-definition'
-        };
-    </script>
-
-    <!-- Initialize Bootstrap tooltips -->
-    <script>
-        $(function () {
-            // Initialize Bootstrap 4 tooltips (legacy)
-            $('[data-toggle="tooltip"]').tooltip();
-
-            // Initialize Bootstrap 5 tooltips
-            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl, {
-                delay: { show: 300, hide: 100 },
-                trigger: 'hover focus',
-                placement: 'auto'
-            }));
-
-            // Initialize Bootstrap 5 popovers
-            const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]');
-            const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl, {
-                trigger: 'focus',
-                html: true
-            }));
-
-            // Reinitialize tooltips when new elements are added dynamically
-            const reinitializeTooltips = function() {
-                // Destroy existing tooltips
-                tooltipList.forEach(tooltip => {
-                    if (tooltip && tooltip.dispose) {
-                        tooltip.dispose();
-                    }
-                });
-
-                // Reinitialize tooltips
-                const newTooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-                const newTooltipList = [...newTooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl, {
-                    delay: { show: 300, hide: 100 },
-                    trigger: 'hover focus',
-                    placement: 'auto'
-                }));
-            };
-
-            // Reinitialize tooltips after dynamic content is added
-            setTimeout(reinitializeTooltips, 1000);
-
-            // Listen for DOM changes to reinitialize tooltips
-            const observer = new MutationObserver(function(mutations) {
-                const shouldReinitialize = mutations.some(mutation => {
-                    return mutation.addedNodes.length > 0 &&
-                           Array.from(mutation.addedNodes).some(node =>
-                               node.nodeType === 1 && node.querySelector && node.querySelector('[data-bs-toggle="tooltip"]')
-                           );
-                });
-
-                if (shouldReinitialize) {
-                    reinitializeTooltips();
-                }
-            });
-
-            observer.observe(document.body, { childList: true, subtree: true });
-        });
-    </script>
-
+    
     {% block scripts %}{% endblock %}
-
+    
     <!-- FORCE NAVIGATION STYLING - MUST BE ABSOLUTELY LAST SCRIPT -->
     <script src="{{ url_for('static', filename='js/force-navigation-styling.js') }}"></script>
 </body>

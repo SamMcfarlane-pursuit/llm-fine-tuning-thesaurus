@@ -272,6 +272,76 @@ def tutorials():
 def frameworks():
     return render_template('frameworks.html', base_template='base-simple.html')
 
+# PyTorch Framework Routes
+@app.route('/frameworks/pytorch')
+def pytorch_guide():
+    return render_template('pytorch.html', base_template='base-simple.html')
+
+@app.route('/frameworks/pytorch/exercises')
+def pytorch_exercises():
+    return render_template('pytorch_exercises.html', base_template='base-simple.html')
+
+@app.route('/frameworks/pytorch/exercises/basics')
+def pytorch_exercises_basics():
+    return render_template('pytorch_exercises/basics.html', base_template='base-simple.html')
+
+@app.route('/frameworks/pytorch/exercises/linear-regression')
+def pytorch_exercises_linear_regression():
+    return render_template('pytorch_exercises/linear_regression.html', base_template='base-simple.html')
+
+@app.route('/frameworks/pytorch/exercises/neural-network-basics')
+def pytorch_exercises_neural_network():
+    return render_template('pytorch_exercises/neural_network.html', base_template='base-simple.html')
+
+@app.route('/frameworks/pytorch/exercises/data-loading')
+def pytorch_exercises_data_loading():
+    return render_template('pytorch_exercises/data_loading.html', base_template='base-simple.html')
+
+@app.route('/frameworks/pytorch/exercises/cnn')
+def pytorch_exercises_cnn():
+    return render_template('pytorch_exercises/cnn.html', base_template='base-simple.html')
+
+@app.route('/frameworks/pytorch/exercises/rnn')
+def pytorch_exercises_rnn():
+    return render_template('pytorch_exercises/rnn.html', base_template='base-simple.html')
+
+@app.route('/frameworks/pytorch/exercises/custom-datasets')
+def pytorch_exercises_custom_datasets():
+    return render_template('pytorch_exercises/custom_datasets.html', base_template='base-simple.html')
+
+@app.route('/frameworks/pytorch/exercises/transfer-learning')
+def pytorch_exercises_transfer_learning():
+    return render_template('pytorch_exercises/transfer_learning.html', base_template='base-simple.html')
+
+@app.route('/frameworks/pytorch/exercises/gan')
+def pytorch_exercises_gan():
+    return render_template('pytorch_exercises/gan.html', base_template='base-simple.html')
+
+@app.route('/frameworks/pytorch/exercises/attention')
+def pytorch_exercises_attention():
+    return render_template('pytorch_exercises/attention.html', base_template='base-simple.html')
+
+@app.route('/frameworks/pytorch/exercises/deployment')
+def pytorch_exercises_deployment():
+    return render_template('pytorch_exercises/deployment.html', base_template='base-simple.html')
+
+@app.route('/frameworks/pytorch/exercises/distributed')
+def pytorch_exercises_distributed():
+    return render_template('pytorch_exercises/distributed.html', base_template='base-simple.html')
+
+# TensorFlow Framework Routes
+@app.route('/frameworks/tensorflow')
+def tensorflow_guide():
+    return render_template('tensorflow.html', base_template='base-simple.html')
+
+@app.route('/frameworks/tensorflow/exercises')
+def tensorflow_exercises():
+    return render_template('tensorflow_exercises.html', base_template='base-simple.html')
+
+@app.route('/frameworks/tensorflow/exercises/basics')
+def tensorflow_exercises_basics():
+    return render_template('tensorflow_exercises/basics.html', base_template='base-simple.html')
+
 @app.route('/profile')
 @login_required
 def profile():

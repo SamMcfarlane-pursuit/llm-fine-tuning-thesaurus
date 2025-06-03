@@ -1,0 +1,391 @@
+{% extends "base.html" %}
+
+{% block title %}Neural Network Basics Exercise | Thesaurus AI LLM FT{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/frameworks.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/themes/prism-tomorrow.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="framework-header pytorch-header">
+                <h1>Neural Network Basics with PyTorch</h1>
+                <p>Build your first neural network with PyTorch. Implement a simple neural network for image classification using the MNIST dataset.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Learning Objectives</h2>
+                <p>By the end of this exercise, you will be able to:</p>
+                <ul>
+                    <li>Build a multi-layer neural network using nn.Module</li>
+                    <li>Work with the MNIST dataset for image classification</li>
+                    <li>Understand activation functions and their importance</li>
+                    <li>Implement forward and backward propagation</li>
+                    <li>Evaluate model accuracy on test data</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Exercise 1: Simple Neural Network for MNIST</h2>
+                <p>Let's build a neural network to classify handwritten digits from the MNIST dataset.</p>
+                
+                <h3>Step 1: Import Libraries and Load Data</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">import torch
+import torch.nn as nn
+import torch.optim as optim
+import torch.nn.functional as F
+import torchvision
+import torchvision.transforms as transforms
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Device configuration
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print(f'Using device: {device}')
+
+# Hyperparameters
+batch_size = 64
+learning_rate = 0.001
+num_epochs = 10
+
+# Data preprocessing
+transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize((0.1307,), (0.3081,))  # MNIST mean and std
+])
+
+# Load MNIST dataset
+train_dataset = torchvision.datasets.MNIST(
+    root='./data', 
+    train=True, 
+    transform=transform, 
+    download=True
+)
+
+test_dataset = torchvision.datasets.MNIST(
+    root='./data', 
+    train=False, 
+    transform=transform
+)
+
+# Data loaders
+train_loader = torch.utils.data.DataLoader(
+    dataset=train_dataset, 
+    batch_size=batch_size, 
+    shuffle=True
+)
+
+test_loader = torch.utils.data.DataLoader(
+    dataset=test_dataset, 
+    batch_size=batch_size, 
+    shuffle=False
+)
+
+print(f'Training samples: {len(train_dataset)}')
+print(f'Test samples: {len(test_dataset)}')
+print(f'Number of classes: 10')</code></pre>
+                </div>
+                
+                <h3>Step 2: Visualize Sample Data</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Visualize some training examples
+def visualize_samples(dataset, num_samples=8):
+    fig, axes = plt.subplots(2, 4, figsize=(10, 5))
+    axes = axes.ravel()
+    
+    for i in range(num_samples):
+        img, label = dataset[i]
+        img = img.squeeze()  # Remove channel dimension for visualization
+        
+        axes[i].imshow(img, cmap='gray')
+        axes[i].set_title(f'Label: {label}')
+        axes[i].axis('off')
+    
+    plt.tight_layout()
+    plt.show()
+
+# Show sample images
+visualize_samples(train_dataset)
+
+# Check data shape
+sample_data, sample_label = train_dataset[0]
+print(f'Sample data shape: {sample_data.shape}')
+print(f'Sample label: {sample_label}')</code></pre>
+                </div>
+                
+                <h3>Step 3: Define Neural Network Architecture</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">class SimpleNeuralNetwork(nn.Module):
+    def __init__(self, input_size, hidden_size, num_classes):
+        super(SimpleNeuralNetwork, self).__init__()
+        self.fc1 = nn.Linear(input_size, hidden_size)
+        self.fc2 = nn.Linear(hidden_size, hidden_size)
+        self.fc3 = nn.Linear(hidden_size, num_classes)
+        self.relu = nn.ReLU()
+        self.dropout = nn.Dropout(0.2)
+        
+    def forward(self, x):
+        # Flatten the input (batch_size, 1, 28, 28) -> (batch_size, 784)
+        x = x.view(x.size(0), -1)
+        
+        # First hidden layer
+        x = self.fc1(x)
+        x = self.relu(x)
+        x = self.dropout(x)
+        
+        # Second hidden layer
+        x = self.fc2(x)
+        x = self.relu(x)
+        x = self.dropout(x)
+        
+        # Output layer
+        x = self.fc3(x)
+        return x
+
+# Model parameters
+input_size = 28 * 28  # 784 (flattened 28x28 images)
+hidden_size = 128
+num_classes = 10
+
+# Create model instance
+model = SimpleNeuralNetwork(input_size, hidden_size, num_classes).to(device)
+
+# Print model architecture
+print(model)
+print(f'\nTotal parameters: {sum(p.numel() for p in model.parameters()):,}')</code></pre>
+                </div>
+                
+                <h3>Step 4: Define Loss Function and Optimizer</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Loss function and optimizer
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+
+print(f'Loss function: {criterion}')
+print(f'Optimizer: {optimizer}')
+print(f'Learning rate: {learning_rate}')</code></pre>
+                </div>
+                
+                <h3>Step 5: Training Loop</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Training function
+def train_model(model, train_loader, criterion, optimizer, num_epochs):
+    model.train()
+    train_losses = []
+    train_accuracies = []
+    
+    for epoch in range(num_epochs):
+        running_loss = 0.0
+        correct = 0
+        total = 0
+        
+        for batch_idx, (data, targets) in enumerate(train_loader):
+            data, targets = data.to(device), targets.to(device)
+            
+            # Forward pass
+            outputs = model(data)
+            loss = criterion(outputs, targets)
+            
+            # Backward pass and optimization
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            
+            # Statistics
+            running_loss += loss.item()
+            _, predicted = torch.max(outputs.data, 1)
+            total += targets.size(0)
+            correct += (predicted == targets).sum().item()
+            
+            # Print progress
+            if batch_idx % 200 == 0:
+                print(f'Epoch [{epoch+1}/{num_epochs}], Step [{batch_idx}/{len(train_loader)}], '
+                      f'Loss: {loss.item():.4f}')
+        
+        # Calculate epoch statistics
+        epoch_loss = running_loss / len(train_loader)
+        epoch_acc = 100 * correct / total
+        train_losses.append(epoch_loss)
+        train_accuracies.append(epoch_acc)
+        
+        print(f'Epoch [{epoch+1}/{num_epochs}] - Loss: {epoch_loss:.4f}, Accuracy: {epoch_acc:.2f}%')
+    
+    return train_losses, train_accuracies
+
+# Train the model
+print("Starting training...")
+train_losses, train_accuracies = train_model(model, train_loader, criterion, optimizer, num_epochs)
+print("Training completed!")</code></pre>
+                </div>
+                
+                <h3>Step 6: Evaluate Model Performance</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Evaluation function
+def evaluate_model(model, test_loader):
+    model.eval()
+    correct = 0
+    total = 0
+    class_correct = list(0. for i in range(10))
+    class_total = list(0. for i in range(10))
+    
+    with torch.no_grad():
+        for data, targets in test_loader:
+            data, targets = data.to(device), targets.to(device)
+            outputs = model(data)
+            _, predicted = torch.max(outputs, 1)
+            total += targets.size(0)
+            correct += (predicted == targets).sum().item()
+            
+            # Per-class accuracy
+            c = (predicted == targets).squeeze()
+            for i in range(targets.size(0)):
+                label = targets[i]
+                class_correct[label] += c[i].item()
+                class_total[label] += 1
+    
+    # Overall accuracy
+    accuracy = 100 * correct / total
+    print(f'Test Accuracy: {accuracy:.2f}%')
+    
+    # Per-class accuracy
+    print('\nPer-class accuracy:')
+    for i in range(10):
+        if class_total[i] > 0:
+            acc = 100 * class_correct[i] / class_total[i]
+            print(f'Digit {i}: {acc:.2f}%')
+    
+    return accuracy
+
+# Evaluate the model
+test_accuracy = evaluate_model(model, test_loader)</code></pre>
+                </div>
+                
+                <h3>Step 7: Visualize Training Progress</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Plot training progress
+plt.figure(figsize=(12, 4))
+
+plt.subplot(1, 2, 1)
+plt.plot(train_losses)
+plt.title('Training Loss')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.grid(True)
+
+plt.subplot(1, 2, 2)
+plt.plot(train_accuracies)
+plt.title('Training Accuracy')
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy (%)')
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()
+
+print(f'Final training accuracy: {train_accuracies[-1]:.2f}%')
+print(f'Final test accuracy: {test_accuracy:.2f}%')</code></pre>
+                </div>
+                
+                <h3>Challenge 1</h3>
+                <p>Experiment with different architectures. Try adding more hidden layers or changing the number of neurons. How does this affect performance?</p>
+                
+                <div class="alert alert-secondary mt-4" role="alert" style="background-color: rgba(0, 0, 0, 0.05); border-left: 5px solid #555; color: #333; border-radius: 10px;">
+                    <div class="d-flex">
+                        <div class="me-3">
+                            <i class="bi bi-lightbulb-fill" style="font-size: 1.5rem; color: #555;"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: #333; font-weight: 600;">Hint</h4>
+                            <p class="mb-0">Try different hidden sizes like 64, 256, or 512. Also experiment with 1, 3, or 4 hidden layers.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Summary</h2>
+                <p>In this exercise, you've learned:</p>
+                <ul>
+                    <li>How to build a multi-layer neural network using PyTorch</li>
+                    <li>Working with real datasets (MNIST)</li>
+                    <li>The importance of activation functions and dropout</li>
+                    <li>How to train and evaluate a classification model</li>
+                    <li>Visualizing training progress and model performance</li>
+                </ul>
+                
+                <div class="text-center mt-5">
+                    <a href="/frameworks/pytorch/exercises/cnn" class="btn btn-lg" style="background: linear-gradient(135deg, var(--pytorch-primary), var(--pytorch-secondary)); color: white; font-weight: 600; border-radius: 30px; padding: 12px 30px; box-shadow: 0 10px 20px rgba(238, 76, 44, 0.3);">
+                        <i class="bi bi-arrow-right-circle me-2"></i> Next Exercise: Convolutional Neural Networks
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/components/prism-python.min.js"></script>
+<script>
+    function copyCode(button) {
+        const codeBlock = button.parentElement.nextElementSibling;
+        const code = codeBlock.textContent;
+        
+        navigator.clipboard.writeText(code).then(() => {
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            button.style.backgroundColor = 'rgba(46, 125, 50, 0.3)';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.backgroundColor = '';
+            }, 2000);
+        });
+    }
+</script>
+{% endblock %}

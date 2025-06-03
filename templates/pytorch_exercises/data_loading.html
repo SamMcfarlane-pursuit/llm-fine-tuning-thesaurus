@@ -1,0 +1,410 @@
+{% extends "base.html" %}
+
+{% block title %}Data Loading Exercise | Thesaurus AI LLM FT{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/frameworks.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/themes/prism-tomorrow.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="framework-header pytorch-header">
+                <h1>Data Loading and Preprocessing with PyTorch</h1>
+                <p>Learn how to efficiently load, preprocess, and batch data using PyTorch's DataLoader and Dataset classes.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Learning Objectives</h2>
+                <p>By the end of this exercise, you will be able to:</p>
+                <ul>
+                    <li>Create custom Dataset classes for your data</li>
+                    <li>Use DataLoader for efficient batching and shuffling</li>
+                    <li>Apply data transformations and augmentations</li>
+                    <li>Handle different data formats (images, text, tabular)</li>
+                    <li>Implement data preprocessing pipelines</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Exercise 1: Custom Dataset for Tabular Data</h2>
+                <p>Let's create a custom dataset for handling tabular data like CSV files.</p>
+                
+                <h3>Step 1: Import Libraries and Create Sample Data</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">import torch
+import torch.nn as nn
+from torch.utils.data import Dataset, DataLoader
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+
+# Create sample tabular data
+np.random.seed(42)
+n_samples = 1000
+n_features = 5
+
+# Generate synthetic features
+X = np.random.randn(n_samples, n_features)
+# Create target with some relationship to features
+y = (2 * X[:, 0] + 1.5 * X[:, 1] - 0.5 * X[:, 2] + 
+     0.3 * X[:, 3] + 0.1 * X[:, 4] + np.random.randn(n_samples) * 0.1)
+
+# Create DataFrame
+feature_names = [f'feature_{i}' for i in range(n_features)]
+df = pd.DataFrame(X, columns=feature_names)
+df['target'] = y
+
+print(f"Dataset shape: {df.shape}")
+print(f"First few rows:\n{df.head()}")
+print(f"Dataset statistics:\n{df.describe()}")</code></pre>
+                </div>
+                
+                <h3>Step 2: Create Custom Dataset Class</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">class TabularDataset(Dataset):
+    def __init__(self, dataframe, target_column, transform=None):
+        """
+        Custom dataset for tabular data
+        
+        Args:
+            dataframe: pandas DataFrame containing the data
+            target_column: name of the target column
+            transform: optional transform to be applied to features
+        """
+        self.data = dataframe.copy()
+        self.target_column = target_column
+        self.transform = transform
+        
+        # Separate features and targets
+        self.features = self.data.drop(columns=[target_column]).values.astype(np.float32)
+        self.targets = self.data[target_column].values.astype(np.float32)
+        
+        print(f"Dataset initialized with {len(self)} samples")
+        print(f"Feature shape: {self.features.shape}")
+        print(f"Target shape: {self.targets.shape}")
+    
+    def __len__(self):
+        return len(self.data)
+    
+    def __getitem__(self, idx):
+        # Get features and target for the given index
+        features = self.features[idx]
+        target = self.targets[idx]
+        
+        # Apply transform if provided
+        if self.transform:
+            features = self.transform(features)
+        
+        return torch.tensor(features), torch.tensor(target)
+    
+    def get_feature_names(self):
+        return [col for col in self.data.columns if col != self.target_column]
+
+# Create dataset instance
+dataset = TabularDataset(df, 'target')
+
+# Test the dataset
+sample_features, sample_target = dataset[0]
+print(f"Sample features: {sample_features}")
+print(f"Sample target: {sample_target}")
+print(f"Feature names: {dataset.get_feature_names()}")</code></pre>
+                </div>
+                
+                <h3>Step 3: Data Preprocessing and Splitting</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Split the data
+train_df, test_df = train_test_split(df, test_size=0.2, random_state=42)
+train_df, val_df = train_test_split(train_df, test_size=0.2, random_state=42)
+
+print(f"Train set size: {len(train_df)}")
+print(f"Validation set size: {len(val_df)}")
+print(f"Test set size: {len(test_df)}")
+
+# Create preprocessing transform
+class StandardizeTransform:
+    def __init__(self, mean=None, std=None):
+        self.mean = mean
+        self.std = std
+    
+    def fit(self, data):
+        self.mean = np.mean(data, axis=0)
+        self.std = np.std(data, axis=0)
+        return self
+    
+    def __call__(self, x):
+        if self.mean is not None and self.std is not None:
+            return (x - self.mean) / (self.std + 1e-8)
+        return x
+
+# Fit scaler on training data
+scaler = StandardizeTransform()
+train_features = train_df.drop(columns=['target']).values
+scaler.fit(train_features)
+
+# Create datasets with preprocessing
+train_dataset = TabularDataset(train_df, 'target', transform=scaler)
+val_dataset = TabularDataset(val_df, 'target', transform=scaler)
+test_dataset = TabularDataset(test_df, 'target', transform=scaler)
+
+print("Datasets created with preprocessing!")</code></pre>
+                </div>
+                
+                <h3>Step 4: Create DataLoaders</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Create data loaders
+batch_size = 32
+
+train_loader = DataLoader(
+    train_dataset, 
+    batch_size=batch_size, 
+    shuffle=True,
+    num_workers=0  # Set to 0 for compatibility
+)
+
+val_loader = DataLoader(
+    val_dataset, 
+    batch_size=batch_size, 
+    shuffle=False,
+    num_workers=0
+)
+
+test_loader = DataLoader(
+    test_dataset, 
+    batch_size=batch_size, 
+    shuffle=False,
+    num_workers=0
+)
+
+print(f"Train loader: {len(train_loader)} batches")
+print(f"Validation loader: {len(val_loader)} batches")
+print(f"Test loader: {len(test_loader)} batches")
+
+# Test the data loader
+for batch_features, batch_targets in train_loader:
+    print(f"Batch features shape: {batch_features.shape}")
+    print(f"Batch targets shape: {batch_targets.shape}")
+    print(f"First sample in batch: {batch_features[0]}")
+    break</code></pre>
+                </div>
+                
+                <h3>Step 5: Simple Model Training with DataLoader</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Simple neural network for regression
+class SimpleRegressor(nn.Module):
+    def __init__(self, input_size, hidden_size=64):
+        super(SimpleRegressor, self).__init__()
+        self.fc1 = nn.Linear(input_size, hidden_size)
+        self.fc2 = nn.Linear(hidden_size, hidden_size)
+        self.fc3 = nn.Linear(hidden_size, 1)
+        self.relu = nn.ReLU()
+        self.dropout = nn.Dropout(0.2)
+    
+    def forward(self, x):
+        x = self.relu(self.fc1(x))
+        x = self.dropout(x)
+        x = self.relu(self.fc2(x))
+        x = self.dropout(x)
+        x = self.fc3(x)
+        return x.squeeze()
+
+# Create model
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+model = SimpleRegressor(input_size=n_features).to(device)
+criterion = nn.MSELoss()
+optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+
+print(f"Model: {model}")
+print(f"Device: {device}")
+
+# Training loop
+num_epochs = 50
+train_losses = []
+val_losses = []
+
+for epoch in range(num_epochs):
+    # Training
+    model.train()
+    train_loss = 0.0
+    for batch_features, batch_targets in train_loader:
+        batch_features, batch_targets = batch_features.to(device), batch_targets.to(device)
+        
+        optimizer.zero_grad()
+        outputs = model(batch_features)
+        loss = criterion(outputs, batch_targets)
+        loss.backward()
+        optimizer.step()
+        
+        train_loss += loss.item()
+    
+    # Validation
+    model.eval()
+    val_loss = 0.0
+    with torch.no_grad():
+        for batch_features, batch_targets in val_loader:
+            batch_features, batch_targets = batch_features.to(device), batch_targets.to(device)
+            outputs = model(batch_features)
+            loss = criterion(outputs, batch_targets)
+            val_loss += loss.item()
+    
+    train_loss /= len(train_loader)
+    val_loss /= len(val_loader)
+    train_losses.append(train_loss)
+    val_losses.append(val_loss)
+    
+    if (epoch + 1) % 10 == 0:
+        print(f'Epoch [{epoch+1}/{num_epochs}], Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f}')
+
+print("Training completed!")</code></pre>
+                </div>
+                
+                <h3>Step 6: Visualize Training Progress</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Plot training progress
+plt.figure(figsize=(10, 4))
+
+plt.subplot(1, 2, 1)
+plt.plot(train_losses, label='Training Loss')
+plt.plot(val_losses, label='Validation Loss')
+plt.title('Training Progress')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.legend()
+plt.grid(True)
+
+# Test the model
+model.eval()
+test_predictions = []
+test_targets = []
+
+with torch.no_grad():
+    for batch_features, batch_targets in test_loader:
+        batch_features = batch_features.to(device)
+        outputs = model(batch_features)
+        test_predictions.extend(outputs.cpu().numpy())
+        test_targets.extend(batch_targets.numpy())
+
+test_predictions = np.array(test_predictions)
+test_targets = np.array(test_targets)
+
+# Plot predictions vs actual
+plt.subplot(1, 2, 2)
+plt.scatter(test_targets, test_predictions, alpha=0.6)
+plt.plot([test_targets.min(), test_targets.max()], 
+         [test_targets.min(), test_targets.max()], 'r--', lw=2)
+plt.xlabel('Actual Values')
+plt.ylabel('Predicted Values')
+plt.title('Predictions vs Actual')
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()
+
+# Calculate test metrics
+test_mse = np.mean((test_predictions - test_targets) ** 2)
+test_r2 = 1 - (np.sum((test_targets - test_predictions) ** 2) / 
+               np.sum((test_targets - np.mean(test_targets)) ** 2))
+
+print(f"Test MSE: {test_mse:.4f}")
+print(f"Test R²: {test_r2:.4f}")</code></pre>
+                </div>
+                
+                <h3>Challenge 1</h3>
+                <p>Create a custom dataset for image data that applies random transformations. Implement data augmentation techniques like random rotation, flipping, and color jittering.</p>
+                
+                <div class="alert alert-secondary mt-4" role="alert" style="background-color: rgba(0, 0, 0, 0.05); border-left: 5px solid #555; color: #333; border-radius: 10px;">
+                    <div class="d-flex">
+                        <div class="me-3">
+                            <i class="bi bi-lightbulb-fill" style="font-size: 1.5rem; color: #555;"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: #333; font-weight: 600;">Hint</h4>
+                            <p class="mb-0">Use torchvision.transforms for image augmentation. Look into RandomRotation, RandomHorizontalFlip, and ColorJitter.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Summary</h2>
+                <p>In this exercise, you've learned:</p>
+                <ul>
+                    <li>How to create custom Dataset classes for different data types</li>
+                    <li>Using DataLoader for efficient batch processing</li>
+                    <li>Implementing data preprocessing and transformations</li>
+                    <li>Training models with proper data loading pipelines</li>
+                    <li>Best practices for data handling in PyTorch</li>
+                </ul>
+                
+                <div class="text-center mt-5">
+                    <a href="/frameworks/pytorch/exercises/cnn" class="btn btn-lg" style="background: linear-gradient(135deg, var(--pytorch-primary), var(--pytorch-secondary)); color: white; font-weight: 600; border-radius: 30px; padding: 12px 30px; box-shadow: 0 10px 20px rgba(238, 76, 44, 0.3);">
+                        <i class="bi bi-arrow-right-circle me-2"></i> Next Exercise: Convolutional Neural Networks
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/components/prism-python.min.js"></script>
+<script>
+    function copyCode(button) {
+        const codeBlock = button.parentElement.nextElementSibling;
+        const code = codeBlock.textContent;
+        
+        navigator.clipboard.writeText(code).then(() => {
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            button.style.backgroundColor = 'rgba(46, 125, 50, 0.3)';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.backgroundColor = '';
+            }, 2000);
+        });
+    }
+</script>
+{% endblock %}

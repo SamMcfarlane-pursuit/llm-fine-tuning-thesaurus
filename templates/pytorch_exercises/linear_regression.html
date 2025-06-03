@@ -1,0 +1,315 @@
+{% extends "base.html" %}
+
+{% block title %}Linear Regression Exercise | Thesaurus AI LLM FT{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/frameworks.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/themes/prism-tomorrow.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="framework-header pytorch-header">
+                <h1>Linear Regression with PyTorch</h1>
+                <p>Implement a linear regression model using PyTorch. Learn how to prepare data, build a model, train it, and evaluate its performance.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Learning Objectives</h2>
+                <p>By the end of this exercise, you will be able to:</p>
+                <ul>
+                    <li>Implement linear regression using PyTorch's nn.Module</li>
+                    <li>Use PyTorch optimizers for parameter updates</li>
+                    <li>Understand loss functions and their role in training</li>
+                    <li>Visualize training progress and model performance</li>
+                    <li>Evaluate model performance on test data</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Exercise 1: Simple Linear Regression</h2>
+                <p>Let's start with a simple linear regression model to predict house prices based on size.</p>
+                
+                <h3>Step 1: Import Libraries and Generate Data</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">import torch
+import torch.nn as nn
+import torch.optim as optim
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Set random seed for reproducibility
+torch.manual_seed(42)
+np.random.seed(42)
+
+# Generate synthetic data
+n_samples = 100
+house_sizes = np.random.uniform(500, 3000, n_samples)  # House sizes in sq ft
+noise = np.random.normal(0, 20000, n_samples)  # Add some noise
+house_prices = 150 * house_sizes + 50000 + noise  # Price = 150 * size + 50k + noise
+
+# Convert to tensors
+X = torch.tensor(house_sizes, dtype=torch.float32).reshape(-1, 1)
+y = torch.tensor(house_prices, dtype=torch.float32).reshape(-1, 1)
+
+print(f"Data shape: X={X.shape}, y={y.shape}")
+print(f"Sample data: Size={X[0].item():.0f} sq ft, Price=${y[0].item():.0f}")</code></pre>
+                </div>
+                
+                <h3>Step 2: Define the Linear Regression Model</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">class LinearRegression(nn.Module):
+    def __init__(self, input_size, output_size):
+        super(LinearRegression, self).__init__()
+        self.linear = nn.Linear(input_size, output_size)
+    
+    def forward(self, x):
+        return self.linear(x)
+
+# Create model instance
+model = LinearRegression(input_size=1, output_size=1)
+
+# Print model parameters
+print("Model parameters:")
+for name, param in model.named_parameters():
+    print(f"{name}: {param.data}")
+    
+print(f"\nInitial weight: {model.linear.weight.item():.4f}")
+print(f"Initial bias: {model.linear.bias.item():.4f}")</code></pre>
+                </div>
+                
+                <h3>Step 3: Define Loss Function and Optimizer</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Define loss function (Mean Squared Error)
+criterion = nn.MSELoss()
+
+# Define optimizer (Stochastic Gradient Descent)
+optimizer = optim.SGD(model.parameters(), lr=0.00001)
+
+print(f"Loss function: {criterion}")
+print(f"Optimizer: {optimizer}")
+print(f"Learning rate: {optimizer.param_groups[0]['lr']}")</code></pre>
+                </div>
+                
+                <h3>Step 4: Training Loop</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Training parameters
+num_epochs = 1000
+losses = []
+
+print("Starting training...")
+for epoch in range(num_epochs):
+    # Forward pass
+    y_pred = model(X)
+    loss = criterion(y_pred, y)
+    
+    # Backward pass and optimization
+    optimizer.zero_grad()  # Clear gradients
+    loss.backward()        # Compute gradients
+    optimizer.step()       # Update parameters
+    
+    # Store loss for plotting
+    losses.append(loss.item())
+    
+    # Print progress
+    if (epoch + 1) % 100 == 0:
+        print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {loss.item():.2f}')
+
+print("Training completed!")
+print(f"Final loss: {losses[-1]:.2f}")
+print(f"Final weight: {model.linear.weight.item():.4f}")
+print(f"Final bias: {model.linear.bias.item():.4f}")</code></pre>
+                </div>
+                
+                <h3>Step 5: Visualize Results</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Plot training loss
+plt.figure(figsize=(12, 4))
+
+plt.subplot(1, 2, 1)
+plt.plot(losses)
+plt.title('Training Loss')
+plt.xlabel('Epoch')
+plt.ylabel('MSE Loss')
+plt.grid(True)
+
+# Plot data and fitted line
+plt.subplot(1, 2, 2)
+with torch.no_grad():
+    y_pred = model(X)
+    
+plt.scatter(X.numpy(), y.numpy(), alpha=0.6, label='Actual data')
+plt.plot(X.numpy(), y_pred.numpy(), 'r-', label='Fitted line', linewidth=2)
+plt.xlabel('House Size (sq ft)')
+plt.ylabel('House Price ($)')
+plt.title('Linear Regression Results')
+plt.legend()
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()
+
+# Calculate R-squared
+with torch.no_grad():
+    y_pred = model(X)
+    ss_res = torch.sum((y - y_pred) ** 2)
+    ss_tot = torch.sum((y - torch.mean(y)) ** 2)
+    r_squared = 1 - (ss_res / ss_tot)
+    print(f"R-squared: {r_squared.item():.4f}")</code></pre>
+                </div>
+                
+                <h3>Challenge 1</h3>
+                <p>Modify the model to include multiple features. Create a dataset with house size, number of bedrooms, and age of the house as features to predict price.</p>
+                
+                <div class="alert alert-secondary mt-4" role="alert" style="background-color: rgba(0, 0, 0, 0.05); border-left: 5px solid #555; color: #333; border-radius: 10px;">
+                    <div class="d-flex">
+                        <div class="me-3">
+                            <i class="bi bi-lightbulb-fill" style="font-size: 1.5rem; color: #555;"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: #333; font-weight: 600;">Hint</h4>
+                            <p class="mb-0">You'll need to change the input_size parameter and create a dataset with multiple columns.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Exercise 2: Polynomial Regression</h2>
+                <p>Extend linear regression to polynomial regression for non-linear relationships.</p>
+                
+                <h3>Step 1: Generate Non-linear Data</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Generate polynomial data
+x_poly = np.linspace(-2, 2, 100)
+y_poly = 2 * x_poly**3 - 3 * x_poly**2 + x_poly + 1 + 0.5 * np.random.randn(100)
+
+# Convert to tensors
+X_poly = torch.tensor(x_poly, dtype=torch.float32).reshape(-1, 1)
+y_poly = torch.tensor(y_poly, dtype=torch.float32).reshape(-1, 1)
+
+# Create polynomial features (x, x^2, x^3)
+X_poly_features = torch.cat([X_poly, X_poly**2, X_poly**3], dim=1)
+
+print(f"Polynomial features shape: {X_poly_features.shape}")
+print(f"First few samples:\n{X_poly_features[:5]}")</code></pre>
+                </div>
+                
+                <h3>Step 2: Train Polynomial Model</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Create polynomial regression model
+poly_model = LinearRegression(input_size=3, output_size=1)
+poly_criterion = nn.MSELoss()
+poly_optimizer = optim.SGD(poly_model.parameters(), lr=0.01)
+
+# Training loop
+poly_losses = []
+for epoch in range(1000):
+    y_pred = poly_model(X_poly_features)
+    loss = poly_criterion(y_pred, y_poly)
+    
+    poly_optimizer.zero_grad()
+    loss.backward()
+    poly_optimizer.step()
+    
+    poly_losses.append(loss.item())
+    
+    if (epoch + 1) % 200 == 0:
+        print(f'Epoch [{epoch+1}/1000], Loss: {loss.item():.4f}')
+
+print("Polynomial regression training completed!")</code></pre>
+                </div>
+                
+                <h3>Challenge 2</h3>
+                <p>Compare the performance of linear vs polynomial regression on the same dataset. Which one fits better and why?</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Summary</h2>
+                <p>In this exercise, you've learned:</p>
+                <ul>
+                    <li>How to implement linear regression using PyTorch's nn.Module</li>
+                    <li>The importance of loss functions and optimizers</li>
+                    <li>How to train a model using gradient descent</li>
+                    <li>How to visualize training progress and results</li>
+                    <li>How to extend to polynomial regression for non-linear data</li>
+                </ul>
+                
+                <div class="text-center mt-5">
+                    <a href="/frameworks/pytorch/exercises/neural-network-basics" class="btn btn-lg" style="background: linear-gradient(135deg, var(--pytorch-primary), var(--pytorch-secondary)); color: white; font-weight: 600; border-radius: 30px; padding: 12px 30px; box-shadow: 0 10px 20px rgba(238, 76, 44, 0.3);">
+                        <i class="bi bi-arrow-right-circle me-2"></i> Next Exercise: Neural Network Basics
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/components/prism-python.min.js"></script>
+<script>
+    function copyCode(button) {
+        const codeBlock = button.parentElement.nextElementSibling;
+        const code = codeBlock.textContent;
+        
+        navigator.clipboard.writeText(code).then(() => {
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            button.style.backgroundColor = 'rgba(46, 125, 50, 0.3)';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.backgroundColor = '';
+            }, 2000);
+        });
+    }
+</script>
+{% endblock %}

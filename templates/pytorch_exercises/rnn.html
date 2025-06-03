@@ -1,0 +1,446 @@
+{% extends "base.html" %}
+
+{% block title %}RNN Exercise | Thesaurus AI LLM FT{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/frameworks.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/themes/prism-tomorrow.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="framework-header pytorch-header">
+                <h1>Recurrent Neural Networks with PyTorch</h1>
+                <p>Build RNNs, LSTMs, and GRUs for sequence data. Learn about text classification and time series prediction.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Learning Objectives</h2>
+                <p>By the end of this exercise, you will be able to:</p>
+                <ul>
+                    <li>Understand RNN, LSTM, and GRU architectures</li>
+                    <li>Process sequential data with PyTorch</li>
+                    <li>Build text classification models</li>
+                    <li>Implement time series prediction</li>
+                    <li>Handle variable-length sequences</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Exercise 1: Simple RNN for Text Classification</h2>
+                <p>Let's build an RNN to classify text sentiment using a simple dataset.</p>
+                
+                <h3>Step 1: Import Libraries and Create Sample Data</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">import torch
+import torch.nn as nn
+import torch.optim as optim
+import torch.nn.functional as F
+from torch.utils.data import Dataset, DataLoader
+from torch.nn.utils.rnn import pad_sequence, pack_padded_sequence, pad_packed_sequence
+import numpy as np
+import matplotlib.pyplot as plt
+from collections import Counter
+import re
+
+# Device configuration
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print(f'Using device: {device}')
+
+# Sample text data for sentiment classification
+positive_texts = [
+    "I love this movie, it's amazing!",
+    "Great performance by the actors",
+    "Wonderful story and excellent direction",
+    "Best film I've seen this year",
+    "Absolutely fantastic and entertaining",
+    "Brilliant cinematography and soundtrack",
+    "Outstanding acting and plot development",
+    "Incredible visual effects and storytelling"
+]
+
+negative_texts = [
+    "This movie is terrible and boring",
+    "Poor acting and weak storyline",
+    "Waste of time, very disappointing",
+    "Bad direction and poor script",
+    "Awful movie, couldn't finish watching",
+    "Terrible plot and bad acting",
+    "Boring and predictable storyline",
+    "Poor quality and uninteresting"
+]
+
+# Combine data
+texts = positive_texts + negative_texts
+labels = [1] * len(positive_texts) + [0] * len(negative_texts)  # 1 for positive, 0 for negative
+
+print(f"Total samples: {len(texts)}")
+print(f"Positive samples: {len(positive_texts)}")
+print(f"Negative samples: {len(negative_texts)}")
+print(f"Sample text: '{texts[0]}' -> Label: {labels[0]}")</code></pre>
+                </div>
+                
+                <h3>Step 2: Text Preprocessing and Vocabulary Building</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">class TextPreprocessor:
+    def __init__(self):
+        self.word_to_idx = {'<PAD>': 0, '<UNK>': 1}
+        self.idx_to_word = {0: '<PAD>', 1: '<UNK>'}
+        self.vocab_size = 2
+    
+    def tokenize(self, text):
+        # Simple tokenization: lowercase and split by spaces
+        text = re.sub(r'[^\w\s]', '', text.lower())
+        return text.split()
+    
+    def build_vocab(self, texts, min_freq=1):
+        # Count word frequencies
+        word_counts = Counter()
+        for text in texts:
+            tokens = self.tokenize(text)
+            word_counts.update(tokens)
+        
+        # Add words to vocabulary
+        for word, count in word_counts.items():
+            if count >= min_freq:
+                self.word_to_idx[word] = self.vocab_size
+                self.idx_to_word[self.vocab_size] = word
+                self.vocab_size += 1
+        
+        print(f"Vocabulary size: {self.vocab_size}")
+        print(f"Sample vocabulary: {list(self.word_to_idx.keys())[:10]}")
+    
+    def text_to_indices(self, text):
+        tokens = self.tokenize(text)
+        return [self.word_to_idx.get(token, 1) for token in tokens]  # 1 is <UNK>
+    
+    def indices_to_text(self, indices):
+        return ' '.join([self.idx_to_word.get(idx, '<UNK>') for idx in indices])
+
+# Create preprocessor and build vocabulary
+preprocessor = TextPreprocessor()
+preprocessor.build_vocab(texts)
+
+# Convert texts to sequences of indices
+sequences = [preprocessor.text_to_indices(text) for text in texts]
+sequence_lengths = [len(seq) for seq in sequences]
+
+print(f"Sample sequence: {sequences[0]}")
+print(f"Converted back: '{preprocessor.indices_to_text(sequences[0])}'")
+print(f"Sequence lengths: {sequence_lengths}")</code></pre>
+                </div>
+                
+                <h3>Step 3: Create Dataset and DataLoader</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">class TextDataset(Dataset):
+    def __init__(self, sequences, labels):
+        self.sequences = sequences
+        self.labels = labels
+    
+    def __len__(self):
+        return len(self.sequences)
+    
+    def __getitem__(self, idx):
+        return torch.tensor(self.sequences[idx], dtype=torch.long), torch.tensor(self.labels[idx], dtype=torch.long)
+
+def collate_fn(batch):
+    # Sort batch by sequence length (descending)
+    batch.sort(key=lambda x: len(x[0]), reverse=True)
+    sequences, labels = zip(*batch)
+    
+    # Get lengths
+    lengths = [len(seq) for seq in sequences]
+    
+    # Pad sequences
+    padded_sequences = pad_sequence(sequences, batch_first=True, padding_value=0)
+    
+    return padded_sequences, torch.stack(labels), lengths
+
+# Create dataset
+dataset = TextDataset(sequences, labels)
+
+# Create data loader
+batch_size = 4
+data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True, collate_fn=collate_fn)
+
+# Test the data loader
+for batch_sequences, batch_labels, batch_lengths in data_loader:
+    print(f"Batch sequences shape: {batch_sequences.shape}")
+    print(f"Batch labels shape: {batch_labels.shape}")
+    print(f"Batch lengths: {batch_lengths}")
+    print(f"Sample sequence: {batch_sequences[0]}")
+    break</code></pre>
+                </div>
+                
+                <h3>Step 4: Define RNN Model</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">class SimpleRNN(nn.Module):
+    def __init__(self, vocab_size, embedding_dim, hidden_dim, output_dim, n_layers=1):
+        super(SimpleRNN, self).__init__()
+        
+        self.embedding = nn.Embedding(vocab_size, embedding_dim)
+        self.rnn = nn.LSTM(embedding_dim, hidden_dim, n_layers, batch_first=True, dropout=0.2)
+        self.fc = nn.Linear(hidden_dim, output_dim)
+        self.dropout = nn.Dropout(0.3)
+        
+    def forward(self, x, lengths):
+        # Embedding
+        embedded = self.embedding(x)  # (batch_size, seq_len, embedding_dim)
+        
+        # Pack padded sequence for efficient RNN processing
+        packed = pack_padded_sequence(embedded, lengths, batch_first=True, enforce_sorted=True)
+        
+        # RNN forward pass
+        packed_output, (hidden, cell) = self.rnn(packed)
+        
+        # Use the last hidden state for classification
+        # hidden shape: (n_layers, batch_size, hidden_dim)
+        last_hidden = hidden[-1]  # Take the last layer
+        
+        # Apply dropout and classification layer
+        output = self.dropout(last_hidden)
+        output = self.fc(output)
+        
+        return output
+
+# Model parameters
+vocab_size = preprocessor.vocab_size
+embedding_dim = 32
+hidden_dim = 64
+output_dim = 2  # Binary classification
+n_layers = 2
+
+# Create model
+model = SimpleRNN(vocab_size, embedding_dim, hidden_dim, output_dim, n_layers).to(device)
+
+print(f"Model: {model}")
+print(f"Total parameters: {sum(p.numel() for p in model.parameters()):,}")
+
+# Test forward pass
+test_sequences, test_labels, test_lengths = next(iter(data_loader))
+test_sequences, test_labels = test_sequences.to(device), test_labels.to(device)
+test_output = model(test_sequences, test_lengths)
+print(f"Test output shape: {test_output.shape}")
+print(f"Test output: {test_output}")</code></pre>
+                </div>
+                
+                <h3>Step 5: Training Loop</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Training setup
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(model.parameters(), lr=0.001)
+
+# Training parameters
+num_epochs = 50
+train_losses = []
+train_accuracies = []
+
+print("Starting training...")
+
+for epoch in range(num_epochs):
+    model.train()
+    total_loss = 0
+    correct = 0
+    total = 0
+    
+    for batch_sequences, batch_labels, batch_lengths in data_loader:
+        batch_sequences, batch_labels = batch_sequences.to(device), batch_labels.to(device)
+        
+        # Forward pass
+        outputs = model(batch_sequences, batch_lengths)
+        loss = criterion(outputs, batch_labels)
+        
+        # Backward pass
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+        
+        # Statistics
+        total_loss += loss.item()
+        _, predicted = torch.max(outputs.data, 1)
+        total += batch_labels.size(0)
+        correct += (predicted == batch_labels).sum().item()
+    
+    # Calculate epoch metrics
+    epoch_loss = total_loss / len(data_loader)
+    epoch_acc = 100 * correct / total
+    train_losses.append(epoch_loss)
+    train_accuracies.append(epoch_acc)
+    
+    if (epoch + 1) % 10 == 0:
+        print(f'Epoch [{epoch+1}/{num_epochs}], Loss: {epoch_loss:.4f}, Accuracy: {epoch_acc:.2f}%')
+
+print("Training completed!")
+
+# Plot training progress
+plt.figure(figsize=(12, 4))
+
+plt.subplot(1, 2, 1)
+plt.plot(train_losses)
+plt.title('Training Loss')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.grid(True)
+
+plt.subplot(1, 2, 2)
+plt.plot(train_accuracies)
+plt.title('Training Accuracy')
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy (%)')
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()
+
+print(f"Final training accuracy: {train_accuracies[-1]:.2f}%")</code></pre>
+                </div>
+                
+                <h3>Step 6: Test the Model</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Test with new examples
+def predict_sentiment(model, preprocessor, text):
+    model.eval()
+    with torch.no_grad():
+        # Preprocess text
+        sequence = preprocessor.text_to_indices(text)
+        sequence_tensor = torch.tensor([sequence], dtype=torch.long).to(device)
+        length = [len(sequence)]
+        
+        # Predict
+        output = model(sequence_tensor, length)
+        probabilities = F.softmax(output, dim=1)
+        predicted_class = torch.argmax(output, dim=1).item()
+        confidence = probabilities[0][predicted_class].item()
+        
+        sentiment = "Positive" if predicted_class == 1 else "Negative"
+        return sentiment, confidence
+
+# Test examples
+test_texts = [
+    "This movie is absolutely wonderful!",
+    "I hate this boring film",
+    "Great acting and amazing story",
+    "Terrible movie, waste of time"
+]
+
+print("Testing the model:")
+for text in test_texts:
+    sentiment, confidence = predict_sentiment(model, preprocessor, text)
+    print(f"Text: '{text}'")
+    print(f"Predicted: {sentiment} (Confidence: {confidence:.3f})")
+    print()
+
+# Evaluate on training data (for demonstration)
+model.eval()
+correct = 0
+total = 0
+
+with torch.no_grad():
+    for batch_sequences, batch_labels, batch_lengths in data_loader:
+        batch_sequences, batch_labels = batch_sequences.to(device), batch_labels.to(device)
+        outputs = model(batch_sequences, batch_lengths)
+        _, predicted = torch.max(outputs, 1)
+        total += batch_labels.size(0)
+        correct += (predicted == batch_labels).sum().item()
+
+final_accuracy = 100 * correct / total
+print(f"Final model accuracy: {final_accuracy:.2f}%")</code></pre>
+                </div>
+                
+                <h3>Challenge 1</h3>
+                <p>Extend the model to handle longer sequences and implement attention mechanism. Try using GRU instead of LSTM and compare performance.</p>
+                
+                <div class="alert alert-secondary mt-4" role="alert" style="background-color: rgba(0, 0, 0, 0.05); border-left: 5px solid #555; color: #333; border-radius: 10px;">
+                    <div class="d-flex">
+                        <div class="me-3">
+                            <i class="bi bi-lightbulb-fill" style="font-size: 1.5rem; color: #555;"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: #333; font-weight: 600;">Hint</h4>
+                            <p class="mb-0">Replace nn.LSTM with nn.GRU and implement a simple attention mechanism using torch.bmm for batch matrix multiplication.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Summary</h2>
+                <p>In this exercise, you've learned:</p>
+                <ul>
+                    <li>How to build RNN models for text classification</li>
+                    <li>Text preprocessing and vocabulary building</li>
+                    <li>Handling variable-length sequences with padding and packing</li>
+                    <li>Using LSTM layers for better sequence modeling</li>
+                    <li>Training and evaluating sequence models</li>
+                </ul>
+                
+                <div class="text-center mt-5">
+                    <a href="/frameworks/pytorch/exercises/attention" class="btn btn-lg" style="background: linear-gradient(135deg, var(--pytorch-primary), var(--pytorch-secondary)); color: white; font-weight: 600; border-radius: 30px; padding: 12px 30px; box-shadow: 0 10px 20px rgba(238, 76, 44, 0.3);">
+                        <i class="bi bi-arrow-right-circle me-2"></i> Next Exercise: Attention Mechanisms
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/components/prism-python.min.js"></script>
+<script>
+    function copyCode(button) {
+        const codeBlock = button.parentElement.nextElementSibling;
+        const code = codeBlock.textContent;
+        
+        navigator.clipboard.writeText(code).then(() => {
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            button.style.backgroundColor = 'rgba(46, 125, 50, 0.3)';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.backgroundColor = '';
+            }, 2000);
+        });
+    }
+</script>
+{% endblock %}

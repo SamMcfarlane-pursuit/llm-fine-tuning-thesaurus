@@ -240,16 +240,7 @@ function initProgressTracking() {
  * Initialize accessibility features
  */
 function initAccessibilityFeatures() {
-    // Add skip links
-    const skipLink = document.createElement('a');
-    skipLink.href = '#exercises';
-    skipLink.textContent = 'Skip to exercises';
-    skipLink.className = 'sr-only sr-only-focusable btn btn-learn';
-    skipLink.style.position = 'absolute';
-    skipLink.style.top = '10px';
-    skipLink.style.left = '10px';
-    skipLink.style.zIndex = '9999';
-    document.body.insertBefore(skipLink, document.body.firstChild);
+    // Skip links removed per user request
 
     // Enhance focus management
     document.addEventListener('keydown', function(e) {

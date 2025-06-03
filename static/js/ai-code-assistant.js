@@ -343,7 +343,7 @@ class AICodeAssistant {
         }
 
         // Check for LLM-specific issues
-        if (code.includes('model.train()') && !code.includes('model.eval()'))) {
+        if (code.includes('model.train()') && !code.includes('model.eval()')) {
             issues.push({
                 type: 'logic',
                 severity: 'warning',

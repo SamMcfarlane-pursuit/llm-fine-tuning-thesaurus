@@ -38,8 +38,7 @@
     {% block head %}{% endblock %}
 </head>
 <body data-topic-id="{{ topic_id|default('') }}" data-module-id="{{ module_id|default('') }}" data-user-logged-in="{{ current_user.is_authenticated|string|lower }}">
-    <!-- Skip to content link for accessibility -->
-    <a href="#main-content" class="skip-to-content">Skip to content</a>
+    <!-- Skip to content link removed per user request -->
 
     <!-- Top Auth Bar -->
     <div class="top-auth-bar">

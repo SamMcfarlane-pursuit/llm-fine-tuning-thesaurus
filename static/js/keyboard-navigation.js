@@ -215,40 +215,10 @@ function initCategoryFiltersKeyboardNavigation() {
 }
 
 /**
- * Initialize skip to content keyboard navigation
+ * Skip to content navigation removed per user request
  */
 function initSkipToContentKeyboardNavigation() {
-    // Ensure skip to content link works properly
-    const skipLink = document.querySelector('.skip-to-content');
-    if (skipLink) {
-        skipLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const targetId = this.getAttribute('href').substring(1);
-            const targetElement = document.getElementById(targetId);
-            
-            if (targetElement) {
-                targetElement.setAttribute('tabindex', '-1');
-                targetElement.focus();
-                
-                // Remove tabindex after focus to avoid interfering with normal tab order
-                setTimeout(() => {
-                    targetElement.removeAttribute('tabindex');
-                }, 1000);
-            }
-        });
-    }
-    
-    // Add keyboard shortcut for skip to content (Alt+S)
-    document.addEventListener('keydown', function(e) {
-        if (e.altKey && e.key === 's') {
-            e.preventDefault();
-            const skipLink = document.querySelector('.skip-to-content');
-            if (skipLink) {
-                skipLink.click();
-            }
-        }
-    });
+    // Skip to content functionality removed
 }
 
 // Re-initialize keyboard navigation when content changes

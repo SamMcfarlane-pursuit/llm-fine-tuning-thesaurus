@@ -24,6 +24,52 @@ class AdvancedProgressTracker {
         this.setupRealtimeSync();
     }
 
+    loadUserProgress() {
+        // Load user progress from localStorage or API
+        try {
+            const savedProgress = localStorage.getItem(`progress_${this.userId}`);
+            if (savedProgress) {
+                const parsed = JSON.parse(savedProgress);
+                this.sessionData = { ...this.sessionData, ...parsed };
+            }
+        } catch (error) {
+            console.warn('Failed to load user progress:', error);
+        }
+    }
+
+    startSessionTracking() {
+        // Generate session ID and start tracking
+        this.sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        console.log('📊 Advanced Progress Tracking started for session:', this.sessionId);
+    }
+
+    initializeSkillAssessment() {
+        // Initialize skill assessment system
+        if (!this.sessionData.skillAssessments) {
+            this.sessionData.skillAssessments = {};
+        }
+    }
+
+    setupRealtimeSync() {
+        // Setup periodic sync of progress data
+        setInterval(() => {
+            this.saveProgressToStorage();
+        }, 30000); // Save every 30 seconds
+
+        // Save on page unload
+        window.addEventListener('beforeunload', () => {
+            this.saveProgressToStorage();
+        });
+    }
+
+    saveProgressToStorage() {
+        try {
+            localStorage.setItem(`progress_${this.userId}`, JSON.stringify(this.sessionData));
+        } catch (error) {
+            console.warn('Failed to save progress:', error);
+        }
+    }
+
     getCurrentUserId() {
         // Get user ID from data attribute or session
         const userElement = document.querySelector('[data-user-logged-in]');
@@ -101,6 +147,23 @@ class AdvancedProgressTracker {
         this.updateProgressBadges(quizData);
     }
 
+    updateProgressBadges(quizData) {
+        // Update progress badges based on quiz completion
+        const badgeContainer = document.querySelector('.progress-badges');
+        if (!badgeContainer) return;
+
+        const badge = document.createElement('div');
+        badge.className = 'progress-badge quiz-badge';
+        badge.innerHTML = `
+            <div class="badge-content">
+                <span class="badge-icon">🏆</span>
+                <span class="badge-text">Quiz Completed: ${quizData.topic}</span>
+                <span class="badge-score">${Math.round((quizData.score / quizData.totalQuestions) * 100)}%</span>
+            </div>
+        `;
+        badgeContainer.appendChild(badge);
+    }
+
     trackWorkshopProgress(workshopData) {
         const progressData = {
             workshopId: workshopData.workshopId,
@@ -119,6 +182,30 @@ class AdvancedProgressTracker {
 
         this.sendAnalytics('workshop_progress', progressData);
         this.updateWorkshopProgress(workshopData);
+    }
+
+    updateWorkshopProgress(workshopData) {
+        // Update workshop progress indicators
+        const progressContainer = document.querySelector('.workshop-progress');
+        if (!progressContainer) return;
+
+        const progressPercent = Math.round((workshopData.stepNumber / workshopData.totalSteps) * 100);
+
+        // Update progress bar if it exists
+        const progressBar = progressContainer.querySelector('.progress-bar');
+        if (progressBar) {
+            progressBar.style.width = `${progressPercent}%`;
+            progressBar.textContent = `${progressPercent}%`;
+        }
+
+        // Add step completion indicator
+        const stepIndicator = document.createElement('div');
+        stepIndicator.className = 'step-completed';
+        stepIndicator.innerHTML = `
+            <span class="step-icon">✅</span>
+            <span class="step-text">Step ${workshopData.stepNumber} completed</span>
+        `;
+        progressContainer.appendChild(stepIndicator);
     }
 
     trackCodeExecution(codeData) {

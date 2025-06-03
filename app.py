@@ -307,6 +307,11 @@ def test_ai_assistant():
 def test_ai_simple():
     return render_template('test_ai_simple.html')
 
+@app.route('/test-ai-connection')
+def test_ai_connection():
+    """Comprehensive AI connection test page"""
+    return render_template('test_ai_connection.html')
+
 @app.route('/test-working-ai')
 def test_working_ai():
     return render_template('test-working-ai.html')

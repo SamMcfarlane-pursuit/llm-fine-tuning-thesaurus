@@ -4,6 +4,49 @@
  * Positioned at the bottom of the screen
  */
 
+/* GUARANTEED AI BUTTON - ALWAYS VISIBLE */
+.guaranteed-ai-button,
+.unified-ai-button,
+[data-ai-button] {
+    position: fixed !important;
+    bottom: 25px !important;
+    right: 25px !important;
+    width: 75px !important;
+    height: 75px !important;
+    background: linear-gradient(135deg, #3c6430, #4f7a41) !important;
+    border: 4px solid #5a8a4d !important;
+    border-radius: 50% !important;
+    color: white !important;
+    font-size: 32px !important;
+    cursor: pointer !important;
+    box-shadow: 0 12px 48px rgba(60, 100, 48, 0.6), 0 0 0 0 rgba(60, 100, 48, 0.9) !important;
+    transition: all 0.3s ease !important;
+    z-index: 2147483647 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    outline: none !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+}
+
+.guaranteed-ai-button:hover,
+.unified-ai-button:hover {
+    transform: scale(1.1) !important;
+    box-shadow: 0 15px 60px rgba(60, 100, 48, 0.8) !important;
+}
+
+.guaranteed-ai-button:active,
+.unified-ai-button:active {
+    transform: scale(0.95) !important;
+}
+
 /* Position the AI assistant container at the bottom right - EXACT MATCH TO IMAGE */
 .ai-assistant-container {
     position: fixed !important;
@@ -839,24 +882,82 @@
     }
 }
 
-/* Simple AI Button */
+/* Simple AI Button - Integrated with AI Assistant System */
 #simple-ai-button {
     position: fixed !important;
-    right: 24px !important;
-    bottom: 24px !important;
+    right: 25px !important;
+    bottom: 25px !important;
     z-index: 999999 !important;
     pointer-events: auto !important;
     visibility: visible !important;
     opacity: 1 !important;
-    display: block !important;
-    width: 64px !important;
-    height: 64px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 70px !important;
+    height: 70px !important;
+    background: linear-gradient(135deg, #3c6430, #4f7a41) !important;
+    border: 3px solid #5a8a4d !important;
+    border-radius: 50% !important;
+    color: white !important;
+    font-size: 30px !important;
     cursor: pointer !important;
-    transition: all 0.3s ease !important;
+    box-shadow: 0 10px 30px rgba(60, 100, 48, 0.6) !important;
+    font-family: Arial, sans-serif !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+    outline: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
 }
 
 #simple-ai-button:hover {
     transform: scale(1.1) !important;
+    box-shadow: 0 15px 40px rgba(60, 100, 48, 0.8) !important;
+}
+
+#simple-ai-button:active {
+    transform: scale(0.95) !important;
+}
+
+/* Simple AI Chat Interface */
+#simple-ai-chat {
+    position: fixed !important;
+    bottom: 110px !important;
+    right: 25px !important;
+    width: 350px !important;
+    height: 400px !important;
+    background: #0d140a !important;
+    border: 2px solid #3c6430 !important;
+    border-radius: 12px !important;
+    z-index: 999998 !important;
+    font-family: Arial, sans-serif !important;
+    display: flex !important;
+    flex-direction: column !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7) !important;
+    animation: fadeInUp 0.3s ease !important;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* AI Test Button States */
+#simple-ai-chat button[onclick="testSimpleAI()"] {
+    transition: all 0.3s ease !important;
+}
+
+#simple-ai-chat button[onclick="testSimpleAI()"]:disabled {
+    cursor: not-allowed !important;
+    opacity: 0.8 !important;
 }
 
 /* Responsive Design */

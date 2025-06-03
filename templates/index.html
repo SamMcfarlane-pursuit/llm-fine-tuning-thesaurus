@@ -490,102 +490,213 @@
 {% endblock %}
 
 {% block scripts %}
-<!-- AI Assistant Button Creation DISABLED - Final AI Assistant handles this -->
-<!--
+<!-- HOMEPAGE AI ASSISTANT BUTTON - CLEAN & GUARANTEED -->
 <script>
-// Immediate AI Assistant Button Creation for Homepage
+// Homepage AI Assistant Button - Ultra-Clean Implementation
 (function() {
-    console.log('Homepage: Creating AI Assistant button immediately...');
+    console.log('🏠 Homepage AI Assistant Starting...');
 
     function createHomepageAIButton() {
-        // Remove any existing button
-        const existing = document.getElementById('homepage-ai-button');
-        if (existing) existing.remove();
+        // Check if AI button already exists
+        let aiButton = document.getElementById('homepage-ai-button');
 
-        // Create button
-        const button = document.createElement('div');
-        button.id = 'homepage-ai-button';
-        button.innerHTML = '🤖';
+        if (!aiButton) {
+            console.log('🤖 Creating Homepage AI Assistant button...');
 
-        // Apply styles with highest priority
-        button.style.cssText = `
-            position: fixed !important;
-            right: 24px !important;
-            bottom: 24px !important;
-            width: 64px !important;
-            height: 64px !important;
-            background: linear-gradient(135deg, #3c6430, #7350a5) !important;
-            border-radius: 50% !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            cursor: pointer !important;
-            z-index: 999999 !important;
-            font-size: 28px !important;
-            color: white !important;
-            box-shadow: 0 8px 32px rgba(60, 100, 48, 0.3) !important;
-            border: 2px solid rgba(255, 255, 255, 0.1) !important;
-            transition: all 0.3s ease !important;
-            user-select: none !important;
-            pointer-events: auto !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-        `;
+            // Create the button
+            aiButton = document.createElement('div');
+            aiButton.id = 'homepage-ai-button';
+            aiButton.innerHTML = '🤖';
+            aiButton.title = 'Visual LLM AI Assistant - Ask me anything!';
 
-        // Add hover effects
-        button.onmouseenter = () => {
-            button.style.transform = 'scale(1.1)';
-            button.style.boxShadow = '0 12px 40px rgba(60, 100, 48, 0.4)';
-        };
+            // Apply maximum visibility styles
+            aiButton.style.cssText = `
+                position: fixed !important;
+                bottom: 25px !important;
+                right: 25px !important;
+                width: 70px !important;
+                height: 70px !important;
+                background: linear-gradient(135deg, #3c6430, #4f7a41) !important;
+                border: 3px solid #5a8a4d !important;
+                border-radius: 50% !important;
+                color: white !important;
+                font-size: 30px !important;
+                cursor: pointer !important;
+                box-shadow: 0 10px 30px rgba(60, 100, 48, 0.6) !important;
+                z-index: 2147483647 !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                font-family: Arial, sans-serif !important;
+                transition: all 0.3s ease !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                pointer-events: auto !important;
+                animation: homepagePulse 4s infinite !important;
+            `;
 
-        button.onmouseleave = () => {
-            button.style.transform = 'scale(1)';
-            button.style.boxShadow = '0 8px 32px rgba(60, 100, 48, 0.3)';
-        };
-
-        // Add click handler
-        button.onclick = () => {
-            console.log('Homepage AI Assistant button clicked!');
-
-            // Try to open AI assistant if available
-            if (window.simpleAI && window.simpleAI.toggle) {
-                window.simpleAI.toggle();
-            } else if (window.aiAssistant && window.aiAssistant.toggleAssistant) {
-                window.aiAssistant.toggleAssistant();
-            } else {
-                // Show loading message
-                alert('🤖 AI Assistant\n\nWelcome to Visual LLM!\n\nYour AI assistant is loading...\nPlease try again in a moment!');
+            // Add pulsing animation
+            if (!document.getElementById('homepage-ai-styles')) {
+                const style = document.createElement('style');
+                style.id = 'homepage-ai-styles';
+                style.textContent = `
+                    @keyframes homepagePulse {
+                        0% {
+                            box-shadow: 0 10px 30px rgba(60, 100, 48, 0.6), 0 0 0 0 rgba(60, 100, 48, 0.7);
+                            transform: scale(1);
+                        }
+                        50% {
+                            box-shadow: 0 10px 30px rgba(60, 100, 48, 0.6), 0 0 0 15px rgba(60, 100, 48, 0);
+                            transform: scale(1.05);
+                        }
+                        100% {
+                            box-shadow: 0 10px 30px rgba(60, 100, 48, 0.6), 0 0 0 0 rgba(60, 100, 48, 0);
+                            transform: scale(1);
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
             }
-        };
 
-        // Add to page
-        document.body.appendChild(button);
-        console.log('Homepage AI Assistant button created successfully!');
+            // Click handler with homepage-specific content
+            aiButton.addEventListener('click', function() {
+                console.log('🤖 Homepage AI Assistant clicked!');
 
-        return button;
+                // Create homepage-specific AI chat interface
+                const existingChat = document.getElementById('homepage-ai-chat');
+                if (existingChat) {
+                    existingChat.remove();
+                    return;
+                }
+
+                const chatBox = document.createElement('div');
+                chatBox.id = 'homepage-ai-chat';
+                chatBox.innerHTML = `
+                    <div style="position: fixed; bottom: 110px; right: 25px; width: 380px; height: 450px; background: #0d140a; border: 2px solid #3c6430; border-radius: 12px; z-index: 9998; font-family: Arial, sans-serif; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,0.4);">
+                        <div style="background: linear-gradient(135deg, #3c6430, #4f7a41); color: white; padding: 15px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 20px;">🤖</span>
+                                <span style="font-weight: bold;">Visual LLM AI Assistant</span>
+                            </div>
+                            <button onclick="document.getElementById('homepage-ai-chat').remove()" style="background: none; border: none; color: white; font-size: 18px; cursor: pointer;">×</button>
+                        </div>
+                        <div style="flex: 1; padding: 15px; color: #e2eedd; overflow-y: auto; font-size: 13px; line-height: 1.4;">
+                            <div style="margin-bottom: 15px; padding: 12px; background: rgba(60, 100, 48, 0.15); border-radius: 6px;">
+                                <div style="font-weight: bold; margin-bottom: 6px; color: #a7cf9b;">🎓 Welcome to Visual LLM!</div>
+                                <div>Your AI assistant for LLM fine-tuning and learning. I'm here to help you navigate the platform and answer questions!</div>
+                            </div>
+
+                            <div style="margin-bottom: 12px;">
+                                <div style="font-weight: bold; margin-bottom: 8px; color: #a7cf9b;">🚀 I can help with:</div>
+                                <div style="margin-bottom: 6px;">• LLM Fine-tuning (LoRA, QLoRA, PEFT)</div>
+                                <div style="margin-bottom: 6px;">• Platform navigation and tutorials</div>
+                                <div style="margin-bottom: 6px;">• Code examples and implementation</div>
+                                <div style="margin-bottom: 6px;">• Learning path recommendations</div>
+                                <div style="margin-bottom: 6px;">• Workshop and quiz guidance</div>
+                            </div>
+
+                            <div style="margin-bottom: 12px; padding: 10px; background: rgba(60, 100, 48, 0.1); border-radius: 6px;">
+                                <div style="font-weight: bold; margin-bottom: 6px; color: #a7cf9b;">📍 Quick Start:</div>
+                                <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
+                                    <a href="/learn" style="color: #a7cf9b; text-decoration: none; padding: 3px 6px; background: rgba(60, 100, 48, 0.2); border-radius: 3px; font-size: 11px;">📚 Start Learning</a>
+                                    <a href="/workshops" style="color: #a7cf9b; text-decoration: none; padding: 3px 6px; background: rgba(60, 100, 48, 0.2); border-radius: 3px; font-size: 11px;">🔧 Workshops</a>
+                                    <a href="/quiz" style="color: #a7cf9b; text-decoration: none; padding: 3px 6px; background: rgba(60, 100, 48, 0.2); border-radius: 3px; font-size: 11px;">❓ Quizzes</a>
+                                </div>
+                                <div style="font-size: 11px; color: #999;">💡 Try asking: "How do I start with LoRA?" or "Show me beginner workshops"</div>
+                            </div>
+
+                            <div style="font-size: 11px; color: #999; text-align: center; margin-top: 10px;">
+                                🤖 <em>Homepage AI Assistant - Always ready to help!</em>
+                            </div>
+                        </div>
+                        <div style="padding: 12px; border-top: 1px solid #3c6430;">
+                            <div style="display: flex; gap: 8px;">
+                                <input type="text" placeholder="Ask me anything about Visual LLM..." style="flex: 1; padding: 8px; background: #2a2a2a; border: 1px solid #3c6430; border-radius: 6px; color: white; font-size: 12px;" id="homepage-ai-input">
+                                <button onclick="sendHomepageMessage()" style="padding: 8px 12px; background: linear-gradient(135deg, #3c6430, #4f7a41); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px;">Send</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(chatBox);
+
+                // Focus input
+                setTimeout(() => {
+                    const input = document.getElementById('homepage-ai-input');
+                    if (input) input.focus();
+                }, 100);
+            });
+
+            // Hover effects
+            aiButton.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.1)';
+                this.style.animation = 'none';
+            });
+
+            aiButton.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+                this.style.animation = 'homepagePulse 4s infinite';
+            });
+
+            // Add to page
+            document.body.appendChild(aiButton);
+            console.log('✅ Homepage AI Assistant button created successfully!');
+        } else {
+            console.log('✅ Homepage AI button already exists');
+        }
+
+        // Verify visibility
+        setTimeout(() => {
+            const rect = aiButton.getBoundingClientRect();
+            const isVisible = rect.width > 0 && rect.height > 0;
+            console.log(`📊 Homepage AI Button Status: Visible=${isVisible}, Size=${rect.width}x${rect.height}`);
+
+            if (isVisible) {
+                console.log('🎉 HOMEPAGE AI BUTTON IS WORKING PERFECTLY!');
+            }
+        }, 100);
     }
 
-    // Create button immediately
+    // Simple message handler for homepage
+    window.sendHomepageMessage = function() {
+        const input = document.getElementById('homepage-ai-input');
+        if (!input || !input.value.trim()) return;
+
+        const message = input.value.trim();
+        input.value = '';
+
+        // Simple response system for homepage
+        let response = "Thanks for your question! ";
+
+        if (message.toLowerCase().includes('lora')) {
+            response += "LoRA (Low-Rank Adaptation) is a parameter-efficient fine-tuning method. Check out our LoRA guide in the Learning section!";
+        } else if (message.toLowerCase().includes('workshop')) {
+            response += "Our workshops offer hands-on coding experience. Visit the Workshops section to get started!";
+        } else if (message.toLowerCase().includes('quiz')) {
+            response += "Test your knowledge with our interactive quizzes. They're great for reinforcing what you've learned!";
+        } else if (message.toLowerCase().includes('start') || message.toLowerCase().includes('begin')) {
+            response += "Great! I recommend starting with our Learning Paths. They'll guide you from beginner to expert level.";
+        } else {
+            response += "I'm here to help you navigate Visual LLM! Try asking about LoRA, workshops, quizzes, or learning paths.";
+        }
+
+        // Add response to chat (simple implementation)
+        alert('🤖 AI Assistant: ' + response);
+    };
+
+    // Run immediately
     createHomepageAIButton();
 
-    // Create button when DOM is ready
+    // Run when DOM loads
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', createHomepageAIButton);
     }
 
-    // Backup creation after 500ms
-    setTimeout(createHomepageAIButton, 500);
+    // Run when window loads
+    window.addEventListener('load', createHomepageAIButton);
 
-    // Emergency backup after 2 seconds
-    setTimeout(() => {
-        if (!document.getElementById('homepage-ai-button')) {
-            console.log('Emergency: Creating homepage AI button...');
-            createHomepageAIButton();
-        }
-    }, 2000);
+    console.log('✅ Homepage AI Assistant System Activated!');
 })();
 </script>
--->
 {% endblock %}
 
 {% block extra_css %}

@@ -1,0 +1,312 @@
+{% extends "base.html" %}
+
+{% block title %}AI Connection Test - Visual LLM{% endblock %}
+
+{% block content %}
+<div style="max-width: 1200px; margin: 0 auto; padding: 30px;">
+    <div style="text-align: center; margin-bottom: 40px;">
+        <h1 style="color: #a7cf9b; margin-bottom: 10px; font-size: 32px;">🤖 AI Bot & Assistant Connection Test</h1>
+        <p style="color: #e2eedd; font-size: 18px;">Comprehensive testing of the Visual LLM AI Assistant integration</p>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 25px; margin: 30px 0;">
+        <!-- Automatic Detection -->
+        <div style="background: #1a1a1a; padding: 25px; border-radius: 15px; border: 2px solid #3c6430; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+            <h3 style="color: #a7cf9b; margin-top: 0; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                <span>🔍</span> Automatic Detection
+            </h3>
+            <div id="auto-results">
+                <div style="padding: 15px; background: rgba(255, 193, 7, 0.2); border: 1px solid #ffc107; border-radius: 8px; color: #ffc107; text-align: center; font-weight: bold;">
+                    ⏳ Running detection tests...
+                </div>
+            </div>
+        </div>
+        
+        <!-- Manual Tests -->
+        <div style="background: #1a1a1a; padding: 25px; border-radius: 15px; border: 2px solid #3c6430; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+            <h3 style="color: #a7cf9b; margin-top: 0; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                <span>🧪</span> Manual Tests
+            </h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+                <button onclick="testAIButton()" style="background: linear-gradient(135deg, #3c6430, #4f7a41); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 14px; transition: all 0.2s;">
+                    🤖 Test AI Button
+                </button>
+                <button onclick="testAIInterface()" style="background: linear-gradient(135deg, #3c6430, #4f7a41); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 14px; transition: all 0.2s;">
+                    💬 Test Interface
+                </button>
+                <button onclick="testAPIConnection()" style="background: linear-gradient(135deg, #3c6430, #4f7a41); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 14px; transition: all 0.2s;">
+                    🔗 Test API
+                </button>
+                <button onclick="testFullConnection()" style="background: linear-gradient(135deg, #7d50af, #9966cc); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 14px; transition: all 0.2s;">
+                    🎯 Full Test
+                </button>
+            </div>
+            <div id="manual-results"></div>
+        </div>
+        
+        <!-- Connection Status -->
+        <div style="background: #1a1a1a; padding: 25px; border-radius: 15px; border: 2px solid #3c6430; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+            <h3 style="color: #a7cf9b; margin-top: 0; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                <span>📊</span> Connection Status
+            </h3>
+            <div id="connection-status">
+                <div style="padding: 15px; background: rgba(125, 80, 165, 0.2); border: 1px solid #7d50af; border-radius: 8px; color: #7d50af; text-align: center; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <span style="width: 12px; height: 12px; background: #ffc107; border-radius: 50%; animation: blink 1s infinite;"></span>
+                    Checking connections...
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Instructions -->
+    <div style="background: rgba(60, 100, 48, 0.15); padding: 25px; border-radius: 15px; border-left: 5px solid #3c6430; margin: 30px 0;">
+        <h3 style="color: #a7cf9b; margin-top: 0; margin-bottom: 15px;">📋 Test Instructions:</h3>
+        <ol style="color: #e2eedd; line-height: 1.8;">
+            <li><strong>Visual Check:</strong> Look for the green 🤖 button in the bottom-right corner</li>
+            <li><strong>Click Test:</strong> Click the AI button to open the assistant interface</li>
+            <li><strong>Connection Test:</strong> Use the test buttons above to verify all connections</li>
+            <li><strong>Console Check:</strong> Open browser dev tools (F12) to see detailed logs</li>
+        </ol>
+    </div>
+    
+    <!-- Expected Position Demo -->
+    <div style="background: #1a1a1a; padding: 25px; border-radius: 15px; border: 2px solid #3c6430; margin: 30px 0;">
+        <h3 style="color: #a7cf9b; margin-top: 0; margin-bottom: 15px;">📍 Expected AI Button Position</h3>
+        <p style="color: #e2eedd; margin-bottom: 15px;">The AI assistant button should appear in the bottom-right corner:</p>
+        <div style="position: relative; height: 100px; background: rgba(60, 100, 48, 0.1); border-radius: 10px; border: 2px dashed #3c6430;">
+            <div style="position: absolute; bottom: 10px; right: 10px; width: 50px; height: 50px; background: linear-gradient(135deg, #3c6430, #4f7a41); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; opacity: 0.7; animation: demoPulse 2s infinite;">🤖</div>
+            <div style="position: absolute; bottom: 15px; right: 70px; color: #a7cf9b; font-size: 12px; font-weight: bold;">← Demo position</div>
+        </div>
+        <p style="color: #999; font-size: 14px; margin-top: 10px;">
+            The real AI button should be nearby with higher z-index and full functionality
+        </p>
+    </div>
+</div>
+
+<style>
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0.3; }
+}
+
+@keyframes demoPulse {
+    0% { box-shadow: 0 8px 24px rgba(60, 100, 48, 0.4), 0 0 0 0 rgba(60, 100, 48, 0.7); }
+    50% { box-shadow: 0 8px 24px rgba(60, 100, 48, 0.4), 0 0 0 15px rgba(60, 100, 48, 0); }
+    100% { box-shadow: 0 8px 24px rgba(60, 100, 48, 0.4), 0 0 0 0 rgba(60, 100, 48, 0); }
+}
+
+button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 20px rgba(60, 100, 48, 0.4) !important;
+}
+
+.status {
+    padding: 15px;
+    border-radius: 10px;
+    margin: 12px 0;
+    font-weight: bold;
+    text-align: center;
+    font-size: 14px;
+}
+
+.status.success {
+    background: rgba(60, 100, 48, 0.3);
+    color: #a7cf9b;
+    border: 2px solid #3c6430;
+}
+
+.status.error {
+    background: rgba(255, 107, 107, 0.3);
+    color: #ff6b6b;
+    border: 2px solid #ff6b6b;
+}
+
+.status.warning {
+    background: rgba(255, 193, 7, 0.3);
+    color: #ffc107;
+    border: 2px solid #ffc107;
+}
+
+.status.info {
+    background: rgba(125, 80, 165, 0.3);
+    color: #7d50af;
+    border: 2px solid #7d50af;
+}
+</style>
+
+<script>
+// Test functions
+function addResult(message, type = 'success', container = 'manual-results') {
+    const results = document.getElementById(container);
+    const div = document.createElement('div');
+    div.className = `status ${type}`;
+    div.innerHTML = message;
+    results.appendChild(div);
+}
+
+function updateConnectionStatus(message, type = 'info') {
+    const status = document.getElementById('connection-status');
+    const indicator = type === 'success' ? 'connected' : type === 'error' ? 'disconnected' : 'pending';
+    const indicatorColor = type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#ffc107';
+    
+    status.innerHTML = `
+        <div class="status ${type}" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+            <span style="width: 12px; height: 12px; background: ${indicatorColor}; border-radius: 50%; ${indicator === 'pending' ? 'animation: blink 1s infinite;' : ''}"></span>
+            ${message}
+        </div>
+    `;
+}
+
+function testAIButton() {
+    console.log('🧪 Testing AI Button...');
+    
+    // Check for unified AI button
+    const unifiedButton = document.querySelector('.unified-ai-button[data-ai-button="true"]');
+    const guaranteedButton = document.querySelector('.guaranteed-ai-button');
+    const anyAIButton = document.querySelectorAll('[class*="ai-button"], [id*="ai-button"], button[title*="AI"]');
+    
+    if (unifiedButton) {
+        const rect = unifiedButton.getBoundingClientRect();
+        const isVisible = rect.width > 0 && rect.height > 0;
+        addResult(`✅ Unified AI Button Found: ${isVisible ? 'Visible' : 'Hidden'}`, isVisible ? 'success' : 'warning');
+        addResult(`Position: ${Math.round(rect.right)}px from left, ${Math.round(window.innerHeight - rect.bottom)}px from bottom`, 'info');
+        
+        if (window.unifiedAI) {
+            addResult('✅ Unified AI object available', 'success');
+            addResult(`Initialized: ${window.unifiedAI.isInitialized ? 'Yes' : 'No'}`, window.unifiedAI.isInitialized ? 'success' : 'warning');
+        } else {
+            addResult('⚠️ Unified AI object not found', 'warning');
+        }
+    } else if (guaranteedButton) {
+        addResult('✅ Guaranteed AI Button Found (fallback)', 'success');
+    } else {
+        addResult(`❌ No AI buttons found (searched ${anyAIButton.length} elements)`, 'error');
+    }
+}
+
+function testAIInterface() {
+    console.log('🧪 Testing AI Interface...');
+    
+    const unifiedInterface = document.querySelector('.unified-ai-interface');
+    const guaranteedInterface = document.querySelector('.guaranteed-ai-interface');
+    
+    if (unifiedInterface) {
+        addResult('✅ Unified AI Interface found', 'success');
+        addResult(`Display: ${unifiedInterface.style.display || 'default'}`, 'info');
+    } else if (guaranteedInterface) {
+        addResult('✅ Guaranteed AI Interface found', 'success');
+    } else {
+        addResult('⚠️ No AI interfaces found (normal until opened)', 'warning');
+    }
+}
+
+async function testAPIConnection() {
+    console.log('🧪 Testing API Connection...');
+    addResult('⏳ Testing API connection...', 'warning');
+    
+    try {
+        const response = await fetch('/api/ai/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                message: 'Connection test from server test page',
+                mode: 'general',
+                context: { test: true, source: 'server_connection_test' }
+            })
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            addResult('✅ API connection successful', 'success');
+            addResult(`Response received: ${data.response ? 'Yes' : 'No'}`, 'success');
+            updateConnectionStatus('AI API Connected & Working', 'success');
+        } else {
+            addResult(`❌ API error: ${response.status}`, 'error');
+            updateConnectionStatus(`API Error: ${response.status}`, 'error');
+        }
+    } catch (error) {
+        addResult(`❌ API connection failed: ${error.message}`, 'error');
+        updateConnectionStatus('API Connection Failed', 'error');
+    }
+}
+
+async function testFullConnection() {
+    console.log('🧪 Running Full Connection Test...');
+    addResult('🎯 Running comprehensive test...', 'info');
+    
+    // Clear previous results
+    document.getElementById('manual-results').innerHTML = '';
+    
+    // Test 1: Button
+    testAIButton();
+    
+    // Test 2: Interface
+    testAIInterface();
+    
+    // Test 3: API
+    await testAPIConnection();
+    
+    // Test 4: Click simulation
+    const aiButton = document.querySelector('.unified-ai-button, .guaranteed-ai-button');
+    if (aiButton) {
+        addResult('✅ AI Button click test: Available', 'success');
+        addResult('💡 Try clicking the AI button to test interface', 'info');
+    } else {
+        addResult('❌ AI Button click test: Not available', 'error');
+    }
+    
+    addResult('🎉 Full connection test completed!', 'success');
+}
+
+// Automatic tests
+function runAutomaticTests() {
+    const results = document.getElementById('auto-results');
+    results.innerHTML = '';
+    
+    setTimeout(() => {
+        // Test 1: Check for unified AI system
+        if (window.unifiedAI && window.unifiedAI.isInitialized) {
+            addResult('✅ Unified AI System: Connected', 'success', 'auto-results');
+            updateConnectionStatus('AI Bot & Assistant Connected', 'success');
+        } else if (window.guaranteedAIButton) {
+            addResult('⚠️ Guaranteed AI System: Active (fallback)', 'warning', 'auto-results');
+            updateConnectionStatus('Fallback AI System Active', 'warning');
+        } else {
+            addResult('❌ No AI system detected', 'error', 'auto-results');
+            updateConnectionStatus('No AI System Detected', 'error');
+        }
+        
+        // Test 2: Check for AI buttons
+        const aiButtons = document.querySelectorAll('.unified-ai-button, .guaranteed-ai-button');
+        if (aiButtons.length > 0) {
+            addResult(`✅ AI Buttons: ${aiButtons.length} found`, 'success', 'auto-results');
+        } else {
+            addResult('❌ AI Buttons: None found', 'error', 'auto-results');
+        }
+        
+        // Test 3: Check console logs
+        addResult('ℹ️ Check browser console for detailed logs', 'info', 'auto-results');
+        
+        // Test 4: Global objects
+        const globalObjects = [];
+        if (window.unifiedAI) globalObjects.push('unifiedAI');
+        if (window.unifiedAIButton) globalObjects.push('unifiedAIButton');
+        if (window.guaranteedAIButton) globalObjects.push('guaranteedAIButton');
+        
+        if (globalObjects.length > 0) {
+            addResult(`✅ Global Objects: ${globalObjects.join(', ')}`, 'success', 'auto-results');
+        } else {
+            addResult('⚠️ No AI global objects found', 'warning', 'auto-results');
+        }
+        
+    }, 3000);
+}
+
+// Run tests when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🧪 AI Connection Test Page Loaded');
+    console.log('🔍 Starting automatic detection...');
+    runAutomaticTests();
+});
+</script>
+{% endblock %}

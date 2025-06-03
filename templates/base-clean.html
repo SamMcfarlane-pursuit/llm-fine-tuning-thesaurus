@@ -20,33 +20,42 @@
     {% endif %}
     <title>{% block title %}Visual LLM{% endblock %}</title>
     
-    <!-- ESSENTIAL CSS ONLY - MINIMAL LOADING -->
+    <!-- ===== ESSENTIAL CSS ONLY - CLEAN & OPTIMIZED ===== -->
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-    
-    <!-- Google Fonts - Roboto -->
+
+    <!-- Google Fonts - Roboto & Fira Code -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-    
+
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    
-    <!-- ONLY ESSENTIAL CUSTOM CSS -->
+
+    <!-- ===== CORE VISUAL LLM STYLES (6 ESSENTIAL FILES ONLY) ===== -->
+    <!-- 1. Main Site Styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- 2. Dark/Light Theme System -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/custom-dark-mode.css') }}">
+
+    <!-- 3. AI Assistant Styling -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/ai-assistant.css') }}">
-    
-    <!-- NAVIGATION OVERRIDE - MUST BE ABSOLUTELY LAST CSS FILES -->
+
+    <!-- ===== NAVIGATION CONSISTENCY (LOAD ORDER CRITICAL) ===== -->
+    <!-- 4. Navigation Base Styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/exact-navigation-match.css') }}">
+
+    <!-- 5. Navigation Overrides -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/final-navigation-override.css') }}">
+
+    <!-- 6. Final Navigation Fixes (MUST BE LAST) -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/absolute-final-navigation.css') }}">
     
     {% block head %}{% endblock %}
 </head>
 <body class="{% block body_class %}{% endblock %}" data-topic-id="{{ topic_id|default('') }}" data-module-id="{{ module_id|default('') }}" data-user-logged-in="{{ current_user.is_authenticated|string|lower }}">
-    <!-- Skip to content link for accessibility -->
-    <a href="#main-content" class="skip-to-content">Skip to content</a>
+    <!-- Skip to content link removed per user request -->
 
     <!-- Navigation Bar - Exact match to image -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">

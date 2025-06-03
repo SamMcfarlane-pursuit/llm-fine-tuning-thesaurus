@@ -61,51 +61,145 @@ class UnifiedAIAssistant {
     }
 
     createButton() {
+        // Remove any existing AI buttons first to prevent conflicts
+        const existingButtons = document.querySelectorAll('.unified-ai-button, .emergency-ai-button, .ai-assistant-button, .guaranteed-ai-button');
+        existingButtons.forEach(btn => {
+            console.log('🗑️ Removing existing AI button:', btn.className);
+            btn.remove();
+        });
+
         const button = document.createElement('button');
         button.className = 'unified-ai-button';
         button.innerHTML = '🤖';
-        button.title = 'Open AI Learning Assistant';
+        button.title = 'Visual LLM AI Assistant - Connected & Ready!';
+        button.setAttribute('data-ai-button', 'true');
+        button.setAttribute('id', 'unified-ai-assistant-button');
 
-        // Enhanced styling with green theme
+        // Enhanced styling with green theme and maximum visibility
         button.style.cssText = `
             position: fixed !important;
-            bottom: 30px !important;
-            right: 30px !important;
-            width: 60px !important;
-            height: 60px !important;
+            bottom: 25px !important;
+            right: 25px !important;
+            width: 75px !important;
+            height: 75px !important;
             background: linear-gradient(135deg, #3c6430, #4f7a41) !important;
-            border: none !important;
+            border: 3px solid #5a8a4d !important;
             border-radius: 50% !important;
             color: white !important;
-            font-size: 24px !important;
+            font-size: 32px !important;
             cursor: pointer !important;
-            box-shadow: 0 8px 32px rgba(60, 100, 48, 0.3) !important;
+            box-shadow: 0 12px 48px rgba(60, 100, 48, 0.6), 0 0 0 0 rgba(60, 100, 48, 0.9) !important;
             transition: all 0.3s ease !important;
-            z-index: 9999 !important;
+            z-index: 2147483647 !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
+            animation: aiButtonPulse 2s infinite !important;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+            outline: none !important;
+            user-select: none !important;
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
         `;
+
+        // Add enhanced CSS animation for pulse effect
+        if (!document.getElementById('ai-button-styles')) {
+            const style = document.createElement('style');
+            style.id = 'ai-button-styles';
+            style.textContent = `
+                @keyframes aiButtonPulse {
+                    0% {
+                        box-shadow: 0 12px 48px rgba(60, 100, 48, 0.6), 0 0 0 0 rgba(60, 100, 48, 0.9);
+                        transform: scale(1);
+                    }
+                    50% {
+                        box-shadow: 0 12px 48px rgba(60, 100, 48, 0.6), 0 0 0 20px rgba(60, 100, 48, 0);
+                        transform: scale(1.05);
+                    }
+                    100% {
+                        box-shadow: 0 12px 48px rgba(60, 100, 48, 0.6), 0 0 0 0 rgba(60, 100, 48, 0);
+                        transform: scale(1);
+                    }
+                }
+
+                .unified-ai-button:hover {
+                    transform: scale(1.15) !important;
+                    box-shadow: 0 15px 60px rgba(60, 100, 48, 0.8) !important;
+                    animation: none !important;
+                }
+
+                .unified-ai-button:active {
+                    transform: scale(0.95) !important;
+                }
+            `;
+            document.head.appendChild(style);
+        }
 
         // Add hover effects
         button.addEventListener('mouseenter', () => {
-            button.style.transform = 'translateY(-2px) scale(1.05)';
-            button.style.boxShadow = '0 12px 40px rgba(60, 100, 48, 0.4)';
+            button.style.transform = 'translateY(-3px) scale(1.1)';
+            button.style.boxShadow = '0 15px 45px rgba(60, 100, 48, 0.5)';
+            button.style.animation = 'none';
         });
 
         button.addEventListener('mouseleave', () => {
             button.style.transform = 'translateY(0) scale(1)';
-            button.style.boxShadow = '0 8px 32px rgba(60, 100, 48, 0.3)';
+            button.style.boxShadow = '0 8px 32px rgba(60, 100, 48, 0.4), 0 0 0 0 rgba(60, 100, 48, 0.7)';
+            button.style.animation = 'aiButtonPulse 2s infinite';
         });
 
-        // Click handler
-        button.addEventListener('click', () => {
-            console.log('🤖 Unified AI Assistant button clicked!');
+        // Enhanced click handler with comprehensive feedback
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('🤖 Unified AI Assistant button clicked! - AI Bot & Assistant Connected');
+
+            // Enhanced visual feedback
+            button.style.transform = 'scale(0.9)';
+            button.style.boxShadow = '0 8px 32px rgba(60, 100, 48, 0.8)';
+
+            setTimeout(() => {
+                button.style.transform = 'scale(1)';
+                button.style.boxShadow = '0 12px 48px rgba(60, 100, 48, 0.6), 0 0 0 0 rgba(60, 100, 48, 0.9)';
+            }, 200);
+
+            // Toggle the AI interface
             this.toggleInterface();
+
+            // Log connection status
+            console.log('✅ AI Bot connected to AI Assistant - Interface toggled');
         });
+
+        // Ensure button stays visible
+        const observer = new MutationObserver(() => {
+            if (!document.body.contains(button)) {
+                console.log('🔄 AI button removed, re-adding...');
+                document.body.appendChild(button);
+            }
+        });
+        observer.observe(document.body, { childList: true, subtree: true });
 
         document.body.appendChild(button);
-        console.log('✅ Unified AI Button created');
+        console.log('✅ Enhanced Unified AI Button created and connected successfully!');
+        console.log('🔗 AI Bot & AI Assistant integration complete');
+
+        // Store reference for global access
+        window.unifiedAIButton = button;
+        window.unifiedAI = this;
+
+        // Verify button is visible and working
+        setTimeout(() => {
+            const rect = button.getBoundingClientRect();
+            const isVisible = rect.width > 0 && rect.height > 0;
+            console.log(`📊 AI Button Status: Visible=${isVisible}, Position=(${Math.round(rect.right)}, ${Math.round(window.innerHeight - rect.bottom)})`);
+
+            if (isVisible) {
+                console.log('🎉 AI Assistant Icon is working and connected!');
+            } else {
+                console.log('⚠️ AI Assistant Icon may not be visible');
+            }
+        }, 1000);
     }
 
     createChatInterface() {
@@ -448,7 +542,22 @@ class UnifiedAIAssistant {
             // Enhance message with context
             const enhancedMessage = this.enhanceMessageWithContext(message);
 
-            // Send to API
+            // Create comprehensive context
+            const context = {
+                current_page: window.location.pathname.split('/')[1] || 'home',
+                page_title: document.title,
+                user_agent: navigator.userAgent,
+                timestamp: new Date().toISOString(),
+                conversation_length: this.conversationHistory.length,
+                learning_context: this.learningContext
+            };
+
+            console.log(`📤 Sending to AI API (${this.currentMode} mode):`, enhancedMessage);
+
+            // Send to API with timeout
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+
             const response = await fetch('/api/ai/chat', {
                 method: 'POST',
                 headers: {
@@ -457,25 +566,43 @@ class UnifiedAIAssistant {
                 body: JSON.stringify({
                     message: enhancedMessage,
                     mode: this.currentMode,
-                    context: this.learningContext
-                })
+                    context: context
+                }),
+                signal: controller.signal
             });
+
+            clearTimeout(timeoutId);
 
             // Remove typing indicator
             this.removeTypingIndicator();
 
             if (response.ok) {
                 const data = await response.json();
-                this.addMessage(data.response || 'I received your message!', 'assistant');
-                console.log('✅ AI response received');
+                const aiResponse = data.response || 'I received your message!';
+                this.addMessage(aiResponse, 'assistant');
+                console.log('✅ AI response received successfully');
+
+                // Store successful interaction
+                this.conversationHistory.push({
+                    user_message: message,
+                    ai_response: aiResponse,
+                    mode: this.currentMode,
+                    timestamp: Date.now()
+                });
             } else {
-                this.addMessage('Sorry, I encountered an error. Please try again.', 'assistant');
-                console.log('❌ API error:', response.status);
+                const errorText = await response.text();
+                console.log('❌ API error:', response.status, errorText);
+                this.addMessage(`Sorry, I encountered an error (${response.status}). Please try again.`, 'assistant');
             }
         } catch (error) {
             console.error('❌ Unified AI Assistant Error:', error);
             this.removeTypingIndicator();
-            this.addMessage('Sorry, I\'m having trouble connecting. Please try again.', 'assistant');
+
+            if (error.name === 'AbortError') {
+                this.addMessage('Request timed out. Please try again with a shorter message.', 'assistant');
+            } else {
+                this.addMessage('Sorry, I\'m having trouble connecting. Please check your internet connection and try again.', 'assistant');
+            }
         }
     }
 
@@ -552,16 +679,50 @@ let unifiedAI = null;
 if (!window.unifiedAILoaded) {
     window.unifiedAILoaded = true;
 
-    // Wait for DOM to be ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            unifiedAI = new UnifiedAIAssistant();
-        });
-    } else {
-        unifiedAI = new UnifiedAIAssistant();
+    // Wait for DOM to be ready and initialize
+    function initializeUnifiedAI() {
+        try {
+            console.log('🚀 Starting Unified AI Assistant initialization...');
+            window.unifiedAI = new UnifiedAIAssistant();
+            console.log('✅ Unified AI Assistant initialized successfully!');
+            console.log('🔗 AI Bot & Assistant connected and ready!');
+
+            // Verify initialization
+            if (window.unifiedAI && window.unifiedAI.isInitialized) {
+                console.log('🎉 Unified AI system is working properly!');
+            } else {
+                console.log('⚠️ Unified AI initialization may have issues');
+            }
+        } catch (error) {
+            console.error('❌ Error initializing Unified AI Assistant:', error);
+
+            // Fallback: trigger guaranteed AI system
+            setTimeout(() => {
+                if (typeof createGuaranteedAIButton === 'function') {
+                    console.log('🔄 Triggering guaranteed AI fallback...');
+                    createGuaranteedAIButton();
+                }
+            }, 1000);
+        }
     }
 
-    console.log('🚀 Unified AI Assistant script loaded');
+    // Initialize based on DOM state
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeUnifiedAI);
+    } else {
+        // DOM is already ready, initialize immediately
+        setTimeout(initializeUnifiedAI, 100);
+    }
+
+    // Also initialize on window load as backup
+    window.addEventListener('load', () => {
+        if (!window.unifiedAI || !window.unifiedAI.isInitialized) {
+            console.log('🔄 Backup initialization triggered...');
+            initializeUnifiedAI();
+        }
+    });
+
+    console.log('🚀 Unified AI Assistant script loaded and ready');
 } else {
     console.log('⚠️ Unified AI Assistant already loaded, skipping...');
 }

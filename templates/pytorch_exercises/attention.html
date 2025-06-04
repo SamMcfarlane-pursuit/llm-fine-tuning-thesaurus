@@ -1,0 +1,451 @@
+{% extends "base.html" %}
+
+{% block title %}Attention Mechanisms Exercise | Thesaurus AI LLM FT{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/frameworks.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/themes/prism-tomorrow.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="framework-header pytorch-header">
+                <h1>Attention Mechanisms with PyTorch</h1>
+                <p>Learn to implement attention mechanisms for improved sequence modeling. Master self-attention and transformer architectures.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Learning Objectives</h2>
+                <p>By the end of this exercise, you will be able to:</p>
+                <ul>
+                    <li>Understand attention mechanisms and their importance</li>
+                    <li>Implement basic attention for sequence-to-sequence models</li>
+                    <li>Build self-attention and multi-head attention</li>
+                    <li>Create simple transformer blocks</li>
+                    <li>Apply attention to text classification tasks</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Exercise 1: Basic Attention Mechanism</h2>
+                <p>Implement a simple attention mechanism for sequence modeling.</p>
+                
+                <h3>Step 1: Understanding Attention</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+import numpy as np
+import matplotlib.pyplot as plt
+import math
+
+# Device configuration
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print(f'Using device: {device}')
+
+class BasicAttention(nn.Module):
+    def __init__(self, hidden_dim):
+        super(BasicAttention, self).__init__()
+        self.hidden_dim = hidden_dim
+        self.attention = nn.Linear(hidden_dim, 1, bias=False)
+        
+    def forward(self, encoder_outputs):
+        # encoder_outputs: (batch_size, seq_len, hidden_dim)
+        
+        # Calculate attention scores
+        scores = self.attention(encoder_outputs)  # (batch_size, seq_len, 1)
+        scores = scores.squeeze(-1)  # (batch_size, seq_len)
+        
+        # Apply softmax to get attention weights
+        attention_weights = F.softmax(scores, dim=1)  # (batch_size, seq_len)
+        
+        # Calculate context vector
+        context = torch.bmm(attention_weights.unsqueeze(1), encoder_outputs)  # (batch_size, 1, hidden_dim)
+        context = context.squeeze(1)  # (batch_size, hidden_dim)
+        
+        return context, attention_weights
+
+# Test basic attention
+hidden_dim = 64
+seq_len = 10
+batch_size = 2
+
+# Create sample encoder outputs
+encoder_outputs = torch.randn(batch_size, seq_len, hidden_dim)
+attention_layer = BasicAttention(hidden_dim)
+
+# Apply attention
+context, weights = attention_layer(encoder_outputs)
+
+print(f"Encoder outputs shape: {encoder_outputs.shape}")
+print(f"Context vector shape: {context.shape}")
+print(f"Attention weights shape: {weights.shape}")
+print(f"Attention weights sum: {weights.sum(dim=1)}")  # Should be 1.0</code></pre>
+                </div>
+                
+                <h3>Step 2: Self-Attention Implementation</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">class SelfAttention(nn.Module):
+    def __init__(self, embed_dim):
+        super(SelfAttention, self).__init__()
+        self.embed_dim = embed_dim
+        
+        # Linear layers for queries, keys, and values
+        self.query = nn.Linear(embed_dim, embed_dim)
+        self.key = nn.Linear(embed_dim, embed_dim)
+        self.value = nn.Linear(embed_dim, embed_dim)
+        
+        self.scale = math.sqrt(embed_dim)
+        
+    def forward(self, x, mask=None):
+        # x: (batch_size, seq_len, embed_dim)
+        batch_size, seq_len, embed_dim = x.size()
+        
+        # Generate queries, keys, and values
+        Q = self.query(x)  # (batch_size, seq_len, embed_dim)
+        K = self.key(x)    # (batch_size, seq_len, embed_dim)
+        V = self.value(x)  # (batch_size, seq_len, embed_dim)
+        
+        # Calculate attention scores
+        scores = torch.bmm(Q, K.transpose(1, 2)) / self.scale  # (batch_size, seq_len, seq_len)
+        
+        # Apply mask if provided
+        if mask is not None:
+            scores.masked_fill_(mask == 0, -1e9)
+        
+        # Apply softmax
+        attention_weights = F.softmax(scores, dim=-1)  # (batch_size, seq_len, seq_len)
+        
+        # Apply attention to values
+        output = torch.bmm(attention_weights, V)  # (batch_size, seq_len, embed_dim)
+        
+        return output, attention_weights
+
+# Test self-attention
+embed_dim = 64
+seq_len = 8
+batch_size = 2
+
+# Create sample input
+x = torch.randn(batch_size, seq_len, embed_dim)
+self_attention = SelfAttention(embed_dim)
+
+# Apply self-attention
+output, attention_weights = self_attention(x)
+
+print(f"Input shape: {x.shape}")
+print(f"Output shape: {output.shape}")
+print(f"Attention weights shape: {attention_weights.shape}")
+
+# Visualize attention weights for first sample
+plt.figure(figsize=(8, 6))
+plt.imshow(attention_weights[0].detach().numpy(), cmap='Blues')
+plt.colorbar()
+plt.title('Self-Attention Weights')
+plt.xlabel('Key Position')
+plt.ylabel('Query Position')
+plt.show()</code></pre>
+                </div>
+                
+                <h3>Step 3: Multi-Head Attention</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">class MultiHeadAttention(nn.Module):
+    def __init__(self, embed_dim, num_heads):
+        super(MultiHeadAttention, self).__init__()
+        assert embed_dim % num_heads == 0
+        
+        self.embed_dim = embed_dim
+        self.num_heads = num_heads
+        self.head_dim = embed_dim // num_heads
+        
+        # Linear layers for Q, K, V
+        self.query = nn.Linear(embed_dim, embed_dim)
+        self.key = nn.Linear(embed_dim, embed_dim)
+        self.value = nn.Linear(embed_dim, embed_dim)
+        
+        # Output projection
+        self.out_proj = nn.Linear(embed_dim, embed_dim)
+        
+        self.scale = math.sqrt(self.head_dim)
+        
+    def forward(self, x, mask=None):
+        batch_size, seq_len, embed_dim = x.size()
+        
+        # Generate Q, K, V
+        Q = self.query(x)  # (batch_size, seq_len, embed_dim)
+        K = self.key(x)
+        V = self.value(x)
+        
+        # Reshape for multi-head attention
+        Q = Q.view(batch_size, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
+        K = K.view(batch_size, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
+        V = V.view(batch_size, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
+        # Shape: (batch_size, num_heads, seq_len, head_dim)
+        
+        # Calculate attention scores
+        scores = torch.matmul(Q, K.transpose(-2, -1)) / self.scale
+        # Shape: (batch_size, num_heads, seq_len, seq_len)
+        
+        # Apply mask if provided
+        if mask is not None:
+            mask = mask.unsqueeze(1).unsqueeze(1)  # Broadcast for heads
+            scores.masked_fill_(mask == 0, -1e9)
+        
+        # Apply softmax
+        attention_weights = F.softmax(scores, dim=-1)
+        
+        # Apply attention to values
+        output = torch.matmul(attention_weights, V)
+        # Shape: (batch_size, num_heads, seq_len, head_dim)
+        
+        # Concatenate heads
+        output = output.transpose(1, 2).contiguous().view(batch_size, seq_len, embed_dim)
+        
+        # Apply output projection
+        output = self.out_proj(output)
+        
+        return output, attention_weights
+
+# Test multi-head attention
+embed_dim = 64
+num_heads = 8
+seq_len = 10
+batch_size = 2
+
+# Create sample input
+x = torch.randn(batch_size, seq_len, embed_dim)
+mha = MultiHeadAttention(embed_dim, num_heads)
+
+# Apply multi-head attention
+output, attention_weights = mha(x)
+
+print(f"Input shape: {x.shape}")
+print(f"Output shape: {output.shape}")
+print(f"Attention weights shape: {attention_weights.shape}")
+print(f"Number of parameters: {sum(p.numel() for p in mha.parameters()):,}")</code></pre>
+                </div>
+                
+                <h3>Step 4: Simple Transformer Block</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">class TransformerBlock(nn.Module):
+    def __init__(self, embed_dim, num_heads, ff_dim, dropout=0.1):
+        super(TransformerBlock, self).__init__()
+        
+        # Multi-head attention
+        self.attention = MultiHeadAttention(embed_dim, num_heads)
+        
+        # Feed-forward network
+        self.feed_forward = nn.Sequential(
+            nn.Linear(embed_dim, ff_dim),
+            nn.ReLU(),
+            nn.Linear(ff_dim, embed_dim)
+        )
+        
+        # Layer normalization
+        self.norm1 = nn.LayerNorm(embed_dim)
+        self.norm2 = nn.LayerNorm(embed_dim)
+        
+        # Dropout
+        self.dropout = nn.Dropout(dropout)
+        
+    def forward(self, x, mask=None):
+        # Self-attention with residual connection
+        attn_output, attention_weights = self.attention(x, mask)
+        x = self.norm1(x + self.dropout(attn_output))
+        
+        # Feed-forward with residual connection
+        ff_output = self.feed_forward(x)
+        x = self.norm2(x + self.dropout(ff_output))
+        
+        return x, attention_weights
+
+# Test transformer block
+embed_dim = 64
+num_heads = 8
+ff_dim = 256
+seq_len = 10
+batch_size = 2
+
+# Create sample input
+x = torch.randn(batch_size, seq_len, embed_dim)
+transformer_block = TransformerBlock(embed_dim, num_heads, ff_dim)
+
+# Apply transformer block
+output, attention_weights = transformer_block(x)
+
+print(f"Input shape: {x.shape}")
+print(f"Output shape: {output.shape}")
+print(f"Transformer block parameters: {sum(p.numel() for p in transformer_block.parameters()):,}")</code></pre>
+                </div>
+                
+                <h3>Step 5: Text Classification with Attention</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">class AttentionClassifier(nn.Module):
+    def __init__(self, vocab_size, embed_dim, num_heads, num_classes, max_seq_len=512):
+        super(AttentionClassifier, self).__init__()
+        
+        # Embedding layer
+        self.embedding = nn.Embedding(vocab_size, embed_dim)
+        self.pos_encoding = self.create_positional_encoding(max_seq_len, embed_dim)
+        
+        # Transformer blocks
+        self.transformer1 = TransformerBlock(embed_dim, num_heads, embed_dim * 4)
+        self.transformer2 = TransformerBlock(embed_dim, num_heads, embed_dim * 4)
+        
+        # Classification head
+        self.classifier = nn.Sequential(
+            nn.Linear(embed_dim, embed_dim // 2),
+            nn.ReLU(),
+            nn.Dropout(0.1),
+            nn.Linear(embed_dim // 2, num_classes)
+        )
+        
+    def create_positional_encoding(self, max_seq_len, embed_dim):
+        pe = torch.zeros(max_seq_len, embed_dim)
+        position = torch.arange(0, max_seq_len).unsqueeze(1).float()
+        
+        div_term = torch.exp(torch.arange(0, embed_dim, 2).float() * 
+                           -(math.log(10000.0) / embed_dim))
+        
+        pe[:, 0::2] = torch.sin(position * div_term)
+        pe[:, 1::2] = torch.cos(position * div_term)
+        
+        return pe.unsqueeze(0)  # (1, max_seq_len, embed_dim)
+        
+    def forward(self, x):
+        # x: (batch_size, seq_len)
+        batch_size, seq_len = x.size()
+        
+        # Embedding
+        x = self.embedding(x)  # (batch_size, seq_len, embed_dim)
+        
+        # Add positional encoding
+        x = x + self.pos_encoding[:, :seq_len, :].to(x.device)
+        
+        # Apply transformer blocks
+        x, attn1 = self.transformer1(x)
+        x, attn2 = self.transformer2(x)
+        
+        # Global average pooling
+        x = x.mean(dim=1)  # (batch_size, embed_dim)
+        
+        # Classification
+        output = self.classifier(x)
+        
+        return output, (attn1, attn2)
+
+# Create model
+vocab_size = 1000
+embed_dim = 64
+num_heads = 8
+num_classes = 2
+seq_len = 20
+batch_size = 4
+
+model = AttentionClassifier(vocab_size, embed_dim, num_heads, num_classes)
+
+# Test forward pass
+sample_input = torch.randint(0, vocab_size, (batch_size, seq_len))
+output, (attn1, attn2) = model(sample_input)
+
+print(f"Input shape: {sample_input.shape}")
+print(f"Output shape: {output.shape}")
+print(f"Attention 1 shape: {attn1.shape}")
+print(f"Attention 2 shape: {attn2.shape}")
+print(f"Total parameters: {sum(p.numel() for p in model.parameters()):,}")</code></pre>
+                </div>
+                
+                <h3>Challenge 1</h3>
+                <p>Implement masked self-attention for causal language modeling. Create a mask that prevents the model from attending to future tokens.</p>
+                
+                <div class="alert alert-secondary mt-4" role="alert" style="background-color: rgba(0, 0, 0, 0.05); border-left: 5px solid #555; color: #333; border-radius: 10px;">
+                    <div class="d-flex">
+                        <div class="me-3">
+                            <i class="bi bi-lightbulb-fill" style="font-size: 1.5rem; color: #555;"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: #333; font-weight: 600;">Hint</h4>
+                            <p class="mb-0">Create a lower triangular mask using torch.tril() and apply it before the softmax operation in attention.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Summary</h2>
+                <p>In this exercise, you've learned:</p>
+                <ul>
+                    <li>How to implement basic attention mechanisms</li>
+                    <li>Self-attention and multi-head attention concepts</li>
+                    <li>Building transformer blocks with residual connections</li>
+                    <li>Applying attention to text classification tasks</li>
+                    <li>Understanding positional encoding and masking</li>
+                </ul>
+                
+                <div class="text-center mt-5">
+                    <a href="/frameworks/pytorch/exercises/deployment" class="btn btn-lg" style="background: linear-gradient(135deg, var(--pytorch-primary), var(--pytorch-secondary)); color: white; font-weight: 600; border-radius: 30px; padding: 12px 30px; box-shadow: 0 10px 20px rgba(238, 76, 44, 0.3);">
+                        <i class="bi bi-arrow-right-circle me-2"></i> Next Exercise: Model Deployment
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/components/prism-python.min.js"></script>
+<script>
+    function copyCode(button) {
+        const codeBlock = button.parentElement.nextElementSibling;
+        const code = codeBlock.textContent;
+        
+        navigator.clipboard.writeText(code).then(() => {
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            button.style.backgroundColor = 'rgba(46, 125, 50, 0.3)';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.backgroundColor = '';
+            }, 2000);
+        });
+    }
+</script>
+{% endblock %}

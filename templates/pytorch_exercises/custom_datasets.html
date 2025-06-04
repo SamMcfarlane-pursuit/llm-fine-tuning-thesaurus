@@ -1,0 +1,470 @@
+{% extends "base.html" %}
+
+{% block title %}Custom Datasets Exercise | Thesaurus AI LLM FT{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/frameworks.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/themes/prism-tomorrow.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="framework-header pytorch-header">
+                <h1>Custom Datasets with PyTorch</h1>
+                <p>Learn to create custom datasets for your specific data types and use cases. Master data loading, preprocessing, and augmentation techniques.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Learning Objectives</h2>
+                <p>By the end of this exercise, you will be able to:</p>
+                <ul>
+                    <li>Create custom Dataset classes for various data types</li>
+                    <li>Implement data augmentation and preprocessing pipelines</li>
+                    <li>Handle image, text, and mixed-modal datasets</li>
+                    <li>Optimize data loading for performance</li>
+                    <li>Work with real-world data challenges</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Exercise 1: Image Dataset with Augmentation</h2>
+                <p>Create a custom dataset for image classification with comprehensive data augmentation.</p>
+                
+                <h3>Step 1: Setup and Data Preparation</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">import torch
+import torch.nn as nn
+from torch.utils.data import Dataset, DataLoader
+import torchvision.transforms as transforms
+from PIL import Image
+import os
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from pathlib import Path
+
+# Device configuration
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print(f'Using device: {device}')
+
+# Create sample image dataset structure
+def create_sample_dataset():
+    """Create a sample dataset structure for demonstration"""
+    # This would normally be your actual dataset
+    # For demo purposes, we'll simulate the structure
+    
+    dataset_info = {
+        'image_paths': [
+            'data/images/cat_001.jpg',
+            'data/images/cat_002.jpg', 
+            'data/images/dog_001.jpg',
+            'data/images/dog_002.jpg',
+            'data/images/bird_001.jpg',
+            'data/images/bird_002.jpg'
+        ],
+        'labels': [0, 0, 1, 1, 2, 2],  # 0: cat, 1: dog, 2: bird
+        'class_names': ['cat', 'dog', 'bird']
+    }
+    
+    return dataset_info
+
+# Get sample dataset info
+dataset_info = create_sample_dataset()
+print(f"Dataset contains {len(dataset_info['image_paths'])} images")
+print(f"Classes: {dataset_info['class_names']}")
+print(f"Sample paths: {dataset_info['image_paths'][:3]}")</code></pre>
+                </div>
+                
+                <h3>Step 2: Custom Image Dataset Class</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">class CustomImageDataset(Dataset):
+    def __init__(self, image_paths, labels, class_names, transform=None, target_transform=None):
+        """
+        Custom dataset for image classification
+        
+        Args:
+            image_paths: List of paths to images
+            labels: List of corresponding labels
+            class_names: List of class names
+            transform: Optional transform to be applied to images
+            target_transform: Optional transform to be applied to labels
+        """
+        self.image_paths = image_paths
+        self.labels = labels
+        self.class_names = class_names
+        self.transform = transform
+        self.target_transform = target_transform
+        
+        # Validate data
+        assert len(image_paths) == len(labels), "Number of images and labels must match"
+        
+        print(f"Dataset initialized with {len(self)} samples")
+        print(f"Classes: {class_names}")
+    
+    def __len__(self):
+        return len(self.image_paths)
+    
+    def __getitem__(self, idx):
+        # Get image path and label
+        image_path = self.image_paths[idx]
+        label = self.labels[idx]
+        
+        # For demonstration, create a random image if file doesn't exist
+        try:
+            image = Image.open(image_path).convert('RGB')
+        except (FileNotFoundError, OSError):
+            # Create a random image for demonstration
+            image = Image.fromarray(np.random.randint(0, 255, (224, 224, 3), dtype=np.uint8))
+        
+        # Apply transforms
+        if self.transform:
+            image = self.transform(image)
+        
+        if self.target_transform:
+            label = self.target_transform(label)
+        
+        return image, label
+    
+    def get_class_name(self, label):
+        return self.class_names[label]
+    
+    def get_class_distribution(self):
+        """Get the distribution of classes in the dataset"""
+        unique, counts = np.unique(self.labels, return_counts=True)
+        distribution = dict(zip([self.class_names[i] for i in unique], counts))
+        return distribution
+
+# Create transforms for training and validation
+train_transform = transforms.Compose([
+    transforms.Resize((256, 256)),
+    transforms.RandomCrop(224),
+    transforms.RandomHorizontalFlip(p=0.5),
+    transforms.RandomRotation(degrees=15),
+    transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+])
+
+val_transform = transforms.Compose([
+    transforms.Resize((224, 224)),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+])
+
+# Create dataset instances
+train_dataset = CustomImageDataset(
+    dataset_info['image_paths'],
+    dataset_info['labels'],
+    dataset_info['class_names'],
+    transform=train_transform
+)
+
+val_dataset = CustomImageDataset(
+    dataset_info['image_paths'],
+    dataset_info['labels'],
+    dataset_info['class_names'],
+    transform=val_transform
+)
+
+print(f"Train dataset: {len(train_dataset)} samples")
+print(f"Validation dataset: {len(val_dataset)} samples")
+print(f"Class distribution: {train_dataset.get_class_distribution()}")</code></pre>
+                </div>
+                
+                <h3>Step 3: Advanced Data Loading with Custom Collate Function</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">def custom_collate_fn(batch):
+    """
+    Custom collate function for handling batches
+    Useful for variable-size data or special preprocessing
+    """
+    images, labels = zip(*batch)
+    
+    # Stack images and labels
+    images = torch.stack(images, 0)
+    labels = torch.tensor(labels, dtype=torch.long)
+    
+    # You can add custom logic here for special handling
+    # For example, filtering out corrupted samples, etc.
+    
+    return images, labels
+
+# Create data loaders
+batch_size = 16
+num_workers = 0  # Set to 0 for compatibility
+
+train_loader = DataLoader(
+    train_dataset,
+    batch_size=batch_size,
+    shuffle=True,
+    num_workers=num_workers,
+    collate_fn=custom_collate_fn,
+    pin_memory=True if torch.cuda.is_available() else False
+)
+
+val_loader = DataLoader(
+    val_dataset,
+    batch_size=batch_size,
+    shuffle=False,
+    num_workers=num_workers,
+    collate_fn=custom_collate_fn,
+    pin_memory=True if torch.cuda.is_available() else False
+)
+
+print(f"Train loader: {len(train_loader)} batches")
+print(f"Validation loader: {len(val_loader)} batches")
+
+# Test the data loader
+for batch_images, batch_labels in train_loader:
+    print(f"Batch images shape: {batch_images.shape}")
+    print(f"Batch labels shape: {batch_labels.shape}")
+    print(f"Labels in batch: {batch_labels}")
+    break</code></pre>
+                </div>
+                
+                <h3>Step 4: Visualization and Analysis</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">def denormalize_image(tensor, mean, std):
+    """Denormalize image tensor for visualization"""
+    for t, m, s in zip(tensor, mean, std):
+        t.mul_(s).add_(m)
+    return torch.clamp(tensor, 0, 1)
+
+def visualize_batch(data_loader, dataset, num_samples=8):
+    """Visualize a batch of images with their labels"""
+    # Get a batch
+    images, labels = next(iter(data_loader))
+    
+    # Denormalize images for visualization
+    mean = [0.485, 0.456, 0.406]
+    std = [0.229, 0.224, 0.225]
+    
+    fig, axes = plt.subplots(2, 4, figsize=(12, 6))
+    axes = axes.ravel()
+    
+    for i in range(min(num_samples, len(images))):
+        # Denormalize image
+        img = denormalize_image(images[i].clone(), mean, std)
+        img = img.permute(1, 2, 0).numpy()
+        
+        # Plot image
+        axes[i].imshow(img)
+        axes[i].set_title(f'{dataset.get_class_name(labels[i].item())}')
+        axes[i].axis('off')
+    
+    plt.tight_layout()
+    plt.show()
+
+# Visualize training data with augmentations
+print("Training data with augmentations:")
+visualize_batch(train_loader, train_dataset)
+
+# Visualize validation data (no augmentations)
+print("Validation data (no augmentations):")
+visualize_batch(val_loader, val_dataset)</code></pre>
+                </div>
+                
+                <h3>Challenge 1</h3>
+                <p>Create a multi-modal dataset that combines images with text descriptions. Implement a custom dataset that loads both image and text data for each sample.</p>
+                
+                <div class="alert alert-secondary mt-4" role="alert" style="background-color: rgba(0, 0, 0, 0.05); border-left: 5px solid #555; color: #333; border-radius: 10px;">
+                    <div class="d-flex">
+                        <div class="me-3">
+                            <i class="bi bi-lightbulb-fill" style="font-size: 1.5rem; color: #555;"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: #333; font-weight: 600;">Hint</h4>
+                            <p class="mb-0">You'll need to handle both image transforms and text tokenization in the __getitem__ method. Consider using a dictionary to return multiple data types.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Exercise 2: Text Dataset with Variable Lengths</h2>
+                <p>Create a custom dataset for text data with proper handling of variable-length sequences.</p>
+                
+                <h3>Text Dataset Implementation</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">from torch.nn.utils.rnn import pad_sequence
+import re
+from collections import Counter
+
+class TextDataset(Dataset):
+    def __init__(self, texts, labels, vocab=None, max_length=None):
+        self.texts = texts
+        self.labels = labels
+        self.max_length = max_length
+        
+        # Build vocabulary if not provided
+        if vocab is None:
+            self.vocab = self.build_vocabulary(texts)
+        else:
+            self.vocab = vocab
+        
+        # Convert texts to token indices
+        self.encoded_texts = [self.encode_text(text) for text in texts]
+        
+    def build_vocabulary(self, texts):
+        """Build vocabulary from texts"""
+        vocab = {'<PAD>': 0, '<UNK>': 1, '<SOS>': 2, '<EOS>': 3}
+        word_counts = Counter()
+        
+        for text in texts:
+            tokens = self.tokenize(text)
+            word_counts.update(tokens)
+        
+        # Add words to vocabulary (frequency threshold can be added)
+        for word, count in word_counts.most_common():
+            if word not in vocab:
+                vocab[word] = len(vocab)
+        
+        return vocab
+    
+    def tokenize(self, text):
+        """Simple tokenization"""
+        text = re.sub(r'[^\w\s]', '', text.lower())
+        return text.split()
+    
+    def encode_text(self, text):
+        """Convert text to sequence of token indices"""
+        tokens = self.tokenize(text)
+        encoded = [self.vocab.get(token, 1) for token in tokens]  # 1 is <UNK>
+        
+        # Add start and end tokens
+        encoded = [2] + encoded + [3]  # <SOS> + tokens + <EOS>
+        
+        # Truncate if too long
+        if self.max_length and len(encoded) > self.max_length:
+            encoded = encoded[:self.max_length-1] + [3]  # Keep <EOS>
+        
+        return encoded
+    
+    def __len__(self):
+        return len(self.texts)
+    
+    def __getitem__(self, idx):
+        return torch.tensor(self.encoded_texts[idx], dtype=torch.long), torch.tensor(self.labels[idx], dtype=torch.long)
+
+# Sample text data
+sample_texts = [
+    "This is a great movie with excellent acting",
+    "Poor storyline and bad direction",
+    "Amazing visual effects and soundtrack",
+    "Boring and predictable plot",
+    "Outstanding performance by all actors"
+]
+sample_labels = [1, 0, 1, 0, 1]  # 1: positive, 0: negative
+
+# Create text dataset
+text_dataset = TextDataset(sample_texts, sample_labels, max_length=20)
+print(f"Text dataset: {len(text_dataset)} samples")
+print(f"Vocabulary size: {len(text_dataset.vocab)}")
+print(f"Sample encoding: {text_dataset.encoded_texts[0]}")
+
+# Custom collate function for text data
+def text_collate_fn(batch):
+    texts, labels = zip(*batch)
+    
+    # Pad sequences to same length
+    padded_texts = pad_sequence(texts, batch_first=True, padding_value=0)
+    labels = torch.stack(labels)
+    
+    # Get actual lengths (before padding)
+    lengths = [len(text) for text in texts]
+    
+    return padded_texts, labels, lengths
+
+# Create text data loader
+text_loader = DataLoader(text_dataset, batch_size=3, shuffle=True, collate_fn=text_collate_fn)
+
+# Test text data loader
+for batch_texts, batch_labels, batch_lengths in text_loader:
+    print(f"Batch texts shape: {batch_texts.shape}")
+    print(f"Batch labels: {batch_labels}")
+    print(f"Batch lengths: {batch_lengths}")
+    break</code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Summary</h2>
+                <p>In this exercise, you've learned:</p>
+                <ul>
+                    <li>How to create custom Dataset classes for different data types</li>
+                    <li>Implementing data augmentation and preprocessing pipelines</li>
+                    <li>Handling variable-length sequences with padding</li>
+                    <li>Creating custom collate functions for special data handling</li>
+                    <li>Optimizing data loading for performance</li>
+                </ul>
+                
+                <div class="text-center mt-5">
+                    <a href="/frameworks/pytorch/exercises/transfer-learning" class="btn btn-lg" style="background: linear-gradient(135deg, var(--pytorch-primary), var(--pytorch-secondary)); color: white; font-weight: 600; border-radius: 30px; padding: 12px 30px; box-shadow: 0 10px 20px rgba(238, 76, 44, 0.3);">
+                        <i class="bi bi-arrow-right-circle me-2"></i> Next Exercise: Transfer Learning
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/components/prism-python.min.js"></script>
+<script>
+    function copyCode(button) {
+        const codeBlock = button.parentElement.nextElementSibling;
+        const code = codeBlock.textContent;
+        
+        navigator.clipboard.writeText(code).then(() => {
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            button.style.backgroundColor = 'rgba(46, 125, 50, 0.3)';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.backgroundColor = '';
+            }, 2000);
+        });
+    }
+</script>
+{% endblock %}

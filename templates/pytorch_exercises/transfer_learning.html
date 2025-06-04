@@ -1,0 +1,427 @@
+{% extends "base.html" %}
+
+{% block title %}Transfer Learning Exercise | Thesaurus AI LLM FT{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/frameworks.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/themes/prism-tomorrow.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="framework-header pytorch-header">
+                <h1>Transfer Learning with PyTorch</h1>
+                <p>Learn to leverage pre-trained models for your own tasks. Master fine-tuning techniques and feature extraction methods.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Learning Objectives</h2>
+                <p>By the end of this exercise, you will be able to:</p>
+                <ul>
+                    <li>Use pre-trained models from torchvision</li>
+                    <li>Implement feature extraction and fine-tuning</li>
+                    <li>Adapt models for custom classification tasks</li>
+                    <li>Compare different transfer learning strategies</li>
+                    <li>Optimize training for transfer learning</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Exercise 1: Feature Extraction with Pre-trained ResNet</h2>
+                <p>Use a pre-trained ResNet model as a feature extractor for a custom classification task.</p>
+                
+                <h3>Step 1: Load Pre-trained Model</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">import torch
+import torch.nn as nn
+import torch.optim as optim
+import torchvision
+import torchvision.transforms as transforms
+import torchvision.models as models
+from torch.utils.data import DataLoader, Dataset
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Device configuration
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print(f'Using device: {device}')
+
+# Load pre-trained ResNet18
+model = models.resnet18(pretrained=True)
+print("Pre-trained ResNet18 loaded successfully!")
+
+# Print model architecture
+print(f"Model architecture:\n{model}")
+
+# Check the final layer
+print(f"Original final layer: {model.fc}")
+print(f"Number of features in final layer: {model.fc.in_features}")
+
+# Freeze all parameters for feature extraction
+for param in model.parameters():
+    param.requires_grad = False
+
+print("All parameters frozen for feature extraction")</code></pre>
+                </div>
+                
+                <h3>Step 2: Modify Model for Custom Task</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Custom classifier for our task
+class TransferLearningModel(nn.Module):
+    def __init__(self, pretrained_model, num_classes, feature_extract=True):
+        super(TransferLearningModel, self).__init__()
+        self.feature_extract = feature_extract
+        
+        # Use pre-trained model as feature extractor
+        self.features = nn.Sequential(*list(pretrained_model.children())[:-1])  # Remove final FC layer
+        
+        # Add custom classifier
+        self.classifier = nn.Sequential(
+            nn.Flatten(),
+            nn.Dropout(0.5),
+            nn.Linear(pretrained_model.fc.in_features, 256),
+            nn.ReLU(),
+            nn.Dropout(0.3),
+            nn.Linear(256, num_classes)
+        )
+        
+        # Freeze feature extractor if specified
+        if feature_extract:
+            for param in self.features.parameters():
+                param.requires_grad = False
+    
+    def forward(self, x):
+        x = self.features(x)
+        x = self.classifier(x)
+        return x
+
+# Create model for 3-class classification (example: cats, dogs, birds)
+num_classes = 3
+transfer_model = TransferLearningModel(model, num_classes, feature_extract=True).to(device)
+
+print(f"Transfer learning model created for {num_classes} classes")
+print(f"Model: {transfer_model}")
+
+# Count trainable parameters
+trainable_params = sum(p.numel() for p in transfer_model.parameters() if p.requires_grad)
+total_params = sum(p.numel() for p in transfer_model.parameters())
+print(f"Trainable parameters: {trainable_params:,}")
+print(f"Total parameters: {total_params:,}")
+print(f"Percentage trainable: {100 * trainable_params / total_params:.2f}%")</code></pre>
+                </div>
+                
+                <h3>Step 3: Data Preparation with Proper Transforms</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Data transforms for transfer learning
+# Important: Use ImageNet normalization for pre-trained models
+data_transforms = {
+    'train': transforms.Compose([
+        transforms.Resize(256),
+        transforms.RandomCrop(224),
+        transforms.RandomHorizontalFlip(),
+        transforms.ToTensor(),
+        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])  # ImageNet stats
+    ]),
+    'val': transforms.Compose([
+        transforms.Resize(256),
+        transforms.CenterCrop(224),
+        transforms.ToTensor(),
+        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ])
+}
+
+# Create sample dataset (using CIFAR-10 as example)
+# In practice, you would use your own dataset
+transform_train = data_transforms['train']
+transform_val = data_transforms['val']
+
+# Load CIFAR-10 and use only 3 classes for demonstration
+full_trainset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform_train)
+full_testset = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform_val)
+
+# CIFAR-10 classes: 0=airplane, 1=automobile, 2=bird, 3=cat, 4=deer, 5=dog, 6=frog, 7=horse, 8=ship, 9=truck
+# Let's use classes 2 (bird), 3 (cat), 5 (dog) and map them to 0, 1, 2
+selected_classes = [2, 3, 5]  # bird, cat, dog
+class_mapping = {2: 0, 3: 1, 5: 2}  # map to 0, 1, 2
+
+def filter_dataset(dataset, selected_classes, class_mapping):
+    """Filter dataset to include only selected classes"""
+    filtered_data = []
+    filtered_targets = []
+    
+    for i, (data, target) in enumerate(dataset):
+        if target in selected_classes:
+            filtered_data.append(data)
+            filtered_targets.append(class_mapping[target])
+    
+    return filtered_data, filtered_targets
+
+# Filter datasets
+train_data, train_targets = filter_dataset(full_trainset, selected_classes, class_mapping)
+test_data, test_targets = filter_dataset(full_testset, selected_classes, class_mapping)
+
+print(f"Filtered train dataset: {len(train_data)} samples")
+print(f"Filtered test dataset: {len(test_data)} samples")
+
+# Create custom dataset class
+class FilteredDataset(Dataset):
+    def __init__(self, data, targets):
+        self.data = data
+        self.targets = targets
+    
+    def __len__(self):
+        return len(self.data)
+    
+    def __getitem__(self, idx):
+        return self.data[idx], self.targets[idx]
+
+# Create datasets and data loaders
+train_dataset = FilteredDataset(train_data, train_targets)
+test_dataset = FilteredDataset(test_data, test_targets)
+
+batch_size = 32
+train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
+
+print(f"Train loader: {len(train_loader)} batches")
+print(f"Test loader: {len(test_loader)} batches")</code></pre>
+                </div>
+                
+                <h3>Step 4: Training with Transfer Learning</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Training setup
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(transfer_model.parameters(), lr=0.001)
+scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.1)
+
+# Training function
+def train_transfer_model(model, train_loader, test_loader, criterion, optimizer, scheduler, num_epochs=10):
+    train_losses = []
+    train_accuracies = []
+    test_accuracies = []
+    
+    for epoch in range(num_epochs):
+        # Training phase
+        model.train()
+        running_loss = 0.0
+        correct = 0
+        total = 0
+        
+        for batch_idx, (data, targets) in enumerate(train_loader):
+            data, targets = data.to(device), targets.to(device)
+            
+            # Forward pass
+            outputs = model(data)
+            loss = criterion(outputs, targets)
+            
+            # Backward pass
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            
+            # Statistics
+            running_loss += loss.item()
+            _, predicted = torch.max(outputs.data, 1)
+            total += targets.size(0)
+            correct += (predicted == targets).sum().item()
+            
+            if batch_idx % 50 == 0:
+                print(f'Epoch [{epoch+1}/{num_epochs}], Step [{batch_idx}/{len(train_loader)}], '
+                      f'Loss: {loss.item():.4f}')
+        
+        # Calculate training accuracy
+        train_acc = 100 * correct / total
+        epoch_loss = running_loss / len(train_loader)
+        train_losses.append(epoch_loss)
+        train_accuracies.append(train_acc)
+        
+        # Evaluation phase
+        model.eval()
+        test_correct = 0
+        test_total = 0
+        
+        with torch.no_grad():
+            for data, targets in test_loader:
+                data, targets = data.to(device), targets.to(device)
+                outputs = model(data)
+                _, predicted = torch.max(outputs, 1)
+                test_total += targets.size(0)
+                test_correct += (predicted == targets).sum().item()
+        
+        test_acc = 100 * test_correct / test_total
+        test_accuracies.append(test_acc)
+        
+        # Update learning rate
+        scheduler.step()
+        
+        print(f'Epoch [{epoch+1}/{num_epochs}] - Train Loss: {epoch_loss:.4f}, '
+              f'Train Acc: {train_acc:.2f}%, Test Acc: {test_acc:.2f}%')
+    
+    return train_losses, train_accuracies, test_accuracies
+
+# Train the model
+print("Starting transfer learning training...")
+train_losses, train_accs, test_accs = train_transfer_model(
+    transfer_model, train_loader, test_loader, criterion, optimizer, scheduler, num_epochs=10
+)
+print("Training completed!")</code></pre>
+                </div>
+                
+                <h3>Step 5: Compare with Fine-tuning</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Create fine-tuning model (unfreeze some layers)
+finetune_model = TransferLearningModel(models.resnet18(pretrained=True), num_classes, feature_extract=False).to(device)
+
+# Freeze early layers, unfreeze later layers
+for name, param in finetune_model.named_parameters():
+    if 'features.0' in name or 'features.1' in name or 'features.2' in name or 'features.3' in name:
+        param.requires_grad = False  # Freeze early layers
+    else:
+        param.requires_grad = True   # Unfreeze later layers
+
+# Count trainable parameters for fine-tuning
+finetune_trainable = sum(p.numel() for p in finetune_model.parameters() if p.requires_grad)
+finetune_total = sum(p.numel() for p in finetune_model.parameters())
+print(f"Fine-tuning - Trainable parameters: {finetune_trainable:,}")
+print(f"Fine-tuning - Percentage trainable: {100 * finetune_trainable / finetune_total:.2f}%")
+
+# Use lower learning rate for fine-tuning
+finetune_optimizer = optim.Adam(finetune_model.parameters(), lr=0.0001)
+finetune_scheduler = optim.lr_scheduler.StepLR(finetune_optimizer, step_size=7, gamma=0.1)
+
+# Train fine-tuning model (shorter training for comparison)
+print("\nStarting fine-tuning training...")
+finetune_losses, finetune_train_accs, finetune_test_accs = train_transfer_model(
+    finetune_model, train_loader, test_loader, criterion, finetune_optimizer, finetune_scheduler, num_epochs=5
+)
+
+# Plot comparison
+plt.figure(figsize=(15, 5))
+
+plt.subplot(1, 3, 1)
+plt.plot(train_losses, label='Feature Extraction')
+plt.plot(finetune_losses, label='Fine-tuning')
+plt.title('Training Loss')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.legend()
+plt.grid(True)
+
+plt.subplot(1, 3, 2)
+plt.plot(train_accs, label='Feature Extraction')
+plt.plot(finetune_train_accs, label='Fine-tuning')
+plt.title('Training Accuracy')
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy (%)')
+plt.legend()
+plt.grid(True)
+
+plt.subplot(1, 3, 3)
+plt.plot(test_accs, label='Feature Extraction')
+plt.plot(finetune_test_accs, label='Fine-tuning')
+plt.title('Test Accuracy')
+plt.xlabel('Epoch')
+plt.ylabel('Accuracy (%)')
+plt.legend()
+plt.grid(True)
+
+plt.tight_layout()
+plt.show()
+
+print(f"Feature Extraction - Final test accuracy: {test_accs[-1]:.2f}%")
+print(f"Fine-tuning - Final test accuracy: {finetune_test_accs[-1]:.2f}%")</code></pre>
+                </div>
+                
+                <h3>Challenge 1</h3>
+                <p>Implement progressive unfreezing: start with feature extraction, then gradually unfreeze layers during training. Compare the results with standard fine-tuning.</p>
+                
+                <div class="alert alert-secondary mt-4" role="alert" style="background-color: rgba(0, 0, 0, 0.05); border-left: 5px solid #555; color: #333; border-radius: 10px;">
+                    <div class="d-flex">
+                        <div class="me-3">
+                            <i class="bi bi-lightbulb-fill" style="font-size: 1.5rem; color: #555;"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: #333; font-weight: 600;">Hint</h4>
+                            <p class="mb-0">Create a function that unfreezes layers progressively during training. Start with the classifier, then unfreeze the last ResNet block, then the second-to-last, etc.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Summary</h2>
+                <p>In this exercise, you've learned:</p>
+                <ul>
+                    <li>How to use pre-trained models for transfer learning</li>
+                    <li>The difference between feature extraction and fine-tuning</li>
+                    <li>Proper data preprocessing for pre-trained models</li>
+                    <li>Strategies for freezing and unfreezing layers</li>
+                    <li>Comparing different transfer learning approaches</li>
+                </ul>
+                
+                <div class="text-center mt-5">
+                    <a href="/frameworks/pytorch/exercises/gan" class="btn btn-lg" style="background: linear-gradient(135deg, var(--pytorch-primary), var(--pytorch-secondary)); color: white; font-weight: 600; border-radius: 30px; padding: 12px 30px; box-shadow: 0 10px 20px rgba(238, 76, 44, 0.3);">
+                        <i class="bi bi-arrow-right-circle me-2"></i> Next Exercise: Generative Adversarial Networks
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/components/prism-python.min.js"></script>
+<script>
+    function copyCode(button) {
+        const codeBlock = button.parentElement.nextElementSibling;
+        const code = codeBlock.textContent;
+        
+        navigator.clipboard.writeText(code).then(() => {
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            button.style.backgroundColor = 'rgba(46, 125, 50, 0.3)';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.backgroundColor = '';
+            }, 2000);
+        });
+    }
+</script>
+{% endblock %}

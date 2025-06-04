@@ -1,0 +1,405 @@
+{% extends "base.html" %}
+
+{% block title %}GAN Exercise | Thesaurus AI LLM FT{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/frameworks.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/themes/prism-tomorrow.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="framework-header pytorch-header">
+                <h1>Generative Adversarial Networks with PyTorch</h1>
+                <p>Learn to build GANs for generating synthetic data. Master the adversarial training process and create realistic images.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Learning Objectives</h2>
+                <p>By the end of this exercise, you will be able to:</p>
+                <ul>
+                    <li>Understand GAN architecture and adversarial training</li>
+                    <li>Implement generator and discriminator networks</li>
+                    <li>Train GANs with proper loss functions</li>
+                    <li>Generate synthetic images from noise</li>
+                    <li>Handle common GAN training challenges</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Exercise 1: Simple GAN for MNIST</h2>
+                <p>Build a basic GAN to generate handwritten digits using the MNIST dataset.</p>
+                
+                <h3>Step 1: Generator Network</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">import torch
+import torch.nn as nn
+import torch.optim as optim
+import torchvision
+import torchvision.transforms as transforms
+from torch.utils.data import DataLoader
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Device configuration
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print(f'Using device: {device}')
+
+class Generator(nn.Module):
+    def __init__(self, noise_dim=100, img_dim=784):
+        super(Generator, self).__init__()
+        self.noise_dim = noise_dim
+        self.img_dim = img_dim
+        
+        self.model = nn.Sequential(
+            # First layer
+            nn.Linear(noise_dim, 256),
+            nn.LeakyReLU(0.2),
+            nn.BatchNorm1d(256),
+            
+            # Second layer
+            nn.Linear(256, 512),
+            nn.LeakyReLU(0.2),
+            nn.BatchNorm1d(512),
+            
+            # Third layer
+            nn.Linear(512, 1024),
+            nn.LeakyReLU(0.2),
+            nn.BatchNorm1d(1024),
+            
+            # Output layer
+            nn.Linear(1024, img_dim),
+            nn.Tanh()  # Output between -1 and 1
+        )
+    
+    def forward(self, noise):
+        return self.model(noise)
+
+# Test generator
+noise_dim = 100
+img_dim = 28 * 28  # MNIST image size
+generator = Generator(noise_dim, img_dim).to(device)
+
+# Generate sample
+sample_noise = torch.randn(4, noise_dim).to(device)
+fake_images = generator(sample_noise)
+
+print(f"Generator architecture:\n{generator}")
+print(f"Input noise shape: {sample_noise.shape}")
+print(f"Generated images shape: {fake_images.shape}")
+print(f"Generator parameters: {sum(p.numel() for p in generator.parameters()):,}")</code></pre>
+                </div>
+                
+                <h3>Step 2: Discriminator Network</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python">class Discriminator(nn.Module):
+    def __init__(self, img_dim=784):
+        super(Discriminator, self).__init__()
+        self.img_dim = img_dim
+        
+        self.model = nn.Sequential(
+            # First layer
+            nn.Linear(img_dim, 1024),
+            nn.LeakyReLU(0.2),
+            nn.Dropout(0.3),
+            
+            # Second layer
+            nn.Linear(1024, 512),
+            nn.LeakyReLU(0.2),
+            nn.Dropout(0.3),
+            
+            # Third layer
+            nn.Linear(512, 256),
+            nn.LeakyReLU(0.2),
+            nn.Dropout(0.3),
+            
+            # Output layer
+            nn.Linear(256, 1),
+            nn.Sigmoid()  # Output probability
+        )
+    
+    def forward(self, img):
+        return self.model(img)
+
+# Test discriminator
+discriminator = Discriminator(img_dim).to(device)
+
+# Test with real and fake images
+real_images = torch.randn(4, img_dim).to(device)  # Placeholder for real images
+fake_images = generator(sample_noise)
+
+real_output = discriminator(real_images)
+fake_output = discriminator(fake_images.detach())
+
+print(f"Discriminator architecture:\n{discriminator}")
+print(f"Real images output: {real_output.squeeze()}")
+print(f"Fake images output: {fake_output.squeeze()}")
+print(f"Discriminator parameters: {sum(p.numel() for p in discriminator.parameters()):,}")</code></pre>
+                </div>
+                
+                <h3>Step 3: Data Preparation</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Data preprocessing for GAN
+transform = transforms.Compose([
+    transforms.ToTensor(),
+    transforms.Normalize((0.5,), (0.5,))  # Normalize to [-1, 1]
+])
+
+# Load MNIST dataset
+dataset = torchvision.datasets.MNIST(
+    root='./data', 
+    train=True, 
+    transform=transform, 
+    download=True
+)
+
+# Create data loader
+batch_size = 64
+data_loader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
+
+print(f"Dataset size: {len(dataset)}")
+print(f"Number of batches: {len(data_loader)}")
+
+# Visualize some real images
+def show_images(images, title="Images", nrow=8):
+    # Denormalize images from [-1, 1] to [0, 1]
+    images = (images + 1) / 2
+    
+    # Create grid
+    grid = torchvision.utils.make_grid(images, nrow=nrow, padding=2)
+    
+    # Plot
+    plt.figure(figsize=(10, 10))
+    plt.imshow(grid.permute(1, 2, 0))
+    plt.title(title)
+    plt.axis('off')
+    plt.show()
+
+# Show sample real images
+sample_batch, _ = next(iter(data_loader))
+show_images(sample_batch[:16], "Real MNIST Images")</code></pre>
+                </div>
+                
+                <h3>Step 4: GAN Training Loop</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Training setup
+lr = 0.0002
+beta1 = 0.5  # Adam optimizer parameter for GANs
+
+# Optimizers
+optimizer_G = optim.Adam(generator.parameters(), lr=lr, betas=(beta1, 0.999))
+optimizer_D = optim.Adam(discriminator.parameters(), lr=lr, betas=(beta1, 0.999))
+
+# Loss function
+criterion = nn.BCELoss()
+
+# Training function
+def train_gan(generator, discriminator, data_loader, num_epochs=50):
+    # Lists to track losses
+    G_losses = []
+    D_losses = []
+    
+    # Fixed noise for visualization
+    fixed_noise = torch.randn(16, noise_dim).to(device)
+    
+    print("Starting GAN training...")
+    
+    for epoch in range(num_epochs):
+        for batch_idx, (real_images, _) in enumerate(data_loader):
+            batch_size = real_images.size(0)
+            real_images = real_images.view(batch_size, -1).to(device)
+            
+            # Labels
+            real_labels = torch.ones(batch_size, 1).to(device)
+            fake_labels = torch.zeros(batch_size, 1).to(device)
+            
+            # ===============================
+            # Train Discriminator
+            # ===============================
+            optimizer_D.zero_grad()
+            
+            # Real images
+            real_output = discriminator(real_images)
+            d_loss_real = criterion(real_output, real_labels)
+            
+            # Fake images
+            noise = torch.randn(batch_size, noise_dim).to(device)
+            fake_images = generator(noise)
+            fake_output = discriminator(fake_images.detach())
+            d_loss_fake = criterion(fake_output, fake_labels)
+            
+            # Total discriminator loss
+            d_loss = d_loss_real + d_loss_fake
+            d_loss.backward()
+            optimizer_D.step()
+            
+            # ===============================
+            # Train Generator
+            # ===============================
+            optimizer_G.zero_grad()
+            
+            # Generate fake images and get discriminator output
+            fake_output = discriminator(fake_images)
+            g_loss = criterion(fake_output, real_labels)  # Want discriminator to think fake is real
+            
+            g_loss.backward()
+            optimizer_G.step()
+            
+            # Track losses
+            G_losses.append(g_loss.item())
+            D_losses.append(d_loss.item())
+            
+            # Print progress
+            if batch_idx % 200 == 0:
+                print(f'Epoch [{epoch+1}/{num_epochs}], Step [{batch_idx}/{len(data_loader)}], '
+                      f'D_loss: {d_loss.item():.4f}, G_loss: {g_loss.item():.4f}')
+        
+        # Generate images for visualization
+        if (epoch + 1) % 10 == 0:
+            with torch.no_grad():
+                fake_images = generator(fixed_noise)
+                fake_images = fake_images.view(-1, 1, 28, 28)
+                show_images(fake_images, f"Generated Images - Epoch {epoch+1}")
+    
+    return G_losses, D_losses
+
+# Train the GAN
+print("Training GAN...")
+G_losses, D_losses = train_gan(generator, discriminator, data_loader, num_epochs=20)
+print("Training completed!")</code></pre>
+                </div>
+                
+                <h3>Step 5: Visualize Training Progress</h3>
+                <div class="framework-code pytorch-code">
+                    <div class="code-header">
+                        <span>Python</span>
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    </div>
+                    <pre><code class="language-python"># Plot training losses
+plt.figure(figsize=(12, 4))
+
+plt.subplot(1, 2, 1)
+plt.plot(G_losses, label='Generator Loss')
+plt.plot(D_losses, label='Discriminator Loss')
+plt.title('GAN Training Losses')
+plt.xlabel('Iteration')
+plt.ylabel('Loss')
+plt.legend()
+plt.grid(True)
+
+# Generate final images
+plt.subplot(1, 2, 2)
+with torch.no_grad():
+    final_noise = torch.randn(16, noise_dim).to(device)
+    final_images = generator(final_noise)
+    final_images = final_images.view(-1, 1, 28, 28)
+    
+    # Denormalize and create grid
+    final_images = (final_images + 1) / 2
+    grid = torchvision.utils.make_grid(final_images, nrow=4, padding=2)
+    
+    plt.imshow(grid.permute(1, 2, 0))
+    plt.title('Final Generated Images')
+    plt.axis('off')
+
+plt.tight_layout()
+plt.show()
+
+# Generate and display more samples
+print("Generating new samples...")
+with torch.no_grad():
+    sample_noise = torch.randn(64, noise_dim).to(device)
+    generated_samples = generator(sample_noise)
+    generated_samples = generated_samples.view(-1, 1, 28, 28)
+    show_images(generated_samples, "Generated MNIST Samples", nrow=8)</code></pre>
+                </div>
+                
+                <h3>Challenge 1</h3>
+                <p>Implement a Deep Convolutional GAN (DCGAN) using convolutional layers instead of fully connected layers. This typically produces better quality images.</p>
+                
+                <div class="alert alert-secondary mt-4" role="alert" style="background-color: rgba(0, 0, 0, 0.05); border-left: 5px solid #555; color: #333; border-radius: 10px;">
+                    <div class="d-flex">
+                        <div class="me-3">
+                            <i class="bi bi-lightbulb-fill" style="font-size: 1.5rem; color: #555;"></i>
+                        </div>
+                        <div>
+                            <h4 style="color: #333; font-weight: 600;">Hint</h4>
+                            <p class="mb-0">Use nn.ConvTranspose2d for the generator and nn.Conv2d for the discriminator. Start with a small feature map and upsample in the generator.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="framework-section pytorch-section">
+                <h2>Summary</h2>
+                <p>In this exercise, you've learned:</p>
+                <ul>
+                    <li>How to implement generator and discriminator networks</li>
+                    <li>Understanding adversarial training dynamics</li>
+                    <li>Proper loss functions and optimization for GANs</li>
+                    <li>Generating synthetic images from random noise</li>
+                    <li>Monitoring and visualizing GAN training progress</li>
+                </ul>
+                
+                <div class="text-center mt-5">
+                    <a href="/frameworks/pytorch/exercises/attention" class="btn btn-lg" style="background: linear-gradient(135deg, var(--pytorch-primary), var(--pytorch-secondary)); color: white; font-weight: 600; border-radius: 30px; padding: 12px 30px; box-shadow: 0 10px 20px rgba(238, 76, 44, 0.3);">
+                        <i class="bi bi-arrow-right-circle me-2"></i> Next Exercise: Attention Mechanisms
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/components/prism-python.min.js"></script>
+<script>
+    function copyCode(button) {
+        const codeBlock = button.parentElement.nextElementSibling;
+        const code = codeBlock.textContent;
+        
+        navigator.clipboard.writeText(code).then(() => {
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            button.style.backgroundColor = 'rgba(46, 125, 50, 0.3)';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.backgroundColor = '';
+            }, 2000);
+        });
+    }
+</script>
+{% endblock %}

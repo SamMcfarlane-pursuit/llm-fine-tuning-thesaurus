@@ -390,6 +390,11 @@ def test_working_ai():
 def test_clean_navigation():
     return render_template('test-clean-navigation.html')
 
+@app.route('/auth-test')
+def auth_test():
+    """Authentication test page to verify all OAuth providers."""
+    return render_template('auth_test.html', config=app.config)
+
 @app.route('/analytics')
 def analytics_dashboard():
     return render_template('analytics_dashboard.html', base_template='base-simple.html')

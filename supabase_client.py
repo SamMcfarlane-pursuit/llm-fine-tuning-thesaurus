@@ -11,30 +11,51 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Get Supabase credentials from environment variables
+SUPABASE_URL = os.environ.get('SUPABASE_URL')
+SUPABASE_KEY = os.environ.get('SUPABASE_KEY')
+
 # Initialize Supabase client
 supabase = None
 
-# Create a dummy client for development
-class DummyClient:
-    def __getattr__(self, name):
-        return self
-    def __call__(self, *args, **kwargs):
-        return self
-    def table(self, *args, **kwargs):
-        return self
-    def select(self, *args, **kwargs):
-        return self
-    def insert(self, *args, **kwargs):
-        return self
-    def update(self, *args, **kwargs):
-        return self
-    def delete(self, *args, **kwargs):
-        return self
-    def eq(self, *args, **kwargs):
-        return self
-    def execute(self, *args, **kwargs):
-        return type('obj', (object,), {'data': []})
-supabase = DummyClient()
+try:
+    if SUPABASE_URL and SUPABASE_KEY and SUPABASE_URL != 'your-supabase-url':
+        supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+        print("✅ Supabase client initialized successfully")
+    else:
+        print("⚠️  Supabase credentials not configured, using dummy client")
+        raise ValueError("Supabase not configured")
+except Exception as e:
+    print(f"⚠️  Supabase initialization failed: {e}")
+    # Create a dummy client for development
+    class DummyClient:
+        def __getattr__(self, name):
+            return self
+        def __call__(self, *args, **kwargs):
+            return self
+        def table(self, *args, **kwargs):
+            return self
+        def select(self, *args, **kwargs):
+            return self
+        def insert(self, *args, **kwargs):
+            return self
+        def update(self, *args, **kwargs):
+            return self
+        def delete(self, *args, **kwargs):
+            return self
+        def eq(self, *args, **kwargs):
+            return self
+        def execute(self, *args, **kwargs):
+            return type('obj', (object,), {'data': []})
+        @property
+        def auth(self):
+            return self
+        def set_session(self, *args, **kwargs):
+            return self
+        def get_user(self, *args, **kwargs):
+            return type('obj', (object,), {'user': None})
+        def sign_up(self, *args, **kwargs):
+            return type('obj', (object,), {'user': None})
+    supabase = DummyClient()
 
 def get_user_by_email(email):
     """Get user by email from Supabase."""

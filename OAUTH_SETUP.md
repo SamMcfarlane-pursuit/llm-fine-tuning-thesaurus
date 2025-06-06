@@ -45,22 +45,7 @@ This guide will help you set up OAuth authentication for the Thesaurus LLM Fine-
     GITHUB_CLIENT_SECRET=your-client-secret
     ```
 
-## Facebook OAuth Setup
 
-1. Go to the [Facebook Developers](https://developers.facebook.com/) website
-2. Create a new app or select an existing one
-3. Navigate to "Settings" > "Basic"
-4. Note the App ID and App Secret
-5. Navigate to "Facebook Login" > "Settings"
-6. Add the following OAuth Redirect URIs:
-   - `http://localhost:5002/auth/login/facebook/callback`
-   - `https://your-domain.com/auth/login/facebook/callback` (for production)
-7. Save changes
-8. Add these credentials to your `.env` file:
-    ```
-    FACEBOOK_CLIENT_ID=your-app-id
-    FACEBOOK_CLIENT_SECRET=your-app-secret
-    ```
 
 ## Testing OAuth
 

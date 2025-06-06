@@ -31,7 +31,7 @@ class User(UserMixin, db.Model):
     stripe_customer_id = db.Column(db.String(128))
 
     # OAuth related fields
-    oauth_provider = db.Column(db.String(20))  # 'google', 'github', 'facebook', etc.
+    oauth_provider = db.Column(db.String(20))  # 'google', 'github', 'supabase', etc.
     oauth_id = db.Column(db.String(128))       # ID from the OAuth provider
 
     # Relationships
@@ -121,7 +121,7 @@ class SocialAccount(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    provider = db.Column(db.String(20))  # 'google', 'github', 'facebook', etc.
+    provider = db.Column(db.String(20))  # 'google', 'github', 'supabase', etc.
     social_id = db.Column(db.String(128))
     access_token = db.Column(db.String(256))
     refresh_token = db.Column(db.String(256))

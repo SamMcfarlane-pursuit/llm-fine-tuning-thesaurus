@@ -42,16 +42,7 @@ def init_oauth(app):
         client_kwargs={'scope': 'user:email'}
     )
 
-    # Register Facebook OAuth client
-    oauth.register(
-        name='facebook',
-        client_id=app.config.get('FACEBOOK_CLIENT_ID'),
-        client_secret=app.config.get('FACEBOOK_CLIENT_SECRET'),
-        access_token_url='https://graph.facebook.com/oauth/access_token',
-        authorize_url='https://www.facebook.com/dialog/oauth',
-        api_base_url='https://graph.facebook.com/',
-        client_kwargs={'scope': 'email'}
-    )
+
 
 # OAuth clients are now registered in the init_oauth function
 
@@ -76,17 +67,10 @@ def github():
     return oauth.github.authorize_redirect(redirect_uri)
 
 
-@auth.route('/login/facebook')
-def facebook():
-    """Login with Facebook."""
-    if current_user.is_authenticated:
-        return redirect(url_for('main.index'))
-
-    redirect_uri = url_for('auth.facebook_authorized', _external=True)
-    return oauth.facebook.authorize_redirect(redirect_uri)
 
 
-@auth.route('/login/google/callback')
+
+@auth.route('/login/google/authorized')
 def google_authorized():
     """Google OAuth callback."""
     try:
@@ -128,13 +112,13 @@ def google_authorized():
             user_id=user.id,
             provider='google',
             social_id=user_data.get('id'),
-            access_token=resp.get('access_token'),
-            expires_at=datetime.now(timezone.utc) + timedelta(seconds=resp.get('expires_in', 3600))
+            access_token=token.get('access_token'),
+            expires_at=datetime.now(timezone.utc) + timedelta(seconds=token.get('expires_in', 3600))
         )
         db.session.add(social_account)
     else:
-        social_account.access_token = resp.get('access_token')
-        social_account.expires_at = datetime.now(timezone.utc) + timedelta(seconds=resp.get('expires_in', 3600))
+        social_account.access_token = token.get('access_token')
+        social_account.expires_at = datetime.now(timezone.utc) + timedelta(seconds=token.get('expires_in', 3600))
 
     db.session.commit()
 
@@ -143,10 +127,10 @@ def google_authorized():
     user.update_last_login()
 
     flash('Successfully logged in with Google!', 'success')
-    return redirect(url_for('main.index'))
+    return redirect(url_for('index'))
 
 
-@auth.route('/login/github/callback')
+@auth.route('/login/github/authorized')
 def github_authorized():
     """GitHub OAuth callback."""
     try:
@@ -203,11 +187,11 @@ def github_authorized():
             user_id=user.id,
             provider='github',
             social_id=str(user_data.get('id')),
-            access_token=resp.get('access_token')
+            access_token=token.get('access_token')
         )
         db.session.add(social_account)
     else:
-        social_account.access_token = resp.get('access_token')
+        social_account.access_token = token.get('access_token')
 
     db.session.commit()
 
@@ -216,73 +200,10 @@ def github_authorized():
     user.update_last_login()
 
     flash('Successfully logged in with GitHub!', 'success')
-    return redirect(url_for('main.index'))
+    return redirect(url_for('index'))
 
 
-@auth.route('/login/facebook/callback')
-def facebook_authorized():
-    """Facebook OAuth callback."""
-    try:
-        token = oauth.facebook.authorize_access_token()
-        if not token:
-            flash('Login failed: Unable to get access token', 'danger')
-            return redirect(url_for('auth.login'))
 
-        # Get user info from Facebook
-        resp = oauth.facebook.get('/me?fields=id,name,email,picture.type(large)')
-        user_data = resp.json()
-
-        # Check if email is available
-        email = user_data.get('email')
-        if not email:
-            flash('Email not available from Facebook. Please grant email permission.', 'danger')
-            return redirect(url_for('auth.login'))
-
-        # Check if user exists
-        user = User.query.filter_by(email=email).first()
-    except Exception as e:
-        flash(f'Login failed: {str(e)}', 'danger')
-        return redirect(url_for('auth.login'))
-
-    if user is None:
-        # Create new user
-        user = User(
-            username=email.split('@')[0],
-            email=email,
-            name=user_data.get('name'),
-            avatar_url=user_data.get('picture', {}).get('data', {}).get('url'),
-            oauth_provider='facebook',
-            oauth_id=user_data.get('id')
-        )
-        db.session.add(user)
-        db.session.commit()
-
-    # Update or create social account
-    social_account = SocialAccount.query.filter_by(
-        user_id=user.id, provider='facebook'
-    ).first()
-
-    if social_account is None:
-        social_account = SocialAccount(
-            user_id=user.id,
-            provider='facebook',
-            social_id=user_data.get('id'),
-            access_token=resp.get('access_token'),
-            expires_at=datetime.now(timezone.utc) + timedelta(seconds=resp.get('expires', 3600))
-        )
-        db.session.add(social_account)
-    else:
-        social_account.access_token = resp.get('access_token')
-        social_account.expires_at = datetime.now(timezone.utc) + timedelta(seconds=resp.get('expires', 3600))
-
-    db.session.commit()
-
-    # Log in user
-    login_user(user)
-    user.update_last_login()
-
-    flash('Successfully logged in with Facebook!', 'success')
-    return redirect(url_for('main.index'))
 
 
 # Token management is handled automatically by Authlib

@@ -112,8 +112,7 @@ def get_oauth_providers():
     """Get OAuth providers for templates."""
     return [
         {'name': 'Google', 'icon': 'google', 'url': url_for('auth.google')},
-        {'name': 'GitHub', 'icon': 'github', 'url': url_for('auth.github')},
-        {'name': 'Facebook', 'icon': 'facebook', 'url': url_for('auth.facebook')}
+        {'name': 'GitHub', 'icon': 'github', 'url': url_for('auth.github')}
     ]
 
 
@@ -150,8 +149,7 @@ def register():
     # Pass OAuth providers to template
     oauth_providers = [
         {'name': 'Google', 'icon': 'google', 'url': url_for('auth.google')},
-        {'name': 'GitHub', 'icon': 'github', 'url': url_for('auth.github')},
-        {'name': 'Facebook', 'icon': 'facebook', 'url': url_for('auth.facebook')}
+        {'name': 'GitHub', 'icon': 'github', 'url': url_for('auth.github')}
     ]
 
     return render_template('auth/register.html', title='Register', form=form, oauth_providers=oauth_providers)
@@ -244,8 +242,7 @@ def convert_guest():
     # Pass OAuth providers to template
     oauth_providers = [
         {'name': 'google', 'icon': 'google', 'display_name': 'Google'},
-        {'name': 'github', 'icon': 'github', 'display_name': 'GitHub'},
-        {'name': 'facebook', 'icon': 'facebook', 'display_name': 'Facebook'}
+        {'name': 'github', 'icon': 'github', 'display_name': 'GitHub'}
     ]
 
     return render_template(

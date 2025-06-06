@@ -15,7 +15,7 @@ from supabase_client import supabase
 def supabase_login():
     """Login with Supabase."""
     if current_user.is_authenticated:
-        return redirect(url_for('main.index'))
+        return redirect(url_for('index'))
 
     # Redirect to Supabase hosted auth page
     redirect_url = url_for('auth.supabase_callback', _external=True)
@@ -96,7 +96,7 @@ def supabase_callback():
         user.update_last_login()
 
         flash('Successfully logged in with Supabase!', 'success')
-        return redirect(url_for('main.index'))
+        return redirect(url_for('index'))
 
     except Exception as e:
         flash(f'Login failed: {str(e)}', 'danger')

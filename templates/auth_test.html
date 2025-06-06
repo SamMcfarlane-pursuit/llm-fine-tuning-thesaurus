@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication Test - Visual LLM</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .auth-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        .auth-section h2 {
+            margin-top: 0;
+            color: #555;
+        }
+        .auth-button {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 10px 10px 10px 0;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        .google-btn {
+            background: #4285f4;
+            color: white;
+        }
+        .google-btn:hover {
+            background: #357ae8;
+        }
+        .github-btn {
+            background: #333;
+            color: white;
+        }
+        .github-btn:hover {
+            background: #24292e;
+        }
+
+        .supabase-btn {
+            background: #3ecf8e;
+            color: white;
+        }
+        .supabase-btn:hover {
+            background: #2bb673;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .config-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .config-section h3 {
+            margin-top: 0;
+            color: #495057;
+        }
+        .config-item {
+            margin: 10px 0;
+            font-family: monospace;
+            background: white;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+        }
+        .test-results {
+            margin-top: 30px;
+        }
+        .test-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+            background: #f8f9fa;
+        }
+        .test-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .test-status.ready {
+            background: #d4edda;
+            color: #155724;
+        }
+        .test-status.not-configured {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .test-status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Authentication Test Page</h1>
+        
+        <div class="status info">
+            <strong>Current Status:</strong> 
+            {% if current_user.is_authenticated %}
+                ✅ Logged in as {{ current_user.name or current_user.username or current_user.email }}
+                <br><small>Provider: {{ current_user.oauth_provider or 'Local' }}</small>
+            {% else %}
+                ❌ Not logged in
+            {% endif %}
+        </div>
+
+        {% if not current_user.is_authenticated %}
+        <div class="auth-section">
+            <h2>🚀 Test Authentication Providers</h2>
+            <p>Click on each button to test the authentication flow:</p>
+            
+            <a href="{{ url_for('auth.google') }}" class="auth-button google-btn">
+                🔍 Sign in with Google
+            </a>
+            
+            <a href="{{ url_for('auth.github') }}" class="auth-button github-btn">
+                🐙 Sign in with GitHub
+            </a>
+
+            <a href="{{ url_for('auth.supabase_login') }}" class="auth-button supabase-btn">
+                ⚡ Sign in with Supabase
+            </a>
+        </div>
+        {% else %}
+        <div class="auth-section">
+            <h2>✅ Authentication Successful!</h2>
+            <p>You are successfully logged in. You can now:</p>
+            <ul>
+                <li>Access protected pages</li>
+                <li>Save your progress</li>
+                <li>Take quizzes and track results</li>
+                <li>Bookmark content</li>
+            </ul>
+            <a href="{{ url_for('auth.logout') }}" class="auth-button" style="background: #dc3545; color: white;">
+                🚪 Logout
+            </a>
+            <a href="{{ url_for('index') }}" class="auth-button" style="background: #28a745; color: white;">
+                🏠 Go to Homepage
+            </a>
+        </div>
+        {% endif %}
+
+        <div class="config-section">
+            <h3>📋 Configuration Status</h3>
+            <div class="test-results">
+                <div class="test-item">
+                    <span>Google OAuth</span>
+                    <span class="test-status {% if config.GOOGLE_CLIENT_ID and config.GOOGLE_CLIENT_ID != 'your-google-client-id' %}ready{% else %}not-configured{% endif %}">
+                        {% if config.GOOGLE_CLIENT_ID and config.GOOGLE_CLIENT_ID != 'your-google-client-id' %}CONFIGURED{% else %}NOT CONFIGURED{% endif %}
+                    </span>
+                </div>
+                <div class="test-item">
+                    <span>GitHub OAuth</span>
+                    <span class="test-status {% if config.GITHUB_CLIENT_ID and config.GITHUB_CLIENT_ID != 'your-github-client-id' %}ready{% else %}not-configured{% endif %}">
+                        {% if config.GITHUB_CLIENT_ID and config.GITHUB_CLIENT_ID != 'your-github-client-id' %}CONFIGURED{% else %}NOT CONFIGURED{% endif %}
+                    </span>
+                </div>
+
+                <div class="test-item">
+                    <span>Supabase</span>
+                    <span class="test-status {% if config.SUPABASE_URL and config.SUPABASE_URL != 'your-supabase-url' %}ready{% else %}not-configured{% endif %}">
+                        {% if config.SUPABASE_URL and config.SUPABASE_URL != 'your-supabase-url' %}CONFIGURED{% else %}NOT CONFIGURED{% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="config-section">
+            <h3>🔧 Required Redirect URIs</h3>
+            <p>Use these exact URLs when configuring your OAuth applications:</p>
+            <div class="config-item">Google: http://127.0.0.1:5037/auth/login/google/authorized</div>
+            <div class="config-item">GitHub: http://127.0.0.1:5037/auth/login/github/authorized</div>
+
+            <div class="config-item">Supabase: http://127.0.0.1:5037/auth/login/supabase/callback</div>
+        </div>
+
+        <div class="config-section">
+            <h3>📖 Setup Instructions</h3>
+            <p>To configure authentication providers:</p>
+            <ol>
+                <li>Follow the <strong>AUTHENTICATION_SETUP_GUIDE.md</strong> in your project root</li>
+                <li>Update your <strong>.env</strong> file with the actual client IDs and secrets</li>
+                <li>Restart the application to load new environment variables</li>
+                <li>Return to this page to test each provider</li>
+            </ol>
+        </div>
+    </div>
+</body>
+</html>

@@ -8,11 +8,7 @@ class EnhancedAuth {
         this.initialized = false;
         this.authProviders = [
             { name: 'Google', icon: 'google', color: '#4285F4' },
-            { name: 'GitHub', icon: 'github', color: '#333333' },
-            { name: 'Facebook', icon: 'facebook', color: '#3b5998' },
-            { name: 'Apple', icon: 'apple', color: '#000000' },
-            { name: 'Microsoft', icon: 'microsoft', color: '#00a1f1' },
-            { name: 'Twitter', icon: 'twitter', color: '#1DA1F2' }
+            { name: 'GitHub', icon: 'github', color: '#333333' }
         ];
         this.currentUser = null;
         this.authStateListeners = [];

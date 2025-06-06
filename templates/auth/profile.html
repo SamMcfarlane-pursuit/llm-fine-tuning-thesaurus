@@ -39,8 +39,7 @@
                             <span class="badge bg-danger me-2"><i class="bi bi-google me-1"></i>Google</span>
                         {% elif current_user.oauth_provider == 'github' %}
                             <span class="badge bg-dark me-2"><i class="bi bi-github me-1"></i>GitHub</span>
-                        {% elif current_user.oauth_provider == 'facebook' %}
-                            <span class="badge bg-primary me-2"><i class="bi bi-facebook me-1"></i>Facebook</span>
+
                         {% endif %}
                     </div>
                 </div>
@@ -130,22 +129,7 @@
                             {% endif %}
                         </li>
 
-                        <!-- Facebook -->
-                        {% set facebook_connected = false %}
-                        {% for account in social_accounts if account.provider == 'facebook' %}
-                            {% set facebook_connected = true %}
-                        {% endfor %}
 
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <div>
-                                <i class="bi bi-facebook me-2 text-primary"></i>Facebook
-                            </div>
-                            {% if facebook_connected %}
-                                <span class="badge bg-success rounded-pill">Connected</span>
-                            {% else %}
-                                <a href="{{ url_for('auth.facebook') }}" class="btn btn-sm btn-outline-primary">Connect</a>
-                            {% endif %}
-                        </li>
 
                         <!-- Supabase -->
                         {% set supabase_connected = false %}

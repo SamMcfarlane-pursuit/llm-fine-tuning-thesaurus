@@ -1,0 +1,317 @@
+{% extends "base.html" %}
+
+{% block title %}API Training & Management - Visual LLM{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">
+                        <i class="bi bi-cloud-arrow-up-fill me-2"></i>
+                        Enhanced API Training & Management
+                    </h2>
+                    <p class="mb-0 text-muted">Manage multiple AI providers and train models with advanced APIs</p>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <div class="h4 mb-0" id="totalProviders">-</div>
+                                <small class="text-muted">Total Providers</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <div class="h4 mb-0 text-success" id="activeProviders">-</div>
+                                <small class="text-muted">Active Providers</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <div class="h4 mb-0 text-info" id="totalRequests">-</div>
+                                <small class="text-muted">Total Requests</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <div class="h4 mb-0 text-warning" id="totalCost">$-</div>
+                                <small class="text-muted">Total Cost</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Provider Management -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4><i class="bi bi-gear-wide-connected me-2"></i>Provider Management</h4>
+                </div>
+                <div class="card-body">
+                    <div id="providersGrid" class="row">
+                        <!-- Providers will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Smart Query Interface -->
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4><i class="bi bi-chat-dots-fill me-2"></i>Smart Query Interface</h4>
+                </div>
+                <div class="card-body">
+                    <!-- Query Preferences -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Cost Priority</label>
+                            <select class="form-select" id="costPriority">
+                                <option value="low">Low Cost (Free/Cheap)</option>
+                                <option value="medium">Medium Cost</option>
+                                <option value="high">High Cost (Premium)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Speed Priority</label>
+                            <select class="form-select" id="speedPriority">
+                                <option value="low">Low Speed</option>
+                                <option value="medium" selected>Medium Speed</option>
+                                <option value="high">High Speed</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Quality Priority</label>
+                            <select class="form-select" id="qualityPriority">
+                                <option value="low">Low Quality</option>
+                                <option value="medium">Medium Quality</option>
+                                <option value="high" selected>High Quality</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Query Input -->
+                    <div class="mb-3">
+                        <label for="queryInput" class="form-label">Your Question</label>
+                        <textarea class="form-control" id="queryInput" rows="4" 
+                                  placeholder="Ask about LLM fine-tuning, LoRA, QLoRA, or any AI/ML topic..."></textarea>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex gap-2 mb-3">
+                        <button class="btn btn-primary" onclick="sendSmartQuery()" id="sendQueryBtn">
+                            <i class="bi bi-send-fill"></i> Send Smart Query
+                        </button>
+                        <button class="btn btn-outline-secondary" onclick="clearQuery()">
+                            <i class="bi bi-trash"></i> Clear
+                        </button>
+                        <div class="dropdown">
+                            <button class="btn btn-outline-info dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                <i class="bi bi-lightbulb"></i> Examples
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#" onclick="loadExample('lora')">What is LoRA fine-tuning?</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="loadExample('qlora')">How does QLoRA work?</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="loadExample('comparison')">Compare LoRA vs QLoRA</a></li>
+                                <li><a class="dropdown-item" href="#" onclick="loadExample('implementation')">Show me LoRA implementation</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Response Area -->
+                    <div id="responseArea" class="d-none">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0">Response</h6>
+                                <div>
+                                    <span class="badge bg-primary" id="responseProvider">-</span>
+                                    <span class="badge bg-secondary" id="responseModel">-</span>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div id="responseContent"></div>
+                                <div class="row mt-3 text-muted small">
+                                    <div class="col-md-3">
+                                        <strong>Tokens:</strong> <span id="responseTokens">-</span>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <strong>Cost:</strong> $<span id="responseCost">-</span>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <strong>Latency:</strong> <span id="responseLatency">-</span>ms
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button class="btn btn-sm btn-outline-primary" onclick="copyResponse()">
+                                            <i class="bi bi-clipboard"></i> Copy
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Provider Recommendations -->
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="bi bi-star-fill me-2"></i>Recommendations</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">Use Case</label>
+                        <select class="form-select" id="useCaseSelect" onchange="loadRecommendations()">
+                            <option value="educational">Educational</option>
+                            <option value="development">Development</option>
+                            <option value="production">Production</option>
+                            <option value="cost_sensitive">Cost Sensitive</option>
+                            <option value="high_quality">High Quality</option>
+                            <option value="fast_inference">Fast Inference</option>
+                        </select>
+                    </div>
+                    <div id="recommendationsContent">
+                        <div class="text-center">
+                            <div class="spinner-border text-primary" role="status"></div>
+                            <p class="mt-2">Loading recommendations...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Query History -->
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6><i class="bi bi-clock-history me-2"></i>Recent Queries</h6>
+                </div>
+                <div class="card-body">
+                    <div id="queryHistory">
+                        <div class="text-center text-muted">
+                            <i class="bi bi-inbox"></i>
+                            <p class="mt-2">No queries yet</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- API Configuration Modal -->
+    <div class="modal fade" id="apiConfigModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">API Configuration</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="apiConfigForm">
+                        <div class="mb-3">
+                            <label for="providerName" class="form-label">Provider</label>
+                            <input type="text" class="form-control" id="providerName" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="apiKey" class="form-label">API Key</label>
+                            <input type="password" class="form-control" id="apiKey" placeholder="Enter API key...">
+                            <div class="form-text">Your API key will be stored securely</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="baseUrl" class="form-label">Base URL</label>
+                            <input type="url" class="form-control" id="baseUrl" readonly>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="enableProvider">
+                            <label class="form-check-label" for="enableProvider">
+                                Enable this provider
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveApiConfig()">Save Configuration</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.provider-card {
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    padding: var(--space-4);
+    margin-bottom: var(--space-3);
+    background: var(--bg-secondary);
+    transition: all var(--transition-fast);
+}
+
+.provider-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.provider-card.enabled {
+    border-left: 4px solid var(--success);
+}
+
+.provider-card.disabled {
+    border-left: 4px solid var(--error);
+    opacity: 0.7;
+}
+
+.provider-status {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: var(--space-2);
+}
+
+.provider-status.online {
+    background-color: var(--success);
+}
+
+.provider-status.offline {
+    background-color: var(--error);
+}
+
+.query-history-item {
+    padding: var(--space-2);
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: background-color var(--transition-fast);
+}
+
+.query-history-item:hover {
+    background-color: var(--bg-tertiary);
+}
+
+.query-history-item:last-child {
+    border-bottom: none;
+}
+
+.recommendation-item {
+    padding: var(--space-2);
+    background: var(--bg-tertiary);
+    border-radius: var(--border-radius);
+    margin-bottom: var(--space-2);
+}
+
+.recommendation-item.recommended {
+    border-left: 3px solid var(--primary);
+}
+</style>
+
+<script src="{{ url_for('static', filename='js/api-training.js') }}"></script>
+{% endblock %}

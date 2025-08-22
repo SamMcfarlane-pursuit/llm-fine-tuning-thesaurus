@@ -1,0 +1,570 @@
+{% extends "base.html" %}
+
+{% block title %}Train Your Own LoRA Model - Visual LLM{% endblock %}
+
+{% block extra_css %}
+<style>
+    .training-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .training-card {
+        background: var(--card-bg);
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 24px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .training-header {
+        text-align: center;
+        margin-bottom: 32px;
+    }
+    
+    .training-header h1 {
+        color: var(--primary-color);
+        margin-bottom: 12px;
+        font-size: 2.5rem;
+    }
+    
+    .training-form {
+        display: grid;
+        gap: 20px;
+    }
+    
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .form-group label {
+        font-weight: 600;
+        color: var(--text-color);
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 12px;
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
+        background: var(--input-bg);
+        color: var(--text-color);
+        font-size: 14px;
+        transition: border-color 0.3s ease;
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+    }
+    
+    .dataset-textarea {
+        min-height: 200px;
+        font-family: 'Courier New', monospace;
+        resize: vertical;
+    }
+    
+    .training-config {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        padding: 16px;
+        background: var(--secondary-bg);
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+    }
+    
+    .config-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+    
+    .config-item label {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--text-muted);
+    }
+    
+    .config-item input {
+        padding: 8px;
+        font-size: 12px;
+    }
+    
+    .limits-info {
+        background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 20px;
+    }
+    
+    .limits-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+        margin-top: 12px;
+    }
+    
+    .limit-item {
+        text-align: center;
+        padding: 8px;
+        background: rgba(255,255,255,0.7);
+        border-radius: 6px;
+    }
+    
+    .limit-value {
+        font-size: 18px;
+        font-weight: bold;
+        color: var(--primary-color);
+    }
+    
+    .limit-label {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-top: 4px;
+    }
+    
+    .train-button {
+        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        color: white;
+        border: none;
+        padding: 16px 32px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 20px;
+    }
+    
+    .train-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    
+    .train-button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+    }
+    
+    .jobs-section {
+        margin-top: 40px;
+    }
+    
+    .job-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 12px;
+        transition: all 0.3s ease;
+    }
+    
+    .job-card:hover {
+        border-color: var(--primary-color);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .job-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+    
+    .job-name {
+        font-weight: 600;
+        color: var(--text-color);
+    }
+    
+    .job-status {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+    }
+    
+    .status-pending { background: #fff3cd; color: #856404; }
+    .status-running { background: #d1ecf1; color: #0c5460; }
+    .status-completed { background: #d4edda; color: #155724; }
+    .status-failed { background: #f8d7da; color: #721c24; }
+    
+    .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: var(--border-color);
+        border-radius: 4px;
+        overflow: hidden;
+        margin: 8px 0;
+    }
+    
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        transition: width 0.3s ease;
+    }
+    
+    .job-details {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 8px;
+        font-size: 12px;
+        color: var(--text-muted);
+    }
+    
+    .example-datasets {
+        margin-top: 16px;
+    }
+    
+    .example-item {
+        background: var(--secondary-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        padding: 12px;
+        margin-bottom: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .example-item:hover {
+        border-color: var(--primary-color);
+        background: var(--primary-color-light);
+    }
+    
+    .example-title {
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+    
+    .example-description {
+        font-size: 12px;
+        color: var(--text-muted);
+    }
+    
+    @media (max-width: 768px) {
+        .training-container {
+            padding: 12px;
+        }
+        
+        .training-config {
+            grid-template-columns: 1fr;
+        }
+        
+        .limits-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="training-container">
+    <!-- Header -->
+    <div class="training-header">
+        <h1>👥 Train Your Own LoRA Model</h1>
+        <p>Create custom LoRA adapters with your own datasets - completely free!</p>
+    </div>
+    
+    <!-- Limits Information -->
+    <div class="training-card">
+        <h3>🎯 Free Tier Limits</h3>
+        <div class="limits-info">
+            <p>Your current usage and limits:</p>
+            <div class="limits-grid" id="limitsGrid">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Training Form -->
+    <div class="training-card">
+        <h3>🚀 Create New Training Job</h3>
+        <form class="training-form" id="trainingForm">
+            <div class="form-group">
+                <label for="modelName">Model Name *</label>
+                <input type="text" id="modelName" name="modelName" placeholder="e.g., my_custom_assistant" required>
+                <small>Choose a unique name for your LoRA model</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="baseModel">Base Model</label>
+                <select id="baseModel" name="baseModel">
+                    <option value="microsoft/DialoGPT-small">DialoGPT-Small (Recommended for beginners)</option>
+                    <option value="microsoft/DialoGPT-medium">DialoGPT-Medium (Better quality)</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="datasetContent">Training Dataset *</label>
+                <textarea id="datasetContent" name="datasetContent" class="dataset-textarea" 
+                         placeholder="Enter your training data here. Format: Question: Answer (one per line)" required></textarea>
+                <small>Maximum 10MB. Use format: "Question: Answer" or just text for completion tasks.</small>
+            </div>
+            
+            <!-- Example Datasets -->
+            <div class="example-datasets">
+                <h4>📚 Example Datasets (Click to use)</h4>
+                <div class="example-item" onclick="loadExampleDataset('educational')">
+                    <div class="example-title">🎓 Educational Assistant</div>
+                    <div class="example-description">Q&A pairs about learning and education</div>
+                </div>
+                <div class="example-item" onclick="loadExampleDataset('coding')">
+                    <div class="example-title">💻 Coding Helper</div>
+                    <div class="example-description">Programming questions and code examples</div>
+                </div>
+                <div class="example-item" onclick="loadExampleDataset('creative')">
+                    <div class="example-title">✨ Creative Writing</div>
+                    <div class="example-description">Story prompts and creative responses</div>
+                </div>
+            </div>
+            
+            <!-- Advanced Configuration -->
+            <div class="form-group">
+                <label>⚙️ Advanced Configuration (Optional)</label>
+                <div class="training-config">
+                    <div class="config-item">
+                        <label for="rank">LoRA Rank</label>
+                        <input type="number" id="rank" name="rank" value="8" min="4" max="32">
+                    </div>
+                    <div class="config-item">
+                        <label for="alpha">LoRA Alpha</label>
+                        <input type="number" id="alpha" name="alpha" value="16" min="8" max="64">
+                    </div>
+                    <div class="config-item">
+                        <label for="epochs">Training Epochs</label>
+                        <input type="number" id="epochs" name="epochs" value="2" min="1" max="5">
+                    </div>
+                    <div class="config-item">
+                        <label for="learningRate">Learning Rate</label>
+                        <input type="number" id="learningRate" name="learningRate" value="0.0005" step="0.0001" min="0.0001" max="0.001">
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" class="train-button" id="trainButton">
+                🚀 Start Training
+            </button>
+        </form>
+    </div>
+    
+    <!-- Training Jobs -->
+    <div class="jobs-section">
+        <div class="training-card">
+            <h3>📊 Your Training Jobs</h3>
+            <div id="jobsList">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- User Models -->
+    <div class="training-card">
+        <h3>🎯 Your Trained Models</h3>
+        <div id="modelsList">
+            <!-- Populated by JavaScript -->
+        </div>
+    </div>
+</div>
+
+<script>
+// Example datasets
+const exampleDatasets = {
+    educational: `What is machine learning?: Machine learning is a subset of AI that enables computers to learn from data without explicit programming.
+How does neural network training work?: Neural networks learn by adjusting weights through backpropagation to minimize prediction errors.
+What is the difference between supervised and unsupervised learning?: Supervised learning uses labeled data while unsupervised learning finds patterns in unlabeled data.
+Explain gradient descent: Gradient descent is an optimization algorithm that iteratively adjusts parameters to minimize a loss function.
+What are the benefits of transfer learning?: Transfer learning allows models to leverage knowledge from pre-trained models, reducing training time and data requirements.`,
+    
+    coding: `How do I create a Python function?: def function_name(parameters): return result
+What is a for loop in Python?: for item in iterable: process(item)
+How to handle exceptions in Python?: try: risky_code() except Exception as e: handle_error(e)
+What is object-oriented programming?: OOP organizes code into classes and objects with properties and methods for better structure and reusability.
+How to read a file in Python?: with open('filename.txt', 'r') as file: content = file.read()`,
+    
+    creative: `Write a story about a magical forest: In the heart of the Whispering Woods, ancient trees held secrets that only the brave could discover.
+Describe a futuristic city: Towering spires of glass and light stretched toward the clouds, where flying vehicles danced between floating gardens.
+Create a character description: Elena was a fierce warrior with emerald eyes that sparkled with determination and a sword that sang in battle.
+Write a poem about the ocean: Waves crash against the shore with endless rhythm, carrying tales from distant lands across the deep blue expanse.
+Describe a mysterious artifact: The crystal orb pulsed with an inner light, its surface etched with symbols that seemed to shift and change when observed.`
+};
+
+// Load example dataset
+function loadExampleDataset(type) {
+    document.getElementById('datasetContent').value = exampleDatasets[type];
+}
+
+// Load user limits
+async function loadUserLimits() {
+    try {
+        const response = await fetch('/api/training/limits');
+        const data = await response.json();
+        
+        if (data.limits) {
+            const limitsGrid = document.getElementById('limitsGrid');
+            limitsGrid.innerHTML = `
+                <div class="limit-item">
+                    <div class="limit-value">${data.limits.daily_jobs_used}/${data.limits.daily_jobs_limit}</div>
+                    <div class="limit-label">Daily Jobs</div>
+                </div>
+                <div class="limit-item">
+                    <div class="limit-value">${data.limits.running_jobs}/${data.limits.max_concurrent}</div>
+                    <div class="limit-label">Running Jobs</div>
+                </div>
+                <div class="limit-item">
+                    <div class="limit-value">${data.limits.total_models}/${data.limits.max_models}</div>
+                    <div class="limit-label">Total Models</div>
+                </div>
+                <div class="limit-item">
+                    <div class="limit-value">${data.system_limits.max_training_time_minutes}</div>
+                    <div class="limit-label">Max Time (min)</div>
+                </div>
+            `;
+        }
+    } catch (error) {
+        console.error('Failed to load limits:', error);
+    }
+}
+
+// Load user jobs
+async function loadUserJobs() {
+    try {
+        const response = await fetch('/api/training/jobs');
+        const data = await response.json();
+        
+        const jobsList = document.getElementById('jobsList');
+        
+        if (data.jobs && data.jobs.length > 0) {
+            jobsList.innerHTML = data.jobs.map(job => `
+                <div class="job-card">
+                    <div class="job-header">
+                        <div class="job-name">${job.model_name}</div>
+                        <div class="job-status status-${job.status}">${job.status.toUpperCase()}</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${job.progress * 100}%"></div>
+                    </div>
+                    <div class="job-details">
+                        <div>Created: ${new Date(job.created_at).toLocaleDateString()}</div>
+                        <div>Progress: ${(job.progress * 100).toFixed(1)}%</div>
+                        ${job.completed_at ? `<div>Completed: ${new Date(job.completed_at).toLocaleDateString()}</div>` : ''}
+                        ${job.metrics ? `<div>Training Time: ${job.metrics.training_time_minutes?.toFixed(1)} min</div>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        } else {
+            jobsList.innerHTML = '<p>No training jobs yet. Create your first LoRA model above!</p>';
+        }
+    } catch (error) {
+        console.error('Failed to load jobs:', error);
+        document.getElementById('jobsList').innerHTML = '<p>Failed to load training jobs.</p>';
+    }
+}
+
+// Load user models
+async function loadUserModels() {
+    try {
+        const response = await fetch('/api/training/models');
+        const data = await response.json();
+        
+        const modelsList = document.getElementById('modelsList');
+        
+        if (data.models && data.models.length > 0) {
+            modelsList.innerHTML = data.models.map(model => `
+                <div class="job-card">
+                    <div class="job-header">
+                        <div class="job-name">🎯 ${model.model_name}</div>
+                        <div class="job-status status-completed">READY</div>
+                    </div>
+                    <div class="job-details">
+                        <div>Created: ${new Date(model.created_at).toLocaleDateString()}</div>
+                        <div>Rank: ${model.config.rank}</div>
+                        ${model.metrics ? `<div>Dataset Size: ${model.metrics.dataset_size}</div>` : ''}
+                        ${model.metrics ? `<div>Efficiency: ${model.metrics.efficiency_score?.toFixed(1)}</div>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        } else {
+            modelsList.innerHTML = '<p>No trained models yet. Complete a training job to see your models here!</p>';
+        }
+    } catch (error) {
+        console.error('Failed to load models:', error);
+        document.getElementById('modelsList').innerHTML = '<p>Failed to load trained models.</p>';
+    }
+}
+
+// Handle form submission
+document.getElementById('trainingForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    const trainButton = document.getElementById('trainButton');
+    
+    // Disable button
+    trainButton.disabled = true;
+    trainButton.textContent = '🚀 Creating Training Job...';
+    
+    try {
+        const response = await fetch('/api/training/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                model_name: formData.get('modelName'),
+                base_model: formData.get('baseModel'),
+                dataset_content: formData.get('datasetContent'),
+                config: {
+                    rank: parseInt(formData.get('rank')),
+                    alpha: parseInt(formData.get('alpha')),
+                    epochs: parseInt(formData.get('epochs')),
+                    learning_rate: parseFloat(formData.get('learningRate'))
+                }
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            alert(`✅ Training job created successfully! Job ID: ${result.job_id}\nEstimated time: ${result.estimated_time_minutes} minutes`);
+            
+            // Reset form
+            e.target.reset();
+            
+            // Reload data
+            loadUserLimits();
+            loadUserJobs();
+        } else {
+            alert(`❌ Failed to create training job: ${result.error}`);
+        }
+    } catch (error) {
+        console.error('Training submission error:', error);
+        alert('❌ Failed to submit training job. Please try again.');
+    } finally {
+        // Re-enable button
+        trainButton.disabled = false;
+        trainButton.textContent = '🚀 Start Training';
+    }
+});
+
+// Auto-refresh jobs every 30 seconds
+setInterval(() => {
+    loadUserJobs();
+    loadUserLimits();
+}, 30000);
+
+// Initial load
+document.addEventListener('DOMContentLoaded', () => {
+    loadUserLimits();
+    loadUserJobs();
+    loadUserModels();
+});
+</script>
+{% endblock %}

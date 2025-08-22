@@ -35,14 +35,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Initialize scroll event listeners (always do this)
         initScrollListeners();
 
-        // Add hover effects to navigation items
-        enhanceNavigationItems();
-
         // Add mobile-specific navigation enhancements
         enhanceMobileNavigation();
-
-        // Add page-specific enhancements based on URL
-        applyPageSpecificEnhancements();
 
         console.log('Enhanced navigation features initialized successfully');
     } catch (error) {

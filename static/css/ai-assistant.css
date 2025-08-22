@@ -1,71 +1,87 @@
 /**
- * AI Assistant Styles
- * Provides styling for the AI assistant component with improved visibility
- * Positioned at the bottom of the screen
+ * AI Assistant Styles - Enhanced UI/UX
+ * Clean, modern design matching the main theme
+ * Optimized for smooth interactions and accessibility
  */
 
-/* GUARANTEED AI BUTTON - ALWAYS VISIBLE */
+/* === AI ASSISTANT BUTTON === */
 .guaranteed-ai-button,
 .unified-ai-button,
 [data-ai-button] {
     position: fixed !important;
-    bottom: 25px !important;
-    right: 25px !important;
-    width: 75px !important;
-    height: 75px !important;
-    background: linear-gradient(135deg, #3c6430, #4f7a41) !important;
-    border: 4px solid #5a8a4d !important;
+    bottom: 24px !important;
+    right: 24px !important;
+    width: 64px !important;
+    height: 64px !important;
+    background: linear-gradient(135deg, var(--light-primary), #4f7a41) !important;
+    border: 2px solid rgba(60, 100, 48, 0.2) !important;
     border-radius: 50% !important;
     color: white !important;
-    font-size: 32px !important;
+    font-size: 24px !important;
     cursor: pointer !important;
-    box-shadow: 0 12px 48px rgba(60, 100, 48, 0.6), 0 0 0 0 rgba(60, 100, 48, 0.9) !important;
-    transition: all 0.3s ease !important;
-    z-index: 2147483647 !important;
+    box-shadow: 0 8px 32px rgba(60, 100, 48, 0.3) !important;
+    transition: all 250ms ease-in-out !important;
+    z-index: 1070 !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     opacity: 1 !important;
     visibility: visible !important;
     pointer-events: auto !important;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    font-family: var(--font-family-base, 'Inter', sans-serif) !important;
     outline: none !important;
-    user-select: none !important;
     -webkit-user-select: none !important;
-    -moz-user-select: none !important;
-    -ms-user-select: none !important;
+    user-select: none !important;
 }
 
 .guaranteed-ai-button:hover,
 .unified-ai-button:hover {
-    transform: scale(1.1) !important;
-    box-shadow: 0 15px 60px rgba(60, 100, 48, 0.8) !important;
+    transform: scale(1.05) !important;
+    box-shadow: 0 12px 40px rgba(60, 100, 48, 0.4) !important;
+    background: linear-gradient(135deg, #4f7a41, var(--light-primary)) !important;
 }
 
 .guaranteed-ai-button:active,
 .unified-ai-button:active {
-    transform: scale(0.95) !important;
+    transform: scale(0.98) !important;
 }
 
-/* Position the AI assistant container at the bottom right - EXACT MATCH TO IMAGE */
+/* Dark theme support for AI button */
+[data-theme="dark"] .guaranteed-ai-button,
+[data-theme="dark"] .unified-ai-button,
+[data-theme="dark"] [data-ai-button] {
+    background: linear-gradient(135deg, var(--dark-primary), #8bc7a0) !important;
+    border-color: rgba(167, 207, 155, 0.2) !important;
+    box-shadow: 0 8px 32px rgba(167, 207, 155, 0.2) !important;
+}
+
+[data-theme="dark"] .guaranteed-ai-button:hover,
+[data-theme="dark"] .unified-ai-button:hover {
+    background: linear-gradient(135deg, #8bc7a0, var(--dark-primary)) !important;
+    box-shadow: 0 12px 40px rgba(167, 207, 155, 0.3) !important;
+}
+
+/* === AI ASSISTANT CONTAINER === */
 .ai-assistant-container {
     position: fixed !important;
     bottom: 20px !important;
     right: 20px !important;
-    z-index: 1000 !important;
+    z-index: 1060 !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: flex-end !important;
     width: 400px;
     height: 600px;
-    background: #1a1a1a;
+    background: var(--bg-primary);
     border-radius: 16px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-    border: 1px solid #333;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--border-color);
     transform: translateY(100%);
     opacity: 0;
-    transition: all 0.3s ease;
+    transition: all 350ms ease-in-out;
     overflow: hidden;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
 }
 
 .ai-assistant-container.ai-assistant-open {

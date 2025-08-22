@@ -31,8 +31,9 @@
                             <div class="card-header bg-primary text-white">
                                 <div class="d-flex align-items-center">
                                     <i class="bi bi-robot me-2"></i>
-                                    <h5 class="mb-0">Visual LLM Assistant</h5>
-                                    <span class="badge bg-success ms-auto">Online</span>
+                                    <h5 class="mb-0">🆓 FREE AI Assistant</h5>
+                                    <span id="llm-status" class="badge bg-warning ms-auto ai-status">Connecting...</span>
+                                    <small id="provider-info" class="text-light ms-2 ai-cost">FREE & Unlimited</small>
                                 </div>
                             </div>
                             <div class="card-body p-0">
@@ -44,7 +45,14 @@
                                         </div>
                                         <div class="message-content">
                                             <div class="message-bubble">
-                                                <p>Hello! I'm your AI assistant for LLM fine-tuning. I can help you with:</p>
+                                                <p>🆓 <strong>Hello! I'm your FREE AI assistant for LLM fine-tuning!</strong></p>
+                                                <div class="alert alert-success mb-2" style="font-size: 0.9em; padding: 8px;">
+                                                    ✅ <strong>Completely FREE</strong> - No API costs<br>
+                                                    ✅ <strong>Unlimited usage</strong> - No rate limits<br>
+                                                    ✅ <strong>100% Private</strong> - Data stays local<br>
+                                                    ✅ <strong>Multiple models</strong> - Different capabilities
+                                                </div>
+                                                <p>I can help you with:</p>
                                                 <ul>
                                                     <li>LoRA and QLoRA concepts</li>
                                                     <li>Code examples and debugging</li>
@@ -61,14 +69,14 @@
                                 
                                 <!-- Chat Input -->
                                 <div class="chat-input">
-                                    <form id="chat-form" class="d-flex">
-                                        <input type="text" id="message-input" class="form-control" 
-                                               placeholder="Ask me anything about LLM fine-tuning..." 
+                                    <form id="ai-chat-form" class="d-flex">
+                                        <input type="text" id="user-input" class="form-control"
+                                               placeholder="Ask me anything about LLM fine-tuning..."
                                                autocomplete="off">
                                         <button type="submit" class="btn btn-primary ms-2">
                                             <i class="bi bi-send"></i>
                                         </button>
-                                        <button type="button" id="voice-btn" class="btn btn-outline-primary ms-2">
+                                        <button type="button" id="voice-input-btn" class="btn btn-outline-primary ms-2">
                                             <i class="bi bi-mic"></i>
                                         </button>
                                     </form>
@@ -383,7 +391,7 @@
     gap: 0.25rem;
 }
 
-.typing-dot {
+.typing-dots span {
     width: 8px;
     height: 8px;
     border-radius: 50%;
@@ -391,12 +399,22 @@
     animation: typing 1.4s infinite ease-in-out;
 }
 
-.typing-dot:nth-child(1) { animation-delay: -0.32s; }
-.typing-dot:nth-child(2) { animation-delay: -0.16s; }
+.typing-dots span:nth-child(1) { animation-delay: -0.32s; }
+.typing-dots span:nth-child(2) { animation-delay: -0.16s; }
+.typing-dots span:nth-child(3) { animation-delay: 0s; }
 
 @keyframes typing {
     0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
     40% { transform: scale(1); opacity: 1; }
+}
+
+/* LLM Status indicators */
+.status-online {
+    background-color: #28a745 !important;
+}
+
+.status-offline {
+    background-color: #dc3545 !important;
 }
 
 /* Voice recording styles */
@@ -428,33 +446,27 @@
 {% endblock %}
 
 {% block extra_js %}
+<!-- Load the FREE Ollama AI Assistant JavaScript -->
+<script src="{{ url_for('static', filename='js/free-ollama-ai-assistant.js') }}"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const chatMessages = document.getElementById('chat-messages');
-    const chatForm = document.getElementById('chat-form');
-    const messageInput = document.getElementById('message-input');
-    const voiceBtn = document.getElementById('voice-btn');
+    const chatForm = document.getElementById('ai-chat-form');
+    const messageInput = document.getElementById('user-input');
+    const voiceBtn = document.getElementById('voice-input-btn');
     
-    // Sample AI responses (in a real app, this would connect to an AI service)
-    const aiResponses = {
-        'lora': 'LoRA (Low-Rank Adaptation) is a parameter-efficient fine-tuning technique that adds trainable low-rank matrices to the attention layers of a pre-trained model. Instead of updating all parameters, LoRA only trains a small number of additional parameters, making it much more memory and compute efficient.',
-        'qlora': 'QLoRA (Quantized LoRA) combines LoRA with quantization techniques. It uses 4-bit quantization to reduce memory usage even further while maintaining performance. QLoRA is particularly useful for fine-tuning large models on consumer hardware.',
-        'implementation': 'Here\'s a basic LoRA implementation:\n\n```python\nfrom peft import LoraConfig, get_peft_model\nfrom transformers import AutoModelForCausalLM\n\n# Load base model\nmodel = AutoModelForCausalLM.from_pretrained("model_name")\n\n# Configure LoRA\nlora_config = LoraConfig(\n    r=16,  # rank\n    lora_alpha=32,\n    target_modules=["q_proj", "v_proj"],\n    lora_dropout=0.1\n)\n\n# Apply LoRA\nmodel = get_peft_model(model, lora_config)\n```',
-        'best practices': 'Here are key best practices for LLM fine-tuning:\n\n1. **Start with a good base model** - Choose a model pre-trained on similar data\n2. **Use parameter-efficient methods** - LoRA/QLoRA for most cases\n3. **Proper data preparation** - Clean, relevant, and well-formatted data\n4. **Monitor training** - Use wandb or tensorboard for tracking\n5. **Gradual learning rates** - Start with 2e-5 to 5e-5\n6. **Validation strategy** - Always keep a held-out validation set',
-        'memory optimization': 'To optimize memory usage during training:\n\n1. **Use gradient checkpointing** - Trades compute for memory\n2. **Reduce batch size** - Use gradient accumulation to maintain effective batch size\n3. **Use QLoRA** - 4-bit quantization significantly reduces memory\n4. **Enable mixed precision** - Use fp16 or bf16\n5. **Optimize sequence length** - Truncate or pad to reasonable lengths\n6. **Use DeepSpeed ZeRO** - For distributed training scenarios'
-    };
-    
-    function getAIResponse(message) {
-        const lowerMessage = message.toLowerCase();
-        
-        for (const [key, response] of Object.entries(aiResponses)) {
-            if (lowerMessage.includes(key)) {
-                return response;
+    // Quick question handlers
+    document.querySelectorAll('.quick-question').forEach(button => {
+        button.addEventListener('click', function() {
+            const question = this.getAttribute('data-question');
+            messageInput.value = question;
+            if (window.freeOllamaAI) {
+                // Trigger the form submission
+                chatForm.dispatchEvent(new Event('submit'));
             }
-        }
-        
-        return "I understand you're asking about LLM fine-tuning. While I don't have a specific answer for that question, I recommend checking our comprehensive guides and workshops. You can also try rephrasing your question or asking about specific topics like LoRA, QLoRA, or implementation details.";
-    }
+        });
+    });
     
     function addMessage(content, isUser = false) {
         const messageDiv = document.createElement('div');
@@ -508,25 +520,43 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Handle chat form submission
-    chatForm.addEventListener('submit', function(e) {
+    // Chat form submission handler for FREE AI Assistant
+    chatForm.addEventListener('submit', async function(e) {
         e.preventDefault();
+
         const message = messageInput.value.trim();
-        
-        if (message) {
-            // Add user message
-            addMessage(message, true);
-            messageInput.value = '';
-            
-            // Show typing indicator
-            showTypingIndicator();
-            
-            // Simulate AI response delay
-            setTimeout(() => {
-                hideTypingIndicator();
-                const response = getAIResponse(message);
-                addMessage(response);
-            }, 1000 + Math.random() * 2000);
+        if (!message) return;
+
+        // Add user message
+        addMessage(message, true);
+        messageInput.value = '';
+
+        // Show typing indicator
+        showTypingIndicator();
+
+        try {
+            // Use the FREE Ollama AI Assistant
+            const response = await window.freeOllamaAI.sendMessage(message);
+
+            // Hide typing indicator
+            hideTypingIndicator();
+
+            // Add AI response
+            addMessage(response.response, false);
+
+            // Update status if needed
+            if (response.status === 'offline') {
+                document.getElementById('llm-status').textContent = '🔧 Setup Required';
+                document.getElementById('llm-status').className = 'badge bg-warning ms-auto ai-status';
+            } else if (response.status === 'success') {
+                document.getElementById('llm-status').textContent = '🆓 FREE AI Online';
+                document.getElementById('llm-status').className = 'badge bg-success ms-auto ai-status';
+            }
+
+        } catch (error) {
+            console.error('Chat error:', error);
+            hideTypingIndicator();
+            addMessage('Sorry, I encountered an error. Please try again.', false);
         }
     });
     

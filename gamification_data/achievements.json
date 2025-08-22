@@ -1,0 +1,202 @@
+{
+  "first_steps": {
+    "id": "first_steps",
+    "name": "First Steps",
+    "description": "Complete your first tutorial",
+    "icon": "\ud83d\udc76",
+    "category": "learning",
+    "points": 100,
+    "requirements": {
+      "tutorials_completed": 1
+    },
+    "rarity": "common",
+    "unlocked_by": [
+      "test_user_123",
+      "demo_user_1",
+      "demo_user_2",
+      "demo_user_3"
+    ]
+  },
+  "knowledge_seeker": {
+    "id": "knowledge_seeker",
+    "name": "Knowledge Seeker",
+    "description": "Complete 5 tutorials",
+    "icon": "\ud83d\udcda",
+    "category": "learning",
+    "points": 500,
+    "requirements": {
+      "tutorials_completed": 5
+    },
+    "rarity": "common",
+    "unlocked_by": [
+      "demo_user_2"
+    ]
+  },
+  "lora_master": {
+    "id": "lora_master",
+    "name": "LoRA Master",
+    "description": "Complete all LoRA workshops",
+    "icon": "\ud83c\udfaf",
+    "category": "learning",
+    "points": 1000,
+    "requirements": {
+      "lora_workshops_completed": 3
+    },
+    "rarity": "rare",
+    "unlocked_by": []
+  },
+  "quiz_champion": {
+    "id": "quiz_champion",
+    "name": "Quiz Champion",
+    "description": "Score 100% on 3 quizzes",
+    "icon": "\ud83c\udfc6",
+    "category": "learning",
+    "points": 750,
+    "requirements": {
+      "perfect_quizzes": 3
+    },
+    "rarity": "rare",
+    "unlocked_by": []
+  },
+  "first_model": {
+    "id": "first_model",
+    "name": "Model Creator",
+    "description": "Train your first LoRA model",
+    "icon": "\ud83e\udd16",
+    "category": "training",
+    "points": 500,
+    "requirements": {
+      "models_trained": 1
+    },
+    "rarity": "common",
+    "unlocked_by": [
+      "test_user_123",
+      "demo_user_1",
+      "demo_user_2",
+      "demo_user_3"
+    ]
+  },
+  "model_trainer": {
+    "id": "model_trainer",
+    "name": "Model Trainer",
+    "description": "Train 5 LoRA models",
+    "icon": "\ud83c\udfcb\ufe0f",
+    "category": "training",
+    "points": 1500,
+    "requirements": {
+      "models_trained": 5
+    },
+    "rarity": "rare",
+    "unlocked_by": [
+      "demo_user_3"
+    ]
+  },
+  "efficiency_expert": {
+    "id": "efficiency_expert",
+    "name": "Efficiency Expert",
+    "description": "Train a model with 90%+ efficiency score",
+    "icon": "\u26a1",
+    "category": "training",
+    "points": 1000,
+    "requirements": {
+      "high_efficiency_models": 1
+    },
+    "rarity": "rare",
+    "unlocked_by": []
+  },
+  "speed_demon": {
+    "id": "speed_demon",
+    "name": "Speed Demon",
+    "description": "Complete training in under 10 minutes",
+    "icon": "\ud83d\ude80",
+    "category": "training",
+    "points": 750,
+    "requirements": {
+      "fast_training_completed": 1
+    },
+    "rarity": "epic",
+    "unlocked_by": []
+  },
+  "helpful_member": {
+    "id": "helpful_member",
+    "name": "Helpful Member",
+    "description": "Share your first model in marketplace",
+    "icon": "\ud83e\udd1d",
+    "category": "community",
+    "points": 300,
+    "requirements": {
+      "models_shared": 1
+    },
+    "rarity": "common",
+    "unlocked_by": [
+      "demo_user_3"
+    ]
+  },
+  "community_contributor": {
+    "id": "community_contributor",
+    "name": "Community Contributor",
+    "description": "Share 3 models in marketplace",
+    "icon": "\ud83c\udf1f",
+    "category": "community",
+    "points": 1000,
+    "requirements": {
+      "models_shared": 3
+    },
+    "rarity": "rare",
+    "unlocked_by": []
+  },
+  "ai_assistant_user": {
+    "id": "ai_assistant_user",
+    "name": "AI Assistant User",
+    "description": "Have 10 conversations with AI assistant",
+    "icon": "\ud83d\udcac",
+    "category": "community",
+    "points": 400,
+    "requirements": {
+      "ai_conversations": 10
+    },
+    "rarity": "common",
+    "unlocked_by": [
+      "demo_user_1"
+    ]
+  },
+  "early_adopter": {
+    "id": "early_adopter",
+    "name": "Early Adopter",
+    "description": "Join the platform in its first month",
+    "icon": "\ud83c\udf05",
+    "category": "special",
+    "points": 2000,
+    "requirements": {
+      "joined_before": "2024-02-01"
+    },
+    "rarity": "legendary",
+    "unlocked_by": []
+  },
+  "perfectionist": {
+    "id": "perfectionist",
+    "name": "Perfectionist",
+    "description": "Complete all available content with 100% score",
+    "icon": "\ud83d\udc8e",
+    "category": "special",
+    "points": 5000,
+    "requirements": {
+      "perfect_completion": true
+    },
+    "rarity": "legendary",
+    "unlocked_by": []
+  },
+  "innovator": {
+    "id": "innovator",
+    "name": "Innovator",
+    "description": "Create a model that gets 10+ downloads",
+    "icon": "\ud83d\udd2c",
+    "category": "special",
+    "points": 2500,
+    "requirements": {
+      "popular_model_downloads": 10
+    },
+    "rarity": "epic",
+    "unlocked_by": []
+  }
+}

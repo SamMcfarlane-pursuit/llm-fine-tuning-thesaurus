@@ -1,0 +1,134 @@
+{
+  "test_user_123": {
+    "user_id": "test_user_123",
+    "username": "TestUser",
+    "level": 2,
+    "total_xp": 1200,
+    "achievements_unlocked": [
+      "first_steps",
+      "first_model"
+    ],
+    "badges_earned": [
+      "\ud83d\udc76",
+      "\ud83e\udd16"
+    ],
+    "stats": {
+      "tutorials_completed": 1,
+      "quizzes_completed": 0,
+      "perfect_quizzes": 0,
+      "models_trained": 1,
+      "models_shared": 0,
+      "ai_conversations": 0,
+      "login_streak": 0,
+      "total_time_spent": 0
+    },
+    "created_at": "2025-06-12T01:29:44.779738",
+    "last_active": "2025-06-12T01:29:44.781918"
+  },
+  "test_user": {
+    "user_id": "test_user",
+    "username": "TestUser",
+    "level": 1,
+    "total_xp": 100,
+    "achievements_unlocked": [],
+    "badges_earned": [],
+    "stats": {
+      "tutorials_completed": 0,
+      "quizzes_completed": 0,
+      "perfect_quizzes": 0,
+      "models_trained": 0,
+      "models_shared": 0,
+      "ai_conversations": 0,
+      "login_streak": 0,
+      "total_time_spent": 0
+    },
+    "created_at": "2025-06-12T01:30:48.305858",
+    "last_active": "2025-06-12T01:30:48.893988"
+  },
+  "demo_user_1": {
+    "user_id": "demo_user_1",
+    "username": "Alice",
+    "level": 3,
+    "total_xp": 2500,
+    "achievements_unlocked": [
+      "first_steps",
+      "first_model",
+      "ai_assistant_user"
+    ],
+    "badges_earned": [
+      "\ud83d\udc76",
+      "\ud83e\udd16",
+      "\ud83d\udcac"
+    ],
+    "stats": {
+      "tutorials_completed": 3,
+      "quizzes_completed": 0,
+      "perfect_quizzes": 0,
+      "models_trained": 2,
+      "models_shared": 0,
+      "ai_conversations": 15,
+      "login_streak": 0,
+      "total_time_spent": 0
+    },
+    "created_at": "2025-06-12T01:31:59.017763",
+    "last_active": "2025-06-12T01:31:59.146918"
+  },
+  "demo_user_2": {
+    "user_id": "demo_user_2",
+    "username": "Bob",
+    "level": 3,
+    "total_xp": 2600,
+    "achievements_unlocked": [
+      "first_steps",
+      "knowledge_seeker",
+      "first_model"
+    ],
+    "badges_earned": [
+      "\ud83d\udc76",
+      "\ud83d\udcda",
+      "\ud83e\udd16"
+    ],
+    "stats": {
+      "tutorials_completed": 5,
+      "quizzes_completed": 0,
+      "perfect_quizzes": 2,
+      "models_trained": 1,
+      "models_shared": 0,
+      "ai_conversations": 0,
+      "login_streak": 0,
+      "total_time_spent": 0
+    },
+    "created_at": "2025-06-12T01:31:59.154337",
+    "last_active": "2025-06-12T01:31:59.228390"
+  },
+  "demo_user_3": {
+    "user_id": "demo_user_3",
+    "username": "Charlie",
+    "level": 4,
+    "total_xp": 3900,
+    "achievements_unlocked": [
+      "first_steps",
+      "first_model",
+      "model_trainer",
+      "helpful_member"
+    ],
+    "badges_earned": [
+      "\ud83d\udc76",
+      "\ud83e\udd16",
+      "\ud83c\udfcb\ufe0f",
+      "\ud83e\udd1d"
+    ],
+    "stats": {
+      "tutorials_completed": 1,
+      "quizzes_completed": 0,
+      "perfect_quizzes": 0,
+      "models_trained": 5,
+      "models_shared": 2,
+      "ai_conversations": 0,
+      "login_streak": 0,
+      "total_time_spent": 0
+    },
+    "created_at": "2025-06-12T01:31:59.235701",
+    "last_active": "2025-06-12T01:31:59.280870"
+  }
+}

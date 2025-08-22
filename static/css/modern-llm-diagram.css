@@ -1,0 +1,285 @@
+/**
+ * MODERN LLM DIAGRAM STYLES
+ * Beautiful, professional styling for the LLM concept visualization
+ */
+
+/* Container Styles */
+.modern-llm-diagram-container {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    height: 500px;
+    margin: 2rem auto;
+    background: transparent;
+    border-radius: 16px;
+    overflow: hidden;
+    /* Hide by default until diagram loads */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+/* Only show background when diagram is loaded */
+.modern-llm-diagram-container.diagram-loaded {
+    opacity: 1;
+    visibility: visible;
+    background: linear-gradient(135deg,
+        rgba(15, 20, 15, 0.95) 0%,
+        rgba(20, 30, 20, 0.9) 50%,
+        rgba(15, 25, 15, 0.95) 100%);
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        0 0 0 1px rgba(60, 100, 48, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+/* SVG Styles */
+.modern-llm-diagram-container svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Node Styles */
+.node {
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.node:hover {
+    filter: brightness(1.2) drop-shadow(0 0 20px currentColor);
+}
+
+.node circle {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.node text {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Connection Styles */
+.connection-line {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: drop-shadow(0 0 3px rgba(60, 100, 48, 0.4));
+}
+
+.connection-line:hover {
+    filter: drop-shadow(0 0 8px rgba(60, 100, 48, 0.8));
+}
+
+/* Tooltip Styles */
+#llm-node-tooltip {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    backdrop-filter: blur(10px);
+    animation: tooltipFadeIn 0.2s ease-out;
+    transform-origin: bottom center;
+}
+
+@keyframes tooltipFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Title Styles */
+.diagram-title {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    letter-spacing: 0.5px;
+}
+
+/* Animation Keyframes */
+@keyframes nodeEntrance {
+    from {
+        opacity: 0;
+        transform: scale(0.5) translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes connectionPulse {
+    0%, 100% {
+        opacity: 0.4;
+        stroke-width: 2;
+    }
+    50% {
+        opacity: 0.8;
+        stroke-width: 3;
+    }
+}
+
+@keyframes drawLine {
+    from {
+        stroke-dashoffset: 1000;
+    }
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes glow {
+    0%, 100% {
+        filter: drop-shadow(0 0 5px currentColor);
+    }
+    50% {
+        filter: drop-shadow(0 0 15px currentColor);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .modern-llm-diagram-container {
+        height: 400px;
+        margin: 1rem;
+        border-radius: 12px;
+    }
+    
+    .node text {
+        font-size: 12px;
+    }
+    
+    #llm-node-tooltip {
+        font-size: 12px;
+        padding: 8px 12px;
+        max-width: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .modern-llm-diagram-container {
+        height: 350px;
+        margin: 0.5rem;
+    }
+    
+    .node text {
+        font-size: 10px;
+    }
+    
+    .diagram-title {
+        font-size: 18px;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .node,
+    .connection-line,
+    #llm-node-tooltip {
+        transition: none;
+        animation: none;
+    }
+    
+    .connection-line {
+        animation: none !important;
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .modern-llm-diagram-container {
+        border: 2px solid #ffffff;
+        background: #000000;
+    }
+    
+    .node circle {
+        stroke-width: 3px;
+    }
+    
+    .connection-line {
+        stroke-width: 3px;
+        opacity: 1 !important;
+    }
+}
+
+/* Dark mode specific adjustments */
+@media (prefers-color-scheme: dark) {
+    .modern-llm-diagram-container {
+        background: linear-gradient(135deg, 
+            rgba(10, 15, 10, 0.98) 0%, 
+            rgba(15, 25, 15, 0.95) 50%, 
+            rgba(10, 20, 10, 0.98) 100%);
+        box-shadow: 
+            0 25px 50px rgba(0, 0, 0, 0.5),
+            inset 0 1px 0 rgba(255, 255, 255, 0.05),
+            0 0 0 1px rgba(60, 100, 48, 0.4);
+    }
+}
+
+/* Light mode specific adjustments */
+@media (prefers-color-scheme: light) {
+    .modern-llm-diagram-container {
+        background: linear-gradient(135deg, 
+            rgba(240, 245, 240, 0.95) 0%, 
+            rgba(235, 245, 235, 0.9) 50%, 
+            rgba(240, 250, 240, 0.95) 100%);
+        box-shadow: 
+            0 20px 40px rgba(0, 0, 0, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.8),
+            0 0 0 1px rgba(60, 100, 48, 0.2);
+    }
+    
+    .node text {
+        fill: #2c3e2c;
+        text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+    }
+    
+    .diagram-title {
+        fill: #2c3e2c;
+        text-shadow: 0 2px 4px rgba(255, 255, 255, 0.5);
+    }
+}
+
+/* Performance optimizations */
+.node,
+.connection-line {
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+}
+
+/* Focus styles for accessibility */
+.node:focus {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+}
+
+/* Loading state */
+.modern-llm-diagram-container.loading {
+    opacity: 0.7;
+}
+
+.modern-llm-diagram-container.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    margin: -20px 0 0 -20px;
+    border: 3px solid rgba(60, 100, 48, 0.3);
+    border-top-color: #3c6430;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

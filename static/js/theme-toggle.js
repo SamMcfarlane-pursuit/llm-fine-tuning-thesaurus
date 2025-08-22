@@ -4,15 +4,28 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize theme immediately
+    // Initialize theme immediately - FORCE LIGHT MODE AS DEFAULT
     initializeTheme();
 
     const themeToggle = document.getElementById('theme-toggle');
     if (themeToggle) {
-        const themeIcon = themeToggle.querySelector('i');
+        let themeIcon = themeToggle.querySelector('i');
 
-        // Check for saved theme preference
+        // If no icon exists, create one
+        if (!themeIcon) {
+            themeIcon = document.createElement('i');
+            themeIcon.className = 'bi bi-moon-fill';
+            themeToggle.appendChild(themeIcon);
+        }
+
+        // ALWAYS default to light theme unless explicitly saved as dark
         const savedTheme = localStorage.getItem('theme') || 'light';
+
+        // Force light theme if no preference is saved
+        if (!localStorage.getItem('theme')) {
+            localStorage.setItem('theme', 'light');
+        }
+
         document.documentElement.setAttribute('data-theme', savedTheme);
         updateThemeIcon(savedTheme);
 
@@ -26,12 +39,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Update theme icon
         function updateThemeIcon(theme) {
-            if (theme === 'dark') {
-                themeIcon.classList.remove('bi-moon-fill');
-                themeIcon.classList.add('bi-sun-fill');
-            } else {
-                themeIcon.classList.remove('bi-sun-fill');
-                themeIcon.classList.add('bi-moon-fill');
+            if (themeIcon) {
+                if (theme === 'dark') {
+                    themeIcon.classList.remove('bi-moon-fill');
+                    themeIcon.classList.add('bi-sun-fill');
+                } else {
+                    themeIcon.classList.remove('bi-sun-fill');
+                    themeIcon.classList.add('bi-moon-fill');
+                }
             }
         }
     }
@@ -62,24 +77,33 @@ function createThemeToggleButton() {
 }
 
 /**
- * Initialize theme based on user preference
+ * Initialize theme based on user preference - ALWAYS DEFAULT TO LIGHT MODE
  */
 function initializeTheme() {
-    // Check if user has a saved preference
-    const savedTheme = localStorage.getItem('theme');
+    // FORCE light theme as default - remove any existing theme classes first
+    document.body.classList.remove('light-theme', 'dark-theme');
 
-    if (savedTheme) {
-        // Apply saved theme
-        document.body.classList.toggle('light-theme', savedTheme === 'light');
+    // Check if user has a saved preference
+    const savedTheme = localStorage.getItem('theme') || 'light';
+
+    if (savedTheme === 'light') {
+        // Apply light theme (user's preferred green color scheme)
+        document.body.classList.add('light-theme');
+        document.body.classList.add('theme-override');
+    } else if (savedTheme === 'dark') {
+        // Apply dark theme only if explicitly saved
+        document.body.classList.remove('light-theme');
         document.body.classList.add('theme-override');
     } else {
-        // Default to light theme (new green color scheme)
+        // Default fallback to light theme
         document.body.classList.add('light-theme');
         localStorage.setItem('theme', 'light');
     }
 
     // Update meta theme-color
     updateMetaThemeColor();
+
+    console.log('Theme initialized:', savedTheme, 'Body classes:', document.body.className);
 }
 
 /**

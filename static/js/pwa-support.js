@@ -239,9 +239,9 @@ class PWASupport {
         this.cacheResources([
             '/',
             '/static/css/style.css',
-            '/static/css/custom-dark-mode.css',
+            '/static/css/dark-mode.css',
             '/static/js/theme-toggle.js',
-            '/static/js/balanced-brightness-enhancer.js',
+            '/static/js/main.js',
             '/learn',
             '/workshops',
             '/tutorials'
@@ -252,7 +252,20 @@ class PWASupport {
         if ('caches' in window) {
             try {
                 const cache = await caches.open('visual-llm-v1');
-                await cache.addAll(urls);
+                // Cache resources individually to handle 404s gracefully
+                const cachePromises = urls.map(async (url) => {
+                    try {
+                        const response = await fetch(url);
+                        if (response.ok) {
+                            await cache.put(url, response);
+                        } else {
+                            console.warn(`Failed to cache ${url}: ${response.status}`);
+                        }
+                    } catch (error) {
+                        console.warn(`Failed to fetch ${url}:`, error.message);
+                    }
+                });
+                await Promise.all(cachePromises);
                 console.log('Resources cached successfully');
             } catch (error) {
                 console.error('Caching failed:', error);

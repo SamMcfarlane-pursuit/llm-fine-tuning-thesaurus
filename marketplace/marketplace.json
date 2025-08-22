@@ -1,0 +1,92 @@
+{
+  "adapters": {
+    "visual_llm_team_llm_education_master": {
+      "id": "visual_llm_team_llm_education_master",
+      "name": "LLM Education Master",
+      "description": "Comprehensive LoRA adapter trained on advanced LLM concepts, fine-tuning techniques, and research papers. Perfect for educational platforms.",
+      "category": "educational",
+      "author": "visual_llm_team",
+      "base_model": "microsoft/DialoGPT-medium",
+      "tags": [
+        "education",
+        "llm",
+        "fine-tuning",
+        "research"
+      ],
+      "license": "MIT",
+      "version": "1.0.0",
+      "created_at": "2025-06-11T21:11:12.519461",
+      "updated_at": "2025-06-11T21:11:12.519470",
+      "downloads": 0,
+      "rating": 4.5,
+      "reviews": [],
+      "featured": true,
+      "size_mb": 8.5,
+      "files_count": 6,
+      "status": "placeholder"
+    },
+    "code_masters_python_code_assistant": {
+      "id": "code_masters_python_code_assistant",
+      "name": "Python Code Assistant",
+      "description": "Specialized LoRA adapter for Python code generation, debugging, and explanation. Trained on high-quality code examples.",
+      "category": "code",
+      "author": "code_masters",
+      "base_model": "microsoft/DialoGPT-medium",
+      "tags": [
+        "python",
+        "coding",
+        "debugging",
+        "programming"
+      ],
+      "license": "MIT",
+      "version": "1.0.0",
+      "created_at": "2025-06-11T21:11:12.519477",
+      "updated_at": "2025-06-11T21:11:12.519478",
+      "downloads": 0,
+      "rating": 4.5,
+      "reviews": [],
+      "featured": true,
+      "size_mb": 8.5,
+      "files_count": 6,
+      "status": "placeholder"
+    },
+    "academic_ai_academic_writing_helper": {
+      "id": "academic_ai_academic_writing_helper",
+      "name": "Academic Writing Helper",
+      "description": "LoRA adapter fine-tuned for academic writing, research assistance, and scholarly communication.",
+      "category": "domain",
+      "author": "academic_ai",
+      "base_model": "microsoft/DialoGPT-medium",
+      "tags": [
+        "academic",
+        "writing",
+        "research",
+        "scholarly"
+      ],
+      "license": "MIT",
+      "version": "1.0.0",
+      "created_at": "2025-06-11T21:11:12.519482",
+      "updated_at": "2025-06-11T21:11:12.519483",
+      "downloads": 0,
+      "rating": 4.5,
+      "reviews": [],
+      "featured": true,
+      "size_mb": 8.5,
+      "files_count": 6,
+      "status": "placeholder"
+    }
+  },
+  "categories": {
+    "educational": "Educational and tutorial content",
+    "code": "Code generation and programming",
+    "chat": "Conversational AI and dialogue",
+    "domain": "Domain-specific knowledge",
+    "multilingual": "Multi-language support",
+    "creative": "Creative writing and content"
+  },
+  "stats": {
+    "total_adapters": 0,
+    "total_downloads": 0,
+    "last_updated": "2025-06-11T21:11:12.519485"
+  }
+}

@@ -37,7 +37,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
     <!-- 2. Dark/Light Theme System -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom-dark-mode.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dark-mode.css') }}">
 
     <!-- 3. AI Assistant Styling -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/ai-assistant.css') }}">
@@ -47,7 +47,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/exact-navigation-match.css') }}">
 
     <!-- 5. Navigation Overrides -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/final-navigation-override.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navigation.css') }}">
 
     <!-- 6. Final Navigation Fixes (MUST BE LAST) -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/absolute-final-navigation.css') }}">
@@ -258,6 +258,6 @@
     {% block scripts %}{% endblock %}
     
     <!-- FORCE NAVIGATION STYLING - MUST BE ABSOLUTELY LAST SCRIPT -->
-    <script src="{{ url_for('static', filename='js/force-navigation-styling.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/enhanced-navigation.js') }}"></script>
 </body>
 </html>

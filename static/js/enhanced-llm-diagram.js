@@ -1,103 +1,394 @@
 /**
- * Enhanced LLM Diagram JavaScript
- * Improves the interactivity and functionality of the LLM fine-tuning concept diagram
- * With robust error handling and performance optimizations
+ * MODERN LLM DIAGRAM - REALISTIC & OPTIMAL
+ * Creates a beautiful, interactive, and professional LLM concept visualization
+ * Optimized for performance and visual appeal
  */
 
-// Self-executing function to avoid global namespace pollution
 (function() {
-    // Initialize when DOM is ready with fallback
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initLLMDiagram);
-    } else {
-        // DOM already loaded, initialize immediately
-        setTimeout(initLLMDiagram, 0);
-    }
+    'use strict';
+
+    // Configuration for modern diagram
+    const CONFIG = {
+        animation: {
+            duration: 1200,
+            easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+            stagger: 150
+        },
+        colors: {
+            primary: '#3c6430',      // Green theme primary
+            secondary: '#919fca',    // Blue-gray secondary
+            accent: '#7350a5',       // Purple accent
+            transformer: '#4a90e2',  // Blue for transformer
+            attention: '#7b68ee',    // Purple for attention
+            models: '#50c878',       // Green for models
+            components: '#ffa500',   // Orange for components
+            background: 'rgba(15, 20, 15, 0.95)',
+            connection: 'rgba(60, 100, 48, 0.4)',
+            connectionHover: 'rgba(60, 100, 48, 0.8)',
+            glow: 'rgba(60, 100, 48, 0.6)'
+        },
+        nodes: {
+            minSize: 70,
+            maxSize: 110,
+            spacing: 180,
+            borderWidth: 3
+        }
+    };
+
+    // Modern LLM Node Data - Comprehensive and Realistic
+    const LLM_NODES = [
+        {
+            id: 'transformer',
+            label: 'Transformer',
+            description: 'Revolutionary attention-based architecture that changed NLP',
+            category: 'architecture',
+            color: CONFIG.colors.transformer,
+            size: 110,
+            position: { x: 50, y: 50 },
+            connections: ['attention', 'encoder', 'decoder', 'bert', 't5'],
+            importance: 1.0,
+            icon: '🔄'
+        },
+        {
+            id: 'attention',
+            label: 'Self-Attention',
+            description: 'Learns relationships between all sequence positions',
+            category: 'mechanism',
+            color: CONFIG.colors.attention,
+            size: 95,
+            position: { x: 20, y: 20 },
+            connections: ['multihead', 'transformer', 'bert'],
+            importance: 0.9,
+            icon: '👁️'
+        },
+        {
+            id: 'multihead',
+            label: 'Multi-Head\nAttention',
+            description: 'Parallel attention heads for different representation subspaces',
+            category: 'mechanism',
+            color: CONFIG.colors.models,
+            size: 100,
+            position: { x: 80, y: 20 },
+            connections: ['attention', 'transformer'],
+            importance: 0.85,
+            icon: '🔍'
+        },
+        {
+            id: 'bert',
+            label: 'BERT',
+            description: 'Bidirectional encoder for deep language understanding',
+            category: 'model',
+            color: CONFIG.colors.components,
+            size: 90,
+            position: { x: 15, y: 80 },
+            connections: ['transformer', 'encoder', 'attention'],
+            importance: 0.8,
+            icon: '📖'
+        },
+        {
+            id: 't5',
+            label: 'T5',
+            description: 'Text-to-text unified framework for all NLP tasks',
+            category: 'model',
+            color: '#ff6b6b',
+            size: 90,
+            position: { x: 85, y: 80 },
+            connections: ['transformer', 'encoder', 'decoder'],
+            importance: 0.8,
+            icon: '🔄'
+        },
+        {
+            id: 'encoder',
+            label: 'Encoder',
+            description: 'Processes and understands input sequences',
+            category: 'component',
+            color: '#9370db',
+            size: 80,
+            position: { x: 25, y: 50 },
+            connections: ['transformer', 'bert', 't5'],
+            importance: 0.7,
+            icon: '📥'
+        },
+        {
+            id: 'decoder',
+            label: 'Decoder',
+            description: 'Generates output sequences autoregressively',
+            category: 'component',
+            color: '#20b2aa',
+            size: 80,
+            position: { x: 75, y: 50 },
+            connections: ['transformer', 't5'],
+            importance: 0.7,
+            icon: '📤'
+        }
+    ];
 
     // Store references for cleanup
     let resizeHandler = null;
     let eventListeners = [];
+    let animationFrameId = null;
+    let diagramSvg = null;
 
     /**
-     * Initialize the LLM diagram with enhanced interactivity
+     * Initialize the modern LLM diagram
      */
     function initLLMDiagram() {
         try {
-            // Use robust diagram utilities if available
-            const utils = window.robustDiagramUtils || {};
+            console.log('🚀 Initializing Modern LLM Diagram...');
 
-            // Get the diagram container
-            const diagramContainer = document.querySelector('.visual-thesaurus-diagram');
+            // Set a timeout to show fallback if diagram doesn't load in 5 seconds
+            window.diagramTimeout = setTimeout(() => {
+                console.warn('⏰ Diagram loading timeout, showing fallback');
+                showFallbackContent();
+            }, 5000);
+
+            // Find or create diagram container
+            let diagramContainer = findOrCreateDiagramContainer();
+
             if (!diagramContainer) {
-                console.warn('LLM Diagram: Container not found');
+                console.warn('⚠️ Could not find or create LLM diagram container');
                 return;
             }
 
-            // Initialize in sequence with error handling
-            Promise.resolve()
-                .then(() => {
-                    console.log('LLM Diagram: Creating connection lines');
-                    return createConnectionLines();
-                })
-                .then(() => {
-                    console.log('LLM Diagram: Adding tooltips');
-                    return addNodeTooltips();
-                })
-                .then(() => {
-                    console.log('LLM Diagram: Adding controls');
-                    return addDiagramControls();
-                })
-                .then(() => {
-                    console.log('LLM Diagram: Adding click handlers');
-                    return addNodeClickHandlers();
-                })
-                .then(() => {
-                    console.log('LLM Diagram: Adding animations');
-                    return animateDiagram();
-                })
-                .then(() => {
-                    console.log('LLM Diagram: Initialization complete');
+            // Clear existing content and set up container
+            setupDiagramContainer(diagramContainer);
 
-                    // Register for cleanup if utilities available
-                    if (utils.registry) {
-                        utils.registry.register('llmDiagram', {
-                            cleanup: cleanup
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('LLM Diagram: Initialization error:', error);
-                });
+            // Create the modern SVG-based diagram
+            createModernLLMDiagram(diagramContainer);
+
+            // Add interactivity
+            addInteractivity();
+
+            // Setup responsive behavior
+            setupResponsiveBehavior();
+
+            // Clear any existing timeout
+            if (window.diagramTimeout) {
+                clearTimeout(window.diagramTimeout);
+            }
+
+            console.log('✅ Modern LLM Diagram initialized successfully');
+
         } catch (error) {
-            console.error('LLM Diagram: Fatal initialization error:', error);
+            console.error('❌ Error initializing modern LLM diagram:', error);
+
+            // Show fallback content
+            showFallbackContent();
         }
     }
 
     /**
-     * Clean up event listeners and resources
+     * Find existing diagram container or create a new one
      */
-    function cleanup() {
-        try {
-            console.log('LLM Diagram: Cleaning up resources');
+    function findOrCreateDiagramContainer() {
+        // Try to find existing containers
+        let container = document.querySelector('.llm-diagram, .visual-thesaurus-diagram, #llm-diagram, .diagram-container');
 
-            // Remove resize handler
-            if (resizeHandler) {
-                window.removeEventListener('resize', resizeHandler);
-                resizeHandler = null;
+        if (!container) {
+            // Look for a suitable parent to create the diagram in
+            const heroSection = document.querySelector('.hero-section, .jumbotron, .banner');
+            const mainContent = document.querySelector('.container, .main-content, main');
+            const body = document.body;
+
+            const parent = heroSection || mainContent || body;
+
+            if (parent) {
+                container = document.createElement('div');
+                container.className = 'modern-llm-diagram-container';
+                container.id = 'modern-llm-diagram';
+
+                // Insert at appropriate position
+                if (heroSection) {
+                    heroSection.appendChild(container);
+                } else if (mainContent) {
+                    mainContent.insertBefore(container, mainContent.firstChild);
+                } else {
+                    body.appendChild(container);
+                }
             }
+        }
 
-            // Remove registered event listeners
-            eventListeners.forEach(({ element, event, handler }) => {
-                if (element && element.removeEventListener) {
-                    element.removeEventListener(event, handler);
+        return container;
+    }
+
+    /**
+     * Setup the diagram container with proper styling
+     */
+    function setupDiagramContainer(container) {
+        container.innerHTML = '';
+        // Remove any existing classes and add loading state
+        container.className = 'modern-llm-diagram-container loading';
+    }
+
+    /**
+     * Create the modern SVG-based LLM diagram
+     */
+    function createModernLLMDiagram(container) {
+        // Create SVG element
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('width', '100%');
+        svg.setAttribute('height', '100%');
+        svg.setAttribute('viewBox', '0 0 800 500');
+        svg.style.cssText = `
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        `;
+
+        // Add definitions for gradients and filters
+        addSVGDefinitions(svg);
+
+        // Create connections first (so they appear behind nodes)
+        createConnections(svg);
+
+        // Create nodes
+        createNodes(svg);
+
+        // Add title
+        addDiagramTitle(svg);
+
+        container.appendChild(svg);
+        diagramSvg = svg;
+
+        // Mark as loaded and show background
+        container.classList.remove('loading');
+        container.classList.add('diagram-loaded');
+
+        // Animate entrance
+        animateEntrance();
+    }
+
+    /**
+     * Add SVG definitions for gradients, filters, and effects
+     */
+    function addSVGDefinitions(svg) {
+        const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+
+        // Gradient definitions
+        const gradients = [
+            { id: 'nodeGradient', colors: ['#4a90e2', '#357abd'] },
+            { id: 'attentionGradient', colors: ['#7b68ee', '#5a4fcf'] },
+            { id: 'modelGradient', colors: ['#50c878', '#3da55a'] },
+            { id: 'componentGradient', colors: ['#ffa500', '#e6940e'] }
+        ];
+
+        gradients.forEach(grad => {
+            const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+            gradient.setAttribute('id', grad.id);
+            gradient.setAttribute('x1', '0%');
+            gradient.setAttribute('y1', '0%');
+            gradient.setAttribute('x2', '100%');
+            gradient.setAttribute('y2', '100%');
+
+            const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+            stop1.setAttribute('offset', '0%');
+            stop1.setAttribute('stop-color', grad.colors[0]);
+
+            const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+            stop2.setAttribute('offset', '100%');
+            stop2.setAttribute('stop-color', grad.colors[1]);
+
+            gradient.appendChild(stop1);
+            gradient.appendChild(stop2);
+            defs.appendChild(gradient);
+        });
+
+        // Glow filter
+        const filter = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
+        filter.setAttribute('id', 'glow');
+        filter.setAttribute('x', '-50%');
+        filter.setAttribute('y', '-50%');
+        filter.setAttribute('width', '200%');
+        filter.setAttribute('height', '200%');
+
+        const feGaussianBlur = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur');
+        feGaussianBlur.setAttribute('stdDeviation', '3');
+        feGaussianBlur.setAttribute('result', 'coloredBlur');
+
+        const feMerge = document.createElementNS('http://www.w3.org/2000/svg', 'feMerge');
+        const feMergeNode1 = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode');
+        feMergeNode1.setAttribute('in', 'coloredBlur');
+        const feMergeNode2 = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode');
+        feMergeNode2.setAttribute('in', 'SourceGraphic');
+
+        feMerge.appendChild(feMergeNode1);
+        feMerge.appendChild(feMergeNode2);
+        filter.appendChild(feGaussianBlur);
+        filter.appendChild(feMerge);
+        defs.appendChild(filter);
+
+        svg.appendChild(defs);
+    }
+
+    /**
+     * Create connection lines between nodes
+     */
+    function createConnections(svg) {
+        const connectionsGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        connectionsGroup.setAttribute('class', 'connections-group');
+
+        // Create connections based on node relationships
+        LLM_NODES.forEach(node => {
+            node.connections.forEach(targetId => {
+                const targetNode = LLM_NODES.find(n => n.id === targetId);
+                if (targetNode) {
+                    createConnection(connectionsGroup, node, targetNode);
                 }
             });
-            eventListeners = [];
+        });
 
-            console.log('LLM Diagram: Cleanup complete');
-        } catch (error) {
-            console.error('LLM Diagram: Cleanup error:', error);
-        }
+        svg.appendChild(connectionsGroup);
+    }
+
+    /**
+     * Create a single connection between two nodes
+     */
+    function createConnection(group, fromNode, toNode) {
+        const fromPos = calculateNodePosition(fromNode);
+        const toPos = calculateNodePosition(toNode);
+
+        // Create curved path
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        const midX = (fromPos.x + toPos.x) / 2;
+        const midY = (fromPos.y + toPos.y) / 2;
+        const controlOffset = 50;
+
+        const d = `M ${fromPos.x} ${fromPos.y} Q ${midX} ${midY - controlOffset} ${toPos.x} ${toPos.y}`;
+
+        path.setAttribute('d', d);
+        path.setAttribute('stroke', CONFIG.colors.connection);
+        path.setAttribute('stroke-width', '2');
+        path.setAttribute('fill', 'none');
+        path.setAttribute('opacity', '0.6');
+        path.setAttribute('class', 'connection-line');
+        path.style.transition = 'all 0.3s ease';
+
+        // Add hover effects
+        path.addEventListener('mouseenter', () => {
+            path.setAttribute('stroke', CONFIG.colors.connectionHover);
+            path.setAttribute('stroke-width', '3');
+            path.setAttribute('opacity', '1');
+        });
+
+        path.addEventListener('mouseleave', () => {
+            path.setAttribute('stroke', CONFIG.colors.connection);
+            path.setAttribute('stroke-width', '2');
+            path.setAttribute('opacity', '0.6');
+        });
+
+        group.appendChild(path);
+    }
+
+    /**
+     * Calculate node position in SVG coordinates
+     */
+    function calculateNodePosition(node) {
+        return {
+            x: (node.position.x / 100) * 800,
+            y: (node.position.y / 100) * 500
+        };
     }
 
     /**
@@ -116,161 +407,118 @@
         }
     }
 
-/**
- * Create connection lines between nodes with robust error handling
- * @returns {Promise} Resolves when connections are created
- */
-function createConnectionLines() {
-    return new Promise((resolve, reject) => {
-        try {
-            // Use robust diagram utilities if available
-            const utils = window.robustDiagramUtils || {};
+    /**
+     * Create nodes in the SVG
+     */
+    function createNodes(svg) {
+        const nodesGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        nodesGroup.setAttribute('class', 'nodes-group');
 
-            const centralNode = document.querySelector('.central-node');
-            const nodes = document.querySelectorAll('.node');
-            const diagramContainer = document.querySelector('.visual-thesaurus-diagram');
+        LLM_NODES.forEach((node, index) => {
+            createNode(nodesGroup, node, index);
+        });
 
-            if (!centralNode || !nodes.length || !diagramContainer) {
-                console.warn('LLM Diagram: Missing elements for connections');
-                return resolve();
-            }
+        svg.appendChild(nodesGroup);
+    }
 
-            // Remove any existing connections to prevent duplicates
-            diagramContainer.querySelectorAll('.connection.diagonal').forEach(conn => {
-                conn.remove();
+    /**
+     * Create a single node
+     */
+    function createNode(group, nodeData, index) {
+        const pos = calculateNodePosition(nodeData);
+
+        // Create node group
+        const nodeGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        nodeGroup.setAttribute('class', `node node-${nodeData.id}`);
+        nodeGroup.setAttribute('data-id', nodeData.id);
+        nodeGroup.style.cursor = 'pointer';
+
+        // Create circle background
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', pos.x);
+        circle.setAttribute('cy', pos.y);
+        circle.setAttribute('r', nodeData.size / 2);
+        circle.setAttribute('fill', nodeData.color);
+        circle.setAttribute('stroke', '#ffffff');
+        circle.setAttribute('stroke-width', CONFIG.nodes.borderWidth);
+        circle.setAttribute('filter', 'url(#glow)');
+        circle.style.transition = 'all 0.3s ease';
+
+        // Create text label
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', pos.x);
+        text.setAttribute('y', pos.y + 5);
+        text.setAttribute('text-anchor', 'middle');
+        text.setAttribute('fill', '#ffffff');
+        text.setAttribute('font-family', 'Arial, sans-serif');
+        text.setAttribute('font-size', '14');
+        text.setAttribute('font-weight', 'bold');
+        text.style.pointerEvents = 'none';
+        text.style.userSelect = 'none';
+
+        // Handle multi-line text
+        const lines = nodeData.label.split('\n');
+        if (lines.length > 1) {
+            lines.forEach((line, lineIndex) => {
+                const tspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+                tspan.setAttribute('x', pos.x);
+                tspan.setAttribute('dy', lineIndex === 0 ? 0 : '1.2em');
+                tspan.textContent = line;
+                text.appendChild(tspan);
             });
-
-            // Get central node position
-            const containerRect = diagramContainer.getBoundingClientRect();
-            const centralRect = centralNode.getBoundingClientRect();
-
-            // Calculate relative position
-            const centralX = centralRect.left + centralRect.width / 2 - containerRect.left;
-            const centralY = centralRect.top + centralRect.height / 2 - containerRect.top;
-
-            // Create connections from central node to each node
-            nodes.forEach((node, index) => {
-                try {
-                    const nodeRect = node.getBoundingClientRect();
-                    const nodeX = nodeRect.left + nodeRect.width / 2 - containerRect.left;
-                    const nodeY = nodeRect.top + nodeRect.height / 2 - containerRect.top;
-
-                    // Calculate distance and angle
-                    const dx = nodeX - centralX;
-                    const dy = nodeY - centralY;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-
-                    // Create connection line
-                    const connection = document.createElement('div');
-                    connection.className = 'connection diagonal';
-                    connection.style.width = `${distance}px`;
-                    connection.style.left = `${centralX}px`;
-                    connection.style.top = `${centralY}px`;
-                    connection.style.transform = `rotate(${angle}deg)`;
-
-                    // Add data attributes for animation and identification
-                    connection.dataset.index = index;
-                    connection.dataset.angle = angle;
-                    connection.dataset.type = 'central';
-                    connection.dataset.source = 'central';
-                    connection.dataset.target = index;
-
-                    diagramContainer.appendChild(connection);
-                } catch (error) {
-                    console.error(`LLM Diagram: Error creating central connection ${index}:`, error);
-                }
-            });
-
-            // Create connections between adjacent nodes with a maximum of 20 connections
-            // to prevent performance issues
-            const maxAdjacentConnections = Math.min(nodes.length, 20);
-
-            for (let i = 0; i < maxAdjacentConnections; i++) {
-                try {
-                    const node1 = nodes[i];
-                    const node2 = nodes[(i + 1) % nodes.length];
-
-                    const node1Rect = node1.getBoundingClientRect();
-                    const node2Rect = node2.getBoundingClientRect();
-
-                    const node1X = node1Rect.left + node1Rect.width / 2 - containerRect.left;
-                    const node1Y = node1Rect.top + node1Rect.height / 2 - containerRect.top;
-                    const node2X = node2Rect.left + node2Rect.width / 2 - containerRect.left;
-                    const node2Y = node2Rect.top + node2Rect.height / 2 - containerRect.top;
-
-                    // Calculate distance and angle
-                    const dx = node2X - node1X;
-                    const dy = node2Y - node1Y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-
-                    // Skip if distance is too large (prevents connections across the entire diagram)
-                    if (distance > containerRect.width * 0.7) {
-                        continue;
-                    }
-
-                    // Create connection line
-                    const connection = document.createElement('div');
-                    connection.className = 'connection diagonal';
-                    connection.style.width = `${distance}px`;
-                    connection.style.left = `${node1X}px`;
-                    connection.style.top = `${node1Y}px`;
-                    connection.style.transform = `rotate(${angle}deg)`;
-
-                    // Add data attributes for animation and identification
-                    connection.dataset.index = i + nodes.length;
-                    connection.dataset.angle = angle;
-                    connection.dataset.type = 'adjacent';
-                    connection.dataset.source = i;
-                    connection.dataset.target = (i + 1) % nodes.length;
-
-                    diagramContainer.appendChild(connection);
-                } catch (error) {
-                    console.error(`LLM Diagram: Error creating adjacent connection ${i}:`, error);
-                }
-            }
-
-            // Setup resize handler to update connections
-            const updateConnections = function() {
-                try {
-                    // Remove existing connections
-                    diagramContainer.querySelectorAll('.connection.diagonal').forEach(conn => {
-                        conn.remove();
-                    });
-
-                    // Recreate connections
-                    createConnectionLines().catch(error => {
-                        console.error('LLM Diagram: Error updating connections:', error);
-                    });
-                } catch (error) {
-                    console.error('LLM Diagram: Error in resize handler:', error);
-                }
-            };
-
-            // Use debounced resize handler for performance
-            if (utils.debounce) {
-                resizeHandler = utils.debounce(updateConnections, 200);
-            } else {
-                // Simple debounce implementation if utilities not available
-                resizeHandler = function() {
-                    if (resizeHandler.timeout) {
-                        clearTimeout(resizeHandler.timeout);
-                    }
-                    resizeHandler.timeout = setTimeout(updateConnections, 200);
-                };
-            }
-
-            window.addEventListener('resize', resizeHandler);
-
-            resolve();
-        } catch (error) {
-            console.error('LLM Diagram: Fatal error creating connections:', error);
-            // Resolve anyway to continue initialization
-            resolve();
+        } else {
+            text.textContent = nodeData.label;
         }
-    });
-}
+
+        // Add icon if available
+        if (nodeData.icon) {
+            const iconText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            iconText.setAttribute('x', pos.x);
+            iconText.setAttribute('y', pos.y - 20);
+            iconText.setAttribute('text-anchor', 'middle');
+            iconText.setAttribute('font-size', '20');
+            iconText.textContent = nodeData.icon;
+            iconText.style.pointerEvents = 'none';
+            nodeGroup.appendChild(iconText);
+        }
+
+        // Add hover effects
+        nodeGroup.addEventListener('mouseenter', () => {
+            circle.setAttribute('r', (nodeData.size / 2) + 5);
+            circle.setAttribute('stroke-width', CONFIG.nodes.borderWidth + 1);
+
+            // Show tooltip
+            showTooltip(nodeData, pos);
+        });
+
+        nodeGroup.addEventListener('mouseleave', () => {
+            circle.setAttribute('r', nodeData.size / 2);
+            circle.setAttribute('stroke-width', CONFIG.nodes.borderWidth);
+
+            // Hide tooltip
+            hideTooltip();
+        });
+
+        // Add click handler
+        nodeGroup.addEventListener('click', () => {
+            handleNodeClick(nodeData);
+        });
+
+        nodeGroup.appendChild(circle);
+        nodeGroup.appendChild(text);
+        group.appendChild(nodeGroup);
+
+        // Store reference for animations
+        nodeGroup.style.opacity = '0';
+        nodeGroup.style.transform = 'scale(0.5)';
+
+        // Animate in with stagger
+        setTimeout(() => {
+            nodeGroup.style.transition = `all ${CONFIG.animation.duration}ms ${CONFIG.animation.easing}`;
+            nodeGroup.style.opacity = '1';
+            nodeGroup.style.transform = 'scale(1)';
+        }, index * CONFIG.animation.stagger);
+    }
 
 /**
  * Add tooltips to nodes with concept descriptions
@@ -539,3 +787,226 @@ function animateDiagram() {
         }
     });
 }
+
+    /**
+     * Add diagram title
+     */
+    function addDiagramTitle(svg) {
+        const title = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        title.setAttribute('x', '400');
+        title.setAttribute('y', '40');
+        title.setAttribute('text-anchor', 'middle');
+        title.setAttribute('fill', '#ffffff');
+        title.setAttribute('font-family', 'Arial, sans-serif');
+        title.setAttribute('font-size', '24');
+        title.setAttribute('font-weight', 'bold');
+        title.textContent = 'LLM Architecture & Components';
+        title.style.opacity = '0.9';
+
+        svg.appendChild(title);
+    }
+
+    /**
+     * Show tooltip for node
+     */
+    function showTooltip(nodeData, position) {
+        hideTooltip(); // Remove any existing tooltip
+
+        const tooltip = document.createElement('div');
+        tooltip.id = 'llm-node-tooltip';
+        tooltip.style.cssText = `
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            max-width: 250px;
+            z-index: 1000;
+            pointer-events: none;
+            border: 1px solid ${nodeData.color};
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        `;
+
+        tooltip.innerHTML = `
+            <div style="font-weight: bold; margin-bottom: 4px;">${nodeData.label}</div>
+            <div style="font-size: 12px; opacity: 0.8;">${nodeData.description}</div>
+            <div style="font-size: 11px; margin-top: 4px; color: ${nodeData.color};">
+                Category: ${nodeData.category}
+            </div>
+        `;
+
+        document.body.appendChild(tooltip);
+
+        // Position tooltip
+        const rect = diagramSvg.getBoundingClientRect();
+        const tooltipRect = tooltip.getBoundingClientRect();
+
+        tooltip.style.left = (rect.left + position.x - tooltipRect.width / 2) + 'px';
+        tooltip.style.top = (rect.top + position.y - tooltipRect.height - 10) + 'px';
+    }
+
+    /**
+     * Hide tooltip
+     */
+    function hideTooltip() {
+        const tooltip = document.getElementById('llm-node-tooltip');
+        if (tooltip) {
+            tooltip.remove();
+        }
+    }
+
+    /**
+     * Handle node click
+     */
+    function handleNodeClick(nodeData) {
+        console.log(`🔍 Clicked on ${nodeData.label}`);
+
+        // Navigate to relevant page or show more info
+        const routes = {
+            'transformer': '/learn?topic=transformer',
+            'attention': '/learn?topic=attention',
+            'multihead': '/learn?topic=multihead-attention',
+            'bert': '/learn?topic=bert',
+            't5': '/learn?topic=t5',
+            'encoder': '/learn?topic=encoder',
+            'decoder': '/learn?topic=decoder'
+        };
+
+        if (routes[nodeData.id]) {
+            window.location.href = routes[nodeData.id];
+        }
+    }
+
+    /**
+     * Add interactivity to the diagram
+     */
+    function addInteractivity() {
+        // Add keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                hideTooltip();
+            }
+        });
+
+        // Add click outside to hide tooltip
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.node')) {
+                hideTooltip();
+            }
+        });
+    }
+
+    /**
+     * Setup responsive behavior
+     */
+    function setupResponsiveBehavior() {
+        resizeHandler = () => {
+            // Update diagram on resize if needed
+            if (diagramSvg) {
+                const container = diagramSvg.parentElement;
+                if (container) {
+                    const rect = container.getBoundingClientRect();
+                    diagramSvg.setAttribute('viewBox', `0 0 ${rect.width} ${rect.height}`);
+                }
+            }
+        };
+
+        window.addEventListener('resize', resizeHandler);
+    }
+
+    /**
+     * Animate entrance of diagram elements
+     */
+    function animateEntrance() {
+        // Animate connections first
+        const connections = diagramSvg.querySelectorAll('.connection-line');
+        connections.forEach((conn, index) => {
+            conn.style.strokeDasharray = '1000';
+            conn.style.strokeDashoffset = '1000';
+            conn.style.animation = `drawLine 1s ease-out ${index * 0.1}s forwards`;
+        });
+
+        // Add CSS for line drawing animation
+        if (!document.getElementById('line-draw-animation')) {
+            const style = document.createElement('style');
+            style.id = 'line-draw-animation';
+            style.textContent = `
+                @keyframes drawLine {
+                    to {
+                        stroke-dashoffset: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+    }
+
+    /**
+     * Show fallback content if diagram fails to load
+     */
+    function showFallbackContent() {
+        const container = document.querySelector('.modern-llm-diagram-container');
+        const fallback = document.querySelector('#diagram-fallback');
+        const description = document.querySelector('#diagram-description');
+
+        if (container) {
+            container.style.display = 'none';
+        }
+
+        if (fallback) {
+            fallback.classList.remove('d-none');
+        }
+
+        if (description) {
+            description.innerHTML = '<i class="bi bi-info-circle me-1"></i>LLM Architecture Overview';
+        }
+    }
+
+    /**
+     * Clean up resources
+     */
+    function cleanup() {
+        try {
+            console.log('🧹 Cleaning up Modern LLM Diagram resources...');
+
+            // Remove resize handler
+            if (resizeHandler) {
+                window.removeEventListener('resize', resizeHandler);
+                resizeHandler = null;
+            }
+
+            // Remove event listeners
+            eventListeners.forEach(({ element, event, handler }) => {
+                if (element && element.removeEventListener) {
+                    element.removeEventListener(event, handler);
+                }
+            });
+            eventListeners = [];
+
+            // Cancel animation frame
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
+
+            // Remove tooltips
+            hideTooltip();
+
+            console.log('✅ Modern LLM Diagram cleanup complete');
+        } catch (error) {
+            console.error('❌ Error during cleanup:', error);
+        }
+    }
+
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initLLMDiagram);
+    } else {
+        setTimeout(initLLMDiagram, 0);
+    }
+
+    // Expose cleanup function globally for manual cleanup if needed
+    window.cleanupModernLLMDiagram = cleanup;
+
+})();

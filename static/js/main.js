@@ -91,7 +91,7 @@ function searchWord() {
     let input = wordInput.value.trim().toLowerCase();
 
     if (!input) {
-        alert('Please enter a word or sentence to search');
+        console.log('Please enter a word or sentence to search');
         return;
     }
 
@@ -833,8 +833,8 @@ function createAIAssistantButton() {
         if (window.aiAssistant && window.aiAssistant.toggleAssistant) {
             window.aiAssistant.toggleAssistant();
         } else {
-            // Show simple alert for now
-            alert('🤖 AI Assistant\n\nLoading AI capabilities...\nPlease try again in a moment!');
+            // Log instead of showing alert
+            console.log('🤖 AI Assistant: Loading AI capabilities...');
         }
     });
 
@@ -895,7 +895,7 @@ setTimeout(() => {
             color: white !important;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
         `;
-        emergencyBtn.onclick = () => alert('🤖 AI Assistant is loading...');
+        emergencyBtn.onclick = () => console.log('🤖 AI Assistant is loading...');
         document.body.appendChild(emergencyBtn);
         console.log('Emergency AI button created!');
     }

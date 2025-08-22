@@ -24,42 +24,22 @@
                     </div>
                 </div>
                 <div class="col-lg-4 text-center">
-                    <!-- LLM Functional Diagram -->
-                    <div class="llm-diagram">
-                        <div class="diagram-container">
-                            <svg width="300" height="200" viewBox="0 0 300 200" class="img-fluid">
-                                <!-- Input Layer -->
-                                <rect x="20" y="80" width="60" height="40" fill="#4db394" rx="5"/>
-                                <text x="50" y="105" text-anchor="middle" fill="white" font-size="12">Input</text>
-
-                                <!-- Transformer Layers -->
-                                <rect x="120" y="60" width="60" height="20" fill="#9c9bd4" rx="3"/>
-                                <text x="150" y="73" text-anchor="middle" fill="white" font-size="10">Attention</text>
-
-                                <rect x="120" y="90" width="60" height="20" fill="#a082c9" rx="3"/>
-                                <text x="150" y="103" text-anchor="middle" fill="white" font-size="10">LoRA</text>
-
-                                <rect x="120" y="120" width="60" height="20" fill="#9c9bd4" rx="3"/>
-                                <text x="150" y="133" text-anchor="middle" fill="white" font-size="10">FFN</text>
-
-                                <!-- Output Layer -->
-                                <rect x="220" y="80" width="60" height="40" fill="#4db394" rx="5"/>
-                                <text x="250" y="105" text-anchor="middle" fill="white" font-size="12">Output</text>
-
-                                <!-- Arrows -->
-                                <path d="M 80 100 L 115 100" stroke="white" stroke-width="2" marker-end="url(#arrowhead)"/>
-                                <path d="M 185 100 L 215 100" stroke="white" stroke-width="2" marker-end="url(#arrowhead)"/>
-
-                                <!-- Arrow marker -->
-                                <defs>
-                                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-                                        <polygon points="0 0, 10 3.5, 0 7" fill="white"/>
-                                    </marker>
-                                </defs>
-                            </svg>
-                        </div>
-                        <p class="mt-2 small">LLM Fine-Tuning Architecture</p>
+                    <!-- Modern Interactive LLM Diagram -->
+                    <div id="modern-llm-diagram" class="modern-llm-diagram-container">
+                        <!-- Diagram will be dynamically created by JavaScript -->
                     </div>
+                    <!-- Fallback content if diagram doesn't load -->
+                    <div id="diagram-fallback" class="d-none">
+                        <div class="text-center py-5">
+                            <i class="bi bi-diagram-3 display-1 text-primary mb-3"></i>
+                            <h5 class="text-muted">LLM Architecture</h5>
+                            <p class="small text-muted">Interactive diagram loading...</p>
+                        </div>
+                    </div>
+                    <p class="mt-3 small text-muted" id="diagram-description">
+                        <i class="bi bi-cursor-fill me-1"></i>
+                        Interactive LLM Architecture - Click nodes to explore
+                    </p>
                 </div>
             </div>
         </div>
@@ -490,211 +470,34 @@
 {% endblock %}
 
 {% block scripts %}
-<!-- HOMEPAGE AI ASSISTANT BUTTON - CLEAN & GUARANTEED -->
+<!-- Modern LLM Diagram CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/modern-llm-diagram.css') }}">
+
+<!-- Modern LLM Diagram JavaScript -->
+<script src="{{ url_for('static', filename='js/enhanced-llm-diagram.js') }}"></script>
+
+<!-- HOMEPAGE AI ASSISTANT - DISABLED - USING MAIN OLLAMA SYSTEM -->
 <script>
-// Homepage AI Assistant Button - Ultra-Clean Implementation
+// Homepage AI Integration - Use Main Ollama AI Assistant Only
 (function() {
-    console.log('🏠 Homepage AI Assistant Starting...');
+    console.log('🏠 Homepage - Using Main Ollama AI System Only');
 
-    function createHomepageAIButton() {
-        // Check if AI button already exists
-        let aiButton = document.getElementById('homepage-ai-button');
+    // Disable any homepage-specific AI functionality
+    // The main AI assistant (final-ai-assistant.js) handles everything
 
-        if (!aiButton) {
-            console.log('🤖 Creating Homepage AI Assistant button...');
-
-            // Create the button
-            aiButton = document.createElement('div');
-            aiButton.id = 'homepage-ai-button';
-            aiButton.innerHTML = '🤖';
-            aiButton.title = 'Visual LLM AI Assistant - Ask me anything!';
-
-            // Apply maximum visibility styles
-            aiButton.style.cssText = `
-                position: fixed !important;
-                bottom: 25px !important;
-                right: 25px !important;
-                width: 70px !important;
-                height: 70px !important;
-                background: linear-gradient(135deg, #3c6430, #4f7a41) !important;
-                border: 3px solid #5a8a4d !important;
-                border-radius: 50% !important;
-                color: white !important;
-                font-size: 30px !important;
-                cursor: pointer !important;
-                box-shadow: 0 10px 30px rgba(60, 100, 48, 0.6) !important;
-                z-index: 2147483647 !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                font-family: Arial, sans-serif !important;
-                transition: all 0.3s ease !important;
-                opacity: 1 !important;
-                visibility: visible !important;
-                pointer-events: auto !important;
-                animation: homepagePulse 4s infinite !important;
-            `;
-
-            // Add pulsing animation
-            if (!document.getElementById('homepage-ai-styles')) {
-                const style = document.createElement('style');
-                style.id = 'homepage-ai-styles';
-                style.textContent = `
-                    @keyframes homepagePulse {
-                        0% {
-                            box-shadow: 0 10px 30px rgba(60, 100, 48, 0.6), 0 0 0 0 rgba(60, 100, 48, 0.7);
-                            transform: scale(1);
-                        }
-                        50% {
-                            box-shadow: 0 10px 30px rgba(60, 100, 48, 0.6), 0 0 0 15px rgba(60, 100, 48, 0);
-                            transform: scale(1.05);
-                        }
-                        100% {
-                            box-shadow: 0 10px 30px rgba(60, 100, 48, 0.6), 0 0 0 0 rgba(60, 100, 48, 0);
-                            transform: scale(1);
-                        }
-                    }
-                `;
-                document.head.appendChild(style);
-            }
-
-            // Click handler with homepage-specific content
-            aiButton.addEventListener('click', function() {
-                console.log('🤖 Homepage AI Assistant clicked!');
-
-                // Create homepage-specific AI chat interface
-                const existingChat = document.getElementById('homepage-ai-chat');
-                if (existingChat) {
-                    existingChat.remove();
-                    return;
-                }
-
-                const chatBox = document.createElement('div');
-                chatBox.id = 'homepage-ai-chat';
-                chatBox.innerHTML = `
-                    <div style="position: fixed; bottom: 110px; right: 25px; width: 380px; height: 450px; background: #0d140a; border: 2px solid #3c6430; border-radius: 12px; z-index: 9998; font-family: Arial, sans-serif; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,0.4);">
-                        <div style="background: linear-gradient(135deg, #3c6430, #4f7a41); color: white; padding: 15px; border-radius: 10px 10px 0 0; display: flex; justify-content: space-between; align-items: center;">
-                            <div style="display: flex; align-items: center; gap: 8px;">
-                                <span style="font-size: 20px;">🤖</span>
-                                <span style="font-weight: bold;">Visual LLM AI Assistant</span>
-                            </div>
-                            <button onclick="document.getElementById('homepage-ai-chat').remove()" style="background: none; border: none; color: white; font-size: 18px; cursor: pointer;">×</button>
-                        </div>
-                        <div style="flex: 1; padding: 15px; color: #e2eedd; overflow-y: auto; font-size: 13px; line-height: 1.4;">
-                            <div style="margin-bottom: 15px; padding: 12px; background: rgba(60, 100, 48, 0.15); border-radius: 6px;">
-                                <div style="font-weight: bold; margin-bottom: 6px; color: #a7cf9b;">🎓 Welcome to Visual LLM!</div>
-                                <div>Your AI assistant for LLM fine-tuning and learning. I'm here to help you navigate the platform and answer questions!</div>
-                            </div>
-
-                            <div style="margin-bottom: 12px;">
-                                <div style="font-weight: bold; margin-bottom: 8px; color: #a7cf9b;">🚀 I can help with:</div>
-                                <div style="margin-bottom: 6px;">• LLM Fine-tuning (LoRA, QLoRA, PEFT)</div>
-                                <div style="margin-bottom: 6px;">• Platform navigation and tutorials</div>
-                                <div style="margin-bottom: 6px;">• Code examples and implementation</div>
-                                <div style="margin-bottom: 6px;">• Learning path recommendations</div>
-                                <div style="margin-bottom: 6px;">• Workshop and quiz guidance</div>
-                            </div>
-
-                            <div style="margin-bottom: 12px; padding: 10px; background: rgba(60, 100, 48, 0.1); border-radius: 6px;">
-                                <div style="font-weight: bold; margin-bottom: 6px; color: #a7cf9b;">📍 Quick Start:</div>
-                                <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
-                                    <a href="/learn" style="color: #a7cf9b; text-decoration: none; padding: 3px 6px; background: rgba(60, 100, 48, 0.2); border-radius: 3px; font-size: 11px;">📚 Start Learning</a>
-                                    <a href="/workshops" style="color: #a7cf9b; text-decoration: none; padding: 3px 6px; background: rgba(60, 100, 48, 0.2); border-radius: 3px; font-size: 11px;">🔧 Workshops</a>
-                                    <a href="/quiz" style="color: #a7cf9b; text-decoration: none; padding: 3px 6px; background: rgba(60, 100, 48, 0.2); border-radius: 3px; font-size: 11px;">❓ Quizzes</a>
-                                </div>
-                                <div style="font-size: 11px; color: #999;">💡 Try asking: "How do I start with LoRA?" or "Show me beginner workshops"</div>
-                            </div>
-
-                            <div style="font-size: 11px; color: #999; text-align: center; margin-top: 10px;">
-                                🤖 <em>Homepage AI Assistant - Always ready to help!</em>
-                            </div>
-                        </div>
-                        <div style="padding: 12px; border-top: 1px solid #3c6430;">
-                            <div style="display: flex; gap: 8px;">
-                                <input type="text" placeholder="Ask me anything about Visual LLM..." style="flex: 1; padding: 8px; background: #2a2a2a; border: 1px solid #3c6430; border-radius: 6px; color: white; font-size: 12px;" id="homepage-ai-input">
-                                <button onclick="sendHomepageMessage()" style="padding: 8px 12px; background: linear-gradient(135deg, #3c6430, #4f7a41); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 12px;">Send</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                document.body.appendChild(chatBox);
-
-                // Focus input
-                setTimeout(() => {
-                    const input = document.getElementById('homepage-ai-input');
-                    if (input) input.focus();
-                }, 100);
-            });
-
-            // Hover effects
-            aiButton.addEventListener('mouseenter', function() {
-                this.style.transform = 'scale(1.1)';
-                this.style.animation = 'none';
-            });
-
-            aiButton.addEventListener('mouseleave', function() {
-                this.style.transform = 'scale(1)';
-                this.style.animation = 'homepagePulse 4s infinite';
-            });
-
-            // Add to page
-            document.body.appendChild(aiButton);
-            console.log('✅ Homepage AI Assistant button created successfully!');
-        } else {
-            console.log('✅ Homepage AI button already exists');
-        }
-
-        // Verify visibility
-        setTimeout(() => {
-            const rect = aiButton.getBoundingClientRect();
-            const isVisible = rect.width > 0 && rect.height > 0;
-            console.log(`📊 Homepage AI Button Status: Visible=${isVisible}, Size=${rect.width}x${rect.height}`);
-
-            if (isVisible) {
-                console.log('🎉 HOMEPAGE AI BUTTON IS WORKING PERFECTLY!');
-            }
-        }, 100);
-    }
-
-    // Simple message handler for homepage
+    // Override any homepage message functions to redirect to main AI
     window.sendHomepageMessage = function() {
-        const input = document.getElementById('homepage-ai-input');
-        if (!input || !input.value.trim()) return;
-
-        const message = input.value.trim();
-        input.value = '';
-
-        // Simple response system for homepage
-        let response = "Thanks for your question! ";
-
-        if (message.toLowerCase().includes('lora')) {
-            response += "LoRA (Low-Rank Adaptation) is a parameter-efficient fine-tuning method. Check out our LoRA guide in the Learning section!";
-        } else if (message.toLowerCase().includes('workshop')) {
-            response += "Our workshops offer hands-on coding experience. Visit the Workshops section to get started!";
-        } else if (message.toLowerCase().includes('quiz')) {
-            response += "Test your knowledge with our interactive quizzes. They're great for reinforcing what you've learned!";
-        } else if (message.toLowerCase().includes('start') || message.toLowerCase().includes('begin')) {
-            response += "Great! I recommend starting with our Learning Paths. They'll guide you from beginner to expert level.";
-        } else {
-            response += "I'm here to help you navigate Visual LLM! Try asking about LoRA, workshops, quizzes, or learning paths.";
+        console.log('🔄 Redirecting to main Ollama AI assistant...');
+        if (window.toggleFinalAI) {
+            window.toggleFinalAI();
         }
-
-        // Add response to chat (simple implementation)
-        alert('🤖 AI Assistant: ' + response);
     };
 
-    // Run immediately
-    createHomepageAIButton();
+    console.log('✅ Homepage AI Integration Complete - Main Ollama System Active');
 
-    // Run when DOM loads
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', createHomepageAIButton);
-    }
+    // No custom AI button needed - main system handles everything
 
-    // Run when window loads
-    window.addEventListener('load', createHomepageAIButton);
 
-    console.log('✅ Homepage AI Assistant System Activated!');
 })();
 </script>
 {% endblock %}

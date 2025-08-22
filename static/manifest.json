@@ -1,187 +1,127 @@
 {
-  "name": "Visual LLM - Fine-Tuning Platform",
+  "name": "Visual LLM - Learn AI Fine-tuning",
   "short_name": "Visual LLM",
-  "description": "Comprehensive platform for learning LLM fine-tuning techniques with interactive tutorials, workshops, and AI-powered assistance",
+  "description": "Interactive platform for learning LLM fine-tuning with LoRA and QLoRA",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0a0f0d",
-  "theme_color": "#4db394",
+  "background_color": "#eef5eb",
+  "theme_color": "#3c6430",
   "orientation": "portrait-primary",
-  "scope": "/",
+  "categories": [
+    "education",
+    "productivity",
+    "utilities"
+  ],
   "lang": "en",
   "dir": "ltr",
-  "categories": ["education", "productivity", "developer"],
-  "screenshots": [
-    {
-      "src": "/static/images/screenshot-desktop.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "platform": "wide",
-      "label": "Visual LLM Desktop Interface"
-    },
-    {
-      "src": "/static/images/screenshot-mobile.png",
-      "sizes": "390x844",
-      "type": "image/png",
-      "platform": "narrow",
-      "label": "Visual LLM Mobile Interface"
-    }
-  ],
   "icons": [
     {
       "src": "/static/images/icon-72x72.png",
       "sizes": "72x72",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "maskable any"
     },
     {
       "src": "/static/images/icon-96x96.png",
       "sizes": "96x96",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "maskable any"
     },
     {
       "src": "/static/images/icon-128x128.png",
       "sizes": "128x128",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "maskable any"
     },
     {
       "src": "/static/images/icon-144x144.png",
       "sizes": "144x144",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "maskable any"
     },
     {
       "src": "/static/images/icon-152x152.png",
       "sizes": "152x152",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "maskable any"
     },
     {
       "src": "/static/images/icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "maskable any"
     },
     {
       "src": "/static/images/icon-384x384.png",
       "sizes": "384x384",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "maskable any"
     },
     {
       "src": "/static/images/icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "maskable any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/static/images/screenshot-mobile-1.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Visual LLM Learning Interface"
+    },
+    {
+      "src": "/static/images/screenshot-desktop-1.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Visual LLM Desktop Experience"
     }
   ],
   "shortcuts": [
     {
-      "name": "Learning Paths",
-      "short_name": "Learn",
-      "description": "Access structured learning paths for LLM fine-tuning",
-      "url": "/learning-paths",
+      "name": "Learn LoRA",
+      "short_name": "LoRA",
+      "description": "Start learning LoRA fine-tuning",
+      "url": "/learn?topic=lora",
       "icons": [
         {
-          "src": "/static/images/shortcut-learn.png",
-          "sizes": "96x96",
-          "type": "image/png"
+          "src": "/static/images/lora-icon.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "AI Assistant",
+      "short_name": "AI Chat",
+      "description": "Chat with AI assistant",
+      "url": "/ai-assistant",
+      "icons": [
+        {
+          "src": "/static/images/ai-icon.png",
+          "sizes": "96x96"
         }
       ]
     },
     {
       "name": "Workshops",
       "short_name": "Workshops",
-      "description": "Hands-on workshops for practical learning",
+      "description": "Hands-on workshops",
       "url": "/workshops",
       "icons": [
         {
-          "src": "/static/images/shortcut-workshop.png",
-          "sizes": "96x96",
-          "type": "image/png"
-        }
-      ]
-    },
-    {
-      "name": "AI Assistant",
-      "short_name": "AI Help",
-      "description": "Get help from the AI-powered code assistant",
-      "url": "/ai-assistant",
-      "icons": [
-        {
-          "src": "/static/images/shortcut-ai.png",
-          "sizes": "96x96",
-          "type": "image/png"
-        }
-      ]
-    },
-    {
-      "name": "Progress Dashboard",
-      "short_name": "Progress",
-      "description": "Track your learning progress and achievements",
-      "url": "/analytics/dashboard",
-      "icons": [
-        {
-          "src": "/static/images/shortcut-progress.png",
-          "sizes": "96x96",
-          "type": "image/png"
+          "src": "/static/images/workshop-icon.png",
+          "sizes": "96x96"
         }
       ]
     }
   ],
-  "related_applications": [],
-  "prefer_related_applications": false,
-  "edge_side_panel": {
-    "preferred_width": 400
-  },
-  "launch_handler": {
-    "client_mode": "navigate-existing"
-  },
-  "handle_links": "preferred",
-  "protocol_handlers": [
+  "related_applications": [
     {
-      "protocol": "web+visualllm",
-      "url": "/share?url=%s"
+      "platform": "webapp",
+      "url": "https://visualllm.com"
     }
-  ],
-  "share_target": {
-    "action": "/share",
-    "method": "POST",
-    "enctype": "multipart/form-data",
-    "params": {
-      "title": "title",
-      "text": "text",
-      "url": "url",
-      "files": [
-        {
-          "name": "files",
-          "accept": [
-            ".py",
-            ".ipynb",
-            ".txt",
-            ".md"
-          ]
-        }
-      ]
-    }
-  },
-  "file_handlers": [
-    {
-      "action": "/open-file",
-      "accept": {
-        "text/python": [".py"],
-        "application/x-ipynb+json": [".ipynb"],
-        "text/markdown": [".md"],
-        "text/plain": [".txt"]
-      }
-    }
-  ],
-  "display_override": [
-    "window-controls-overlay",
-    "standalone",
-    "minimal-ui",
-    "browser"
   ]
 }

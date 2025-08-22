@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
     <!-- 2. Dark/Light Theme System -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom-dark-mode.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dark-mode.css') }}">
 
     <!-- 3. AI Assistant Styling -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/ai-assistant.css') }}">
@@ -27,7 +27,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/exact-navigation-match.css') }}">
 
     <!-- 5. Navigation Overrides -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/final-navigation-override.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navigation.css') }}">
 
     <!-- 6. Final Navigation Fixes (MUST BE LAST) -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/absolute-final-navigation.css') }}">
@@ -120,6 +120,11 @@
                     <form class="d-flex me-3" method="GET" action="{{ url_for('search_results') }}">
                         <input class="form-control" type="search" name="q" placeholder="Search concepts..." style="width: 200px;">
                     </form>
+
+                    <!-- Theme Toggle Button -->
+                    <button id="theme-toggle" class="btn btn-outline-secondary me-2" type="button" title="Toggle light/dark theme">
+                        <i class="bi bi-moon-fill"></i>
+                    </button>
 
                     <!-- Authentication -->
                     {% if current_user.is_authenticated %}
@@ -292,11 +297,15 @@
     <!-- Simple Category Filter - Guaranteed to work -->
     <script src="{{ url_for('static', filename='js/simple-category-filter.js') }}"></script>
 
+    <!-- FREE Ollama AI Assistant - Floating bot for all pages -->
+    <script src="{{ url_for('static', filename='js/final-ai-assistant.js') }}"></script>
+
     <script src="{{ url_for('static', filename='js/pwa-support.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/advanced-notification-system.js') }}"></script>
+    <!-- TEMPORARILY DISABLED - CAUSING POPUP CONFLICTS -->
+    <!-- <script src="{{ url_for('static', filename='js/advanced-notification-system.js') }}"></script> -->
     {% block scripts %}{% endblock %}
 
     <!-- FORCE NAVIGATION STYLING - MUST BE ABSOLUTELY LAST SCRIPT -->
-    <script src="{{ url_for('static', filename='js/force-navigation-styling.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/enhanced-navigation.js') }}"></script>
 </body>
 </html>

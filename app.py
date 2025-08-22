@@ -29,6 +29,536 @@ from quiz.routes import quiz_bp as quiz_module
 # Load environment variables from .env file if it exists
 load_dotenv()
 
+# FREE OLLAMA AI ASSISTANT IMPLEMENTATION
+import requests
+import subprocess
+import time
+from typing import Optional, Dict, List
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
+
+class FreeOllamaAIAssistant:
+    """
+    100% FREE Ollama AI Assistant for Visual LLM Education
+    No API keys, no costs, unlimited usage
+    """
+
+    def __init__(self, base_url="http://localhost:11434"):
+        self.base_url = base_url
+        self.models = {
+            'educational': 'visual-llm-educator',  # Our custom educational AI with teacher personality
+            'general': 'llama3.1',                 # Best overall model - Latest Llama
+            'fast': 'llama3.2',                    # Fast responses - Smaller Llama
+            'code': 'codellama',                   # Code generation specialist
+            'small': 'llama3.2',                   # Lightweight but capable
+            'math': 'llama3.1',                    # Mathematical reasoning - Most capable
+            'fallback': 'mistral'                  # Fallback if Llama models unavailable
+        }
+        self.current_model = 'general'
+        self.llm_knowledge = self._load_educational_content()
+
+        # Create session with connection pooling for high-volume usage
+        self.session = requests.Session()
+
+        # Configure retry strategy
+        retry_strategy = Retry(
+            total=3,
+            backoff_factor=1,
+            status_forcelist=[429, 500, 502, 503, 504],
+        )
+
+        # Mount adapter with retry strategy
+        adapter = HTTPAdapter(
+            pool_connections=10,
+            pool_maxsize=20,
+            max_retries=retry_strategy
+        )
+        self.session.mount("http://", adapter)
+        self.session.mount("https://", adapter)
+
+    def _load_educational_content(self):
+        """Educational content for LLM fine-tuning"""
+        return {
+            'lora': """LoRA (Low-Rank Adaptation) is a parameter-efficient fine-tuning technique that:
+            - Reduces trainable parameters by up to 99%
+            - Decomposes weight updates into low-rank matrices
+            - Maintains model performance while using less memory
+            - Enables fine-tuning on consumer GPUs""",
+
+            'qlora': """QLoRA combines quantization with LoRA:
+            - Uses 4-bit quantization to reduce memory usage
+            - Maintains LoRA's parameter efficiency
+            - Enables fine-tuning 70B models on single GPU
+            - Preserves model quality despite quantization""",
+
+            'transformer': """The Transformer architecture revolutionized NLP:
+            - Uses self-attention instead of recurrence
+            - Enables parallel processing of sequences
+            - Better at capturing long-range dependencies
+            - Foundation for models like BERT, GPT, T5""",
+
+            'attention': """Attention mechanisms allow models to:
+            - Focus on relevant parts of input sequences
+            - Compute relationships between all positions
+            - Handle variable-length sequences efficiently
+            - Form the core of transformer architectures""",
+
+            'fine_tuning': """Fine-tuning adapts pre-trained models:
+            - Continues training on domain-specific data
+            - Uses lower learning rates than pre-training
+            - Can be full fine-tuning or parameter-efficient
+            - Transfers knowledge to new tasks effectively"""
+        }
+
+    def is_available(self) -> bool:
+        """Check if Ollama is running"""
+        try:
+            response = self.session.get(f"{self.base_url}/api/tags", timeout=3)
+            return response.status_code == 200
+        except:
+            return False
+
+    def start_ollama(self) -> bool:
+        """Start Ollama service"""
+        try:
+            subprocess.Popen(['ollama', 'serve'],
+                           stdout=subprocess.DEVNULL,
+                           stderr=subprocess.DEVNULL)
+            time.sleep(3)  # Wait for service to start
+            return self.is_available()
+        except:
+            return False
+
+    def download_model(self, model_name: str) -> bool:
+        """Download a model if not present"""
+        try:
+            print(f"📦 Downloading {model_name}...")
+            result = subprocess.run([
+                'ollama', 'pull', model_name
+            ], capture_output=True, text=True)
+            return result.returncode == 0
+        except:
+            return False
+
+    def get_available_models(self) -> List[str]:
+        """Get list of downloaded models"""
+        if not self.is_available():
+            return []
+
+        try:
+            response = self.session.get(f"{self.base_url}/api/tags", timeout=5)
+            if response.status_code == 200:
+                models = response.json().get('models', [])
+                return [model['name'].split(':')[0] for model in models]
+            return []
+        except:
+            return []
+
+    def choose_best_model(self, query: str) -> str:
+        """Choose best model based on query content and availability - prioritizing educational model"""
+        query_lower = query.lower()
+        available_models = self.get_available_models()
+
+        # Educational keywords that benefit from our custom educational model
+        educational_keywords = [
+            'lora', 'qlora', 'fine-tuning', 'transformer', 'attention', 'peft', 'adapter',
+            'explain', 'what is', 'how does', 'why', 'teach', 'learn', 'understand',
+            'difference', 'compare', 'example', 'tutorial', 'guide', 'help'
+        ]
+
+        # ALWAYS prioritize our custom educational model for educational content
+        if any(word in query_lower for word in educational_keywords):
+            # For educational content: prioritize our custom model first
+            preferred_models = [self.models['educational'], self.models['general'], self.models['math']]
+        elif any(word in query_lower for word in ['code', 'python', 'javascript', 'programming', 'function', 'implementation']):
+            # For code: prefer educational model (it has coding knowledge), then codellama
+            preferred_models = [self.models['educational'], self.models.get('code'), self.models['general']]
+        elif any(word in query_lower for word in ['math', 'calculate', 'equation', 'formula', 'statistics', 'parameter']):
+            # For math: prefer educational model, then math-capable models
+            preferred_models = [self.models['educational'], self.models['math'], self.models['general']]
+        elif any(word in query_lower for word in ['quick', 'fast', 'simple', 'brief', 'hello', 'hi']) or len(query) < 30:
+            # For quick queries: still try educational model first for consistency
+            preferred_models = [self.models['educational'], self.models['fast'], self.models['small']]
+        else:
+            # For all other content: default to educational model for best teaching experience
+            preferred_models = [self.models['educational'], self.models['general'], self.models['fast']]
+
+        # Return the first available model from preferences
+        for model in preferred_models:
+            if model and model in available_models:
+                return model
+
+        # Fallback to any available model (prefer newer models)
+        if available_models:
+            # Prefer llama3.2 or llama3.1 if available
+            for preferred in ['llama3.2', 'llama3.1', 'mistral']:
+                if preferred in available_models:
+                    return preferred
+            return available_models[0]
+
+        # Final fallback
+        return self.models.get('fast', 'llama3.2')
+
+    def enhance_prompt(self, user_query: str) -> str:
+        """Add comprehensive educational context to prompts for intelligent responses"""
+        context = """You are Professor LLM, an expert AI educator specializing in Large Language Model fine-tuning on the Visual LLM platform.
+
+EDUCATIONAL MISSION: Provide comprehensive, detailed, and practical guidance on LLM fine-tuning techniques.
+
+YOUR EXPERTISE INCLUDES:
+• LoRA (Low-Rank Adaptation) - mathematical foundations, implementation, optimization
+• QLoRA (Quantized LoRA) - 4-bit quantization, memory efficiency, hardware requirements
+• Parameter-Efficient Fine-Tuning (PEFT) - methods, comparisons, best practices
+• Transformer architectures - attention mechanisms, layer structures, scaling
+• Hugging Face ecosystem - transformers, peft, datasets, model hub
+• Practical implementation - complete code examples, debugging, optimization
+• Hardware considerations - GPU memory, quantization, distributed training
+
+RESPONSE REQUIREMENTS:
+✅ Provide detailed, comprehensive explanations (minimum 300 words for technical topics)
+✅ Include practical code examples with explanations
+✅ Use clear educational structure with headings and bullet points
+✅ Explain mathematical concepts in accessible terms
+✅ Offer step-by-step implementation guidance
+✅ Compare different approaches and their trade-offs
+✅ Include best practices and common pitfalls
+✅ Maintain encouraging, supportive educational tone
+
+VISUAL LLM PLATFORM CONTEXT:
+This is an educational platform focused on teaching LLM fine-tuning techniques. Users are students and practitioners learning about:
+- LoRA and QLoRA fine-tuning methods
+- Parameter-efficient training techniques
+- Practical implementation with real models
+- Memory optimization and hardware efficiency
+- Production deployment strategies
+
+PLATFORM FEATURES:
+- Interactive learning modules and workshops
+- Hands-on coding exercises with real models
+- Comprehensive tutorials and guides
+- Quizzes and assessments for knowledge retention
+- AI assistant support across all pages
+- Code examples and practical implementations
+
+RESPONSE FORMAT:
+- Use educational emojis (🎓, 📚, 💡, 🔍, ✅) for visual appeal
+- Structure responses with clear headings and bullet points
+- Include code examples when relevant
+- Provide step-by-step guidance for complex topics
+- Encourage hands-on learning and experimentation
+
+        """
+
+        # Add relevant educational content with enhanced context
+        for keyword, content in self.llm_knowledge.items():
+            if keyword.lower() in user_query.lower():
+                context += f"\nRELEVANT EDUCATIONAL BACKGROUND on {keyword.upper()}:\n{content}\n"
+
+        # Add specific context based on query type
+        query_lower = user_query.lower()
+        if any(word in query_lower for word in ['code', 'example', 'implementation', 'python']):
+            context += "\nNOTE: Provide complete, working code examples with detailed explanations.\n"
+
+        if any(word in query_lower for word in ['difference', 'compare', 'vs', 'versus']):
+            context += "\nNOTE: Provide comprehensive comparisons with technical details, pros/cons, and use cases.\n"
+
+        if any(word in query_lower for word in ['how', 'step', 'guide', 'tutorial']):
+            context += "\nNOTE: Provide step-by-step guidance with practical implementation details.\n"
+
+        return context + f"\nSTUDENT QUESTION: {user_query}\n\nPlease provide a comprehensive, educational response that includes technical depth, practical examples, and encourages hands-on learning:\n\nRESPONSE:"
+
+    def query(self, user_message: str, model: Optional[str] = None) -> Dict:
+        """Query Ollama with educational enhancement"""
+        # Auto-setup if needed
+        if not self.is_available():
+            print("🔧 Ollama not available, attempting to start...")
+            if not self.start_ollama():
+                return {
+                    'response': 'AI assistant is currently offline. Please ensure Ollama is installed and running. Visit https://ollama.ai for installation instructions.',
+                    'status': 'offline',
+                    'model': 'none'
+                }
+
+        # Choose best model
+        selected_model = model or self.choose_best_model(user_message)
+
+        # Ensure model is available
+        available_models = self.get_available_models()
+        if selected_model not in available_models:
+            # Try to download the model
+            if not self.download_model(selected_model):
+                # Fallback to any available model
+                if available_models:
+                    selected_model = available_models[0]
+                else:
+                    return {
+                        'response': f'No models available. Please download a model first: ollama pull {selected_model}',
+                        'status': 'no_models',
+                        'model': 'none'
+                    }
+
+        enhanced_prompt = self.enhance_prompt(user_message)
+
+        try:
+            # Use session with connection pooling for high-volume usage
+            response = self.session.post(
+                f"{self.base_url}/api/generate",
+                json={
+                    'model': selected_model,
+                    'prompt': enhanced_prompt,
+                    'stream': False,
+                    'options': {
+                        'temperature': 0.7,
+                        'top_p': 0.9,
+                        'top_k': 40,
+                        'num_predict': 2000,    # Increased for comprehensive educational responses
+                        'stop': ['Student question:', 'Human:', 'User:', '\n\nStudent:', '\n\nHuman:'],
+                        'num_ctx': 4096,        # Increased context window for detailed responses
+                        'repeat_penalty': 1.1,  # Reduce repetition
+                        'seed': -1,             # Random seed for variety
+                        'num_thread': 8,        # Increased threads for better performance
+                        'num_gpu': 1,           # Enable GPU if available
+                        'low_vram': False       # Allow more memory for detailed responses
+                    }
+                },
+                timeout=45,  # Optimized timeout for loaded models
+                headers={'Connection': 'keep-alive'}  # Connection pooling
+            )
+
+            if response.status_code == 200:
+                result = response.json()
+                return {
+                    'response': result.get('response', '').strip(),
+                    'status': 'success',
+                    'model': selected_model,
+                    'tokens': result.get('eval_count', 0)
+                }
+            else:
+                return {
+                    'response': 'Sorry, I encountered an error processing your request.',
+                    'status': 'error',
+                    'model': selected_model
+                }
+
+        except Exception as e:
+            return {
+                'response': f'Sorry, I\'m having trouble. Error: {str(e)}',
+                'status': 'error',
+                'model': selected_model
+            }
+
+    def stream_query(self, user_message: str, model: Optional[str] = None):
+        """Stream responses for real-time chat"""
+        if not self.is_available():
+            yield "AI assistant is currently offline. Please ensure Ollama is running."
+            return
+
+        selected_model = model or self.choose_best_model(user_message)
+        enhanced_prompt = self.enhance_prompt(user_message)
+
+        try:
+            response = requests.post(
+                f"{self.base_url}/api/generate",
+                json={
+                    'model': selected_model,
+                    'prompt': enhanced_prompt,
+                    'stream': True,
+                    'options': {
+                        'temperature': 0.7,
+                        'top_p': 0.9,
+                        'max_tokens': 1000
+                    }
+                },
+                stream=True,
+                timeout=60
+            )
+
+            for line in response.iter_lines():
+                if line:
+                    try:
+                        data = json.loads(line)
+                        if 'response' in data:
+                            yield data['response']
+                        if data.get('done', False):
+                            break
+                    except json.JSONDecodeError:
+                        continue
+
+        except Exception as e:
+            yield f"Error: {str(e)}"
+
+# Initialize the FREE AI Assistant
+free_ai_assistant = FreeOllamaAIAssistant()
+
+# Initialize Enhanced AI Assistant with comprehensive knowledge base
+try:
+    from enhanced_ai_assistant import create_enhanced_ai_assistant
+    enhanced_ai_assistant = create_enhanced_ai_assistant()
+    print("✅ Enhanced AI Assistant initialized with comprehensive knowledge base")
+    ENHANCED_KNOWLEDGE_AVAILABLE = True
+except ImportError as e:
+    print(f"⚠️ Enhanced AI Assistant not available: {e}")
+    enhanced_ai_assistant = None
+    ENHANCED_KNOWLEDGE_AVAILABLE = False
+
+# Initialize Multi-Provider AI Assistant for enhanced performance
+try:
+    import asyncio
+    import aiohttp
+    from multi_provider_ai_assistant import MultiProviderAIAssistant
+
+    multi_ai_assistant = MultiProviderAIAssistant()
+    print("✅ Multi-provider AI assistant initialized with Groq, HuggingFace, and Ollama support")
+    ENHANCED_AI_AVAILABLE = True
+except ImportError as e:
+    print(f"⚠️ Multi-provider AI not available (missing dependencies): {e}")
+    multi_ai_assistant = None
+    ENHANCED_AI_AVAILABLE = False
+except Exception as e:
+    print(f"⚠️ Multi-provider AI assistant failed to initialize: {e}")
+    multi_ai_assistant = None
+    ENHANCED_AI_AVAILABLE = False
+
+# Initialize Enhanced API System for comprehensive provider management
+try:
+    from enhanced_api_system import EnhancedAPISystem
+    enhanced_api = EnhancedAPISystem()
+    ENHANCED_API_AVAILABLE = True
+    print("✅ Enhanced API System initialized with multiple provider support")
+except Exception as e:
+    print(f"⚠️ Enhanced API System not available: {e}")
+    enhanced_api = None
+    ENHANCED_API_AVAILABLE = False
+
+# Initialize Comprehensive AI Assistant (Claude-level quality)
+try:
+    from comprehensive_ai_assistant import ComprehensiveAIAssistant
+    comprehensive_ai = ComprehensiveAIAssistant()
+    COMPREHENSIVE_AI_AVAILABLE = True
+    print("🧠 Comprehensive AI Assistant initialized with Claude-level capabilities")
+except Exception as e:
+    print(f"⚠️ Comprehensive AI Assistant not available: {e}")
+    comprehensive_ai = None
+    COMPREHENSIVE_AI_AVAILABLE = False
+
+# Initialize LoRA Model System for actual fine-tuned model inference
+try:
+    from lora_model_server import lora_manager, get_lora_response
+
+    print("✅ LoRA Model System initialized")
+    print("🔍 Checking for available LoRA adapters...")
+
+    available_models = lora_manager.get_available_models()
+    lora_models_available = any(info["adapter_available"] for info in available_models.values())
+
+    if lora_models_available:
+        print("✅ LoRA adapters found and ready for inference")
+        LORA_MODELS_AVAILABLE = True
+    else:
+        print("⚠️ No LoRA adapters found - will use fallback responses")
+        print("💡 Run 'python train_lora_models.py' to train educational assistant")
+        LORA_MODELS_AVAILABLE = False
+
+except ImportError as e:
+    print(f"⚠️ LoRA Model System not available (missing dependencies): {e}")
+    print("📦 Install: pip install transformers peft torch")
+    LORA_MODELS_AVAILABLE = False
+except Exception as e:
+    print(f"⚠️ LoRA Model System failed to initialize: {e}")
+    LORA_MODELS_AVAILABLE = False
+
+# Initialize QLoRA Model System for advanced 4-bit quantized models
+try:
+    from qlora_model_server import qlora_manager, get_qlora_response
+
+    print("⚡ QLoRA Model System initialized")
+    print("🔍 Checking for available QLoRA adapters...")
+
+    available_qlora = qlora_manager.get_available_qlora_models()
+    qlora_models_available = any(info["adapter_available"] for info in available_qlora.values())
+
+    if qlora_models_available:
+        print("✅ QLoRA adapters found and ready for inference")
+        print("⚡ 4-bit quantization enabled for large model fine-tuning")
+        QLORA_MODELS_AVAILABLE = True
+    else:
+        print("⚠️ No QLoRA adapters found - advanced models not available")
+        print("💡 Run 'python train_qlora_models.py' to train Llama-2-7B")
+        QLORA_MODELS_AVAILABLE = False
+
+except ImportError as e:
+    print(f"⚠️ QLoRA Model System not available (missing dependencies): {e}")
+    print("📦 Install: pip install transformers peft torch bitsandbytes")
+    QLORA_MODELS_AVAILABLE = False
+except Exception as e:
+    print(f"⚠️ QLoRA Model System failed to initialize: {e}")
+    QLORA_MODELS_AVAILABLE = False
+
+# Initialize User Training System for Phase 4 advanced features
+try:
+    from user_training_system import get_training_manager
+
+    user_training_manager = get_training_manager()
+    print("👥 User Training System initialized")
+    print("🎓 Users can now train their own LoRA models!")
+    USER_TRAINING_AVAILABLE = True
+
+except ImportError as e:
+    print(f"⚠️ User Training System not available (missing dependencies): {e}")
+    print("📦 Install: pip install transformers peft torch datasets")
+    USER_TRAINING_AVAILABLE = False
+except Exception as e:
+    print(f"⚠️ User Training System failed to initialize: {e}")
+    USER_TRAINING_AVAILABLE = False
+
+# Initialize Gamification System for Phase 5 engagement features
+try:
+    from gamification_system import get_gamification_manager
+
+    gamification_manager = get_gamification_manager()
+    print("🎮 Gamification System initialized")
+    print("🏆 Badges, achievements, and leaderboards ready!")
+    GAMIFICATION_AVAILABLE = True
+
+except ImportError as e:
+    print(f"⚠️ Gamification System not available: {e}")
+    GAMIFICATION_AVAILABLE = False
+except Exception as e:
+    print(f"⚠️ Gamification System failed to initialize: {e}")
+    GAMIFICATION_AVAILABLE = False
+
+# Initialize Global Expansion System for Phase 6 international features
+try:
+    from global_expansion_system import get_global_expansion_manager
+
+    global_expansion_manager = get_global_expansion_manager()
+    print("🌍 Global Expansion System initialized")
+    print("🌐 Multi-language support and accessibility ready!")
+    GLOBAL_EXPANSION_AVAILABLE = True
+
+except ImportError as e:
+    print(f"⚠️ Global Expansion System not available: {e}")
+    GLOBAL_EXPANSION_AVAILABLE = False
+except Exception as e:
+    print(f"⚠️ Global Expansion System failed to initialize: {e}")
+    GLOBAL_EXPANSION_AVAILABLE = False
+
+# Initialize Platform Completion System for Phase 7 final features
+try:
+    from platform_completion_system import get_platform_completion_manager
+
+    platform_completion_manager = get_platform_completion_manager()
+    print("🌟 Platform Completion System initialized")
+    print("🎓 University partnerships and certifications ready!")
+    PLATFORM_COMPLETION_AVAILABLE = True
+
+except ImportError as e:
+    print(f"⚠️ Platform Completion System not available: {e}")
+    PLATFORM_COMPLETION_AVAILABLE = False
+except Exception as e:
+    print(f"⚠️ Platform Completion System failed to initialize: {e}")
+    PLATFORM_COMPLETION_AVAILABLE = False
+
 # Fix NLTK SSL certificate issue
 try:
     _create_unverified_https_context = ssl._create_unverified_context
@@ -52,9 +582,51 @@ _ = wn.synsets('test')
 # Configure Flask application
 app = Flask(__name__)
 
-# Load configuration from config.py
-app_config = config.get(os.environ.get('FLASK_ENV', 'development'))
-app.config.from_object(app_config)
+# Production configuration setup
+try:
+    from production_config import get_config, validate_production_env
+
+    # Get environment-specific configuration
+    env = os.environ.get('FLASK_ENV', 'development')
+    if env == 'production':
+        # Validate production environment variables
+        validate_production_env()
+        print("✅ Production environment validated")
+
+    # Load production configuration
+    production_config = get_config()
+    app.config.from_object(production_config)
+
+    # Initialize production configuration
+    if hasattr(production_config, 'init_app'):
+        production_config.init_app(app)
+
+    print(f"🔧 Loaded {env} configuration")
+
+except ImportError:
+    # Fallback to existing config if production_config not available
+    print("⚠️ Using fallback configuration")
+    app_config = config.get(os.environ.get('FLASK_ENV', 'development'))
+    app.config.from_object(app_config)
+except Exception as e:
+    print(f"❌ Configuration error: {e}")
+    # Use development config as fallback
+    app_config = config.get('development')
+    app.config.from_object(app_config)
+
+# Production security enhancements
+if os.environ.get('FLASK_ENV') == 'production':
+    # Trust proxy headers for HTTPS detection
+    from werkzeug.middleware.proxy_fix import ProxyFix
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
+
+    # Force HTTPS in production
+    @app.before_request
+    def force_https():
+        if not request.is_secure and request.headers.get('X-Forwarded-Proto') != 'https':
+            return redirect(request.url.replace('http://', 'https://'))
+
+    print("🔒 Production security enabled")
 
 # Initialize extensions
 db.init_app(app)
@@ -62,6 +634,51 @@ login_manager.init_app(app)
 migrate.init_app(app, db)
 oauth.init_app(app)
 csrf.init_app(app)
+
+# Initialize production extensions
+try:
+    from flask_limiter import Limiter
+    from flask_limiter.util import get_remote_address
+    from flask_caching import Cache
+    from flask_compress import Compress
+
+    # Rate limiting for production
+    limiter = Limiter(
+        app,
+        key_func=get_remote_address,
+        default_limits=["200 per day", "50 per hour"],
+        storage_uri=app.config.get('RATELIMIT_STORAGE_URL', 'memory://')
+    )
+
+    # Caching for performance
+    cache = Cache(app)
+
+    # Compression for static files
+    compress = Compress(app)
+
+    print("✅ Production extensions initialized (rate limiting, caching, compression)")
+
+except ImportError as e:
+    print(f"⚠️ Some production extensions not available: {e}")
+    # Create dummy objects to prevent errors
+    class DummyLimiter:
+        def limit(self, *args, **kwargs):
+            def decorator(f):
+                return f
+            return decorator
+
+    class DummyCache:
+        def cached(self, *args, **kwargs):
+            def decorator(f):
+                return f
+            return decorator
+        def memoize(self, *args, **kwargs):
+            def decorator(f):
+                return f
+            return decorator
+
+    limiter = DummyLimiter()
+    cache = DummyCache()
 
 # Configure session for proper login persistence
 app.config['SESSION_COOKIE_SECURE'] = False  # Set to True in production with HTTPS
@@ -87,17 +704,103 @@ app.register_blueprint(analytics_bp, url_prefix='/analytics')
 from api import api_bp
 app.register_blueprint(api_bp)
 
+# Register Enhanced API Systems
+from api.llm_assistant_api import llm_api
+from api.ollama_training_api import training_api
+app.register_blueprint(llm_api)
+app.register_blueprint(training_api)
+
 # Initialize OAuth providers
 from auth.oauth import init_oauth
 init_oauth(app)
 
+# Simple fallback thesaurus implementation
+class SimpleLLMThesaurus:
+    """Simple thesaurus using educational LLM concepts"""
+
+    def __init__(self):
+        self.llm_concepts = {
+            'lora': {
+                'synonyms': ['low-rank adaptation', 'parameter-efficient fine-tuning', 'PEFT', 'adapter tuning'],
+                'related': ['qlora', 'fine-tuning', 'adapters', 'parameter efficiency', 'memory optimization'],
+                'definition': 'LoRA (Low-Rank Adaptation) is a parameter-efficient fine-tuning technique that reduces trainable parameters by decomposing weight updates into low-rank matrices.'
+            },
+            'qlora': {
+                'synonyms': ['quantized lora', 'quantized low-rank adaptation', '4-bit lora'],
+                'related': ['lora', 'quantization', 'fine-tuning', 'memory efficiency', '4-bit training'],
+                'definition': 'QLoRA combines 4-bit quantization with LoRA to enable fine-tuning of large language models on consumer hardware.'
+            },
+            'transformer': {
+                'synonyms': ['attention model', 'self-attention network', 'encoder-decoder'],
+                'related': ['attention', 'bert', 'gpt', 'encoder', 'decoder', 'multi-head attention'],
+                'definition': 'The Transformer is a neural network architecture that uses self-attention mechanisms to process sequential data in parallel.'
+            },
+            'fine-tuning': {
+                'synonyms': ['model adaptation', 'transfer learning', 'domain adaptation'],
+                'related': ['lora', 'qlora', 'training', 'optimization', 'learning rate', 'epochs'],
+                'definition': 'Fine-tuning is the process of adapting a pre-trained model to a specific task or domain using task-specific data.'
+            },
+            'attention': {
+                'synonyms': ['attention mechanism', 'self-attention', 'multi-head attention'],
+                'related': ['transformer', 'query', 'key', 'value', 'softmax', 'weights'],
+                'definition': 'Attention mechanisms allow models to focus on relevant parts of the input when making predictions.'
+            }
+        }
+
+    def get_word_data(self, word):
+        word_lower = word.lower()
+        if word_lower in self.llm_concepts:
+            concept = self.llm_concepts[word_lower]
+            return {
+                'word': word,
+                'synonyms': concept['synonyms'],
+                'related': concept['related'],
+                'definition': concept['definition']
+            }
+        return {'word': word, 'synonyms': [], 'related': [], 'definition': f'No definition available for {word}'}
+
+    def get_synonyms(self, word):
+        return self.get_word_data(word)['synonyms']
+
+    def get_related_terms(self, word):
+        return self.get_word_data(word)['related']
+
+    def search(self, query):
+        results = []
+        query_lower = query.lower()
+        for concept, data in self.llm_concepts.items():
+            if (query_lower in concept or
+                any(query_lower in syn.lower() for syn in data['synonyms']) or
+                any(query_lower in rel.lower() for rel in data['related'])):
+                results.append({
+                    'term': concept,
+                    'definition': data['definition'],
+                    'relevance': 1.0
+                })
+        return results
+
+    def get_related_concepts(self, query):
+        return self.search(query)
+
+    def get_learning_resources(self):
+        return [
+            {'title': 'LoRA Guide', 'url': '/lora-guide', 'type': 'guide'},
+            {'title': 'QLoRA Guide', 'url': '/qlora-guide', 'type': 'guide'},
+            {'title': 'Workshops', 'url': '/workshops', 'type': 'interactive'},
+            {'title': 'Tutorials', 'url': '/tutorials', 'type': 'tutorial'}
+        ]
+
+    def get_concept_definition(self, concept):
+        return self.get_word_data(concept)['definition']
+
 # Initialize global instances
 try:
+    # Try to initialize the full ThesaurusLLM if a model is available
     thesaurus = ThesaurusLLM()
 except Exception as e:
-    print(f"Warning: ThesaurusLLM initialization failed: {e}")
-    print("Running without custom thesaurus model - using basic functionality")
-    thesaurus = None
+    print(f"Info: ThesaurusLLM initialization failed: {e}")
+    print("Using simple fallback thesaurus with LLM educational concepts")
+    thesaurus = SimpleLLMThesaurus()
 
 quiz = quiz_module
 
@@ -210,6 +913,21 @@ def workshop_qlora_deep_dive():
 @app.route('/workshop-advanced-peft')
 def workshop_advanced_peft():
     return render_template('workshop_advanced_peft.html', base_template='base-simple.html')
+
+@app.route('/user-training')
+def user_training():
+    """User Training System - Phase 4 Feature"""
+    return render_template('user_training.html', base_template='base.html')
+
+@app.route('/achievements')
+def achievements_dashboard():
+    """Gamification Dashboard - Phase 5 Feature"""
+    return render_template('gamification_dashboard.html', base_template='base.html')
+
+@app.route('/certifications')
+def certifications_dashboard():
+    """Certifications Dashboard - Phase 7 Feature"""
+    return render_template('certifications_dashboard.html', base_template='base.html')
 
 @app.route('/workshop-memory-efficiency')
 def workshop_memory_efficiency():
@@ -347,6 +1065,18 @@ def tensorflow_exercises_basics():
 def profile():
     return render_template('profile.html', base_template='base-simple.html')
 
+@app.route('/training/ollama')
+@login_required
+def ollama_training():
+    """Ollama model training interface"""
+    return render_template('training/ollama_training.html')
+
+@app.route('/training/api')
+@login_required
+def api_training():
+    """Enhanced API training and management interface"""
+    return render_template('training/api_training.html')
+
 @app.route('/login')
 def login():
     # Redirect to the auth blueprint login route
@@ -381,6 +1111,11 @@ def test_ai_simple():
 def test_ai_connection():
     """Comprehensive AI connection test page"""
     return render_template('test_ai_connection.html')
+
+@app.route('/test-free-ai')
+def test_free_ai():
+    """Test the FREE Ollama AI assistant"""
+    return render_template('test_free_ai.html')
 
 @app.route('/test-working-ai')
 def test_working_ai():
@@ -741,5 +1476,914 @@ def get_concept_definition():
         app.logger.error(f"Error getting concept definition: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
+# FREE OLLAMA AI ASSISTANT API ROUTES
+@app.route('/api/ai/free/chat', methods=['POST'])
+@csrf.exempt
+@limiter.limit("30 per hour")  # Rate limit for AI usage
+def free_ollama_chat():
+    """Main free chat endpoint with enhanced knowledge base and rate limiting"""
+    try:
+        data = request.get_json()
+        user_message = data.get('message', '')
+        model = data.get('model')
+
+        if not user_message:
+            return jsonify({'error': 'No message provided'}), 400
+
+        # Input validation for production
+        if len(user_message) > 1000:
+            return jsonify({'error': 'Message too long (max 1000 characters)'}), 400
+
+        # First try enhanced knowledge base for comprehensive responses
+        if ENHANCED_KNOWLEDGE_AVAILABLE and enhanced_ai_assistant:
+            try:
+                enhanced_response = enhanced_ai_assistant.get_response(user_message)
+                # Check if we got a comprehensive response (not the default fallback)
+                if enhanced_response and not enhanced_response.startswith("🎯 **I'm here to help"):
+                    return jsonify({
+                        'response': enhanced_response,
+                        'status': 'success',
+                        'model': 'enhanced_knowledge_base',
+                        'provider': 'visual_llm_enhanced',
+                        'type': 'comprehensive',
+                        'unlimited': True
+                    })
+            except Exception as e:
+                app.logger.warning(f"Enhanced knowledge base failed, falling back to Ollama: {e}")
+
+        # Fallback to Ollama for general conversation
+        result = free_ai_assistant.query(user_message, model)
+        return jsonify(result)
+    except Exception as e:
+        app.logger.error(f"Error in free AI chat: {str(e)}")
+        return jsonify({
+            'response': 'Sorry, I encountered an error. Please try again.',
+            'status': 'error',
+            'model': 'none'
+        }), 500
+
+@app.route('/api/ai/free/stream', methods=['POST'])
+@csrf.exempt
+def free_ollama_stream():
+    """Streaming endpoint for real-time responses"""
+    try:
+        data = request.get_json()
+        user_message = data.get('message', '')
+        model = data.get('model')
+
+        def generate():
+            try:
+                for chunk in free_ai_assistant.stream_query(user_message, model):
+                    yield f"data: {json.dumps({'content': chunk})}\n\n"
+                yield f"data: {json.dumps({'done': True})}\n\n"
+            except Exception as e:
+                yield f"data: {json.dumps({'error': str(e)})}\n\n"
+
+        return app.response_class(generate(), mimetype='text/plain')
+    except Exception as e:
+        app.logger.error(f"Error in free AI stream: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/ai/free/models', methods=['GET'])
+@csrf.exempt
+def free_ollama_models():
+    """Get available models"""
+    try:
+        return jsonify({
+            'available': free_ai_assistant.get_available_models(),
+            'recommended': free_ai_assistant.models,
+            'status': 'online' if free_ai_assistant.is_available() else 'offline',
+            'type': 'free_local'
+        })
+    except Exception as e:
+        app.logger.error(f"Error getting free AI models: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/ai/free/setup', methods=['POST'])
+@csrf.exempt
+def free_ollama_setup():
+    """Setup Ollama and download models"""
+    try:
+        # Try to start Ollama if not running
+        if not free_ai_assistant.is_available():
+            free_ai_assistant.start_ollama()
+
+        # Download recommended models
+        models_to_download = ['llama3.1', 'mistral']
+        downloaded = []
+
+        for model in models_to_download:
+            if free_ai_assistant.download_model(model):
+                downloaded.append(model)
+
+        return jsonify({
+            'success': len(downloaded) > 0,
+            'downloaded': downloaded,
+            'available': free_ai_assistant.get_available_models(),
+            'status': 'ready' if free_ai_assistant.is_available() else 'failed'
+        })
+    except Exception as e:
+        app.logger.error(f"Error setting up free AI: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/ai/free/status', methods=['GET'])
+@csrf.exempt
+def free_ollama_status():
+    """Check AI assistant status"""
+    try:
+        return jsonify({
+            'available': free_ai_assistant.is_available(),
+            'models': free_ai_assistant.get_available_models(),
+            'type': 'free_local',
+            'provider': 'ollama',
+            'unlimited': True
+        })
+    except Exception as e:
+        app.logger.error(f"Error getting free AI status: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+# COMPREHENSIVE AI ENDPOINTS - Claude-level Quality
+@app.route('/api/ai/comprehensive/chat', methods=['POST'])
+@csrf.exempt
+@limiter.limit("30 per hour")  # Premium endpoint with lower limit
+def comprehensive_ai_chat():
+    """Comprehensive AI chat with Claude-level quality and technical expertise"""
+    if not COMPREHENSIVE_AI_AVAILABLE or not comprehensive_ai:
+        return jsonify({
+            'success': False,
+            'error': 'Comprehensive AI assistant not available',
+            'fallback': 'Try the enhanced AI assistant instead'
+        }), 503
+
+    try:
+        data = request.get_json()
+        message = data.get('message', '').strip()
+        context = data.get('context', {})
+
+        if not message:
+            return jsonify({
+                'success': False,
+                'error': 'Message is required'
+            }), 400
+
+        # Get comprehensive response
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        response = loop.run_until_complete(comprehensive_ai.get_comprehensive_response(message, context))
+        loop.close()
+
+        return jsonify({
+            'success': True,
+            'response': response.content,
+            'confidence': response.confidence,
+            'sources': response.sources,
+            'code_examples': response.code_examples,
+            'related_topics': response.related_topics,
+            'difficulty_level': response.difficulty_level,
+            'response_time': response.response_time,
+            'provider_used': response.provider_used,
+            'tokens_used': response.tokens_used,
+            'metadata': {
+                'comprehensive': True,
+                'technical_depth': 'high',
+                'educational_quality': 'claude_level'
+            }
+        })
+
+    except Exception as e:
+        app.logger.error(f"Comprehensive AI chat error: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': str(e),
+            'fallback_response': 'I apologize, but I\'m experiencing technical difficulties. Please try again, and I\'ll provide you with comprehensive technical guidance on AI/ML, software development, or any computer science topic.'
+        }), 500
+
+# ENHANCED AI ENDPOINTS - Multi-Provider Support
+@app.route('/api/ai/enhanced/chat', methods=['POST'])
+@csrf.exempt
+@limiter.limit("50 per hour")  # Higher limit for enhanced AI
+def enhanced_ai_chat():
+    """Enhanced AI chat with multi-provider support and rate limiting"""
+    if not ENHANCED_AI_AVAILABLE or not multi_ai_assistant:
+        # Fallback to free Ollama
+        return free_ollama_chat()
+
+    try:
+        data = request.get_json()
+        message = data.get('message', '')
+        provider = data.get('provider')  # Optional preferred provider
+
+        if not message:
+            return jsonify({'error': 'No message provided'}), 400
+
+        # Input validation for production
+        if len(message) > 1000:
+            return jsonify({'error': 'Message too long (max 1000 characters)'}), 400
+
+        # Run async query
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        try:
+            response = loop.run_until_complete(multi_ai_assistant.query(message, provider))
+        finally:
+            loop.close()
+
+        return jsonify({
+            'response': response.content,
+            'model': response.model,
+            'provider': response.provider,
+            'tokens_used': response.tokens_used,
+            'cost': response.cost,
+            'success': response.success,
+            'enhanced': True
+        })
+
+    except Exception as e:
+        app.logger.error(f"Enhanced AI error: {str(e)}")
+        # Fallback to free Ollama on error
+        return free_ollama_chat()
+
+@app.route('/api/ai/enhanced/status', methods=['GET'])
+@csrf.exempt
+def enhanced_ai_status():
+    """Get status of enhanced AI system"""
+    if not ENHANCED_AI_AVAILABLE or not multi_ai_assistant:
+        return jsonify({
+            'enhanced_available': False,
+            'fallback_to': 'free_ollama',
+            'reason': 'Multi-provider system not initialized'
+        })
+
+    # Get provider status
+    status = {}
+    for name, provider in multi_ai_assistant.providers.items():
+        if hasattr(provider, 'available'):
+            status[name] = {
+                'available': provider.available,
+                'type': 'api' if name in ['groq', 'huggingface'] else 'local' if name == 'ollama' else 'static'
+            }
+
+    return jsonify({
+        'enhanced_available': True,
+        'providers': status,
+        'fallback_chain': multi_ai_assistant.fallback_chain,
+        'total_providers': len(multi_ai_assistant.providers)
+    })
+
+# LORA MODEL ENDPOINTS - Real fine-tuned model inference
+@app.route('/api/ai/lora/chat', methods=['POST'])
+@csrf.exempt
+@limiter.limit("20 per hour")  # Lower limit for LoRA models (more resource intensive)
+def lora_model_chat():
+    """Chat with actual LoRA fine-tuned models"""
+    if not LORA_MODELS_AVAILABLE:
+        # Fallback to enhanced AI
+        return enhanced_ai_chat()
+
+    try:
+        data = request.get_json()
+        message = data.get('message', '')
+        model_name = data.get('model', 'educational_assistant')
+
+        if not message:
+            return jsonify({'error': 'No message provided'}), 400
+
+        # Input validation
+        if len(message) > 500:
+            return jsonify({'error': 'Message too long (max 500 characters for LoRA models)'}), 400
+
+        # Get response from LoRA model
+        response = get_lora_response(message, model_name)
+
+        return jsonify({
+            'response': response['response'],
+            'model': response['model'],
+            'adapter': response['adapter'],
+            'tokens_generated': response['tokens'],
+            'inference_time': response['time'],
+            'success': response['success'],
+            'type': 'lora_fine_tuned',
+            'cost': 0.0  # Free local inference
+        })
+
+    except Exception as e:
+        app.logger.error(f"LoRA model error: {str(e)}")
+        # Fallback to enhanced AI on error
+        return enhanced_ai_chat()
+
+@app.route('/api/ai/lora/models', methods=['GET'])
+@csrf.exempt
+def lora_available_models():
+    """Get available LoRA fine-tuned models"""
+    if not LORA_MODELS_AVAILABLE:
+        return jsonify({
+            'lora_available': False,
+            'reason': 'LoRA models not initialized',
+            'models': {}
+        })
+
+    try:
+        available_models = lora_manager.get_available_models()
+
+        return jsonify({
+            'lora_available': True,
+            'models': available_models,
+            'total_models': len(available_models),
+            'ready_models': sum(1 for info in available_models.values() if info['adapter_available'])
+        })
+
+    except Exception as e:
+        app.logger.error(f"Error getting LoRA models: {str(e)}")
+        return jsonify({'error': 'Failed to get model information'}), 500
+
+@app.route('/api/ai/lora/status', methods=['GET'])
+@csrf.exempt
+def lora_model_status():
+    """Get LoRA model system status"""
+    return jsonify({
+        'lora_system_available': LORA_MODELS_AVAILABLE,
+        'models_loaded': len(lora_manager.lora_adapters) if LORA_MODELS_AVAILABLE else 0,
+        'device': lora_manager.device if LORA_MODELS_AVAILABLE else 'unknown',
+        'memory_info': {
+            'cuda_available': lora_manager.device == 'cuda' if LORA_MODELS_AVAILABLE else False,
+            'device_info': lora_manager.device if LORA_MODELS_AVAILABLE else 'unknown'
+        }
+    })
+
+# QLORA MODEL ENDPOINTS - Advanced 4-bit quantized models
+@app.route('/api/ai/qlora/chat', methods=['POST'])
+@csrf.exempt
+@limiter.limit("10 per hour")  # Lower limit for QLoRA (more resource intensive)
+def qlora_model_chat():
+    """Chat with QLoRA 4-bit quantized fine-tuned models"""
+    if not QLORA_MODELS_AVAILABLE:
+        # Fallback to LoRA models
+        if LORA_MODELS_AVAILABLE:
+            return lora_model_chat()
+        else:
+            return enhanced_ai_chat()
+
+    try:
+        data = request.get_json()
+        message = data.get('message', '')
+        model_name = data.get('model', 'llama_7b_educational')
+
+        if not message:
+            return jsonify({'error': 'No message provided'}), 400
+
+        # Input validation for QLoRA (longer context allowed)
+        if len(message) > 1000:
+            return jsonify({'error': 'Message too long (max 1000 characters for QLoRA models)'}), 400
+
+        # Get response from QLoRA model
+        response = get_qlora_response(message, model_name)
+
+        return jsonify({
+            'response': response['response'],
+            'model': response['model'],
+            'adapter': response['adapter'],
+            'quantization': response['quantization'],
+            'tokens_generated': response['tokens'],
+            'inference_time': response['time'],
+            'memory_used': response['memory'],
+            'success': response['success'],
+            'type': 'qlora_4bit_quantized',
+            'cost': 0.0  # Free local inference
+        })
+
+    except Exception as e:
+        app.logger.error(f"QLoRA model error: {str(e)}")
+        # Fallback to LoRA or enhanced AI
+        if LORA_MODELS_AVAILABLE:
+            return lora_model_chat()
+        else:
+            return enhanced_ai_chat()
+
+@app.route('/api/ai/qlora/models', methods=['GET'])
+@csrf.exempt
+def qlora_available_models():
+    """Get available QLoRA fine-tuned models"""
+    if not QLORA_MODELS_AVAILABLE:
+        return jsonify({
+            'qlora_available': False,
+            'reason': 'QLoRA models not initialized',
+            'models': {}
+        })
+
+    try:
+        available_models = qlora_manager.get_available_qlora_models()
+
+        return jsonify({
+            'qlora_available': True,
+            'models': available_models,
+            'total_models': len(available_models),
+            'ready_models': sum(1 for info in available_models.values() if info['adapter_available']),
+            'quantization_supported': qlora_manager.quantization_available
+        })
+
+    except Exception as e:
+        app.logger.error(f"Error getting QLoRA models: {str(e)}")
+        return jsonify({'error': 'Failed to get QLoRA model information'}), 500
+
+@app.route('/api/ai/qlora/status', methods=['GET'])
+@csrf.exempt
+def qlora_model_status():
+    """Get QLoRA model system status"""
+    if not QLORA_MODELS_AVAILABLE:
+        return jsonify({
+            'qlora_system_available': False,
+            'reason': 'QLoRA system not initialized'
+        })
+
+    try:
+        system_info = qlora_manager.get_system_info()
+
+        return jsonify({
+            'qlora_system_available': True,
+            'device': system_info['device'],
+            'quantization_available': system_info['quantization_available'],
+            'models_loaded': system_info['models_loaded'],
+            'total_models': system_info['total_models'],
+            'gpu_info': system_info.get('gpu_info', {}),
+            'capabilities': {
+                '4bit_quantization': system_info['quantization_available'],
+                'large_model_support': system_info['device'] == 'cuda',
+                'memory_efficient': True
+            }
+        })
+
+    except Exception as e:
+        app.logger.error(f"Error getting QLoRA status: {str(e)}")
+        return jsonify({'error': 'Failed to get QLoRA status'}), 500
+
+# USER TRAINING SYSTEM ENDPOINTS - Phase 4 Advanced Features
+@app.route('/api/training/create', methods=['POST'])
+@csrf.exempt
+@limiter.limit("3 per day")  # Free tier limit
+def create_training_job():
+    """Create a new user training job"""
+    if not USER_TRAINING_AVAILABLE:
+        return jsonify({
+            'success': False,
+            'error': 'User training system not available'
+        }), 503
+
+    try:
+        data = request.get_json()
+
+        # Get user ID (from session or generate temp ID)
+        user_id = session.get('user_id', f"temp_{uuid.uuid4().hex[:8]}")
+        session['user_id'] = user_id
+
+        # Validate required fields
+        required_fields = ['model_name', 'dataset_content']
+        for field in required_fields:
+            if not data.get(field):
+                return jsonify({
+                    'success': False,
+                    'error': f'Missing required field: {field}'
+                }), 400
+
+        # Create training job
+        result = user_training_manager.create_training_job(
+            user_id=user_id,
+            model_name=data['model_name'],
+            base_model=data.get('base_model', 'microsoft/DialoGPT-small'),
+            dataset_content=data['dataset_content'],
+            training_config=data.get('config', {})
+        )
+
+        return jsonify(result)
+
+    except Exception as e:
+        app.logger.error(f"Training job creation error: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': 'Failed to create training job'
+        }), 500
+
+@app.route('/api/training/status/<job_id>', methods=['GET'])
+@csrf.exempt
+def get_training_status(job_id):
+    """Get status of a training job"""
+    if not USER_TRAINING_AVAILABLE:
+        return jsonify({'error': 'User training system not available'}), 503
+
+    try:
+        status = user_training_manager.get_job_status(job_id)
+        if not status:
+            return jsonify({'error': 'Job not found'}), 404
+
+        return jsonify(status)
+
+    except Exception as e:
+        app.logger.error(f"Training status error: {str(e)}")
+        return jsonify({'error': 'Failed to get training status'}), 500
+
+@app.route('/api/training/jobs', methods=['GET'])
+@csrf.exempt
+def get_user_training_jobs():
+    """Get all training jobs for current user"""
+    if not USER_TRAINING_AVAILABLE:
+        return jsonify({'error': 'User training system not available'}), 503
+
+    try:
+        user_id = session.get('user_id')
+        if not user_id:
+            return jsonify({'jobs': []})
+
+        jobs = user_training_manager.get_user_jobs(user_id)
+        return jsonify({'jobs': jobs})
+
+    except Exception as e:
+        app.logger.error(f"Get user jobs error: {str(e)}")
+        return jsonify({'error': 'Failed to get user jobs'}), 500
+
+@app.route('/api/training/models', methods=['GET'])
+@csrf.exempt
+def get_user_models():
+    """Get all completed models for current user"""
+    if not USER_TRAINING_AVAILABLE:
+        return jsonify({'error': 'User training system not available'}), 503
+
+    try:
+        user_id = session.get('user_id')
+        if not user_id:
+            return jsonify({'models': []})
+
+        models = user_training_manager.get_user_models(user_id)
+        return jsonify({'models': models})
+
+    except Exception as e:
+        app.logger.error(f"Get user models error: {str(e)}")
+        return jsonify({'error': 'Failed to get user models'}), 500
+
+@app.route('/api/training/limits', methods=['GET'])
+@csrf.exempt
+def get_training_limits():
+    """Get training limits for current user"""
+    if not USER_TRAINING_AVAILABLE:
+        return jsonify({'error': 'User training system not available'}), 503
+
+    try:
+        user_id = session.get('user_id', 'anonymous')
+        limits = user_training_manager._check_user_limits(user_id)
+
+        return jsonify({
+            'limits': limits,
+            'system_limits': user_training_manager.user_limits
+        })
+
+    except Exception as e:
+        app.logger.error(f"Get training limits error: {str(e)}")
+        return jsonify({'error': 'Failed to get training limits'}), 500
+
+# GAMIFICATION SYSTEM ENDPOINTS - Phase 5 Engagement Features
+@app.route('/api/gamification/profile', methods=['GET'])
+@csrf.exempt
+def get_user_gamification_profile():
+    """Get user's gamification profile"""
+    if not GAMIFICATION_AVAILABLE:
+        return jsonify({'error': 'Gamification system not available'}), 503
+
+    try:
+        user_id = session.get('user_id', f"temp_{uuid.uuid4().hex[:8]}")
+        session['user_id'] = user_id
+
+        # Get user achievements and progress
+        achievements_data = gamification_manager.get_user_achievements(user_id)
+
+        # Get user rank
+        rank_data = gamification_manager.get_user_rank(user_id, "overall")
+
+        return jsonify({
+            'user': {
+                'user_id': achievements_data['user'].user_id,
+                'username': achievements_data['user'].username,
+                'level': achievements_data['user'].level,
+                'total_xp': achievements_data['user'].total_xp,
+                'badges_earned': achievements_data['user'].badges_earned
+            },
+            'achievements': {
+                'unlocked': [
+                    {
+                        'id': a.id,
+                        'name': a.name,
+                        'description': a.description,
+                        'icon': a.icon,
+                        'category': a.category,
+                        'points': a.points,
+                        'rarity': a.rarity
+                    }
+                    for a in achievements_data['unlocked_achievements']
+                ],
+                'total_achievements': achievements_data['total_achievements'],
+                'completion_percentage': achievements_data['completion_percentage']
+            },
+            'rank': rank_data,
+            'stats': achievements_data['user'].stats
+        })
+
+    except Exception as e:
+        app.logger.error(f"Gamification profile error: {str(e)}")
+        return jsonify({'error': 'Failed to get gamification profile'}), 500
+
+@app.route('/api/gamification/leaderboard', methods=['GET'])
+@csrf.exempt
+def get_leaderboard():
+    """Get leaderboard"""
+    if not GAMIFICATION_AVAILABLE:
+        return jsonify({'error': 'Gamification system not available'}), 503
+
+    try:
+        category = request.args.get('category', 'overall')
+        limit = min(int(request.args.get('limit', 10)), 50)  # Max 50
+
+        leaderboard = gamification_manager.get_leaderboard(category, limit)
+
+        return jsonify({
+            'leaderboard': leaderboard,
+            'category': category,
+            'total_entries': len(leaderboard)
+        })
+
+    except Exception as e:
+        app.logger.error(f"Leaderboard error: {str(e)}")
+        return jsonify({'error': 'Failed to get leaderboard'}), 500
+
+# GLOBAL EXPANSION ENDPOINTS - Phase 6 International Features
+@app.route('/api/i18n/languages', methods=['GET'])
+@csrf.exempt
+def get_supported_languages():
+    """Get list of supported languages"""
+    if not GLOBAL_EXPANSION_AVAILABLE:
+        return jsonify({'error': 'Global expansion system not available'}), 503
+
+    try:
+        languages = global_expansion_manager.get_supported_languages()
+        return jsonify({
+            'languages': languages,
+            'total_languages': len(languages),
+            'default_language': 'en'
+        })
+    except Exception as e:
+        app.logger.error(f"Get languages error: {str(e)}")
+        return jsonify({'error': 'Failed to get supported languages'}), 500
+
+@app.route('/api/i18n/translations/<lang_code>', methods=['GET'])
+@csrf.exempt
+def get_translations(lang_code):
+    """Get translations for a specific language"""
+    if not GLOBAL_EXPANSION_AVAILABLE:
+        return jsonify({'error': 'Global expansion system not available'}), 503
+
+    try:
+        if lang_code not in global_expansion_manager.supported_languages:
+            return jsonify({'error': 'Language not supported'}), 400
+
+        translations = global_expansion_manager.translations.get(lang_code, {})
+        language_info = global_expansion_manager.supported_languages[lang_code]
+
+        return jsonify({
+            'language': language_info,
+            'translations': translations,
+            'total_keys': len(translations)
+        })
+    except Exception as e:
+        app.logger.error(f"Get translations error: {str(e)}")
+        return jsonify({'error': 'Failed to get translations'}), 500
+
+@app.route('/api/i18n/detect-language', methods=['POST'])
+@csrf.exempt
+def detect_user_language():
+    """Detect user's preferred language from Accept-Language header"""
+    if not GLOBAL_EXPANSION_AVAILABLE:
+        return jsonify({'error': 'Global expansion system not available'}), 503
+
+    try:
+        accept_language = request.headers.get('Accept-Language', '')
+        detected_lang = global_expansion_manager.detect_user_language(accept_language)
+
+        return jsonify({
+            'detected_language': detected_lang,
+            'language_info': global_expansion_manager.supported_languages.get(detected_lang, {}),
+            'accept_language_header': accept_language
+        })
+    except Exception as e:
+        app.logger.error(f"Language detection error: {str(e)}")
+        return jsonify({'error': 'Failed to detect language'}), 500
+
+@app.route('/api/accessibility/config', methods=['GET'])
+@csrf.exempt
+def get_accessibility_config():
+    """Get accessibility configuration"""
+    if not GLOBAL_EXPANSION_AVAILABLE:
+        return jsonify({'error': 'Global expansion system not available'}), 503
+
+    try:
+        config = global_expansion_manager.create_accessibility_config()
+        return jsonify(config)
+    except Exception as e:
+        app.logger.error(f"Accessibility config error: {str(e)}")
+        return jsonify({'error': 'Failed to get accessibility config'}), 500
+
+@app.route('/manifest.json', methods=['GET'])
+def get_pwa_manifest():
+    """Get Progressive Web App manifest"""
+    if not GLOBAL_EXPANSION_AVAILABLE:
+        return jsonify({'error': 'PWA not available'}), 503
+
+    try:
+        manifest = global_expansion_manager.create_mobile_pwa_config()
+        return jsonify(manifest)
+    except Exception as e:
+        app.logger.error(f"PWA manifest error: {str(e)}")
+        return jsonify({'error': 'Failed to get PWA manifest'}), 500
+
+# PLATFORM COMPLETION ENDPOINTS - Phase 7 Final Features
+@app.route('/api/certifications/programs', methods=['GET'])
+@csrf.exempt
+def get_certification_programs():
+    """Get available certification programs"""
+    if not PLATFORM_COMPLETION_AVAILABLE:
+        return jsonify({'error': 'Platform completion system not available'}), 503
+
+    try:
+        programs = platform_completion_manager.get_certification_programs()
+        return jsonify({
+            'programs': programs,
+            'total_programs': len(programs)
+        })
+    except Exception as e:
+        app.logger.error(f"Get certification programs error: {str(e)}")
+        return jsonify({'error': 'Failed to get certification programs'}), 500
+
+@app.route('/api/certifications/progress', methods=['GET'])
+@csrf.exempt
+def get_certification_progress():
+    """Get user's certification progress"""
+    if not PLATFORM_COMPLETION_AVAILABLE:
+        return jsonify({'error': 'Platform completion system not available'}), 503
+
+    try:
+        user_id = session.get('user_id', f"temp_{uuid.uuid4().hex[:8]}")
+        session['user_id'] = user_id
+
+        progress = platform_completion_manager.get_user_certification_progress(user_id)
+        certifications = platform_completion_manager.get_user_certifications(user_id)
+
+        return jsonify({
+            'progress': progress,
+            'earned_certifications': certifications,
+            'total_earned': len(certifications)
+        })
+    except Exception as e:
+        app.logger.error(f"Get certification progress error: {str(e)}")
+        return jsonify({'error': 'Failed to get certification progress'}), 500
+
+@app.route('/api/certifications/award', methods=['POST'])
+@csrf.exempt
+def award_certification():
+    """Award certification to user"""
+    if not PLATFORM_COMPLETION_AVAILABLE:
+        return jsonify({'error': 'Platform completion system not available'}), 503
+
+    try:
+        data = request.get_json()
+        user_id = session.get('user_id', f"temp_{uuid.uuid4().hex[:8]}")
+        session['user_id'] = user_id
+
+        cert_id = data.get('certification_id')
+        if not cert_id:
+            return jsonify({'error': 'Certification ID required'}), 400
+
+        result = platform_completion_manager.award_certification(user_id, cert_id)
+
+        if result['success']:
+            return jsonify(result)
+        else:
+            return jsonify(result), 400
+
+    except Exception as e:
+        app.logger.error(f"Award certification error: {str(e)}")
+        return jsonify({'error': 'Failed to award certification'}), 500
+
+@app.route('/api/platform/analytics', methods=['GET'])
+@csrf.exempt
+def get_platform_analytics():
+    """Get comprehensive platform analytics"""
+    if not PLATFORM_COMPLETION_AVAILABLE:
+        return jsonify({'error': 'Platform completion system not available'}), 503
+
+    try:
+        analytics = platform_completion_manager.get_platform_analytics()
+        return jsonify(analytics)
+    except Exception as e:
+        app.logger.error(f"Platform analytics error: {str(e)}")
+        return jsonify({'error': 'Failed to get platform analytics'}), 500
+
+@app.route('/api/partnerships/universities', methods=['GET'])
+@csrf.exempt
+def get_university_partnerships():
+    """Get university partnership information"""
+    if not PLATFORM_COMPLETION_AVAILABLE:
+        return jsonify({'error': 'Platform completion system not available'}), 503
+
+    try:
+        partnerships = platform_completion_manager.get_university_partnerships()
+        return jsonify({
+            'partnerships': partnerships,
+            'total_partnerships': len(partnerships),
+            'active_partnerships': sum(1 for p in partnerships.values() if p['status'] == 'active'),
+            'total_students': sum(p['students_enrolled'] for p in partnerships.values())
+        })
+    except Exception as e:
+        app.logger.error(f"University partnerships error: {str(e)}")
+        return jsonify({'error': 'Failed to get university partnerships'}), 500
+
+# ENHANCED API SYSTEM ENDPOINTS
+@app.route('/api/enhanced/chat', methods=['POST'])
+@csrf.exempt
+@limiter.limit("100 per hour")
+def enhanced_api_chat():
+    """Enhanced API chat with intelligent provider routing"""
+    if not ENHANCED_API_AVAILABLE or not enhanced_api:
+        return jsonify({
+            'success': False,
+            'error': 'Enhanced API system not available',
+            'fallback': 'Use /api/ai/enhanced/chat instead'
+        }), 503
+
+    try:
+        data = request.get_json()
+        message = data.get('message', '').strip()
+        preferences = data.get('preferences', {})
+
+        if not message:
+            return jsonify({
+                'success': False,
+                'error': 'Message is required'
+            }), 400
+
+        # Use async in sync context
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        response = loop.run_until_complete(enhanced_api.smart_query(message, preferences))
+        loop.close()
+
+        return jsonify({
+            'success': response.success,
+            'response': response.content,
+            'model': response.model,
+            'provider': response.provider,
+            'tokens_used': response.tokens_used,
+            'cost': response.cost,
+            'latency': response.latency,
+            'metadata': response.metadata,
+            'error': response.error
+        })
+
+    except Exception as e:
+        app.logger.error(f"Enhanced API chat error: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@app.route('/api/enhanced/providers', methods=['GET'])
+@csrf.exempt
+def enhanced_api_providers():
+    """Get status of all enhanced API providers"""
+    if not ENHANCED_API_AVAILABLE or not enhanced_api:
+        return jsonify({
+            'success': False,
+            'error': 'Enhanced API system not available'
+        }), 503
+
+    try:
+        status = enhanced_api.get_provider_status()
+        return jsonify({
+            'success': True,
+            'providers': status,
+            'total_providers': len(status),
+            'enabled_providers': len([p for p in status.values() if p['enabled']])
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
 if __name__ == '__main__':
-    app.run(debug=True, port=int(os.environ.get('PORT', 5037)))
+    # Production-ready configuration
+    port = int(os.environ.get('PORT', 5037))
+    debug = os.environ.get('FLASK_ENV') != 'production'
+
+    if os.environ.get('FLASK_ENV') == 'production':
+        print(f"🚀 Starting Visual LLM in PRODUCTION mode on port {port}")
+        print("🔒 Security features enabled")
+        print("⚡ Performance optimizations active")
+        app.run(host='0.0.0.0', port=port, debug=False)
+    else:
+        print(f"🔧 Starting Visual LLM in DEVELOPMENT mode on port {port}")
+        app.run(debug=debug, port=port)

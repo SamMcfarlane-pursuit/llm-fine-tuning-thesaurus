@@ -31,25 +31,18 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <!-- ===== CORE VISUAL LLM STYLES (6 ESSENTIAL FILES ONLY) ===== -->
-    <!-- 1. Main Site Styles -->
+    <!-- ===== ENHANCED VISUAL LLM STYLES - CLEAN & MODERN ===== -->
+    <!-- 1. Main Site Styles - Enhanced Design System -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
-    <!-- 2. Dark/Light Theme System -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom-dark-mode.css') }}">
+    <!-- 2. Enhanced Navigation Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navigation.css') }}">
 
-    <!-- 3. AI Assistant Styling -->
+    <!-- 3. Dark Mode Theme System -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dark-mode.css') }}">
+
+    <!-- 4. AI Assistant Styling -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/ai-assistant.css') }}">
-
-    <!-- ===== NAVIGATION CONSISTENCY (LOAD ORDER CRITICAL) ===== -->
-    <!-- 4. Navigation Base Styles -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/exact-navigation-match.css') }}">
-
-    <!-- 5. Navigation Overrides -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/final-navigation-override.css') }}">
-
-    <!-- 6. Final Navigation Fixes (MUST BE LAST) -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/absolute-final-navigation.css') }}">
 
     {% block head %}{% endblock %}
 
@@ -146,6 +139,10 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{{ url_for('ai_assistant') }}">AI Assistant</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('user_training') }}">👥 Train Your Model</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('achievements_dashboard') }}">🏆 Achievements</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('certifications_dashboard') }}">🎓 Certifications</a></li>
+                            <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{{ url_for('user_dashboard') }}">Dashboard</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('analytics_dashboard') }}">Analytics</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('search_results') }}">Advanced Search</a></li>
@@ -159,6 +156,14 @@
                     <form class="d-flex me-3" method="GET" action="{{ url_for('search_results') }}">
                         <input class="form-control" type="search" name="q" placeholder="Search concepts..." style="width: 200px;">
                     </form>
+
+                    <!-- Language Selector -->
+                    {% include 'components/language_selector.html' %}
+
+                    <!-- Theme Toggle -->
+                    <button class="theme-toggle me-3" id="themeToggle" type="button" title="Toggle dark/light mode">
+                        <i class="bi bi-sun-fill" id="themeIcon"></i>
+                    </button>
 
                     <!-- Authentication -->
                     {% if current_user.is_authenticated %}
@@ -329,10 +334,11 @@
     <script src="{{ url_for('static', filename='js/enhanced-image-quality.js') }}"></script>
     <script src="{{ url_for('static', filename='js/font-loader.js') }}"></script>
     <script src="{{ url_for('static', filename='js/page-transitions.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/theme-toggle.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/enhanced-theme-toggle.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/improved-theme-toggle.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/enhanced-theme-toggle-v2.js') }}"></script>
+    <!-- Modern Theme Toggle System -->
+    <script src="{{ url_for('static', filename='js/modern-theme-toggle.js') }}"></script>
+
+    <!-- ===== COMPREHENSIVE AI ASSISTANT - CLAUDE-LEVEL QUALITY ===== -->
+    <script src="{{ url_for('static', filename='js/comprehensive-ai-assistant.js') }}"></script>
 
     <!-- Robust Features - Advanced functionality -->
     <!-- TEMPORARILY DISABLED - FIXING JAVASCRIPT ERRORS -->
@@ -810,6 +816,95 @@
 
         // Global function to check AI assistant status
         window.checkAIAssistantStatus = function() {
+            console.log('🔍 AI Assistant Status Check:');
+            console.log('  Simple AI Button:', document.getElementById('simple-ai-button') ? '✅ Found' : '❌ Missing');
+            console.log('  Immediate AI Button:', document.querySelector('.immediate-ai-button') ? '✅ Found' : '❌ Missing');
+            console.log('  Final AI Assistant:', typeof initFinalAI === 'function' ? '✅ Loaded' : '❌ Not Loaded');
+            console.log('  Page:', window.location.pathname);
+
+            // Ensure at least one AI button exists
+            const hasAnyAI = document.getElementById('simple-ai-button') ||
+                           document.querySelector('.immediate-ai-button') ||
+                           document.querySelector('.final-ai-button');
+
+            if (!hasAnyAI) {
+                console.log('🚨 No AI buttons found, creating emergency backup...');
+                createImmediateAIButton();
+            }
+
+            return hasAnyAI;
+        };
+
+        // Enhanced AI assistant initialization for ALL pages
+        window.ensureAIAssistantOnAllPages = function() {
+            console.log('🚀 Ensuring AI Assistant works on ALL pages...');
+
+            // Check if Final AI Assistant is loaded
+            if (typeof initFinalAI === 'function') {
+                console.log('✅ Final AI Assistant detected, initializing...');
+                try {
+                    initFinalAI();
+                } catch (error) {
+                    console.log('⚠️ Final AI Assistant initialization failed:', error);
+                }
+            }
+
+            // Ensure at least one AI button exists
+            setTimeout(() => {
+                const hasAI = window.checkAIAssistantStatus();
+                if (!hasAI) {
+                    console.log('🚨 Creating emergency AI button for page:', window.location.pathname);
+                    createImmediateAIButton();
+                }
+            }, 1000);
+
+            // Monitor for AI button removal and recreate if needed
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'childList' && mutation.removedNodes.length > 0) {
+                        // Check if any AI buttons were removed
+                        const removedAI = Array.from(mutation.removedNodes).some(node =>
+                            node.id === 'simple-ai-button' ||
+                            node.classList?.contains('immediate-ai-button') ||
+                            node.classList?.contains('final-ai-button')
+                        );
+
+                        if (removedAI) {
+                            console.log('🚨 AI button was removed, recreating...');
+                            setTimeout(() => {
+                                if (!window.checkAIAssistantStatus()) {
+                                    createImmediateAIButton();
+                                }
+                            }, 500);
+                        }
+                    }
+                });
+            });
+
+            observer.observe(document.body, { childList: true, subtree: true });
+            console.log('✅ AI Assistant monitoring active on page:', window.location.pathname);
+        };
+
+        // Run AI assistant initialization immediately and on page load
+        window.ensureAIAssistantOnAllPages();
+
+        // Also run when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', window.ensureAIAssistantOnAllPages);
+        }
+
+        // And when window loads
+        window.addEventListener('load', window.ensureAIAssistantOnAllPages);
+
+        // Check AI status every 10 seconds to ensure it's always available
+        setInterval(function() {
+            if (!window.checkAIAssistantStatus()) {
+                console.log('🔄 Periodic AI check failed, recreating...');
+                createImmediateAIButton();
+            }
+        }, 10000);
+
+        console.log('🎉 ROBUST AI ASSISTANT SYSTEM ACTIVATED FOR ALL PAGES!');
             const simpleButton = document.getElementById('simple-ai-button');
             const toggleFunction = typeof toggleSimpleAI === 'function';
             const testFunction = typeof testSimpleAI === 'function';
@@ -930,6 +1025,6 @@
     </script>
 
     <!-- FORCE NAVIGATION STYLING - MUST BE ABSOLUTELY LAST SCRIPT -->
-    <script src="{{ url_for('static', filename='js/force-navigation-styling.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/enhanced-navigation.js') }}"></script>
 </body>
 </html>

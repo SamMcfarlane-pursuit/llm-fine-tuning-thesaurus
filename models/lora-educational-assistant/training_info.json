@@ -1,0 +1,6 @@
+{
+  "base_model": "microsoft/DialoGPT-medium",
+  "lora_config": {
+    "r": 16,
+    "lora_alpha": 32,
+    "target_modules": 

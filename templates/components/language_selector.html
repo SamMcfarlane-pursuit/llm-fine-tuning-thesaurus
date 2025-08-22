@@ -1,0 +1,424 @@
+<!-- Language Selector Component -->
+<div class="language-selector dropdown" id="languageSelector">
+    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" 
+            aria-expanded="false" aria-label="Select Language" id="languageSelectorButton">
+        <span id="currentLanguageFlag">🌐</span>
+        <span id="currentLanguageName">English</span>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end" id="languageDropdown">
+        <!-- Languages will be populated by JavaScript -->
+        <li><div class="dropdown-item-text text-muted small">Loading languages...</div></li>
+    </ul>
+</div>
+
+<style>
+.language-selector {
+    margin-left: 8px;
+}
+
+.language-selector .dropdown-toggle {
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    color: var(--text-color);
+    font-size: 14px;
+    padding: 6px 12px;
+    min-width: 120px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.language-selector .dropdown-toggle:hover {
+    border-color: var(--primary-color);
+    background: var(--primary-color-light);
+}
+
+.language-selector .dropdown-toggle:focus {
+    box-shadow: 0 0 0 2px rgba(60, 100, 48, 0.25);
+}
+
+.language-selector .dropdown-menu {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    max-height: 300px;
+    overflow-y: auto;
+    min-width: 200px;
+}
+
+.language-selector .dropdown-item {
+    color: var(--text-color);
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.language-selector .dropdown-item:hover {
+    background: var(--primary-color-light);
+    color: var(--primary-color);
+}
+
+.language-selector .dropdown-item.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.language-flag {
+    font-size: 18px;
+    width: 24px;
+    text-align: center;
+}
+
+.language-info {
+    flex: 1;
+}
+
+.language-name {
+    font-weight: 500;
+}
+
+.language-native {
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+.language-completion {
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    background: var(--secondary-bg);
+    color: var(--text-muted);
+    margin-left: auto;
+}
+
+.language-completion.complete {
+    background: var(--success-color);
+    color: white;
+}
+
+.language-completion.partial {
+    background: var(--warning-color);
+    color: white;
+}
+
+.language-completion.minimal {
+    background: var(--danger-color);
+    color: white;
+}
+
+/* RTL Support */
+[dir="rtl"] {
+    text-align: right;
+}
+
+[dir="rtl"] .language-selector .dropdown-toggle {
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .language-selector .dropdown-item {
+    flex-direction: row-reverse;
+    text-align: right;
+}
+
+[dir="rtl"] .language-completion {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+/* Accessibility */
+.language-selector .dropdown-item:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: -2px;
+}
+
+@media (max-width: 768px) {
+    .language-selector .dropdown-toggle {
+        min-width: 100px;
+        font-size: 13px;
+        padding: 5px 10px;
+    }
+    
+    .language-selector .dropdown-menu {
+        min-width: 180px;
+    }
+    
+    .language-selector .dropdown-item {
+        padding: 10px 12px;
+    }
+}
+</style>
+
+<script>
+class LanguageSelector {
+    constructor() {
+        this.currentLanguage = localStorage.getItem('selectedLanguage') || 'en';
+        this.languages = {};
+        this.translations = {};
+        
+        this.init();
+    }
+    
+    async init() {
+        try {
+            await this.loadLanguages();
+            await this.loadTranslations(this.currentLanguage);
+            this.renderLanguageSelector();
+            this.applyLanguage();
+            this.detectUserLanguage();
+        } catch (error) {
+            console.error('Language selector initialization failed:', error);
+            this.showFallback();
+        }
+    }
+    
+    async loadLanguages() {
+        try {
+            const response = await fetch('/api/i18n/languages');
+            const data = await response.json();
+            
+            if (data.languages) {
+                this.languages = data.languages;
+            } else {
+                throw new Error('No languages data received');
+            }
+        } catch (error) {
+            console.error('Failed to load languages:', error);
+            // Fallback to basic language list
+            this.languages = {
+                'en': { name: 'English', native_name: 'English', flag: '🇺🇸', completion: 100 },
+                'es': { name: 'Spanish', native_name: 'Español', flag: '🇪🇸', completion: 85 },
+                'fr': { name: 'French', native_name: 'Français', flag: '🇫🇷', completion: 80 },
+                'zh': { name: 'Chinese', native_name: '中文', flag: '🇨🇳', completion: 70 }
+            };
+        }
+    }
+    
+    async loadTranslations(langCode) {
+        try {
+            const response = await fetch(`/api/i18n/translations/${langCode}`);
+            const data = await response.json();
+            
+            if (data.translations) {
+                this.translations = data.translations;
+            }
+        } catch (error) {
+            console.error(`Failed to load translations for ${langCode}:`, error);
+            this.translations = {}; // Fallback to empty translations
+        }
+    }
+    
+    async detectUserLanguage() {
+        try {
+            const response = await fetch('/api/i18n/detect-language', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await response.json();
+            
+            if (data.detected_language && 
+                data.detected_language !== this.currentLanguage && 
+                !localStorage.getItem('selectedLanguage')) {
+                
+                // Show language suggestion
+                this.showLanguageSuggestion(data.detected_language);
+            }
+        } catch (error) {
+            console.error('Language detection failed:', error);
+        }
+    }
+    
+    showLanguageSuggestion(suggestedLang) {
+        const langInfo = this.languages[suggestedLang];
+        if (!langInfo) return;
+        
+        const suggestion = document.createElement('div');
+        suggestion.className = 'alert alert-info alert-dismissible fade show';
+        suggestion.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 300px;
+            font-size: 14px;
+        `;
+        
+        suggestion.innerHTML = `
+            <div class="d-flex align-items-center gap-2">
+                <span>${langInfo.flag}</span>
+                <div>
+                    <strong>Switch to ${langInfo.native_name}?</strong>
+                    <div class="mt-1">
+                        <button class="btn btn-sm btn-primary me-2" onclick="languageSelector.switchLanguage('${suggestedLang}'); this.closest('.alert').remove();">
+                            Yes
+                        </button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="this.closest('.alert').remove();">
+                            No
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(suggestion);
+        
+        // Auto-remove after 10 seconds
+        setTimeout(() => {
+            if (suggestion.parentNode) {
+                suggestion.remove();
+            }
+        }, 10000);
+    }
+    
+    renderLanguageSelector() {
+        const dropdown = document.getElementById('languageDropdown');
+        const currentLangButton = document.getElementById('languageSelectorButton');
+        
+        if (!dropdown || !currentLangButton) return;
+        
+        // Update current language display
+        const currentLang = this.languages[this.currentLanguage];
+        if (currentLang) {
+            document.getElementById('currentLanguageFlag').textContent = currentLang.flag;
+            document.getElementById('currentLanguageName').textContent = currentLang.native_name;
+        }
+        
+        // Populate dropdown
+        dropdown.innerHTML = Object.entries(this.languages)
+            .sort(([,a], [,b]) => b.completion - a.completion) // Sort by completion
+            .map(([code, lang]) => {
+                const isActive = code === this.currentLanguage;
+                const completionClass = lang.completion >= 90 ? 'complete' : 
+                                      lang.completion >= 70 ? 'partial' : 'minimal';
+                
+                return `
+                    <li>
+                        <a class="dropdown-item ${isActive ? 'active' : ''}" 
+                           href="#" 
+                           onclick="languageSelector.switchLanguage('${code}'); return false;"
+                           data-lang="${code}">
+                            <span class="language-flag">${lang.flag}</span>
+                            <div class="language-info">
+                                <div class="language-name">${lang.name}</div>
+                                <div class="language-native">${lang.native_name}</div>
+                            </div>
+                            <span class="language-completion ${completionClass}">
+                                ${lang.completion}%
+                            </span>
+                        </a>
+                    </li>
+                `;
+            }).join('');
+    }
+    
+    async switchLanguage(langCode) {
+        if (langCode === this.currentLanguage) return;
+        
+        try {
+            // Show loading state
+            const button = document.getElementById('languageSelectorButton');
+            const originalContent = button.innerHTML;
+            button.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Loading...';
+            button.disabled = true;
+            
+            // Load new translations
+            await this.loadTranslations(langCode);
+            
+            // Update current language
+            this.currentLanguage = langCode;
+            localStorage.setItem('selectedLanguage', langCode);
+            
+            // Apply new language
+            this.applyLanguage();
+            this.renderLanguageSelector();
+            
+            // Update page direction for RTL languages
+            const langInfo = this.languages[langCode];
+            if (langInfo && langInfo.direction === 'rtl') {
+                document.documentElement.setAttribute('dir', 'rtl');
+            } else {
+                document.documentElement.setAttribute('dir', 'ltr');
+            }
+            
+            // Restore button
+            button.innerHTML = originalContent;
+            button.disabled = false;
+            
+            // Show success message
+            this.showMessage(`Language switched to ${langInfo.native_name}`, 'success');
+            
+        } catch (error) {
+            console.error('Failed to switch language:', error);
+            this.showMessage('Failed to switch language', 'error');
+        }
+    }
+    
+    applyLanguage() {
+        // Apply translations to elements with data-i18n attribute
+        document.querySelectorAll('[data-i18n]').forEach(element => {
+            const key = element.getAttribute('data-i18n');
+            const translation = this.getTranslation(key);
+            
+            if (element.tagName === 'INPUT' && element.type === 'text') {
+                element.placeholder = translation;
+            } else {
+                element.textContent = translation;
+            }
+        });
+        
+        // Apply translations to elements with data-i18n-title attribute
+        document.querySelectorAll('[data-i18n-title]').forEach(element => {
+            const key = element.getAttribute('data-i18n-title');
+            const translation = this.getTranslation(key);
+            element.title = translation;
+        });
+    }
+    
+    getTranslation(key) {
+        return this.translations[key] || key;
+    }
+    
+    showMessage(message, type = 'info') {
+        const alert = document.createElement('div');
+        alert.className = `alert alert-${type} alert-dismissible fade show`;
+        alert.style.cssText = `
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            min-width: 300px;
+        `;
+        alert.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+        `;
+        
+        document.body.appendChild(alert);
+        
+        setTimeout(() => {
+            if (alert.parentNode) {
+                alert.remove();
+            }
+        }, 3000);
+    }
+    
+    showFallback() {
+        const dropdown = document.getElementById('languageDropdown');
+        if (dropdown) {
+            dropdown.innerHTML = `
+                <li><div class="dropdown-item-text text-muted">Language selector unavailable</div></li>
+            `;
+        }
+    }
+}
+
+// Initialize language selector when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    window.languageSelector = new LanguageSelector();
+});
+</script>

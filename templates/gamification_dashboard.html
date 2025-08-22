@@ -1,0 +1,587 @@
+{% extends "base.html" %}
+
+{% block title %}Achievements & Leaderboard - Visual LLM{% endblock %}
+
+{% block extra_css %}
+<style>
+    .gamification-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    
+    .profile-card {
+        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        color: white;
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 24px;
+        text-align: center;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+    
+    .profile-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 16px;
+        font-size: 32px;
+    }
+    
+    .profile-username {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+    
+    .profile-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 16px;
+        margin-top: 20px;
+    }
+    
+    .stat-item {
+        background: rgba(255,255,255,0.1);
+        border-radius: 8px;
+        padding: 12px;
+        backdrop-filter: blur(10px);
+    }
+    
+    .stat-value {
+        font-size: 20px;
+        font-weight: bold;
+        display: block;
+    }
+    
+    .stat-label {
+        font-size: 12px;
+        opacity: 0.8;
+        margin-top: 4px;
+    }
+    
+    .level-progress {
+        background: rgba(255,255,255,0.2);
+        border-radius: 20px;
+        height: 8px;
+        margin: 12px 0;
+        overflow: hidden;
+    }
+    
+    .level-progress-fill {
+        background: white;
+        height: 100%;
+        border-radius: 20px;
+        transition: width 0.3s ease;
+    }
+    
+    .section-card {
+        background: var(--card-bg);
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 24px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .section-header {
+        display: flex;
+        justify-content: between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    
+    .section-title {
+        font-size: 20px;
+        font-weight: bold;
+        color: var(--text-color);
+    }
+    
+    .achievements-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 16px;
+    }
+    
+    .achievement-card {
+        background: var(--secondary-bg);
+        border: 2px solid var(--border-color);
+        border-radius: 12px;
+        padding: 16px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .achievement-card.unlocked {
+        border-color: var(--primary-color);
+        background: linear-gradient(135deg, var(--primary-color-light), var(--secondary-bg));
+    }
+    
+    .achievement-card.locked {
+        opacity: 0.6;
+        filter: grayscale(0.5);
+    }
+    
+    .achievement-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
+    .achievement-icon {
+        font-size: 32px;
+        margin-bottom: 12px;
+        display: block;
+    }
+    
+    .achievement-name {
+        font-weight: bold;
+        margin-bottom: 8px;
+        color: var(--text-color);
+    }
+    
+    .achievement-description {
+        font-size: 14px;
+        color: var(--text-muted);
+        margin-bottom: 12px;
+        line-height: 1.4;
+    }
+    
+    .achievement-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+    }
+    
+    .achievement-points {
+        background: var(--accent-color);
+        color: white;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-weight: bold;
+    }
+    
+    .achievement-rarity {
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 10px;
+    }
+    
+    .rarity-common { background: #95a5a6; color: white; }
+    .rarity-rare { background: #3498db; color: white; }
+    .rarity-epic { background: #9b59b6; color: white; }
+    .rarity-legendary { background: #f39c12; color: white; }
+    
+    .achievement-progress {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--border-color);
+    }
+    
+    .achievement-progress-fill {
+        height: 100%;
+        background: var(--primary-color);
+        transition: width 0.3s ease;
+    }
+    
+    .leaderboard-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 16px;
+    }
+    
+    .leaderboard-table th,
+    .leaderboard-table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .leaderboard-table th {
+        background: var(--secondary-bg);
+        font-weight: bold;
+        color: var(--text-color);
+    }
+    
+    .leaderboard-rank {
+        font-weight: bold;
+        font-size: 18px;
+        width: 60px;
+        text-align: center;
+    }
+    
+    .rank-1 { color: #f39c12; }
+    .rank-2 { color: #95a5a6; }
+    .rank-3 { color: #cd7f32; }
+    
+    .leaderboard-user {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .user-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--primary-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+    }
+    
+    .category-tabs {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+    
+    .category-tab {
+        padding: 8px 16px;
+        border: 2px solid var(--border-color);
+        border-radius: 20px;
+        background: var(--secondary-bg);
+        color: var(--text-color);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 14px;
+        font-weight: 500;
+    }
+    
+    .category-tab.active {
+        border-color: var(--primary-color);
+        background: var(--primary-color);
+        color: white;
+    }
+    
+    .category-tab:hover {
+        border-color: var(--primary-color);
+    }
+    
+    .badges-display {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin: 12px 0;
+    }
+    
+    .badge-icon {
+        font-size: 24px;
+        padding: 8px;
+        background: rgba(255,255,255,0.1);
+        border-radius: 50%;
+        backdrop-filter: blur(10px);
+    }
+    
+    .loading-spinner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 200px;
+        font-size: 18px;
+        color: var(--text-muted);
+    }
+    
+    @media (max-width: 768px) {
+        .gamification-container {
+            padding: 12px;
+        }
+        
+        .profile-stats {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .achievements-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .category-tabs {
+            justify-content: center;
+        }
+        
+        .leaderboard-table {
+            font-size: 14px;
+        }
+        
+        .leaderboard-table th,
+        .leaderboard-table td {
+            padding: 8px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="gamification-container">
+    <!-- User Profile Card -->
+    <div class="profile-card" id="profileCard">
+        <div class="loading-spinner">Loading your profile...</div>
+    </div>
+    
+    <!-- Achievements Section -->
+    <div class="section-card">
+        <div class="section-header">
+            <h2 class="section-title">🏆 Achievements</h2>
+            <div id="achievementStats"></div>
+        </div>
+        
+        <!-- Achievement Categories -->
+        <div class="category-tabs">
+            <div class="category-tab active" data-category="all">All</div>
+            <div class="category-tab" data-category="learning">📚 Learning</div>
+            <div class="category-tab" data-category="training">🎯 Training</div>
+            <div class="category-tab" data-category="community">🤝 Community</div>
+            <div class="category-tab" data-category="special">⭐ Special</div>
+        </div>
+        
+        <div class="achievements-grid" id="achievementsGrid">
+            <div class="loading-spinner">Loading achievements...</div>
+        </div>
+    </div>
+    
+    <!-- Leaderboard Section -->
+    <div class="section-card">
+        <div class="section-header">
+            <h2 class="section-title">📊 Leaderboard</h2>
+        </div>
+        
+        <!-- Leaderboard Categories -->
+        <div class="category-tabs">
+            <div class="category-tab active" data-leaderboard="overall">Overall</div>
+            <div class="category-tab" data-leaderboard="level">Level</div>
+            <div class="category-tab" data-leaderboard="achievements">Achievements</div>
+            <div class="category-tab" data-leaderboard="models">Models</div>
+        </div>
+        
+        <div id="leaderboardContainer">
+            <div class="loading-spinner">Loading leaderboard...</div>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentUser = null;
+let allAchievements = [];
+
+// Load user profile
+async function loadUserProfile() {
+    try {
+        const response = await fetch('/api/gamification/profile');
+        const data = await response.json();
+        
+        if (data.error) {
+            document.getElementById('profileCard').innerHTML = `
+                <div style="text-align: center; color: #e74c3c;">
+                    <h3>🎮 Gamification Coming Soon!</h3>
+                    <p>Achievements and leaderboards will be available soon.</p>
+                </div>
+            `;
+            return;
+        }
+        
+        currentUser = data.user;
+        allAchievements = [...data.achievements.unlocked, ...data.achievements.locked];
+        
+        // Calculate level progress
+        const currentLevelXP = (data.user.level - 1) * 1000;
+        const nextLevelXP = data.user.level * 1000;
+        const progressXP = data.user.total_xp - currentLevelXP;
+        const progressPercent = (progressXP / 1000) * 100;
+        
+        document.getElementById('profileCard').innerHTML = `
+            <div class="profile-avatar">
+                ${data.user.username.charAt(0).toUpperCase()}
+            </div>
+            <div class="profile-username">${data.user.username}</div>
+            <div>Level ${data.user.level}</div>
+            <div class="level-progress">
+                <div class="level-progress-fill" style="width: ${progressPercent}%"></div>
+            </div>
+            <div>${progressXP}/1000 XP to next level</div>
+            
+            <div class="badges-display">
+                ${data.user.badges_earned.map(badge => `<span class="badge-icon">${badge}</span>`).join('')}
+            </div>
+            
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <span class="stat-value">${data.user.total_xp}</span>
+                    <div class="stat-label">Total XP</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">${data.achievements.unlocked.length}</span>
+                    <div class="stat-label">Achievements</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">#${data.rank.rank || 'N/A'}</span>
+                    <div class="stat-label">Rank</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">${data.achievements.completion_percentage.toFixed(1)}%</span>
+                    <div class="stat-label">Completion</div>
+                </div>
+            </div>
+        `;
+        
+        // Update achievement stats
+        document.getElementById('achievementStats').innerHTML = `
+            <span>${data.achievements.unlocked.length}/${data.achievements.total_achievements} unlocked</span>
+        `;
+        
+        // Load achievements
+        displayAchievements(allAchievements, 'all');
+        
+    } catch (error) {
+        console.error('Failed to load profile:', error);
+        document.getElementById('profileCard').innerHTML = `
+            <div style="text-align: center; color: #e74c3c;">
+                <h3>⚠️ Unable to load profile</h3>
+                <p>Please try refreshing the page.</p>
+            </div>
+        `;
+    }
+}
+
+// Display achievements
+function displayAchievements(achievements, category) {
+    const grid = document.getElementById('achievementsGrid');
+    
+    let filteredAchievements = achievements;
+    if (category !== 'all') {
+        filteredAchievements = achievements.filter(a => {
+            const achievement = a.achievement || a;
+            return achievement.category === category;
+        });
+    }
+    
+    if (filteredAchievements.length === 0) {
+        grid.innerHTML = '<div class="loading-spinner">No achievements in this category yet.</div>';
+        return;
+    }
+    
+    grid.innerHTML = filteredAchievements.map(item => {
+        const achievement = item.achievement || item;
+        const isUnlocked = !item.progress;
+        const progress = item.progress || 1;
+        
+        return `
+            <div class="achievement-card ${isUnlocked ? 'unlocked' : 'locked'}">
+                <div class="achievement-icon">${achievement.icon}</div>
+                <div class="achievement-name">${achievement.name}</div>
+                <div class="achievement-description">${achievement.description}</div>
+                <div class="achievement-meta">
+                    <span class="achievement-points">+${achievement.points} XP</span>
+                    <span class="achievement-rarity rarity-${achievement.rarity}">${achievement.rarity}</span>
+                </div>
+                ${!isUnlocked ? `
+                    <div class="achievement-progress">
+                        <div class="achievement-progress-fill" style="width: ${progress * 100}%"></div>
+                    </div>
+                ` : ''}
+            </div>
+        `;
+    }).join('');
+}
+
+// Load leaderboard
+async function loadLeaderboard(category = 'overall') {
+    try {
+        const response = await fetch(`/api/gamification/leaderboard?category=${category}&limit=20`);
+        const data = await response.json();
+        
+        if (data.error) {
+            document.getElementById('leaderboardContainer').innerHTML = `
+                <div class="loading-spinner">Leaderboard not available</div>
+            `;
+            return;
+        }
+        
+        const container = document.getElementById('leaderboardContainer');
+        container.innerHTML = `
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>User</th>
+                        <th>Level</th>
+                        <th>XP</th>
+                        <th>Achievements</th>
+                        <th>Models</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${data.leaderboard.map(entry => `
+                        <tr>
+                            <td class="leaderboard-rank rank-${entry.rank}">#${entry.rank}</td>
+                            <td>
+                                <div class="leaderboard-user">
+                                    <div class="user-avatar">${entry.username.charAt(0).toUpperCase()}</div>
+                                    <span>${entry.username}</span>
+                                </div>
+                            </td>
+                            <td>${entry.level}</td>
+                            <td>${entry.total_xp.toLocaleString()}</td>
+                            <td>${entry.achievements_count}</td>
+                            <td>${entry.models_trained}</td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        `;
+        
+    } catch (error) {
+        console.error('Failed to load leaderboard:', error);
+        document.getElementById('leaderboardContainer').innerHTML = `
+            <div class="loading-spinner">Failed to load leaderboard</div>
+        `;
+    }
+}
+
+// Event listeners
+document.addEventListener('DOMContentLoaded', () => {
+    loadUserProfile();
+    loadLeaderboard();
+    
+    // Achievement category tabs
+    document.querySelectorAll('[data-category]').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('[data-category]').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            displayAchievements(allAchievements, tab.dataset.category);
+        });
+    });
+    
+    // Leaderboard category tabs
+    document.querySelectorAll('[data-leaderboard]').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('[data-leaderboard]').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            loadLeaderboard(tab.dataset.leaderboard);
+        });
+    });
+});
+
+// Auto-refresh every 2 minutes
+setInterval(() => {
+    loadUserProfile();
+    const activeLeaderboard = document.querySelector('[data-leaderboard].active');
+    if (activeLeaderboard) {
+        loadLeaderboard(activeLeaderboard.dataset.leaderboard);
+    }
+}, 120000);
+</script>
+{% endblock %}

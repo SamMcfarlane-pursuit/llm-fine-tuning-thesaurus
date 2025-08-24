@@ -12,7 +12,7 @@ import logging
 from typing import Dict, Any, Optional
 import time
 
-# Import the enhanced AI assistant
+# Import the enhanced AI assistant and multi-provider system
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 try:
@@ -21,6 +21,12 @@ try:
 except ImportError:
     enhanced_ai_available = False
 
+try:
+    from multi_provider_ai_assistant import MultiProviderAIAssistant
+    multi_provider_available = True
+except ImportError:
+    multi_provider_available = False
+
 # Create blueprint
 llm_api = Blueprint('llm_api', __name__)
 
@@ -28,23 +34,16 @@ llm_api = Blueprint('llm_api', __name__)
 llm_manager = None
 
 def initialize_llm_manager():
-    """Initialize the LLM manager with the best available provider"""
+    """Initialize the LLM manager with the multi-provider system"""
     global llm_manager
     
-    # Priority order: try free options first, then paid
-    providers = ["ollama", "huggingface", "openai", "gemini"]
-    
-    for provider in providers:
+    if multi_provider_available:
         try:
-            llm_manager = LLMAssistantManager(provider=provider)
-            # Test with a simple query
-            test_response = llm_manager.get_llm_response("Hello", "test")
-            if test_response and "Error:" not in test_response:
-                logging.info(f"✅ LLM Manager initialized with {provider}")
-                return provider
+            llm_manager = MultiProviderAIAssistant()
+            logging.info("✅ Multi-Provider AI Assistant initialized")
+            return "multi_provider"
         except Exception as e:
-            logging.warning(f"❌ {provider} failed: {e}")
-            continue
+            logging.warning(f"❌ Multi-provider initialization failed: {e}")
     
     logging.error("❌ No LLM providers available")
     return None
@@ -86,20 +85,45 @@ def llm_chat():
                 'provider': 'fallback'
             })
         
-        # Get LLM response
+        # Get LLM response using async method
         start_time = time.time()
-        llm_response = llm_manager.get_llm_response(user_message, context)
-        response_time = time.time() - start_time
         
-        # Log the interaction (optional)
-        log_interaction(user_message, llm_response, response_time)
+        # Create enhanced prompt with context
+        enhanced_message = f"{context}\n\nUser Question: {user_message}" if context else user_message
         
-        return jsonify({
-            'response': llm_response,
-            'success': True,
-            'provider': llm_manager.provider,
-            'response_time': round(response_time, 2)
-        })
+        # Use asyncio to call the async query method
+        import asyncio
+        try:
+            # Run the async query method
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            ai_response = loop.run_until_complete(llm_manager.query(enhanced_message))
+            loop.close()
+            
+            response_time = time.time() - start_time
+            
+            # Log the interaction (optional)
+            log_interaction(user_message, ai_response.content, response_time)
+            
+            return jsonify({
+                'response': ai_response.content,
+                'success': ai_response.success,
+                'provider': ai_response.provider,
+                'model': ai_response.model,
+                'response_time': round(response_time, 2)
+            })
+            
+        except Exception as e:
+            logging.error(f"Async query error: {str(e)}")
+            response_time = time.time() - start_time
+            
+            return jsonify({
+                'response': "I'm having trouble processing your request. Please try again.",
+                'success': False,
+                'provider': 'error',
+                'error': str(e),
+                'response_time': round(response_time, 2)
+            })
         
     except Exception as e:
         logging.error(f"LLM Chat error: {str(e)}")

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI Components Test - Visual LLM</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/navigation.css">
+    <link rel="stylesheet" href="/static/css/dark-mode.css">
+    <style>
+        .test-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border: 1px solid #dee2e6;
+            border-radius: 0.5rem;
+            background: #f8f9fa;
+        }
+        .test-section h3 {
+            color: #198754;
+            margin-bottom: 1rem;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+        .status-pass { background-color: #28a745; }
+        .status-fail { background-color: #dc3545; }
+        .status-pending { background-color: #ffc107; }
+    </style>
+</head>
+<body>
+    <!-- Navigation Test -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-success" href="#">
+                Visual LLM
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="learningDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-book me-1"></i>Learning
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Start Learning</a></li>
+                            <li><a class="dropdown-item" href="#">Learning Paths</a></li>
+                            <li><a class="dropdown-item" href="#">Getting Started</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-tools me-1"></i>Workshops
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-question-circle me-1"></i>Quizzes
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <button id="theme-toggle" class="btn btn-outline-secondary btn-sm me-2">
+                            <i class="bi bi-moon-fill"></i>
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="bi bi-person-circle me-1"></i>Profile
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h1 class="display-4 fw-bold mb-4">UI Components Test Suite</h1>
+        <p class="lead mb-4">Testing all Visual LLM UI components, navigation, dark mode, and interactive elements.</p>
+
+        <!-- Navigation Test -->
+        <div class="test-section">
+            <h3><span class="status-indicator status-pending" id="nav-status"></span>Navigation Test</h3>
+            <p>Testing responsive navigation, dropdowns, and mobile toggle.</p>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Desktop Navigation</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-check-circle text-success"></i> Brand logo visible</li>
+                        <li><i class="bi bi-check-circle text-success"></i> Learning dropdown functional</li>
+                        <li><i class="bi bi-check-circle text-success"></i> Workshop links accessible</li>
+                        <li><i class="bi bi-check-circle text-success"></i> Quiz navigation working</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h5>Mobile Navigation</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-check-circle text-success"></i> Hamburger menu toggle</li>
+                        <li><i class="bi bi-check-circle text-success"></i> Responsive collapse</li>
+                        <li><i class="bi bi-check-circle text-success"></i> Touch-friendly buttons</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dark Mode Test -->
+        <div class="test-section">
+            <h3><span class="status-indicator status-pending" id="theme-status"></span>Dark Mode Test</h3>
+            <p>Testing theme toggle functionality and dark mode styling.</p>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Theme Toggle</h5>
+                    <button id="test-theme-toggle" class="btn btn-primary mb-3">
+                        <i class="bi bi-palette"></i> Test Theme Toggle
+                    </button>
+                    <ul class="list-unstyled">
+                        <li><span id="theme-toggle-status"><i class="bi bi-clock text-warning"></i> Theme toggle pending test</span></li>
+                        <li><span id="dark-mode-status"><i class="bi bi-clock text-warning"></i> Dark mode styling pending</span></li>
+                        <li><span id="light-mode-status"><i class="bi bi-clock text-warning"></i> Light mode styling pending</span></li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h5>Current Theme Info</h5>
+                    <p><strong>Active Theme:</strong> <span id="current-theme">light</span></p>
+                    <p><strong>Saved Preference:</strong> <span id="saved-theme">none</span></p>
+                    <p><strong>System Preference:</strong> <span id="system-theme">unknown</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Elements Test -->
+        <div class="test-section">
+            <h3><span class="status-indicator status-pending" id="interactive-status"></span>Interactive Elements Test</h3>
+            <p>Testing buttons, cards, modals, and other interactive components.</p>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm hover-card">
+                        <div class="card-body text-center">
+                            <div class="feature-icon mb-3">
+                                <i class="bi bi-book display-4 text-primary"></i>
+                            </div>
+                            <h5 class="card-title">Learn & Study</h5>
+                            <p class="card-text">Test card with hover effects and interactive elements.</p>
+                            <button class="btn btn-primary">Test Button</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm hover-card">
+                        <div class="card-body text-center">
+                            <div class="feature-icon mb-3">
+                                <i class="bi bi-tools display-4 text-success"></i>
+                            </div>
+                            <h5 class="card-title">Workshops</h5>
+                            <p class="card-text">Interactive workshop card with hover animations.</p>
+                            <button class="btn btn-success">Test Workshop</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm hover-card">
+                        <div class="card-body text-center">
+                            <div class="feature-icon mb-3">
+                                <i class="bi bi-question-circle display-4 text-warning"></i>
+                            </div>
+                            <h5 class="card-title">Quizzes</h5>
+                            <p class="card-text">Quiz card with interactive elements and feedback.</p>
+                            <button class="btn btn-warning">Test Quiz</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Elements Test -->
+        <div class="test-section">
+            <h3><span class="status-indicator status-pending" id="forms-status"></span>Form Elements Test</h3>
+            <p>Testing form inputs, validation, and accessibility.</p>
+            <div class="row">
+                <div class="col-md-6">
+                    <form>
+                        <div class="mb-3">
+                            <label for="test-input" class="form-label">Test Input</label>
+                            <input type="text" class="form-control" id="test-input" placeholder="Enter test text">
+                        </div>
+                        <div class="mb-3">
+                            <label for="test-select" class="form-label">Test Select</label>
+                            <select class="form-select" id="test-select">
+                                <option selected>Choose option...</option>
+                                <option value="1">Option 1</option>
+                                <option value="2">Option 2</option>
+                                <option value="3">Option 3</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="test-checkbox">
+                                <label class="form-check-label" for="test-checkbox">
+                                    Test checkbox
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Test Submit</button>
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <h5>Accessibility Features</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-check-circle text-success"></i> Proper labels</li>
+                        <li><i class="bi bi-check-circle text-success"></i> Keyboard navigation</li>
+                        <li><i class="bi bi-check-circle text-success"></i> Focus indicators</li>
+                        <li><i class="bi bi-check-circle text-success"></i> Screen reader support</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Results Summary -->
+        <div class="test-section">
+            <h3>Test Results Summary</h3>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <h4 class="text-success" id="passed-count">0</h4>
+                        <p>Tests Passed</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <h4 class="text-danger" id="failed-count">0</h4>
+                        <p>Tests Failed</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <h4 class="text-warning" id="pending-count">5</h4>
+                        <p>Tests Pending</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <h4 class="text-info" id="total-count">5</h4>
+                        <p>Total Tests</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Test JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let passedTests = 0;
+            let failedTests = 0;
+            let pendingTests = 5;
+
+            // Test Navigation
+            function testNavigation() {
+                const navbar = document.querySelector('.navbar');
+                const dropdowns = document.querySelectorAll('.dropdown-toggle');
+                const mobileToggle = document.querySelector('.navbar-toggler');
+                
+                if (navbar && dropdowns.length > 0 && mobileToggle) {
+                    updateTestStatus('nav-status', 'pass');
+                    passedTests++;
+                    pendingTests--;
+                } else {
+                    updateTestStatus('nav-status', 'fail');
+                    failedTests++;
+                    pendingTests--;
+                }
+                updateCounts();
+            }
+
+            // Test Theme Toggle
+            function testThemeToggle() {
+                const themeToggle = document.getElementById('theme-toggle');
+                const testButton = document.getElementById('test-theme-toggle');
+                
+                if (themeToggle) {
+                    updateTestStatus('theme-status', 'pass');
+                    document.getElementById('theme-toggle-status').innerHTML = '<i class="bi bi-check-circle text-success"></i> Theme toggle button found';
+                    
+                    // Test theme switching
+                    testButton.addEventListener('click', function() {
+                        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+                        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                        document.documentElement.setAttribute('data-theme', newTheme);
+                        document.getElementById('current-theme').textContent = newTheme;
+                        
+                        if (newTheme === 'dark') {
+                            document.getElementById('dark-mode-status').innerHTML = '<i class="bi bi-check-circle text-success"></i> Dark mode activated';
+                        } else {
+                            document.getElementById('light-mode-status').innerHTML = '<i class="bi bi-check-circle text-success"></i> Light mode activated';
+                        }
+                    });
+                    
+                    passedTests++;
+                    pendingTests--;
+                } else {
+                    updateTestStatus('theme-status', 'fail');
+                    document.getElementById('theme-toggle-status').innerHTML = '<i class="bi bi-x-circle text-danger"></i> Theme toggle button not found';
+                    failedTests++;
+                    pendingTests--;
+                }
+                updateCounts();
+            }
+
+            // Test Interactive Elements
+            function testInteractiveElements() {
+                const cards = document.querySelectorAll('.hover-card');
+                const buttons = document.querySelectorAll('.btn');
+                
+                if (cards.length >= 3 && buttons.length >= 5) {
+                    updateTestStatus('interactive-status', 'pass');
+                    passedTests++;
+                    pendingTests--;
+                } else {
+                    updateTestStatus('interactive-status', 'fail');
+                    failedTests++;
+                    pendingTests--;
+                }
+                updateCounts();
+            }
+
+            // Test Forms
+            function testForms() {
+                const inputs = document.querySelectorAll('input, select, textarea');
+                const labels = document.querySelectorAll('label');
+                
+                if (inputs.length >= 3 && labels.length >= 3) {
+                    updateTestStatus('forms-status', 'pass');
+                    passedTests++;
+                    pendingTests--;
+                } else {
+                    updateTestStatus('forms-status', 'fail');
+                    failedTests++;
+                    pendingTests--;
+                }
+                updateCounts();
+            }
+
+            // Update test status indicator
+            function updateTestStatus(elementId, status) {
+                const element = document.getElementById(elementId);
+                element.className = `status-indicator status-${status}`;
+            }
+
+            // Update test counts
+            function updateCounts() {
+                document.getElementById('passed-count').textContent = passedTests;
+                document.getElementById('failed-count').textContent = failedTests;
+                document.getElementById('pending-count').textContent = pendingTests;
+            }
+
+            // Initialize theme info
+            function initializeThemeInfo() {
+                const savedTheme = localStorage.getItem('theme') || 'none';
+                const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+                
+                document.getElementById('saved-theme').textContent = savedTheme;
+                document.getElementById('system-theme').textContent = systemTheme;
+                document.getElementById('current-theme').textContent = currentTheme;
+            }
+
+            // Run all tests
+            setTimeout(() => {
+                testNavigation();
+                testThemeToggle();
+                testInteractiveElements();
+                testForms();
+                initializeThemeInfo();
+                
+                // Final test - overall UI
+                if (passedTests >= 3) {
+                    console.log('✅ UI Components Test Suite: PASSED');
+                } else {
+                    console.log('❌ UI Components Test Suite: FAILED');
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

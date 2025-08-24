@@ -796,7 +796,14 @@ class SimpleLLMThesaurus:
 # Initialize global instances
 try:
     # Try to initialize the full ThesaurusLLM if a model is available
-    thesaurus = ThesaurusLLM()
+    # Check if there's a model path available first
+    model_path = os.environ.get('THESAURUS_MODEL_PATH')
+    if model_path and os.path.exists(model_path):
+        thesaurus = ThesaurusLLM(model_path=model_path)
+        print(f"✅ ThesaurusLLM initialized with model: {model_path}")
+    else:
+        # No model available, use fallback
+        raise ValueError("No model path available")
 except Exception as e:
     print(f"Info: ThesaurusLLM initialization failed: {e}")
     print("Using simple fallback thesaurus with LLM educational concepts")

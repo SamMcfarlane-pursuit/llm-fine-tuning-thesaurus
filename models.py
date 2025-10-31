@@ -18,6 +18,7 @@ JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY', secrets.token_hex(32))
 class User(db.Model, UserMixin):
     """User model for authentication."""
     __tablename__ = 'users'
+    __table_args__ = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True, nullable=False, index=True)
@@ -145,6 +146,7 @@ class User(db.Model, UserMixin):
 class UserProgress(db.Model):
     """Model to track user progress in the LLM fine-tuning journey."""
     __tablename__ = 'user_progress'
+    __table_args__ = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
@@ -308,6 +310,7 @@ class PopQuizQuestion(db.Model):
 class SocialAccount(db.Model):
     """Model for social accounts linked to users."""
     __tablename__ = 'social_accounts'
+    __table_args__ = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
@@ -327,6 +330,7 @@ class SocialAccount(db.Model):
 class AnalyticsEvent(db.Model):
     """Model for analytics events."""
     __tablename__ = 'analytics_events'
+    __table_args__ = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True)
     event_type = db.Column(db.String(50), nullable=False)  # e.g., 'page_view', 'tutorial_complete'
@@ -347,6 +351,7 @@ class AnalyticsEvent(db.Model):
 class ContentMetrics(db.Model):
     """Model for content metrics."""
     __tablename__ = 'content_metrics'
+    __table_args__ = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True)
     content_type = db.Column(db.String(50), nullable=False)  # e.g., 'tutorial', 'quiz', 'exercise'
@@ -366,6 +371,7 @@ class ContentMetrics(db.Model):
 class DailyMetrics(db.Model):
     """Model for daily metrics."""
     __tablename__ = 'daily_metrics'
+    __table_args__ = {'extend_existing': True}
 
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date, nullable=False)  # Date of the metrics

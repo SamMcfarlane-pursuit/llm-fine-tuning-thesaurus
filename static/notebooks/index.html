@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notebooks Directory</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f8f9fa; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
+        .notebook-list { list-style: none; padding: 0; }
+        .notebook-item { margin: 15px 0; padding: 15px; background: #f8f9fa; border-radius: 5px; border-left: 4px solid #007bff; }
+        .notebook-item a { text-decoration: none; color: #007bff; font-weight: bold; }
+        .notebook-item a:hover { text-decoration: underline; }
+        .description { color: #666; margin-top: 5px; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Training Notebooks</h1>
+        <p>Welcome to the notebooks directory. Here you'll find Jupyter notebooks for LLM fine-tuning tutorials and exercises.</p>
+        
+        <ul class="notebook-list">
+            <li class="notebook-item">
+                <a href="LoRA_Fine_Tuning_Tutorial.ipynb">LoRA Fine-Tuning Tutorial</a>
+                <div class="description">Learn how to implement LoRA (Low-Rank Adaptation) for efficient fine-tuning</div>
+            </li>
+            <li class="notebook-item">
+                <a href="QLoRA_Implementation_Guide.ipynb">QLoRA Implementation Guide</a>
+                <div class="description">Advanced QLoRA techniques for memory-efficient training</div>
+            </li>
+            <li class="notebook-item">
+                <a href="Model_Deployment_Tutorial.ipynb">Model Deployment Tutorial</a>
+                <div class="description">Deploy your fine-tuned models to production</div>
+            </li>
+        </ul>
+        
+        <div style="margin-top: 30px; padding: 20px; background: #e3f2fd; border-radius: 5px;">
+            <strong>💡 Tip:</strong> These notebooks are designed to work with Google Colab for easy access to GPU resources.
+        </div>
+    </div>
+</body>
+</html>

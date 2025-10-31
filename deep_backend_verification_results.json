@@ -1,0 +1,380 @@
+{
+  "summary": {
+    "total_tests": 37,
+    "passed": 36,
+    "failed": 0,
+    "warnings": 1,
+    "success_rate": 97.2972972972973,
+    "category_results": {
+      "Database": {
+        "passed": 4,
+        "failed": 0,
+        "total": 4
+      },
+      "API": {
+        "passed": 8,
+        "failed": 0,
+        "total": 8
+      },
+      "Thesaurus": {
+        "passed": 3,
+        "failed": 0,
+        "total": 3
+      },
+      "Auth": {
+        "passed": 5,
+        "failed": 1,
+        "total": 6
+      },
+      "Performance": {
+        "passed": 6,
+        "failed": 0,
+        "total": 6
+      },
+      "Integration": {
+        "passed": 10,
+        "failed": 0,
+        "total": 10
+      }
+    },
+    "critical_failures": 0,
+    "avg_response_time": 0.002929202715555827,
+    "timestamp": "2025-08-27T01:18:36.734592"
+  },
+  "detailed_results": [
+    {
+      "category": "Database",
+      "test_name": "Database Stats API",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:35.640045",
+      "response_code": 200,
+      "response_time": 0.0034928321838378906,
+      "details": "Connected: Unknown"
+    },
+    {
+      "category": "Database",
+      "test_name": "Database File Existence",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:35.640116",
+      "response_code": null,
+      "response_time": null,
+      "details": "Database file found: instance/app.db"
+    },
+    {
+      "category": "Database",
+      "test_name": "Database Connection",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:35.643477",
+      "response_code": null,
+      "response_time": null,
+      "details": "Connected successfully, 5 tables found"
+    },
+    {
+      "category": "Database",
+      "test_name": "Database Schema",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:35.643551",
+      "response_code": null,
+      "response_time": null,
+      "details": "Tables: user, thesaurus_entry, related_concept, learning_resource, user_progress"
+    },
+    {
+      "category": "API",
+      "test_name": "Health Check",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:35.646014",
+      "response_code": 200,
+      "response_time": 0.0023589134216308594,
+      "details": "Valid JSON response with 7 fields"
+    },
+    {
+      "category": "API",
+      "test_name": "System Status",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:35.649503",
+      "response_code": 200,
+      "response_time": 0.003394603729248047,
+      "details": "Valid JSON response with 7 fields"
+    },
+    {
+      "category": "API",
+      "test_name": "Performance Metrics",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:35.651991",
+      "response_code": 200,
+      "response_time": 0.0024139881134033203,
+      "details": "Valid JSON response with 7 fields"
+    },
+    {
+      "category": "API",
+      "test_name": "Performance Status",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:35.655719",
+      "response_code": 200,
+      "response_time": 0.0035409927368164062,
+      "details": "Valid JSON response with 4 fields"
+    },
+    {
+      "category": "API",
+      "test_name": "Database Statistics",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:35.658997",
+      "response_code": 200,
+      "response_time": 0.0031638145446777344,
+      "details": "Valid JSON response with 5 fields"
+    },
+    {
+      "category": "API",
+      "test_name": "Quiz System Test",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:35.661134",
+      "response_code": 200,
+      "response_time": 0.002068042755126953,
+      "details": "Valid JSON response with 5 fields"
+    },
+    {
+      "category": "Thesaurus",
+      "test_name": "Word Lookup: happy",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:35.662826",
+      "response_code": 200,
+      "response_time": 0.0016071796417236328,
+      "details": "Found 0 synonyms"
+    },
+    {
+      "category": "Thesaurus",
+      "test_name": "Word Lookup: computer",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:35.665363",
+      "response_code": 200,
+      "response_time": 0.002402067184448242,
+      "details": "Found 0 synonyms"
+    },
+    {
+      "category": "Thesaurus",
+      "test_name": "Word Lookup: learning",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:35.669060",
+      "response_code": 200,
+      "response_time": 0.0035429000854492188,
+      "details": "Found 0 synonyms"
+    },
+    {
+      "category": "API",
+      "test_name": "Analytics Tracking",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:35.672609",
+      "response_code": 400,
+      "response_time": 0.00345611572265625,
+      "details": "Endpoint accessible (CSRF protection active)"
+    },
+    {
+      "category": "API",
+      "test_name": "Emergency Mode Toggle",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:35.675234",
+      "response_code": 400,
+      "response_time": 0.0025610923767089844,
+      "details": "Endpoint accessible (CSRF protection active)"
+    },
+    {
+      "category": "Auth",
+      "test_name": "Login Endpoint",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:35.677603",
+      "response_code": 200,
+      "response_time": 0.0022840499877929688,
+      "details": "JSON response: Authentication - Coming Soon!"
+    },
+    {
+      "category": "Auth",
+      "test_name": "Register Endpoint",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:35.678886",
+      "response_code": 200,
+      "response_time": 0.0012450218200683594,
+      "details": "Registration page accessible"
+    },
+    {
+      "category": "Auth",
+      "test_name": "Protected Route: /profile",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:35.688412",
+      "response_code": 200,
+      "response_time": 0.00946497917175293,
+      "details": "Proper auth handling"
+    },
+    {
+      "category": "Auth",
+      "test_name": "Protected Route: /user_dashboard",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:35.691801",
+      "response_code": 200,
+      "response_time": 0.0033011436462402344,
+      "details": "Proper auth handling"
+    },
+    {
+      "category": "Auth",
+      "test_name": "Protected Route: /analytics_dashboard",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:35.695447",
+      "response_code": 200,
+      "response_time": 0.0035660266876220703,
+      "details": "Proper auth handling"
+    },
+    {
+      "category": "Auth",
+      "test_name": "CSRF Protection",
+      "status": "WARN",
+      "timestamp": "2025-08-27T01:18:35.698086",
+      "response_code": 400,
+      "response_time": 0.0025169849395751953,
+      "details": "400 error, likely CSRF protection"
+    },
+    {
+      "category": "Performance",
+      "test_name": "Metrics Collection",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:35.699421",
+      "response_code": 200,
+      "response_time": 0.001260995864868164,
+      "details": "Found 3 performance metrics"
+    },
+    {
+      "category": "Performance",
+      "test_name": "Memory Monitoring",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:35.699435",
+      "response_code": null,
+      "response_time": null,
+      "details": "Memory usage tracking active"
+    },
+    {
+      "category": "Performance",
+      "test_name": "CPU Monitoring",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:35.699442",
+      "response_code": null,
+      "response_time": null,
+      "details": "CPU usage tracking active"
+    },
+    {
+      "category": "Performance",
+      "test_name": "Status Monitoring",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:35.700537",
+      "response_code": 200,
+      "response_time": 0.0010628700256347656,
+      "details": "Status data available with 4 fields"
+    },
+    {
+      "category": "Performance",
+      "test_name": "System Resources",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:36.702470",
+      "response_code": null,
+      "response_time": null,
+      "details": "CPU: 41.5%, Memory: 83.0%, Disk: 20.2%"
+    },
+    {
+      "category": "Performance",
+      "test_name": "Alert System",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:36.702558",
+      "response_code": null,
+      "response_time": null,
+      "details": "Performance alerts file exists"
+    },
+    {
+      "category": "Integration",
+      "test_name": "Home Page Content",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:36.705761",
+      "response_code": 200,
+      "response_time": 0.00290679931640625,
+      "details": "Found 3/3 expected elements"
+    },
+    {
+      "category": "Integration",
+      "test_name": "Thesaurus Page Content",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:36.709072",
+      "response_code": 200,
+      "response_time": 0.0026361942291259766,
+      "details": "Found 1/3 expected elements"
+    },
+    {
+      "category": "Integration",
+      "test_name": "Learn Page Content",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:36.713589",
+      "response_code": 200,
+      "response_time": 0.0037238597869873047,
+      "details": "Found 3/3 expected elements"
+    },
+    {
+      "category": "Integration",
+      "test_name": "Workshops Page Content",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:36.717318",
+      "response_code": 200,
+      "response_time": 0.003309965133666992,
+      "details": "Found 3/3 expected elements"
+    },
+    {
+      "category": "Integration",
+      "test_name": "JS File: main.js",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:36.720650",
+      "response_code": 200,
+      "response_time": 0.0031158924102783203,
+      "details": "Contains 6 API calls, 6 fetch requests"
+    },
+    {
+      "category": "Integration",
+      "test_name": "JS File: thesaurus.js",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:36.723298",
+      "response_code": 200,
+      "response_time": 0.0025370121002197266,
+      "details": "Contains 5 API calls, 5 fetch requests"
+    },
+    {
+      "category": "Integration",
+      "test_name": "JS File: tutorials.js",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:36.725184",
+      "response_code": 200,
+      "response_time": 0.0018439292907714844,
+      "details": "Contains 0 API calls, 0 fetch requests"
+    },
+    {
+      "category": "Integration",
+      "test_name": "Static Asset: style.css",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:36.726610",
+      "response_code": 200,
+      "response_time": 0.001394033432006836,
+      "details": "Asset loaded successfully (11464 bytes)"
+    },
+    {
+      "category": "Integration",
+      "test_name": "Static Asset: manifest.json",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:36.728204",
+      "response_code": 200,
+      "response_time": 0.0015637874603271484,
+      "details": "Asset loaded successfully (2970 bytes)"
+    },
+    {
+      "category": "Integration",
+      "test_name": "Static Asset: logo.svg",
+      "status": "PASS",
+      "timestamp": "2025-08-27T01:18:36.734378",
+      "response_code": 200,
+      "response_time": 0.006139993667602539,
+      "details": "Asset loaded successfully (497 bytes)"
+    }
+  ],
+  "critical_issues": []
+}

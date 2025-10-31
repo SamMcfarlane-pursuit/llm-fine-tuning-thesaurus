@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+
+{% block title %}Visual Thesaurus - Thesaurus AI LLM FT{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/vis-network@9.1.2/dist/vis-network.min.js"></script>
+<style>
+    .thesaurus-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .search-section {
+        background: #f8f9fa;
+        padding: 30px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+    .visualization-container {
+        height: 600px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background: white;
+        position: relative;
+    }
+    .word-input {
+        font-size: 1.2em;
+        padding: 12px 20px;
+        border: 2px solid #007bff;
+        border-radius: 25px;
+        width: 300px;
+        margin-right: 15px;
+    }
+    .search-btn {
+        font-size: 1.2em;
+        padding: 12px 30px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+    }
+    .search-btn:hover {
+        background: #0056b3;
+    }
+    .placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: #6c757d;
+        font-size: 1.1em;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="thesaurus-container">
+    <div class="search-section">
+        <h1 class="mb-4">Visual Thesaurus</h1>
+        <p class="lead mb-4">Explore word relationships through interactive visualizations</p>
+        <div class="search-form">
+            <input type="text" id="wordInput" class="word-input" placeholder="Enter a word to explore..." autocomplete="off">
+            <button onclick="searchWord()" class="search-btn">Visualize</button>
+        </div>
+    </div>
+    
+    <div class="visualization-container" id="networkContainer">
+        <div class="placeholder" id="visualizationPlaceholder">
+            <div>
+                <i class="fas fa-search fa-3x mb-3"></i>
+                <p>Enter a word above to see its visual thesaurus</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mt-4">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Synonyms</h5>
+                    </div>
+                    <div class="card-body" id="synonymsList">
+                        <p class="text-muted">Search for a word to see synonyms</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Antonyms</h5>
+                    </div>
+                    <div class="card-body" id="antonymsList">
+                        <p class="text-muted">Search for a word to see antonyms</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Related Terms</h5>
+                    </div>
+                    <div class="card-body" id="relatedTermsList">
+                        <p class="text-muted">Search for a word to see related terms</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/thesaurus.js') }}"></script>
+<script>
+    // Initialize thesaurus functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const wordInput = document.getElementById('wordInput');
+        
+        // Allow Enter key to trigger search
+        wordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchWord();
+            }
+        });
+    });
+    
+    function searchWord() {
+        const wordInput = document.getElementById('wordInput');
+        const word = wordInput.value.trim();
+        
+        if (!word) {
+            alert('Please enter a word to search');
+            return;
+        }
+        
+        const networkContainer = document.getElementById('networkContainer');
+        const placeholder = document.getElementById('visualizationPlaceholder');
+        
+        // Show loading state
+        networkContainer.innerHTML = '<div class="placeholder"><div><i class="fas fa-spinner fa-spin fa-3x mb-3"></i><p>Generating visualization...</p></div></div>';
+        
+        // Fetch thesaurus data
+        fetch(`/api/thesaurus?word=${encodeURIComponent(word)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    networkContainer.innerHTML = `<div class="placeholder"><div class="alert alert-danger">${data.error}</div></div>`;
+                    return;
+                }
+                
+                // Update word lists
+                updateWordLists(data);
+                
+                // Create simple visualization
+                createSimpleVisualization(word, data);
+            })
+            .catch(error => {
+                console.error('Error fetching thesaurus data:', error);
+                networkContainer.innerHTML = '<div class="placeholder"><div class="alert alert-danger">Error generating visualization. Please try again.</div></div>';
+            });
+    }
+    
+    function updateWordLists(data) {
+        const synonymsList = document.getElementById('synonymsList');
+        const antonymsList = document.getElementById('antonymsList');
+        const relatedTermsList = document.getElementById('relatedTermsList');
+        
+        // Update synonyms
+        if (data.synonyms && data.synonyms.length > 0) {
+            synonymsList.innerHTML = data.synonyms.map(word => `<span class="badge bg-primary me-1 mb-1">${word}</span>`).join('');
+        } else {
+            synonymsList.innerHTML = '<p class="text-muted">No synonyms found</p>';
+        }
+        
+        // Update antonyms
+        if (data.antonyms && data.antonyms.length > 0) {
+            antonymsList.innerHTML = data.antonyms.map(word => `<span class="badge bg-danger me-1 mb-1">${word}</span>`).join('');
+        } else {
+            antonymsList.innerHTML = '<p class="text-muted">No antonyms found</p>';
+        }
+        
+        // Update related terms
+        if (data.related && data.related.length > 0) {
+            relatedTermsList.innerHTML = data.related.map(word => `<span class="badge bg-success me-1 mb-1">${word}</span>`).join('');
+        } else {
+            relatedTermsList.innerHTML = '<p class="text-muted">No related terms found</p>';
+        }
+    }
+    
+    function createSimpleVisualization(centerWord, data) {
+        const container = document.getElementById('networkContainer');
+        
+        // Create a simple text-based visualization for now
+        const html = `
+            <div class="p-4">
+                <div class="text-center mb-4">
+                    <h3 class="text-primary">${centerWord}</h3>
+                    <p class="text-muted">Word Relationships</p>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <h5 class="text-primary">Synonyms</h5>
+                        ${data.synonyms ? data.synonyms.slice(0, 5).map(word => `<div class="mb-2"><span class="badge bg-primary">${word}</span></div>`).join('') : '<p class="text-muted">None found</p>'}
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <h5 class="text-danger">Antonyms</h5>
+                        ${data.antonyms ? data.antonyms.slice(0, 5).map(word => `<div class="mb-2"><span class="badge bg-danger">${word}</span></div>`).join('') : '<p class="text-muted">None found</p>'}
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <h5 class="text-success">Related</h5>
+                        ${data.related ? data.related.slice(0, 5).map(word => `<div class="mb-2"><span class="badge bg-success">${word}</span></div>`).join('') : '<p class="text-muted">None found</p>'}
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        container.innerHTML = html;
+    }
+</script>
+{% endblock %}

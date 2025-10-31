@@ -1,0 +1,238 @@
+{
+  "summary": {
+    "total_tests": 11,
+    "passed": 5,
+    "failed": 6,
+    "success_rate": 45.45454545454545,
+    "total_time": 0.12188005447387695
+  },
+  "results": [
+    {
+      "name": "Homepage UI Elements",
+      "type": "page_elements",
+      "endpoint": "/",
+      "success": true,
+      "found_elements": 6,
+      "missing_elements": 0,
+      "response_time_ms": 12.95,
+      "details": {
+        "found": [
+          {
+            "tag": "title",
+            "text": "Visual LLM"
+          },
+          {
+            "tag": "h1"
+          },
+          {
+            "tag": "nav"
+          },
+          "thesaurus",
+          "learn",
+          "workshops"
+        ],
+        "missing": []
+      }
+    },
+    {
+      "name": "Thesaurus Page UI Elements",
+      "type": "page_elements",
+      "endpoint": "/thesaurus",
+      "success": true,
+      "found_elements": 5,
+      "missing_elements": 0,
+      "response_time_ms": 10.81,
+      "details": {
+        "found": [
+          {
+            "tag": "form"
+          },
+          {
+            "tag": "input",
+            "attrs": {
+              "type": "text"
+            }
+          },
+          {
+            "tag": "button"
+          },
+          "synonym",
+          "word"
+        ],
+        "missing": []
+      }
+    },
+    {
+      "name": "Learn Page UI Elements",
+      "type": "page_elements",
+      "endpoint": "/learn",
+      "success": true,
+      "found_elements": 4,
+      "missing_elements": 0,
+      "response_time_ms": 3.56,
+      "details": {
+        "found": [
+          {
+            "tag": "h1"
+          },
+          {
+            "tag": "nav"
+          },
+          "learning",
+          "tutorial"
+        ],
+        "missing": []
+      }
+    },
+    {
+      "name": "Workshops Page UI Elements",
+      "type": "page_elements",
+      "endpoint": "/workshops",
+      "success": true,
+      "found_elements": 3,
+      "missing_elements": 0,
+      "response_time_ms": 2.97,
+      "details": {
+        "found": [
+          {
+            "tag": "h1"
+          },
+          "workshop",
+          "exercise"
+        ],
+        "missing": []
+      }
+    },
+    {
+      "name": "Login Page Elements",
+      "type": "page_elements",
+      "endpoint": "/auth/login",
+      "success": false,
+      "found_elements": 1,
+      "missing_elements": 1,
+      "response_time_ms": 1.76,
+      "details": {
+        "found": [
+          "coming soon"
+        ],
+        "missing": [
+          "login"
+        ]
+      }
+    },
+    {
+      "name": "Register Page Elements",
+      "type": "page_elements",
+      "endpoint": "/auth/register",
+      "success": false,
+      "found_elements": 1,
+      "missing_elements": 1,
+      "response_time_ms": 1.28,
+      "details": {
+        "found": [
+          "coming soon"
+        ],
+        "missing": [
+          "register"
+        ]
+      }
+    },
+    {
+      "name": "LoRA Guide Elements",
+      "type": "page_elements",
+      "endpoint": "/lora_guide",
+      "success": true,
+      "found_elements": 3,
+      "missing_elements": 0,
+      "response_time_ms": 3.98,
+      "details": {
+        "found": [
+          {
+            "tag": "h1"
+          },
+          "lora",
+          "fine-tuning"
+        ],
+        "missing": []
+      }
+    },
+    {
+      "name": "QLoRA Guide Elements",
+      "type": "page_elements",
+      "endpoint": "/qlora_guide",
+      "success": false,
+      "found_elements": 2,
+      "missing_elements": 1,
+      "response_time_ms": 3.03,
+      "details": {
+        "found": [
+          {
+            "tag": "h1"
+          },
+          "qlora"
+        ],
+        "missing": [
+          "quantized"
+        ]
+      }
+    },
+    {
+      "name": "User Dashboard Elements",
+      "type": "page_elements",
+      "endpoint": "/user_dashboard",
+      "success": false,
+      "found_elements": 1,
+      "missing_elements": 1,
+      "response_time_ms": 1.85,
+      "details": {
+        "found": [
+          "dashboard"
+        ],
+        "missing": [
+          {
+            "tag": "h1"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Analytics Dashboard Elements",
+      "type": "page_elements",
+      "endpoint": "/analytics_dashboard",
+      "success": false,
+      "found_elements": 1,
+      "missing_elements": 1,
+      "response_time_ms": 1.01,
+      "details": {
+        "found": [
+          "analytics"
+        ],
+        "missing": [
+          {
+            "tag": "h1"
+          }
+        ]
+      }
+    },
+    {
+      "name": "AI Assistant Page Elements",
+      "type": "page_elements",
+      "endpoint": "/ai_assistant",
+      "success": false,
+      "found_elements": 1,
+      "missing_elements": 2,
+      "response_time_ms": 1.07,
+      "details": {
+        "found": [
+          "assistant"
+        ],
+        "missing": [
+          {
+            "tag": "h1"
+          },
+          "chat"
+        ]
+      }
+    }
+  ]
+}

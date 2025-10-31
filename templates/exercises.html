@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Exercises - Thesaurus AI</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        .exercises-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .exercise-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #e0e0e0;
+        }
+        .exercise-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        .exercise-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .exercise-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .difficulty {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .difficulty.beginner {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+        .difficulty.intermediate {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+        .difficulty.advanced {
+            background: #ffebee;
+            color: #c62828;
+        }
+        .start-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .coming-soon {
+            text-align: center;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin-top: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .coming-soon h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        .coming-soon p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Interactive Exercises</h1>
+            <p>Practice and improve your AI/ML skills with hands-on exercises</p>
+        </div>
+
+        <div class="exercises-grid">
+            <div class="exercise-card">
+                <div class="difficulty beginner">Beginner</div>
+                <h3>Python Basics for AI</h3>
+                <p>Learn fundamental Python concepts essential for AI development including data types, control structures, and functions.</p>
+                <button class="start-btn" onclick="startExercise('python-basics')">Start Exercise</button>
+            </div>
+
+            <div class="exercise-card">
+                <div class="difficulty beginner">Beginner</div>
+                <h3>NumPy Fundamentals</h3>
+                <p>Master array operations, mathematical functions, and data manipulation using NumPy for scientific computing.</p>
+                <button class="start-btn" onclick="startExercise('numpy-fundamentals')">Start Exercise</button>
+            </div>
+
+            <div class="exercise-card">
+                <div class="difficulty intermediate">Intermediate</div>
+                <h3>Pandas Data Analysis</h3>
+                <p>Practice data cleaning, transformation, and analysis using Pandas DataFrames with real-world datasets.</p>
+                <button class="start-btn" onclick="startExercise('pandas-analysis')">Start Exercise</button>
+            </div>
+
+            <div class="exercise-card">
+                <div class="difficulty intermediate">Intermediate</div>
+                <h3>Machine Learning with Scikit-learn</h3>
+                <p>Build and evaluate machine learning models using classification, regression, and clustering algorithms.</p>
+                <button class="start-btn" onclick="startExercise('ml-scikit')">Start Exercise</button>
+            </div>
+
+            <div class="exercise-card">
+                <div class="difficulty advanced">Advanced</div>
+                <h3>Deep Learning with PyTorch</h3>
+                <p>Create neural networks, implement backpropagation, and train deep learning models from scratch.</p>
+                <button class="start-btn" onclick="startExercise('pytorch-deep')">Start Exercise</button>
+            </div>
+
+            <div class="exercise-card">
+                <div class="difficulty advanced">Advanced</div>
+                <h3>Natural Language Processing</h3>
+                <p>Work with text data, implement tokenization, and build language models for various NLP tasks.</p>
+                <button class="start-btn" onclick="startExercise('nlp-advanced')">Start Exercise</button>
+            </div>
+        </div>
+
+        <div class="exercise-card" style="grid-column: 1 / -1; text-align: center;">
+            <h3>🎯 Practice Mode</h3>
+            <p>Complete exercises to earn points and track your progress in AI/ML concepts!</p>
+            <div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
+                <div style="background: #e8f5e8; padding: 15px; border-radius: 10px;">
+                    <strong>Exercises Completed:</strong> <span id="completed-count">0</span>
+                </div>
+                <div style="background: #fff3e0; padding: 15px; border-radius: 10px;">
+                    <strong>Total Points:</strong> <span id="total-points">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Exercise data and progress tracking
+        let exerciseProgress = JSON.parse(localStorage.getItem('exerciseProgress')) || {
+            completed: [],
+            points: 0
+        };
+
+        // Exercise content database
+        const exercises = {
+            'python-basics': {
+                title: 'Python Basics for AI',
+                questions: [
+                    {
+                        question: 'What is the correct way to create a list in Python?',
+                        options: ['list = []', 'list = ()', 'list = {}', 'list = ""'],
+                        correct: 0,
+                        points: 10
+                    },
+                    {
+                        question: 'Which function is used to get the length of a list?',
+                        options: ['size()', 'length()', 'len()', 'count()'],
+                        correct: 2,
+                        points: 10
+                    }
+                ]
+            },
+            'numpy-fundamentals': {
+                title: 'NumPy Fundamentals',
+                questions: [
+                    {
+                        question: 'What is the correct way to import NumPy?',
+                        options: ['import numpy', 'import numpy as np', 'from numpy import *', 'import np'],
+                        correct: 1,
+                        points: 15
+                    }
+                ]
+            },
+            'pandas-analysis': {
+                title: 'Pandas Data Analysis',
+                questions: [
+                    {
+                        question: 'Which method is used to read a CSV file in Pandas?',
+                        options: ['pd.read_csv()', 'pd.load_csv()', 'pd.import_csv()', 'pd.open_csv()'],
+                        correct: 0,
+                        points: 20
+                    }
+                ]
+            },
+            'ml-scikit': {
+                title: 'Machine Learning with Scikit-learn',
+                questions: [
+                    {
+                        question: 'What does the fit() method do in scikit-learn?',
+                        options: ['Tests the model', 'Trains the model', 'Validates the model', 'Saves the model'],
+                        correct: 1,
+                        points: 25
+                    }
+                ]
+            },
+            'pytorch-deep': {
+                title: 'Deep Learning with PyTorch',
+                questions: [
+                    {
+                        question: 'What is the main building block of neural networks in PyTorch?',
+                        options: ['torch.Layer', 'torch.nn.Module', 'torch.Network', 'torch.Model'],
+                        correct: 1,
+                        points: 30
+                    }
+                ]
+            },
+            'nlp-advanced': {
+                title: 'Natural Language Processing',
+                questions: [
+                    {
+                        question: 'What is tokenization in NLP?',
+                        options: ['Encrypting text', 'Breaking text into tokens', 'Translating text', 'Compressing text'],
+                        correct: 1,
+                        points: 30
+                    }
+                ]
+            }
+        };
+
+        function startExercise(exerciseId) {
+            const exercise = exercises[exerciseId];
+            if (!exercise) {
+                alert('Exercise not found!');
+                return;
+            }
+
+            if (exerciseProgress.completed.includes(exerciseId)) {
+                if (confirm('You have already completed this exercise. Do you want to retake it?')) {
+                    runExercise(exerciseId, exercise);
+                }
+            } else {
+                runExercise(exerciseId, exercise);
+            }
+        }
+
+        function runExercise(exerciseId, exercise) {
+            let currentQuestion = 0;
+            let score = 0;
+            let totalPoints = 0;
+
+            function showQuestion() {
+                if (currentQuestion >= exercise.questions.length) {
+                    completeExercise(exerciseId, score, totalPoints);
+                    return;
+                }
+
+                const q = exercise.questions[currentQuestion];
+                totalPoints += q.points;
+                
+                const optionsHtml = q.options.map((option, index) => 
+                    `<button onclick="selectAnswer(${index})" style="display: block; width: 100%; margin: 10px 0; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background: white; cursor: pointer;">${option}</button>`
+                ).join('');
+
+                const questionHtml = `
+                    <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; display: flex; align-items: center; justify-content: center;">
+                        <div style="background: white; padding: 30px; border-radius: 15px; max-width: 500px; width: 90%;">
+                            <h3>${exercise.title}</h3>
+                            <p><strong>Question ${currentQuestion + 1} of ${exercise.questions.length}</strong></p>
+                            <p>${q.question}</p>
+                            <div id="options">${optionsHtml}</div>
+                            <p style="margin-top: 20px; color: #666;">Points: ${q.points}</p>
+                        </div>
+                    </div>
+                `;
+
+                document.body.insertAdjacentHTML('beforeend', questionHtml);
+
+                window.selectAnswer = function(selectedIndex) {
+                    const isCorrect = selectedIndex === q.correct;
+                    if (isCorrect) {
+                        score += q.points;
+                        alert('Correct! +' + q.points + ' points');
+                    } else {
+                        alert('Incorrect. The correct answer was: ' + q.options[q.correct]);
+                    }
+                    
+                    document.querySelector('[style*="position: fixed"]').remove();
+                    currentQuestion++;
+                    setTimeout(showQuestion, 500);
+                };
+            }
+
+            showQuestion();
+        }
+
+        function completeExercise(exerciseId, score, totalPoints) {
+            if (!exerciseProgress.completed.includes(exerciseId)) {
+                exerciseProgress.completed.push(exerciseId);
+                exerciseProgress.points += score;
+            }
+            
+            localStorage.setItem('exerciseProgress', JSON.stringify(exerciseProgress));
+            updateProgressDisplay();
+            
+            alert(`Exercise completed!\nScore: ${score}/${totalPoints} points\nTotal Points: ${exerciseProgress.points}`);
+        }
+
+        function updateProgressDisplay() {
+            document.getElementById('completed-count').textContent = exerciseProgress.completed.length;
+            document.getElementById('total-points').textContent = exerciseProgress.points;
+        }
+
+        // Add some interactive animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.exercise-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+            
+            // Initialize progress display
+            updateProgressDisplay();
+        });
+    </script>
+</body>
+</html>

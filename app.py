@@ -5,7 +5,9 @@ This provides a web interface for interacting with the thesaurus.
 import os
 import ssl
 import nltk
-from flask import Flask, render_template, request, jsonify, redirect, url_for, session
+import logging
+import traceback
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session, g
 import json
 import uuid
 
@@ -14,7 +16,8 @@ from visual_thesaurus import VisualThesaurus
 from thesaurus_utils import ThesaurusLLM
 from llm_concepts import LLMConceptsVisualizer
 from llm_thesaurus import LLMThesaurus
-from models import UserProgress, Quiz
+import models as root_models
+from models.auth import User, UserProgress
 from auth import auth_bp
 from enhanced_visualizations import EnhancedVisualizations
 from quiz import quiz_bp
@@ -620,13 +623,41 @@ if os.environ.get('FLASK_ENV') == 'production':
     from werkzeug.middleware.proxy_fix import ProxyFix
     app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 
-    # Force HTTPS in production
-    @app.before_request
-    def force_https():
-        if not request.is_secure and request.headers.get('X-Forwarded-Proto') != 'https':
-            return redirect(request.url.replace('http://', 'https://'))
+# Custom middleware for error handling
+class ErrorHandlingMiddleware:
+    def __init__(self, wsgi_app):
+        self.wsgi_app = wsgi_app
+        
+    def __call__(self, environ, start_response):
+        try:
+            return self.wsgi_app(environ, start_response)
+        except Exception as e:
+            # Log the exception
+            logger.critical(f"Unhandled middleware exception: {str(e)}\nTraceback: {traceback.format_exc()}")
+            
+            # Start the response with a 500 status code
+            start_response('500 INTERNAL SERVER ERROR', [
+                ('Content-Type', 'text/html')
+            ])
+            
+            # Return the 500 error page content
+            with open(os.path.join(os.path.dirname(__file__), 'templates/errors/500.html'), 'rb') as f:
+                return [f.read()]
 
-    print("🔒 Production security enabled")
+# Apply middleware
+app.wsgi_app = ErrorHandlingMiddleware(app.wsgi_app)
+
+# Force HTTPS in production only, not in development
+@app.before_request
+def force_https():
+    # Skip HTTPS redirect for local development
+    if '127.0.0.1' in request.host or 'localhost' in request.host:
+        return None
+    
+    if not request.is_secure and request.headers.get('X-Forwarded-Proto') != 'https':
+        return redirect(request.url.replace('http://', 'https://'))
+
+print("🔒 Production security enabled")
 
 # Initialize extensions
 db.init_app(app)
@@ -713,6 +744,42 @@ app.register_blueprint(training_api)
 # Initialize OAuth providers
 from auth.oauth import init_oauth
 init_oauth(app)
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('app.log'),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(__name__)
+
+# Error handlers
+@app.errorhandler(404)
+def not_found_error(error):
+    """Handle 404 errors with custom template"""
+    logger.warning(f"404 Error: {request.path} - Referrer: {request.referrer}")
+    return render_template('errors/404.html'), 404
+
+@app.errorhandler(403)
+def forbidden_error(error):
+    """Handle 403 errors with custom template"""
+    logger.warning(f"403 Error: {request.path} - User: {current_user.id if not current_user.is_anonymous else 'Anonymous'}")
+    return render_template('errors/403.html'), 403
+
+@app.errorhandler(500)
+def internal_error(error):
+    """Handle 500 errors with custom template and detailed logging"""
+    logger.error(f"500 Error: {request.path}\nError: {error}\nTraceback: {traceback.format_exc()}")
+    return render_template('errors/500.html'), 500
+
+@app.errorhandler(Exception)
+def unhandled_exception(error):
+    """Catch all unhandled exceptions"""
+    logger.critical(f"Unhandled Exception: {error}\nPath: {request.path}\nTraceback: {traceback.format_exc()}")
+    return render_template('errors/500.html'), 500
 
 # Simple fallback thesaurus implementation
 class SimpleLLMThesaurus:

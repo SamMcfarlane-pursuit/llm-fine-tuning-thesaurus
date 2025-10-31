@@ -1,0 +1,236 @@
+{
+  "summary": {
+    "total_tests": 23,
+    "passed": 18,
+    "failed": 0,
+    "warnings": 5,
+    "success_rate": 78.26086956521739,
+    "category_results": {
+      "Exercise Pages": {
+        "passed": 4,
+        "failed": 0,
+        "total": 4
+      },
+      "Exercise JavaScript": {
+        "passed": 4,
+        "failed": 0,
+        "total": 4
+      },
+      "Exercise APIs": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5
+      },
+      "Exercise Interactivity": {
+        "passed": 4,
+        "failed": 0,
+        "total": 6
+      },
+      "Exercise Resources": {
+        "passed": 1,
+        "failed": 0,
+        "total": 4
+      }
+    },
+    "exercise_failures": 0,
+    "avg_response_time": 0.0038533351000617534,
+    "timestamp": "2025-08-29T00:49:00.576457"
+  },
+  "detailed_results": [
+    {
+      "category": "Exercise Pages",
+      "test_name": "Page Access: /exercises",
+      "status": "PASS",
+      "timestamp": "2025-08-29T00:49:00.517955",
+      "details": "Found 6/8 exercise indicators",
+      "response_code": 200,
+      "response_time": 0.013025045394897461
+    },
+    {
+      "category": "Exercise Pages",
+      "test_name": "Page Access: /workshop_exercises",
+      "status": "PASS",
+      "timestamp": "2025-08-29T00:49:00.529845",
+      "details": "Found 8/8 exercise indicators",
+      "response_code": 200,
+      "response_time": 0.011493206024169922
+    },
+    {
+      "category": "Exercise Pages",
+      "test_name": "Page Access: /tutorials",
+      "status": "PASS",
+      "timestamp": "2025-08-29T00:49:00.535418",
+      "details": "Found 8/8 exercise indicators",
+      "response_code": 200,
+      "response_time": 0.0051288604736328125
+    },
+    {
+      "category": "Exercise Pages",
+      "test_name": "Page Access: /learn",
+      "status": "PASS",
+      "timestamp": "2025-08-29T00:49:00.544531",
+      "details": "Found 8/8 exercise indicators",
+      "response_code": 200,
+      "response_time": 0.008260965347290039
+    },
+    {
+      "category": "Exercise JavaScript",
+      "test_name": "JS File: quiz.js",
+      "status": "PASS",
+      "timestamp": "2025-08-29T00:49:00.547182",
+      "details": "Size: 30537 bytes, exercise functions: 3",
+      "response_code": 200,
+      "response_time": 0.0024900436401367188
+    },
+    {
+      "category": "Exercise JavaScript",
+      "test_name": "JS File: tutorials.js",
+      "status": "PASS",
+      "timestamp": "2025-08-29T00:49:00.549049",
+      "details": "Size: 3166 bytes, exercise functions: 1",
+      "response_code": 200,
+      "response_time": 0.0018341541290283203
+    },
+    {
+      "category": "Exercise JavaScript",
+      "test_name": "JS File: learn-page.js",
+      "status": "PASS",
+      "timestamp": "2025-08-29T00:49:00.551809",
+      "details": "Size: 11576 bytes, exercise functions: 5",
+      "response_code": 200,
+      "response_time": 0.0023221969604492188
+    },
+    {
+      "category": "Exercise JavaScript",
+      "test_name": "JS File: main.js",
+      "status": "PASS",
+      "timestamp": "2025-08-29T00:49:00.558180",
+      "details": "Size: 30908 bytes, exercise functions: 3",
+      "response_code": 200,
+      "response_time": 0.005198240280151367
+    },
+    {
+      "category": "Exercise APIs",
+      "test_name": "API: /api/quiz-test",
+      "status": "PASS",
+      "timestamp": "2025-08-29T00:49:00.560754",
+      "details": "JSON data with 5 fields",
+      "response_code": 200,
+      "response_time": 0.002496957778930664
+    },
+    {
+      "category": "Exercise APIs",
+      "test_name": "API: /quiz/api/random-question",
+      "status": "PASS",
+      "timestamp": "2025-08-29T00:49:00.562096",
+      "details": "JSON data with 4 fields",
+      "response_code": 200,
+      "response_time": 0.0013167858123779297
+    },
+    {
+      "category": "Exercise APIs",
+      "test_name": "API: /quiz/api/results",
+      "status": "PASS",
+      "timestamp": "2025-08-29T00:49:00.563795",
+      "details": "JSON data with 5 fields",
+      "response_code": 200,
+      "response_time": 0.001667022705078125
+    },
+    {
+      "category": "Exercise APIs",
+      "test_name": "API: /api/exercises",
+      "status": "PASS",
+      "timestamp": "2025-08-29T00:49:00.565127",
+      "details": "JSON data with 4 fields",
+      "response_code": 200,
+      "response_time": 0.0013079643249511719
+    },
+    {
+      "category": "Exercise APIs",
+      "test_name": "API: /api/tutorials",
+      "status": "PASS",
+      "timestamp": "2025-08-29T00:49:00.566770",
+      "details": "JSON data with 5 fields",
+      "response_code": 200,
+      "response_time": 0.0016207695007324219
+    },
+    {
+      "category": "Exercise Interactivity",
+      "test_name": "Start Buttons",
+      "status": "PASS",
+      "timestamp": "2025-08-29T00:49:00.567953",
+      "details": "Found 8 instances"
+    },
+    {
+      "category": "Exercise Interactivity",
+      "test_name": "Exercise Cards",
+      "status": "PASS",
+      "timestamp": "2025-08-29T00:49:00.567959",
+      "details": "Found 11 instances"
+    },
+    {
+      "category": "Exercise Interactivity",
+      "test_name": "Click Handlers",
+      "status": "PASS",
+      "timestamp": "2025-08-29T00:49:00.567963",
+      "details": "Found 6 instances"
+    },
+    {
+      "category": "Exercise Interactivity",
+      "test_name": "Form Elements",
+      "status": "WARN",
+      "timestamp": "2025-08-29T00:49:00.567966",
+      "details": "Found 0 instances"
+    },
+    {
+      "category": "Exercise Interactivity",
+      "test_name": "Input Fields",
+      "status": "WARN",
+      "timestamp": "2025-08-29T00:49:00.567969",
+      "details": "Found 0 instances"
+    },
+    {
+      "category": "Exercise Interactivity",
+      "test_name": "JavaScript Functions",
+      "status": "PASS",
+      "timestamp": "2025-08-29T00:49:00.567972",
+      "details": "Found 5 instances"
+    },
+    {
+      "category": "Exercise Resources",
+      "test_name": "Resource: /static/css/style.css",
+      "status": "PASS",
+      "timestamp": "2025-08-29T00:49:00.570131",
+      "details": "Size: 11464 bytes",
+      "response_code": 200,
+      "response_time": 0.002126932144165039
+    },
+    {
+      "category": "Exercise Resources",
+      "test_name": "Resource: /static/images/exercises/",
+      "status": "WARN",
+      "timestamp": "2025-08-29T00:49:00.572320",
+      "details": "Resource may not exist",
+      "response_code": 404,
+      "response_time": 0.0021698474884033203
+    },
+    {
+      "category": "Exercise Resources",
+      "test_name": "Resource: /static/notebooks/",
+      "status": "WARN",
+      "timestamp": "2025-08-29T00:49:00.573867",
+      "details": "Resource may not exist",
+      "response_code": 404,
+      "response_time": 0.0015337467193603516
+    },
+    {
+      "category": "Exercise Resources",
+      "test_name": "Resource: /static/sounds/",
+      "status": "WARN",
+      "timestamp": "2025-08-29T00:49:00.575403",
+      "details": "Resource may not exist",
+      "response_code": 404,
+      "response_time": 0.0015139579772949219
+    }
+  ]
+}

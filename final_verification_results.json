@@ -1,0 +1,365 @@
+{
+  "summary": {
+    "total_tests": 50,
+    "passed": 49,
+    "failed": 1,
+    "success_rate": 98.0,
+    "route_failures": 0,
+    "api_failures": 0,
+    "ui_failures": 1,
+    "static_failures": 0,
+    "timestamp": "2025-08-30T23:54:35.154674"
+  },
+  "detailed_results": [
+    {
+      "test_name": "Server Health Check",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:34.983051",
+      "response_code": 200,
+      "details": "Server is running"
+    },
+    {
+      "test_name": "Route: Home Page",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:34.988370",
+      "response_code": 200,
+      "details": "Accessible at /"
+    },
+    {
+      "test_name": "Route: Thesaurus Page",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:34.993029",
+      "response_code": 200,
+      "details": "Accessible at /thesaurus"
+    },
+    {
+      "test_name": "Route: Learn Page",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:34.997022",
+      "response_code": 200,
+      "details": "Accessible at /learn"
+    },
+    {
+      "test_name": "Route: Workshops Page",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:34.999837",
+      "response_code": 200,
+      "details": "Accessible at /workshops"
+    },
+    {
+      "test_name": "Route: Tutorials Page",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.002037",
+      "response_code": 200,
+      "details": "Accessible at /tutorials"
+    },
+    {
+      "test_name": "Route: Guides Page",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.003343",
+      "response_code": 200,
+      "details": "Accessible at /guides"
+    },
+    {
+      "test_name": "Route: Exercises Page",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.004901",
+      "response_code": 200,
+      "details": "Accessible at /exercises"
+    },
+    {
+      "test_name": "Route: Profile Page",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.008361",
+      "response_code": 200,
+      "details": "Accessible at /profile"
+    },
+    {
+      "test_name": "Route: Contact Page",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.011642",
+      "response_code": 200,
+      "details": "Accessible at /contact"
+    },
+    {
+      "test_name": "Route: Terms Page",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.014506",
+      "response_code": 200,
+      "details": "Accessible at /terms"
+    },
+    {
+      "test_name": "Route: Privacy Page",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.016808",
+      "response_code": 200,
+      "details": "Accessible at /privacy"
+    },
+    {
+      "test_name": "Route: Login Page",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.017712",
+      "response_code": 200,
+      "details": "Accessible at /auth/login"
+    },
+    {
+      "test_name": "Route: Register Page",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.018796",
+      "response_code": 200,
+      "details": "Accessible at /auth/register"
+    },
+    {
+      "test_name": "Route: User Dashboard",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.019976",
+      "response_code": 200,
+      "details": "Accessible at /user_dashboard"
+    },
+    {
+      "test_name": "Route: Analytics Dashboard",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.020945",
+      "response_code": 200,
+      "details": "Accessible at /analytics_dashboard"
+    },
+    {
+      "test_name": "Route: AI Assistant Page",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.022004",
+      "response_code": 200,
+      "details": "Accessible at /ai_assistant"
+    },
+    {
+      "test_name": "Route: Getting Started Page",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.023119",
+      "response_code": 200,
+      "details": "Accessible at /getting_started"
+    },
+    {
+      "test_name": "Route: Learning Paths Page",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.027299",
+      "response_code": 200,
+      "details": "Accessible at /learning_paths"
+    },
+    {
+      "test_name": "Route: LoRA Guide Page",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.029492",
+      "response_code": 200,
+      "details": "Accessible at /lora_guide"
+    },
+    {
+      "test_name": "Route: QLoRA Guide Page",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.031770",
+      "response_code": 200,
+      "details": "Accessible at /qlora_guide"
+    },
+    {
+      "test_name": "Route: Docker Guide Page",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.034349",
+      "response_code": 200,
+      "details": "Accessible at /docker_guide"
+    },
+    {
+      "test_name": "Route: HuggingFace Guide Page",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.036626",
+      "response_code": 200,
+      "details": "Accessible at /huggingface_guide"
+    },
+    {
+      "test_name": "Route: Google ML Course Page",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.039615",
+      "response_code": 200,
+      "details": "Accessible at /google_ml_crash_course"
+    },
+    {
+      "test_name": "Route: Frameworks Page",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.042054",
+      "response_code": 200,
+      "details": "Accessible at /frameworks"
+    },
+    {
+      "test_name": "Route: Search Results Page",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.043743",
+      "response_code": 200,
+      "details": "Accessible at /search_results"
+    },
+    {
+      "test_name": "Route: Quiz List Page",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.046027",
+      "response_code": 200,
+      "details": "Accessible at /quiz/quiz_list"
+    },
+    {
+      "test_name": "Route: Quiz Dashboard Page",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.047133",
+      "response_code": 200,
+      "details": "Accessible at /quiz/quiz_dashboard"
+    },
+    {
+      "test_name": "Route: Workshop Exercises Page",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.048748",
+      "response_code": 200,
+      "details": "Accessible at /workshop_exercises"
+    },
+    {
+      "test_name": "Route: Workshop Progress Page",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.051780",
+      "response_code": 200,
+      "details": "Accessible at /workshop_progress"
+    },
+    {
+      "test_name": "Route: LoRA Fine-tuning Workshop",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.053833",
+      "response_code": 200,
+      "details": "Accessible at /workshop_lora_fine_tuning"
+    },
+    {
+      "test_name": "Route: QLoRA Deep Dive Workshop",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.056131",
+      "response_code": 200,
+      "details": "Accessible at /workshop_qlora_deep_dive"
+    },
+    {
+      "test_name": "API: API Health Check",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.057190",
+      "response_code": 200,
+      "details": "Accessible at /api/health"
+    },
+    {
+      "test_name": "API: Thesaurus API",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.058194",
+      "response_code": 200,
+      "details": "Accessible at /api/thesaurus"
+    },
+    {
+      "test_name": "API: Performance Metrics API",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.059047",
+      "response_code": 200,
+      "details": "Accessible at /api/performance/metrics"
+    },
+    {
+      "test_name": "API: Performance Status API",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.059986",
+      "response_code": 200,
+      "details": "Accessible at /api/performance/status"
+    },
+    {
+      "test_name": "API: Analytics Tracking API",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.061146",
+      "response_code": 405,
+      "details": "Accessible at /api/analytics/track"
+    },
+    {
+      "test_name": "API: System Status API",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.062176",
+      "response_code": 200,
+      "details": "Accessible at /api/system/status"
+    },
+    {
+      "test_name": "API: Database Stats API",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.063098",
+      "response_code": 200,
+      "details": "Accessible at /api/database/stats"
+    },
+    {
+      "test_name": "API: Quiz Test API",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.064070",
+      "response_code": 200,
+      "details": "Accessible at /api/quiz-test"
+    },
+    {
+      "test_name": "API: Emergency Mode API",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.064863",
+      "response_code": 405,
+      "details": "Accessible at /api/admin/emergency-mode"
+    },
+    {
+      "test_name": "UI: Home Page UI",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.076805",
+      "response_code": null,
+      "details": "All required elements found"
+    },
+    {
+      "test_name": "UI: Thesaurus UI",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.089551",
+      "response_code": null,
+      "details": "All required elements found"
+    },
+    {
+      "test_name": "UI: Login Form UI",
+      "status": "FAIL",
+      "timestamp": "2025-08-30T23:54:35.093051",
+      "response_code": null,
+      "details": "Missing elements: auth_form (.auth-form, form), email_field (input[name='email'], input[type='email']), password_field (input[name='password'], input[type='password']), submit_button (button[type='submit'], input[type='submit'], .auth-submit)"
+    },
+    {
+      "test_name": "UI: Learn Page UI",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.125742",
+      "response_code": null,
+      "details": "All required elements found"
+    },
+    {
+      "test_name": "Static: Main CSS",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.131300",
+      "response_code": 200,
+      "details": "Asset loaded successfully"
+    },
+    {
+      "test_name": "Static: Main JavaScript",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.134558",
+      "response_code": 200,
+      "details": "Asset loaded successfully"
+    },
+    {
+      "test_name": "Static: Thesaurus JavaScript",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.136545",
+      "response_code": 200,
+      "details": "Asset loaded successfully"
+    },
+    {
+      "test_name": "Static: PWA Manifest",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.138152",
+      "response_code": 200,
+      "details": "Asset loaded successfully"
+    },
+    {
+      "test_name": "Static: Logo SVG",
+      "status": "PASS",
+      "timestamp": "2025-08-30T23:54:35.154406",
+      "response_code": 200,
+      "details": "Asset loaded successfully"
+    }
+  ]
+}

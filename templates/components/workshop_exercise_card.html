@@ -15,6 +15,17 @@
     {% if description %}
     <p class="exercise-description">{{ description }}</p>
     {% endif %}
+    
+    {% if learning_objectives %}
+    <div class="learning-objectives">
+        <p><strong>Learning Objectives:</strong></p>
+        <ul>
+            {% for objective in learning_objectives.split(',') %}
+                <li>{{ objective }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
 
     {% if status %}
     <div class="status-indicator">{{ status }}</div>

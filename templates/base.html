@@ -44,6 +44,12 @@
     <!-- 4. AI Assistant Styling -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/ai-assistant.css') }}">
 
+    <!-- 5. Mobile Responsive Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile.css') }}">
+    
+    <!-- 6. UI Redesign - New Simplified Interface -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/redesign.css') }}">
+
     {% block head %}{% endblock %}
 
     <!-- Auth-Only Progress Bar JavaScript - Execute as early as possible -->
@@ -70,12 +76,12 @@
 <body class="{% block body_class %}{% endblock %}" data-topic-id="{{ topic_id|default('') }}" data-module-id="{{ module_id|default('') }}" data-user-logged-in="{{ current_user.is_authenticated|string|lower }}">
     <!-- Skip to content link removed per user request -->
 
-    <!-- Navigation Bar - Exact match to image -->
+    <!-- Simplified Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
         <div class="container">
             <!-- Brand -->
             <a class="navbar-brand fw-bold text-success" href="{{ url_for('index') }}">
-                Visual LLM
+                <i class="bi bi-braces-asterisk me-2"></i>Visual LLM
             </a>
 
             <!-- Mobile toggle -->
@@ -83,65 +89,67 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <!-- Navigation items -->
+            <!-- Navigation items - Simplified Structure -->
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
-                    <!-- Learning -->
+                    <!-- Learn - Combined Learning Resources -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="learningDropdown" role="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-book me-1"></i>Learning
+                        <a class="nav-link dropdown-toggle" href="#" id="learnDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-book me-1"></i>Learn
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ url_for('learn') }}">Start Learning</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('learning_paths') }}">Learning Paths</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('getting_started') }}">Getting Started</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('learn') }}"><i class="bi bi-collection-play me-2"></i>All Learning Resources</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('learning_paths') }}"><i class="bi bi-signpost-split me-2"></i>Learning Paths</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('getting_started') }}"><i class="bi bi-rocket-takeoff me-2"></i>Getting Started</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{{ url_for('lora_guide') }}">LoRA Fine-tuning</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('qlora_guide') }}">QLoRA Techniques</a></li>
+                            <li><h6 class="dropdown-header">Fine-Tuning Techniques</h6></li>
+                            <li><a class="dropdown-item" href="{{ url_for('lora_guide') }}"><i class="bi bi-cpu me-2"></i>LoRA Guide</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('qlora_guide') }}"><i class="bi bi-memory me-2"></i>QLoRA Guide</a></li>
                         </ul>
                     </li>
 
-                    <!-- Workshops -->
+                    <!-- Practice - Hands-on Learning -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="workshopsDropdown" role="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-hammer me-1"></i>Workshops
+                        <a class="nav-link dropdown-toggle" href="#" id="practiceDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-hammer me-1"></i>Practice
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ url_for('workshops') }}">All Workshops</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('workshop_exercises') }}">Exercises</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('workshop_progress') }}">Progress Tracking</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('workshops') }}"><i class="bi bi-tools me-2"></i>Workshops</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('workshop_exercises') }}"><i class="bi bi-journal-code me-2"></i>Exercises</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('quiz.quiz_list') }}"><i class="bi bi-question-circle me-2"></i>Quizzes</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{{ url_for('workshop_lora_fine_tuning') }}">LoRA Workshop</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('workshop_qlora_deep_dive') }}">QLoRA Deep Dive</a></li>
+                            <li><h6 class="dropdown-header">Featured Workshops</h6></li>
+                            <li><a class="dropdown-item" href="{{ url_for('workshop_lora_fine_tuning') }}"><i class="bi bi-cpu me-2"></i>LoRA Workshop</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('workshop_qlora_deep_dive') }}"><i class="bi bi-memory me-2"></i>QLoRA Workshop</a></li>
                         </ul>
                     </li>
 
-                    <!-- Resources -->
+                    <!-- Resources - Consolidated -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="resourcesDropdown" role="button" data-bs-toggle="dropdown">
                             <i class="bi bi-collection me-1"></i>Resources
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ url_for('tutorials') }}">Video Tutorials</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('frameworks') }}">Frameworks</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('google_ml_crash_course') }}">Google ML Course</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('tutorials') }}"><i class="bi bi-play-circle me-2"></i>Video Tutorials</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('frameworks') }}"><i class="bi bi-boxes me-2"></i>Frameworks</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{{ url_for('docker_guide') }}">Docker Setup</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('huggingface_guide') }}">Hugging Face</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('quiz.quiz_list') }}">Quizzes</a></li>
+                            <li><h6 class="dropdown-header">External Resources</h6></li>
+                            <li><a class="dropdown-item" href="{{ url_for('google_ml_crash_course') }}"><i class="bi bi-google me-2"></i>Google ML Course</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('huggingface_guide') }}"><i class="bi bi-emoji-smile me-2"></i>Hugging Face</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('docker_guide') }}"><i class="bi bi-box-seam me-2"></i>Docker Setup</a></li>
                         </ul>
                     </li>
 
-                    <!-- Tools -->
+                    <!-- Tools - Simplified -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="toolsDropdown" role="button" data-bs-toggle="dropdown">
                             <i class="bi bi-gear me-1"></i>Tools
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ url_for('ai_assistant') }}">AI Assistant</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('user_training') }}">👥 Train Your Model</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('achievements_dashboard') }}">🏆 Achievements</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('certifications_dashboard') }}">🎓 Certifications</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('ai_assistant') }}"><i class="bi bi-robot me-2"></i>AI Assistant</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('workshop_lora_fine_tuning') }}"><i class="bi bi-cpu-fill me-2"></i>Train Your Model</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ url_for('analytics_dashboard') }}"><i class="bi bi-trophy me-2"></i>Achievements</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{{ url_for('user_dashboard') }}">Dashboard</a></li>
                             <li><a class="dropdown-item" href="{{ url_for('analytics_dashboard') }}">Analytics</a></li>
@@ -179,8 +187,8 @@
                             </ul>
                         </div>
                     {% else %}
-                        <a href="{{ url_for('login') }}" class="btn btn-outline-primary me-2">Sign In</a>
-                        <a href="{{ url_for('register') }}" class="btn btn-success">Register</a>
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary me-2">Sign In</a>
+                        <a href="{{ url_for('auth.register') }}" class="btn btn-success">Register</a>
                     {% endif %}
                 </div>
             </div>
@@ -190,37 +198,58 @@
     <!-- Category Filter Bar (appears on relevant pages) -->
     <div class="category-filter-bar bg-light border-bottom" id="categoryFilterBar" style="display: none;">
         <div class="container">
-            <div class="row align-items-center py-2">
-                <div class="col-md-8">
-                    <div class="d-flex flex-wrap gap-2">
-                        <span class="fw-bold text-muted me-3">Filter by:</span>
-                        <button class="btn btn-sm btn-outline-primary category-filter active" data-category="all">
-                            <i class="bi bi-grid me-1"></i>All
-                        </button>
-                        <button class="btn btn-sm btn-outline-primary category-filter" data-category="beginner">
-                            <i class="bi bi-star me-1"></i>Beginner
-                        </button>
-                        <button class="btn btn-sm btn-outline-primary category-filter" data-category="intermediate">
-                            <i class="bi bi-star-half me-1"></i>Intermediate
-                        </button>
-                        <button class="btn btn-sm btn-outline-primary category-filter" data-category="advanced">
-                            <i class="bi bi-stars me-1"></i>Advanced
-                        </button>
-                        <button class="btn btn-sm btn-outline-success category-filter" data-category="lora">
-                            <i class="bi bi-cpu me-1"></i>LoRA
-                        </button>
-                        <button class="btn btn-sm btn-outline-success category-filter" data-category="qlora">
-                            <i class="bi bi-memory me-1"></i>QLoRA
-                        </button>
-                        <button class="btn btn-sm btn-outline-info category-filter" data-category="hands-on">
-                            <i class="bi bi-hand-index me-1"></i>Hands-on
-                        </button>
-                        <button class="btn btn-sm btn-outline-warning category-filter" data-category="theory">
-                            <i class="bi bi-book me-1"></i>Theory
-                        </button>
+            <div class="row align-items-center py-3">
+                <div class="col-lg-9 col-md-8">
+                    <div class="filter-container">
+                        <div class="filter-group-label"><span class="fw-bold text-muted">Filter by:</span></div>
+                        <div class="filter-group">
+                            <div class="filter-group-label"><small class="text-muted">View All</small></div>
+                            <button class="btn btn-sm btn-outline-primary category-filter active" data-category="all">
+                                <i class="bi bi-grid me-1"></i>All
+                            </button>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <div class="filter-group-label"><small class="text-muted">Difficulty</small></div>
+                            <div class="btn-group" role="group" aria-label="Difficulty level">
+                                <button class="btn btn-sm btn-outline-primary category-filter" data-category="beginner">
+                                    <i class="bi bi-star me-1"></i>Beginner
+                                </button>
+                                <button class="btn btn-sm btn-outline-primary category-filter" data-category="intermediate">
+                                    <i class="bi bi-star-half me-1"></i>Intermediate
+                                </button>
+                                <button class="btn btn-sm btn-outline-primary category-filter" data-category="advanced">
+                                    <i class="bi bi-stars me-1"></i>Advanced
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <div class="filter-group-label"><small class="text-muted">Technique</small></div>
+                            <div class="btn-group" role="group" aria-label="Technique type">
+                                <button class="btn btn-sm btn-outline-success category-filter" data-category="lora">
+                                    <i class="bi bi-cpu me-1"></i>LoRA
+                                </button>
+                                <button class="btn btn-sm btn-outline-success category-filter" data-category="qlora">
+                                    <i class="bi bi-memory me-1"></i>QLoRA
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <div class="filter-group-label"><small class="text-muted">Format</small></div>
+                            <div class="btn-group" role="group" aria-label="Content format">
+                                <button class="btn btn-sm btn-outline-info category-filter" data-category="hands-on">
+                                    <i class="bi bi-hand-index me-1"></i>Hands-on
+                                </button>
+                                <button class="btn btn-sm btn-outline-warning category-filter" data-category="theory">
+                                    <i class="bi bi-book me-1"></i>Theory
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-4 text-end">
+                <div class="col-lg-3 col-md-4 text-end">
                     <button class="btn btn-sm btn-outline-secondary" id="clearFilters">
                         <i class="bi bi-x-circle me-1"></i>Clear Filters
                     </button>
@@ -248,50 +277,70 @@
     <!-- Include the How to Use This Site modal -->
     {% include 'components/how_to_use_modal.html' %}
 
-    <!-- Enhanced Footer -->
+    <!-- Enhanced Footer with Improved Visual Hierarchy -->
     <footer class="bg-dark text-white py-5 mt-auto">
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 col-md-6 mb-4">
-                    <h5 class="text-primary">Visual LLM</h5>
-                    <p class="mb-3">The most comprehensive platform for learning LLM fine-tuning techniques. From beginner to expert, master LoRA, QLoRA, and advanced methods.</p>
-                    <div class="social-links">
-                        <a href="#" class="text-white me-3"><i class="bi bi-github"></i></a>
-                        <a href="#" class="text-white me-3"><i class="bi bi-twitter"></i></a>
-                        <a href="#" class="text-white me-3"><i class="bi bi-linkedin"></i></a>
-                        <a href="#" class="text-white me-3"><i class="bi bi-youtube"></i></a>
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-braces-asterisk text-primary me-2 fs-4"></i>
+                        <h5 class="text-primary m-0">Visual LLM</h5>
+                    </div>
+                    <p class="mb-4 text-light">The most comprehensive platform for learning LLM fine-tuning techniques. From beginner to expert, master LoRA, QLoRA, and advanced methods.</p>
+                    <div class="social-links mb-3">
+                        <a href="#" class="btn btn-outline-light btn-sm me-2"><i class="bi bi-github"></i></a>
+                        <a href="#" class="btn btn-outline-light btn-sm me-2"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="btn btn-outline-light btn-sm me-2"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" class="btn btn-outline-light btn-sm me-2"><i class="bi bi-youtube"></i></a>
                     </div>
                 </div>
 
-                <div class="col-lg-2 col-md-6 mb-4">
-                    <h6 class="text-uppercase fw-bold">Learning</h6>
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><a href="{{ url_for('learning_paths') }}" class="text-white text-decoration-none">Learning Paths</a></li>
-                        <li class="mb-2"><a href="{{ url_for('workshops') }}" class="text-white text-decoration-none">Workshops</a></li>
-                        <li class="mb-2"><a href="{{ url_for('tutorials') }}" class="text-white text-decoration-none">Tutorials</a></li>
-                        <li class="mb-2"><a href="{{ url_for('quiz.quiz_list') }}" class="text-white text-decoration-none">Quizzes</a></li>
-                    </ul>
-                </div>
+                <div class="col-lg-8 col-md-6 mb-4">
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <h6 class="text-uppercase fw-bold text-primary border-bottom pb-2 mb-3">Learn</h6>
+                            <ul class="list-unstyled footer-links">
+                                <li class="mb-2"><a href="{{ url_for('learning_paths') }}" class="text-decoration-none"><i class="bi bi-signpost-split me-2 text-light"></i>Learning Paths</a></li>
+                                <li class="mb-2"><a href="{{ url_for('workshops') }}" class="text-decoration-none"><i class="bi bi-tools me-2 text-light"></i>Workshops</a></li>
+                                <li class="mb-2"><a href="{{ url_for('tutorials') }}" class="text-decoration-none"><i class="bi bi-play-circle me-2 text-light"></i>Tutorials</a></li>
+                                <li class="mb-2"><a href="{{ url_for('quiz.quiz_list') }}" class="text-decoration-none"><i class="bi bi-question-circle me-2 text-light"></i>Quizzes</a></li>
+                            </ul>
+                        </div>
 
-                <div class="col-lg-2 col-md-6 mb-4">
-                    <h6 class="text-uppercase fw-bold">Guides</h6>
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><a href="{{ url_for('lora_guide') }}" class="text-white text-decoration-none">LoRA Guide</a></li>
-                        <li class="mb-2"><a href="{{ url_for('qlora_guide') }}" class="text-white text-decoration-none">QLoRA Guide</a></li>
-                        <li class="mb-2"><a href="{{ url_for('docker_guide') }}" class="text-white text-decoration-none">Docker Guide</a></li>
-                        <li class="mb-2"><a href="{{ url_for('huggingface_guide') }}" class="text-white text-decoration-none">Hugging Face</a></li>
-                    </ul>
-                </div>
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <h6 class="text-uppercase fw-bold text-primary border-bottom pb-2 mb-3">Guides</h6>
+                            <ul class="list-unstyled footer-links">
+                                <li class="mb-2"><a href="{{ url_for('lora_guide') }}" class="text-decoration-none"><i class="bi bi-cpu me-2 text-light"></i>LoRA Guide</a></li>
+                                <li class="mb-2"><a href="{{ url_for('qlora_guide') }}" class="text-decoration-none"><i class="bi bi-memory me-2 text-light"></i>QLoRA Guide</a></li>
+                                <li class="mb-2"><a href="{{ url_for('docker_guide') }}" class="text-decoration-none"><i class="bi bi-box-seam me-2 text-light"></i>Docker Guide</a></li>
+                                <li class="mb-2"><a href="{{ url_for('huggingface_guide') }}" class="text-decoration-none"><i class="bi bi-emoji-smile me-2 text-light"></i>Hugging Face</a></li>
+                            </ul>
+                        </div>
 
-                <div class="col-lg-2 col-md-6 mb-4">
-                    <h6 class="text-uppercase fw-bold">Tools</h6>
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><a href="{{ url_for('ai_assistant') }}" class="text-white text-decoration-none">AI Assistant</a></li>
-                        <li class="mb-2"><a href="{{ url_for('search_results') }}" class="text-white text-decoration-none">Search</a></li>
-                        <li class="mb-2"><a href="{{ url_for('user_dashboard') }}" class="text-white text-decoration-none">Dashboard</a></li>
-                        <li class="mb-2"><a href="{{ url_for('analytics.dashboard') }}" class="text-white text-decoration-none">Analytics</a></li>
-                    </ul>
+                        <div class="col-lg-4 col-md-6 mb-4">
+                            <h6 class="text-uppercase fw-bold text-primary border-bottom pb-2 mb-3">Tools</h6>
+                            <ul class="list-unstyled footer-links">
+                                <li class="mb-2"><a href="{{ url_for('ai_assistant') }}" class="text-decoration-none"><i class="bi bi-robot me-2 text-light"></i>AI Assistant</a></li>
+                                <li class="mb-2"><a href="{{ url_for('search_results') }}" class="text-decoration-none"><i class="bi bi-search me-2 text-light"></i>Search</a></li>
+                                <li class="mb-2"><a href="{{ url_for('user_dashboard') }}" class="text-decoration-none"><i class="bi bi-speedometer2 me-2 text-light"></i>Dashboard</a></li>
+                                <li class="mb-2"><a href="{{ url_for('analytics_dashboard') }}" class="text-decoration-none"><i class="bi bi-trophy me-2 text-light"></i>Achievements</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
+            </div>
+            
+            <div class="row mt-4 pt-4 border-top border-secondary">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="small text-muted mb-0">&copy; 2023 Visual LLM. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <a href="#" class="text-muted small me-3">Privacy Policy</a>
+                    <a href="#" class="text-muted small me-3">Terms of Service</a>
+                    <a href="#" class="text-muted small">Contact Us</a>
+                </div>
+            </div>
+        </div>
 
                 <div class="col-lg-2 col-md-6 mb-4">
                     <h6 class="text-uppercase fw-bold">Support</h6>
@@ -389,23 +438,7 @@
     <script src="{{ url_for('static', filename='js/dropdown-fix.js') }}"></script>
     <!-- Purple Text Enhancer - Adds subtle animations to purple text in dark mode -->
     <script src="{{ url_for('static', filename='js/purple-text-enhancer.js') }}"></script>
-    <!-- Section Header Enhancer - Improves visibility of section headers with optimal contrast -->
-    <script src="{{ url_for('static', filename='js/section-header-enhancer.js') }}"></script>
-    <!-- Text Visibility Enhancer - Dynamically fixes text visibility issues -->
-    <script src="{{ url_for('static', filename='js/text-visibility-enhancer.js') }}"></script>
-    <!-- Advanced Text Visibility - Provides advanced techniques for text visibility -->
-    <script src="{{ url_for('static', filename='js/advanced-text-visibility.js') }}"></script>
-    <!-- Concept Map Heading Fix - Specifically targets and enhances the "Explore the Concept Map" heading -->
-    <script src="{{ url_for('static', filename='js/concept-map-heading-fix.js') }}"></script>
-    <!-- Learn & Explore Header Fix - Direct DOM manipulation for the specific header -->
-    <script src="{{ url_for('static', filename='js/learn-explore-header-fix.js') }}"></script>
-    <!-- TensorFlow Text Visibility Fix - Specifically targets and enhances text visibility in the TensorFlow section -->
-    <script src="{{ url_for('static', filename='js/tensorflow-text-visibility-fix.js') }}"></script>
 
-    <!-- High-Contrast Purple Text - Makes text in guide cards high-contrast purple for maximum readability -->
-    <script src="{{ url_for('static', filename='js/high-contrast-purple-text.js') }}"></script>
-    <!-- Direct Guide Card Fix - Directly targets the exact guide cards shown in the image with inline styles -->
-    <script src="{{ url_for('static', filename='js/direct-guide-card-fix.js') }}"></script>
     {% if current_user.is_authenticated %}
     <script src="{{ url_for('static', filename='js/pop_quiz.js') }}"></script>
     {% endif %}

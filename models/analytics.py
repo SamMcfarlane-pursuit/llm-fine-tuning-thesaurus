@@ -12,6 +12,7 @@ class AnalyticsEvent(db.Model):
     """
     
     __tablename__ = 'analytics_events'
+    __table_args__ = {'extend_existing': True}
     
     id = db.Column(db.Integer, primary_key=True)
     event_type = db.Column(db.String(64), index=True, nullable=False)
@@ -55,6 +56,7 @@ class UserMetrics(db.Model):
     """
     
     __tablename__ = 'user_metrics'
+    __table_args__ = {'extend_existing': True}
     
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
@@ -100,6 +102,7 @@ class DailyMetrics(db.Model):
     """
     
     __tablename__ = 'daily_metrics'
+    __table_args__ = {'extend_existing': True}
     
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date, nullable=False, index=True, unique=True)
@@ -141,6 +144,7 @@ class ContentMetrics(db.Model):
     """
     
     __tablename__ = 'content_metrics'
+    __table_args__ = {'extend_existing': True}
     
     id = db.Column(db.Integer, primary_key=True)
     content_type = db.Column(db.String(64), nullable=False)

@@ -4,8 +4,28 @@ Routes for the quiz module.
 from flask import render_template, request, redirect, url_for, flash, jsonify, current_app, session
 from flask_login import current_user, login_required
 from . import quiz_bp
-from models import Quiz, QuizQuestion as Question, QuizOption as Option, QuizAttempt, QuizAnswer, db
-from models import QuizAttempt as QuizResult, QuizAnswer as QuizResultDetail
+import sys
+import os
+# Add the parent directory to sys.path to import from root models.py
+parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if parent_dir not in sys.path:
+    sys.path.insert(0, parent_dir)
+
+# Import specific classes from root models.py using importlib
+import importlib.util
+spec = importlib.util.spec_from_file_location("root_models", os.path.join(parent_dir, "models.py"))
+root_models = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(root_models)
+
+# Now we can use the classes from root models.py
+Quiz = root_models.Quiz
+Question = root_models.QuizQuestion
+Option = root_models.QuizOption
+QuizAttempt = root_models.QuizAttempt
+QuizAnswer = root_models.QuizAnswer
+db = root_models.db
+QuizResult = root_models.QuizAttempt
+QuizResultDetail = root_models.QuizAnswer
 from datetime import datetime
 import random
 

@@ -1,4 +1,4 @@
-{% extends base_template %}
+{% extends "base-simple.html" %}
 
 {% block title %}Learning Paths - Visual LLM{% endblock %}
 
@@ -231,7 +231,7 @@
                                                     </div>
                                                     <p class="small text-muted">Complete modules to track your progress</p>
                                                     <div class="d-grid">
-                                                        <a href="{{ url_for('analytics.dashboard') }}" class="btn btn-outline-success btn-sm">View Detailed Progress</a>
+                                                        <a href="{{ url_for('analytics_dashboard') }}" class="btn btn-outline-success btn-sm">View Detailed Progress</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -255,7 +255,7 @@
                                             <div class="timeline-content">
                                                 <h5>Week 1: Advanced Fine-Tuning</h5>
                                                 <ul>
-                                                    <li><a href="{{ url_for('workshop_full_fine_tuning') }}">Full fine-tuning workshop</a></li>
+                                                    <li><a href="{{ url_for('workshop_lora_fine_tuning') }}">LoRA fine-tuning workshop</a></li>
                                                     <li><a href="{{ url_for('qlora_guide') }}">QLoRA deep dive</a></li>
                                                     <li><strong>Workshop:</strong> <a href="{{ url_for('workshop_qlora_deep_dive') }}">QLoRA implementation</a></li>
                                                 </ul>
@@ -268,8 +268,8 @@
                                             <div class="timeline-content">
                                                 <h5>Week 2: Optimization & Efficiency</h5>
                                                 <ul>
-                                                    <li><a href="{{ url_for('workshop_memory_efficiency') }}">Memory optimization</a></li>
-                                                    <li><a href="{{ url_for('workshop_advanced_peft') }}">Advanced PEFT methods</a></li>
+                                                    <li><a href="{{ url_for('workshop_exercises') }}">Memory optimization exercises</a></li>
+                                                    <li><a href="{{ url_for('workshop_qlora_deep_dive') }}">Advanced PEFT methods</a></li>
                                                     <li><strong>Exercise:</strong> Multi-GPU training</li>
                                                 </ul>
                                             </div>

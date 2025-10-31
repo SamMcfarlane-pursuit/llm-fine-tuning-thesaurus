@@ -2,12 +2,21 @@
 Authentication views.
 """
 
-from flask import render_template, redirect, url_for, flash, request, session, current_app
+from flask import render_template, redirect, url_for, flash, request, session, current_app, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, HiddenField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
 from utils.email import send_password_reset_email
+from secure_auth_system import (
+    SecurePasswordManager, SecureSessionManager, MultiFactorAuth, 
+    InputSanitizer, SQLInjectionProtection, AuthenticationRateLimiter
+)
+import qrcode
+import io
+import base64
+import secrets
+from datetime import datetime, timedelta
 try:
     from werkzeug.urls import url_parse
 except ImportError:
@@ -21,33 +30,54 @@ except ImportError:
         from urllib.parse import urlparse
         def url_parse(url):
             return urlparse(url)
-from datetime import datetime
 
 from . import auth
-from .forms import LoginForm, RegistrationForm, ProfileForm, GuestConversionForm
+from .forms import LoginForm, RegistrationForm, ProfileForm, GuestConversionForm, MFASetupForm, MFAVerifyForm, PasswordResetRequestForm, PasswordResetForm
 from models import User, UserProgress
 from extensions import db
+
+# Initialize security components
+password_manager = SecurePasswordManager()
+session_manager = SecureSessionManager()
+mfa_manager = MultiFactorAuth()
+input_sanitizer = InputSanitizer()
+sql_protector = SQLInjectionProtection()
+rate_limiter = AuthenticationRateLimiter()
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
     """Login page."""
     if current_user.is_authenticated:
         return redirect(url_for('index'))
+    
+    # Check rate limiting
+    client_ip = request.remote_addr
+    if not rate_limiter.is_allowed(client_ip, 'login'):
+        flash('Too many login attempts. Please try again later.', 'error')
+        return render_template('auth/login.html', title='Sign In', form=LoginForm(), oauth_providers=get_oauth_providers())
 
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-
-        # Track login attempts in session
-        if 'login_attempts' not in session:
-            session['login_attempts'] = 0
-            session['last_attempt_time'] = datetime.now().timestamp()
+        # Sanitize input
+        email = input_sanitizer.sanitize_email(form.email.data)
+        password = form.password.data
+        
+        # Protect against SQL injection
+        if not sql_protector.is_safe_input(email):
+            flash('Invalid input detected.', 'error')
+            return render_template('auth/login.html', title='Sign In', form=form, oauth_providers=get_oauth_providers())
+        
+        user = User.query.filter_by(email=email).first()
+        
+        if user and hasattr(user, 'is_account_locked') and user.is_account_locked():
+            flash('Account is temporarily locked due to multiple failed login attempts.', 'error')
+            return render_template('auth/login.html', title='Sign In', form=form, oauth_providers=get_oauth_providers())
 
         # Check if user exists
         if user is None:
             # User doesn't exist - provide helpful message
             flash('No account found with this email address. Please check your email or register for a new account.', 'danger')
-            session['login_attempts'] += 1
+            rate_limiter.record_attempt(client_ip, 'login')
 
             # Store the email for potential registration
             session['attempted_email'] = form.email.data
@@ -60,41 +90,37 @@ def login():
                                   attempted_email=form.email.data)
 
         # Check password
-        if not user.check_password(form.password.data):
-            # Incorrect password
-            session['login_attempts'] += 1
+        if not user.check_password(password):
+            # Record failed login attempt
+            if hasattr(user, 'record_failed_login_attempt'):
+                user.record_failed_login_attempt()
+            
+            rate_limiter.record_attempt(client_ip, 'login')
+            flash('Incorrect password. Please try again.', 'danger')
+            return render_template('auth/login.html',
+                                  title='Sign In',
+                                  form=form,
+                                  oauth_providers=get_oauth_providers(),
+                                  show_password_error=True,
+                                  error_message="Incorrect password. Please try again.")
 
-            # Different message based on number of attempts
-            if session['login_attempts'] >= 3:
-                flash('Multiple failed login attempts. Did you forget your password? You can reset it below.', 'warning')
-                return render_template('auth/login.html',
-                                      title='Sign In',
-                                      form=form,
-                                      oauth_providers=get_oauth_providers(),
-                                      show_reset_prompt=True,
-                                      show_password_error=True,
-                                      user_email=form.email.data,
-                                      error_message="Incorrect password. Please try again or reset your password.")
-            else:
-                flash('Incorrect password. Please try again.', 'danger')
-                return render_template('auth/login.html',
-                                      title='Sign In',
-                                      form=form,
-                                      oauth_providers=get_oauth_providers(),
-                                      show_password_error=True,
-                                      error_message="Incorrect password. Please try again.")
-
+        # Reset failed login attempts
+        if hasattr(user, 'reset_failed_login_attempts'):
+            user.reset_failed_login_attempts()
+        
+        # Check if MFA is enabled
+        if hasattr(user, 'mfa_enabled') and user.mfa_enabled:
+            # Store user ID in session for MFA verification
+            session['mfa_user_id'] = user.id
+            session['mfa_login_time'] = datetime.now().isoformat()
+            return redirect(url_for('auth.verify_mfa'))
+        
         # Successful login
         login_user(user, remember=form.remember_me.data)
         user.update_last_login()
-
-        # Reset login attempts
-        if 'login_attempts' in session:
-            session.pop('login_attempts')
-        if 'last_attempt_time' in session:
-            session.pop('last_attempt_time')
-        if 'attempted_email' in session:
-            session.pop('attempted_email')
+        
+        # Create secure session
+        session_manager.create_session(session, user.id)
 
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
@@ -130,19 +156,48 @@ def register():
     """Registration page."""
     if current_user.is_authenticated:
         return redirect(url_for('index'))
+    
+    # Check rate limiting
+    client_ip = request.remote_addr
+    if not rate_limiter.is_allowed(client_ip, 'register'):
+        flash('Too many registration attempts. Please try again later.', 'error')
+        oauth_providers = [
+            {'name': 'Google', 'icon': 'google', 'url': url_for('auth.google')},
+            {'name': 'GitHub', 'icon': 'github', 'url': url_for('auth.github')}
+        ]
+        return render_template('auth/register.html', title='Register', form=RegistrationForm(), oauth_providers=oauth_providers)
 
     form = RegistrationForm()
     if form.validate_on_submit():
+        # Sanitize input
+        username = input_sanitizer.sanitize_username(form.username.data)
+        email = input_sanitizer.sanitize_email(form.email.data)
+        name = input_sanitizer.sanitize_text(form.name.data) if hasattr(form, 'name') and form.name.data else username
+        password = form.password.data
+        
+        # Protect against SQL injection
+        if not sql_protector.is_safe_input(username) or not sql_protector.is_safe_input(email):
+            flash('Invalid input detected.', 'error')
+            oauth_providers = [
+                {'name': 'Google', 'icon': 'google', 'url': url_for('auth.google')},
+                {'name': 'GitHub', 'icon': 'github', 'url': url_for('auth.github')}
+            ]
+            return render_template('auth/register.html', title='Register', form=form, oauth_providers=oauth_providers)
+        
+        # Create user with secure password
         user = User(
-            username=form.username.data,
-            email=form.email.data,
-            name=form.name.data
+            username=username,
+            email=email,
+            name=name
         )
-        user.set_password(form.password.data)
+        user.set_password(password)
+        if hasattr(user, 'password_changed_at'):
+            user.password_changed_at = datetime.now()
 
         db.session.add(user)
         db.session.commit()
-
+        
+        rate_limiter.record_attempt(client_ip, 'register')
         flash('Congratulations, you are now a registered user!', 'success')
         return redirect(url_for('auth.login'))
 
@@ -530,3 +585,115 @@ def password_reset(token):
     return render_template('auth/password_reset.html',
                           title='Reset Password',
                           form=form)
+
+
+@auth.route('/setup-mfa', methods=['GET', 'POST'])
+@login_required
+def setup_mfa():
+    """Setup MFA for user account."""
+    if current_user.mfa_enabled:
+        flash('MFA is already enabled for your account.', 'info')
+        return redirect(url_for('auth.profile'))
+    
+    form = MFASetupForm()
+    
+    if form.validate_on_submit():
+        # Verify the TOTP code
+        if mfa_manager.verify_totp(current_user.mfa_secret, form.token.data):
+            current_user.mfa_enabled = True
+            db.session.commit()
+            flash('MFA has been successfully enabled for your account!', 'success')
+            return redirect(url_for('auth.profile'))
+        else:
+            flash('Invalid verification code. Please try again.', 'error')
+    
+    # Generate MFA secret if not exists
+    if not current_user.mfa_secret:
+        current_user.mfa_secret = mfa_manager.generate_secret()
+        db.session.commit()
+    
+    # Generate QR code
+    qr_code_url = mfa_manager.get_qr_code_url(
+        current_user.mfa_secret,
+        current_user.email,
+        'Learning Platform'
+    )
+    
+    # Generate QR code image
+    qr = qrcode.QRCode(version=1, box_size=10, border=5)
+    qr.add_data(qr_code_url)
+    qr.make(fit=True)
+    
+    img = qr.make_image(fill_color="black", back_color="white")
+    img_buffer = io.BytesIO()
+    img.save(img_buffer, format='PNG')
+    img_buffer.seek(0)
+    
+    qr_code_img = base64.b64encode(img_buffer.getvalue()).decode()
+    
+    return render_template('auth/setup_mfa.html',
+                          title='Setup Two-Factor Authentication',
+                          form=form,
+                          qr_code_img=qr_code_img,
+                          manual_entry_key=current_user.mfa_secret)
+
+
+@auth.route('/verify-mfa', methods=['GET', 'POST'])
+def verify_mfa():
+    """Verify MFA during login."""
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    
+    if 'mfa_user_id' not in session:
+        flash('MFA verification session expired.', 'error')
+        return redirect(url_for('auth.login'))
+    
+    user = User.query.get(session['mfa_user_id'])
+    if not user or not user.mfa_enabled:
+        session.pop('mfa_user_id', None)
+        flash('Invalid MFA session.', 'error')
+        return redirect(url_for('auth.login'))
+    
+    form = MFAVerifyForm()
+    
+    if form.validate_on_submit():
+        if mfa_manager.verify_totp(user.mfa_secret, form.token.data):
+            # Complete login
+            login_user(user)
+            user.update_last_login()
+            
+            # Create secure session
+            session_manager.create_session(session, user.id)
+            
+            # Clean up MFA session data
+            session.pop('mfa_user_id', None)
+            session.pop('mfa_login_time', None)
+            
+            next_page = request.args.get('next')
+            if not next_page or url_parse(next_page).netloc != '':
+                next_page = url_for('index')
+            
+            flash('Login successful!', 'success')
+            return redirect(next_page)
+        else:
+            flash('Invalid verification code. Please try again.', 'error')
+    
+    return render_template('auth/verify_mfa.html',
+                          title='Two-Factor Authentication',
+                          form=form)
+
+
+@auth.route('/disable-mfa', methods=['POST'])
+@login_required
+def disable_mfa():
+    """Disable MFA for user account."""
+    if not current_user.mfa_enabled:
+        flash('MFA is not enabled for your account.', 'info')
+        return redirect(url_for('auth.profile'))
+    
+    current_user.mfa_enabled = False
+    current_user.mfa_secret = None
+    db.session.commit()
+    
+    flash('MFA has been disabled for your account.', 'warning')
+    return redirect(url_for('auth.profile'))

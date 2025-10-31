@@ -4,8 +4,9 @@ Authentication models for the application.
 
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from extensions import db
+from secure_auth_system import SecurePasswordManager
 
 class User(UserMixin, db.Model):
     """User model for authentication."""
@@ -38,18 +39,59 @@ class User(UserMixin, db.Model):
     social_accounts = db.relationship('SocialAccount', backref='user', lazy='dynamic', cascade='all, delete-orphan')
     progress = db.relationship('UserProgress', backref='user', lazy='dynamic', cascade='all, delete-orphan')
 
+    # MFA fields
+    mfa_secret = db.Column(db.String(32))  # TOTP secret
+    mfa_enabled = db.Column(db.Boolean, default=False)
+    mfa_backup_codes = db.Column(db.Text)  # Comma-separated backup codes
+    
+    # Security fields
+    failed_login_attempts = db.Column(db.Integer, default=0)
+    account_locked_until = db.Column(db.DateTime)
+    password_changed_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
+        self._password_manager = SecurePasswordManager()
 
     def set_password(self, password):
-        """Set user password."""
-        self.password_hash = generate_password_hash(password)
+        """Set user password with secure bcrypt hashing."""
+        self.password_hash = self._password_manager.hash_password(password)
+        self.password_changed_at = datetime.now(timezone.utc)
 
     def check_password(self, password):
-        """Check if password is correct."""
+        """Check if password is correct using secure verification."""
         if self.password_hash:
-            return check_password_hash(self.password_hash, password)
+            return self._password_manager.verify_password(password, self.password_hash)
         return False
+    
+    def is_account_locked(self):
+        """Check if account is locked due to failed login attempts."""
+        if self.account_locked_until:
+            return datetime.now(timezone.utc) < self.account_locked_until
+        return False
+    
+    def lock_account(self, duration_minutes=30):
+        """Lock account for specified duration."""
+        self.account_locked_until = datetime.now(timezone.utc) + timedelta(minutes=duration_minutes)
+        db.session.commit()
+    
+    def unlock_account(self):
+        """Unlock account and reset failed attempts."""
+        self.account_locked_until = None
+        self.failed_login_attempts = 0
+        db.session.commit()
+    
+    def increment_failed_login(self):
+        """Increment failed login attempts."""
+        self.failed_login_attempts += 1
+        if self.failed_login_attempts >= 5:
+            self.lock_account()
+        db.session.commit()
+    
+    def reset_failed_login(self):
+        """Reset failed login attempts on successful login."""
+        self.failed_login_attempts = 0
+        db.session.commit()
 
     def update_last_login(self):
         """Update last login time."""

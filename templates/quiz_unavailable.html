@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Quiz System Unavailable{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-warning">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        Quiz System Unavailable
+                    </h4>
+                </div>
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <i class="bi bi-tools" style="font-size: 4rem; color: #ffc107;"></i>
+                    </div>
+                    <h5 class="card-title">Service Temporarily Unavailable</h5>
+                    <p class="card-text">{{ message or 'The quiz system is currently under maintenance.' }}</p>
+                    
+                    <div class="mt-4">
+                        <h6>What you can do instead:</h6>
+                        <div class="row mt-3">
+                            <div class="col-md-4 mb-3">
+                                <a href="{{ url_for('learn') }}" class="btn btn-outline-primary w-100">
+                                    <i class="bi bi-book"></i><br>
+                                    Learn
+                                </a>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <a href="{{ url_for('workshops') }}" class="btn btn-outline-success w-100">
+                                    <i class="bi bi-tools"></i><br>
+                                    Workshops
+                                </a>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <a href="{{ url_for('tutorials') }}" class="btn btn-outline-info w-100">
+                                    <i class="bi bi-play-circle"></i><br>
+                                    Tutorials
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <a href="{{ url_for('index') }}" class="btn btn-primary">
+                            <i class="bi bi-house"></i> Return to Home
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

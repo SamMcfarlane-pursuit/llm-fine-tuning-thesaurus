@@ -1,0 +1,268 @@
+{
+  "summary": {
+    "total_tests": 32,
+    "passed": 19,
+    "failed": 13,
+    "success_rate": 59.4,
+    "total_time": 0.23,
+    "timestamp": "2025-08-27T00:45:04.605465"
+  },
+  "results": [
+    {
+      "test": "Health Check",
+      "success": true,
+      "response_code": 200,
+      "message": "Response time: 15.3ms",
+      "response_time": 15.3,
+      "timestamp": "2025-08-27T00:45:04.394783"
+    },
+    {
+      "test": "Health Check Data",
+      "success": true,
+      "response_code": 200,
+      "message": "Valid health data structure",
+      "response_time": null,
+      "timestamp": "2025-08-27T00:45:04.394844"
+    },
+    {
+      "test": "API Health Check",
+      "success": true,
+      "response_code": 200,
+      "message": "Response time: 2.45ms",
+      "response_time": 2.45,
+      "timestamp": "2025-08-27T00:45:04.397328"
+    },
+    {
+      "test": "Performance Metrics",
+      "success": true,
+      "response_code": 200,
+      "message": "Response time: 2.22ms",
+      "response_time": 2.22,
+      "timestamp": "2025-08-27T00:45:04.399572"
+    },
+    {
+      "test": "Performance Status",
+      "success": true,
+      "response_code": 200,
+      "message": "Response time: 2.53ms",
+      "response_time": 2.53,
+      "timestamp": "2025-08-27T00:45:04.402123"
+    },
+    {
+      "test": "System Status",
+      "success": true,
+      "response_code": 200,
+      "message": "Response time: 1.59ms",
+      "response_time": 1.59,
+      "timestamp": "2025-08-27T00:45:04.403735"
+    },
+    {
+      "test": "Database Stats",
+      "success": true,
+      "response_code": 200,
+      "message": "Response time: 1.37ms",
+      "response_time": 1.37,
+      "timestamp": "2025-08-27T00:45:04.405122"
+    },
+    {
+      "test": "Thesaurus API Info",
+      "success": true,
+      "response_code": 200,
+      "message": "Response time: 0.87ms",
+      "response_time": 0.87,
+      "timestamp": "2025-08-27T00:45:04.406014"
+    },
+    {
+      "test": "Thesaurus API Info Data",
+      "success": true,
+      "response_code": 200,
+      "message": "Valid API info structure",
+      "response_time": null,
+      "timestamp": "2025-08-27T00:45:04.406035"
+    },
+    {
+      "test": "Thesaurus Query - Happy",
+      "success": false,
+      "response_code": 400,
+      "message": "Expected [200], got 400",
+      "response_time": null,
+      "timestamp": "2025-08-27T00:45:04.409341"
+    },
+    {
+      "test": "Thesaurus Empty Word",
+      "success": true,
+      "response_code": 400,
+      "message": "Response time: 1.38ms",
+      "response_time": 1.38,
+      "timestamp": "2025-08-27T00:45:04.410757"
+    },
+    {
+      "test": "Thesaurus Missing Word",
+      "success": true,
+      "response_code": 400,
+      "message": "Response time: 1.21ms",
+      "response_time": 1.21,
+      "timestamp": "2025-08-27T00:45:04.411984"
+    },
+    {
+      "test": "Session Verification (Unauthenticated)",
+      "success": false,
+      "response_code": 404,
+      "message": "Expected [401], got 404",
+      "response_time": null,
+      "timestamp": "2025-08-27T00:45:04.412947"
+    },
+    {
+      "test": "Check Auth Status",
+      "success": false,
+      "response_code": 404,
+      "message": "Expected [200], got 404",
+      "response_time": null,
+      "timestamp": "2025-08-27T00:45:04.414038"
+    },
+    {
+      "test": "Login Invalid Credentials",
+      "success": false,
+      "response_code": 404,
+      "message": "Expected [401], got 404",
+      "response_time": null,
+      "timestamp": "2025-08-27T00:45:04.415123"
+    },
+    {
+      "test": "Login Missing Password",
+      "success": false,
+      "response_code": 404,
+      "message": "Expected [400], got 404",
+      "response_time": null,
+      "timestamp": "2025-08-27T00:45:04.416163"
+    },
+    {
+      "test": "Register Missing Fields",
+      "success": false,
+      "response_code": 404,
+      "message": "Expected [400], got 404",
+      "response_time": null,
+      "timestamp": "2025-08-27T00:45:04.417172"
+    },
+    {
+      "test": "Logout",
+      "success": false,
+      "response_code": 404,
+      "message": "Expected [200], got 404",
+      "response_time": null,
+      "timestamp": "2025-08-27T00:45:04.417969"
+    },
+    {
+      "test": "AI Assistant Status",
+      "success": false,
+      "response_code": 404,
+      "message": "Expected [200], got 404",
+      "response_time": null,
+      "timestamp": "2025-08-27T00:45:04.418877"
+    },
+    {
+      "test": "AI Suggestions",
+      "success": false,
+      "response_code": 404,
+      "message": "Expected [200], got 404",
+      "response_time": null,
+      "timestamp": "2025-08-27T00:45:04.420182"
+    },
+    {
+      "test": "AI Chat Query",
+      "success": false,
+      "response_code": 404,
+      "message": "Expected [200], got 404",
+      "response_time": null,
+      "timestamp": "2025-08-27T00:45:04.421330"
+    },
+    {
+      "test": "AI Chat Empty Message",
+      "success": false,
+      "response_code": 404,
+      "message": "Expected [400], got 404",
+      "response_time": null,
+      "timestamp": "2025-08-27T00:45:04.422360"
+    },
+    {
+      "test": "Track Analytics Event",
+      "success": false,
+      "response_code": 400,
+      "message": "Expected [200], got 400",
+      "response_time": null,
+      "timestamp": "2025-08-27T00:45:04.424354"
+    },
+    {
+      "test": "Track Analytics Empty Data",
+      "success": true,
+      "response_code": 400,
+      "message": "Response time: 1.4ms",
+      "response_time": 1.4,
+      "timestamp": "2025-08-27T00:45:04.425769"
+    },
+    {
+      "test": "Quiz Test Endpoint",
+      "success": true,
+      "response_code": 200,
+      "message": "Response time: 1.51ms",
+      "response_time": 1.51,
+      "timestamp": "2025-08-27T00:45:04.427296"
+    },
+    {
+      "test": "Emergency Mode Toggle",
+      "success": false,
+      "response_code": 400,
+      "message": "Expected [401, 403, 405], got 400",
+      "response_time": null,
+      "timestamp": "2025-08-27T00:45:04.428504"
+    },
+    {
+      "test": "Homepage",
+      "success": true,
+      "response_code": 200,
+      "message": "Response time: 80.31ms",
+      "response_time": 80.31,
+      "timestamp": "2025-08-27T00:45:04.508834"
+    },
+    {
+      "test": "Thesaurus Page",
+      "success": true,
+      "response_code": 200,
+      "message": "Response time: 70.39ms",
+      "response_time": 70.39,
+      "timestamp": "2025-08-27T00:45:04.579247"
+    },
+    {
+      "test": "Learn Page",
+      "success": true,
+      "response_code": 200,
+      "message": "Response time: 18.56ms",
+      "response_time": 18.56,
+      "timestamp": "2025-08-27T00:45:04.597839"
+    },
+    {
+      "test": "Workshops Page",
+      "success": true,
+      "response_code": 200,
+      "message": "Response time: 5.38ms",
+      "response_time": 5.38,
+      "timestamp": "2025-08-27T00:45:04.603243"
+    },
+    {
+      "test": "Login Page",
+      "success": true,
+      "response_code": 200,
+      "message": "Response time: 1.16ms",
+      "response_time": 1.16,
+      "timestamp": "2025-08-27T00:45:04.604425"
+    },
+    {
+      "test": "Register Page",
+      "success": true,
+      "response_code": 200,
+      "message": "Response time: 0.87ms",
+      "response_time": 0.87,
+      "timestamp": "2025-08-27T00:45:04.605308"
+    }
+  ]
+}

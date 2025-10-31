@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">Two-Factor Authentication</h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-shield-alt"></i>
+                        Please enter the 6-digit code from your authenticator app to complete your login.
+                    </div>
+                    
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="mb-3">
+                            {{ form.totp_token.label(class="form-label") }}
+                            {{ form.totp_token(class="form-control form-control-lg text-center", placeholder="000000", maxlength="6", style="letter-spacing: 0.5em; font-size: 1.5rem;") }}
+                            {% for error in form.totp_token.errors %}
+                                <div class="text-danger mt-2">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="form-check">
+                                {{ form.use_backup_code(class="form-check-input") }}
+                                {{ form.use_backup_code.label(class="form-check-label") }}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3" id="backup-code-field" style="display: none;">
+                            {{ form.backup_code.label(class="form-label") }}
+                            {{ form.backup_code(class="form-control", placeholder="Enter backup code") }}
+                            {% for error in form.backup_code.errors %}
+                                <div class="text-danger mt-2">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            {{ form.submit(class="btn btn-primary btn-lg") }}
+                            <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary">Back to Login</a>
+                        </div>
+                    </form>
+                    
+                    <div class="mt-4">
+                        <div class="alert alert-light">
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle"></i>
+                                Having trouble? Make sure your device's time is synchronized and try again.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Toggle backup code field
+document.getElementById('use_backup_code').addEventListener('change', function() {
+    const backupField = document.getElementById('backup-code-field');
+    const totpField = document.getElementById('totp_token');
+    
+    if (this.checked) {
+        backupField.style.display = 'block';
+        totpField.disabled = true;
+        totpField.required = false;
+    } else {
+        backupField.style.display = 'none';
+        totpField.disabled = false;
+        totpField.required = true;
+    }
+});
+
+// Auto-focus on the TOTP input
+document.getElementById('totp_token').focus();
+
+// Auto-submit when 6 digits are entered
+document.getElementById('totp_token').addEventListener('input', function() {
+    if (this.value.length === 6 && /^\d{6}$/.test(this.value)) {
+        // Small delay to allow user to see the complete code
+        setTimeout(() => {
+            this.form.submit();
+        }, 500);
+    }
+});
+</script>
+{% endblock %}

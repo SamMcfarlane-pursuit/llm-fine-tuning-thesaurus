@@ -4,8 +4,8 @@
  */
 
 (function() {
-    // Check if user is authenticated
-    const isAuthenticated = document.body.getAttribute('data-user-logged-in') === 'true';
+    // Check if user is authenticated (with null check for document.body)
+    const isAuthenticated = document.body && document.body.getAttribute('data-user-logged-in') === 'true';
     
     // If user is not authenticated, override progress bar creation functions
     if (!isAuthenticated) {

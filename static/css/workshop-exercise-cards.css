@@ -1,0 +1,99 @@
+/* Workshop Exercise Cards Styling */
+
+.workshop-exercise-card {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 15px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.workshop-exercise-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.workshop-exercise-card h3 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-size: 1.2em;
+}
+
+.workshop-exercise-card p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.workshop-exercise-card .difficulty {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.workshop-exercise-card .difficulty.easy {
+    background: #d4edda;
+    color: #155724;
+}
+
+.workshop-exercise-card .difficulty.medium {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.workshop-exercise-card .difficulty.hard {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.workshop-exercise-card .btn {
+    background: #007bff;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 10px;
+    transition: background 0.3s ease;
+}
+
+.workshop-exercise-card .btn:hover {
+    background: #0056b3;
+    text-decoration: none;
+    color: white;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    .workshop-exercise-card {
+        background: #2d3748;
+        border-color: #4a5568;
+        color: #e2e8f0;
+    }
+    
+    .workshop-exercise-card h3 {
+        color: #f7fafc;
+    }
+    
+    .workshop-exercise-card p {
+        color: #cbd5e0;
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .workshop-exercise-card {
+        margin: 10px 0;
+        padding: 15px;
+    }
+    
+    .workshop-exercise-card h3 {
+        font-size: 1.1em;
+    }
+}

@@ -1,0 +1,597 @@
+{
+  "summary": {
+    "total_tests": 31,
+    "passed": 28,
+    "failed": 3,
+    "success_rate": 90.32258064516128,
+    "total_time": 0.6366088390350342
+  },
+  "results": [
+    {
+      "name": "Health Check",
+      "method": "GET",
+      "endpoint": "/health",
+      "url": "http://localhost:5002/health",
+      "expected_status": [
+        200
+      ],
+      "actual_status": 200,
+      "success": true,
+      "response_time_ms": 77.24,
+      "timestamp": "2025-08-30T23:53:01.010378",
+      "response_data": {
+        "emergency_mode": true,
+        "features": {
+          "crash_prevention": true,
+          "enhanced_features": false,
+          "performance_monitoring": true,
+          "quiz_system": false
+        },
+        "issues": [
+          "High memory usage: 83.0%"
+        ],
+        "performance": {
+          "active_connections": 1,
+          "avg_response_time": 0.004835605621337891,
+          "cpu_usage": 48.008,
+          "emergency_mode": true,
+          "max_concurrent_users": 50,
+          "memory_usage": 82.984,
+          "timestamp": "2025-08-30T23:53:00.998861"
+        },
+        "status": "warning",
+        "timestamp": "2025-08-31T03:53:00.998933+00:00",
+        "version": "2.1.0-production"
+      }
+    },
+    {
+      "name": "API Health Check",
+      "method": "GET",
+      "endpoint": "/api/health",
+      "url": "http://localhost:5002/api/health",
+      "expected_status": [
+        200
+      ],
+      "actual_status": 200,
+      "success": true,
+      "response_time_ms": 20.68,
+      "timestamp": "2025-08-30T23:53:01.031157",
+      "response_data": {
+        "emergency_mode": true,
+        "features": {
+          "crash_prevention": true,
+          "enhanced_features": false,
+          "performance_monitoring": true,
+          "quiz_system": false
+        },
+        "issues": [
+          "High memory usage: 83.0%"
+        ],
+        "performance": {
+          "active_connections": 1,
+          "avg_response_time": 0.006976962089538574,
+          "cpu_usage": 48.008,
+          "emergency_mode": true,
+          "max_concurrent_users": 50,
+          "memory_usage": 82.984,
+          "timestamp": "2025-08-30T23:53:01.025744"
+        },
+        "status": "warning",
+        "timestamp": "2025-08-31T03:53:01.025763+00:00",
+        "version": "2.1.0-production"
+      }
+    },
+    {
+      "name": "Performance Metrics",
+      "method": "GET",
+      "endpoint": "/api/performance/metrics",
+      "url": "http://localhost:5002/api/performance/metrics",
+      "expected_status": [
+        200
+      ],
+      "actual_status": 200,
+      "success": true,
+      "response_time_ms": 24.18,
+      "timestamp": "2025-08-30T23:53:01.055396",
+      "response_data": {
+        "active_connections": 1,
+        "avg_response_time": 0.007024574279785156,
+        "cpu_usage": 48.008,
+        "emergency_mode": true,
+        "max_concurrent_users": 50,
+        "memory_usage": 82.984,
+        "timestamp": "2025-08-30T23:53:01.043618"
+      }
+    },
+    {
+      "name": "Performance Status",
+      "method": "GET",
+      "endpoint": "/api/performance/status",
+      "url": "http://localhost:5002/api/performance/status",
+      "expected_status": [
+        200
+      ],
+      "actual_status": 200,
+      "success": true,
+      "response_time_ms": 33.03,
+      "timestamp": "2025-08-30T23:53:01.088622",
+      "response_data": {
+        "emergency_mode": true,
+        "issues": [
+          "High memory usage: 83.0%"
+        ],
+        "metrics": {
+          "active_connections": 1,
+          "avg_response_time": 0.007133642832438151,
+          "cpu_usage": 48.008,
+          "emergency_mode": true,
+          "max_concurrent_users": 50,
+          "memory_usage": 82.984,
+          "timestamp": "2025-08-30T23:53:01.080756"
+        },
+        "status": "warning"
+      }
+    },
+    {
+      "name": "System Status",
+      "method": "GET",
+      "endpoint": "/api/system/status",
+      "url": "http://localhost:5002/api/system/status",
+      "expected_status": [
+        200
+      ],
+      "actual_status": 200,
+      "success": true,
+      "response_time_ms": 47.65,
+      "timestamp": "2025-08-30T23:53:01.136374",
+      "response_data": {
+        "capacity": {
+          "current_connections": 1,
+          "load_percentage": 2.0,
+          "max_concurrent_users": 50
+        },
+        "features": {
+          "connection_limiting": true,
+          "crash_prevention": true,
+          "emergency_mode": true,
+          "enhanced_features": false,
+          "performance_monitoring": true,
+          "quiz_system": false,
+          "rate_limiting": true
+        },
+        "health_status": "warning",
+        "performance": {
+          "active_connections": 1,
+          "avg_response_time": 0.006770985467093331,
+          "cpu_usage": 48.008,
+          "emergency_mode": true,
+          "max_concurrent_users": 50,
+          "memory_usage": 82.984,
+          "timestamp": "2025-08-30T23:53:01.114294"
+        },
+        "status": "operational",
+        "timestamp": "2025-08-31T03:53:01.123312+00:00",
+        "version": "2.1.0-production"
+      }
+    },
+    {
+      "name": "Database Stats",
+      "method": "GET",
+      "endpoint": "/api/database/stats",
+      "url": "http://localhost:5002/api/database/stats",
+      "expected_status": [
+        200
+      ],
+      "actual_status": 200,
+      "success": true,
+      "response_time_ms": 27.98,
+      "timestamp": "2025-08-30T23:53:01.164404",
+      "response_data": {
+        "data": {
+          "connection_status": "Not Available",
+          "database_path": "sqlite:///quiz_test.db",
+          "database_type": "SQLite",
+          "enhanced_features": false,
+          "tables": {
+            "user_progress": "Not Available",
+            "users": "Not Available"
+          }
+        },
+        "enhanced": false,
+        "message": "Basic database stats (enhanced features disabled)",
+        "status": "success",
+        "timestamp": "2025-08-31T03:53:01.161370+00:00"
+      }
+    },
+    {
+      "name": "Thesaurus API - GET",
+      "method": "GET",
+      "endpoint": "/api/thesaurus",
+      "url": "http://localhost:5002/api/thesaurus",
+      "expected_status": [
+        200,
+        400
+      ],
+      "actual_status": 200,
+      "success": true,
+      "response_time_ms": 21.62,
+      "timestamp": "2025-08-30T23:53:01.186084",
+      "response_data": {
+        "endpoints": {
+          "GET /api/thesaurus": "API information",
+          "POST /api/thesaurus": "Get synonyms for a word"
+        },
+        "max_connections": "80 concurrent connections",
+        "message": "Thesaurus API is running",
+        "rate_limit": "120 requests per minute",
+        "usage": "Send POST request with {\"word\": \"your_word\"}"
+      }
+    },
+    {
+      "name": "Thesaurus API - POST Valid",
+      "method": "POST",
+      "endpoint": "/api/thesaurus",
+      "url": "http://localhost:5002/api/thesaurus",
+      "expected_status": [
+        200
+      ],
+      "actual_status": 400,
+      "success": false,
+      "response_time_ms": 25.07,
+      "timestamp": "2025-08-30T23:53:01.211261",
+      "response_text": "<!doctype html>\n<html lang=en>\n<title>400 Bad Request</title>\n<h1>Bad Request</h1>\n<p>The CSRF token is missing.</p>\n"
+    },
+    {
+      "name": "Thesaurus API - POST Invalid",
+      "method": "POST",
+      "endpoint": "/api/thesaurus",
+      "url": "http://localhost:5002/api/thesaurus",
+      "expected_status": [
+        400
+      ],
+      "actual_status": 400,
+      "success": true,
+      "response_time_ms": 20.04,
+      "timestamp": "2025-08-30T23:53:01.231346",
+      "response_text": "<!doctype html>\n<html lang=en>\n<title>400 Bad Request</title>\n<h1>Bad Request</h1>\n<p>The CSRF token is missing.</p>\n"
+    },
+    {
+      "name": "Track Analytics - Valid",
+      "method": "POST",
+      "endpoint": "/api/analytics/track",
+      "url": "http://localhost:5002/api/analytics/track",
+      "expected_status": [
+        200
+      ],
+      "actual_status": 400,
+      "success": false,
+      "response_time_ms": 13.94,
+      "timestamp": "2025-08-30T23:53:01.245356",
+      "response_text": "<!doctype html>\n<html lang=en>\n<title>400 Bad Request</title>\n<h1>Bad Request</h1>\n<p>The CSRF token is missing.</p>\n"
+    },
+    {
+      "name": "Track Analytics - Invalid",
+      "method": "POST",
+      "endpoint": "/api/analytics/track",
+      "url": "http://localhost:5002/api/analytics/track",
+      "expected_status": [
+        400
+      ],
+      "actual_status": 400,
+      "success": true,
+      "response_time_ms": 3.34,
+      "timestamp": "2025-08-30T23:53:01.248759",
+      "response_text": "<!doctype html>\n<html lang=en>\n<title>400 Bad Request</title>\n<h1>Bad Request</h1>\n<p>The CSRF token is missing.</p>\n"
+    },
+    {
+      "name": "Quiz Test Endpoint",
+      "method": "GET",
+      "endpoint": "/api/quiz-test",
+      "url": "http://localhost:5002/api/quiz-test",
+      "expected_status": [
+        200
+      ],
+      "actual_status": 200,
+      "success": true,
+      "response_time_ms": 8.54,
+      "timestamp": "2025-08-30T23:53:01.257333",
+      "response_data": {
+        "available_endpoints": [
+          "/quiz/ - Quiz list",
+          "/quiz/dashboard - Quiz dashboard",
+          "/quiz/api/random-question - Random question API",
+          "/quiz/api/results - Quiz results API"
+        ],
+        "database_connected": false,
+        "note": "Quiz system not available",
+        "quiz_system_status": "disabled",
+        "rate_limit": "30 requests per minute"
+      }
+    },
+    {
+      "name": "Emergency Mode Toggle",
+      "method": "POST",
+      "endpoint": "/api/admin/emergency-mode",
+      "url": "http://localhost:5002/api/admin/emergency-mode",
+      "expected_status": [
+        401,
+        403,
+        405
+      ],
+      "actual_status": 400,
+      "success": false,
+      "response_time_ms": 6.86,
+      "timestamp": "2025-08-30T23:53:01.264314",
+      "response_text": "<!doctype html>\n<html lang=en>\n<title>400 Bad Request</title>\n<h1>Bad Request</h1>\n<p>The CSRF token is missing.</p>\n"
+    },
+    {
+      "name": "Homepage",
+      "method": "GET",
+      "endpoint": "/",
+      "url": "http://localhost:5002/",
+      "expected_status": [
+        200
+      ],
+      "actual_status": 200,
+      "success": true,
+      "response_time_ms": 24.8,
+      "timestamp": "2025-08-30T23:53:01.289196",
+      "response_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Visual LLM - Home</title>\n\n    <!-- ===== ESSEN"
+    },
+    {
+      "name": "Thesaurus Page",
+      "method": "GET",
+      "endpoint": "/thesaurus",
+      "url": "http://localhost:5002/thesaurus",
+      "expected_status": [
+        200
+      ],
+      "actual_status": 200,
+      "success": true,
+      "response_time_ms": 74.88,
+      "timestamp": "2025-08-30T23:53:01.364353",
+      "response_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover\">\n "
+    },
+    {
+      "name": "Learn Page",
+      "method": "GET",
+      "endpoint": "/learn",
+      "url": "http://localhost:5002/learn",
+      "expected_status": [
+        200
+      ],
+      "actual_status": 200,
+      "success": true,
+      "response_time_ms": 16.97,
+      "timestamp": "2025-08-30T23:53:01.382132",
+      "response_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover\">\n "
+    },
+    {
+      "name": "Workshops Page",
+      "method": "GET",
+      "endpoint": "/workshops",
+      "url": "http://localhost:5002/workshops",
+      "expected_status": [
+        200
+      ],
+      "actual_status": 200,
+      "success": true,
+      "response_time_ms": 15.93,
+      "timestamp": "2025-08-30T23:53:01.398222",
+      "response_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover\">\n "
+    },
+    {
+      "name": "LoRA Guide",
+      "method": "GET",
+      "endpoint": "/lora_guide",
+      "url": "http://localhost:5002/lora_guide",
+      "expected_status": [
+        200
+      ],
+      "actual_status": 200,
+      "success": true,
+      "response_time_ms": 27.55,
+      "timestamp": "2025-08-30T23:53:01.425869",
+      "response_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Visual LLM - Home</title>\n\n    <!-- ===== ESSEN"
+    },
+    {
+      "name": "QLoRA Guide",
+      "method": "GET",
+      "endpoint": "/qlora_guide",
+      "url": "http://localhost:5002/qlora_guide",
+      "expected_status": [
+        200
+      ],
+      "actual_status": 200,
+      "success": true,
+      "response_time_ms": 19.32,
+      "timestamp": "2025-08-30T23:53:01.445323",
+      "response_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Visual LLM - Home</title>\n\n    <!-- ===== ESSEN"
+    },
+    {
+      "name": "Auth Login Page",
+      "method": "GET",
+      "endpoint": "/auth/login",
+      "url": "http://localhost:5002/auth/login",
+      "expected_status": [
+        200
+      ],
+      "actual_status": 200,
+      "success": true,
+      "response_time_ms": 3.28,
+      "timestamp": "2025-08-30T23:53:01.448671",
+      "response_data": {
+        "message": "Authentication - Coming Soon!"
+      }
+    },
+    {
+      "name": "Auth Register Page",
+      "method": "GET",
+      "endpoint": "/auth/register",
+      "url": "http://localhost:5002/auth/register",
+      "expected_status": [
+        200
+      ],
+      "actual_status": 200,
+      "success": true,
+      "response_time_ms": 5.85,
+      "timestamp": "2025-08-30T23:53:01.454560",
+      "response_data": {
+        "message": "Registration - Coming Soon!"
+      }
+    },
+    {
+      "name": "Workshop Exercises",
+      "method": "GET",
+      "endpoint": "/workshop_exercises",
+      "url": "http://localhost:5002/workshop_exercises",
+      "expected_status": [
+        200
+      ],
+      "actual_status": 200,
+      "success": true,
+      "response_time_ms": 17.63,
+      "timestamp": "2025-08-30T23:53:01.472234",
+      "response_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover\">\n "
+    },
+    {
+      "name": "Workshop Progress",
+      "method": "GET",
+      "endpoint": "/workshop_progress",
+      "url": "http://localhost:5002/workshop_progress",
+      "expected_status": [
+        200
+      ],
+      "actual_status": 200,
+      "success": true,
+      "response_time_ms": 34.24,
+      "timestamp": "2025-08-30T23:53:01.506567",
+      "response_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Visual LLM - Home</title>\n\n    <!-- ===== ESSEN"
+    },
+    {
+      "name": "Tutorials",
+      "method": "GET",
+      "endpoint": "/tutorials",
+      "url": "http://localhost:5002/tutorials",
+      "expected_status": [
+        200
+      ],
+      "actual_status": 200,
+      "success": true,
+      "response_time_ms": 3.56,
+      "timestamp": "2025-08-30T23:53:01.510181",
+      "response_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover\">\n "
+    },
+    {
+      "name": "Frameworks",
+      "method": "GET",
+      "endpoint": "/frameworks",
+      "url": "http://localhost:5002/frameworks",
+      "expected_status": [
+        200
+      ],
+      "actual_status": 200,
+      "success": true,
+      "response_time_ms": 5.06,
+      "timestamp": "2025-08-30T23:53:01.515301",
+      "response_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover\">\n "
+    },
+    {
+      "name": "Docker Guide",
+      "method": "GET",
+      "endpoint": "/docker_guide",
+      "url": "http://localhost:5002/docker_guide",
+      "expected_status": [
+        200
+      ],
+      "actual_status": 200,
+      "success": true,
+      "response_time_ms": 11.46,
+      "timestamp": "2025-08-30T23:53:01.526826",
+      "response_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Visual LLM - Home</title>\n\n    <!-- ===== ESSEN"
+    },
+    {
+      "name": "HuggingFace Guide",
+      "method": "GET",
+      "endpoint": "/huggingface_guide",
+      "url": "http://localhost:5002/huggingface_guide",
+      "expected_status": [
+        200
+      ],
+      "actual_status": 200,
+      "success": true,
+      "response_time_ms": 11.28,
+      "timestamp": "2025-08-30T23:53:01.538240",
+      "response_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover\">\n "
+    },
+    {
+      "name": "User Dashboard",
+      "method": "GET",
+      "endpoint": "/user_dashboard",
+      "url": "http://localhost:5002/user_dashboard",
+      "expected_status": [
+        200,
+        302
+      ],
+      "actual_status": 200,
+      "success": true,
+      "response_time_ms": 7.51,
+      "timestamp": "2025-08-30T23:53:01.545836",
+      "response_data": {
+        "error": "User dashboard template error: 'base_template' is undefined"
+      }
+    },
+    {
+      "name": "Analytics Dashboard",
+      "method": "GET",
+      "endpoint": "/analytics_dashboard",
+      "url": "http://localhost:5002/analytics_dashboard",
+      "expected_status": [
+        200,
+        302
+      ],
+      "actual_status": 200,
+      "success": true,
+      "response_time_ms": 1.7,
+      "timestamp": "2025-08-30T23:53:01.547679",
+      "response_data": {
+        "feature": "analytics_dashboard",
+        "message": "Analytics Dashboard - Coming Soon!",
+        "status": "success"
+      }
+    },
+    {
+      "name": "AI Assistant",
+      "method": "GET",
+      "endpoint": "/ai_assistant",
+      "url": "http://localhost:5002/ai_assistant",
+      "expected_status": [
+        200
+      ],
+      "actual_status": 200,
+      "success": true,
+      "response_time_ms": 5.96,
+      "timestamp": "2025-08-30T23:53:01.553670",
+      "response_data": {
+        "feature": "ai_assistant",
+        "message": "AI Assistant - Coming Soon!",
+        "status": "success"
+      }
+    },
+    {
+      "name": "Profile",
+      "method": "GET",
+      "endpoint": "/profile",
+      "url": "http://localhost:5002/profile",
+      "expected_status": [
+        200,
+        302
+      ],
+      "actual_status": 200,
+      "success": true,
+      "response_time_ms": 15.92,
+      "timestamp": "2025-08-30T23:53:01.569633",
+      "response_text": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Visual LLM - Home</title>\n\n    <!-- ===== ESSEN"
+    }
+  ]
+}

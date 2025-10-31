@@ -29,6 +29,9 @@
     <!-- 5. Navigation Overrides -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/navigation.css') }}">
 
+    <!-- 6. Mobile Responsive Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mobile.css') }}">
+
     <!-- 6. Final Navigation Fixes (MUST BE LAST) -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/absolute-final-navigation.css') }}">
 
@@ -140,8 +143,8 @@
                             </ul>
                         </div>
                     {% else %}
-                        <a href="{{ url_for('login') }}" class="btn btn-outline-primary me-2">Sign In</a>
-                        <a href="{{ url_for('register') }}" class="btn btn-success">Register</a>
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary me-2">Sign In</a>
+                        <a href="{{ url_for('auth.register') }}" class="btn btn-success">Register</a>
                     {% endif %}
                 </div>
             </div>
@@ -247,7 +250,7 @@
                         <li class="mb-2"><a href="{{ url_for('ai_assistant') }}" class="text-white text-decoration-none">AI Assistant</a></li>
                         <li class="mb-2"><a href="{{ url_for('search_results') }}" class="text-white text-decoration-none">Search</a></li>
                         <li class="mb-2"><a href="{{ url_for('user_dashboard') }}" class="text-white text-decoration-none">Dashboard</a></li>
-                        <li class="mb-2"><a href="{{ url_for('analytics.dashboard') }}" class="text-white text-decoration-none">Analytics</a></li>
+                        <li class="mb-2"><a href="{{ url_for('analytics_dashboard') }}" class="text-white text-decoration-none">Analytics</a></li>
                     </ul>
                 </div>
 

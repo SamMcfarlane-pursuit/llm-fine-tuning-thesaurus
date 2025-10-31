@@ -34,9 +34,10 @@
                 difficulty="Medium",
                 time="10 min",
                 title="Basic LoRA Implementation",
-                description="Implement a basic LoRA fine-tuning setup for a small language model.",
+                description="Implement a basic LoRA fine-tuning setup for a small language model. Learn to configure rank and alpha parameters for optimal performance.",
                 status="You haven't attempted this exercise yet.",
-                url=url_for('lora_guide')
+                url=url_for('lora_guide'),
+                learning_objectives="Understand LoRA architecture,Configure PEFT library parameters,Evaluate parameter efficiency"
             %}
                 {% include 'components/workshop_exercise_card.html' %}
             {% endwith %}
@@ -62,7 +63,7 @@
                 title="Advanced Parameter Tuning",
                 description="Fine-tune advanced parameters for optimal model performance and efficiency.",
                 status="You haven't attempted this exercise yet.",
-                url=url_for('workshop_memory_efficiency')
+                url=url_for('workshop_exercises')
             %}
                 {% include 'components/workshop_exercise_card.html' %}
             {% endwith %}
@@ -77,7 +78,7 @@
                 title="Multi-GPU Training",
                 description="Set up distributed training across multiple GPUs for large model fine-tuning.",
                 status="You haven't attempted this exercise yet.",
-                url=url_for('workshop_memory_efficiency')
+                url=url_for('workshop_exercises')
             %}
                 {% include 'components/workshop_exercise_card.html' %}
             {% endwith %}

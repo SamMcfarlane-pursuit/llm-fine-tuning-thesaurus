@@ -2,9 +2,10 @@
 OAuth integration for authentication.
 """
 
-from flask import redirect, url_for, flash, current_app
+from flask import redirect, url_for, flash, current_app, session, request
 from flask_login import login_user, current_user
 from datetime import datetime, timedelta, timezone
+import logging
 
 from . import auth
 from models import User
@@ -27,7 +28,9 @@ def init_oauth(app):
         client_secret=app.config.get('GOOGLE_CLIENT_SECRET'),
         server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
         client_kwargs={
-            'scope': 'openid email profile'
+            'scope': 'openid email profile',
+            'prompt': 'select_account',  # Force account selection for better UX
+            'access_type': 'offline'     # Get refresh token for long-term access
         }
     )
 
@@ -39,7 +42,10 @@ def init_oauth(app):
         access_token_url='https://github.com/login/oauth/access_token',
         authorize_url='https://github.com/login/oauth/authorize',
         api_base_url='https://api.github.com/',
-        client_kwargs={'scope': 'user:email'}
+        client_kwargs={
+            'scope': 'user:email',
+            'token_endpoint_auth_method': 'client_secret_post'  # Ensure proper token authentication
+        }
     )
 
 
@@ -122,10 +128,14 @@ def google_authorized():
 
     db.session.commit()
 
-    # Log in user
-    login_user(user)
+    # Log in user with remember=True for persistent session
+    login_user(user, remember=True)
     user.update_last_login()
-
+    
+    # Store provider info in session for consistent experience
+    from flask import session
+    session['oauth_provider'] = 'google'
+    
     flash('Successfully logged in with Google!', 'success')
     return redirect(url_for('index'))
 
@@ -187,18 +197,24 @@ def github_authorized():
             user_id=user.id,
             provider='github',
             social_id=str(user_data.get('id')),
-            access_token=token.get('access_token')
+            access_token=token.get('access_token'),
+            expires_at=datetime.now(timezone.utc) + timedelta(seconds=token.get('expires_in', 3600))
         )
         db.session.add(social_account)
     else:
         social_account.access_token = token.get('access_token')
+        social_account.expires_at = datetime.now(timezone.utc) + timedelta(seconds=token.get('expires_in', 3600))
 
     db.session.commit()
 
-    # Log in user
-    login_user(user)
+    # Log in user with remember=True for persistent session
+    login_user(user, remember=True)
     user.update_last_login()
-
+    
+    # Store provider info in session for consistent experience
+    from flask import session
+    session['oauth_provider'] = 'github'
+    
     flash('Successfully logged in with GitHub!', 'success')
     return redirect(url_for('index'))
 

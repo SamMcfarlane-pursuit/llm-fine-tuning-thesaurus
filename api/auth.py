@@ -6,11 +6,17 @@ from flask_login import current_user, login_user, logout_user
 from models import User, db
 from werkzeug.security import check_password_hash
 from extensions import csrf
+from utils.error_handlers import handle_api_error
+import logging
+
+# Configure logging
+logger = logging.getLogger(__name__)
 
 # Create a blueprint for authentication API routes
 auth_api_bp = Blueprint('auth_api', __name__)
 
 @auth_api_bp.route('/verify-session', methods=['GET'])
+@handle_api_error
 def verify_session():
     """Verify if the user has a valid session."""
     if current_user.is_authenticated:
@@ -30,16 +36,23 @@ def verify_session():
 
 @auth_api_bp.route('/login', methods=['POST'])
 @csrf.exempt
+@handle_api_error
 def login_api():
     """API endpoint for user login."""
     data = request.json
     
-    if not data or not data.get('email') or not data.get('password'):
-        return jsonify({'error': 'Missing email or password'}), 400
+    if not data:
+        logger.warning(f"Login attempt with missing data from IP: {request.remote_addr}")
+        raise ValueError("Missing request data")
+    
+    if not data.get('email') or not data.get('password'):
+        logger.warning(f"Login attempt with incomplete data from IP: {request.remote_addr}")
+        raise ValueError("Missing email or password")
     
     user = User.query.filter_by(email=data['email']).first()
     
     if not user or not check_password_hash(user.password_hash, data['password']):
+        logger.warning(f"Failed login attempt for email: {data.get('email')} from IP: {request.remote_addr}")
         return jsonify({'error': 'Invalid email or password'}), 401
     
     # Update last login time

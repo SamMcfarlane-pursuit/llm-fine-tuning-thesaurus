@@ -7,12 +7,14 @@ LLM capabilities, and contextual responses for the Visual LLM platform.
 
 import json
 import logging
+import traceback
 from datetime import datetime
 from flask import Blueprint, request, jsonify, current_app
 from flask_login import current_user
 from transformers import pipeline, set_seed
 import torch
 from extensions import csrf
+from utils.error_handlers import handle_api_error
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -697,119 +699,127 @@ What would you like to know about LLM fine-tuning?"""
 
 @ai_assistant_api.route('/chat', methods=['POST'])
 @csrf.exempt
+@handle_api_error
 def chat():
     """Main chat endpoint for AI assistant"""
-    try:
-        data = request.json
+    data = request.json
 
-        if not data or 'message' not in data:
-            return jsonify({'error': 'No message provided'}), 400
+    if not data:
+        logger.warning(f"Empty request to chat endpoint from IP: {request.remote_addr}")
+        raise ValueError("No request data provided")
 
-        message = data['message'].strip()
-        context = data.get('context', {})
-        mode = data.get('mode', 'general')  # Get mode from unified AI assistant
+    if 'message' not in data:
+        logger.warning(f"Missing message in chat request from IP: {request.remote_addr}")
+        raise ValueError("No message provided")
 
-        if not message:
-            return jsonify({'error': 'Empty message'}), 400
+    message = data['message'].strip()
+    context = data.get('context', {})
+    mode = data.get('mode', 'general')  # Get mode from unified AI assistant
 
-        # Log the interaction
-        logger.info(f"AI Assistant query ({mode} mode): {message[:100]}...")
+    if not message:
+        logger.warning(f"Empty message in chat request from IP: {request.remote_addr}")
+        raise ValueError("Empty message")
 
-        # Generate response with mode and context
-        response = generate_contextual_response(message, context, mode)
+    # Log the interaction
+    logger.info(f"AI Assistant query ({mode} mode): {message[:100]}...")
 
-        # Add metadata
-        response_data = {
-            'response': response,
-            'timestamp': datetime.now().isoformat(),
-            'context': {
-                'user_authenticated': current_user.is_authenticated,
-                'current_page': context.get('current_page', 'unknown'),
-                'response_type': 'contextual'
-            }
+    # Generate response with mode and context
+    response = generate_contextual_response(message, context, mode)
+
+    # Add metadata
+    response_data = {
+        'response': response,
+        'timestamp': datetime.now().isoformat(),
+        'context': {
+            'user_authenticated': current_user.is_authenticated,
+            'current_page': context.get('current_page', 'unknown'),
+            'response_type': 'contextual'
         }
+    }
 
-        # Add user-specific data if authenticated
-        if current_user.is_authenticated:
-            response_data['context']['user_id'] = current_user.id
-            response_data['context']['username'] = current_user.username
+    # Add user-specific data if authenticated
+    if current_user.is_authenticated:
+        response_data['context']['user_id'] = current_user.id
+        response_data['context']['username'] = current_user.username
 
-        return jsonify(response_data)
-
-    except Exception as e:
-        logger.error(f"Error in chat endpoint: {str(e)}")
-        return jsonify({
-            'error': 'Internal server error',
-            'response': generate_fallback_response(data.get('message', ''))
-        }), 500
+    return jsonify(response_data)
 
 @ai_assistant_api.route('/suggestions', methods=['GET'])
 @csrf.exempt
+@handle_api_error
 def get_suggestions():
     """Get contextual suggestions based on current page"""
-    try:
-        current_page = request.args.get('page', 'home')
+    current_page = request.args.get('page', 'home')
 
-        # Page-specific suggestions
-        suggestions = {
-            'home': [
-                "What is Visual LLM?",
-                "How do I get started with LLM fine-tuning?",
-                "Show me the learning paths",
-                "What workshops are available?"
-            ],
-            'learn': [
-                "Explain LoRA fine-tuning",
-                "What is the difference between LoRA and QLoRA?",
-                "Show me implementation examples",
-                "How do I track my progress?"
-            ],
-            'workshops': [
-                "How do I access Google Colab notebooks?",
-                "What prerequisites do I need?",
-                "Show me a complete LoRA implementation",
-                "Help me with workshop exercises"
-            ],
-            'quiz': [
-                "How are quizzes scored?",
-                "What topics are covered?",
-                "Can I retake quizzes?",
-                "Show me my quiz progress"
-            ]
-        }
+    # Page-specific suggestions
+    suggestions = {
+        'home': [
+            "What is Visual LLM?",
+            "How do I get started with LLM fine-tuning?",
+            "Show me the learning paths",
+            "What workshops are available?"
+        ],
+        'learn': [
+            "Explain LoRA fine-tuning",
+            "What is the difference between LoRA and QLoRA?",
+            "Show me implementation examples",
+            "How do I track my progress?"
+        ],
+        'workshops': [
+            "How do I access Google Colab notebooks?",
+            "What prerequisites do I need?",
+            "Show me a complete LoRA implementation",
+            "Help me with workshop exercises"
+        ],
+        'quiz': [
+            "How are quizzes scored?",
+            "What topics are covered?",
+            "Can I retake quizzes?",
+            "Show me my quiz progress"
+        ]
+    }
 
-        return jsonify({
-            'suggestions': suggestions.get(current_page, suggestions['home']),
-            'page': current_page
-        })
-
-    except Exception as e:
-        logger.error(f"Error getting suggestions: {str(e)}")
-        return jsonify({'error': 'Internal server error'}), 500
+    return jsonify({
+        'suggestions': suggestions.get(current_page, suggestions['home']),
+        'page': current_page
+    })
 
 @ai_assistant_api.route('/status', methods=['GET'])
 @csrf.exempt
+@handle_api_error
 def get_status():
     """Get AI assistant status and capabilities"""
-    try:
-        return jsonify({
-            'status': 'online',
-            'capabilities': [
-                'Contextual responses',
-                'Website navigation help',
-                'Technical concept explanations',
-                'Code examples and tutorials',
-                'Learning path guidance',
-                'Progress tracking assistance'
-            ],
-            'models_loaded': list(model_cache.keys()),
-            'knowledge_base': {
-                'concepts': len(WEBSITE_KNOWLEDGE['technical_concepts']),
-                'navigation_items': len(WEBSITE_KNOWLEDGE['navigation']),
-                'features': len(WEBSITE_KNOWLEDGE['platform_info']['features'])
-            }
-        })
+    return jsonify({
+        'status': 'online',
+        'capabilities': [
+            'Contextual responses',
+            'Website navigation help',
+            'Technical concept explanations',
+            'Code examples and tutorials',
+            'Learning path guidance',
+            'Progress tracking assistance'
+        ],
+        'models_loaded': list(model_cache.keys()),
+        'knowledge_base': {
+            'concepts': len(WEBSITE_KNOWLEDGE['technical_concepts']),
+            'navigation_items': len(WEBSITE_KNOWLEDGE['navigation']),
+            'features': len(WEBSITE_KNOWLEDGE['platform_info']['features'])
+        }
+    })
 
-    except Exception as e:
-        logger.error(f"Error getting status: {str(e)}")
-        return jsonify({'error': 'Internal server error'}), 500
+@ai_assistant_api.route('/test-error', methods=['GET'])
+@csrf.exempt
+@handle_api_error
+def test_error():
+    """Test endpoint to verify error handling"""
+    error_type = request.args.get('type', 'server')
+    
+    if error_type == 'value':
+        raise ValueError("Test value error")
+    elif error_type == 'permission':
+        raise PermissionError("Test permission error")
+    elif error_type == 'notfound':
+        raise FileNotFoundError("Test not found error")
+    else:
+        # Default to server error
+        raise Exception("Test server error")
